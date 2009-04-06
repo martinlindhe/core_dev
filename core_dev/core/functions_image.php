@@ -25,7 +25,7 @@ $predef_color['black'] = array(0,0,0);
  */
 function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $fileId = 0)
 {
-	global $db, $config, $files;
+	global $h, $db, $config;
 	if (empty($to_width) && empty($to_height)) return false;
 
 	$data = getimagesize($in_file);
@@ -64,9 +64,7 @@ function resizeImageExact($in_file, $out_file, $to_width = 0, $to_height = 0, $f
 	imagedestroy($image);
 	imagedestroy($image_p);
 
-	if ($fileId) {
-		$files->updateFile($fileId);
-	}
+	if ($fileId) $h->files->updateFile($fileId);
 
 	return true;
 }
@@ -104,12 +102,12 @@ function resizeImageCalc($filename, $to_width, $to_height)
  */
 function resizeImage($in_file, $out_file, $_pct)
 {
-	global $config, $files;
+	global $h, $config;
 	if (!is_numeric($_pct)) return false;
 
-	$mime = $files->lookupMimeType($in_file);
+	$mime = $h->files->lookupMimeType($in_file);
 
-	if (!$files->image_convert) return false;
+	if (!$h->files->image_convert) return false;
 
 	//Resize with imagemagick
 	switch ($mime) {
@@ -148,12 +146,12 @@ function resizeImage($in_file, $out_file, $_pct)
  */
 function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
 {
-	global $config, $files;
+	global $h, $config;
 	if (!is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
 
-	$mime = $files->lookupMimeType($in_file);
+	$mime = $h->files->lookupMimeType($in_file);
 
-	if (!$files->image_convert) return false;
+	if (!$h->files->image_convert) return false;
 
 	$crop = ($x2-$x1).'x'.($y2-$y1).'+'.$x1.'+'.$y1;
 
@@ -227,12 +225,12 @@ function convertImage($in_file, $out_file, $to_mime)
  */
 function rotateImage($in_file, $out_file, $_angle)
 {
-	global $config, $files;
+	global $h, $config;
 	if (!is_numeric($_angle)) return false;
 
-	$mime = $files->lookupMimeType($in_file);
+	$mime = $h->files->lookupMimeType($in_file);
 
-	if ($files->image_convert) {
+	if ($h->files->image_convert) {
 		//Rotate with imagemagick
 		switch ($mime) {
 			case 'image/jpeg':

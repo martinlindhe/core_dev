@@ -12,10 +12,10 @@ $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disabl
 
 function getThumbUrl($_id, $w = 0, $h = 0, $fullUrl = false)
 {
-	global $files, $config;
+	global $h, $config;
 
-	if (!is_numeric($w) || !$w) $w = $files->thumb_default_width;
-	if (!is_numeric($h) || !$h) $h = $files->thumb_default_height;
+	if (!is_numeric($w) || !$w) $w = $h->files->thumb_default_width;
+	if (!is_numeric($h) || !$h) $h = $h->files->thumb_default_height;
 	if (is_float($w)) $w = floor($w);
 	if (is_float($h)) $h = floor($h);
 

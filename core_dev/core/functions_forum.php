@@ -166,21 +166,21 @@ function setForumItemParent($itemId, $parentId)
 
 function addForumFolder($parentId, $folderName, $folderDesc = '')
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($parentId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($parentId)) return false;
 
 	$folderDesc = strip_tags($folderDesc);
 	$folderName = $db->escape(strip_tags($folderName));
 	$folderDesc = $db->escape($folderDesc);
 
-	$q = 'INSERT INTO tblForums SET itemType='.FORUM_FOLDER.',authorId='.$session->id.',parentId='.$parentId.',itemSubject="'.$folderName.'",itemBody="'.$folderDesc.'",timeCreated=NOW()';
+	$q = 'INSERT INTO tblForums SET itemType='.FORUM_FOLDER.',authorId='.$h->session->id.',parentId='.$parentId.',itemSubject="'.$folderName.'",itemBody="'.$folderDesc.'",timeCreated=NOW()';
 	return $db->insert($q);
 }
 
 function addForumMessage($parentId, $subject, $body, $sticky = 0)
 {
-	global $db, $session, $config;
-	if (!$session->id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
+	global $h, $db, $config;
+	if (!$h->session->id || !is_numeric($parentId) || !is_numeric($sticky)) return false;
 
 	$body = strip_tags($body);
 	$subject = $db->escape(strip_tags($subject));
@@ -188,7 +188,7 @@ function addForumMessage($parentId, $subject, $body, $sticky = 0)
 	$body = substr($body, 0, $config['forum']['maxsize_body']);
 	$body = $db->escape($body);
 
-	$q = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$session->id.',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
+	$q = 'INSERT INTO tblForums SET itemType='.FORUM_MESSAGE.',authorId='.$h->session->id.',parentId='.$parentId.',itemSubject="'.$subject.'",itemBody="'.$body.'",timeCreated=NOW()';
 	if ($sticky) $q .= ',sticky='.$sticky;
 	$itemId = $db->insert($q);
 
@@ -258,8 +258,8 @@ function getLastForumPosts($count)
 
 function forumLockItem($itemId)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($itemId)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($itemId)) return false;
 
 	$q = 'UPDATE tblForums SET locked=1 WHERE itemId='.$itemId;
 	$db->update($q);
@@ -267,8 +267,8 @@ function forumLockItem($itemId)
 
 function forumUnlockItem($itemId)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($itemId)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($itemId)) return false;
 
 	$q = 'UPDATE tblForums SET locked=0 WHERE itemId='.$itemId;
 	$db->update($q);
@@ -572,7 +572,7 @@ function getForumLastPost($itemId)
 
 function showForumPost($item, $islocked = false)
 {
-	global $session, $files, $config;
+	global $h, $config;
 
 	$subject = formatUserInputText($item['itemSubject']);
 	$body = formatUserInputText($item['itemBody']);
@@ -593,10 +593,10 @@ function showForumPost($item, $islocked = false)
 	echo '</div><br/>';
 
 	echo $body;
-	$signature = loadUserdataSetting($session->id, $config['settings']['default_signature']);
+	$signature = loadUserdataSetting($h->session->id, $config['settings']['default_signature']);
 	if ($signature) echo '<hr/>'.$signature.'<br/>';
 
-	$files->showAttachments(FILETYPE_FORUM, $item['itemId']);
+	$h->files->showAttachments(FILETYPE_FORUM, $item['itemId']);
 	echo '</td>';
 
 	echo '<td width="120" valign="top" class="forum_item_text">';
@@ -608,7 +608,7 @@ function showForumPost($item, $islocked = false)
 
 	echo '</tr>';
 
-	if (!$session->id) {
+	if (!$h->session->id) {
 		echo '</table><br/>';
 		return;
 	}
@@ -623,19 +623,19 @@ function showForumPost($item, $islocked = false)
 			echo '<a href="forum_new.php?id='.$item['parentId'].'&amp;q='.$item['itemId'].'">'.t('Quote').'</a> ';
 		}
 
-		if ($item['authorId'] == $session->id || $session->isAdmin) {
+		if ($item['authorId'] == $h->session->id || $h->session->isAdmin) {
 			echo '<a href="forum_edit.php?id='.$item['itemId'].'">'.t('Edit').'</a> ';
 		}
 	}
 
-	if (!$islocked && $session->isAdmin) {
+	if (!$islocked && $h->session->isAdmin) {
 		echo '<a href="forum_delete.php?id='.$item['itemId'].'">'.t('Remove').'</a> ';
 	}
 
 	if (forumItemIsDiscussion($item['itemId'])) {
 		echo '<a href="forum_tipsa.php?id='.$item['itemId'].'">'.t('Tell a friend').'</a> ';
 
-		if ($session->isAdmin) {
+		if ($h->session->isAdmin) {
 			if (!$item['locked']) {
 				echo '<a href="forum_lock.php?id='.$item['itemId'].'">'.t('Lock').'</a> ';
 			} else {
@@ -645,7 +645,7 @@ function showForumPost($item, $islocked = false)
 		}
 	}
 
-	if ($session->id != $item['authorId']) {
+	if ($h->session->id != $item['authorId']) {
 		echo '<a href="forum_report.php?id='.$item['itemId'].'">'.t('Report').'</a> ';
 	}
 
@@ -655,7 +655,7 @@ function showForumPost($item, $islocked = false)
 
 function displayTopicFlat($itemId)
 {
-	global $db, $session, $config;
+	global $h, $db, $config;
 	if (!is_numeric($itemId)) return false;
 
 	echo '<div class="forum_overview_group">';
@@ -666,7 +666,7 @@ function displayTopicFlat($itemId)
 
 	showForumPost($item);
 
-	if ($session->id) {
+	if ($h->session->id) {
 		if (!isSubscribed(SUBSCRIPTION_FORUM, $itemId)) {
 			echo '<a href="?id='.$itemId.'&subscribe='.$itemId.'">Subscribe to topic</a><br/><br/>';
 		} else {
@@ -773,10 +773,10 @@ function getForumSearchQuery($list)
 
 function deleteForumItem($itemId)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($itemId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($itemId)) return false;
 
-	$q = 'UPDATE tblForums SET timeDeleted=NOW(),deletedBy='.$session->id.' WHERE itemId='.$itemId;
+	$q = 'UPDATE tblForums SET timeDeleted=NOW(),deletedBy='.$h->session->id.' WHERE itemId='.$itemId;
 
 	if ($db->update($q)) {
 		removeFromModerationQueueByType(MODERATION_FORUM, $itemId);
@@ -835,11 +835,11 @@ function getForumEntriesCountPeriod($dateStart, $dateStop)
 
 function displayForum($_id)
 {
-	global $session;
+	global $h;
 	if (!is_numeric($_id)) return false;
 
 	// Start/stop subscription
-	if ($session->id) {
+	if ($h->session->id) {
 		if (!empty($_GET['subscribe'])) addSubscription(SUBSCRIPTION_FORUM, $_GET['subscribe']);
 		if (!empty($_GET['unsubscribe'])) removeSubscription(SUBSCRIPTION_FORUM, $_GET['unsubscribe']);
 	}
@@ -853,7 +853,7 @@ function displayForum($_id)
 		//display root level
 		echo displayRootForumContent();
 
-		if ($session->isAdmin) echo '<a href="forum_new.php?id=0">'.t('Create new root level category').'</a>';
+		if ($h->session->isAdmin) echo '<a href="forum_new.php?id=0">'.t('Create new root level category').'</a>';
 		return;
 	}
 
@@ -862,7 +862,7 @@ function displayForum($_id)
 		echo displayForumContentFlat($_id);
 
 		echo '<a href="forum_new.php?id='.$_id.'">Create new forum here</a><br/>';
-		if ($session->isAdmin) {
+		if ($h->session->isAdmin) {
 			echo '<a href="forum_edit.php?id='.$_id.'">Edit forum name</a><br/>';
 			echo '<a href="forum_delete.php?id='.$_id.'">Delete forum</a><br/>';
 		}
@@ -900,9 +900,9 @@ function displayForum($_id)
 //FIXME is the function documentation correct?
 function createForumCategory($itemId)
 {
-	global $db, $session, $config, $files;
+	global $h, $db, $config;
 
-	if (!$itemId && !$session->isAdmin) return false;	//invalid request
+	if (!$itemId && !$h->session->isAdmin) return false;	//invalid request
 
 	if ($itemId) {
 		$item = getForumItem($itemId);
@@ -935,7 +935,7 @@ function createForumCategory($itemId)
 	if (!empty($_POST['subject']) || !empty($_POST['body'])) {
 
 		if (strlen($writeBody) <= $config['forum']['maxsize_body']) {
-			if ($session->isAdmin && ($itemId == 0 || $item['parentId'] == 0)) {
+			if ($h->session->isAdmin && ($itemId == 0 || $item['parentId'] == 0)) {
 				//Create category or a forum
 				if ($writeSubject) {
 					$createdId = addForumFolder($itemId, $writeSubject, $writeBody);
@@ -951,12 +951,12 @@ function createForumCategory($itemId)
 					$forum_error = 'You must write a topic!';
 				} else {
 					$sticky = 0;
-					if ($session->isAdmin && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
+					if ($h->session->isAdmin && !empty($_POST['sticky'])) $sticky = $_POST['sticky'];
 					$createdId = addForumMessage($itemId, $writeSubject, $writeBody, $sticky);
 
 					if ($createdId) {
 						//attach all FILETYPE_FORUM ownerId =0 to this id
-						$q = 'UPDATE tblFiles SET ownerId='.$createdId.' WHERE fileType='.FILETYPE_FORUM.' AND ownerId=0 AND uploaderId='.$session->id;
+						$q = 'UPDATE tblFiles SET ownerId='.$createdId.' WHERE fileType='.FILETYPE_FORUM.' AND ownerId=0 AND uploaderId='.$h->session->id;
 						$db->update($q);
 					}
 					goLoc('forum.php?id='.$itemId.'#post'.$createdId);
@@ -1007,7 +1007,7 @@ function createForumCategory($itemId)
 		echo t('Subject').': <input type="text" size="60" maxlength="50" name="subject" value="'.$writeSubject.'"/><br/>';
 		echo '<textarea name="body" cols="60" rows="14">'.$writeBody.'</textarea><br/><br/>';
 
-		if ($session->isAdmin) {
+		if ($h->session->isAdmin) {
 			//Allow admins to create stickies & announcements
 			echo '<input name="sticky" type="radio" class="radio" value="0" id="r0" checked="checked"/><label for="r0">Create a normal thread</label><br/>';
 			echo '<input name="sticky" type="radio" class="radio" value="1" id="r1"/><label for="r1">Admin only: Make the thread a sticky</label><br/>';
@@ -1020,10 +1020,10 @@ function createForumCategory($itemId)
 
 		//handle file upload
 		if (!empty($_FILES['file1'])) {
-			$files->handleUpload($_FILES['file1'], FILETYPE_FORUM, 0);
+			$h->files->handleUpload($_FILES['file1'], FILETYPE_FORUM, 0);
 		}
 
-		$files->showAttachments(FILETYPE_FORUM, 0);
+		$h->files->showAttachments(FILETYPE_FORUM, 0);
 
 		echo '<div id="forum_new_attachment">';
 		echo t('Attach a file').': ';
@@ -1056,11 +1056,11 @@ function createForumCategory($itemId)
 
 function forumEdit($itemId)	//FIXME använd inte header()
 {
-	global $session, $config;
+	global $h, $config;
 
 	$item = getForumItem($itemId);
 
-	if (!$item || $item['locked'] || (!$session->isAdmin && ($item['authorId'] != $session->id))) {
+	if (!$item || $item['locked'] || (!$h->session->isAdmin && ($item['authorId'] != $h->session->id))) {
 		header('Location: '.$config['start_page']);
 		die;
 	}
@@ -1073,7 +1073,7 @@ function forumEdit($itemId)	//FIXME använd inte header()
 
 	if ($subject || $body) {
 		$sticky = 0;
-		if ($session->isAdmin && !empty($_POST['sticky'])) $sticky = 1;
+		if ($h->session->isAdmin && !empty($_POST['sticky'])) $sticky = 1;
 
 		forumUpdateItem($itemId, $subject, $body, $sticky);
 
@@ -1106,7 +1106,7 @@ function forumEdit($itemId)	//FIXME använd inte header()
 		echo '<textarea name="body" cols="60" rows="14">'.$item['itemBody'].'</textarea><br/><br/>';
 	}
 
-	if ($session->isAdmin && forumItemIsDiscussion($itemId)) {
+	if ($h->session->isAdmin && forumItemIsDiscussion($itemId)) {
 		echo '<input type="checkbox" class="checkbox" value="1" name="sticky"'.($item['sticky']?' checked="checked"':'').'/>';
 		echo ' The thread is a sticky<br/><br/>';
 	}
@@ -1117,13 +1117,13 @@ function forumEdit($itemId)	//FIXME använd inte header()
 //FIXME dont use goLoc()
 function moveForum($itemId)
 {
+	global $h;
 	if (!is_numeric($itemId)) return false;
-	global $session;
 
 	$item = getForumItem($itemId);
 
 	if (!$item) {
-		goLoc($session->start_page);
+		goLoc($h->session->start_page);
 		die;
 	}
 
@@ -1188,8 +1188,8 @@ function reportForumPost($itemId)
 //	myspace:	http://www.myspace.com/Modules/PostTo/Pages
 function shareForumItem($itemId)
 {
-	global $session, $config;
-	if (!$session->id || !is_numeric($itemId)) return false;
+	global $h, $config;
+	if (!$h->session->id || !is_numeric($itemId)) return false;
 
 	if (!empty($_POST['fshare_mail'])) {
 		if (ValidEmail($_POST['fshare_mail'])) {
@@ -1201,7 +1201,7 @@ function shareForumItem($itemId)
 				$mail = "Hej!\n\n";
 			}
 
-			$mail .= $session->username." har skickat dig den här länken till dig från communityt\n";
+			$mail .= $h->session->username." har skickat dig den här länken till dig från communityt\n";
 			$mail .= "på vår sajt, ".$config['app']['full_url']."/.\n\n";
 
 			if ($item['authorId']) {

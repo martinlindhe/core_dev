@@ -125,7 +125,7 @@ function getSubscriptionsNewCountPeriod($type, $dateStart, $dateStop)
  */
 function getSubscribers($type, $itemId)
 {
-	global $db, $session;
+	global $db;
 	if (!is_numeric($type) || !is_numeric($itemId)) return false;
 
 	$q = 'SELECT * FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type;
@@ -134,7 +134,7 @@ function getSubscribers($type, $itemId)
 
 function notifySubscribers($type, $itemId, $newItemId)
 {
-	global $db, $config, $files;
+	global $db, $config, $h;
 	if (!is_numeric($type) || !is_numeric($itemId) || !is_numeric($newItemId)) return false;
 
 	$subscribers = getSubscribers($type, $itemId);
@@ -179,7 +179,7 @@ function notifySubscribers($type, $itemId, $newItemId)
 				}
 				break;
 			case SUBSCRIPTION_FILES:
-				$file = $files->getFile($newItemId);
+				$file = $h->files->getFile($newItemId);
 
 				$check = getCategoryPermissions(CATEGORY_USERFILE, $file['categoryId']);
 

@@ -2,9 +2,9 @@
 /**
  * $Id$
  *
- *	core											tblWiki
- *	for history-support: atom_revisions.php			tblRevisions
- *	for files-support: $files objekt				tblFiles
+ *	core                                            tblWiki
+ *	for history-support: atom_revisions.php         tblRevisions
+ *	for files-support: files_default.php $h->files  tblFiles
  *
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -26,7 +26,7 @@ $config['wiki']['first_tab'] = 'Wiki';
  */
 function wikiUpdate($wikiName, $_text)
 {
-	global $db, $h, $config;
+	global $h, $db, $config;
 
 	$wikiName = $db->escape(trim($wikiName));
 	if (!$wikiName) return false;
@@ -55,7 +55,7 @@ function wikiUpdate($wikiName, $_text)
  */
 function wikiFormat($wikiName, $data)
 {
-	global $db, $files, $config, $h;
+	global $h, $db, $config;
 
 	if (empty($data['msg'])) {
 		echo '<div class="wiki">';
@@ -88,7 +88,7 @@ function wikiFormat($wikiName, $data)
  */
 function wiki($wikiName = '')
 {
-	global $db, $files, $h, $config;
+	global $h, $db, $config;
 
 	$current_tab = $config['wiki']['first_tab'];
 
@@ -128,7 +128,7 @@ function wiki($wikiName = '')
 			$_SERVER['PHP_SELF'].'?Wiki:'.$wikiName => 'Wiki:'.str_replace('_', ' ', $wikiName),
 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$wikiName => t('Edit'),
 			$_SERVER['PHP_SELF'].'?WikiHistory:'.$wikiName => t('History'),
-			$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName => t('Files').' ('.$files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')'
+			$_SERVER['PHP_SELF'].'?WikiFiles:'.$wikiName => t('Files').' ('.$h->files->getFileCount(FILETYPE_WIKI, $data['wikiId']).')'
 		);
 	} else {
 		$wiki_menu = array(
@@ -209,7 +209,7 @@ function wiki($wikiName = '')
 
 		//List "unused files" for this Wiki when in edit mode
 		if ($config['wiki']['allow_files']) {
-			$filelist = $files->getFiles(FILETYPE_WIKI, $data['wikiId']);
+			$filelist = $h->files->getFiles(FILETYPE_WIKI, $data['wikiId']);
 			if ($filelist) {
 				$str = '';
 
@@ -218,7 +218,7 @@ function wiki($wikiName = '')
 
 					$showTag = $linkTag = '[[file:'.$row['fileId'].']]';
 
-					if (in_array($row['fileMime'], $files->image_mime_types)) {
+					if (in_array($row['fileMime'], $h->files->image_mime_types)) {
 						$showTag = showThumb($row['fileId'], $showTag);
 					}
 

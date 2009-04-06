@@ -97,7 +97,7 @@ if (!isset($_GET['moded'])) {
 					$owner = Files::getUploader($row['itemId']);
 					systemMessage($owner, $subject, $msg);
 				}
-				$files->deleteFile($row['itemId']);
+				$h->files->deleteFile($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
 
@@ -111,7 +111,7 @@ if (!isset($_GET['moded'])) {
 				}
 
 				deleteSetting(SETTING_USERDATA, 0, $owner, getUserdataFieldIdByType(USERDATA_TYPE_IMAGE));
-				$files->deleteFile($row['itemId']);
+				$h->files->deleteFile($row['itemId']);
 				removeFromModerationQueue($row['queueId']);
 				break;
 

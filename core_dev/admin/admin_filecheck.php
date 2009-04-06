@@ -15,22 +15,22 @@ require('design_admin_head.php');
 
 echo '<h1>File checker utility</h1>';
 
-if (!is_dir($files->upload_dir)) {
-	echo 'Fatal error: '.$files->upload_dir.' dont exist. Please adjust config.php for your project.';
+if (!is_dir($h->files->upload_dir)) {
+	echo 'Fatal error: '.$h->files->upload_dir.' dont exist. Please adjust config.php for your project.';
 	die;
 }
 
 if (!empty($_POST)) {
-	$list = Files::getFiles();
+	$list = $h->files->getFiles();
 	foreach ($list as $row) {
 		if (isset($_POST[ 'fchk_'.$row['fileId'] ])) {
 			switch ($_POST['fchk_'.$row['fileId']]) {
 				case 'update':
-					$files->updateFile($row['fileId']);
+					$h->files->updateFile($row['fileId']);
 					break;
 
 				case 'delete':
-					$files->deleteFile($row['fileId']);
+					$h->files->deleteFile($row['fileId']);
 					break;
 
 				default:
@@ -41,14 +41,14 @@ if (!empty($_POST)) {
 }
 
 if (isset($_GET['update'])) {
-	$list = Files::getFiles();
+	$list = $h->files->getFiles();
 
 	echo 'Checking <b>'.count($list).'</b> file entries...<br/><br/>';
 
 	$cleanup = array();
 
 	foreach ($list as $row) {
-		$filename = $files->findUploadPath($row['fileId']);
+		$filename = $h->files->findUploadPath($row['fileId']);
 		if (file_exists($filename)) {
 
 			$filesize = filesize($filename);
@@ -57,20 +57,20 @@ if (isset($_GET['update'])) {
 				$cleanup[$row['fileId']]['action'] = 'update';
 			}
 
-			$mime_type = $files->lookupMimeType($filename);
+			$mime_type = $h->files->lookupMimeType($filename);
 			if ($mime_type != $row['fileMime']) {
 				$cleanup[$row['fileId']]['err'][] = 'mime type changed from '.$row['fileMime'].' to '.$mime_type;
 				$cleanup[$row['fileId']]['action'] = 'update';
 			}
 
-			$media_type = $files->lookupMediaType($filename);
+			$media_type = $h->files->lookupMediaType($filename);
 			if ($media_type != $row['mediaType']) {
 				$cleanup[$row['fileId']]['err'][] = 'media type changed from '.$row['mediaType'].' to '.$media_type;
 				$cleanup[$row['fileId']]['action'] = 'update';
 			}
 
-			$oldsums = $files->checksums($row['fileId'], false, false);
-			$newsums = $files->checksums($row['fileId'], true, false);
+			$oldsums = $h->files->checksums($row['fileId'], false, false);
+			$newsums = $h->files->checksums($row['fileId'], true, false);
 			if ($oldsums['sha1'] != $newsums['sha1']) {
 				$cleanup[$row['fileId']]['err'][] = 'sha1 changed from '.$oldsums['sha1'].' to '.$newsums['sha1'];
 				$cleanup[$row['fileId']]['action'] = 'update';
@@ -100,7 +100,7 @@ if (isset($_GET['update'])) {
 
 } else {
 
-	$tot = Files::getFileCount();
+	$tot = $h->files->getFileCount();
 
 	echo 'The database contains <b>'.$tot.'</b> files.<br/><br/>';
 

@@ -17,8 +17,8 @@ $config['news']['allow_polls'] = true;	//allow polls to be attached to articles
 
 function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($rss_enabled) || !is_numeric($category_id)) return false;
 
 	$q = 'SELECT newsId FROM tblNews WHERE title="'.$db->escape($title).'" AND body="'.$db->escape($body).'"';
 	if ($db->getOneItem($q)) return false;
@@ -26,7 +26,7 @@ function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 	$topublish_time = strtotime($topublish);
 	if ($topublish_time < time()) $topublish_time = time();
 
-	$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$session->id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
+	$q = 'INSERT INTO tblNews SET title="'.$db->escape($title).'",body="'.$db->escape($body).'",rss_enabled='.$rss_enabled.',creatorId='.$h->session->id.',timeToPublish="'.sql_datetime($topublish_time).'",timeCreated=NOW(),categoryId='.$category_id;
 	$db->insert($q);
 
 	return true;
@@ -34,22 +34,22 @@ function addNews($title, $body, $topublish, $rss_enabled, $category_id = 0)
 
 function updateNews($newsId, $categoryId, $title, $body, $topublish, $rss_enabled)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($newsId) || !is_numeric($categoryId) || !is_numeric($rss_enabled)) return false;
 
 	$topublish = sql_datetime(strtotime($topublish));
 
-	$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db->escape($title).'",body="'.$db->escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$session->id.' WHERE newsId='.$newsId;
+	$q = 'UPDATE tblNews SET categoryId='.$categoryId.',title="'.$db->escape($title).'",body="'.$db->escape($body).'",timeToPublish="'.$topublish.'",rss_enabled='.$rss_enabled.',timeEdited=NOW(),editorId='.$h->session->id.' WHERE newsId='.$newsId;
 	$db->update($q);
 	return true;
 }
 
 function removeNews($_id)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
-	$db->update('UPDATE tblNews SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE newsId='.$_id);
+	$db->update('UPDATE tblNews SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE newsId='.$_id);
 	return true;
 }
 
@@ -129,7 +129,7 @@ function getLatestNews()
 
 function showNewsArticle($_id = 0)
 {
-	global $db, $session, $files, $config, $project;
+	global $h, $db, $config, $project;
 	if (!is_numeric($_id)) return false;
 
 	//Looks for formatted news section commands, like: News:ID, NewsEdit:ID, NewsDelete:ID, NewsComment:ID, NewsFiles:ID
@@ -140,7 +140,7 @@ function showNewsArticle($_id = 0)
 	$news = getNewsItem($_id);
 	if (!$news) return;
 
-	if (!$session->isAdmin && !datetime_less($news['timeToPublish'], now())) return false;
+	if (!$h->session->isAdmin && !datetime_less($news['timeToPublish'], now())) return false;
 
 	echo '<div class="news">';
 	echo '<div class="news_top">';
@@ -162,12 +162,12 @@ function showNewsArticle($_id = 0)
 	echo '</div>'; //class="news_top"
 	echo '<br/>';
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		$menu = array(
 			$_SERVER['PHP_SELF'].'?News:'.$_id => t('Show news'),
 			$_SERVER['PHP_SELF'].'?NewsEdit:'.$_id => t('Edit'),
 			$_SERVER['PHP_SELF'].'?NewsPolls:'.$_id => t('Polls'),
-			$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => t('Attachments').' ('.$files->getFileCount(FILETYPE_NEWS, $_id).')',
+			$_SERVER['PHP_SELF'].'?NewsFiles:'.$_id => t('Attachments').' ('.$h->files->getFileCount(FILETYPE_NEWS, $_id).')',
 			$_SERVER['PHP_SELF'].'?NewsDelete:'.$_id => t('Delete'),
 			$_SERVER['PHP_SELF'].'?NewsCategories:'.$_id => t('Categories'),
 			$_SERVER['PHP_SELF'].'?NewsComment:'.$_id => t('Comments').' ('.getCommentsCount(COMMENT_NEWS, $_id).')'
@@ -181,7 +181,7 @@ function showNewsArticle($_id = 0)
 
 	echo createMenu($menu, 'blog_menu');
 
-	if ($current_tab == 'NewsEdit' && $session->isAdmin) {
+	if ($current_tab == 'NewsEdit' && $h->session->isAdmin) {
 
 		if (!empty($_POST['news_title'])) {
 			updateNews($_id, $_POST['news_cat'], $_POST['news_title'], $_POST['news_body'], $_POST['news_publish'], $_POST['news_rss']);
@@ -205,10 +205,10 @@ function showNewsArticle($_id = 0)
 		echo xhtmlSubmit('Save changes');
 		echo '</form>';
 
-	} else if ($current_tab == 'NewsPolls' && $session->isAdmin) {
+	} else if ($current_tab == 'NewsPolls' && $h->session->isAdmin) {
 		managePolls(POLL_NEWS, $_id);
 
-	} else if ($current_tab == 'NewsDelete' && $session->isAdmin) {
+	} else if ($current_tab == 'NewsDelete' && $h->session->isAdmin) {
 
 		if (confirmed(t('Are you sure you wish to delete this news entry?'), 'NewsDelete:'.$_id)) {
 			removeNews($_id);
@@ -219,11 +219,11 @@ function showNewsArticle($_id = 0)
 			die;
 		}
 
-	} else if ($current_tab == 'NewsCategories' && $session->isAdmin) {
+	} else if ($current_tab == 'NewsCategories' && $h->session->isAdmin) {
 
 		manageCategoriesDialog(CATEGORY_NEWS);
 
-	} else if ($current_tab == 'NewsFiles' && $session->isAdmin) {
+	} else if ($current_tab == 'NewsFiles' && $h->session->isAdmin) {
 
 		echo showFiles(FILETYPE_NEWS, $_id);
 
@@ -253,7 +253,7 @@ function showNewsArticle($_id = 0)
  */
 function showNews($limit = 0)
 {
-	global $db, $session, $config;
+	global $h, $db, $config;
 
 	//Displays one news article - returns if successful
 	if (showNewsArticle()) return;
@@ -266,7 +266,7 @@ function showNews($limit = 0)
 	foreach ($list as $row) {
 		showNewsOverview($row);
 	}
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		echo '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php">'.t('Add news').'</a><br/>';
 		echo '<a href="'.$config['core']['web_root'].'admin/admin_news.php">'.t('Manage news').'</a><br/>';
 	}

@@ -14,6 +14,6 @@ $fieldId = getUserdataFieldIdByType(USERDATA_TYPE_IMAGE);
 $fileId = loadUserdataSetting($_GET['id'], $fieldId);
 
 if ($fileId && !isInQueue($fileId, MODERATION_PRES_IMAGE)) {
-	$files->sendFile($fileId, true);
+	$h->files->sendFile($fileId, true);
 }
 ?>

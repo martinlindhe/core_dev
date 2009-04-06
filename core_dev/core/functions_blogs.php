@@ -18,13 +18,13 @@ $config['blog']['allow_rating'] = true;		//allow users to rate blogs
  */
 function addBlog($categoryId, $title, $body, $isPrivate = 0)
 {
-	global $db, $session, $config;
-	if (!$session->id || !is_numeric($categoryId) || !is_numeric($isPrivate)) return false;
+	global $h, $db, $config;
+	if (!$h->session->id || !is_numeric($categoryId) || !is_numeric($isPrivate)) return false;
 
 	$title = $db->escape($title);
 	$body = $db->escape($body);
 
-	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$session->id;
+	$q = 'INSERT INTO tblBlogs SET categoryId='.$categoryId.',userId='.$h->session->id;
 	$q .= ',subject="'.$title.'",body="'.$body.'",timeCreated=NOW(),isPrivate='.$isPrivate;
 	$blogId = $db->insert($q);
 
@@ -34,7 +34,7 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
 	}
 	//notify subscribers
 	if ($config['subscriptions']['notify']) {
-		notifySubscribers(SUBSCRIPTION_BLOG, $session->id, $blogId);
+		notifySubscribers(SUBSCRIPTION_BLOG, $h->session->id, $blogId);
 	}
 
 	return $blogId;
@@ -47,10 +47,10 @@ function addBlog($categoryId, $title, $body, $isPrivate = 0)
  */
 function deleteBlog($_id)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblBlogs SET timeDeleted=NOW(),deletedBy='.$session->id.' WHERE blogId='.$_id;
+	$q = 'UPDATE tblBlogs SET timeDeleted=NOW(),deletedBy='.$h->session->id.' WHERE blogId='.$_id;
 	$db->update($q);
 }
 
@@ -73,8 +73,8 @@ function updateBlogReadCount($_id)
  */
 function updateBlog($blogId, $categoryId, $title, $body, $isPrivate = 0)
 {
-	global $db, $session, $config;
-	if (!$session->id || !is_numeric($blogId) || !is_numeric($categoryId) || !is_numeric($isPrivate)) return false;
+	global $h, $db, $config;
+	if (!$h->session->id || !is_numeric($blogId) || !is_numeric($categoryId) || !is_numeric($isPrivate)) return false;
 
 	$title = $db->escape($title);
 	$body = $db->escape($body);
@@ -145,13 +145,13 @@ function getBlog($blogId)
  */
 function getBlogs($_id = 0, $_limit_sql = '')
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_id)) return false;
 
 	$q  = 'SELECT * FROM tblBlogs';
 	$q .= ' WHERE deletedBy=0';
 	if ($_id) $q .= ' AND userId='.$_id;
-	if (!$session->isAdmin && ($session->id != $_id || !isFriends($_id))) {
+	if (!$h->session->isAdmin && ($h->session->id != $_id || !isFriends($_id))) {
 		$q .= ' AND isPrivate=0';
 	}
 	$q .= ' ORDER BY timeCreated DESC'.$_limit_sql;
@@ -165,13 +165,13 @@ function getBlogs($_id = 0, $_limit_sql = '')
  */
 function getBlogCount($_id = 0)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_id)) return false;
 
 	$q  = 'SELECT COUNT(blogId) FROM tblBlogs';
 	$q .= ' WHERE deletedBy=0';
 	if ($_id) $q .= ' AND userId='.$_id;
-	if (!$session->isAdmin && ($session->id != $_id || !isFriends($_id))) {
+	if (!$h->session->isAdmin && ($h->session->id != $_id || !isFriends($_id))) {
 		$q .= ' AND isPrivate=0';
 	}
 	return $db->getOneItem($q);
@@ -215,7 +215,7 @@ function getBlogsByMonth($userId, $month, $year, $order_desc = true)
  */
 function showBlog()
 {
-	global $session, $files, $config;
+	global $h, $config;
 
 	//Looks for formatted blog section commands, like: Blog:ID, BlogEdit:ID, BlogDelete:ID, BlogReport:ID, BlogComment:ID, BlogFiles:ID
 	$cmd = fetchSpecialParams($config['blog']['allowed_tabs']);
@@ -233,7 +233,7 @@ function showBlog()
 		return false;
 	}
 
-	if (($session->id == $blog['userId'] || $session->isAdmin) && isset($_POST['blog_cat']) && isset($_POST['blog_title']) && isset($_POST['blog_body'])) {
+	if (($h->session->id == $blog['userId'] || $h->session->isAdmin) && isset($_POST['blog_cat']) && isset($_POST['blog_title']) && isset($_POST['blog_body'])) {
 		updateBlog($_id, $_POST['blog_cat'], $_POST['blog_title'], $_POST['blog_body']);
 		$blog = getBlog($_id);
 	}
@@ -248,12 +248,12 @@ function showBlog()
 	echo '</div>'; //class="blog_head"
 
 	$menu = array($_SERVER['PHP_SELF'].'?Blog:'.$_id => 'Show blog');
-	if ($session->id == $blog['userId'] || $session->isSuperAdmin) {
+	if ($h->session->id == $blog['userId'] || $h->session->isSuperAdmin) {
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogEdit:'.$_id => 'Edit blog'));
-		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$files->getFileCount(FILETYPE_BLOG, $_id).')'));
+		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogFiles:'.$_id => 'Attachments ('.$h->files->getFileCount(FILETYPE_BLOG, $_id).')'));
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogDelete:'.$_id => 'Delete blog'));
 	}
-	if ($session->id && $session->id != $blog['userId']) {
+	if ($h->session->id && $h->session->id != $blog['userId']) {
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogReport:'.$_id => 'Report blog'));
 	}
 	$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$_id => 'Comments ('.getCommentsCount(COMMENT_BLOG, $_id).')'));
@@ -262,7 +262,7 @@ function showBlog()
 
 	echo '<div class="blog_body">';
 
-	if ($current_tab == 'BlogEdit' && ($session->id == $blog['userId'] || $session->isAdmin) ) {
+	if ($current_tab == 'BlogEdit' && ($h->session->id == $blog['userId'] || $h->session->isAdmin) ) {
 		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?BlogEdit:'.$_id.'">';
 		echo '<input type="text" name="blog_title" value="'.$blog['subject'].'" size="40" maxlength="40"/>';
 
@@ -283,14 +283,14 @@ function showBlog()
 			echo '<div class="blog_foot">Last updated '. $blog['timeUpdated'].'</div>';
 		}
 
-	} else if ($current_tab == 'BlogDelete' && (($session->id && $session->id == $blog['userId']) || $session->isAdmin) ) {
+	} else if ($current_tab == 'BlogDelete' && (($h->session->id && $h->session->id == $blog['userId']) || $h->session->isAdmin) ) {
 
 		if (confirmed('Are you sure you want to delete this blog?', 'BlogDelete:'.$_id)) {
 			deleteBlog($_id);
 			echo 'The blog has been deleted.<br/>';
 		}
 
-	} else if ($current_tab == 'BlogReport' && $session->id) {
+	} else if ($current_tab == 'BlogReport' && $h->session->id) {
 
 		if (isset($_POST['blog_reportreason'])) {
 			$queueId = addToModerationQueue(MODERATION_BLOG, $_id);
@@ -312,7 +312,7 @@ function showBlog()
 
 		showComments(COMMENT_BLOG, $_id);
 
-	} else if ($current_tab == 'BlogFiles' && ($session->id == $blog['userId'] || $session->isAdmin)) {
+	} else if ($current_tab == 'BlogFiles' && ($h->session->id == $blog['userId'] || $h->session->isAdmin)) {
 
 		echo showFiles(FILETYPE_BLOG, $_id);
 
@@ -326,7 +326,7 @@ function showBlog()
 
 		if ($config['blog']['allow_rating']) {
 			echo '<div class="news_rate">';
-			if ($session->id != $blog['userId']) {
+			if ($h->session->id != $blog['userId']) {
 				echo ratingGadget(RATE_BLOG, $_id);
 			} else {
 				echo showRating(RATE_BLOG, $_id);
@@ -344,13 +344,13 @@ function showBlog()
  */
 function showUserBlogs($_userid_name = '')
 {
-	global $session;
+	global $h;
 
 	if ($_userid_name && isset($_GET[$_userid_name]) && is_numeric($_GET[$_userid_name])) {
 		$userId = $_GET[$_userid_name];
 		echo 'Blogs:'.Users::getName($userId).'<br/>';
 	} else {
-		$userId = $session->id;
+		$userId = $h->session->id;
 		echo 'Your blogs:<br/>';
 	}
 

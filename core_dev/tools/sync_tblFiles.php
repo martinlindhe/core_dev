@@ -9,7 +9,7 @@
 
 require_once('/var/www/www.phonecafe.se/config.php');
 
-$list = $files->getFiles();
+$list = $h->files->getFiles();
 
 echo "Processing ".count($list)." files ...\n";
 
@@ -17,12 +17,12 @@ $deletes = 0;
 $updates = 0;
 
 foreach ($list as $row) {
-	if ($files->updateFile($row['fileId'])) {
+	if ($h->files->updateFile($row['fileId'])) {
 		echo ".";
 		$updates++;
 	} else {
 		echo "*";
-		$files->deleteFile($row['fileId'], 0, true);
+		$h->files->deleteFile($row['fileId'], 0, true);
 		$deletes++;
 	}
 }

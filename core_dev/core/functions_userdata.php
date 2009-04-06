@@ -798,8 +798,8 @@ function findUserByEmail($email)
  */
 function editUserdataSettings($_userid = '')
 {
-	global $config, $session, $files;
-	if (empty($_userid)) $_userid = $session->id;
+	global $h, $config;
+	if (empty($_userid)) $_userid = $h->session->id;
 
 	$list = readAllUserdata($_userid);
 	if (!$list) return;
@@ -813,10 +813,10 @@ function editUserdataSettings($_userid = '')
 			switch ($row['fieldType']) {
 				case USERDATA_TYPE_IMAGE:
 					if (!empty($_POST['userdata_'.$row['fieldId'].'_remove'])) {
-						$files->deleteFile($row['settingValue']);
+						$h->files->deleteFile($row['settingValue']);
 						$row['settingValue'] = 0;
 					} else if (isset($_FILES['userdata_'.$row['fieldId']])) { // FIXME: Gör så att handleUpload klarar av att ta userId som parameter
-						$row['settingValue'] = $files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
+						$row['settingValue'] = $h->files->handleUpload($_FILES['userdata_'.$row['fieldId']], FILETYPE_USERDATA, $row['fieldId']);
 					}
 					break;
 
@@ -867,7 +867,7 @@ function editUserdataSettings($_userid = '')
 					if (empty($_POST['userdata_'.$row['fieldId']])) break;
 					if (!ZipLocation::isValid($_POST['userdata_'.$row['fieldId']])) {
 						echo '<div class="critical">'.t('The Swedish zipcode you entered is not valid!').'</div>';
-						$session->log('User entered invalid swedish zipcode: '.$_POST['userdata_'.$row['fieldId']], LOGLEVEL_WARNING);
+						$h->session->log('User entered invalid swedish zipcode: '.$_POST['userdata_'.$row['fieldId']], LOGLEVEL_WARNING);
 					} else {
 						saveSetting(SETTING_USERDATA, 0, $_userid, 'city', ZipLocation::cityId($_POST['userdata_'.$row['fieldId']]));
 						saveSetting(SETTING_USERDATA, 0, $_userid, 'region', ZipLocation::regionId($_POST['userdata_'.$row['fieldId']]));
@@ -898,19 +898,19 @@ function editUserdataSettings($_userid = '')
 
 function editUserdataDropdown($name, $field, $default = '')
 {
-	global $session;
+	global $h;
 
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		$session->save($fieldId, $_POST[$field]);
+		$h->session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 
 		if (getUserdataFieldType($fieldId) == USERDATA_TYPE_THEME) {
-			$session->theme = $curr;
+			$h->session->theme = $curr;
 		}
 	} else {
-		$curr = $session->load($fieldId, 0);
+		$curr = $h->session->load($fieldId, 0);
 	}
 
 	if (!$curr) $curr = $default;
@@ -920,73 +920,73 @@ function editUserdataDropdown($name, $field, $default = '')
 
 function editUserdataInput($name, $field)
 {
-	global $session;
+	global $h;
 
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		$session->save($fieldId, $_POST[$field]);
+		$h->session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = $session->load($fieldId, '');
+		$curr = $h->session->load($fieldId, '');
 	}
 	return xhtmlInput($field, $curr);
 }
 
 function editUserdataCheckbox($name, $field)
 {
-	global $session;
+	global $h;
 
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		$session->save($fieldId, $_POST[$field]);
+		$h->session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = $session->load($fieldId, '');
+		$curr = $h->session->load($fieldId, '');
 	}
 	return xhtmlCheckbox($field, $name, 1, $curr);
 }
 
 function editUserdataTextarea($name, $field, $width, $height)
 {
-	global $session;
+	global $h;
 
 	$fieldId = getUserdataFieldIdByName($name);
 
 	if (isset($_POST[$field])) {
-		$session->save($fieldId, $_POST[$field]);
+		$h->session->save($fieldId, $_POST[$field]);
 		$curr = $_POST[$field];
 	} else {
-		$curr = $session->load($fieldId, '');
+		$curr = $h->session->load($fieldId, '');
 	}
 	return xhtmlTextarea($field, $curr, $width, $height);
 }
 
 function editUserdataImage($name, $field)
 {
-	global $session, $files;
+	global $h;
 
 	$fieldId = getUserdataFieldIdByName($name);
 
 	$out = '';
 
 	if (isset($_FILES[$field])) {
-		$curr = $files->handleUpload($_FILES[$field], FILETYPE_USERDATA, $fieldId);
-		$nfo = $files->getFile($curr);
+		$curr = $h->files->handleUpload($_FILES[$field], FILETYPE_USERDATA, $fieldId);
+		$nfo = $h->files->getFile($curr);
 		if ($nfo['mediaType'] == MEDIATYPE_IMAGE) {
-			$session->save($fieldId, $curr);
+			$h->session->save($fieldId, $curr);
 		} else {
 			$out .= '<div class="critical">'.t('The uploaded file is not a image. You need to upload a image to use as a presentation image!').'</div>';
 			$curr = 0;
 		}
 	} else {
-		$curr = $session->load($fieldId, '');
+		$curr = $h->session->load($fieldId, '');
 	}
 
 	if (!empty($_GET['delpic']) && $_GET['delpic'] == $curr) {
-		$files->deleteFile($curr);
-		$session->save($fieldId, '');
+		$h->files->deleteFile($curr);
+		$h->session->save($fieldId, '');
 		$curr = 0;
 	}
 
@@ -1017,7 +1017,7 @@ function editUserdataImage($name, $field)
  */
 function getUsersOnlineByGender($gender)
 {
-	global $db, $session;
+	global $h, $db;
 
 	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_GENDER);
 
@@ -1033,7 +1033,7 @@ function getUsersOnlineByGender($gender)
 
 	$q  = 'SELECT t1.* FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingName="'.$fieldId.'" AND t2.settingType='.SETTING_USERDATA.') ';
-	$q .= ' WHERE t1.timeDeleted IS NULL AND t1.timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+	$q .= ' WHERE t1.timeDeleted IS NULL AND t1.timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
 	$q .= ' AND t2.settingValue = "'.$genderId.'"';
 	$q .= ' ORDER BY t1.timeLastActive DESC';
 
@@ -1042,7 +1042,7 @@ function getUsersOnlineByGender($gender)
 
 function getUsersOnlineByGenderCnt($gender)
 {
-	global $db, $session;
+	global $h, $db;
 
 	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_GENDER);
 
@@ -1058,7 +1058,7 @@ function getUsersOnlineByGenderCnt($gender)
 
 	$q  = 'SELECT COUNT(*) FROM tblUsers AS t1';
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingName="'.$fieldId.'" AND t2.settingType='.SETTING_USERDATA.') ';
-	$q .= ' WHERE t1.timeDeleted IS NULL AND t1.timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+	$q .= ' WHERE t1.timeDeleted IS NULL AND t1.timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
 	$q .= ' AND t2.settingValue = "'.$genderId.'"';
 
 	return $db->getOneItem($q);
@@ -1066,7 +1066,7 @@ function getUsersOnlineByGenderCnt($gender)
 
 function getRandomUserByGender($gender)
 {
-	global $db, $session;
+	global $h, $db;
 
 	$fieldId = getUserdataFieldIdByType(USERDATA_TYPE_GENDER);
 
@@ -1084,7 +1084,7 @@ function getRandomUserByGender($gender)
 	$q .= ' LEFT JOIN tblSettings AS t2 ON (t1.userId = t2.ownerId AND t2.settingName="'.$fieldId.'" AND t2.settingType='.SETTING_USERDATA.') ';
 	$q .= ' WHERE t1.timeDeleted IS NULL';
 	$q .= ' AND t2.settingValue = "'.$genderId.'"';
-	if ($session->id) $q .= ' AND userId!='.$session->id;
+	if ($h->session->id) $q .= ' AND userId!='.$h->session->id;
 	$q .= ' ORDER BY RAND() LIMIT 1';
 
 	return $db->getOneItem($q);

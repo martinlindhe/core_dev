@@ -188,13 +188,13 @@ if (isset($_GET['gb'])) {
 } else if (isset($_GET['gallimg'])) {
 	echo '<h1>Incoming GALLERY IMAGES</h1>';
 
-	$tot_cnt = $files->getFileCount(FILETYPE_USERFILE, 0, 0, MEDIATYPE_IMAGE);
+	$tot_cnt = $h->files->getFileCount(FILETYPE_USERFILE, 0, 0, MEDIATYPE_IMAGE);
 
 	$pager = makePager($tot_cnt, 10);
 
 	echo $pager['head'];
 
-	$list = $files->getFilesByMediaType(FILETYPE_USERFILE, 0, 0, MEDIATYPE_IMAGE, $pager['limit'], 'DESC');
+	$list = $h->files->getFilesByMediaType(FILETYPE_USERFILE, 0, 0, MEDIATYPE_IMAGE, $pager['limit'], 'DESC');
 
 	foreach ($list as $row) {
 		echo showThumb($row['fileId'], '', 270, 200);

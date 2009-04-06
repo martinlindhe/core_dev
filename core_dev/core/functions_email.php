@@ -70,7 +70,7 @@ function smtp_mail($dst_adr, $subj, $msg, $attach_name = '', $attach_data = '', 
  */
 function contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res)
 {
-	global $db, $files;
+	global $h, $db;
 	if (empty($message) || empty($subject)) return false;
 
 	if ($all == 1) { // Ignore everything else, just get a list of all users.
@@ -102,7 +102,7 @@ function contact_users($message, $subject, $all, $presvid, $logged_in_days, $day
 				if ($presvid == 1) {
 					$cId = loadSetting(SETTING_USERDATA, 0, $row['userId'], 'm2w_id');
 					if (!$cId) continue;
-					$vid_pres = $files->getFiles(FILETYPE_VIDEOPRES, $cId);
+					$vid_pres = $h->files->getFiles(FILETYPE_VIDEOPRES, $cId);
 					if (!is_array($vid_pres)) continue;
 				}
 			}

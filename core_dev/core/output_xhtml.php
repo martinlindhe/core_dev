@@ -23,7 +23,7 @@ require_once('locale.php');
  */
 function createXHTMLHeader()
 {
-	global $config, $h, $files, $title;
+	global $h, $config, $title;
 	global $meta_rss, $meta_js, $meta_css, $meta_search, $meta_favicon;
 	global $body_onload;
 
@@ -75,7 +75,7 @@ function createXHTMLHeader()
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
 		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
-		if (!empty($files) && $files->allow_rating) {
+		if (!empty($h->files) && $h->files->allow_rating) {
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
 		}
 	}
@@ -415,13 +415,13 @@ function xhtmlTable($arr, $heads = '', $callback = '')
  */
 function getCategoriesSelect($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
 {	//FIXME: rename to xhtmlSelectCategory()
-	global $config, $files;
+	global $h, $config;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	$out = '<select name="'.strip_tags($selectName).'">';
 
 	if ($_type == CATEGORY_USERFILE) {
-		if ($files->allow_root_level) {
+		if ($h->files->allow_root_level) {
 			$out .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
 		}
 	} else {
