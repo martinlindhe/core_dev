@@ -19,7 +19,7 @@ define('POLL_FORTUNE',	3);	//this is actually a "fortune of the day" message, wi
  */
 function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 	$text = $db->escape(trim($text));
@@ -82,7 +82,7 @@ function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
 		default: die('eexp');
 	}
 
-	$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session->id.',timeCreated=NOW()'.$timeStart.$timeEnd;
+	$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$h->session->id.',timeCreated=NOW()'.$timeStart.$timeEnd;
 	return $db->insert($q);
 }
 
@@ -91,7 +91,7 @@ function addPoll($_type, $ownerId, $text, $duration_mode = '', $start_mode = '')
  */
 function addPollExactPeriod($_type, $ownerId, $text, $_start, $_end)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_type) || !is_numeric($ownerId)) return false;
 
 	$text = $db->escape(trim($text));
@@ -99,7 +99,7 @@ function addPollExactPeriod($_type, $ownerId, $text, $_start, $_end)
 	$_start = sql_datetime(strtotime($_start));
 	$_end = sql_datetime(strtotime($_end));
 
-	$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$session->id.',timeCreated=NOW(),timeStart="'.$db->escape($_start).'",timeEnd="'.$db->escape($_end).'"';
+	$q = 'INSERT INTO tblPolls SET ownerId='.$ownerId.',pollType='.$_type.',pollText="'.$text.'",createdBy='.$h->session->id.',timeCreated=NOW(),timeStart="'.$db->escape($_start).'",timeEnd="'.$db->escape($_end).'"';
 	$db->insert($q);
 }
 
@@ -162,13 +162,13 @@ function getActivePolls($_type, $ownerId = 0, $limit = 0)
  */
 function addPollVote($_id, $voteId)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_id) || !is_numeric($voteId)) return false;
 
-	$q = 'SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$session->id;
+	$q = 'SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$h->session->id;
 	if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblPollVotes SET userId='.$session->id.',pollId='.$_id.',voteId='.$voteId;
+	$q = 'INSERT INTO tblPollVotes SET userId='.$h->session->id.',pollId='.$_id.',voteId='.$voteId;
 	$db->insert($q);
 	return true;
 }
@@ -178,10 +178,10 @@ function addPollVote($_id, $voteId)
  */
 function hasAnsweredPoll($_id)
 {
-	global $db, $session;
-	if (!is_numeric($_id) || !$session->id) return false;
+	global $h, $db;
+	if (!is_numeric($_id) || !$h->session->id) return false;
 
-	$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$session->id.' AND pollId='.$_id;
+	$q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$h->session->id.' AND pollId='.$_id;
 	if ($db->getOneItem($q)) return true;
 	return false;
 }
@@ -206,10 +206,10 @@ function getPollStats($_id)
  */
 function removePoll($_type, $_id)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblPolls SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id;
+	$q = 'UPDATE tblPolls SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id;
 	$db->update($q);
 }
 
@@ -218,7 +218,7 @@ function removePoll($_type, $_id)
  */
 function poll($_type, $_id)
 {
-	global $session;
+	global $h;
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$data = getPoll($_type, $_id);
@@ -236,16 +236,16 @@ function poll($_type, $_id)
 	$list = getCategories(CATEGORY_POLL, $_id);
 
 	$result .= '<div id="poll'.$_id.'">';
-	if ($session->isAdmin && $data['timeStart']) $result .= t('Starts').': '.$data['timeStart'].', '.t('ends').' '.$data['timeEnd'].'<br/>';
+	if ($h->session->isAdmin && $data['timeStart']) $result .= t('Starts').': '.$data['timeStart'].', '.t('ends').' '.$data['timeEnd'].'<br/>';
 
-	if ($session->id && $active && !hasAnsweredPoll($_id)) {
+	if ($h->session->id && $active && !hasAnsweredPoll($_id)) {
 		foreach ($list as $row) {
 			$result .= '<div class="poll_item" onclick="submit_poll('.$_id.','.$row['categoryId'].')">';
 			$result .= $row['categoryName'];
 			$result .= '</div><br/>';
 		}
 	} else {
-		if ($session->id) {
+		if ($h->session->id) {
 			$result .= '<br/>';
 			if ($active) {
 				$result .= t('You already voted, showing current standings').':<br/><br/>';
@@ -265,12 +265,12 @@ function poll($_type, $_id)
 		}
 	}
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		$result .= '<br/><input type="button" class="button" value="'.t('Save as .csv').'" onclick="get_poll_csv('.$_id.')"/>';
 	}
 	$result .= '</div>';
 
-	if ($session->id) {
+	if ($h->session->id) {
 		$result .= '<div id="poll_voted'.$_id.'" style="display:none">';
 			$result .= t('Your vote has been registered.');
 		$result .= '</div>';
@@ -525,8 +525,8 @@ function managePolls($_type, $_owner = 0)
  */
 function showAttachedPolls($_type, $_owner)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_type) || !is_numeric($_owner)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	$list = getPolls($_type, $_owner);
 	if (!$list) return;

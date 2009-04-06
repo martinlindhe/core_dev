@@ -12,8 +12,8 @@ require_once('atom_moderation.php');	//for moderation functionality
  */
 function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($ownerId) || !is_numeric($private)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($ownerId) || !is_numeric($private)) return false;
 
 	//Strip all html
 	$subject = $db->escape(strip_tags($subject));
@@ -25,13 +25,13 @@ function addGuestbookEntry($ownerId, $subject, $body, $private = 0)
 		checks if the user has written a identical message in the last 5 minutes
 	*/
 	$q  = 'SELECT COUNT(*) FROM tblGuestbooks';
-	$q .= ' WHERE userId='.$ownerId.' AND authorId='.$session->id;
+	$q .= ' WHERE userId='.$ownerId.' AND authorId='.$h->session->id;
 	$q .= ' AND subject="'.$subject.'" AND body="'.$body.'"';
 	$q .= ' AND timeCreated>=DATE_SUB(NOW(),INTERVAL 5 MINUTE)';
 	if ($db->getOneItem($q)) return false;
 
 	$q  = 'INSERT INTO tblGuestbooks SET userId='.$ownerId.',';
-	$q .= 'authorId='.$session->id.',subject="'.$subject.'",';
+	$q .= 'authorId='.$h->session->id.',subject="'.$subject.'",';
 	$q .= 'body="'.$body.'",timeCreated=NOW(),isPrivate='.$private;
 	$entryId = $db->insert($q);
 
@@ -60,10 +60,10 @@ function setGuestbookAnswerId($entryId, $answerId)
  */
 function removeGuestbookEntry($_id)
 {
-	global $db, $session;
-	if (!is_numeric($_id) || !$session->id) return false;
+	global $h, $db;
+	if (!is_numeric($_id) || !$h->session->id) return false;
 
-	$q = 'UPDATE tblGuestbooks SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE entryId='.$_id;
+	$q = 'UPDATE tblGuestbooks SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE entryId='.$_id;
 	$db->update($q);
 }
 
@@ -234,10 +234,10 @@ function getGuestbookUnreadCount($userId)
  */
 function markGuestbookRead()
 {
-	global $db, $session;
-	if (!$session->id) return false;
+	global $h, $db;
+	if (!$h->session->id) return false;
 
-	$q = 'UPDATE tblGuestbooks SET timeRead=NOW() WHERE timeRead IS NULL AND userId='.$session->id;
+	$q = 'UPDATE tblGuestbooks SET timeRead=NOW() WHERE timeRead IS NULL AND userId='.$h->session->id;
 	$db->update($q);
 }
 
@@ -247,13 +247,13 @@ function markGuestbookRead()
  */
 function showGuestbook($userId)
 {
-	global $config, $session;
-	if ($session->isAdmin || $session->id == $userId) {
+	global $h, $config;
+	if ($h->session->isAdmin || $h->session->id == $userId) {
 		if (!empty($_GET['remove'])) {
 			removeGuestbookEntry($_GET['remove']);
 		}
 	}
-	if ($session->id != $userId && !empty($_POST['body'])) {
+	if ($h->session->id != $userId && !empty($_POST['body'])) {
 		addGuestbookEntry($userId, '', $_POST['body']);
 	}
 
@@ -266,7 +266,7 @@ function showGuestbook($userId)
 	}
 
 	if (!$tot_cnt) {
-		if ($session->id == $userId) {
+		if ($h->session->id == $userId) {
 			echo t('Your guestbook is empty');
 		} else {
 			echo t('The guestbook is empty');
@@ -276,7 +276,7 @@ function showGuestbook($userId)
 
 	if ($historyId) {
 		echo t('Displaying guestbook history between yourself and').' '.Users::getName($historyId).'<br/>';
-		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$session->id.'">'.t('Return to guestbook overview').'</a><br/><br/>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$h->session->id.'">'.t('Return to guestbook overview').'</a><br/><br/>';
 	}
 
 	$pager = makePager($tot_cnt, 5);
@@ -296,27 +296,27 @@ function showGuestbook($userId)
 		echo ', '.formatTime($row['timeCreated']);
 		echo '</div>';
 
-		if ($session->id == $userId) {
+		if ($h->session->id == $userId) {
 			if (!$row['timeRead']) {
 				echo '<img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
 			}
 		}
 		echo stripslashes($row['body']).'<br/>';
 
-		if ($session->isAdmin || $session->id == $userId) {
+		if ($h->session->isAdmin || $h->session->id == $userId) {
 			echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;remove='.$row['entryId'].'">'.t('Remove').'</a>';
 		}
 
-		if ($session->id == $row['userId']) {
+		if ($h->session->id == $row['userId']) {
 			echo ' | <a href="#" onclick="show_element_by_name(\'gb_reply_'.$row['entryId'].'\')">'.t('Reply').'</a>';
 		}
 
-		if (!$historyId && ($session->id == $row['authorId'] || $session->id == $row['userId'])) {
-			echo ' | <a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;history='.($row['authorId']==$session->id?$row['userId']:$row['authorId']).'">'.t('History').'</a>';
+		if (!$historyId && ($h->session->id == $row['authorId'] || $h->session->id == $row['userId'])) {
+			echo ' | <a href="'.$_SERVER['PHP_SELF'].'?id='.$userId.'&amp;history='.($row['authorId']==$h->session->id ? $row['userId'] : $row['authorId']).'">'.t('History').'</a>';
 		}
 		echo '</div><br/>';
 
-		if ($session->id == $row['userId']) {
+		if ($h->session->id == $row['userId']) {
 			echo '<div id="gb_reply_'.$row['entryId'].'" style="display:none;">';
 			echo t('Reply to').' '.Users::getName($row['authorId']).':<br/>';
 			echo '<form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$row['authorId'].'">';
@@ -327,8 +327,8 @@ function showGuestbook($userId)
 		}
 	}
 
-	if ($session->id) {
-		if ($session->id != $userId) {
+	if ($h->session->id) {
+		if ($h->session->id != $userId) {
 			echo t('New entry').':<br/>';
 			echo '<form name="addGuestbook" method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$userId.'">';
 			echo '<textarea name="body" cols="40" rows="6"></textarea><br/><br/>';

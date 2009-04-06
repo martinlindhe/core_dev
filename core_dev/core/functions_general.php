@@ -81,7 +81,7 @@ function URLadd($_key, $_val = '', $_extra = '')	//FIXME: is this function even 
 function confirmed($text, $_var, $_id = 0)
 {
 	global $project;	//path to design includes
-	global $config, $db, $session, $time_start;
+	global $h, $db, $config, $time_start;
 
 	if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
 

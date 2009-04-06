@@ -37,11 +37,11 @@ $config['subscriptions']['message']['files'] = '';		//default text
  */
 function addSubscription($type, $itemId, $ownerId = 0)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)|| !is_numeric($ownerId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($type) || !is_numeric($itemId)|| !is_numeric($ownerId)) return false;
 
 	if ($ownerId == 0 && isSubscribed($type, $itemId)) return false;
-	$q = 'INSERT INTO tblSubscriptions SET ownerId='.($ownerId==0?$session->id:$ownerId).', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
+	$q = 'INSERT INTO tblSubscriptions SET ownerId='.(!$ownerId ? $h->session->id : $ownerId).', itemId='.$itemId.', type='.$type.', timeCreated=NOW()';
 	return $db->insert($q);
 }
 
@@ -54,10 +54,10 @@ function addSubscription($type, $itemId, $ownerId = 0)
  */
 function removeSubscription($type, $itemId)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
 
-	$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type.' AND ownerId='.$session->id;
+	$q = 'DELETE FROM tblSubscriptions WHERE itemId='.$itemId.' AND type='.$type.' AND ownerId='.$h->session->id;
 	return $db->delete($q);
 }
 
@@ -70,10 +70,10 @@ function removeSubscription($type, $itemId)
  */
 function isSubscribed($type, $itemId)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($type) || !is_numeric($itemId)) return false;
 
-	$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$session->id.' AND type='.$type.' AND itemId='.$itemId;
+	$q = 'SELECT id FROM tblSubscriptions WHERE ownerId='.$h->session->id.' AND type='.$type.' AND itemId='.$itemId;
 	if ($db->getOneItem($q)) return true;
 	return false;
 }
@@ -86,18 +86,18 @@ function isSubscribed($type, $itemId)
  */
 function getSubscriptions($type)	//FIXME take userId parameter
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($type)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($type)) return false;
 
 	switch ($type) {
 		case SUBSCRIPTION_FORUM:
 			$q = 'SELECT t1.*,t2.itemSubject FROM tblSubscriptions AS t1 ';
 			$q .= 'LEFT JOIN tblForums AS t2 ON (t1.itemId=t2.itemId) ';
-			$q .= 'WHERE t1.type='.$type.' AND t1.ownerId='.$session->id;
+			$q .= 'WHERE t1.type='.$type.' AND t1.ownerId='.$h->session->id;
 			break;
 
 		default:
-			$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$session->id;
+			$q = 'SELECT * FROM tblSubscriptions WHERE type='.$type.' AND ownerId='.$h->session->id;
 			break;
 	}
 	return $db->getArray($q);
@@ -134,7 +134,7 @@ function getSubscribers($type, $itemId)
 
 function notifySubscribers($type, $itemId, $newItemId)
 {
-	global $db, $config, $h;
+	global $h, $db, $config;
 	if (!is_numeric($type) || !is_numeric($itemId) || !is_numeric($newItemId)) return false;
 
 	$subscribers = getSubscribers($type, $itemId);

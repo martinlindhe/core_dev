@@ -17,13 +17,13 @@ define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
  */
 function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_type) || !is_numeric($_subjectId)) return false;
 
-	$q = 'SELECT feedbackId FROM tblFeedback WHERE feedbackType='.$_type.' AND subj="'.$db->escape($_subj).'" AND body="'.$db->escape($_body).'" AND userId='.$session->id;
+	$q = 'SELECT feedbackId FROM tblFeedback WHERE feedbackType='.$_type.' AND subj="'.$db->escape($_subj).'" AND body="'.$db->escape($_body).'" AND userId='.$h->session->id;
 	if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$session->id.',subjectId='.$_subjectId.',timeCreated=NOW()';
+	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$h->session->id.',subjectId='.$_subjectId.',timeCreated=NOW()';
 	return $db->insert($q);
 }
 
@@ -32,10 +32,10 @@ function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
  */
 function answerFeedback($_id, $_answer)
 {
-	global $db, $session;
-	if (!is_numeric($_id) || !$session->id) return false;
+	global $h, $db;
+	if (!is_numeric($_id) || !$h->session->id) return false;
 
-	$q = 'UPDATE tblFeedback SET answer="'.$db->escape($_answer).'", answeredBy='.$session->id.',timeAnswered=NOW() WHERE feedbackId='.$_id;
+	$q = 'UPDATE tblFeedback SET answer="'.$db->escape($_answer).'", answeredBy='.$h->session->id.',timeAnswered=NOW() WHERE feedbackId='.$_id;
 	return $db->update($q);
 }
 
@@ -148,8 +148,8 @@ function searchFeedbackCnt($_type = 0, $_search)
  */
 function deleteFeedback($_id)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
 	$q = 'DELETE FROM tblFeedback WHERE feedbackId='.$_id;
 	return $db->delete($q);
@@ -160,8 +160,8 @@ function deleteFeedback($_id)
  */
 function getFeedbackItem($_id)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
 	$q = 'SELECT * FROM tblFeedback WHERE feedbackId='.$_id;
 	return $db->getOneRow($q);

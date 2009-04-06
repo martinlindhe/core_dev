@@ -8,7 +8,7 @@
 
 require_once('find_config.php');
 
-if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
+if (!$h->session->id || empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
 
 echo ZipLocation::citySelect($_GET['i']);
 ?>

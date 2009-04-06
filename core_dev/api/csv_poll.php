@@ -9,11 +9,11 @@
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;
 
 require_once('find_config.php');
-	
-$session->requireAdmin();
+
+$h->session->requireAdmin();
 
 $_id = $_GET['id'];
-	
+
 $outfile = 'poll #'.$_id.' - '.date('Y-m-d H:i').'.txt';		//default extension for csv files in spss
 
 header('Content-type: text/csv');

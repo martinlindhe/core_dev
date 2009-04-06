@@ -15,15 +15,15 @@ define('MESSAGE_GROUP_OUTBOX',	2);
  */
 function sendMessage($_id, $_subj, $_msg)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_id)) return false;
 
 	//Adds message to recievers inbox
-	$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
+	$q = 'INSERT INTO tblMessages SET ownerId='.$_id.',fromId='.$h->session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_INBOX;
 	$db->insert($q);
 
 	//Add message to senders outbox
-	$q = 'INSERT INTO tblMessages SET ownerId='.$session->id.',fromId='.$session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
+	$q = 'INSERT INTO tblMessages SET ownerId='.$h->session->id.',fromId='.$h->session->id.',toId='.$_id.',subject="'.$db->escape($_subj).'",body="'.$db->escape($_msg).'",timeCreated=NOW(),groupId='.MESSAGE_GROUP_OUTBOX;
 	$id = $db->insert($q);
 
 	return $id;
@@ -183,12 +183,12 @@ function getMessagesNewItemsCount($_group = 0, $_id = 0)
  */
 function getMessage($_id)
 {
-	global $db, $session;
-	if (!is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_id)) return false;
 
-	$q = 'SELECT * FROM tblMessages WHERE ownerId='.$session->id.' AND msgId='.$_id.' AND timeDeleted IS NULL';
+	$q = 'SELECT * FROM tblMessages WHERE ownerId='.$h->session->id.' AND msgId='.$_id.' AND timeDeleted IS NULL';
 	$row = $db->getOneRow($q);
-	if ($row['ownerId'] != $session->id) return false;
+	if ($row['ownerId'] != $h->session->id) return false;
 	return $row;
 }
 
@@ -197,10 +197,10 @@ function getMessage($_id)
  */
 function markMessageRead($_id)
 {
-	global $db, $session;
-	if (!is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$session->id.' AND toId='.$session->id.' AND msgId='.$_id;
+	$q = 'UPDATE tblMessages SET timeRead=NOW() WHERE ownerId='.$h->session->id.' AND toId='.$h->session->id.' AND msgId='.$_id;
 	return $db->update($q);
 }
 
@@ -209,11 +209,11 @@ function markMessageRead($_id)
  */
 function markMessageDeleted($_id)
 {
-	global $db, $session;
-	if (!is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_id)) return false;
 
 	$q = 'UPDATE tblMessages SET timeDeleted=NOW() WHERE msgId='.$_id;
-	if (!$session->isAdmin) $q .= ' AND ownerId='.$session->id;
+	if (!$h->session->isAdmin) $q .= ' AND ownerId='.$h->session->id;
 	return $db->update($q);
 }
 
@@ -222,7 +222,7 @@ function markMessageDeleted($_id)
  */
 function showMessages($_group = 0)
 {
-	global $db, $session, $config;
+	global $h, $db, $config;
 	if (!is_numeric($_group)) return false;
 
 	if (!empty($_GET['read']) && is_numeric($_GET['read'])) {
@@ -248,7 +248,7 @@ function showMessages($_group = 0)
 
 		markMessageRead($_GET['read']);
 
-		if ($msg['fromId'] && $msg['fromId'] != $session->id) {
+		if ($msg['fromId'] && $msg['fromId'] != $h->session->id) {
 			echo ' <a href="messages.php?id='.$msg['fromId'].'&amp;r='.$msg['msgId'].'">'.t('Reply').'</a><br/>';
 		}
 		echo '<br/>';
@@ -264,14 +264,14 @@ function showMessages($_group = 0)
 	if (!$_group && !empty($_GET['g']) && is_numeric($_GET['g'])) $_group = $_GET['g'];
 	if (!$_group) $_group = MESSAGE_GROUP_INBOX;
 
-	echo ($_group==MESSAGE_GROUP_INBOX?'<b>'.t('INBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_INBOX.'">'.t('INBOX').'</a>').' | ';
+	echo ($_group==MESSAGE_GROUP_INBOX ?'<b>'.t('INBOX').'</b>' :'<a href="?g='.MESSAGE_GROUP_INBOX. '">'.t('INBOX').'</a>').' | ';
 	echo ($_group==MESSAGE_GROUP_OUTBOX?'<b>'.t('OUTBOX').'</b>':'<a href="?g='.MESSAGE_GROUP_OUTBOX.'">'.t('OUTBOX').'</a>').'<br/>';
 	echo '<br/>';
 
-	$list = getMessages($_group, $session->id);
+	$list = getMessages($_group, $h->session->id);
 	if (!$list) {
 		switch ($_group) {
-			case MESSAGE_GROUP_INBOX: echo t('No messages in inbox'); break;
+			case MESSAGE_GROUP_INBOX:  echo t('No messages in inbox'); break;
 			case MESSAGE_GROUP_OUTBOX: echo t('No messages in outbox'); break;
 			default: echo t('No messages'); break;
 		}

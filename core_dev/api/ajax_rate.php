@@ -12,7 +12,7 @@
 
 require_once('find_config.php');
 
-if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i']) ||
+if (!$h->session->id || empty($_GET['i']) || !is_numeric($_GET['i']) ||
 	empty($_GET['t']) || !is_numeric($_GET['t']) ||
 	empty($_GET['v']) || !is_numeric($_GET['v'])) die('bad');
 

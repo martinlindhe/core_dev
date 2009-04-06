@@ -216,11 +216,11 @@ function setStopword($wordId, $wordText, $full)
 
 /**
  * Adds the forum item $itemId to the moderation queue tagged with reason $queueType
- * $triggeredBy is only used if $session is not available
+ * $triggeredBy is only used if $h->session is not available
  */
 function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $triggeredBy = 0)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($itemId) || !is_numeric($queueType) || !is_bool($auto_triggered) || !is_numeric($triggeredBy)) return false;
 
 	if ($auto_triggered != '1') $auto_triggered = 0;
@@ -229,7 +229,7 @@ function addToModerationQueue($queueType, $itemId, $auto_triggered = false, $tri
 	$queueId = $db->getOneItem($q);
 	if ($queueId) return $queueId;
 
-	$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.($session ? $session->id : $triggeredBy).',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
+	$q = 'INSERT INTO tblModeration SET queueType='.$queueType.',itemId='.$itemId.',creatorId='.($h->session ? $h->session->id : $triggeredBy).',autoTriggered='.$auto_triggered.',timeCreated=NOW()';
 	return $db->insert($q);
 }
 
@@ -350,10 +350,10 @@ function getModeratedQueueCount($_type = 0)
  */
 function removeFromModerationQueue($queueId)
 {
-	global $db, $session;
-	if (!$session->isWebmaster || !is_numeric($queueId)) return false;
+	global $h, $db;
+	if (!$h->session->isWebmaster || !is_numeric($queueId)) return false;
 
-	$q = 'UPDATE tblModeration SET moderatedBy='.$session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
+	$q = 'UPDATE tblModeration SET moderatedBy='.$h->session->id.',timeModerated=NOW() WHERE queueId='.$queueId;
 	$db->update($q);
 }
 

@@ -7,9 +7,9 @@
 
 require_once('find_config.php');
 
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
-$userId = $session->id;
+$userId = $h->session->id;
 
 if (isset($_GET['otherid'])) {
 	$otherId = $_GET['otherid'];

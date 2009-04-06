@@ -1,5 +1,8 @@
 <?php
 
+die; //FIXME: this is not functional / used
+
+
 require_once('config_required.php');
 
 $session->requireLocalhost();
@@ -7,7 +10,7 @@ $session->requireLocalhost();
 echo '<h1>Create config.php file</h1>';
 
 echo 'I found the following compatible db extensions loaded in PHP:<br/>';
-	
+
 if (extension_loaded('mysqli')) {
 	echo '<div class="okay">MySQLi extension (recommended, requires PHP 5)</div>';
 }

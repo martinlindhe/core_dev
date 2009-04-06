@@ -44,19 +44,19 @@ define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all user
  */
 function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_flags)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_flags)) return false;
 
 	$_name = $db->escape(trim($_name));
 	if (!$_name) return false;
 
 	$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
-	$q .= ' AND creatorId='.$session->id;
+	$q .= ' AND creatorId='.$h->session->id;
 	$check = $db->getOneItem($q);
 	if ($check) return false;
 
 	$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner;
-	$q .= ',timeCreated=NOW(),creatorId='.$session->id.',permissions='.$_flags;
+	$q .= ',timeCreated=NOW(),creatorId='.$h->session->id.',permissions='.$_flags;
 	return $db->insert($q);
 }
 
@@ -65,8 +65,8 @@ function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
  */
 function updateCategory($_type, $_id, $name)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$q = 'UPDATE tblCategories SET categoryName="'.$db->escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
 	$db->update($q);
@@ -77,8 +77,8 @@ function updateCategory($_type, $_id, $name)
  */
 function removeCategory($_type, $_id)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$q = 'DELETE FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
 	return $db->delete($q);
@@ -195,18 +195,18 @@ function getGlobalCategories($_type)
  */
 function getGlobalAndUserCategories($_type, $_owner = 0)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	switch ($_type) {
 		case CATEGORY_USERFILE:
-			if (!$session->id) return false;
-			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
+			if (!$h->session->id) return false;
+			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$h->session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
 			break;
 
 		case CATEGORY_BLOG:
-			if (!$session->id) return false;
-			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
+			if (!$h->session->id) return false;
+			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$h->session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
 			break;
 
 		case CATEGORY_NEWS:
@@ -236,10 +236,10 @@ function getGlobalAndUserCategories($_type, $_owner = 0)
  */
 function manageCategoriesDialog($_type)
 {
-	global $config, $session;
-	if (!$session->id) return getCategoriesSelect($_type);
+	global $h, $config;
+	if (!$h->session->id) return getCategoriesSelect($_type);
 
-	if (($session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category'])) {
+	if (($h->session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category'])) {
 		//Create new category. Only allow categories inside root level
 		$cat_type = $_type;
 		if (!empty($_POST['new_file_category_type']) && is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];

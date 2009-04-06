@@ -9,7 +9,7 @@ die;	//FIXME: this file is nonworking. keeping the code for now because it makes
 
 require_once('find_config.php');
 
-if (!$session->isAdmin || empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) die;
+if (!$h->session->isAdmin || empty($_GET['y']) || !is_numeric($_GET['y']) || empty($_GET['m']) || !is_numeric($_GET['m'])) die;
 
 $year = $_GET['y'];
 $month = $_GET['m'];

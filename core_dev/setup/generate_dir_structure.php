@@ -1,6 +1,6 @@
 <?php
 
-//fixme: denna kod anropas & används ej ännu av något setup script
+die; //FIXME: this code is unused & not functional
 
 if (!is_dir($this->upload_dir)) {
 
@@ -9,14 +9,14 @@ if (!is_dir($this->upload_dir)) {
 		die('FATAL: Cannot create upload directory at '.$this->upload_dir.'. Please check paths in config.php');
 	}
 
-	$session->log('Creating upload directory');
+	$h->session->log('Creating upload directory');
 
 	mkdir($this->upload_dir);
 	file_put_contents($this->upload_dir.'.htaccess', $this->htaccess);
 	file_put_contents($this->upload_dir.'index.html', '');
 
 	if (!is_dir(realpath($this->thumbs_dir))) {
-		$session->log('Creating thumbs directory');
+		$h->session->log('Creating thumbs directory');
 		mkdir($this->thumbs_dir);
 		file_put_contents($this->thumbs_dir.'.htaccess', $this->htaccess);
 		file_put_contents($this->thumbs_dir.'index.html', '');

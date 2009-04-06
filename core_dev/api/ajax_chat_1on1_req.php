@@ -7,12 +7,12 @@
  */
 
 require_once('find_config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
 $event = getSubscriptions(SUBSCRIPTION_USER_CHATREQ);
 
 if ($event && !isset($_GET['nonewchat'])) {
-	echo $session->id.';'.$event[0]['itemId'].';'.Users::getName($event[0]['itemId']);
+	echo $h->session->id.';'.$event[0]['itemId'].';'.Users::getName($event[0]['itemId']);
 	removeSubscription(SUBSCRIPTION_USER_CHATREQ, $event[0]['itemId']);
 }
 else {

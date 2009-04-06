@@ -23,15 +23,15 @@ define('RATE_FILE',  3);
  */
 function rateItem($_type, $_id, $_rating)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
 
 	//Check if user already voted
-	$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session->id;
+	$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$h->session->id;
 	if ($db->getOneItem($q)) return false;
 
 	//Save the vote
-	$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$session->id.',timeRated=NOW()';
+	$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$h->session->id.',timeRated=NOW()';
 	$db->insert($q);
 
 	//Count current average of the rating
@@ -71,10 +71,10 @@ function rateItem($_type, $_id, $_rating)
  */
 function isRated($_type, $_id)
 {
-	global $db, $session;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$session->id;
+	$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$h->session->id;
 	if ($db->getOneItem($q)) return true;
 	return false;
 }
@@ -120,11 +120,11 @@ function getRating($_type, $_id)
  */
 function ratingGadget($_type, $_id)
 {
-	global $db, $session, $config;
+	global $h, $db, $config;
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	if (!$session->id || isRated($_type, $_id) ||
-		($_type == RATE_FILE && Files::getOwner($_id) == $session->id))
+	if (!$h->session->id || isRated($_type, $_id) ||
+		($_type == RATE_FILE && Files::getOwner($_id) == $h->session->id))
 		return showRating($_type, $_id);
 
 	$result = t('Rate this').':<br/>';

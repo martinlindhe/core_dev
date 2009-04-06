@@ -14,9 +14,9 @@
  */
 function chat_1on1_XHTML($otherId)
 {
-	global $session, $body_onload, $db;
+	global $h, $db, $body_onload;
 
-	$userId = $session->id;
+	$userId = $h->session->id;
 
 	$otherName = Users::getName($otherId);
 	if (empty($otherName)) {

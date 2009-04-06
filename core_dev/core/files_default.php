@@ -339,7 +339,7 @@ class files_default
 	}
 
 	/**
-	 * Stores uploaded file associated to $session->id
+	 * Stores uploaded file associated to $h->session->id
 	 *
 	 * @param $FileData array of php internal file data from file upload
 	 * @param $fileType type of file

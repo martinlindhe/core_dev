@@ -17,13 +17,13 @@ define('CALENDAR_SERVICE',	3);	///< Service wide calendar. tblCalendar.ownerId =
  */
 function addCalendar($_type, $_owner, $begin, $end, $desc)
 {
-	global $db, $session;
-	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	$begin = sql_datetime(datetime_to_timestamp($begin));
 	$end = sql_datetime(datetime_to_timestamp($end));
 
-	$q = 'INSERT INTO tblCalendar SET type='.$_type.', ownerId='.$_owner.',creatorId='.$session->id.',timeBegin="'.$begin.'",timeEnd="'.$end.'", info="'.$db->escape($desc).'"';
+	$q = 'INSERT INTO tblCalendar SET type='.$_type.', ownerId='.$_owner.',creatorId='.$h->session->id.',timeBegin="'.$begin.'",timeEnd="'.$end.'", info="'.$db->escape($desc).'"';
 	$db->insert($q);
 }
 
@@ -32,8 +32,8 @@ function addCalendar($_type, $_owner, $begin, $end, $desc)
  */
 function updateCalendar($_type, $_id, $begin, $end, $desc)
 {
-	global $db, $session;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$begin = sql_datetime(datetime_to_timestamp($begin));
 	$end = sql_datetime(datetime_to_timestamp($end));
@@ -47,8 +47,8 @@ function updateCalendar($_type, $_id, $begin, $end, $desc)
  */
 function deleteCalendar($_type, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$q = 'DELETE FROM tblCalendar WHERE type='.$_type.' AND entryId='.$_id;
 	$db->delete($q);

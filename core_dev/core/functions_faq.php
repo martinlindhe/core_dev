@@ -14,10 +14,10 @@
  */
 function addFAQ($_q, $_a)
 {
-	global $db, $session;
-	if (!$session->isAdmin) return;
+	global $h, $db;
+	if (!$h->session->isAdmin) return;
 
-	$q = 'INSERT INTO tblFAQ SET question="'.$db->escape($_q).'",answer="'.$db->escape($_a).'",createdBy='.$session->id.',timeCreated=NOW()';
+	$q = 'INSERT INTO tblFAQ SET question="'.$db->escape($_q).'",answer="'.$db->escape($_a).'",createdBy='.$h->session->id.',timeCreated=NOW()';
 	return $db->insert($q);
 }
 
@@ -31,8 +31,8 @@ function addFAQ($_q, $_a)
  */
 function updateFAQ($_id, $_q, $_a)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
 	$q = 'UPDATE tblFAQ SET question="'.$db->escape($_q).'",answer="'.$db->escape($_a).'" WHERE faqId='.$_id;
 	$db->update($q);
@@ -47,8 +47,8 @@ function updateFAQ($_id, $_q, $_a)
  */
 function deleteFAQ($_id)
 {
-	global $db, $session;
-	if (!$session->isAdmin || !is_numeric($_id)) return false;
+	global $h, $db;
+	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
 	$q = 'DELETE FROM tblFAQ WHERE faqId='.$_id;
 	$db->delete($q);
@@ -71,11 +71,11 @@ function getFAQ()
  */
 function showFAQ()
 {
-	global $session;
+	global $h;
 
 	$active = 0;
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		if (!empty($_POST['faq_q']) && isset($_POST['faq_a'])) {
 			$active = addFAQ($_POST['faq_q'], $_POST['faq_a']);
 		}
@@ -89,7 +89,7 @@ function showFAQ()
 	}
 
 	$list = getFAQ();
-	if (!$list && !$session->isAdmin) return;
+	if (!$list && !$h->session->isAdmin) return;
 
 	if (!$active && $list) $active = $list[0]['faqId'];
 
@@ -102,7 +102,7 @@ function showFAQ()
 			echo '<div class="faq_a" id="faq_'.$i.'" style="'.($list[$i]['faqId']!=$active?'display:none':'').'">';
 				echo $list[$i]['answer'];
 
-				if ($session->isAdmin) {
+				if ($h->session->isAdmin) {
 					echo '<br/><br/>';
 					echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_element_by_name(\'faq_holder_'.$i.'\'); show_element_by_name(\'faq_edit_'.$i.'\');"/> ';
 					echo '<input type="button" class="button" value="'.t('Delete').'" onclick="document.location=\'?fdel='.$list[$i]['faqId'].'\'"/>';
@@ -112,7 +112,7 @@ function showFAQ()
 
 		echo '</div>';	//id="faq_holder_x"
 
-		if ($session->isAdmin) {
+		if ($h->session->isAdmin) {
 			echo '<div class="faq_holder" id="faq_edit_'.$i.'" style="display: none;">';
 				echo '<form method="post" action="?fid='.$list[$i]['faqId'].'">';
 				echo '<div class="faq_q">';
@@ -127,7 +127,7 @@ function showFAQ()
 		}
 	}
 
-	if ($session->isAdmin) {
+	if ($h->session->isAdmin) {
 		echo '<br/>';
 		echo '<form method="post" action="">';
 		echo t('Add new FAQ').': <input type="text" name="faq_q" size="40"/><br/>';

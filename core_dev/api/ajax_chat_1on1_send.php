@@ -6,9 +6,9 @@
  */
 
 require_once('find_config.php');
-$session->requireLoggedIn();
+$h->session->requireLoggedIn();
 
-$userId = $session->id;
+$userId = $h->session->id;
 
 if (isset($_GET['otherid'])) {
 	$otherId = $_GET['otherid'];
@@ -22,8 +22,8 @@ if (isset($_GET['msg'])) {
 	die(0);
 }
 
-
-$msgs = $db->insert('INSERT INTO tblChat (userId, authorId, msg, msgDate, msgRead) VALUES ('.$otherId.', '.$userId.', "'.$msg.'", NOW(), 0)');
+$q = 'INSERT INTO tblChat (userId, authorId, msg, msgDate, msgRead) VALUES ('.$otherId.', '.$userId.', "'.$msg.'", NOW(), 0)';
+$msgs = $db->insert($q);
 
 echo 1;
 ?>

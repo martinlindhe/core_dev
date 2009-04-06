@@ -11,7 +11,7 @@
 
 require_once('find_config.php');
 
-if (!$session->id || empty($_GET['i']) || !is_numeric($_GET['i']) || empty($_GET['t']) || !is_numeric($_GET['t'])) die('bad');
+if (!$h->session->id || empty($_GET['i']) || !is_numeric($_GET['i']) || empty($_GET['t']) || !is_numeric($_GET['t'])) die('bad');
 
 echo ratingGadget($_GET['t'], $_GET['i']);
 ?>

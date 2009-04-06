@@ -21,13 +21,13 @@ define('BLOCK_USERID',	3);		//block by userid
  */
 function addBlock($_type, $rule)
 {
-	global $db, $session;
+	global $h, $db;
 	if (!is_numeric($_type) || !trim($rule)) return false;
 
 	$q = 'SELECT COUNT(*) FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
 	if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblBlocks SET type='.$_type.',rule="'.$db->escape($rule).'",timeCreated=NOW()'.($session ? ',createdBy='.$session->id : '');
+	$q = 'INSERT INTO tblBlocks SET type='.$_type.',rule="'.$db->escape($rule).'",timeCreated=NOW()'.($h->session ? ',createdBy='.$h->session->id : '');
 	$db->insert($q);
 }
 

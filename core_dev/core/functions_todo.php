@@ -126,9 +126,8 @@ function getBugReport($bugId)
  */
 function moveBugReport($bugId, $creator, $desc, $details, $timestamp, $category, $categoryId)
 {
-	global $db, $session;
-	if (!$session->id) return false;
-	if (!is_numeric($bugId) || !is_numeric($creator) || !is_numeric($timestamp) || !is_numeric($category) || !is_numeric($categoryId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($bugId) || !is_numeric($creator) || !is_numeric($timestamp) || !is_numeric($category) || !is_numeric($categoryId)) return false;
 
 	$desc = $db->escape($desc);
 	$details = $db->escape($details);
@@ -195,10 +194,10 @@ function getClosedTodoItems($categoryId)
  */
 function addTodoItem($categoryId, $desc, $details, $category)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($categoryId) || !is_numeric($category)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($categoryId) || !is_numeric($category)) return false;
 
-	$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemCreator='.$session->id.',itemDesc="'.$db->escape($desc).'",itemDetails="'.$db->escape($details).'",itemCategory='.$category.',timeCreated=NOW()';
+	$q = 'INSERT INTO tblTodoLists SET categoryId='.$categoryId.',itemCreator='.$h->session->id.',itemDesc="'.$db->escape($desc).'",itemDetails="'.$db->escape($details).'",itemCategory='.$category.',timeCreated=NOW()';
 	$db->insert($q);
 }
 
