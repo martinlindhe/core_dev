@@ -20,8 +20,8 @@ define('DOWNLOAD_METHOD_RSS', 'rss');		//todo...
 
 function addAdblockRule($ruleText, $ruleType, $sampleUrl)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($ruleType)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($ruleType)) return false;
 
 	$ruleText = $db->escape(strip_tags(trim($ruleText)));
 	$sampleUrl = $db->escape(strip_tags(trim($sampleUrl)));
@@ -31,28 +31,32 @@ function addAdblockRule($ruleText, $ruleType, $sampleUrl)
 		return 'This rule already exists!';
 	}
 
-	$q = 'INSERT INTO tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',creatorId='.$session->id.',timeCreated=NOW()';
+	$q = 'INSERT INTO tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',creatorId='.$h->session->id.',timeCreated=NOW()';
 	return $db->insert($q);
 }
 
 function updateAdblockRule($ruleId, $ruleText, $ruleType, $sampleUrl)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($ruleId) || !is_numeric($ruleType)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($ruleId) || !is_numeric($ruleType)) return false;
 
 	$ruleText = $db->escape(strip_tags(trim($ruleText)));
 	$sampleUrl = $db->escape(strip_tags(trim($sampleUrl)));
 
-	$db->update('UPDATE tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',editorId='.$session->id.',timeEdited=NOW() WHERE ruleId='.$ruleId);
+	$q = 'UPDATE tblAdblockRules SET ruleText="'.$ruleText.'",sampleUrl="'.$sampleUrl.'",ruleType='.$ruleType.',editorId='.$h->session->id.',timeEdited=NOW() WHERE ruleId='.$ruleId;
+	$db->update($q);
 }
 
 function removeAdblockRule($ruleId)
 {
-	global $db, $session;
-	if (!$session->id || !is_numeric($ruleId)) return false;
+	global $h, $db;
+	if (!$h->session->id || !is_numeric($ruleId)) return false;
 
-	$db->update('UPDATE tblAdblockRules SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE ruleId='.$ruleId);
-	$db->update('UPDATE tblComments SET deletedBy='.$session->id.',timeDeleted=NOW() WHERE ownerId='.$ruleId.' AND commentType='.COMMENT_ADBLOCKRULE);
+	$q = 'UPDATE tblAdblockRules SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE ruleId='.$ruleId;
+	$db->update($q);
+
+	$q = 'UPDATE tblComments SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE ownerId='.$ruleId.' AND commentType='.COMMENT_ADBLOCKRULE;
+	$db->update($q);
 }
 
 /**
@@ -225,7 +229,7 @@ function getAdblockLatestAdditions($cnt)
  */
 function handleAdblockDownloadRequest()
 {
-	global $session, $files, $config;
+	global $h, $config;
 	$requestType = 0;
 
 	if (isset($_POST['type_0']) || isset($_POST['type_1']) || isset($_POST['type_2']) || isset($_POST['type_3'])) {
@@ -251,22 +255,22 @@ function handleAdblockDownloadRequest()
 	$type_ext = '';
 
 	switch ($types) {
-		case '0': case '0,,,':	$type_ext = '-unsorted'; break;
-		case '1': case ',1,,':	$type_ext = '-ads'; break;
-		case '2': case ',,2,':	$type_ext = '-trackers'; break;
-		case '3': case ',,,3':	$type_ext = '-counters'; break;
-		case '0,1,2,3';					$type_ext = '-all'; break;
-		default:								$type_ext = '-custom-'.$types; break;
+		case '0': case '0,,,': $type_ext = '-unsorted'; break;
+		case '1': case ',1,,': $type_ext = '-ads'; break;
+		case '2': case ',,2,': $type_ext = '-trackers'; break;
+		case '3': case ',,,3': $type_ext = '-counters'; break;
+		case '0,1,2,3';        $type_ext = '-all'; break;
+		default:               $type_ext = '-custom-'.$types; break;
 	}
 
-	$datestr	= date('Ymd');
-	$hour		= date('H');
+	$datestr = date('Ymd');
+	$hour    = date('H');
 
 	$cache_file = $config['adblock']['cachepath'].'adblockfilters'.$type_ext.'.txt';
 
 	if ($config['debug']) {
 		$str = 'Downloaded ruleset '.$cache_file.' ('.$requestType.')';
-		$session->log($str);
+		$h->session->log($str);
 	}
 
 	$lastchanged = 0;
@@ -294,7 +298,7 @@ function handleAdblockDownloadRequest()
 		header('Filterset-timestamp: '. $lastchanged);
 	}
 
-	$files->sendTextfile($cache_file);
+	$h->files->sendTextfile($cache_file);
 	return true;
 }
 ?>

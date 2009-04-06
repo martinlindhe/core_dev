@@ -10,7 +10,7 @@ $fileId = $_GET['id'];
 
 require('design_head.php');
 
-$data = $files->getFileInfo($fileId);
+$data = $h->files->getFileInfo($fileId);
 if (!$data) {
 	echo '<h1>File dont exist</h1>';
 	die;
@@ -59,19 +59,19 @@ echo '</table>';
 
 showFileInfo($fileId);
 
-$file = $files->getFileInfo($fileId);
+$file = $h->files->getFileInfo($fileId);
 if ($file['fileType'] == FILETYPE_CLONE_CONVERTED) {
 	echo 'This file is a converted version of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
 }
 
-$list = $files->getFileList(FILETYPE_CLONE_CONVERTED, $fileId);
+$list = $h->files->getFileList(FILETYPE_CLONE_CONVERTED, $fileId);
 if ($list) echo '<h1>Conversions based on this file</h1>';
 foreach ($list as $row) {
 	echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
 }
 echo '<br/>';
 
-$files->updateFile($fileId);
+$h->files->updateFile($fileId);
 
 echo '<a href="http_enqueue.php?id='.$fileId.'">Create process (media conversion, or further processing)</a>';
 

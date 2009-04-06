@@ -53,23 +53,23 @@ if ($event['orderType'] == PROCESS_FETCH) {
 } else {
 	showFileInfo($fileId);
 
-	$data = $files->getFileInfo($fileId);
+	$data = $h->files->getFileInfo($fileId);
 
-	if (in_array($data['fileMime'], $files->audio_mime_types)) {
+	if (in_array($data['fileMime'], $h->files->audio_mime_types)) {
 		echo '<h1>convert audio</h1>';
 
 		echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$eventId.'">';
 		echo 'Select output format: ';
 
 		echo '<select name="dst_audio_fmt">';
-		foreach ($files->audio_mime_types as $key => $val) {
+		foreach ($h->files->audio_mime_types as $key => $val) {
 			echo '<option value="'.$key.'">'.$val.'</option>';
 		}
 		echo '</select>';
 
 		echo '<input type="submit" value="Continue"/>';
 		echo '</form>';
-	} else if (in_array($data['fileMime'], $files->image_mime_types)) {
+	} else if (in_array($data['fileMime'], $h->files->image_mime_types)) {
 
 		echo '<h1>convert image</h1>';
 
@@ -77,7 +77,7 @@ if ($event['orderType'] == PROCESS_FETCH) {
 		echo 'Select output format: ';
 
 		echo '<select name="dst_image_fmt">';
-		foreach ($files->image_mime_types as $key => $val) {
+		foreach ($h->files->image_mime_types as $key => $val) {
 			echo '<option value="'.$key.'">'.$val.'</option>';
 		}
 		echo '</select>';
@@ -88,7 +88,7 @@ if ($event['orderType'] == PROCESS_FETCH) {
 		echo 'Image view:<br/>';
 		echo makeThumbLink($fileId);
 
-	} else if (in_array($data['fileMime'], $files->video_mime_types)) {
+	} else if (in_array($data['fileMime'], $h->files->video_mime_types)) {
 
 		echo '<h1>convert video</h1>';
 
@@ -96,7 +96,7 @@ if ($event['orderType'] == PROCESS_FETCH) {
 		echo 'Select output format: ';
 
 		echo '<select name="dst_video_fmt">';
-		foreach ($files->video_mime_types as $key => $val) {
+		foreach ($h->files->video_mime_types as $key => $val) {
 			echo '<option value="'.$key.'">'.$val.'</option>';
 		}
 		echo '</select>';
@@ -119,7 +119,7 @@ if ($event['orderType'] == PROCESS_FETCH) {
 
 		echo 'todo: show found video links from html and allow user to choose which ones to queue for download';
 
-		$arr = extract_filenames(file_get_contents($files->getFileInfo($fileId)));
+		$arr = extract_filenames(file_get_contents($h->files->getFileInfo($fileId)));
 		d($arr);
 	} else {
 		echo 'Dont know how to handle mimetype: '.$data['fileMime'];
