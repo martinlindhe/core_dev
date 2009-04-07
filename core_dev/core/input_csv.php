@@ -13,13 +13,16 @@
  *
  * @param $filename string filename
  * @param $callback string callback function
- * @param $start_line int starting line number
+ * @param $start_line int starting line number (counting from 0)
  * @param $delimiter character separating CSV cells (usually , or ;)
  */
 function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 {
 	$fp = fopen($filename, 'r');
-	if (!$fp || !function_exists($callback)) return false;
+	if (!$fp || !function_exists($callback)) {
+		echo "FATAL: csvParse() callback not defined\n";
+		return false;
+	}
 
 	$cols = 0;
 	$i = 0;
@@ -37,6 +40,7 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 		}
 		$i++;
 	}
+
 	fclose($fp);
 }
 
@@ -48,7 +52,10 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
  */
 function csvParseRow($row, $delimiter = ',')
 {
-	if (strpos($row, $delimiter) === false) return false;
+	if (strpos($row, $delimiter) === false) {
+		echo "FATAL: csvParserow() got bad input\n";
+		return false;
+	}
 
 	$el = 0;
 	$res = array();
