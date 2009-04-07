@@ -4,7 +4,7 @@
  *
  * Simple CSV parser
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 
@@ -53,7 +53,7 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 function csvParseRow($row, $delimiter = ',')
 {
 	if (strpos($row, $delimiter) === false) {
-		echo "FATAL: csvParserow() got bad input\n";
+		echo "FATAL: csvParseRow() got bad input\n";
 		return false;
 	}
 
