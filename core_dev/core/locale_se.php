@@ -69,6 +69,7 @@ function t_se($s)
 		case 'Owner': return 'Ägare';
 		case 'Time': return 'Tidpunkt';
 		case 'Referer': return 'Referens';
+		case 'Display': return 'Visa';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
