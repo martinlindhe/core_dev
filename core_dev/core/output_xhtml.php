@@ -282,7 +282,7 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0)
 {
 	if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
-	return '<input type="text" name="'.$_name.'"'.
+	return '<input type="text" name="'.$_name.'" id="'.$_name.'"'.
 		($_value ? ' value="'.$_value.'"' : '').
 		($_size ? ' size="'.$_size.'"': '').
 		($_maxlen ? ' maxlength="'.$_maxlen.'"': '').

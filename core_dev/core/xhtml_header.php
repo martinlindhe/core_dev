@@ -142,13 +142,13 @@ class xhtml_header
 
 		echo '</head>';
 		if (count($this->onLoad)) {
-			echo '<body onload="';
+			echo '<body class="yui-skin-sam" onload="';
 			foreach ($this->onLoad as $row) {
 				echo $row;
 			}
 			echo '">';
 		} else {
-			echo '<body>';
+			echo '<body class="yui-skin-sam">';
 		}
 
 		//XXX: remove getProjectPath eventually
