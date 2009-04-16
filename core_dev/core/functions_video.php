@@ -4,7 +4,7 @@
  *
  * Video handling helper functions
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 /**
@@ -26,16 +26,15 @@
  * @param $h height of player window (not height of video clip)
  * @return html code
  */
-function embedVideo($url, $w = 352, $h = 288, $params = array())
+function embedVideo($url, $width = 352, $height = 288, $params = array())
 {
-	global $h;
-	if (!is_numeric($w) || !is_numeric($h)) return false;
+	if (!is_numeric($width) || !is_numeric($height)) return false;
 
-	if (strpos($h->session->user_agent, 'MSIE')) {
+	if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')) {
 		//Tested in IE 7
 		//FIXME try IE 6
 		$data  = '<object type="application/x-oleobject'.
-				' width="'.$w.'" height="'.$h.'"'.
+				' width="'.$width.'" height="'.$height.'"'.
 				' classid="clsid:6BF52A52-394A-11D3-B153-00C04F79FAA6">';	//Windows Media Player 7, 9, 10 and 11
 		$data .= '<param name="URL" value="'.$url.'">';
 		if (empty($params)) {
@@ -53,7 +52,7 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 		//For Firefox Linux, install mozilla-plugin-vlc
 		//For Firefox Windows, install wmpfirefoxplugin.exe from http://port25.technet.com
 		$data = '<embed type="application/x-mplayer2"'.
-				' width="'.$w.'" height="'.$h.'"'.
+				' width="'.$width.'" height="'.$height.'"'.
 				' src="'.$url.'"'.
 				' ShowControls="1" ShowStatusBar="1"'.
 				' autostart="'.(!empty($params['AutoStart']) && $params['AutoStart'] == 'true' ? '1' : '0').'">';
@@ -66,17 +65,16 @@ function embedVideo($url, $w = 352, $h = 288, $params = array())
 /**
  * XXX
  */
-function embedAudio($url, $w = 352)
+function embedAudio($url, $width = 352)
 {
-	global $h;
 	if (!is_numeric($w)) return false;
 
-	if (strpos($h->session->user_agent, 'MSIE')) {
-		$h = 46;
+	if (isset($_SERVER['HTTP_USER_AGENT']) && strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')) {
+		$height = 46;
 		//Tested in IE 7
 		//FIXME try IE 6
 		$data  = '<object type="application/x-oleobject'.
-				' width="'.$w.'" height="'.$h.'"'.
+				' width="'.$width.'" height="'.$height.'"'.
 				' classid="clsid:6BF52A52-394A-11D3-B153-00C04F79FAA6">';	//Windows Media Player 7, 9, 10 and 11
 		$data .= '<param name="URL" value="'.$url.'">';
 
@@ -85,12 +83,12 @@ function embedAudio($url, $w = 352)
 		$data .= '<param name="uiMode" value="mini">';
 		$data .= '</object>';
 	} else {
-		$h = 50;
+		$height = 50;
 		//This works with Firefox in Windows and Linux and Opera in Windows
 		//For Firefox Linux, install mozilla-plugin-vlc
 		//For Firefox Windows, install wmpfirefoxplugin.exe from http://port25.technet.com
 		$data = '<embed type="application/x-mplayer2"'.
-				' width="'.$w.'" height="'.$h.'"'.
+				' width="'.$width.'" height="'.$height.'"'.
 				' src="'.$url.'"'.
 				' ShowControls="1" ShowStatusBar="1"'.
 				' autostart="0">';
