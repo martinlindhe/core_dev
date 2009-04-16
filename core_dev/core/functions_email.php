@@ -12,7 +12,7 @@ $config['smtp']['password'] = '';
 $config['smtp']['sender'] = 'core_dev@somewhere';
 $config['smtp']['sender_name'] = 'core_dev';
 
-require_core('ext/class.phpmailer.php');
+require_once('ext/class.phpmailer.php');
 
 /**
  * Helper function: calls class.phpmailer.php functions
