@@ -49,6 +49,7 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
  *
  * @param $row line of raw CSV data to parse
  * @param $delimiter character separating CSV cells (usually , or ;)
+ * @return array of parsed values
  */
 function csvParseRow($row, $delimiter = ',')
 {
@@ -83,6 +84,7 @@ function csvParseRow($row, $delimiter = ',')
 	//Clean up escaped fields
 	for ($i=0; $i<count($res); $i++) {
 		$res[$i] = csvUnescape($res[$i]);
+		if ($i == count($res)-1) $res[$i] = rtrim($res[$i]); //strip lf
 	}
 
 	return $res;
@@ -90,6 +92,8 @@ function csvParseRow($row, $delimiter = ',')
 
 /**
  * Unescapes CSV data
+ * @param $str string to unescape
+ * @return unescaped string
  */
 function csvUnescape($str)
 {
