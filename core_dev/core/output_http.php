@@ -47,16 +47,18 @@ function http_post($url, $data)
 	$handle = @fsockopen($p['host'], $port, $errno, $errstr, 30);
 	if (!$handle) return false;
 
-	$params = http_encode_params($data);
+	if (is_array($data)) {
+		$data = http_encode_params($data);
+	}
 
 	$h =
 		"POST ".$p['path']." HTTP/1.0\r\n".
 		"Host: ".$p['host']."\r\n".
 		"Content-Type: application/x-www-form-urlencoded\r\n".
-		"Content-Length: ".strlen($params)."\r\n".
+		"Content-Length: ".strlen($data)."\r\n".
 		"User-Agent: core_dev\r\n".	//XXX version
 		"\r\n".
-		$params;
+		$data;
 
 	if ($p['scheme'] == 'https') {
 		//FIXME: how to start a https session? example here http://www.nusphere.com/kb/phpmanual/wrappers.http.htm?/
