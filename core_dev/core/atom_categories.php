@@ -8,31 +8,27 @@
  */
 
 //tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
-define('CATEGORY_USERFILE',			1);		///< normal, public userfile
-define('CATEGORY_WIKIFILE',			4);		///< category for wiki file attachments, to allow better organization if needed
-define('CATEGORY_TODOLIST',			5);		///< todo list categories
+define('CATEGORY_USERFILE', 1);   ///< normal, public userfile
+define('CATEGORY_WIKIFILE', 4);   ///< category for wiki file attachments, to allow better organization if needed
+define('CATEGORY_TODOLIST', 5);   ///< todo list categories
 
-define('CATEGORY_BLOG', 			10);	///< normal, personal blog category
-define('CATEGORY_CONTACT',			11);	///< friend relation category, like "Old friends", "Family"
-define('CATEGORY_USERDATA',			12);	///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
-define('CATEGORY_POLL',				13);	///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
-define('CATEGORY_EMAIL',			14);	///< list of user-associated email-adresses
-define('CATEGORY_SMS',				15);	///< list of user-associated sms-contact-numbers
-define('CATEGORY_CELLPHONE',		16);	///< list of user-associated cellphone-numbers
-define('CATEGORY_MMS',				17);	///< list of user-associated mms-numbers
+define('CATEGORY_BLOG',     10);  ///< normal, personal blog category
+define('CATEGORY_CONTACT',  11);  ///< friend relation category, like "Old friends", "Family"
+define('CATEGORY_USERDATA', 12);  ///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
+define('CATEGORY_POLL',     13);  ///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
+define('CATEGORY_LANGUAGE', 14);  ///< represents a language, for multi-language features & used by "lang" project
 
-define('CATEGORY_NEWS',				20);	///< news categories
-define('CATEGORY_LANGUAGE',			51);	///< represents a language, for multi-language features & used by "lang" project
+define('CATEGORY_NEWS',     20);  ///< news categories
 
 
 
 //tblCategory.permissions:
-define('CAT_PERM_PUBLIC',	0x01);	///< public category
-define('CAT_PERM_PRIVATE',	0x02);	///< owner and owner's friends can see the content
-define('CAT_PERM_HIDDEN',	0x04);	///< only owner can see the content
+define('CAT_PERM_PUBLIC',   0x01); ///< public category
+define('CAT_PERM_PRIVATE',  0x02); ///< owner and owner's friends can see the content
+define('CAT_PERM_HIDDEN',   0x04); ///< only owner can see the content
 
-define('CAT_PERM_USER',		0x40);	///< category is created by user
-define('CAT_PERM_GLOBAL',	0x80);	///< category is globally available to all users
+define('CAT_PERM_USER',     0x40); ///< category is created by user
+define('CAT_PERM_GLOBAL',   0x80); ///< category is globally available to all users
 
 /**
  * Adds a new category
