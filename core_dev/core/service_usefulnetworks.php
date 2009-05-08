@@ -15,9 +15,6 @@
 //QUESTION: docs lists carrier names in upper case but they are not accepted in upper case?
 //QUESTION: why is MDN & Sprint in the response xml's rather than correct info?
 
-//TODO: implement function to handle /location/audit
-
-
 require_once('output_http.php');
 
 class un_request
@@ -97,7 +94,7 @@ class un_request
 	/**
 	 * Performs a asyncronous (non-blocking) MSID position request
 	 *
-	 * @return transaction id for the position request
+	 * @return transaction id for the position request (36-byte string)
 	 */
 	function pos_async($msid, $carrier)
 	{
@@ -132,8 +129,33 @@ class un_request
 		$res = http_post($uri, $x);
 
 		$parsed = $this->parse_loc_response($res['body']);
-		if ($parsed['status_code'] == 'PENDING_LOCATION_RESPONSE') return false;
+		if ($parsed['status_code'] != 'OK') return false;
 		return $parsed;
+	}
+
+	/**
+	 * @param $transaction_id transaction id from previous $un->pos_async() request
+	 */
+	function pos_audit($transaction_id)
+	{
+		$uri = $this->base_url.'/location/audit';
+
+		$tid = 1234;
+
+		$x =
+		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'.
+		'<unRequest>'.
+			'<auditRequest>'.
+				'<requestHeader>'.
+					'<activeToken>'.$this->active_token.'</activeToken>'.
+					'<clientTransactionId>'.$tid.'</clientTransactionId>'.
+				'</requestHeader>'.
+				'<transactionId>'.$transaction_id.'</transactionId>'.
+			'</auditRequest>'.
+		'</unRequest>';
+
+		$res = http_post($uri, $x);
+		return $this->parse_loc_response($res['body']);
 	}
 
 	/**
@@ -154,7 +176,7 @@ class un_request
 		switch ($carrier) {
 			case 'Tre':
 			case 'Telia':
-			case 'Telenor'://XXXX untested!!
+			case 'Telenor':
 			case 'Tele2': //XXX untested!
 				$type = 'MSISDN';
 				break;
@@ -198,7 +220,6 @@ class un_request
 		'</unRequest>';
 
 		$res = http_post($uri, $x);
-
 		return $this->parse_loc_response($res['body']);
 	}
 
