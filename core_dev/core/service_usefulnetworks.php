@@ -11,6 +11,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//WISH-LIST: please return something more descriptive than "SYSTEM_FAILURE" when you specify the wrong Carrier in a position request
 //QUESTION: what is expire time of a "active_token"?
 //QUESTION: docs lists carrier names in upper case but they are not accepted in upper case?
 //QUESTION: why is MDN & Sprint in the response xml's rather than correct info?
@@ -24,20 +25,9 @@ class un_request
 	var $active_token = '';  ///< set with active token if authenticated
 	var $response_code = ''; ///< holds the response code of last server response
 
-	/**
-	 * Parses XML response data from authentication request
-	 */
-	function parse_auth_response($data)
+	function __construct($url)
 	{
-		$parser = xml_parser_create('ISO-8859-1');
-		xml_parse_into_struct($parser, $data, $data_vals, $data_idx);
-		xml_parser_free($parser);
-
-		foreach ($data_vals as $idx=>$val)
-		{
-			if ($val['tag'] == 'UNRESPONSECODE') $this->response_code = $val['value'];
-			if ($val['tag'] == 'ACTIVETOKEN')    $this->active_token  = $val['value'];
-		}
+		$this->base_url = $url;
 	}
 
 	/**
@@ -47,10 +37,8 @@ class un_request
 	 *
 	 * @return a valid UN session token
 	 */
-	function auth($url, $app_id, $user, $pass)
+	function auth($app_id, $user, $pass)
 	{
-		$this->base_url = $url;
-
 		$uri = $this->base_url.'/application/authenticate';
 
 		$this->app_id = $app_id;
@@ -127,6 +115,8 @@ class un_request
 		'</unRequest>';
 
 		$res = http_post($uri, $x);
+
+		if ($res['status'] == 410) return false; //pos has already been polled, use pos_audit() instead
 
 		$parsed = $this->parse_loc_response($res['body']);
 		if ($parsed['status_code'] != 'OK') return false;
@@ -221,6 +211,22 @@ class un_request
 
 		$res = http_post($uri, $x);
 		return $this->parse_loc_response($res['body']);
+	}
+
+	/**
+	 * Parses XML response data from authentication request
+	 */
+	function parse_auth_response($data)
+	{
+		$parser = xml_parser_create('ISO-8859-1');
+		xml_parse_into_struct($parser, $data, $data_vals, $data_idx);
+		xml_parser_free($parser);
+
+		foreach ($data_vals as $idx=>$val)
+		{
+			if ($val['tag'] == 'UNRESPONSECODE') $this->response_code = $val['value'];
+			if ($val['tag'] == 'ACTIVETOKEN')    $this->active_token  = $val['value'];
+		}
 	}
 
 	function parse_loc_response($data)
