@@ -304,7 +304,7 @@ function xhtmlImage($_src, $_alt = '')
 {
 	return '<img src="'.$_src.'"'.
 		($_alt ? ' alt="'.$_alt.'" title="'.$_alt.'"' : '').
-		'>';
+		'/>';
 }
 
 /**

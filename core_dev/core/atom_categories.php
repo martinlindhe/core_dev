@@ -4,7 +4,7 @@
  *
  * Set of functions to implement categories, used by various modules
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 //tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
