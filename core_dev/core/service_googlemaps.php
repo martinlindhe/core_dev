@@ -24,8 +24,8 @@ $config['google_maps']['api_key'] = '';
  * Google Static Maps HTTP API documentation:
  * http://code.google.com/apis/maps/documentation/staticmaps/
  *
- * @param $lat latitude (-90.0 to 90.0)
- * @param $long longitude (-180.0 to 180.0)
+ * @param $lat latitude (-90.0 to 90.0) horizontal
+ * @param $long longitude (-180.0 to 180.0) vertical
  * @param $width up to 640 pixels
  * @param $height up to 640 pixels
  * @param $zoom 0 (whole world) to 19 (very detailed view) or "auto" to autozoom
@@ -126,7 +126,7 @@ function googleMapsReverseGeocode($lat, $long)
 	$res = csvParseRow(file_get_contents($url));
 	if ($res[0] != 200 || $res[1] == 0) return false;
 
-	$out['name'] = $res[2];
+	$out['name'] = utf8_encode($res[2]);
 	$out['accuracy'] = $res[1];	//0 (worst) to 9 (best)
 	return $out;
 }
