@@ -84,6 +84,21 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
 	return $defaultValue;
 }
 
+function loadSettingById($_type, $categoryId, $ownerId, $settingId, $all = false)
+{
+	global $db;
+
+	if ($all) $q = 'SELECT * FROM tblSettings';
+	else      $q = 'SELECT settingValue FROM tblSettings';
+	$q .= ' WHERE settingType='.$_type;
+	$q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND ownerId='.$ownerId;
+	$q .= ' AND settingId='.$settingId;
+
+	if ($all) return $db->getOneRow($q);
+	return $db->getOneItem($q);
+}
+
 function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
 {
 	//echo "readAllSettings() IS DEPRECATED!!";
