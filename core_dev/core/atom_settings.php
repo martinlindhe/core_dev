@@ -4,14 +4,17 @@
  *
  * Store user/server or other custom types of settings in database
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-define('SETTING_APPDATA',		1);		//setting global to the whole application
-define('SETTING_USERDATA',		2);		//settings used to store personal userdata
-define('SETTING_CALLERDATA',	3);		//settings used to store data of a caller
-define('SETTING_EXTERNALDATA',	4);		//settings used to store data with external ownerid (such as a Facebook id)
+define('SETTING_APPDATA',      1); ///< setting global to the whole application
+define('SETTING_USERDATA',     2); ///< settings used to store personal userdata
+define('SETTING_CALLERDATA',   3); ///< settings used to store data of a caller
+define('SETTING_EXTERNALDATA', 4); ///< settings used to store data with external ownerid (such as a Facebook id)
 //TODO remove these and make more userdata field types instead
+
+//XXX use id's from 50 and up for application specified types
+
 $config['settings']['default_signature'] = 'Signature';	//default name of the userdata field used to contain the forum signature
 
 /**
@@ -79,6 +82,12 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
 	return $defaultValue;
 }
 
+function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
+{
+	//echo "readAllSettings() IS DEPRECATED!!";
+	return loadSettings($_type, $categoryId, $ownerId);
+}
+
 /**
  * Returns array of all settings for requested owner
  *
@@ -87,7 +96,7 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
  * @param $ownerId owner of the settings
  * @return array of settings
  */
-function readAllSettings($_type, $categoryId = 0, $ownerId = 0)	//rename to loadSettings() ?
+function loadSettings($_type, $categoryId = 0, $ownerId = 0)
 {
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
