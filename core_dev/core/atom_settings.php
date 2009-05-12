@@ -144,7 +144,19 @@ function deleteSetting($_type, $categoryId, $ownerId, $settingName)
 	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
 	$q .= ' AND categoryId='.$categoryId;
 	$q .= ' AND settingType='.$_type;
-	$q .= ' AND settingName = "'.$settingName.'" LIMIT 1';
+	$q .= ' AND settingName="'.$db->escape($settingName).'" LIMIT 1';
+	return $db->delete($q);
+}
+
+function deleteSettingById($_type, $categoryId, $ownerId, $settingId)
+{
+	global $db;
+	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !is_numeric($settingId)) return false;
+
+	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
+	$q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND settingType='.$_type;
+	$q .= ' AND settingId='.$settingId;
 	return $db->delete($q);
 }
 
