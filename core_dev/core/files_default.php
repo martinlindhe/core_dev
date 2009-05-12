@@ -451,6 +451,11 @@ class files_default
 	{
 		$subdir = floor($fileId / 10000) * 10000;
 
+		if ($mkdir && !is_dir($this->upload_dir)) {
+			mkdir($this->upload_dir);
+			chmod($this->upload_dir, 0777);
+		}
+
 		if (!$base_dir) $base_dir = 'org/';
 		$dir = $this->upload_dir.$base_dir.$subdir;
 
