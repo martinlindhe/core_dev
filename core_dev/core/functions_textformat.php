@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 //TODO: rename config variables
@@ -10,19 +10,19 @@ $config['url_rewrite_length'] = 45;		//max length of visible url's after rewrite
 $config['url_rewrite_trailing'] = 15;	//number of characters to save at the end of the string
 $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';	//set to '' to disable redir feature
 
-function getThumbUrl($_id, $w = 0, $h = 0, $fullUrl = false)
+function getThumbUrl($_id, $width = 0, $height = 0, $fullUrl = false)
 {
 	global $h, $config;
 
-	if (!is_numeric($w) || !$w) $w = $h->files->thumb_default_width;
-	if (!is_numeric($h) || !$h) $h = $h->files->thumb_default_height;
-	if (is_float($w)) $w = floor($w);
-	if (is_float($h)) $h = floor($h);
+	if (!is_numeric($width)  || !$width)  $width  = $h->files->thumb_default_width;
+	if (!is_numeric($height) || !$height) $height = $h->files->thumb_default_height;
+	if (is_float($width))  $width  = floor($width);
+	if (is_float($height)) $height = floor($height);
 
 	$str = '';
 	if ($fullUrl) $str .= $config['app']['full_url'];
 
-	$str .= $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$w.'&amp;h='.$h;
+	$str .= $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$width.'&amp;h='.$height;
 	return $str;
 }
 
