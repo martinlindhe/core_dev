@@ -16,7 +16,7 @@
 require_once('input_coordinates.php');
 require_once('input_csv.php');
 
-$config['google_maps']['api_key'] = '';
+//$config['google_maps']['api_key'] = '';
 
 /**
  * Displays a static map
