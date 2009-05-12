@@ -91,8 +91,8 @@ function loadSettingById($_type, $categoryId, $ownerId, $settingId, $all = false
 	if ($all) $q = 'SELECT * FROM tblSettings';
 	else      $q = 'SELECT settingValue FROM tblSettings';
 	$q .= ' WHERE settingType='.$_type;
-	$q .= ' AND categoryId='.$categoryId;
-	$q .= ' AND ownerId='.$ownerId;
+	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
 	$q .= ' AND settingId='.$settingId;
 
 	if ($all) return $db->getOneRow($q);
