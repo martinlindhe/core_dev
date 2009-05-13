@@ -187,10 +187,11 @@ class files_default
 	/**
 	 * Performs mimetype lookup using GNU file utility
 	 *
-	 * @param $filename name of file to check
+	 * @param $filename fileId or name of file to check
 	 */
 	function lookupMimeType($filename)
 	{
+		if (is_numeric($filename)) $filename = $this->findUploadPath($filename);
 		if (!file_exists($filename)) return false;
 
 		$c = 'file -bi '.escapeshellarg($filename);
@@ -209,11 +210,12 @@ class files_default
 	/**
 	 * Checks what kind of media this is (video, document etc)
 	 *
-	 * @param $filename name of file to check
+	 * @param $filename fileId or name of file to check
 	 * @return media type id (0 for unknown media types)
 	 */
 	function lookupMediaType($filename)
 	{
+		if (is_numeric($filename)) $filename = $this->findUploadPath($filename);
 		if (!file_exists($filename)) return false;
 
 		$mime = $this->lookupMimeType($filename);
