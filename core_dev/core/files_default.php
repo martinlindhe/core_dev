@@ -95,6 +95,7 @@ class files_default
 		),
 		MEDIATYPE_AUDIO => array(
 			array('audio/x-ms-wma', 'Windows Media Audio'),
+			array('audio/mpeg', 'MP3 Audio'),
 			array('audio/x-mpeg', 'MP3 Audio'),
 			array('application/x-ogg', 'OGG Audio'),
 		),
@@ -657,7 +658,7 @@ class files_default
 		$size = filesize($filename);
 		if (!is_numeric($size) || !$size) return false;
 
-		$mime_type = $this->lookupMimeType($filename);
+		$mime_type  = $this->lookupMimeType($filename);
 		$media_type = $this->lookupMediaType($filename);
 
 		//force calculation of checksums
