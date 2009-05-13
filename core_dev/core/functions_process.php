@@ -600,6 +600,8 @@ function generateVideoThumbs($fileId)
 	global $h;
 	if (!is_numeric($fileId)) return false;
 
+	if ($h->files->lookupMediaType($fileId) != MEDIATYPE_VIDEO) return false;
+
 	$c = 'ffprobe -show_files '.$h->files->findUploadPath($fileId).' 2> /dev/null | grep duration | cut -d= -f2';
 	//echo "Executing: ".$c."\n";
 	$duration = exec($c);
