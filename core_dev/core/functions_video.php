@@ -133,7 +133,7 @@ function embedQuickTimeVideo($url, $mute = false)
 /**
  * Helper function to embed Flash .swf objects
  */
-function embedSwf($url, $w = 0, $h = 0, $div_id = '')
+function embedSwf($url, $w = 0, $h = 0, $div_id = '')	//XXX deprecate!! ???
 {
 	if (!$div_id) $div_id = 'div_'.mt_rand(1,999999);
 	if (!$w) $w = 176 * 1.5;
@@ -155,6 +155,36 @@ function embedSwf($url, $w = 0, $h = 0, $div_id = '')
 	$data .= 'fo.addVariable("file","'.$url.'");';
 	$data .= 'fo.addVariable("autostart", false);';
 	//$data .= 'fo.addVariable("image","video.jpg");';
+	$data .= 'fo.write("'.$div_id.'");';
+	$data .= '</script>';
+
+	return $data;
+}
+
+/**
+ * Helper function to embed .flv video using swf flash video player
+ */
+function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '')
+{
+	if (!$div_id) $div_id = 'div_'.mt_rand(1,999999);
+	if (!$w) $w = 176 * 1.5;
+	if (!$h) $h = 144 * 1.5;
+
+	$player_url = '/core_dev/api/flash/mediaplayer.swf';
+
+	$data = '<p id="'.$div_id.'">';
+	$data .= '<a href="'.$video_url.'">Download file</a>';
+	$data .= '</p>';
+
+	$data .= '<script type="text/javascript">';
+	$data .= 'var fo = new SWFObject("'.$player_url.'", "player", '.$w.', '.$h.', "9");';
+	$data .= 'fo.addParam("allowfullscreen","true");';
+	$data .= 'fo.addParam("allowscriptaccess","always");';
+
+	$params = '';
+	$params = 'autostart=true';
+	$data .= 'fo.addParam("flashvars","file='.$video_url.'&'.$params.'");';
+
 	$data .= 'fo.write("'.$div_id.'");';
 	$data .= '</script>';
 
