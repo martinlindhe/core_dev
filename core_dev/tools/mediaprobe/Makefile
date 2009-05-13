@@ -12,6 +12,7 @@ OBJS = \
     \
     probe_mp3.o  \
     probe_asf.o  \
+    probe_flv.o  \
     \
     main.o
 

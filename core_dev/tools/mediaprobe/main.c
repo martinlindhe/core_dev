@@ -30,6 +30,8 @@
 //container format parsers
 #include "probe_asf.h"
 
+#include "probe_flv.h"
+
 //audio format parsers
 #include "probe_mp3.h"
 
@@ -78,6 +80,7 @@ int main(int argc, char** argv)
 
 	//container format parsers
 	if (probe_asf (f, len, info) == E_PROBESUCCESS) goto finish;
+	if (probe_flv (f, len, info) == E_PROBESUCCESS) goto finish;
 
 	//audio format parsers
 	if (probe_mp3 (f, len, info) == E_PROBESUCCESS) goto finish;
