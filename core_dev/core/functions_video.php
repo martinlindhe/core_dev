@@ -135,7 +135,7 @@ function embedQuickTimeVideo($url, $mute = false)
  */
 function embedSwf($url, $w = 0, $h = 0, $div_id = '')	//XXX deprecate!! ???
 {
-	if (!$div_id) $div_id = 'div_'.mt_rand(1,999999);
+	if (!$div_id) $div_id = 'swf_'.mt_rand(1,999999);
 	if (!$w) $w = 176 * 1.5;
 	if (!$h) $h = 144 * 1.5;
 
@@ -166,7 +166,7 @@ function embedSwf($url, $w = 0, $h = 0, $div_id = '')	//XXX deprecate!! ???
  */
 function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '')
 {
-	if (!$div_id) $div_id = 'div_'.mt_rand(1,999999);
+	if (!$div_id) $div_id = 'flv_'.mt_rand(1,999999);
 	if (!$w) $w = 176 * 1.5;
 	if (!$h) $h = 144 * 1.5;
 
@@ -181,7 +181,6 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '')
 	$data .= 'fo.addParam("allowfullscreen","true");';
 	$data .= 'fo.addParam("allowscriptaccess","always");';
 
-	$params = '';
 	$params = 'autostart=true';
 	$data .= 'fo.addParam("flashvars","file='.$video_url.'&'.$params.'");';
 
