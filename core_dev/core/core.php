@@ -244,4 +244,23 @@ function goLoc($url)
 	echo '</script>';
 }
 
+/**
+ * Generate a random string of a-z, A-Z, 0-9 (62 combinations)
+ */
+function randstr($len)
+{
+	$res = '';
+	for ($i=0; $i<$len; $i++) {
+		$rnd = mt_rand(0, 61);
+		if ($rnd < 10) {
+			$res .= chr($rnd+48);
+		} else if ($rnd < 36) {
+			$res .= chr($rnd+55);
+		} else {
+			$res .= chr($rnd+61);
+		}
+	}
+	return $res;
+}
+
 ?>
