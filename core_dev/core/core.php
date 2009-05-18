@@ -263,4 +263,18 @@ function randstr($len)
 	return $res;
 }
 
+/**
+ * Checks if a string contains only numbers 0-9
+ */
+function numbers_only($s)
+{
+	$ok = array('0','1','2','3','4','5','6','7','8','9');
+	for ($i=0; $i<strlen($s); $i++) {
+		$c = substr($s, $i, 1);
+		if (!in_array($c, $ok)) return false;
+	}
+
+	return true;
+}
+
 ?>
