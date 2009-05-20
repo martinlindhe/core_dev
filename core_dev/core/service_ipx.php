@@ -62,10 +62,10 @@ function sendSMS($customerId, $from_number, $dst_number, $msg, $tariff = '', $re
 	if (!$reference) {
 		$reference = '#NULL#';
 		$ipx_username = $config['sms']['bulk_username'];
-		$ipx_username = $config['sms']['bulk_password'];
+		$ipx_password = $config['sms']['bulk_password'];
 	} else {
 		$ipx_username = $config['sms']['premium_username'];
-		$ipx_username = $config['sms']['premium_password'];
+		$ipx_password = $config['sms']['premium_password'];
 	}
 
 	//$msg must be a UTF-8 encoded string for non latin1-characters to work
