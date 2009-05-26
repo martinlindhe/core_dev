@@ -99,6 +99,8 @@ function allowedIP($whitelist)
  */
 function matchIP($ip, $matches)
 {
+	if (!is_numeric($ip)) $ip = IPv4_to_GeoIP($ip);
+
 	foreach ($matches as $chk) {
 		$a = explode('/', $chk);	//check against "80.0.0.0/8" format
 		if (count($a) == 2) {
