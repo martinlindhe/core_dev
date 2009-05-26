@@ -365,6 +365,27 @@ function xhtmlButton($_title, $onclick = '')
 }
 
 /**
+ * $shapes = array(
+ *   array('shape' => 'rect',   'href' => 'a.html', 'coords' => array(x1,y1,x2,y2)),
+ *   array('shape' => 'circle', 'href' => 'b.html', 'coords' => array(x,y,radius)),
+ *   array('shape' => 'poly',   'href' => 'c.html', 'coords' => array(x1,y1,x2,y2,..,xn,yn))
+ * );
+ */
+function xhtmlMap($shapes, $name)
+{
+	$res =
+	'<map name="'.$name.'">';
+	foreach ($shapes as $s) {
+		$res .= '<area shape="'.$s['shape'].'" coords="'.implode($s['coords'], ',').'" href="'.$s['href'].'"'.(!empty($s['alt']) ? ' alt="'.$s['alt'].'" title="'.$s['alt'].'"' : '').'/>';
+	}
+	$res .=
+	'</map>';
+
+	return $res;
+}
+
+
+/**
  * Helper to create a table out of a named array and/or callback function
  *
  * @param $arr is a normal $list array
