@@ -72,18 +72,32 @@ function reservedIPv4($ip)
 }
 
 /**
- * Checks if specified IPv4 address is in the whitelist
+ * Checks if client IP address is in the whitelist
  * Useful to create simple IP access rules
  *
- * @param $ip IPv4 address in GeoIP or human readable format
- * @param $allowed array of IPv4 addresses
- * @return true if specified address is in the $allowed list
+ * @param $whitelist array of IPv4 addresses
+ * @return true if client IP address is in the $allowed list
  */
-function allowedIPv4($ip, $allowed)
+function allowedIPv4($whitelist)
 {
-	if (!is_numeric($ip)) $ip = IPv4_to_GeoIP($ip);
+	if (php_sapi_name() == 'cli') return true;
 
-	foreach ($allowed as $chk) {
+	$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+
+	return matchIP($ip, $whitelist);
+}
+
+/**
+ * If the IPv4 address in $ip is found to match a rule in $matches
+ * then the function returns true
+ *
+ * @param $ip IPv4 address in GeoIP or human readable format
+ * @param $matches array of IPv4 addresses
+ * @return true if $ip address is found in the $matches list
+ */
+function matchIP($ip, $matches)
+{
+	foreach ($matches as $chk) {
 		$a = explode('/', $chk);	//check against "80.0.0.0/8" format
 		if (count($a) == 2) {
 			$lo = IPv4_to_GeoIP($a[0]);
@@ -98,4 +112,5 @@ function allowedIPv4($ip, $allowed)
 
 	return false;
 }
+
 ?>
