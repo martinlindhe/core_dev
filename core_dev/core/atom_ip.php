@@ -2,8 +2,10 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
+
+//TODO: Handle IPv6 addresses (transparently)
 
 /**
  * Converts a IPv4 address to GeoIP format
@@ -48,7 +50,7 @@ function GeoIP_to_IPv4($geoip)
  * @param $ip IPv4 address in GeoIP or human readable format
  * @return true if specified IPv4 address is reserved
  */
-function reservedIPv4($ip)
+function reservedIP($ip)
 {
 	if (!is_numeric($ip)) $ip = IPv4_to_GeoIP($ip);
 
@@ -78,7 +80,7 @@ function reservedIPv4($ip)
  * @param $whitelist array of IPv4 addresses
  * @return true if client IP address is in the $allowed list
  */
-function allowedIPv4($whitelist)
+function allowedIP($whitelist)
 {
 	if (php_sapi_name() == 'cli') return true;
 
