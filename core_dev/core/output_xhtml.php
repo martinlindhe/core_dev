@@ -547,4 +547,27 @@ function xhtmlOpenSearch($url, $name, $icon_url = '')
 		//echo	'<Url type="application/x-suggestions+json" method="get" template="http://en.wikipedia.org/w/api.php?action=opensearch&amp;search={searchTerms}&amp;namespace=0"/>';
 	echo '</OpenSearchDescription>';
 }
+
+/**
+ * Helper to generate Javascript style arrays
+ */
+function jsArray($name, $list) {
+
+	$res =
+	'<script type="text/javascript">'.
+	$name.' = ['."\n";
+
+	foreach ($list as $l) {
+		$res .= '{ ';
+		foreach ($l as $key=>$val) {
+			$res .= $key.': '.(is_numeric($val) ? $val : '"'.$val.'"').', ';
+		}
+		$res .= '},'."\n";
+	}
+	$res .=
+	'];'.
+	'</script>';
+
+	return $res;
+}
 ?>
