@@ -2,6 +2,7 @@
 
 require_once('config.php');
 
+/*
 if (!empty($_POST['site'])) {
 	$type = 0;
 	if (!empty($_POST['type'])) $type = $_POST['type'];
@@ -21,10 +22,13 @@ if (!empty($_POST['site'])) {
 	require('design_foot.php');
 	die;
 }
+*/
 
 require('design_head.php');
 
 wiki('Report_top');
+
+/*
 ?>
 <br/>
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>" name="reportform">
@@ -52,6 +56,7 @@ wiki('Report_bottom');
 document.reportform.site.focus();
 </script>
 <?php
+*/
 
 require('design_foot.php');
 ?>
