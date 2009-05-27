@@ -1,3 +1,17 @@
+<style type="text/css">
+	#chart
+	{
+		width: 500px;
+		height: 350px;
+	}
+</style>
+
+<div id="chart">
+	Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher.
+	You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.
+</div>
+
+
 <script type="text/javascript">
 
 YAHOO.widget.Chart.SWFURL = "<?=$config['core']['web_root']?>js/yui/charts/assets/charts.swf";

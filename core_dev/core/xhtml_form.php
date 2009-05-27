@@ -173,7 +173,7 @@ class xhtml_form
 
 				echo xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
-				require('js_calendar.js');
+				require_once('js_calendar.js');
 				echo '</td>';
 				break;
 
