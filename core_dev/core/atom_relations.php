@@ -39,7 +39,7 @@ function saveRelation($_type, $_owner, $r1, $r2)
 	global $db;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	$q = 'INSERT INTO tblRelations SET relationType='.$type.',ownerId='.$_owner;
+	$q = 'INSERT INTO tblRelations SET relationType='.$_type.',ownerId='.$_owner;
 	$q .= ',r1="'.$db->escape($r1).'",r2="'.$db->escape($r2).'",timeSaved=NOW()';
 	return $db->insert($q);
 }
