@@ -85,6 +85,8 @@ class user_default extends user_base
 			Users::updateUser($newUserId, $username, $_mode);
 		}
 
+		Users::setPassword($newUserId, $password1, $password2);
+
 		dp('Registered user: '.$username);
 
 		//Stores the additional data from the userdata fields that's required at registration

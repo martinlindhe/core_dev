@@ -49,23 +49,23 @@ class Users
 	 */
 	function setPassword($_id, $_pwd1, $_pwd2 = '', $key = '')
 	{
-		global $db, $session, $auth;
+		global $db, $h;
 		if (!is_numeric($_id)) return false;
 		/* This function is referenced in the Auth-class too, but in that
 		 * context you cant use the $auth-object, since it's itself.
 		 * If $key is empty, the reference wasn't from the Auth-class
 		 * so therefore use the key from the Auth-object instead.
 		 */
-		if (empty($key)) $key = $auth->sha1_key;
+		if (empty($key)) $key = $h->auth->sha1_key;
 
 		if ($_pwd2) {
 			if (strlen($_pwd1) < 4) {
-				$session->error = t('Password must be at least 4 characters long');
+				$h->error = t('Password must be at least 4 characters long');
 				return false;
 			}
 
 			if ($_pwd1 != $_pwd2) {
-				$session->error = t('The passwords doesnt match');
+				$h->error = t('The passwords doesnt match');
 				return false;
 			}
 		}
@@ -783,10 +783,10 @@ class Users
 	 */
 	function isOnline($_id)
 	{
-		global $db, $session;
+		global $db, $h;
 		if (!is_numeric($_id)) return false;
 
-		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeDeleted IS NULL AND timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND) LIMIT 1';
+		$q = 'SELECT userId FROM tblUsers WHERE userId = '.$_id.' AND timeDeleted IS NULL AND timeLastActive>=DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND) LIMIT 1';
 		if ($db->getOneItem($q)) return true;
 
 		return false;
