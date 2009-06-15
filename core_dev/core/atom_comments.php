@@ -50,11 +50,9 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
 	if ($privateComment) $private = 1;
 	else $private = 0;
 
-	if (!empty($h->session->id)) {
-		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$h->session->id.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
-	} else {
-		$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId=0, userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
-	}
+	$userId = !empty($h->session->id) ? $h->session->id : 0;
+
+	$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$userId.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
 	return $db->insert($q);
 }
 
