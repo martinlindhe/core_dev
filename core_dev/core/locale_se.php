@@ -70,6 +70,7 @@ function t_se($s)
 		case 'Time': return 'Tidpunkt';
 		case 'Referer': return 'Referens';
 		case 'Display': return 'Visa';
+		case 'Anonymous': return 'Anonym';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
