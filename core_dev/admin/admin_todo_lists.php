@@ -118,7 +118,7 @@ echo '</table>';
 echo '<br/>';
 
 echo '<b>Development log</b><br/><br/>';
-showComments(COMMENT_TODOLIST, $itemId);
+echo showComments(COMMENT_TODOLIST, $itemId);
 
 //echo showFileAttachments($itemId, FILETYPE_PR);
 

@@ -55,7 +55,7 @@ foreach ($events as $row) {
 echo '</table>';
 
 echo '<h2>'.t('Comments').'</h2>';
-showComments(COMMENT_USER, $userId);
+echo showComments(COMMENT_USER, $userId);
 
 echo '<h2>All userdata</h2>';
 if (!empty($_POST['new_ud_key']) && isset($_POST['new_ud_val'])) {

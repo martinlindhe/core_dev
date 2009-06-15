@@ -36,7 +36,7 @@ if ($h->session->isSuperAdmin && !empty($_POST)) {
 		if (!is_numeric($newUserId)) {
 			echo '<div class="critical">'.$newUserId.'</div>';
 		} else {
-			echo '<div class="okay">New user created. Go to user page: '.Users::link($newUserId, $_POST['u_name']).'</div>';
+			echo '<div class="okay">New user created. <a href="admin_user.php?id='.$newUserId.'">'.$_POST['u_name'].'</a></div>';
 		}
 	}
 }

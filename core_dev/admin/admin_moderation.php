@@ -121,7 +121,7 @@ if (!isset($_GET['moded'])) {
 }
 
 if (!empty($_GET['comments'])) {
-	showComments(COMMENT_MODERATION, $_GET['comments']);
+	echo showComments(COMMENT_MODERATION, $_GET['comments']);
 	require('design_admin_foot.php');
 	die;
 }

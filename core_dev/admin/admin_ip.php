@@ -45,7 +45,7 @@ if ($ip && !$block) {
 	echo '<hr/>';
 
 	//Admin notes
-	showComments(COMMENT_ADMIN_IP, $geoip);
+	echo showComments(COMMENT_ADMIN_IP, $geoip);
 } else if ($userId) {
 	$name = Users::getName($userId);
 	echo '<h1>'.$name.'</h1>';
