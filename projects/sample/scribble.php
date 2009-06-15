@@ -7,7 +7,7 @@ require('design_head.php');
 
 echo '<h1>Scribble</h1>';
 
-showComments(COMMENT_SCRIBBLE);
+echo showComments(COMMENT_SCRIBBLE);
 
 require('design_foot.php');
 ?>
