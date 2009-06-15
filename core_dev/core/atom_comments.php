@@ -247,16 +247,6 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 		unset($_POST['cmt_'.$_type]);
 	}
 
-	if (!empty($_GET['delete']) && is_numeric($_GET['delete'])) {
-		//let users delete comments belonging to their files
-		if ($h->session->isAdmin ||
-			($_type == COMMENT_FILE && $h->files->getOwner($ownerId) == $h->session->id)
-		) {
-			deleteComment($_GET['delete']);	//FIXME: comment typ!
-			unset($_GET['delete']);
-		}
-	}
-
 	//Gets all comments for this item
 	$cnt = getCommentsCount($_type, $ownerId);
 
@@ -269,7 +259,7 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 	$list = getComments($_type, $ownerId, false, $pager['limit']);
 	echo $pager['head'];
 	foreach ($list as $row) {
-		showComment($row);
+		echo showComment($row);
 	}
 	if ($cnt >= 5) echo $pager['head'];
 	echo '</div>'; //id="comments_only"
@@ -310,7 +300,7 @@ function showAllComments($_type)
 	}
 
 	foreach ($list as $row) {
-		showComment($row);
+		echo showComment($row);
 	}
 }
 
@@ -321,22 +311,40 @@ function showAllComments($_type)
 function showComment($row)
 {
 	global $config, $h;
-	echo '<div class="comment_details">';
+
+	if (!empty($_GET['cmt_delete']) && is_numeric($_GET['cmt_delete']) && ($_GET['cmt_delete'] == $row['commentId']) ) {
+		//let users delete comments belonging to their files
+		if ($h->session->isAdmin ||
+			($_type == COMMENT_FILE && $h->files->getOwner($ownerId) == $h->session->id)
+		) {
+			deleteComment($_GET['cmt_delete']);	//FIXME: comment typ!
+			unset($_GET['cmt_delete']);
+			return false;
+		}
+	}
+
+	$res = '<div class="comment_details">';
 	//echo makeThumbLink($row['ownerId']);
-	echo Users::link($row['userId'], $row['userName']).'<br/>';
-	echo $row['timeCreated'];
-	echo '</div>';
-	echo '<div class="comment_text">'.nl2br($row['commentText']);
-	if ($h->session->isAdmin ||
+	if ($row['userId']) {
+		$res .= Users::link($row['userId']).'<br/>';
+	} else {
+		$res .= t('Anonymous').'<br/>';
+	}
+	$res .= '<font size="1">'.formatTime($row['timeCreated']).'</font>';
+	$res .= '</div>';
+	$res .= '<div class="comment_text">'.nl2br($row['commentText']);
+	if ($h->session->id && ($h->session->isAdmin ||
 		//allow users to delete their own comments
 		$h->session->id == $row['userId'] ||
 		//allow users to delete comments on their files
 		($row['commentType'] == COMMENT_FILE && $h->files->getOwner($row['ownerId']) == $h->session->id)
+		)
 	) {
-		echo ' | ';
-		echo coreButton('Delete', URLadd('delete', $row['commentId']) );
+		$res .= ' | ';
+		$res .= coreButton('Delete', URLadd('cmt_delete', $row['commentId']) );
 
 	}
-	echo '</div>';
+	$res .= '</div>';
+	return $res;
 }
 ?>

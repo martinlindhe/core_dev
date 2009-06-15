@@ -176,14 +176,14 @@ function showRegisterForm($preId = 0, $act_code = 0)
 	global $h, $config;
 	if (!is_numeric($preId) || !is_numeric($act_code)) return false;
 
-	if ($this->mail_error) {
+	if ($h->auth->mail_error) {
 		echo '<div class="critical">'.t('An error occured sending activation mail!').'</div><br/>';
 		return false;
 	}
 
 	$h->showError();
 
-	if ($this->activation_sent) {
+	if ($h->auth->activation_sent) {
 		echo t('An email with your activation code has been sent.').'<br/>';
 		echo t('Follow the link in the mail to finish your registration.').'<br/>';
 		return true;
@@ -202,7 +202,7 @@ function showRegisterForm($preId = 0, $act_code = 0)
 			'</tr>';
 	echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
 	echo '<tr><td>'.t('Repeat password').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
-	if ($this->userdata) {
+	if ($h->user->userdata) {
 		showRequiredUserdataFields();
 	}
 	echo '</table><br/>';

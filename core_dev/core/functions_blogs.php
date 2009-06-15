@@ -310,7 +310,7 @@ function showBlog()
 
 	} else if ($current_tab == 'BlogComment') {
 
-		showComments(COMMENT_BLOG, $_id);
+		echo showComments(COMMENT_BLOG, $_id);
 
 	} else if ($current_tab == 'BlogFiles' && ($h->session->id == $blog['userId'] || $h->session->isAdmin)) {
 

@@ -15,6 +15,7 @@
 //QUESTION: what is expire time of a "active_token"?
 //QUESTION: docs lists carrier names in upper case but they are not accepted in upper case?
 //QUESTION: why is MDN & Sprint in the response xml's rather than correct info?
+//QUESTION: 12000 meter precision always on Tre phones?
 
 require_once('output_http.php');
 

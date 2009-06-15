@@ -228,7 +228,7 @@ function showNewsArticle($_id = 0)
 		echo showFiles(FILETYPE_NEWS, $_id);
 
 	} else if ($current_tab == 'NewsComment') {
-		showComments(COMMENT_NEWS, $_id);
+		echo showComments(COMMENT_NEWS, $_id);
 	} else {
 
 		$art = parseArticle($news['title'], $news['body']);

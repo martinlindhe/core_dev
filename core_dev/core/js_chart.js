@@ -32,26 +32,15 @@ var seriesDef =
 	{ displayName: "Calls", yField: "calls" }
 ];
 
-YAHOO.example.formatCurrencyAxisLabel = function( value )
-{
-	return YAHOO.util.Number.format( value,
-	{
-		prefix: "",
-		thousandsSeparator: ",",
-		decimalPlaces: 0
-	});
-}
-
 YAHOO.example.getDataTipText = function( item, index, series )
 {
 	var toolTipText = series.displayName + " starting at " + item.hours;
-	toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( item[series.yField] );
+	toolTipText += "\n" + item[series.yField];
 	return toolTipText;
 }
 
 var currencyAxis = new YAHOO.widget.NumericAxis();
 currencyAxis.minimum = 0;
-currencyAxis.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
 
 var mychart = new YAHOO.widget.LineChart( "chart", myDataSource,
 {
