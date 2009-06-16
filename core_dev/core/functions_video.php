@@ -164,7 +164,7 @@ function embedSwf($url, $w = 0, $h = 0, $div_id = '')	//XXX deprecate!! ???
 /**
  * Helper function to embed .flv video using swf flash video player
  */
-function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '')
+function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = true)
 {
 	if (!$div_id) $div_id = 'flv_'.mt_rand(1,999999);
 	if (!$w) $w = 176 * 1.5;
@@ -181,7 +181,8 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '')
 	$data .= 'fo.addParam("allowfullscreen","true");';
 	$data .= 'fo.addParam("allowscriptaccess","always");';
 
-	$params = 'autostart=true';
+	$params = '';
+	if ($autostart) $params = 'autostart=true';
 	$data .= 'fo.addParam("flashvars","file='.$video_url.'&'.$params.'");';
 
 	$data .= 'fo.write("'.$div_id.'");';

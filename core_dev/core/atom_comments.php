@@ -4,7 +4,7 @@
  *
  * Set of functions to implement comments, used by various modules
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 //FIXME cleanup API and take userId as parameter, no tblUsers assumtions & usage
@@ -330,9 +330,12 @@ function showComment($row)
 	} else {
 		$res .= t('Anonymous').'<br/>';
 	}
+
+	$txt = formatUserInputText($row['commentText']);
+
 	$res .= '<font size="1">'.formatTime($row['timeCreated']).'</font>';
 	$res .= '</div>';
-	$res .= '<div class="comment_text">'.nl2br($row['commentText']);
+	$res .= '<div class="comment_text">'.$txt;
 	if ($h->session->id && ($h->session->isAdmin ||
 		//allow users to delete their own comments
 		$h->session->id == $row['userId'] ||

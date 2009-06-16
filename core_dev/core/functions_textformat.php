@@ -269,6 +269,11 @@ function formatUserInputText($text, $convert_html = true)
 				$result = makeImageLink($link['param']);
 				break;
 
+			case 'video':
+				$url = '/video/'.$link['param'].'.flv';
+				$result = embedFlashVideo($url, 176, 144, '', false);
+				break;
+
 			case 'poll':
 				$result = poll(POLL_NEWS, $link['param']);
 				break;
