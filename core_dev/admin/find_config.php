@@ -5,6 +5,8 @@
 
 $project = '../../';
 
+$project = '/var/www/m2w/operator/';
+
 require_once($project.'config.php');
 
 set_include_path($config['core']['fs_root'].'core/');

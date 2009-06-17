@@ -7,7 +7,7 @@
  * Deletes missing files
  */
 
-require_once('/var/www/www.phonecafe.se/config.php');
+require_once('/var/www/cs/ga/config.php');
 
 $list = $h->files->getFiles();
 

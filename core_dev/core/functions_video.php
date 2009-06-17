@@ -133,7 +133,7 @@ function embedQuickTimeVideo($url, $mute = false)
 /**
  * Helper function to embed Flash .swf objects
  */
-function embedSwf($url, $w = 0, $h = 0, $div_id = '')	//XXX deprecate!! ???
+function embedSwf($url, $w = 0, $h = 0, $div_id = '', $autostart = true)	//XXX deprecate!! ???
 {
 	if (!$div_id) $div_id = 'swf_'.mt_rand(1,999999);
 	if (!$w) $w = 176 * 1.5;
@@ -143,18 +143,15 @@ function embedSwf($url, $w = 0, $h = 0, $div_id = '')	//XXX deprecate!! ???
 	$data .= '<p>swf holder</p>';
 	$data .= '</div>';
 
-	$data .= '<script language="javascript" type="text/javascript">';
-
-    //$data .= 'swfobject.embedSWF("'.$url.'", "'.$div_id.'", "'.$w.'", "'.$h.'", "9.0.0");';	//XXX: requires swfobject 2.0
-
-	//XXX: this is for swfobject 1.5
-	$data .= 'var fo = new SWFObject("'.$url.'", "mediaplayer", '.$w.', '.$h.', "8", "#FFFFFF");';
+	$data .= '<script type="text/javascript">';
+	$data .= 'var fo = new SWFObject("'.$url.'", "player", '.$w.', '.$h.', "9");';
 	$data .= 'fo.addParam("allowfullscreen","true");';
-	$data .= 'fo.addVariable("width",'.$w.');';
-	$data .= 'fo.addVariable("height",'.$h.');';
-	$data .= 'fo.addVariable("file","'.$url.'");';
-	$data .= 'fo.addVariable("autostart", false);';
-	//$data .= 'fo.addVariable("image","video.jpg");';
+	$data .= 'fo.addParam("allowscriptaccess","always");';
+
+	$params = '';
+	if ($autostart) $params = 'autostart=true';
+	$data .= 'fo.addParam("flashvars","'.$params.'");';
+
 	$data .= 'fo.write("'.$div_id.'");';
 	$data .= '</script>';
 

@@ -107,8 +107,6 @@ The link will expire in __EXPIRETIME__";
 	{
 		global $config;
 
-//FIXME use output_smtp.php instead!
-die('handleForgotPassword() needs fixing!');
 		$email = trim($email);
 		if (strpos($email, '@')) {
 			if (!ValidEmail($email)) return false;
@@ -137,6 +135,8 @@ die('handleForgotPassword() needs fixing!');
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);
 		$msg = preg_replace($pattern, $replacement, $this->mail_password_msg);
+
+//FIXME use output_smtp.php
 
 		if (!$this->SmtpSend($email, $subj, $msg)) {
 			removeActivation(ACTIVATE_CHANGE_PWD, $code);

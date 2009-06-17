@@ -541,7 +541,7 @@ class Users
 	 */
 	function search()
 	{
-		global $session;
+		global $h;
 
 		if (isset($_POST['c'])) {
 
@@ -601,7 +601,7 @@ class Users
 		$list = getUserdataFields();
 		echo '<table>';
 		foreach ($list as $row) {
-			if ($row['private'] && !$session->isAdmin) continue;
+			if ($row['private'] && !$h->session->isAdmin) continue;
 
 			echo '<tr'.($row['private']?' class="critical"':'').'>';
 			echo getUserdataSearch($row);
@@ -626,7 +626,7 @@ class Users
 	 */
 	function getSearchResult($data)
 	{
-		global $db, $session;
+		global $db, $h;
 
 		$criteria = 0;
 		if (isset($data['c'])) {
@@ -648,7 +648,7 @@ class Users
 
 		// Add one INNER JOIN for each parameter we want to search for
 		foreach ($list as $row) {
-			if (!$session->isAdmin && $row['private']) continue;
+			if (!$h->session->isAdmin && $row['private']) continue;
 			if ($row['fieldType'] == USERDATA_TYPE_LOCATION_SWE && !empty($data['search_loc_city'])) {
 				$q .= 'LEFT JOIN tblSettings AS n'.$start.' ON (t1.userId=n'.$start.'.ownerId AND n'.$start.'.settingName="city" AND n'.$start.'.settingType='.SETTING_USERDATA.') ';
 				$start++;
@@ -673,7 +673,7 @@ class Users
 
 		// Find the userdata fields the user searched for
 		foreach ($list as $row) {
-			if (!$session->isAdmin && $row['private']) continue;
+			if (!$h->session->isAdmin && $row['private']) continue;
 			if (!empty($data['userdata_'.$row['fieldId']]) || (!empty($data['search_loc_region']) || !empty($data['search_loc_city']))) {
 				if ($start > 1) { // n1 is always created!
 					switch ($row['fieldType']) {

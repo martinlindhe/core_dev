@@ -116,10 +116,15 @@ class handler
 
 	function showError($clear_err = true)
 	{
-		if (!$this->error) return;
+		if ($this->error) echo '<div class="critical">'.$this->error.'</div><br/>';
+		if ($this->session->error) echo '<div class="critical">'.$this->session->error.'</div><br/>';
+		if ($this->auth->error) echo '<div class="critical">'.$this->auth->error.'</div><br/>';
 
-		echo '<div class="critical">'.$this->error.'</div><br/>';
-		if ($clear_err) $this->error = ''; //remove error message once it has been displayed
+		if ($clear_err) {
+			$this->error = ''; //remove error message once it has been displayed
+			$this->session->error = '';
+			$this->auth->error = '';
+		}
 	}
 
 	function handleEvents()
