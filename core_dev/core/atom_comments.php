@@ -250,32 +250,32 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 	//Gets all comments for this item
 	$cnt = getCommentsCount($_type, $ownerId);
 
-	echo '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.$cnt.' '.($cnt == 1 ? t('comment'):t('comments')).'</div>';
+	$res = '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.$cnt.' '.($cnt == 1 ? t('comment'):t('comments')).'</div>';
 
-	echo '<div id="comments_holder">';
-	echo '<div id="comments_only">';
+	$res .= '<div id="comments_holder">';
+	$res .= '<div id="comments_only">';
 	$pager = makePager($cnt, $limit);
 
 	$list = getComments($_type, $ownerId, false, $pager['limit']);
-	echo $pager['head'];
+	$res .= $pager['head'];
 	foreach ($list as $row) {
-		echo showComment($row);
+		$res .= showComment($row);
 	}
-	if ($cnt >= 5) echo $pager['head'];
-	echo '</div>'; //id="comments_only"
+	if ($cnt >= 5) $res .= $pager['head'];
+	$res .= '</div>'; //id="comments_only"
 
 	if ( ($h->session->id && $_type != COMMENT_MODERATION) ||
 			($_type == COMMENT_FILE || $_type == COMMENT_PASTEBIN)
 	) {
-		echo '<form method="post" action="">';
-		echo xhtmlTextarea('cmt_'.$_type, '', $col_w, $col_h).'<br/>';
-		echo xhtmlSubmit('Add comment');
-		echo '</form>';
+		$res .= '<form method="post" action="">';
+		$res .= xhtmlTextarea('cmt_'.$_type, '', $col_w, $col_h).'<br/>';
+		$res .= xhtmlSubmit('Add comment');
+		$res .= '</form>';
 	}
 
-	echo '</div>';	//id="comments_holder"
+	$res .= '</div>';	//id="comments_holder"
 
-	return count($list);
+	return $res;
 }
 
 /**

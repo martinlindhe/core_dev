@@ -529,17 +529,21 @@ function showAttachedPolls($_type, $_owner)
 	if (!$h->session->isAdmin || !is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	$list = getPolls($_type, $_owner);
-	if (!$list) return;
+	if (!$list) return false;
+
+	$res = '';
 
 	foreach ($list as $row) {
-		echo '<div class="poll_attached">';
-		echo '<b>'.$row['pollText'].'</b><br/>';
+		$res .= '<div class="poll_attached">';
+		$res .= '<b>'.$row['pollText'].'</b><br/>';
 		$answers = getCategories(CATEGORY_POLL, $row['pollId']);
 		foreach ($answers as $an) {
-			echo $an['categoryName'].' ';
+			$res .= $an['categoryName'].' ';
 		}
-		echo '<a href="">See results</a>';
-		echo '</div>';
+		$res .= '<a href="">See results</a>';
+		$res .= '</div>';
 	}
+
+	return $res;
 }
 ?>

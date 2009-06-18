@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 require_once('atom_comments.php');		//for news comment support
@@ -138,29 +138,29 @@ function showNewsArticle($_id = 0)
 	if (empty($_id) || !is_numeric($_id)) return false;
 
 	$news = getNewsItem($_id);
-	if (!$news) return;
+	if (!$news) return false;
 
 	if (!$h->session->isAdmin && !datetime_less($news['timeToPublish'], now())) return false;
 
-	echo '<div class="news">';
-	echo '<div class="news_top">';
-	if ($news['rss_enabled']) echo '<div class="news_title_rss">';
-	else echo '<div class="news_title">';
-	echo $news['title'].'</div>';
+	$res = '<div class="news">';
+	$res .= '<div class="news_top">';
+	if ($news['rss_enabled']) $res .= '<div class="news_title_rss">';
+	else $res .= '<div class="news_title">';
+	$res .= $news['title'].'</div>';
 
 	if ($news['categoryId']) {
-		echo '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $news['categoryId']).'</a><br/>';
+		$res .= '<a href="news.php?cat='.$news['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $news['categoryId']).'</a><br/>';
 	}
-	echo 'By '.Users::link($news['creatorId'], $news['creatorName']);
+	$res .= 'By '.Users::link($news['creatorId'], $news['creatorName']);
 	if (datetime_less($news['timeToPublish'], now())) {
-		echo ', '.t('published').' '.formatTime($news['timeToPublish']).'<br/>';
+		$res .= ', '.t('published').' '.formatTime($news['timeToPublish']).'<br/>';
 	} else {
-		echo ', <b>'.t('will be published').' '.formatTime($news['timeToPublish']).'</b><br/>';
+		$res .= ', <b>'.t('will be published').' '.formatTime($news['timeToPublish']).'</b><br/>';
 	}
 
-	if ($news['editorId']) echo '<i>'.t('Updated').' '.formatTime($news['timeEdited']).' '.t('by').' '.$news['editorName'].'</i><br/>';
-	echo '</div>'; //class="news_top"
-	echo '<br/>';
+	if ($news['editorId']) $res .= '<i>'.t('Updated').' '.formatTime($news['timeEdited']).' '.t('by').' '.$news['editorName'].'</i><br/>';
+	$res .= '</div>'; //class="news_top"
+	$res .= '<br/>';
 
 	if ($h->session->isAdmin) {
 		$menu = array(
@@ -179,7 +179,7 @@ function showNewsArticle($_id = 0)
 			);
 	}
 
-	echo createMenu($menu, 'blog_menu');
+	$res .= createMenu($menu, 'blog_menu');
 
 	if ($current_tab == 'NewsEdit' && $h->session->isAdmin) {
 
@@ -189,21 +189,21 @@ function showNewsArticle($_id = 0)
 
 		$item = getNewsItem($_id);
 
-		echo '<h1>'.t('Edit news article').'</h1>';
-		echo '<form method="post" action="'.'?NewsEdit:'.$_id.'">';
-		echo '<input type="hidden" name="news_rss" value="0"/>';
-		echo t('Title').': '.xhtmlInput('news_title', $item['title'], 50).'<br/>';
-		echo t('Text').':<br/>';
-		echo xhtmlTextarea('news_body', $item['body'], 60, 16).'<br/>';
-		echo '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
-		echo ' <label for="rss_check">';
-		echo '<img src="'.$config['core']['web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
-		echo t('Include this news in the RSS feed').'</label><br/><br/>';
-		echo t('Category').': '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
-		echo t('Time for publication').': ';
-		echo xhtmlInput('news_publish', $item['timeToPublish']).'<br/>';
-		echo xhtmlSubmit('Save changes');
-		echo '</form>';
+		$res .= '<h1>'.t('Edit news article').'</h1>';
+		$res .= '<form method="post" action="'.'?NewsEdit:'.$_id.'">';
+		$res .= '<input type="hidden" name="news_rss" value="0"/>';
+		$res .= t('Title').': '.xhtmlInput('news_title', $item['title'], 50).'<br/>';
+		$res .= t('Text').':<br/>';
+		$res .= xhtmlTextarea('news_body', $item['body'], 60, 16).'<br/>';
+		$res .= '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
+		$res .= ' <label for="rss_check">';
+		$res .= '<img src="'.$config['core']['web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
+		$res .= t('Include this news in the RSS feed').'</label><br/><br/>';
+		$res .= t('Category').': '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
+		$res .= t('Time for publication').': ';
+		$res .= xhtmlInput('news_publish', $item['timeToPublish']).'<br/>';
+		$res .= xhtmlSubmit('Save changes');
+		$res .= '</form>';
 
 	} else if ($current_tab == 'NewsPolls' && $h->session->isAdmin) {
 		managePolls(POLL_NEWS, $_id);
@@ -225,27 +225,27 @@ function showNewsArticle($_id = 0)
 
 	} else if ($current_tab == 'NewsFiles' && $h->session->isAdmin) {
 
-		echo showFiles(FILETYPE_NEWS, $_id);
+		$res .= showFiles(FILETYPE_NEWS, $_id);
 
 	} else if ($current_tab == 'NewsComment') {
-		echo showComments(COMMENT_NEWS, $_id);
+		$res .= showComments(COMMENT_NEWS, $_id);
 	} else {
 
 		$art = parseArticle($news['title'], $news['body']);
-		if ($art['head']) echo '<div class="news_head">'.$art['head'].'</div>';
-		echo '<div class="news_body">'.$art['body'].'</div>';
+		if ($art['head']) $res .= '<div class="news_head">'.$art['head'].'</div>';
+		$res .= '<div class="news_body">'.$art['body'].'</div>';
 
 		if ($config['news']['allow_rating']) {
-			echo '<br/>';
-			echo '<div class="news_rate">';
-			echo ratingGadget(RATE_NEWS, $_id);
-			echo '</div>';
+			$res .= '<br/>';
+			$res .= '<div class="news_rate">';
+			$res .= ratingGadget(RATE_NEWS, $_id);
+			$res .= '</div>';
 		}
 	}
 
-	echo '</div>'; //class="news"
+	$res .= '</div>'; //class="news"
 
-	return true;
+	return $res;
 }
 
 /**
@@ -256,7 +256,8 @@ function showNews($limit = 0)
 	global $h, $db, $config;
 
 	//Displays one news article - returns if successful
-	if (showNewsArticle()) return;
+	$res = showNewsArticle();
+	if ($res) return $res;
 
 	$_cat_id = 0;
 	if (!empty($_GET['cat']) && is_numeric($_GET['cat'])) $_cat_id = $_GET['cat'];
@@ -264,39 +265,41 @@ function showNews($limit = 0)
 	$list = getPublishedNews($_cat_id, $limit);
 
 	foreach ($list as $row) {
-		showNewsOverview($row);
+		$res .= showNewsOverview($row);
 	}
 	if ($h->session->isAdmin) {
-		echo '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php">'.t('Add news').'</a><br/>';
-		echo '<a href="'.$config['core']['web_root'].'admin/admin_news.php">'.t('Manage news').'</a><br/>';
+		$res .= '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php">'.t('Add news').'</a><br/>';
+		$res .= '<a href="'.$config['core']['web_root'].'admin/admin_news.php">'.t('Manage news').'</a><br/>';
 	}
+	return $res;
 }
 
 function showNewsOverview($row)
 {
 	global $config;
 
-	echo '<div class="news_item_overview">';
+	$res = '<div class="news_item_overview">';
 
-	echo '<h1>'.$row['title'].'</h1>';
-	echo '<div>';
-	//echo '<div class="news_item_picl">'.Users::linkThumb($row['creatorId'], $row['creatorName']).'</div>';
-		echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a> '.formatTime($row['timeToPublish']).'<br/>';	//fixme: show optional link title instead
+	$res .= '<h1>'.$row['title'].'</h1>';
+	$res .= '<div>';
+	//$res .= '<div class="news_item_picl">'.Users::linkThumb($row['creatorId'], $row['creatorName']).'</div>';
+		$res .= '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a> '.formatTime($row['timeToPublish']).'<br/>';	//fixme: show optional link title instead
 		$art = parseArticle($row['title'], $row['body']);
-		echo $art['head'];
-	echo '</div>';
+		$res .= $art['head'];
+	$res .= '</div>';
 	/*
-	echo '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
-	if ($row['categoryId']) echo ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $row['categoryId']).'</a>';
+	$res .= '<a href="?News:'.$row['newsId'].'">'.$row['title'].'</a>, published '.$row['timeToPublish'];
+	if ($row['categoryId']) $res .= ' - <a href="news.php?cat='.$row['categoryId'].'">'.getCategoryName(CATEGORY_NEWS, $row['categoryId']).'</a>';
 	$art = parseArticle($row['title'], $row['body']);
-	echo '<br/>'.$art['head'].'<br/>';
+	$res .= '<br/>'.$art['head'].'<br/>';
 	*/
-	echo '</div><br class="clr"/>';
+	$res .= '</div><br class="clr"/>';
 
 	if ($config['news']['allow_polls']) {
 		//show news polls
-		showAttachedPolls(POLL_NEWS, $row['newsId']);
-		echo '<br/>';
+		$res .= showAttachedPolls(POLL_NEWS, $row['newsId']);
+		$res .= '<br/>';
 	}
+	return $res;
 }
 ?>
