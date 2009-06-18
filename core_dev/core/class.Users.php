@@ -373,11 +373,11 @@ class Users
 	 */
 	function getRandomUserId()
 	{
-		global $db, $session;
+		global $db, $h;
 
 		$q  = 'SELECT userId FROM tblUsers';
 		$q .= ' WHERE userName IS NOT NULL AND timeDeleted IS NULL';
-		if ($session->id) $q .= ' AND userId!='.$session->id;
+		if ($h->session->id) $q .= ' AND userId!='.$h->session->id;
 		$q .= ' ORDER BY RAND() LIMIT 1';
 		return $db->getOneItem($q);
 	}
