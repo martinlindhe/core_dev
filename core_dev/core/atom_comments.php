@@ -308,7 +308,7 @@ function showAllComments($_type)
  * Default function for displaying comments
  * FIXME: make it possible to override this function
  */
-function showComment($row)
+function showComment($row, $style_head = 'comment_details', $style_body = 'comment_text')
 {
 	global $config, $h;
 
@@ -323,19 +323,16 @@ function showComment($row)
 		}
 	}
 
-	$res = '<div class="comment_details">';
+	$res = '<div class="'.$style_head.'">';
 	//echo makeThumbLink($row['ownerId']);
-	if ($row['userId']) {
-		$res .= Users::link($row['userId']).'<br/>';
-	} else {
-		$res .= t('Anonymous').'<br/>';
-	}
+
+	$res .= $row['userId'] ? Users::link($row['userId']) : t('Anonymous');
 
 	$txt = formatUserInputText($row['commentText']);
 
-	$res .= '<font size="1">'.formatTime($row['timeCreated']).'</font>';
+	$res .= ', <font size="1">'.formatTime($row['timeCreated']).'</font>';
 	$res .= '</div>';
-	$res .= '<div class="comment_text">'.$txt;
+	$res .= '<div class="'.$style_body.'">'.$txt;
 	if ($h->session->id && ($h->session->isAdmin ||
 		//allow users to delete their own comments
 		$h->session->id == $row['userId'] ||
