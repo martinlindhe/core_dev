@@ -4,6 +4,8 @@
  *
  * Sends mail through a SMTP email server
  *
+ * See class.Sendmail.php for a easier to use API
+ *
  * References
  * http://tools.ietf.org/html/rfc5321
  * http://tools.ietf.org/html/rfc821

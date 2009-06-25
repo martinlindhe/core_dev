@@ -8,6 +8,7 @@
  */
 
 require_once('atom_activation.php');	//for mail activation
+require_once('class.Sendmail.php');		//for sending mail
 
 abstract class auth_base
 {
@@ -136,8 +137,6 @@ The link will expire in __EXPIRETIME__";
 		);
 		$msg = preg_replace($pattern, $replacement, $this->mail_password_msg);
 
-//FIXME use output_smtp.php
-
 		if (!$this->SmtpSend($email, $subj, $msg)) {
 			removeActivation(ACTIVATE_CHANGE_PWD, $code);
 			$session->error = t('Problems sending mail');
@@ -148,6 +147,24 @@ The link will expire in __EXPIRETIME__";
 		return true;
 	}
 
+	function SmtpConfig($server, $username, $password, $from_adr, $from_name = '') {
+		$this->mail_server   = $server;
+		$this->mail_username = $username;
+		$this->mail_password = $password;
+		$this->mail_fromadr  = $from_adr;
+		$this->mail_fromname = $from_name;
+	}
+
+	function SmtpSend($dst_mail, $subject, $body)
+	{
+		if (!$this->sendmail) {
+			$this->sendmail = new Sendmail($this->mail_server, $this->mail_username, $this->mail_password);
+			$this->sendmail->from($this->mail_fromadr, $this->mail_fromname);
+		}
+
+		$this->sendmail->to($dst_mail);
+		return $this->sendmail->send($subject, $body);
+	}
 
 }
 
