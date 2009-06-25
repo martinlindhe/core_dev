@@ -147,6 +147,8 @@ The link will expire in __EXPIRETIME__";
 		return true;
 	}
 
+	var $sendmail, $mail_server, $mail_username, $mail_password, $mail_fromadr, $mail_fromname;
+
 	function SmtpConfig($server, $username, $password, $from_adr, $from_name = '') {
 		$this->mail_server   = $server;
 		$this->mail_username = $username;
