@@ -72,7 +72,6 @@ The link will expire in __EXPIRETIME__";
 		return true;
 	}
 
-
 	/**
 	 * Verifies user activaction code
 	 *
@@ -80,7 +79,7 @@ The link will expire in __EXPIRETIME__";
 	 * @param $_code
 	 * @return true if success
 	 */
-/*	function verifyActivationMail($_id, $_code)
+	function verifyActivationMail($_id, $_code)
 	{
 		if (!is_numeric($_id) || !is_numeric($_code)) return false;
 
@@ -97,7 +96,6 @@ The link will expire in __EXPIRETIME__";
 		echo t('You can now proceed to').' <a href="login.php">'.t('log in').'</a>.';
 		return true;
 	}
-*/
 
 	/**
 	 * Looks up user supplied email address / alias and generates a mail for them if needed
