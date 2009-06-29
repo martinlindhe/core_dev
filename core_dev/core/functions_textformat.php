@@ -276,7 +276,7 @@ function formatUserInputText($text, $convert_html = true)
 
 			case 'audio':
 				$url = '/audio/'.$link['param'].'.mp3';
-				$result = embedFlashAudio($url, 176, 60);
+				$result = embedFlashAudio($url, 176, 60, '', '/core_dev/gfx/voice_play.png', false);
 				break;
 
 			case 'poll':
