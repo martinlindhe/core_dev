@@ -274,7 +274,7 @@ function formatUserInputText($text, $convert_html = true)
 				$result = embedFlashVideo($url, 176, 144, '', false);
 				break;
 
-			case 'video':
+			case 'audio':
 				$url = '/audio/'.$link['param'].'.mp3';
 				$result = embedFlashAudio($url, 176, 60);
 				break;
