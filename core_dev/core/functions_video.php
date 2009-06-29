@@ -188,7 +188,7 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = 
 	return $data;
 }
 
-function embedFlashAudio($audio_url, $w = 176, $h = 60, $div_id = '', $img = '/core_dev/gfx/voice_play.png')
+function embedFlashAudio($audio_url, $w = 176, $h = 60, $div_id = '', $img = '/core_dev/gfx/voice_play.png', $autostart = true)
 {
 	if (!$div_id) $div_id = 'flv_'.mt_rand(1,999999);
 	if (!$w) $w = 176;
