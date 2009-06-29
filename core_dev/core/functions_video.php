@@ -187,4 +187,31 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = 
 
 	return $data;
 }
+
+function embedFlashAudio($audio_url, $w = 176, $h = 60, $img = '/core_dev/gfx/voice_play.png')
+{
+	if (!$div_id) $div_id = 'flv_'.mt_rand(1,999999);
+	if (!$w) $w = 176;
+	if (!$h) $h = 60;
+
+	$player_url = '/core_dev/api/flash/mediaplayer.swf';
+
+	$data = '<p id="'.$div_id.'">';
+	$data .= '<a href="'.$audio_url.'">Download file</a>';
+	$data .= '</p>';
+
+	$data .= '<script type="text/javascript">';
+	$data .= 'var fo = new SWFObject("'.$player_url.'", "player", '.$w.', '.$h.', "9");';
+	$data .= 'fo.addParam("allowfullscreen","true");';
+	$data .= 'fo.addParam("allowscriptaccess","always");';
+
+	$params = '';
+	if ($autostart) $params = 'autostart=true';
+	$data .= 'fo.addParam("flashvars","file='.$audio_url.'&'.$params.'");';
+
+	$data .= 'fo.write("'.$div_id.'");';
+	$data .= '</script>';
+
+	return $data;
+}
 ?>
