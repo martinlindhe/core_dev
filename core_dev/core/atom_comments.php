@@ -163,7 +163,7 @@ function getComment($commentId)
 	$q  = 'SELECT * FROM tblComments ';
 	$q .= 'WHERE commentId='.$commentId.' AND deletedBy=0 LIMIT 1';
 
-	return $db->getOneItem($q);
+	return $db->getOneRow($q);
 }
 
 /**
