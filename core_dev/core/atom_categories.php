@@ -20,6 +20,9 @@ define('CATEGORY_LANGUAGE', 14);  ///< represents a language, for multi-language
 
 define('CATEGORY_NEWS',     20);  ///< news categories
 
+define('CATEGORY_GENERIC', 30);  ///< application specific categories
+define('CATEGORY_GENERIC2', 31);  ///< application specific categories
+
 
 
 //tblCategory.permissions:
