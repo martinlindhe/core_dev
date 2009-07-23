@@ -23,6 +23,68 @@ function ucfirst_utf8($s)
 }
 
 /**
+ * Kombinerar ihop orden som en uppräkning: "kalle, britta och sven"
+ * @param $words array of words to make a sentence out of
+ */
+function respond_swedish_listing($words)
+{
+	$a = '';
+	for ($i=0; $i<count($words); $i++) {
+		if ($i+1 == count($words)) {
+			$a .= ' och '.$words[$i];
+		} else {
+			if ($i) $a .= ', ';
+			$a .= $words[$i];
+		}
+	}
+	return $a;
+}
+
+/**
+ * Besvarar frågan "vem har namnsdag idag?"
+ */
+function autoreply_svensk_namnsdag_idag()
+{
+	global $namnsdag_swe;
+
+	$idx = date('md');
+
+	$a = 'Idag har ingen namnsdag'; //XXX "eftersom det är nyårsafton"...
+
+	if (!empty($namnsdag_swe[$idx])) {
+		$names = explode(', ', $namnsdag_swe[$idx]);
+		if (count($names) > 1) {
+			$a = 'Idag har '.respond_swedish_listing($names).' namnsdag';
+		} else {
+			$a = 'Idag har '.$namnsdag_swe[$idx].' namnsdag';
+		}
+	}
+	return $a;
+}
+
+/**
+ * Besvarar frågan "vem har namnsdag DATUM?"
+ */
+function autoreply_svensk_namnsdag_datum($when)
+{
+	global $namnsdag_swe;
+
+	$idx = '0404'; //XXX: hmm...
+
+	$a = 'Ingen har namnsdag den '.$idx;	//XXX: snygga till strängen
+
+	if (!empty($namnsdag_swe[$idx])) {
+		$names = explode(', ', $namnsdag_swe[$idx]);
+		if (count($names) > 1) {
+			$a = respond_swedish_listing($names).' har namnsdag den '.$idx; //XXX : snygga till
+		} else {
+			$a = $namnsdag_swe[$idx].' har namnsdag den '.$idx; //XXX : snygga till
+		}
+	}
+	return $a;
+}
+
+/**
  * Svara när ett svenskt namn har namnsdag
  * @return "NAMN har namnsdag den X:e MÅNAD (om Y dagar), tillsammans med NAMN2 och NAMN3"
  */
@@ -30,9 +92,9 @@ function autoreply_svensk_namnsdag($in_name)
 {
 	global $namnsdag_swe, $month_swe, $day_suff_swe;
 
-	//FIXME: 1108: "Gustav Adolf" dubbelnamn
+	//FIXME testa: 1108: "Gustav Adolf" dubbelnamn
 
-	//XXX hack: ersätt vanliga smeknamn med vanliga riktiga namn
+	//ersätt vanliga smeknamn med vanliga riktiga namn. XXX array replace
 	switch (ucfirst_utf8($in_name)) {
 	//smeknamn:
 	case 'Bengan': $name = 'Bengt'; break;
@@ -501,9 +563,13 @@ $namnsdag_swe["1229"] = 'Natalia, Natalie';
 $namnsdag_swe["1230"] = 'Abel, Set';
 $namnsdag_swe["1231"] = 'Sylvester';
 
+/*
 $a = autoreply_svensk_namnsdag('niclas');
+$a = autoreply_svensk_namnsdag_idag();
+*/
+
+$a = autoreply_svensk_namnsdag_datum('0202');
 
 echo $a."\n";
-
 
 ?>
