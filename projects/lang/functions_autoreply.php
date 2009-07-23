@@ -5,13 +5,13 @@
 
 require_once('/var/www/core_dev/core/functions_time.php');
 require_once('/var/www/core_dev/core/locale_se.php');
-
+require_once('/var/www/core_dev/core/service_currency_webservicex.php'); //currency conversion
 
 /**
- * http://sv.wikipedia.org/wiki/Namnsdag (FIXME valid until 2016)
+ * http://sv.wikipedia.org/wiki/Namnsdag (TODO: valid until 2016)
  */
 
-//needed to correctly match some swedish names, like "Östen"
+//needed to correctly lowercase some swedish names, like "Östen"->"östen"
 function strtolower_utf8($s)
 {
 	return mb_convert_case($s, MB_CASE_LOWER, "UTF-8");
@@ -20,6 +20,29 @@ function strtolower_utf8($s)
 function ucfirst_utf8($s)
 {
 	return mb_convert_case($s, MB_CASE_TITLE, "UTF-8");
+}
+
+/**
+ * Writes a entry to the autoreply failure log
+ */
+function autoreply_log_failure($msg)
+{
+	echo 'FIXME logga: '.$msg."\n";
+}
+
+/**
+ * Responds to the question "how much is 100 USD in SEK?"
+ */
+function respond_currency_convert_toswedish($value, $from)
+{
+	$currency = new CurrencyConverter();
+	if (!$currency->Decode($from)) {
+		autoreply_log_failure('Vi känner inte igen valutakoden '.$from);
+		return false;
+	}
+
+	$a = $value.' '.$currency->Decode($from).' är värt '.round($currency->Convert($value, $from, 'SEK'), 2).' Svenska kronor';
+	return $a;
 }
 
 /**
@@ -59,6 +82,32 @@ function swe_describe_day($d)
 }
 
 /**
+ * Besvarar frågan "vad är klockan i london?"
+ */
+function autoreply_swedish_time($where = 'sverige')
+{
+	global $month_swe, $day_suff_swe;
+	$previous = date_default_timezone_get();
+
+	switch (strtolower_utf8($where)) {
+	//XXX more at http://se.php.net/manual/en/timezones.php
+	case 'sverige': case 'stockholm':    $place = 'Europe/Stockholm'; break;
+	case 'england': case 'london':       $place = 'Europe/London'; break;
+	case 'new york':    $place = 'America/New_York'; break;
+	case 'los angeles': $place = 'America/Los_Angeles'; break;
+	default:
+		autoreply_log_failure('Vi känner inte igen platsen '.$where);
+		return false;
+	}
+	date_default_timezone_set($place);
+
+	$a = 'Klockan i '.ucfirst_utf8($where).' är '.date('H:i').' den '.date('j').':'.$day_suff_swe[date('j')].' '.$month_swe[date('n')].' '.date('Y').' ('.date('T').')';
+
+	date_default_timezone_set($previous);
+	return $a;
+}
+
+/**
  * Besvarar frågan "vem har namnsdag idag?"
  */
 function autoreply_svensk_namnsdag_idag()
@@ -86,8 +135,12 @@ function autoreply_svensk_namnsdag_datum($when)
 {
 	global $namnsdag_swe;
 
-	$idx = '0404'; //XXX: hmm...
-	$a = swe_describe_day($idx).' har ingen namnsdag då.'; //XXX: snygga till strängen
+	switch (strtolower($when)) {
+	case 'idag': case 'nu': return autoreply_svensk_namnsdag_idag();
+	default: $idx = '0404'; //XXX: hmm...
+	}
+
+	$a = ucfirst_utf8(swe_describe_day($idx)).' är det ingen som har namnsdag.'; //XXX: snygga till strängen
 
 	if (!empty($namnsdag_swe[$idx])) {
 		$names = explode(', ', $namnsdag_swe[$idx]);
@@ -579,13 +632,11 @@ $namnsdag_swe["1229"] = 'Natalia, Natalie';
 $namnsdag_swe["1230"] = 'Abel, Set';
 $namnsdag_swe["1231"] = 'Sylvester';
 
-/*
-$a = autoreply_svensk_namnsdag('niclas');
-
-*/
-
+//$a = autoreply_svensk_namnsdag('niclas');
 //$a = autoreply_svensk_namnsdag_idag();
-$a = autoreply_svensk_namnsdag_datum('0202');
+//$a = autoreply_svensk_namnsdag_datum('0202');
+//$a = respond_currency_convert_toswedish(100, 'USD');
+$a = autoreply_swedish_time('engleand');
 
 echo $a."\n";
 
