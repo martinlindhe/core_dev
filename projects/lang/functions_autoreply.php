@@ -49,7 +49,17 @@ function autoreply_svensk_namnsdag_idag()
 
 	$idx = date('md');
 
-	$a = 'Idag har ingen namnsdag'; //XXX "eftersom det är nyårsafton"...
+	$reason = '';
+	switch ($idx) {
+		case '0101': $reason = 'Nyårsdagen'; break;
+		case '0202': $reason = 'Kyndelsmässodagen'; break;
+		case '0229': $reason = 'Skottdagen'; break;
+		case '0325': $reason = 'Marie bebådelsedag'; break;
+		case '0624': $reason = 'Johannes döparens dag'; break;
+		case '1101': $reason = 'Allhelgonadagen'; break;
+		case '1225': $reason = 'Juldagen'; break;
+	}
+	$a = 'Idag på '.$reason.' är det ingen som har namnsdag.';
 
 	if (!empty($namnsdag_swe[$idx])) {
 		$names = explode(', ', $namnsdag_swe[$idx]);
@@ -71,7 +81,17 @@ function autoreply_svensk_namnsdag_datum($when)
 
 	$idx = '0404'; //XXX: hmm...
 
-	$a = 'Ingen har namnsdag den '.$idx;	//XXX: snygga till strängen
+	$reason = '';
+	switch ($idx) {
+		case '0101': $reason = 'Nyårsdagen'; break;
+		case '0202': $reason = 'Kyndelsmässodagen'; break;
+		case '0229': $reason = 'Skottdagen'; break;
+		case '0325': $reason = 'Marie bebådelsedag'; break;
+		case '0624': $reason = 'Johannes döparens dag'; break;
+		case '1101': $reason = 'Allhelgonadagen'; break;
+		case '1225': $reason = 'Juldagen'; break;
+	}
+	$a = 'Den '.$idx.' är det '.$reason.' och ingen har namnsdag då.'; //XXX: snygga till strängen
 
 	if (!empty($namnsdag_swe[$idx])) {
 		$names = explode(', ', $namnsdag_swe[$idx]);
@@ -565,9 +585,10 @@ $namnsdag_swe["1231"] = 'Sylvester';
 
 /*
 $a = autoreply_svensk_namnsdag('niclas');
-$a = autoreply_svensk_namnsdag_idag();
+
 */
 
+//$a = autoreply_svensk_namnsdag_idag();
 $a = autoreply_svensk_namnsdag_datum('0202');
 
 echo $a."\n";
