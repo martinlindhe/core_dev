@@ -34,12 +34,20 @@ class CurrencyConverter
 
 	/**
 	 * Converts specified ammount of $from currency into $to currency
+	 * @param $val the value to convert from
+	 * @param $from currency code to convert from
+	 * @param $to currency code to convert to
+	 * @return converted currency
 	 */
 	function Convert($val, $from, $to)
 	{
 		return $val * $this->ConversionRate($from, $to);
 	}
 
+	/**
+	 * Decodes a currency code to English full name
+	 * @param $code currency code
+	 */
 	function Decode($code)
 	{
 		//all supported currencies as of 2009.07.23:
@@ -198,7 +206,6 @@ class CurrencyConverter
 		);
 
 		if (empty($codes[$code])) return false;
-
 		return $codes[$code];
 	}
 }
