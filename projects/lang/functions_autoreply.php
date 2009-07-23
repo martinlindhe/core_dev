@@ -129,6 +129,39 @@ function autoreply_svensk_namnsdag_idag()
 }
 
 /**
+ * Besvarar frågan "hur många dagar är det i MÅNAD?"
+ */
+function autoreply_days_in_months($month)
+{
+	global $month_swe;
+	$month = ucfirst_utf8($month);
+	$n = array_search($month, $month_swe);
+	if (!$n) return false;
+
+	switch ($n)
+	{
+	case 1: $val = 31; break;
+	case 2:
+		if (date('L')) return $month.' har 29 dagar i år eftersom det är skottår';
+		$val = 28;
+		break;
+	case 3: $val = 31; break;
+	case 4: $val = 30; break;
+	case 5: $val = 31; break;
+	case 6: $val = 30; break;
+	case 7: $val = 31; break;
+	case 8: $val = 31; break;
+	case 9: $val = 30; break;
+	case 10: $val = 31; break;
+	case 11: $val = 30; break;
+	case 12: $val = 31; break;
+	default: return false;
+	}
+	return $month.' har '.$val.' dagar';
+}
+
+
+/**
  * Besvarar frågan "vem har namnsdag DATUM?"
  */
 function autoreply_svensk_namnsdag_datum($when)
@@ -636,7 +669,9 @@ $namnsdag_swe["1231"] = 'Sylvester';
 //$a = autoreply_svensk_namnsdag_idag();
 //$a = autoreply_svensk_namnsdag_datum('0202');
 //$a = respond_currency_convert_toswedish(100, 'USD');
-$a = autoreply_swedish_time('engleand');
+//$a = autoreply_swedish_time('england');
+
+$a = autoreply_days_in_months('februari');
 
 echo $a."\n";
 
