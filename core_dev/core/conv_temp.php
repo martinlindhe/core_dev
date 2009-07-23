@@ -24,50 +24,51 @@ class temp
 		//XXX: the rounding is neccesary to work around PHP's handling of floats,
 		//     or some will return .0000000000001 precision which make testcase fail
 		switch ($to) {
-			case 'C': return round($this->toCelcius($from, $val), 8);
-			case 'F': return round($this->toFarenheit($from, $val), 8);
-			case 'K': return round($this->toKelvin($from, $val), 8);
-			case 'R': return round($this->toRankine($from, $val), 8);
+		case 'C': return round($this->toCelcius($from, $val), 8);
+		case 'F': return round($this->toFarenheit($from, $val), 8);
+		case 'K': return round($this->toKelvin($from, $val), 8);
+		case 'R': return round($this->toRankine($from, $val), 8);
 		}
+		return false;
 	}
 
 	function toCelcius($s, $val)
 	{
 		switch ($s) {
-			case 'C': return  $val;
-			case 'F': return ($val - 32) * (5/9);
-			case 'K': return  $val - 273.15;
-			case 'R': return ($val - 491.67) * (5/9);
+		case 'C': return  $val;
+		case 'F': return ($val - 32) * (5/9);
+		case 'K': return  $val - 273.15;
+		case 'R': return ($val - 491.67) * (5/9);
 		}
 	}
 
 	function toFarenheit($s, $val)
 	{
 		switch ($s) {
-			case 'C': return ($val * (9/5)) + 32;
-			case 'F': return  $val;
-			case 'K': return ($val * (9/5)) - 459.67;
-			case 'R': return  $val - 459.67;
+		case 'C': return ($val * (9/5)) + 32;
+		case 'F': return  $val;
+		case 'K': return ($val * (9/5)) - 459.67;
+		case 'R': return  $val - 459.67;
 		}
 	}
 
 	function toKelvin($s, $val)
 	{
 		switch ($s) {
-			case 'C': return  $val + 273.15;
-			case 'F': return ($val + 459.67) * (5/9);
-			case 'K': return  $val;
-			case 'R': return  $val * (5/9);
+		case 'C': return  $val + 273.15;
+		case 'F': return ($val + 459.67) * (5/9);
+		case 'K': return  $val;
+		case 'R': return  $val * (5/9);
 		}
 	}
 
 	function toRankine($s, $val)
 	{
 		switch ($s) {
-			case 'C': return ($val + 273.15) * (9/5);
-			case 'F': return  $val + 459.67;
-			case 'K': return  $val * (9/5);
-			case 'R': return  $val;
+		case 'C': return ($val + 273.15) * (9/5);
+		case 'F': return  $val + 459.67;
+		case 'K': return  $val * (9/5);
+		case 'R': return  $val;
 		}
 	}
 }

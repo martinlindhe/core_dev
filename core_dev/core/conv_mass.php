@@ -22,24 +22,25 @@ class mass
 		//XXX: the rounding is neccesary to work around PHP's handling of floats,
 		//     or some will return .0000000000001 precision which make testcase fail
 		switch ($to) {
-			case 'kg': return round($this->toKilo($from, $val), 8);
-			case 'lb': return round($this->toPound($from, $val), 8);
+		case 'kg': return round($this->toKilo($from, $val), 8);
+		case 'lb': return round($this->toPound($from, $val), 8);
 		}
+		return false;
 	}
 
 	function toKilo($s, $val)
 	{
 		switch ($s) {
-			case 'kg': return $val;
-			case 'lb': return $val * 0.45359237;
+		case 'kg': return $val;
+		case 'lb': return $val * 0.45359237;
 		}
 	}
 
 	function toPound($s, $val)
 	{
 		switch ($s) {
-			case 'kg': return $val / 0.45359237;
-			case 'lb': return $val;
+		case 'kg': return $val / 0.45359237;
+		case 'lb': return $val;
 		}
 	}
 
