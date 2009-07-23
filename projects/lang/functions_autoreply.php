@@ -41,6 +41,24 @@ function respond_swedish_listing($words)
 }
 
 /**
+ * Describes the specified day
+ * @param $d day to describe in format "MMDD"
+ */
+function swe_describe_day($d)
+{
+	switch ($d) {
+	case '0101': return 'på Nyårsdagen';
+	case '0202': return 'på Kyndelsmässodagen';
+	case '0229': return 'på Skottdagen';
+	case '0325': return 'på Marie bebådelsedag';
+	case '0624': return 'på Johannes döparens dag';
+	case '1101': return 'på Allhelgonadagen';
+	case '1225': return 'på Juldagen';
+	}
+	return false;
+}
+
+/**
  * Besvarar frågan "vem har namnsdag idag?"
  */
 function autoreply_svensk_namnsdag_idag()
@@ -48,18 +66,7 @@ function autoreply_svensk_namnsdag_idag()
 	global $namnsdag_swe;
 
 	$idx = date('md');
-
-	$reason = '';
-	switch ($idx) {
-		case '0101': $reason = 'Nyårsdagen'; break;
-		case '0202': $reason = 'Kyndelsmässodagen'; break;
-		case '0229': $reason = 'Skottdagen'; break;
-		case '0325': $reason = 'Marie bebådelsedag'; break;
-		case '0624': $reason = 'Johannes döparens dag'; break;
-		case '1101': $reason = 'Allhelgonadagen'; break;
-		case '1225': $reason = 'Juldagen'; break;
-	}
-	$a = 'Idag på '.$reason.' är det ingen som har namnsdag.';
+	$a = 'Idag '.swe_describe_day($idx).' är det ingen som har namnsdag.';
 
 	if (!empty($namnsdag_swe[$idx])) {
 		$names = explode(', ', $namnsdag_swe[$idx]);
@@ -80,18 +87,7 @@ function autoreply_svensk_namnsdag_datum($when)
 	global $namnsdag_swe;
 
 	$idx = '0404'; //XXX: hmm...
-
-	$reason = '';
-	switch ($idx) {
-		case '0101': $reason = 'Nyårsdagen'; break;
-		case '0202': $reason = 'Kyndelsmässodagen'; break;
-		case '0229': $reason = 'Skottdagen'; break;
-		case '0325': $reason = 'Marie bebådelsedag'; break;
-		case '0624': $reason = 'Johannes döparens dag'; break;
-		case '1101': $reason = 'Allhelgonadagen'; break;
-		case '1225': $reason = 'Juldagen'; break;
-	}
-	$a = 'Den '.$idx.' är det '.$reason.' och ingen har namnsdag då.'; //XXX: snygga till strängen
+	$a = swe_describe_day($idx).' har ingen namnsdag då.'; //XXX: snygga till strängen
 
 	if (!empty($namnsdag_swe[$idx])) {
 		$names = explode(', ', $namnsdag_swe[$idx]);
