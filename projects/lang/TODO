@@ -1,2 +1,3 @@
 * gör en modul för att identifiera språk av inmatad text (+ gränssnitt att lära sig nya språk)
 * gör en modul för att snacka med google translate (om möjligt)
+* synonym-uppslag + UI för att förenkla ner en mening
