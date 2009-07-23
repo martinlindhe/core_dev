@@ -28,17 +28,17 @@ class mass
 		return false;
 	}
 
-	function toKilo($s, $val)
+	function toKilo($from, $val)
 	{
-		switch ($s) {
+		switch ($from) {
 		case 'kg': return $val;
 		case 'lb': return $val * 0.45359237;
 		}
 	}
 
-	function toPound($s, $val)
+	function toPound($from, $val)
 	{
-		switch ($s) {
+		switch ($from) {
 		case 'kg': return $val / 0.45359237;
 		case 'lb': return $val;
 		}

@@ -32,9 +32,9 @@ class temp
 		return false;
 	}
 
-	function toCelcius($s, $val)
+	function toCelcius($from, $val)
 	{
-		switch ($s) {
+		switch ($from) {
 		case 'C': return  $val;
 		case 'F': return ($val - 32) * (5/9);
 		case 'K': return  $val - 273.15;
@@ -42,9 +42,9 @@ class temp
 		}
 	}
 
-	function toFarenheit($s, $val)
+	function toFarenheit($from, $val)
 	{
-		switch ($s) {
+		switch ($from) {
 		case 'C': return ($val * (9/5)) + 32;
 		case 'F': return  $val;
 		case 'K': return ($val * (9/5)) - 459.67;
@@ -52,9 +52,9 @@ class temp
 		}
 	}
 
-	function toKelvin($s, $val)
+	function toKelvin($from, $val)
 	{
-		switch ($s) {
+		switch ($from) {
 		case 'C': return  $val + 273.15;
 		case 'F': return ($val + 459.67) * (5/9);
 		case 'K': return  $val;
@@ -62,9 +62,9 @@ class temp
 		}
 	}
 
-	function toRankine($s, $val)
+	function toRankine($from, $val)
 	{
-		switch ($s) {
+		switch ($from) {
 		case 'C': return ($val + 273.15) * (9/5);
 		case 'F': return  $val + 459.67;
 		case 'K': return  $val * (9/5);
