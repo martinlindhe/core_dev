@@ -33,11 +33,9 @@ class length
 	{
 		if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
 
-		$res = ($val * $this->scale[$from]) / $this->scale[$to];
-
 		//XXX: rounding is neccesary to work around PHP's handling of floats,
 		//     or some will return .0000000000001 precision which make tests fail
-		return round($res, 8);
+		return round(($val * $this->scale[$from]) / $this->scale[$to], 8);
 	}
 }
 
