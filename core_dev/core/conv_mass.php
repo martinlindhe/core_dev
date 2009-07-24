@@ -13,27 +13,21 @@
 
 class mass
 {
+	var $scale = array( ///< unit scale to Gram
+	'g'  => 1,        //Gram
+	'kg' => 1000,     //Kilogram
+	't'  => 1000000,  //Tonne
+	'lb' => 453.59237 //Pound
+	);
+
 	function conv($from, $to, $val)
 	{
-		//convert to gram for internal representation
-		switch (strtolower($from)) {
-		case 'gram':     case 'g':  $gram = $val; break;
-		case 'kilogram': case 'kg': $gram = $val * 1000; break;
-		case 'tonne':    case 't':  $gram = $val * 1000000; break;
-		case 'pound':    case 'lb': $gram = $val * 453.59237; break;
-		default: return false;
-		}
+		if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
 
-		switch (strtolower($to)) {
-		case 'gram':     case 'g':  $res = $gram; break;
-		case 'kilogram': case 'kg': $res = $gram / 1000; break;
-		case 'tonne':    case 't':  $res = $gram / 1000000; break;
-		case 'pound':    case 'lb': $res = $gram / 453.59237; break;
-		default: return false;
-		}
+		$res = ($val * $this->scale[$from]) / $this->scale[$to];
 
-		//XXX: the rounding is neccesary to work around PHP's handling of floats,
-		//     or some will return .0000000000001 precision which make testcase fail
+		//XXX: rounding is neccesary to work around PHP's handling of floats,
+		//     or some will return .0000000000001 precision which make tests fail
 		return round($res, 8);
 	}
 }

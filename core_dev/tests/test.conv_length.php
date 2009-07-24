@@ -28,7 +28,7 @@ if ($l->conv('yd', 'mm', 0.25) != 228.6) echo "FAIL14\n";
 if ($l->conv('mm', 'nm', 10) != 10000000) echo "FAIL15\n";
 if ($l->conv('nm', 'mm', 500000) != 0.5) echo "FAIL16\n";
 
-if ($l->conv('pm', 'nm', 500000) != 500) echo "FAIL17: ".$l->conv('pm', 'nm', 500000)."\n";
-if ($l->conv('nm', 'pm', 0.04) != 40) echo "FAIL18: ".$l->conv('nm', 'pm', 0.04)."\n";
+if ($l->conv('pm', 'nm', 500000) != 500) echo "FAIL17\n";
+if ($l->conv('nm', 'pm', 0.04) != 40) echo "FAIL18\n";
 
 ?>

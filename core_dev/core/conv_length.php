@@ -13,49 +13,30 @@
 
 class length
 {
+	var $scale = array( ///< unit scale to Meter
+	'pm'     => 0.000000000001, //Picometer
+	'nm'     => 0.000000001,    //Nanometer
+	'mm'     => 0.001,          //Millimeter
+	'cm'     => 0.01,           //Centimeter
+	'dm'     => 0.1,            //Decimeter
+	'm'      => 1,              //Meter
+	'km'     => 1000,           //Kilometer
+	'in'     => 0.0254,         //Inch
+	'ft'     => 0.304800610,    //Feet
+	'yd'     => 0.9144,         //Yard
+	'ukmile' => 1852,           //UK nautical mile
+	'usmile' => 1609.344,       //US statute mile
+	'au'     => 149597871464    //Astronomical Unit
+	);
+
 	function conv($from, $to, $val)
 	{
-		//convert to meter for internal representation
-		switch (strtolower($from)) {
-		case 'picometer':    case 'pm': $meter = $val * 0.000000000001; break; //1 trillionth meter
-		case 'nanometer':    case 'nm': $meter = $val * 0.000000001; break; //1 millionth meter
-		case 'millimeter':   case 'mm': $meter = $val * 0.001; break;
-		case 'centimeter':   case 'cm': $meter = $val * 0.01; break;
-		case 'decimeter':    case 'dm': $meter = $val * 0.1; break;
-		case 'meter':        case 'm':  $meter = $val * 1; break;
-		case 'kilometer':    case 'km': $meter = $val * 1000; break;
+		if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
 
-		case 'feet':         case 'ft': $meter = $val * 0.304800610; break;
-		case 'inch':         case 'in': $meter = $val * 0.0254; break;
-		case 'yard':         case 'yd': $meter = $val * 0.9144; break;
-		case 'ukmile':                  $meter = $val * 1852; break; //UK nautical mile
-		case 'usmile':                  $meter = $val * 1609.344; break; //US statute mile
+		$res = ($val * $this->scale[$from]) / $this->scale[$to];
 
-		case 'astronomical': case 'au': $meter = $val * 149597871464; break;
-		default: return false;
-		}
-
-		switch (strtolower($to)) {
-		case 'picometer':    case 'pm': $res = $meter / 0.000000000001; break;
-		case 'nanometer':    case 'nm': $res = $meter / 0.000000001; break;
-		case 'millimeter':   case 'mm': $res = $meter / 0.001; break;
-		case 'centimeter':   case 'cm': $res = $meter / 0.01; break;
-		case 'decimeter':    case 'dm': $res = $meter / 0.1; break;
-		case 'meter':        case 'm':  $res = $meter / 1; break;
-		case 'kilometer':    case 'km': $res = $meter / 1000; break;
-
-		case 'feet':         case 'ft': $res = $meter / 0.304800610; break;
-		case 'inch':         case 'in': $res = $meter / 0.0254; break;
-		case 'yard':         case 'yd': $res = $meter / 0.9144; break;
-		case 'ukmile':                  $res = $meter / 1852; break;
-		case 'usmile':                  $res = $meter / 1609.344; break;
-
-		case 'astronomical': case 'au': $res = $meter / 149597871464; break;
-		default: return false;
-		}
-
-//		echo $val. " ".$from." to ".$to.": ".$meter." meter -> ".$res." ".$to."\n";
-
+		//XXX: rounding is neccesary to work around PHP's handling of floats,
+		//     or some will return .0000000000001 precision which make tests fail
 		return round($res, 8);
 	}
 }

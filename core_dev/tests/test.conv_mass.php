@@ -6,7 +6,7 @@ $m = new mass();
 
 if ($m->conv('kg', 'lb', 500) != 1102.31131092) echo "FAIL 1: ".$m->conv('kg', 'lb', 500)."\n";
 if ($m->conv('lb', 'kg', 500) != 226.796185)    echo "FAIL 2: ".$m->conv('lb', 'kg', 500)."\n";
-if ($m->conv('tonne', 'kg', 1) != 1000) echo "FAIL 3\n";
-if ($m->conv('kg', 'tonne', 2000) != 2) echo "FAIL 4\n";
+if ($m->conv('t', 'kg', 1) != 1000) echo "FAIL 3\n";
+if ($m->conv('kg', 't', 2000) != 2) echo "FAIL 4\n";
 
 ?>

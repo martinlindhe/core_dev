@@ -33,8 +33,8 @@ class temp
 		default: return false;
 		}
 
-		//XXX: the rounding is neccesary to work around PHP's handling of floats,
-		//     or some will return .0000000000001 precision which make testcase fail
+		//XXX: rounding is neccesary to work around PHP's handling of floats,
+		//     or some will return .0000000000001 precision which make tests fail
 		return round($res, 8);
 	}
 }
