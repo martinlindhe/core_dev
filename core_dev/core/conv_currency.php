@@ -25,7 +25,9 @@ class currency
 	 */
 	function conv($from, $to, $val)
 	{
-		return $val * $this->GetConversionRate($from, $to);
+		$rate = $this->GetConversionRate($from, $to);
+		if (!$rate) return false;
+		return $val * $rate;
 	}
 
 	/**

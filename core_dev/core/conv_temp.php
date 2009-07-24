@@ -2,17 +2,12 @@
 /**
  * $Id$
  *
- * Conversion functions for different temperature systems
- *
- * Supported temperature systems:
- * - Celcius (C)
- * - Farenheit (F)
- * - Kelvin (K)
- * - Rankine (R)
+ * Conversion functions for different units of temperature
  *
  * References
  * ----------
  * http://en.wikipedia.org/wiki/Temperature_conversion_formulas
+ * http://en.wikipedia.org/wiki/Conversion_of_units#Temperature
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
@@ -21,55 +16,26 @@ class temp
 {
 	function conv($from, $to, $val)
 	{
+		//convert to celcius for internal representation
+		switch (strtolower($from)) {
+		case 'celcius':   case 'c': $cel =  $val; break;
+		case 'farenheit': case 'f': $cel = ($val - 32) * (5/9); break;
+		case 'rakine':    case 'r': $cel = ($val - 491.67) * (5/9); break;
+		case 'kelvin':    case 'k': $cel =  $val - 273.15; break;
+		default: return false;
+		}
+
+		switch (strtolower($to)) {
+		case 'celcius':   case 'c': $res =  $cel; break;
+		case 'farenheit': case 'f': $res = ($cel * (9/5)) + 32; break;
+		case 'rakine':    case 'r': $res = ($cel + 273.15) * (9/5); break;
+		case 'kelvin':    case 'k': $res =  $cel + 273.15; break;
+		default: return false;
+		}
+
 		//XXX: the rounding is neccesary to work around PHP's handling of floats,
 		//     or some will return .0000000000001 precision which make testcase fail
-		switch ($to) {
-		case 'C': return round($this->toCelcius($from, $val), 8);
-		case 'F': return round($this->toFarenheit($from, $val), 8);
-		case 'K': return round($this->toKelvin($from, $val), 8);
-		case 'R': return round($this->toRankine($from, $val), 8);
-		}
-		return false;
-	}
-
-	function toCelcius($from, $val)
-	{
-		switch ($from) {
-		case 'C': return  $val;
-		case 'F': return ($val - 32) * (5/9);
-		case 'K': return  $val - 273.15;
-		case 'R': return ($val - 491.67) * (5/9);
-		}
-	}
-
-	function toFarenheit($from, $val)
-	{
-		switch ($from) {
-		case 'C': return ($val * (9/5)) + 32;
-		case 'F': return  $val;
-		case 'K': return ($val * (9/5)) - 459.67;
-		case 'R': return  $val - 459.67;
-		}
-	}
-
-	function toKelvin($from, $val)
-	{
-		switch ($from) {
-		case 'C': return  $val + 273.15;
-		case 'F': return ($val + 459.67) * (5/9);
-		case 'K': return  $val;
-		case 'R': return  $val * (5/9);
-		}
-	}
-
-	function toRankine($from, $val)
-	{
-		switch ($from) {
-		case 'C': return ($val + 273.15) * (9/5);
-		case 'F': return  $val + 459.67;
-		case 'K': return  $val * (9/5);
-		case 'R': return  $val;
-		}
+		return round($res, 8);
 	}
 }
 
