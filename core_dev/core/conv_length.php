@@ -17,12 +17,12 @@ class length
 	{
 		//convert to meter for internal representation
 		switch (strtolower($from)) {
-		case 'picometer':    case 'pm': $meter = $val / 1000000000000; break; //1 trillionth meter
-		case 'nanometer':    case 'nm': $meter = $val / 1000000; break; //1 millionth meter
-		case 'millimeter':   case 'mm': $meter = $val / 1000; break;
-		case 'centimeter':   case 'cm': $meter = $val / 100; break;
-		case 'decimeter':    case 'dm': $meter = $val / 10; break;
-		case 'meter':        case 'm':  $meter = $val; break;
+		case 'picometer':    case 'pm': $meter = $val * 0.000000000001; break; //1 trillionth meter
+		case 'nanometer':    case 'nm': $meter = $val * 0.000000001; break; //1 millionth meter
+		case 'millimeter':   case 'mm': $meter = $val * 0.001; break;
+		case 'centimeter':   case 'cm': $meter = $val * 0.01; break;
+		case 'decimeter':    case 'dm': $meter = $val * 0.1; break;
+		case 'meter':        case 'm':  $meter = $val * 1; break;
 		case 'kilometer':    case 'km': $meter = $val * 1000; break;
 
 		case 'feet':         case 'ft': $meter = $val * 0.304800610; break;
@@ -36,12 +36,12 @@ class length
 		}
 
 		switch (strtolower($to)) {
-		case 'picometer':    case 'pm': $res = $meter * 1000000000000; break;
-		case 'nanometer':    case 'nm': $res = $meter * 1000000; break;
-		case 'millimeter':   case 'mm': $res = $meter * 1000; break;
-		case 'centimeter':   case 'cm': $res = $meter * 100; break;
-		case 'decimeter':    case 'dm': $res = $meter * 10; break;
-		case 'meter':        case 'm':  $res = $meter; break;
+		case 'picometer':    case 'pm': $res = $meter / 0.000000000001; break;
+		case 'nanometer':    case 'nm': $res = $meter / 0.000000001; break;
+		case 'millimeter':   case 'mm': $res = $meter / 0.001; break;
+		case 'centimeter':   case 'cm': $res = $meter / 0.01; break;
+		case 'decimeter':    case 'dm': $res = $meter / 0.1; break;
+		case 'meter':        case 'm':  $res = $meter / 1; break;
 		case 'kilometer':    case 'km': $res = $meter / 1000; break;
 
 		case 'feet':         case 'ft': $res = $meter / 0.304800610; break;
@@ -53,6 +53,8 @@ class length
 		case 'astronomical': case 'au': $res = $meter / 149597871464; break;
 		default: return false;
 		}
+
+//		echo $val. " ".$from." to ".$to.": ".$meter." meter -> ".$res." ".$to."\n";
 
 		return round($res, 8);
 	}
