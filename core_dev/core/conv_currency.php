@@ -12,6 +12,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+require_once('class.Cache.php');
 require_once('service_currency_webservicex.php');
 
 class currency
@@ -39,7 +40,14 @@ class currency
 	{
 		if (!$this->Decode($from) || !$this->Decode($to)) return false;
 
-		return webservicex_currency_conversion_rate($from, $to);
+		$cache = new cache();
+		$rate = $cache->get('currency_'.$from.'_'.$to);
+		if ($rate) return $rate;
+
+		$rate = webservicex_currency_conversion_rate($from, $to);
+
+		$cache->set('currency_'.$from.'_'.$to, $rate, 5*60);
+		return $rate;
 	}
 
 	/**
