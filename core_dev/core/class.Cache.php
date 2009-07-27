@@ -13,23 +13,24 @@
 
 class cache
 {
-	var $handle;
+	var $handle = false;
 	function __construct($server = '127.0.0.1', $port = 11211)
 	{
+		if (!class_exists('Memcache')) return false;
 		$this->handle = new Memcache;
 		$this->handle->connect($server, $port);
 	}
 
 	function get($key)
 	{
-		if ($this->handle->get($key.'_expiretime') < time()) return false;
+		if (!$this->handle) return false;
 		return $this->handle->get($key);
 	}
 
 	function set($key, $val, $expire = 60)
 	{
-		$this->handle->set($key, $val);
-		$this->handle->set($key.'_expiretime', time()+$expire);
+		if (!$this->handle) return false;
+		$this->handle->set($key, $val, false, $expire);
 	}
 }
 
