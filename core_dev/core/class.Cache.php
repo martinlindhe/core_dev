@@ -9,14 +9,14 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: if Memcache is not available, use ini-file style in /tmp/coredev_cache
-
 class cache
 {
 	var $handle = false;
+
 	function __construct($server = '127.0.0.1', $port = 11211)
 	{
 		if (!class_exists('Memcache')) return false;
+
 		$this->handle = new Memcache;
 		$this->handle->connect($server, $port);
 	}
@@ -30,7 +30,7 @@ class cache
 	function set($key, $val, $expire = 60)
 	{
 		if (!$this->handle) return false;
-		$this->handle->set($key, $val, false, $expire);
+		return $this->handle->set($key, $val, false, $expire);
 	}
 }
 
