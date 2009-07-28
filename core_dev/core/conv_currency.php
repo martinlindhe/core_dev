@@ -16,6 +16,8 @@ require_once('service_currency_webservicex.php');
 
 class currency
 {
+	var $precision = 0; ///< if set specifies how many decimals to return (rounded)
+
 	/**
 	 * Converts specified ammount of $from currency into $to currency
 	 * @param $val the value to convert from
@@ -27,6 +29,10 @@ class currency
 	{
 		$rate = $this->rate($from, $to);
 		if (!$rate) return false;
+
+		if ($this->precision)
+			return round($val * $rate, $this->precision);
+
 		return $val * $rate;
 	}
 
