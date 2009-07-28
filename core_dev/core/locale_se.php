@@ -8,23 +8,41 @@
  */
 
 $month_swe = array(
-	'', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
-	'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December');
+'', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
+'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December');
 
 $weekday_swe = array(
-	'', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag');
+'', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag');
 
 $day_suff_swe = array(//den 1:a, 5:e osv...
-	'', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
-	'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
-	'e', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
-	'e', 'a');
+'', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
+'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
+'e', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
+'e', 'a');
+
+$timeunits_swe = array(
+'second' =>'sekund',
+'seconds'=>'sekunder',
+'minute' =>'minut',
+'minutes'=>'minuter',
+'hour'   =>'timme',
+'hours'  =>'timmar',
+'day'    =>'dag',
+'days'   =>'dagar',
+'week'   =>'vecka',
+'weeks'  =>'veckor',
+'month'  =>'månad',
+'months' =>'månader',
+'year'   =>'år',
+'years'  =>'år');
 
 /**
  * Translates strings into Swedish
  */
 function t_se($s)
 {
+	global $timeunits_swe;
+
 	switch ($s) {
 		case 'Save': return 'Spara';
 		case 'Lock': return 'Lås';
@@ -370,8 +388,10 @@ function t_se($s)
 
 		//Moderation / monitoring
 		case 'Monitored': return 'Granskad';
-
-		default: return '__('.$s.')__';
 	}
+
+	if (!empty($timeunits_swe[strtolower($s)])) return $timeunits_swe[strtolower($s)];
+
+	return '__('.$s.')__';
 }
 ?>

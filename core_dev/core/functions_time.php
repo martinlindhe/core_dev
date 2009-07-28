@@ -70,10 +70,13 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 	}
 
 	$stack = array();
-	foreach ($diffs as $interval => $num)
-		$stack[] = array($num, $interval . ($num != 1 ? 's' : ''));
+	foreach ($diffs as $interval => $num) {
+		$name = $interval . ($num != 1 ? 's' : '');
+		$stack[] = array($num, t($name));
+	}
 
 	$ret = array();
+
 	while (count($ret) < $precision && ($item = array_shift($stack)) !== null) {
 		if ($item[0] > 0) {
 			if (!$arr) $ret[] = "{$item[0]} {$item[1]}";
