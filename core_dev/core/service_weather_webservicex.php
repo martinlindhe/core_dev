@@ -6,6 +6,7 @@
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=48
  */
 
+require_once('conv_temp.php');
 require_once('input_xml.php');
 require_once('class.Cache.php');
 
@@ -34,15 +35,17 @@ function webservicex_weather($city, $country = '')
 		$p = $x->parse($xml);
 		if (!$p) return false;
 
-		preg_match('/(?<farenheit>\d+) F \((?<celcius>\d+) C\)/', $p['CurrentWeather|Temperature'], $match);
-		if (!empty($match['celcius'])) $p['CurrentWeather|Temperature'] = $match['celcius'].' C';
+		list($farenheit) = explode(' ', $p['CurrentWeather|Temperature']);
+		$temp = new temp();
+		$celcius = round($temp->conv('F','C', $farenheit), 1);
 
 		$res = array(
-		'Location'     =>$p['CurrentWeather|Location'],     //"Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M"
-		'Time'         =>$p['CurrentWeather|Time'],         //
-		'Wind'         =>$p['CurrentWeather|Wind'],         //XXX: "from the SSE (150 degrees) at 5 MPH (4 KT):0"
-		'SkyConditions'=>$p['CurrentWeather|SkyConditions'],//overcast
-		'Temperature'  =>$p['CurrentWeather|Temperature']
+		'Location'     =>@$p['CurrentWeather|Location'],     //"Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M"
+		'Time'         =>@$p['CurrentWeather|Time'],         //XXX: "Jul 28, 2009 - 02:20 PM EDT / 2009.07.28 1820 UTC"
+		'Wind'         =>@$p['CurrentWeather|Wind'],         //XXX: "from the SSE (150 degrees) at 5 MPH (4 KT):0"
+		'Visibility'   =>@$p['CurrentWeather|Visibility'],   //XXX: "greater than 7 mile(s):0"
+		'SkyConditions'=>@$p['CurrentWeather|SkyConditions'],//see $skyconditions_swe (can be empty)
+		'Temperature'  => $celcius
 		);
 
 		$cache->set('weather_'.$city.'_'.$country, serialize($res), 5*60);
@@ -56,9 +59,5 @@ function webservicex_weather($city, $country = '')
 		return false;
 	}
 }
-
-$x = webservicex_weather('stockholm');
-
-print_r($x);
 
 ?>

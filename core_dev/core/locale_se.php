@@ -36,12 +36,17 @@ $timeunits_swe = array(
 'year'   =>'år',
 'years'  =>'år');
 
+$skyconditions_swe = array(
+'mostly clear'  => 'mestadels soligt',
+'mostly cloudy' => 'mestadels molnigt',
+);
+
 /**
  * Translates strings into Swedish
  */
 function t_se($s)
 {
-	global $timeunits_swe;
+	global $timeunits_swe, $skyconditions_swe;
 
 	switch ($s) {
 		case 'Save': return 'Spara';
@@ -391,6 +396,7 @@ function t_se($s)
 	}
 
 	if (!empty($timeunits_swe[strtolower($s)])) return $timeunits_swe[strtolower($s)];
+	if (!empty($skyconditions_swe[strtolower($s)])) return $skyconditions_swe[strtolower($s)];
 
 	return '__('.$s.')__';
 }
