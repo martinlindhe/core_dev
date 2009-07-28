@@ -12,7 +12,6 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.Cache.php');
 require_once('service_currency_webservicex.php');
 
 class currency
@@ -26,7 +25,7 @@ class currency
 	 */
 	function conv($from, $to, $val)
 	{
-		$rate = $this->GetConversionRate($from, $to);
+		$rate = $this->rate($from, $to);
 		if (!$rate) return false;
 		return $val * $rate;
 	}
@@ -36,25 +35,18 @@ class currency
 	 * @param $from ISO 4217 currency code (USD, GBP, SEK)
 	 * @param $to ISO 4217 currency code
 	 */
-	function GetConversionRate($from, $to)
+	function rate($from, $to)
 	{
-		if (!$this->Decode($from) || !$this->Decode($to)) return false;
+		if (!$this->decode($from) || !$this->decode($to)) return false;
 
-		$cache = new cache();
-		$rate = $cache->get('currency_'.$from.'_'.$to);
-		if ($rate) return $rate;
-
-		$rate = webservicex_currency_conversion_rate($from, $to);
-
-		$cache->set('currency_'.$from.'_'.$to, $rate, 5*60);
-		return $rate;
+		return webservicex_currency_conversion_rate($from, $to);
 	}
 
 	/**
 	 * Decodes a currency code to English full name
 	 * @param $code currency code
 	 */
-	function Decode($code)
+	function decode($code)
 	{
 		//all supported currencies as of 2009.07.23:
 		$codes = array(
@@ -211,6 +203,7 @@ class currency
 		'ZWD'=>'Zimbabwe Dollar'
 		);
 
+		$code = strtoupper($code);
 		if (empty($codes[$code])) return false;
 		return $codes[$code];
 	}

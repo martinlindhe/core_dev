@@ -6,6 +6,8 @@
  * http://www.webservicex.net/WS/WSDetails.aspx?CATID=2&WSID=10
  */
 
+require_once('class.Cache.php');
+
 define('WEBSERVICEX_CURRENCY_API', 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL');
 
 function webservicex_currency_conversion_rate($from, $to)
@@ -13,8 +15,17 @@ function webservicex_currency_conversion_rate($from, $to)
 	$client = new SoapClient(WEBSERVICEX_CURRENCY_API);
 
 	try {
-		$val = $client->ConversionRate( array('FromCurrency'=>strtoupper($from), 'ToCurrency'=>strtoupper($to)) );
-		return $val->ConversionRateResult;
+		$cache = new cache();
+		$rate = $cache->get('currency_'.$from.'_'.$to);
+		if ($rate) return $rate;
+
+		$params['FromCurrency'] = strtoupper($from);
+		$params['ToCurrency']   = strtoupper($to);
+		$rate = $client->ConversionRate($params);
+
+		$cache->set('currency_'.$from.'_'.$to, $rate->ConversionRateResult, 5*60);
+		return $rate->ConversionRateResult;
+
 	} catch (Exception $e) {
 		echo 'exception: '.$e, "\n";
 		echo 'Request header:'.$client->__getLastRequestHeaders()."\n";
