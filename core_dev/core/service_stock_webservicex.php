@@ -6,6 +6,7 @@
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=19
  */
 
+require_once('functions_defaults.php');
 require_once('input_xml.php');
 require_once('class.Cache.php');
 
@@ -27,24 +28,28 @@ function webservicex_stock_quote($code)
 		$x = new xml_input();
 		$p = $x->parse($xml);
 
+		//FIXME adjust timezone of timestamp
+		$timestamp = strtotime($p['StockQuotes|Stock|Date'].' '.$p['StockQuotes|Stock|Time']);
+
 		$res = array(
 		'Symbol'       =>$p['StockQuotes|Stock|Symbol'],
 		'Name'         =>$p['StockQuotes|Stock|Name'],
 		'Last'         =>$p['StockQuotes|Stock|Last'],
-		'Time'         =>$p['StockQuotes|Stock|Date'].' '.$p['StockQuotes|Stock|Time'],//FIXME format time & adjust timezone
+		'Time'         =>formatTime($timestamp),
+		'Timestamp'    =>$timestamp,
 		'Change'       =>$p['StockQuotes|Stock|Change'],
 		'Open'         =>$p['StockQuotes|Stock|Open'],
 		'High'         =>$p['StockQuotes|Stock|High'],
 		'Low'          =>$p['StockQuotes|Stock|Low'],
 		'Volume'       =>$p['StockQuotes|Stock|Volume'],
-		'MktCap'       =>$p['StockQuotes|Stock|MktCap'], //XXX ???
 		'PreviousClose'=>$p['StockQuotes|Stock|PreviousClose'],
 		'PercentChange'=>$p['StockQuotes|Stock|PercentageChange'],
-		'AnnRange'     =>$p['StockQuotes|Stock|AnnRange'],//XXX ???
 		'Earns'        =>$p['StockQuotes|Stock|Earns'],
+		'MktCap'       =>$p['StockQuotes|Stock|MktCap'], //XXX ???
+		'AnnRange'     =>$p['StockQuotes|Stock|AnnRange'],//XXX ???
 		'P-E'          =>$p['StockQuotes|Stock|P-E']//XXX???
 		);
-		$cache->set('stock_'.$code, serialize($res), 5*60);
+		$cache->set('stock_'.$code, serialize($res), 20); //20 sec cache
 		return $res;
 
 	} catch (Exception $e) {
@@ -55,10 +60,5 @@ function webservicex_stock_quote($code)
 		return false;
 	}
 }
-
-$x = webservicex_stock_quote('AAPL');
-print_r($x);
-
-
 
 ?>

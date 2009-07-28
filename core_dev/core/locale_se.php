@@ -37,8 +37,11 @@ $timeunits_swe = array(
 'years'  =>'år');
 
 $skyconditions_swe = array(
-'mostly clear'  => 'mestadels soligt',
+'clear'         => 'molnfritt',
+'mostly clear'  => 'mestadels molnfritt',
 'mostly cloudy' => 'mestadels molnigt',
+//'partly clear'  => 'delvis molnfritt',
+'partly cloudy' => 'delvis molnigt'
 );
 
 /**
