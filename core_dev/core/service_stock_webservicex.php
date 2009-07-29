@@ -8,7 +8,6 @@
 
 require_once('functions_defaults.php');
 require_once('input_xml.php');
-require_once('class.Cache.php');
 
 define('WEBSERVICEX_STOCK_API', 'http://www.webservicex.net/stockquote.asmx?wsdl');
 
@@ -17,10 +16,6 @@ function webservicex_stock_quote($code)
 	$client = new SoapClient(WEBSERVICEX_STOCK_API);
 
 	try {
-		$cache = new cache();
-		$data = $cache->get('stock_'.$code);
-		if ($data) return unserialize($data);
-
 		$params['symbol'] = $code;
 		$val = $client->GetQuote($params);
 		$xml = $val->GetQuoteResult;
@@ -49,7 +44,6 @@ function webservicex_stock_quote($code)
 		'AnnRange'     =>$p['StockQuotes|Stock|AnnRange'],//XXX ???
 		'P-E'          =>$p['StockQuotes|Stock|P-E']//XXX???
 		);
-		$cache->set('stock_'.$code, serialize($res), 20); //20 sec cache
 		return $res;
 
 	} catch (Exception $e) {

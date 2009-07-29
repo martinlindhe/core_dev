@@ -8,7 +8,6 @@
 
 require_once('conv_temp.php');
 require_once('input_xml.php');
-require_once('class.Cache.php');
 
 define('WEBSERVICEX_WEATHER_API', 'http://www.webservicex.net/globalweather.asmx?wsdl');
 
@@ -17,11 +16,6 @@ function webservicex_weather($city, $country = '')
 	$client = new SoapClient(WEBSERVICEX_WEATHER_API);
 
 	try {
-
-		$cache = new cache();
-		$data = $cache->get('weather_'.$city.'_'.$country);
-		if ($data) return unserialize($data);
-
 		$params['CityName']    = $city;
 		$params['CountryName'] = $country;
 		$val = $client->GetWeather($params);
@@ -47,8 +41,6 @@ function webservicex_weather($city, $country = '')
 		'SkyConditions'=>@$p['CurrentWeather|SkyConditions'],//see $skyconditions_swe (can be empty)
 		'Temperature'  => $celcius
 		);
-
-		$cache->set('weather_'.$city.'_'.$country, serialize($res), 5*60);
 		return $res;
 
 	} catch (Exception $e) {

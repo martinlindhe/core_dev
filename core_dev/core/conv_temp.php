@@ -14,7 +14,7 @@
 
 class temp
 {
-	var $precision = 0; ///< if set, specifies rounding precision
+	var $precision = 2; ///< if set, specifies rounding precision
 
 	function conv($from, $to, $val)
 	{
