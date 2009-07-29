@@ -13,6 +13,8 @@
 
 class length
 {
+	var $precision = 0; ///< if set, specifies rounding precision
+
 	var $scale = array( ///< unit scale to Meter
 	'pm'     => 0.000000000001, //Picometer
 	'nm'     => 0.000000001,    //Nanometer
@@ -31,11 +33,35 @@ class length
 
 	function conv($from, $to, $val)
 	{
+		$from = $this->shortcode($from);
+		$to   = $this->shortcode($to);
+
 		if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
 
-		//XXX: rounding is neccesary to work around PHP's handling of floats,
-		//     or some will return .0000000000001 precision which make tests fail
-		return round(($val * $this->scale[$from]) / $this->scale[$to], 8);
+		if ($this->precision)
+			return round(($val * $this->scale[$from]) / $this->scale[$to], $this->precision);
+
+		return ($val * $this->scale[$from]) / $this->scale[$to];
+	}
+
+	function shortcode($name)
+	{
+		$lookup = array(
+		'picometer'  => 'pm',
+		'nanometer'  => 'nm',
+		'millimeter' => 'mm',
+		'centimeter' => 'cm',
+		'decimeter'  => 'dm',
+		'meter'      => 'm',
+		'kilometer'  => 'km',
+		'inch'       => 'in',
+		'feet'       => 'ft',
+		'yard'       => 'yd'
+		);
+
+		$name = strtolower_utf8($name);
+		if (!empty($lookup[$name])) return $lookup[$name];
+		return $name;
 	}
 }
 
