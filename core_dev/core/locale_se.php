@@ -41,7 +41,8 @@ $skyconditions_swe = array(
 'mostly clear'  => 'mestadels molnfritt',
 'mostly cloudy' => 'mestadels molnigt',
 //'partly clear'  => 'delvis molnfritt',
-'partly cloudy' => 'delvis molnigt'
+'partly cloudy' => 'delvis molnigt',
+'overcast'      => 'molnigt'
 );
 
 /**
