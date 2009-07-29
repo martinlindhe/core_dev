@@ -12,6 +12,7 @@
 class cache
 {
 	var $handle = false;
+	var $debug  = false;
 
 	function __construct($server = '127.0.0.1', $port = 11211)
 	{
@@ -24,13 +25,23 @@ class cache
 	function get($key)
 	{
 		if (!$this->handle) return false;
-		return $this->handle->get($key);
+
+		$val = $this->handle->get($key);
+
+		if ($this->debug) echo "cache: READ ".$key." = ".$val."\n";
+
+		return $val;
 	}
 
 	function set($key, $val, $expire = 60)
 	{
 		if (!$this->handle) return false;
-		return $this->handle->set($key, $val, false, $expire);
+
+		if ($this->debug) echo "cache: WRITE ".$key." = ".$val." (".$expire." sec)\n";
+
+		$ret = $this->handle->set($key, $val, false, $expire);
+
+		return $ret;
 	}
 }
 

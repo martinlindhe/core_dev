@@ -46,6 +46,8 @@ class length
 
 	function shortcode($name)
 	{
+		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
+
 		$lookup = array(
 		'picometer'  => 'pm',
 		'nanometer'  => 'nm',
@@ -56,12 +58,18 @@ class length
 		'kilometer'  => 'km',
 		'inch'       => 'in',
 		'feet'       => 'ft',
-		'yard'       => 'yd'
+		'yard'       => 'yd',
+		'usmile'     => 'usmile',
+		'ukmile'     => 'ukmile',
+		'mile'       => 'usmile', //XXX US or UK?
+		'astronomical'=>'au',
 		);
 
-		$name = strtolower_utf8($name);
+		$name = strtolower($name);
+
 		if (!empty($lookup[$name])) return $lookup[$name];
-		return $name;
+		if (array_search($name, $lookup)) return $name;
+		return false;
 	}
 }
 

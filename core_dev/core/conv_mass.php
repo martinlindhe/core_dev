@@ -13,6 +13,8 @@
 
 class mass
 {
+	var $precision = 0; ///< if set, specifies rounding precision
+
 	var $scale = array( ///< unit scale to Gram
 	'g'  => 1,        //Gram
 	'kg' => 1000,     //Kilogram
@@ -22,11 +24,33 @@ class mass
 
 	function conv($from, $to, $val)
 	{
-		if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
+		$from = $this->shortcode($from);
+		$to   = $this->shortcode($to);
 
-		//XXX: rounding is neccesary to work around PHP's handling of floats,
-		//     or some will return .0000000000001 precision which make tests fail
-		return round(($val * $this->scale[$from]) / $this->scale[$to], 8);
+		if (!$from || !$to) return false;
+
+		if ($this->precision)
+			return round(($val * $this->scale[$from]) / $this->scale[$to], $this->precision);
+
+		return ($val * $this->scale[$from]) / $this->scale[$to];
+	}
+
+	function shortcode($name)
+	{
+		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
+
+		$lookup = array(
+		'gram'     => 'g',
+		'kilogram' => 'kg',
+		'kilo'     => 'kg',
+		'tonne'    => 't',
+		'pound'    => 'lb',
+		);
+
+		$name = strtolower($name);
+		if (!empty($lookup[$name])) return $lookup[$name];
+		if (array_search($name, $lookup)) return $name;
+		return false;
 	}
 }
 

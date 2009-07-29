@@ -16,7 +16,8 @@ require_once('service_currency_webservicex.php');
 
 class currency
 {
-	var $precision = 0; ///< if set specifies how many decimals to return (rounded)
+	var $precision    = 0;   ///< if set specifies how many decimals to return (rounded)
+	var $cache_expire = 300; ///< expire time in seconds for local cache
 
 	/**
 	 * Converts specified ammount of $from currency into $to currency
@@ -43,9 +44,18 @@ class currency
 	 */
 	function rate($from, $to)
 	{
+		$from = strtolower_utf8($from);
+		$to   = strtolower_utf8($to);
 		if (!$this->decode($from) || !$this->decode($to)) return false;
 
-		return webservicex_currency_conversion_rate($from, $to);
+		$key = 'currency_'.$from.'_'.$to;
+		$cache = new cache();
+		$rate = $cache->get($key);
+		if ($rate) return $rate;
+
+		$rate = webservicex_currency_conversion_rate($from, $to);
+		$cache->set($key, $rate, $this->cache_expire);
+		return $rate;
 	}
 
 	/**

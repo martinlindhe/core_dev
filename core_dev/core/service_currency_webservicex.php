@@ -15,15 +15,10 @@ function webservicex_currency_conversion_rate($from, $to)
 	$client = new SoapClient(WEBSERVICEX_CURRENCY_API);
 
 	try {
-		$cache = new cache();
-		$rate = $cache->get('currency_'.$from.'_'.$to);
-		if ($rate) return $rate;
-
 		$params['FromCurrency'] = strtoupper($from);
 		$params['ToCurrency']   = strtoupper($to);
-		$rate = $client->ConversionRate($params);
 
-		$cache->set('currency_'.$from.'_'.$to, $rate->ConversionRateResult, 5*60);
+		$rate = $client->ConversionRate($params);
 		return $rate->ConversionRateResult;
 
 	} catch (Exception $e) {

@@ -45,6 +45,22 @@ $skyconditions_swe = array(
 'overcast'      => 'molnigt'
 );
 
+$scales_swe = array(
+'pm' => 'picometer',
+'nm' => 'nanometer',
+'mm' => 'millimeter',
+'cm' => 'centimeter',
+'dm' => 'decimeter',
+'m'  => 'meter',
+'km' => 'kilometer',
+'in' => 'inch', //???
+'ft' => 'fot',
+'yd' => 'yard', //???
+'usmile' => 'Amerikansk mile',
+'ukmile' => 'Brittisk mile',
+'mile'   => 'usmile or ukmile XXX', //XXX US or UK?
+);
+
 /**
  * Translates strings into Swedish
  */
