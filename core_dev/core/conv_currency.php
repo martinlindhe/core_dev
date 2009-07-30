@@ -12,6 +12,8 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+require_once('class.Cache.php');
+
 require_once('service_currency_webservicex.php');
 
 class currency

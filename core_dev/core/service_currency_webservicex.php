@@ -6,8 +6,6 @@
  * http://www.webservicex.net/WS/WSDetails.aspx?CATID=2&WSID=10
  */
 
-require_once('class.Cache.php');
-
 define('WEBSERVICEX_CURRENCY_API', 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL');
 
 function webservicex_currency_conversion_rate($from, $to)
