@@ -9,6 +9,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//TODO: add QueryZipCode (is it useful???)
+//TODO: query for "who has this number XXX?"
+
 require_once('class.Cache.php');
 
 class TA_queryParams
