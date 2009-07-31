@@ -36,7 +36,7 @@ function webservicex_stock_quote($code)
 		'Open'         =>$p['StockQuotes|Stock|Open'],
 		'High'         =>$p['StockQuotes|Stock|High'],
 		'Low'          =>$p['StockQuotes|Stock|Low'],
-		'Volume'       =>$p['StockQuotes|Stock|Volume'],
+		'Volume'       =>@$p['StockQuotes|Stock|Volume'],
 		'PreviousClose'=>$p['StockQuotes|Stock|PreviousClose'],
 		'PercentChange'=>$p['StockQuotes|Stock|PercentageChange'],
 		'Earns'        =>$p['StockQuotes|Stock|Earns'],
