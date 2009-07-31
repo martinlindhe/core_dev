@@ -120,6 +120,7 @@ class un_request
 		if ($res['status'] == 410) return false; //pos has already been polled, use pos_audit() instead
 
 		$parsed = $this->parse_loc_response($res['body']);
+
 		if ($parsed['status_code'] != 'OK') return false;
 		return $parsed;
 	}

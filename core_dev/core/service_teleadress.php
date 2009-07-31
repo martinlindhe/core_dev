@@ -165,9 +165,8 @@ class Teleadress
 			$res = $this->client->Find($params);
 		}
 
-		if ($this->showError($res)) {
-			$res = false;
-		} else {
+		$post = false;
+		if (!$this->showError($res)) {
 			$post = $this->firstResult($res, $return_first);
 		}
 
@@ -187,9 +186,8 @@ class Teleadress
 			$res = $this->client->Find($params);
 		}
 
-		if ($this->showError($res)) {
-			$res = false;
-		} else {
+		$post = false;
+		if (!$this->showError($res)) {
 			$post = $this->firstResult($res);
 		}
 
