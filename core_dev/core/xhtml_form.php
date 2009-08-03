@@ -58,9 +58,9 @@ class xhtml_form
 	/**
 	 * Adds a input field to the form
 	 */
-	function input($name, $str, $default = '')
+	function input($name, $str, $val = '')
 	{
-		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $default);
+		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $val);
 	}
 
 	/**
