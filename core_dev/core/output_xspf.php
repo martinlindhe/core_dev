@@ -14,8 +14,6 @@ class xspf
 {
 	function render($items)
 	{
-		//XXX totem cant load xspf from network, only local disk! test new version
-		//vlc plays this correctly
 		$res  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">'."\n";
 		$res .= "\t<trackList>\n";
@@ -42,6 +40,25 @@ class xspf
 
 		$res .= "\t</trackList>\n";
 		$res .= "</playlist>\n";
+
+		return $res;
+	}
+
+	/**
+	 * Renders the playlist as a HTML table
+	 */
+	function html($items)
+	{
+		$res = '<table border="1">';
+
+		foreach ($items as $row) {
+			$res .= '<tr><td>';
+			$res .= '<h2>'.formatTime($row['pubdate']).' '.$row['title'].'</h2>';
+			$res .= '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>';
+			$res .= '<p>'.$row['desc'].'</p>';
+			$res .= '<a href="'.$row['video'].'">Play video</a>';
+			$res .= '</td></tr>';
+		}
 
 		return $res;
 	}

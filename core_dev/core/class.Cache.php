@@ -28,7 +28,7 @@ class cache
 
 		$val = $this->handle->get($key);
 
-		if ($this->debug) echo "cache: READ ".$key." = ".$val."\n";
+		if ($this->debug) echo "MEMCACHE READ ".$key." = ".$val."\n";
 
 		return $val;
 	}
@@ -37,7 +37,7 @@ class cache
 	{
 		if (!$this->handle) return false;
 
-		if ($this->debug) echo "cache: WRITE ".$key." = ".$val." (".$expire." sec)\n";
+		if ($this->debug) echo "MEMCACHE WRITE ".$key." = ".$val." (".$expire." sec)\n";
 
 		$ret = $this->handle->set($key, $val, false, $expire);
 
