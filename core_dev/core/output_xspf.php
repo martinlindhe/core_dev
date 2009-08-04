@@ -45,6 +45,15 @@ class xspf
 	}
 
 	/**
+	 * Sets mimetype and outputs the playlist
+	 */
+	function output($items)
+	{
+		header('Content-type: application/xspf+xml');
+		echo $this->render($items);
+	}
+
+	/**
 	 * Renders the playlist as a HTML table
 	 */
 	function html($items)

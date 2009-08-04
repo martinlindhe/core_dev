@@ -7,16 +7,19 @@
  * RSS 2.0:  http://www.rssboard.org/rss-specification
  * Atom 1.0: http://www.atomenabled.org/developers/syndication
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 //TODO: verify that the outputted feeds & mime types actually works with some popular news readers & feed aggregators
 //TODO: maybe need to use <![CDATA[text here]]> everywhere too to embed HTML. verify with html entries
 
+//TODO: rename to output_feed
+
 require_once('functions_time.php');	//for date3339() and date882()
 
 class rss_output
 {
+	var $version = 'core_dev output_feed 1.0'; //XXX version
 	var $entries = array();
 
 	var $ttl = 15;	///< time to live, in minutes
@@ -53,10 +56,10 @@ class rss_output
 			//required fields:
 			'<id>'.$this->link.'</id>'.
 			'<title>'.$this->title.'</title>'.
-			'<updated>2003-12-13T18:30:02Z</updated>'.
+			'<updated>'.date3339(time()).'</updated>'.
 			//optional fields:
-			'<link href="'.$this->link.'"/>'.
-			'<generator>core_dev</generator>';	//XXX version
+			'<link rel="alternate" href="'.$this->link.'"/>'.
+			'<generator>'.$this->version.'</generator>';
 
 		foreach ($this->entries as $entry) {
 			$res .=
@@ -66,8 +69,10 @@ class rss_output
 				'<title>'.trim($entry['title']).'</title>'.
 				'<updated>'.date3339($entry['pubdate']).'</updated>'.	//RFC 3339 timestamp
 				//optional fields:
-				'<link href="'.trim($entry['link']).'"/>'.
 				'<summary>'.trim($entry['desc']).'</summary>'.
+				'<link rel="alternate" href="'.trim($entry['link']).'"/>'.
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$entry['video'].'"/>' : '').
+				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$entry['image'].'"/>' : '').
 			'</entry>';
 		}
 		$res .=
@@ -93,6 +98,13 @@ class rss_output
 				'<generator>core_dev</generator>';				//XXX version
 
 		foreach ($this->entries as $entry) {
+			//XXX can only be 1 media object per rss2 item (???)
+			$media = '';
+			if (!empty($entry['video']))
+				$media .= '<enclosure url="'.$entry['video'].'" type="'.$entry['video_type'].'"/>';
+			else if (!empty($entry['image']))
+				$media .= '<enclosure url="'.$entry['image'].'" type="'.$entry['image_type'].'"/>';
+
 			$res .=
 			'<item>'.
 				//required fields:
@@ -101,7 +113,7 @@ class rss_output
 				'<description>'.trim($entry['desc']).'</description>'.
 				//optional fields:
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
-				//<enclosure> is used to attach a media object to the feed
+				$media.
 			'</item>';
 		}
 

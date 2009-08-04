@@ -80,9 +80,13 @@ class xhtml_header
 		$this->onLoad[] = $js;
 	}
 
-	function reload($ms)
+	/**
+	 * Adds Javascript to reload the page after a period of time
+	 * @param $secs seconds until reload
+	 */
+	function reload($secs)
 	{
-		$this->reload_time = $ms;
+		$this->reload_time = $secs;
 	}
 
 	function mime($type)

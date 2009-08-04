@@ -9,6 +9,8 @@
 
 //TODO: identify and handle atom feeds transparently (from class.Feed.php)
 
+//TODO: rename to input_feed
+
 require_once('input_http.php'); //for is_url()
 
 class rss_input
@@ -41,7 +43,9 @@ class rss_input
 			$row['pubdate']  = strtotime(trim($this->pubDate));
 			$row['duration'] = $this->duration;
 			if ($this->video_url) $row['video'] = $this->video_url;
+			if ($this->video_type) $row['video_type'] = $this->video_type;
 			if ($this->image_url) $row['image'] = $this->image_url;
+			if ($this->video_type) $row['image_type'] = $this->image_type;
 
 			$this->entries[] = $row;
 			if ($this->callback) call_user_func($this->callback, $row);
