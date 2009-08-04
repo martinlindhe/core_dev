@@ -66,6 +66,8 @@ class currency
 	 */
 	function decode($code)
 	{
+		$code = strtoupper($code);
+
 		//all supported currencies as of 2009.07.23:
 		$codes = array(
 		'AFA'=>'Afghanistan Afghani',
@@ -221,7 +223,6 @@ class currency
 		'ZWD'=>'Zimbabwe Dollar'
 		);
 
-		$code = strtoupper($code);
 		if (empty($codes[$code])) return false;
 		return $codes[$code];
 	}

@@ -37,6 +37,7 @@ class mass
 
 	function shortcode($name)
 	{
+		$name = strtolower($name);
 		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
 
 		$lookup = array(
@@ -47,7 +48,6 @@ class mass
 		'pound'    => 'lb',
 		);
 
-		$name = strtolower($name);
 		if (!empty($lookup[$name])) return $lookup[$name];
 		if (array_search($name, $lookup)) return $name;
 		return false;

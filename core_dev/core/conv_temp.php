@@ -46,6 +46,8 @@ class temp
 
 	function shortcode($name)
 	{
+		$name = strtolower($name);
+
 		$lookup = array(
 		'celcius'   => 'c',
 		'farenheit' => 'f',
@@ -53,7 +55,6 @@ class temp
 		'kelvin'    => 'k',
 		);
 
-		$name = strtolower($name);
 		if (!empty($lookup[$name])) return $lookup[$name];
 		if (array_search($name, $lookup)) return $name;
 		return false;

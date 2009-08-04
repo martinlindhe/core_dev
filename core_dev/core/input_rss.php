@@ -7,7 +7,9 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//TODO: identify and handle atom feeds transparently
+//TODO: identify and handle atom feeds transparently (from class.Feed.php)
+
+require_once('input_http.php'); //for is_url()
 
 class rss_input
 {
@@ -102,6 +104,10 @@ class rss_input
 
 	function parse($data, $callback = '')
 	{
+		if (is_url($data)) {
+			$data = file_get_contents($data);
+		}
+
 		$parser = xml_parser_create();
 		xml_set_object($parser, $this);
 		xml_set_element_handler($parser, 'startElement', 'endElement');
@@ -114,8 +120,14 @@ class rss_input
 		}
 		xml_parser_free($parser);
 
+		uasort($this->entries, 'rss_sort_desc');
 		return $this->entries;
 	}
+}
+
+function rss_sort_desc($a, $b)
+{
+    return ($a['pubdate'] > $b['pubdate']) ? -1 : 1;
 }
 
 ?>

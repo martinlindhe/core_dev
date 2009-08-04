@@ -46,6 +46,7 @@ class length
 
 	function shortcode($name)
 	{
+		$name = strtolower($name);
 		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
 
 		$lookup = array(
@@ -64,8 +65,6 @@ class length
 		'mile'       => 'usmile', //XXX US or UK?
 		'astronomical'=>'au',
 		);
-
-		$name = strtolower($name);
 
 		if (!empty($lookup[$name])) return $lookup[$name];
 		if (array_search($name, $lookup)) return $name;

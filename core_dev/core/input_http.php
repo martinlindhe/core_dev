@@ -6,10 +6,25 @@
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 $config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
+
+/**
+ * Checks if input string is a valid http or https URL
+ *
+ * @param $url string
+ * @return true if input is a url
+ */
+function is_url($url)
+{
+	if (strpos($url, ' ')) return false; //FIXME: the regexp allows spaces in domain name
+	$pattern = "(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)";
+
+	if (preg_match($pattern, $url)) return true;
+	return false;
+}
 
 /**
  * Fetches header for given URL and returns it in a parsed array
@@ -21,7 +36,11 @@ function http_head($url)
 {
 	global $config;
 
-	//FIXME: isURL() check
+	if (!is_url($url)) {
+		echo $url." is not a valid URL\n";
+		return false;
+	}
+
 	$u = parse_url($url);
 
 	switch ($u['scheme']) {
