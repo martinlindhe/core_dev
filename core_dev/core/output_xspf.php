@@ -24,7 +24,8 @@ class xspf
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 			$res .= "\t\t<track>\n";
-			$title = formatTime($row['pubdate']).' '.$row['title'].' - '.$row['desc'];
+			$title = formatTime($row['pubdate']).' '.$row['title'];
+			//if ($row['desc']) $title .= ' - '.$row['desc'];
 			$res .= "\t\t\t<title><![CDATA[".$title."]]></title>\n";
 
 			$res .= "\t\t\t<location>".$row['video']."</location>\n";

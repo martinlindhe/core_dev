@@ -56,9 +56,9 @@ $scales_swe = array(
 'in' => 'inch', //???
 'ft' => 'fot',
 'yd' => 'yard', //???
-'usmile' => 'Amerikansk mile',
 'ukmile' => 'Brittisk mile',
-'mile'   => 'usmile or ukmile XXX', //XXX US or UK?
+'usmile' => 'Amerikansk mile',
+'mile'   => 'Amerikansk mile',
 );
 
 /**
@@ -106,6 +106,10 @@ function t_se($s)
 		case 'Referer': return 'Referens';
 		case 'Display': return 'Visa';
 		case 'Anonymous': return 'Anonym';
+
+		//Times
+		case 'Yesterday': return 'Igår';
+		case 'Tomorrow': return 'I morgon';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
