@@ -15,6 +15,8 @@ class xhtml_header
 {
 	var $title   = '';
 	var $favicon = '';
+	var $reload_time = 0; ///< time after page load to reload the page, in seconds
+	var $mime_type = 'text/html';
 
 	var $feeds  = array();
 	var $search = array();
@@ -78,12 +80,26 @@ class xhtml_header
 		$this->onLoad[] = $js;
 	}
 
+	function reload($ms)
+	{
+		$this->reload_time = $ms;
+	}
+
+	function mime($type)
+	{
+		$this->mime_type = $type;
+	}
+
 	/**
 	 * Creates a complete XHTML header, showing rss feeds if available, etc
 	 */
 	function render()
 	{
 		global $config, $h;
+
+		if ($this->mime_type) {
+			header('Content-type: '.$this->mime_type);
+		}
 
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
@@ -159,6 +175,12 @@ class xhtml_header
 		if (function_exists('getProjectPath') && !empty($config['core']['web_root'])) {
 			echo '<script type="text/javascript">';
 			echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core']['web_root'].'api/";';
+			echo '</script>';
+		}
+
+		if ($this->reload_time) {
+			echo '<script type="text/javascript">';
+			echo 'setTimeout("location.reload();", '.($this->reload_time*1000).');';
 			echo '</script>';
 		}
 
