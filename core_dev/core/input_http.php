@@ -13,13 +13,21 @@ $config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE;
 
 require_once('class.Cache.php');
 
+/**
+ * Utility class for url manipulation and cached reads
+ */
 class url_handler
 {
 	var $scheme, $host, $port, $path, $param;
+	var $cache;
+	var $cache_time;
+	var $debug = false;
 
 	function __construct($url = '')
 	{
 		$this->parse($url);
+		$this->cache = new cache();
+		$this->cache_time = 60*5;
 	}
 
 	function parse($url)
@@ -39,20 +47,16 @@ class url_handler
 		if (!empty($parsed['port']))
 			$this->port = $parsed['port'];
 
-		$arr = explode('&', $parsed['query']);
-		foreach ($arr as $pair) {
-			//print_r($pair);
-			$vals = explode('=', $pair);
-			//print_r($vals);
-			$this->param[$vals[0]] = $vals[1];
-		}
+		if (!empty($parsed['query']))
+			parse_str($parsed['query'], $this->param);
 	}
 
 	/**
-	 * Adds a parameter to the url
+	 * Adds/sets a parameter to the url
 	 */
-	function add($name, $val = false)
+	function set($name, $val = false)
 	{
+		unset($this->param[$name]);
 		$this->param[$name] = $val;
 	}
 
@@ -70,12 +74,13 @@ class url_handler
 	{
 		$url = $this->render();
 		$key = 'url//'.urlencode($url);
-		$cache = new cache();
-		$data = $cache->get($key);
+
+		$data = $this->cache->get($key);
 		if (!$data) {
+			if ($this->debug) echo "REAL READ ".$url."\n";
 			$data = file_get_contents($url);
-			$cache->set($key, $data, 60*5); //5 minutes. XXX make configurable
-		}
+			$this->cache->set($key, $data, $this->cache_time);
+		} else if ($this->debug) echo "CACHE READ ".$url."\n";
 		return $data;
 	}
 
@@ -83,14 +88,8 @@ class url_handler
 	{
 		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
 
-		if (!empty($this->param)) {
-			$params = '';
-			foreach ($this->param as $name=>$val) {
-				$params .= '&'.$name.'='.$val;
-			}
-			$params = '?'.substr($params, 1);
-			$res .= $params;
-		}
+		if (!empty($this->param))
+			$res .= '?'.http_build_query($this->param);
 
 		return $res;
 	}

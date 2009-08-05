@@ -2,6 +2,14 @@
 require_once('/var/www/core_dev/core/core.php');
 require_once('/var/www/core_dev/core/input_http.php');
 
+$url = 'http://mtgnewmedia.se:81/xml/xmltoplayer.php?type=siteMapData&channel=2se&country=se';
+$u = new url_handler($url);
+echo 'in : '.$url."\n";
+$u->add('category', 0);
+$u->remove('type');
+echo 'out: '.$u->render()."\n";
+
+
 if (!is_url('http://server.com/file.php')) echo "FAIL 1\n";
 if (!is_url('https://server.com/file.php')) echo "FAIL 2\n";
 if (!is_url('http://server.com:1000/file.php')) echo "FAIL 3\n";

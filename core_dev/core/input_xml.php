@@ -3,28 +3,46 @@
  * $Id$
  *
  * XML reading helper
+ *
+ * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
 //TODO: use this class in many more places
 
-require_once('input_http.php'); //for is_url()
+require_once('input_http.php'); //for url_handler
 
 class xml_input
 {
     var $name;
     var $attr;
-    var $data  = array();
-    var $stack = array();
+    var $data;
+    var $stack;
     var $keys;
     var $path;
+	var $index, $idxval, $value;
 
-    function parse($data)
+	/**
+	 * @param $index if set, name of field to read index from
+	 * @param $value if set, name of field to read value from
+	 */
+    function parse($data, $index = '', $value = '')
     {
 		if (is_url($data)) {
-			$data = file_get_contents($data);
+			$u = new url_handler($data);
+			$data = $u->fetch();
 		}
 
-		$parser = xml_parser_create ("UTF-8");
+		$this->name = '';
+		$this->attr = '';
+		$this->data = array();
+		$this->stack = array();
+		$this->keys = '';
+		$this->path = '';
+		$this->index = $index;
+		$this->idxval = '';
+		$this->value = $value;
+
+		$parser = xml_parser_create('UTF-8');
 		xml_set_object($parser, $this);
 		xml_set_element_handler($parser, 'startXML', 'endXML');
 		xml_set_character_data_handler($parser, 'charXML');
@@ -40,6 +58,9 @@ class xml_input
 
 	function startXML($parser, $name, $attr)
 	{
+		$this->name = $name;
+		if ($this->index) return;
+
 		$this->stack[$name] = array();
 		$keys = '';
 		$total = count($this->stack)-1;
@@ -60,6 +81,8 @@ class xml_input
 
 	function endXML($parser, $name)
 	{
+		if ($this->index) return;
+
 		end($this->stack);
 		if (key($this->stack) == $name) array_pop($this->stack);
 	}
@@ -69,7 +92,12 @@ class xml_input
 		$data = trim($data);
 		if (empty($data)) return;
 
-		$this->data[$this->keys] = $data;
+		if ($this->index == $this->name)
+			$this->idxval = $data;
+		else if ($this->value == $this->name)
+			$this->data[$this->idxval] = $data;
+		else
+			$this->data[$this->keys] = $data;
 	}
 }
 
