@@ -11,6 +11,92 @@
 
 $config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
 
+require_once('class.Cache.php');
+
+class url_handler
+{
+	var $scheme, $host, $port, $path, $param;
+
+	function __construct($url = '')
+	{
+		$this->parse($url);
+	}
+
+	function parse($url)
+	{
+		$parsed = parse_url($url);
+		switch ($parsed['scheme']) {
+		case 'http':
+			break;
+		default:
+			echo "unhandled url scheme ".$parsed['scheme']."\n";
+			return false;
+		}
+		$this->scheme = $parsed['scheme'];
+		$this->host = $parsed['host'];
+		$this->path = $parsed['path'];
+
+		if (!empty($parsed['port']))
+			$this->port = $parsed['port'];
+
+		$arr = explode('&', $parsed['query']);
+		foreach ($arr as $pair) {
+			//print_r($pair);
+			$vals = explode('=', $pair);
+			//print_r($vals);
+			$this->param[$vals[0]] = $vals[1];
+		}
+	}
+
+	/**
+	 * Adds a parameter to the url
+	 */
+	function add($name, $val = false)
+	{
+		$this->param[$name] = $val;
+	}
+
+	function remove($name)
+	{
+		foreach ($this->param as $n=>$val)
+			if ($name == $n)
+				unset($this->param[$n]);
+	}
+
+	/**
+	 * Fetches the data of the web resource
+	 */
+	function fetch()
+	{
+		$url = $this->render();
+		$key = 'url//'.urlencode($url);
+		$cache = new cache();
+		$data = $cache->get($key);
+		if (!$data) {
+			$data = file_get_contents($url);
+			$cache->set($key, $data, 60*5); //5 minutes. XXX make configurable
+		}
+		return $data;
+	}
+
+	function render()
+	{
+		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
+
+		if (!empty($this->param)) {
+			$params = '';
+			foreach ($this->param as $name=>$val) {
+				$params .= '&'.$name.'='.$val;
+			}
+			$params = '?'.substr($params, 1);
+			$res .= $params;
+		}
+
+		return $res;
+	}
+}
+
+
 /**
  * Checks if input string is a valid http or https URL
  *
