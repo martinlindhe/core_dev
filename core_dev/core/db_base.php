@@ -163,7 +163,7 @@ abstract class db_base
 	/**
 	 * Shows driver-specific settings + status
 	 */
-	abstract function showDriverStatus();
+	abstract function status();
 
 
 	/**

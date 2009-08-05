@@ -55,7 +55,7 @@ class db_sqlite extends db_base
 	/**
 	 * Shows SQLite driver status
 	 */
-	function showDriverStatus()
+	function status()
 	{
 		echo 'Encoding: '.sqlite_libencoding().'<br/>';
 		echo 'Last error: '.sqlite_last_error($this->db_handle).'<br/>';

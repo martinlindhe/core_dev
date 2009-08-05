@@ -56,7 +56,7 @@ class db_mysql extends db_base
 	/**
 	 * Shows MySQL driver status
 	 */
-	function showDriverStatus()
+	function status()
 	{
 		echo 'Host info: '.mysql_get_host_info($this->db_handle).'<br/>';
 		echo 'Connection character set: '.mysql_client_encoding($this->db_handle).'<br/>';

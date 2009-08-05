@@ -59,7 +59,7 @@ class db_postgresql extends db_base
 	/**
 	 * Shows PostgreSQL driver status
 	 */
-	function showDriverStatus()
+	function status()
 	{
 		echo 'Server encoding: '.pg_parameter_status($this->db_handle, 'server_encoding').'<br/>';
 		echo 'Client encoding: '.pg_parameter_status($this->db_handle, 'client_encoding').'<br/>';
