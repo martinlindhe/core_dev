@@ -7,6 +7,8 @@
  * RSS 2.0:  http://www.rssboard.org/rss-specification
  * Atom 1.0: http://www.atomenabled.org/developers/syndication
  *
+ * Output verified with http://feedvalidator.org/
+ *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
@@ -65,16 +67,16 @@ class rss_output
 			$res .=
 			'<entry>'.
 				//required fields:
-				'<id>'.trim($entry['link']).'</id>'."\n".
-				'<title><![CDATA['.trim($entry['title']).']]></title>'."\n".
-				'<updated>'.date3339($entry['pubdate']).'</updated>'."\n".	//RFC 3339 timestamp
+				'<id>'.trim($entry['link']).'</id>'.
+				'<title><![CDATA['.trim($entry['title']).']]></title>'.
+				'<updated>'.date3339($entry['pubdate']).'</updated>'.	//RFC 3339 timestamp
 				//optional fields:
-				'<summary><![CDATA['.trim($entry['desc']).']]></summary>'."\n".
-				'<link rel="alternate" href="'.trim($entry['link']).'"/>'."\n".
+				'<summary><![CDATA['.trim($entry['desc']).']]></summary>'.
+				'<link rel="alternate" href="'.trim($entry['link']).'"/>'.
 				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.urlencode($entry['video']).'"/>' : '')."\n".
-				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.urlencode($entry['image']).'"/>' : '')."\n".
-			'</entry>'."\n";
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.htmlspecialchars($entry['video']).'"/>' : '').
+				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.htmlspecialchars($entry['image']).'"/>' : '').
+			'</entry>';
 		}
 		$res .=
 		'</feed>';
@@ -96,15 +98,15 @@ class rss_output
 				'<description><![CDATA['.$this->desc.']]></description>'.
 				//optional fields:
 				($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
-				'<generator>core_dev</generator>';				//XXX version
+				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
 			//XXX can only be 1 media object per rss2 item (???)
 			$media = '';
 			if (!empty($entry['video']))
-				$media .= '<enclosure url="'.$entry['video'].'" type="'.$entry['video_type'].'"/>';
+				$media .= '<enclosure type="'.$entry['video_type'].'" url="'.htmlspecialchars($entry['video']).'" length="'.(!empty($entry['video_duration']) ? $entry['video_duration'] : '1').'"/>';
 			else if (!empty($entry['image']))
-				$media .= '<enclosure url="'.$entry['image'].'" type="'.$entry['image_type'].'"/>';
+				$media .= '<enclosure type="'.$entry['image_type'].'" url="'.htmlspecialchars($entry['image']).'"/>';
 
 			$res .=
 			'<item>'.
@@ -115,7 +117,7 @@ class rss_output
 				//optional fields:
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
 				$media.
-			'</item>';
+			'</item>'."\n";
 		}
 
 		$res .=
