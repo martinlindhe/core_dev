@@ -55,7 +55,7 @@ class rss_output
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
 			//required fields:
 			'<id>'.$this->link.'</id>'.
-			'<title>'.$this->title.'</title>'.
+			'<title><![CDATA['.$this->title.']]></title>'.
 			'<updated>'.date3339(time()).'</updated>'.
 			//optional fields:
 			'<link rel="alternate" href="'.$this->link.'"/>'.
@@ -65,15 +65,16 @@ class rss_output
 			$res .=
 			'<entry>'.
 				//required fields:
-				'<id>'.trim($entry['link']).'</id>'.
-				'<title>'.trim($entry['title']).'</title>'.
-				'<updated>'.date3339($entry['pubdate']).'</updated>'.	//RFC 3339 timestamp
+				'<id>'.trim($entry['link']).'</id>'."\n".
+				'<title><![CDATA['.trim($entry['title']).']]></title>'."\n".
+				'<updated>'.date3339($entry['pubdate']).'</updated>'."\n".	//RFC 3339 timestamp
 				//optional fields:
-				'<summary>'.trim($entry['desc']).'</summary>'.
-				'<link rel="alternate" href="'.trim($entry['link']).'"/>'.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$entry['video'].'"/>' : '').
-				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$entry['image'].'"/>' : '').
-			'</entry>';
+				'<summary><![CDATA['.trim($entry['desc']).']]></summary>'."\n".
+				'<link rel="alternate" href="'.trim($entry['link']).'"/>'."\n".
+				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.urlencode($entry['video']).'"/>' : '')."\n".
+				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.urlencode($entry['image']).'"/>' : '')."\n".
+			'</entry>'."\n";
 		}
 		$res .=
 		'</feed>';
@@ -90,9 +91,9 @@ class rss_output
 		'<rss version="2.0">'.
 			'<channel>'.
 				//required fields:
-				'<title>'.$this->title.'</title>'.
+				'<title><![CDATA['.$this->title.']]></title>'.
 				'<link>'.$this->link.'</link>'.
-				'<description>'.$this->desc.'</description>'.
+				'<description><![CDATA['.$this->desc.']]></description>'.
 				//optional fields:
 				($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
 				'<generator>core_dev</generator>';				//XXX version
@@ -108,9 +109,9 @@ class rss_output
 			$res .=
 			'<item>'.
 				//required fields:
-				'<title>'.trim($entry['title']).'</title>'.
+				'<title><![CDATA['.trim($entry['title']).']]></title>'.
 				'<link>'.trim($entry['link']).'</link>'.
-				'<description>'.trim($entry['desc']).'</description>'.
+				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
 				//optional fields:
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
 				$media.

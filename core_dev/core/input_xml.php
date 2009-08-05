@@ -7,6 +7,8 @@
 
 //TODO: use this class in many more places
 
+require_once('input_http.php'); //for is_url()
+
 class xml_input
 {
     var $name;
@@ -16,15 +18,19 @@ class xml_input
     var $keys;
     var $path;
 
-    function parse($xml)
+    function parse($data)
     {
+		if (is_url($data)) {
+			$data = file_get_contents($data);
+		}
+
 		$parser = xml_parser_create ("UTF-8");
 		xml_set_object($parser, $this);
 		xml_set_element_handler($parser, 'startXML', 'endXML');
 		xml_set_character_data_handler($parser, 'charXML');
 		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
 
-		if (!xml_parse($parser, $xml)) {
+		if (!xml_parse($parser, $data)) {
 			sprintf('XML error at line %d column %d',
 				xml_get_current_line_number($parser),
 				xml_get_current_column_number($parser));
@@ -45,12 +51,10 @@ class xml_input
 				$keys .= $key;
 			$i++;
 		}
-		/*
-		if (array_key_exists($keys, $this->data))
+
+		if (!empty($attr))
 			$this->data[$keys][] = $attr;
-		else
-			$this->data[$keys] = $attr;
-		*/
+
 		$this->keys = $keys;
 	}
 
