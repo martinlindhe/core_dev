@@ -12,16 +12,13 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//TODO: verify that the outputted feeds & mime types actually works with some popular news readers & feed aggregators
-//TODO: maybe need to use <![CDATA[text here]]> everywhere too to embed HTML. verify with html entries
-
-//TODO: rename to output_feed
+//TODO: rename file and class to output_feed
 
 require_once('functions_time.php');	//for date3339() and date882()
 
 class rss_output
 {
-	var $version = 'core_dev output_feed 1.0'; //XXX version
+	var $version = 'core_dev output_feed 1.0';
 	var $entries = array();
 
 	var $ttl = 15;	///< time to live, in minutes
@@ -56,12 +53,12 @@ class rss_output
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
 			//required fields:
-			'<id>'.$this->link.'</id>'.
+			'<id>'.htmlspecialchars($this->link).'</id>'.
 			'<title><![CDATA['.$this->title.']]></title>'.
 			'<updated>'.date3339(time()).'</updated>'.
 			//optional fields:
-			'<link rel="alternate" href="'.$this->link.'"/>'.
-			'<generator>'.$this->version.'</generator>';
+			'<link rel="alternate" href="'.htmlspecialchars($this->link).'"/>'.
+			'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
 			$res .=
@@ -76,7 +73,7 @@ class rss_output
 				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
 				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.htmlspecialchars($entry['video']).'"/>' : '').
 				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.htmlspecialchars($entry['image']).'"/>' : '').
-			'</entry>';
+			'</entry>'."\n";
 		}
 		$res .=
 		'</feed>';
@@ -94,7 +91,7 @@ class rss_output
 			'<channel>'.
 				//required fields:
 				'<title><![CDATA['.$this->title.']]></title>'.
-				'<link>'.$this->link.'</link>'.
+				'<link>'.htmlspecialchars($this->link).'</link>'.
 				'<description><![CDATA['.$this->desc.']]></description>'.
 				//optional fields:
 				($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
@@ -112,7 +109,7 @@ class rss_output
 			'<item>'.
 				//required fields:
 				'<title><![CDATA['.trim($entry['title']).']]></title>'.
-				'<link>'.trim($entry['link']).'</link>'.
+				'<link>'.trim(htmlspecialchars($entry['link'])).'</link>'.
 				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
 				//optional fields:
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp

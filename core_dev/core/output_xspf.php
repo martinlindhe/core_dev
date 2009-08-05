@@ -1,9 +1,18 @@
 <?php
 /**
- * Generates a VLC-compilant XSPF playlist
+ * Generates a XSPF playlist
  *
+ * References
+ * ----------
  * http://validator.xspf.org/
  * http://en.wikipedia.org/wiki/Xspf
+ *
+ * Compatiblity (2009.08.05)
+ * -------------------------
+ * ffmpeg/ffplay: dont support xspf playlists (but only player for rtmp:// content)
+ * VLC 1.0: works (not with rtmp:// content)
+ * Totem 2.27: trouble loading xspf from certain url's: http://bugzilla.gnome.org/show_bug.cgi?id=590722
+ * SMPlayer 0.67: dont support xspf playlists: https://sourceforge.net/tracker/index.php?func=detail&aid=1920553&group_id=185512&atid=913576
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */

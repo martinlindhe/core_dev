@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//TODO: identify and handle atom feeds transparently (from class.Feed.php)
+//TODO: parse atom feeds
 
 //TODO: rename to input_feed
 
@@ -109,7 +109,8 @@ class rss_input
 	function parse($data, $callback = '')
 	{
 		if (is_url($data)) {
-			$data = file_get_contents($data);
+			$u = new url_handler($data);
+			$data = $u->fetch();
 		}
 
 		$parser = xml_parser_create();
