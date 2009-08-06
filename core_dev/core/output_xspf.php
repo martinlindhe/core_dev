@@ -41,8 +41,8 @@ class xspf
 
 			$res .= '<location>'.$vid_url->render().'</location>';
 
-			if (!empty($row['video_duration']))
-				$res .= '<duration>'.($row['video_duration']*1000).'</duration>'; //in milliseconds
+			if (!empty($row['duration']))
+				$res .= '<duration>'.($row['duration']*1000).'</duration>'; //in milliseconds
 
 			if (!empty($row['image'])) {
 				$res .= '<image>'.$img_url->render().'</image>';
@@ -75,10 +75,10 @@ class xspf
 
 		foreach ($items as $row) {
 			$res .= '<tr><td>';
-			$res .= '<h2>'.formatTime($row['pubdate']).' '.$row['title'].'</h2>';
+			$res .= '<h2>'.formatTime($row['pubdate']).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>';
 			$res .= '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>';
 			$res .= '<p>'.$row['desc'].'</p>';
-			$res .= '<a href="'.$row['video'].'">Play video</a>';
+			if (!empty($row['video'])) $res .= '<a href="'.$row['video'].'">Play video</a>';
 			$res .= '</td></tr>';
 		}
 

@@ -7,7 +7,10 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//TODO: use input_xml for parsing
 //TODO: parse atom feeds
+
+//TODO: extend callback to allow mapping of special fields to standard ones, such as "<svtplay:xmllink svtplay:type="titles">http://xml.svtplay.se/v1/titles/102897</svtplay:xmllink>" to "guid"
 
 //TODO: rename to input_feed
 
@@ -21,8 +24,11 @@ class rss_input
 	var $attrs;
 	var $video_url, $video_type, $duration;
 	var $image_url, $image_type;
-	var $entries = array();
+	var $entries;
 	var $callback = '';
+	var $guid2 = ''; //XXX remove this hack
+
+	var $sort = true;	///< sort output array?
 
 	function startElement($parser, $name, $attrs = '')
 	{
@@ -42,20 +48,22 @@ class rss_input
 			$row['desc']     = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
 			$row['pubdate']  = strtotime(trim($this->pubDate));
 			$row['guid']     = trim($this->guid);
+			$row['guid2']    = trim($this->guid2); //XXX remove hack!
 			$row['duration'] = trim($this->duration);
 			if ($this->video_url)  $row['video'] = $this->video_url;
 			if ($this->video_type) $row['video_type'] = $this->video_type;
 			if ($this->image_url)  $row['image'] = $this->image_url;
 			if ($this->video_type) $row['image_type'] = $this->image_type;
 
-			$this->entries[] = $row;
 			if ($this->callback) call_user_func($this->callback, $row);
+			$this->entries[] = $row;
 
 			$this->link = '';
 			$this->title = '';
 			$this->desc = '';
 			$this->pubDate = '';
 			$this->guid = '';
+			$this->guid2 = ''; //XXX rmeove hack!
 			$this->attrs = '';
 			$this->video_url  = '';
 			$this->video_type = '';
@@ -90,12 +98,32 @@ class rss_input
 				$this->guid .= $data;
 				break;
 
+			case 'SVTPLAY:XMLLINK':
+				//XXX hack! fix callback mechanism to handle this
+				$this->guid2 .= $data;
+				break;
+
+			case 'MEDIA:THUMBNAIL':
+				if (!$this->image_url) { //XXX prefer full image over thumbnails
+					$this->image_url  = $this->attrs['URL'];
+					$this->image_type = 'image/jpeg';//$this->attrs['TYPE'];
+				}
+				break;
+
 			case 'MEDIA:CONTENT':
 				switch ($this->attrs['TYPE']) {
 				case 'video/x-flv':
 					$this->video_url  = $this->attrs['URL'];
 					$this->video_type = $this->attrs['TYPE'];
 					$this->duration   = $this->attrs['DURATION'];
+					break;
+
+				case 'video/x-ms-asf':
+					if (!$this->video_url) { //XXX prefer flv over asf
+						$this->video_url  = $this->attrs['URL'];
+						$this->video_type = $this->attrs['TYPE'];
+						$this->duration   = $this->attrs['DURATION'];
+					}
 					break;
 
 				case 'image/jpeg':
@@ -119,6 +147,8 @@ class rss_input
 			$data = $u->fetch();
 		}
 
+		$this->entries = array();
+
 		$parser = xml_parser_create();
 		xml_set_object($parser, $this);
 		xml_set_element_handler($parser, 'startElement', 'endElement');
@@ -131,7 +161,7 @@ class rss_input
 		}
 		xml_parser_free($parser);
 
-		uasort($this->entries, 'rss_sort_desc');
+		if ($this->sort) uasort($this->entries, 'rss_sort_desc');
 		return $this->entries;
 	}
 }

@@ -57,11 +57,9 @@ class rss_output
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
-			//required fields:
 			'<id>'.htmlspecialchars($this->link).'</id>'.
 			'<title><![CDATA['.$this->title.']]></title>'.
 			'<updated>'.date3339(time()).'</updated>'.
-			//optional fields:
 			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
@@ -70,15 +68,13 @@ class rss_output
 			$img_url = new url_handler($entry['image']);
 			$res .=
 			'<entry>'.
-				//required fields:
 				'<id>'.(!empty($entry['guid']) ? $entry['guid'] : htmlspecialchars($entry['link']) ).'</id>'.
 				'<title><![CDATA['.$entry['title'].']]></title>'.
-				'<updated>'.date3339($entry['pubdate']).'</updated>'.	//RFC 3339 timestamp
-				//optional fields:
-				'<summary><![CDATA['.$entry['desc'].']]></summary>'.
 				'<link rel="alternate" href="'.$entry['link'].'"/>'.
+				'<summary><![CDATA['.(!empty($entry['desc']) ? $entry['desc'] : ' ').']]></summary>'.
+				'<updated>'.date3339($entry['pubdate']).'</updated>'.
 				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$vid_url->render().'"/>' : '').
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$vid_url->render().'"'.(!empty($entry['duration']) ? ' length="'.$entry['duration'].'"' : '').'/>' : '').
 				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$img_url->render().'"/>' : '').
 			'</entry>'."\n";
 		}
@@ -99,11 +95,9 @@ class rss_output
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">'.
 			'<channel>'.
-				//required fields:
 				'<title><![CDATA['.$this->title.']]></title>'.
 				'<link>'.htmlspecialchars($this->link).'</link>'.
 				'<description><![CDATA['.$this->desc.']]></description>'.
-				//optional fields:
 				($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
 				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($u->render()).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
@@ -114,14 +108,12 @@ class rss_output
 
 			$res .=
 			'<item>'.
-				//required fields:
 				'<title><![CDATA['.trim($entry['title']).']]></title>'.
 				'<link>'.trim(htmlspecialchars($entry['link'])).'</link>'.
 				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
-				//optional fields:
+				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.
 				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
-				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
-				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$vid_url->render().'"/>' : '').
+				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$vid_url->render().'" duration="'.$entry['duration'].'"/>' : '').
 				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$img_url->render().'"/>' : '').
 			'</item>'."\n";
 		}
