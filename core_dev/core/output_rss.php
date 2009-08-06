@@ -6,10 +6,7 @@
  *
  * Atom 1.0: http://www.atomenabled.org/developers/syndication
  * RSS 2.0:  http://www.rssboard.org/rss-specification
- *
- * Limitations:
- * ------------
- * - RSS 2.0 only allows 1 media object per feed entry
+ * RSS 2.0 media rss: http://video.search.yahoo.com/mrss
  *
  * Output verified with http://feedvalidator.org/
  *
@@ -100,7 +97,7 @@ class rss_output
 
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
-		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'.
+		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">'.
 			'<channel>'.
 				//required fields:
 				'<title><![CDATA['.$this->title.']]></title>'.
@@ -112,16 +109,8 @@ class rss_output
 				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
-			//XXX can only be 1 media object per rss2 item (???)
-
-			$media = '';
-			if (!empty($entry['video'])) {
-				$vid_url = new url_handler($entry['video']);
-				$media .= '<enclosure type="'.$entry['video_type'].'" url="'.$vid_url->render().'" length="'.(!empty($entry['video_duration']) ? $entry['video_duration'] : '1').'"/>';
-			} else if (!empty($entry['image'])) {
-				$img_url = new url_handler($entry['image']);
-				$media .= '<enclosure type="'.$entry['image_type'].'" url="'.$img_url->render().'"/>';
-			}
+			$vid_url = new url_handler($entry['video']);
+			$img_url = new url_handler($entry['image']);
 
 			$res .=
 			'<item>'.
@@ -132,7 +121,8 @@ class rss_output
 				//optional fields:
 				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
-				$media.
+				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$vid_url->render().'"/>' : '').
+				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$img_url->render().'"/>' : '').
 			'</item>'."\n";
 		}
 
