@@ -23,32 +23,36 @@ class xspf
 {
 	function render($items)
 	{
-		$res  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">'."\n";
-		$res .= "\t<trackList>\n";
+		$res  = '<?xml version="1.0" encoding="UTF-8"?>';
+		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
+		$res .= '<trackList>'."\n";
 
 		foreach ($items as $row) {
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
-			$res .= "\t\t<track>\n";
+
+			$vid_url = new url_handler($row['video']);
+			$img_url = new url_handler($row['image']);
+
+			$res .= '<track>';
 			$title = formatTime($row['pubdate']).' '.$row['title'];
 			//if ($row['desc']) $title .= ' - '.$row['desc'];
-			$res .= "\t\t\t<title><![CDATA[".$title."]]></title>\n";
+			$res .= '<title><![CDATA['.trim($title).']]></title>';
 
-			$res .= "\t\t\t<location>".$row['video']."</location>\n";
+			$res .= '<location>'.$vid_url->render().'</location>';
 
-			if (!empty($row['duration']))
-				$res .= "\t\t\t<duration>".($row['duration']*1000)."</duration>\n"; //in milliseconds
+			if (!empty($row['video_duration']))
+				$res .= '<duration>'.($row['video_duration']*1000).'</duration>'; //in milliseconds
 
 			if (!empty($row['image'])) {
-				$res .= "\t\t\t<image>".$row['image']."</image>\n";
+				$res .= '<image>'.$img_url->render().'</image>';
 			}
 
-			$res .= "\t\t</track>\n";
+			$res .= '</track>'."\n";
 		}
 
-		$res .= "\t</trackList>\n";
-		$res .= "</playlist>\n";
+		$res .= '</trackList>';
+		$res .= '</playlist>';
 
 		return $res;
 	}

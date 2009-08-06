@@ -25,7 +25,8 @@ class url_handler
 
 	function __construct($url = '')
 	{
-		$this->parse($url);
+		if ($url) $this->parse($url);
+
 		$this->cache = new cache();
 		$this->cache_time = 60*5;
 	}
@@ -35,6 +36,7 @@ class url_handler
 		$parsed = parse_url($url);
 		switch ($parsed['scheme']) {
 		case 'http':
+		case 'rtmp':
 			break;
 		default:
 			echo "unhandled url scheme ".$parsed['scheme']."\n";
@@ -70,21 +72,37 @@ class url_handler
 	/**
 	 * Fetches the data of the web resource
 	 */
-	function fetch()
+	function fetch($cache_time = false)
 	{
-		$url = $this->render();
-		$key = 'url//'.urlencode($url);
+		$url = $this->compact();
+		$key = 'url//'.htmlspecialchars($url);
 
 		$data = $this->cache->get($key);
 		if (!$data) {
 			if ($this->debug) echo "REAL READ ".$url."\n";
 			$data = file_get_contents($url);
-			$this->cache->set($key, $data, $this->cache_time);
+			$this->cache->set($key, $data, ($cache_time !== false ? $cache_time : $this->cache_time));
 		} else if ($this->debug) echo "CACHE READ ".$url."\n";
 		return $data;
 	}
 
+	/**
+	 * Outputs URL in a safe format (& => &amp;)
+	 */
 	function render()
+	{
+		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
+
+		if (!empty($this->param))
+			$res .= '?'.htmlspecialchars(http_build_query($this->param));
+
+		return $res;
+	}
+
+	/**
+	 * Outputs URL in a compact format (& => &)
+	 */
+	function compact()
 	{
 		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
 
@@ -93,6 +111,7 @@ class url_handler
 
 		return $res;
 	}
+
 }
 
 

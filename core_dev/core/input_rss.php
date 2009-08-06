@@ -17,7 +17,7 @@ class rss_input
 {
 	var $inside_item = false;
 	var $current_tag = '';
-	var $link, $title, $desc, $pubDate;
+	var $link, $title, $desc, $pubDate, $guid;
 	var $attrs;
 	var $video_url, $video_type, $duration;
 	var $image_url, $image_type;
@@ -41,10 +41,11 @@ class rss_input
 			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
 			$row['desc']     = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
 			$row['pubdate']  = strtotime(trim($this->pubDate));
-			$row['duration'] = $this->duration;
-			if ($this->video_url) $row['video'] = $this->video_url;
+			$row['guid']     = trim($this->guid);
+			$row['duration'] = trim($this->duration);
+			if ($this->video_url)  $row['video'] = $this->video_url;
 			if ($this->video_type) $row['video_type'] = $this->video_type;
-			if ($this->image_url) $row['image'] = $this->image_url;
+			if ($this->image_url)  $row['image'] = $this->image_url;
 			if ($this->video_type) $row['image_type'] = $this->image_type;
 
 			$this->entries[] = $row;
@@ -54,6 +55,7 @@ class rss_input
 			$this->title = '';
 			$this->desc = '';
 			$this->pubDate = '';
+			$this->guid = '';
 			$this->attrs = '';
 			$this->video_url  = '';
 			$this->video_type = '';
@@ -82,6 +84,10 @@ class rss_input
 
 			case 'PUBDATE':
 				$this->pubDate .= $data;
+				break;
+
+			case 'GUID':
+				$this->guid .= $data;
 				break;
 
 			case 'MEDIA:CONTENT':

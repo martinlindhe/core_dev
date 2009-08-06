@@ -20,6 +20,7 @@ class xml_input
     var $keys;
     var $path;
 	var $index, $idxval, $value;
+	var $cache_time = false;
 
 	/**
 	 * @param $index if set, name of field to read index from
@@ -29,7 +30,7 @@ class xml_input
     {
 		if (is_url($data)) {
 			$u = new url_handler($data);
-			$data = $u->fetch();
+			$data = $u->fetch($this->cache_time);
 		}
 
 		$this->name = '';

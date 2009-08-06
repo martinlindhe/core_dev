@@ -4,8 +4,12 @@
  *
  * Simple news feed renderer with support for RSS 2.0 and Atom 1.0
  *
- * RSS 2.0:  http://www.rssboard.org/rss-specification
  * Atom 1.0: http://www.atomenabled.org/developers/syndication
+ * RSS 2.0:  http://www.rssboard.org/rss-specification
+ *
+ * Limitations:
+ * ------------
+ * - RSS 2.0 only allows 1 media object per feed entry
  *
  * Output verified with http://feedvalidator.org/
  *
@@ -14,6 +18,7 @@
 
 //TODO: rename file and class to output_feed
 
+require_once('input_http.php'); //for url_handler()
 require_once('functions_time.php');	//for date3339() and date882()
 
 class rss_output
@@ -49,6 +54,9 @@ class rss_output
 	 */
 	function renderATOM()
 	{
+		$u = new url_handler($this->link);
+		$u->path = $_SERVER['REQUEST_URI'];
+
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
@@ -57,22 +65,24 @@ class rss_output
 			'<title><![CDATA['.$this->title.']]></title>'.
 			'<updated>'.date3339(time()).'</updated>'.
 			//optional fields:
-			'<link rel="alternate" href="'.htmlspecialchars($this->link).'"/>'.
+			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
+			$vid_url = new url_handler($entry['video']);
+			$img_url = new url_handler($entry['image']);
 			$res .=
 			'<entry>'.
 				//required fields:
-				'<id>'.trim($entry['link']).'</id>'.
-				'<title><![CDATA['.trim($entry['title']).']]></title>'.
+				'<id>'.(!empty($entry['guid']) ? $entry['guid'] : htmlspecialchars($entry['link']) ).'</id>'.
+				'<title><![CDATA['.$entry['title'].']]></title>'.
 				'<updated>'.date3339($entry['pubdate']).'</updated>'.	//RFC 3339 timestamp
 				//optional fields:
-				'<summary><![CDATA['.trim($entry['desc']).']]></summary>'.
-				'<link rel="alternate" href="'.trim($entry['link']).'"/>'.
+				'<summary><![CDATA['.$entry['desc'].']]></summary>'.
+				'<link rel="alternate" href="'.$entry['link'].'"/>'.
 				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.htmlspecialchars($entry['video']).'"/>' : '').
-				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.htmlspecialchars($entry['image']).'"/>' : '').
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$vid_url->render().'"/>' : '').
+				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$img_url->render().'"/>' : '').
 			'</entry>'."\n";
 		}
 		$res .=
@@ -85,9 +95,12 @@ class rss_output
 	 */
 	function renderRSS2()
 	{
+		$u = new url_handler($this->link);
+		$u->path = $_SERVER['REQUEST_URI'];
+
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
-		'<rss version="2.0">'.
+		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">'.
 			'<channel>'.
 				//required fields:
 				'<title><![CDATA['.$this->title.']]></title>'.
@@ -95,15 +108,20 @@ class rss_output
 				'<description><![CDATA['.$this->desc.']]></description>'.
 				//optional fields:
 				($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
+				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($u->render()).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
 			//XXX can only be 1 media object per rss2 item (???)
+
 			$media = '';
-			if (!empty($entry['video']))
-				$media .= '<enclosure type="'.$entry['video_type'].'" url="'.htmlspecialchars($entry['video']).'" length="'.(!empty($entry['video_duration']) ? $entry['video_duration'] : '1').'"/>';
-			else if (!empty($entry['image']))
-				$media .= '<enclosure type="'.$entry['image_type'].'" url="'.htmlspecialchars($entry['image']).'"/>';
+			if (!empty($entry['video'])) {
+				$vid_url = new url_handler($entry['video']);
+				$media .= '<enclosure type="'.$entry['video_type'].'" url="'.$vid_url->render().'" length="'.(!empty($entry['video_duration']) ? $entry['video_duration'] : '1').'"/>';
+			} else if (!empty($entry['image'])) {
+				$img_url = new url_handler($entry['image']);
+				$media .= '<enclosure type="'.$entry['image_type'].'" url="'.$img_url->render().'"/>';
+			}
 
 			$res .=
 			'<item>'.
@@ -112,6 +130,7 @@ class rss_output
 				'<link>'.trim(htmlspecialchars($entry['link'])).'</link>'.
 				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
 				//optional fields:
+				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.	//RFC 822 timestamp
 				$media.
 			'</item>'."\n";
@@ -125,7 +144,7 @@ class rss_output
 	}
 
 	/**
-	 * Generates RSS feed
+	 * Generates XML for feed
 	 */
 	function render($format = 'rss2')
 	{
