@@ -1,6 +1,10 @@
 <?php
 /**
+ * $Id$
+ *
  * Used by output_feed.php, output_playlist.php
+ *
+ * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
 //TODO: use with table output code (and call it output_table.php)
@@ -26,7 +30,7 @@ class coredev_output_list
 
 	function clearList()
 	{
-		//XXX implement
+		die('XXX implement clearList');
 	}
 }
 

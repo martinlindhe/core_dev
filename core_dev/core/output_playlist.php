@@ -1,5 +1,7 @@
 <?php
 /**
+ * $Id$
+ *
  * Generates a XSPF or M3U playlist
  *
  * References
