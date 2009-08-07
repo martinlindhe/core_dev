@@ -15,10 +15,11 @@
 
 //TODO: rename file and class to output_feed
 
+require_once('output_list.php');
 require_once('input_http.php'); //for url_handler()
 require_once('functions_time.php');	//for date3339() and date882()
 
-class rss_output
+class rss_output extends coredev_output_list
 {
 	var $version = 'core_dev output_feed 1.0';
 	var $entries = array();
@@ -29,21 +30,36 @@ class rss_output
 	var $link = '';
 
 	/**
-	 * Adds a array of entries to the feed list
+	 * Generates XML for feed
 	 */
-	function addList($list)
+	function render($format = 'rss2')
 	{
-		foreach ($list as $entry) {
-			$this->entries[] = $entry;
+		switch ($format) {
+		case 'atom':
+			return $this->renderATOM();
+
+		case 'rss2':
+			return $this->renderRSS2();
 		}
+		return false;
 	}
 
 	/**
-	 * Adds a entry to the feed list
+	 * Outputs the feed and set HTTP header
 	 */
-	function addEntry($entry)
+	function output($format = 'rss2')
 	{
-		$this->entries[] = $entry;
+		switch ($format) {
+		case 'atom':
+			header('Content-type: application/atom+xml');
+			break;
+
+		case 'rss2':
+			header('Content-type: application/rss+xml');
+			break;
+		}
+
+		echo $this->render($format);
 	}
 
 	/**
@@ -125,37 +141,29 @@ class rss_output
 		return $res;
 	}
 
-	/**
-	 * Generates XML for feed
-	 */
-	function render($format = 'rss2')
-	{
-		switch ($format) {
-			case 'atom':
-				return $this->renderATOM();
 
-			case 'rss2':
-				return $this->renderRSS2();
-		}
-		return false;
+//XZXXX använd i output-rss åxå!!! :::
+
+	/**
+	 * Adds a array of entries to the feed list
+	 */
+	function addList($list)
+	{
+		foreach ($list as $entry)
+			$this->entries[] = $entry;
 	}
 
 	/**
-	 * Outputs the feed and set HTTP header
+	 * Adds a entry to the feed list
 	 */
-	function output($format = 'rss2')
+	function addEntry($entry)
 	{
-		switch ($format) {
-			case 'atom':
-				header('Content-type: application/atom+xml');
-				break;
+		$this->entries[] = $entry;
+	}
 
-			case 'rss2':
-				header('Content-type: application/rss+xml');
-				break;
-		}
-
-		echo $this->render($format);
+	function clearList()
+	{
+		//XXX implement
 	}
 }
 

@@ -8,6 +8,7 @@
  * http://en.wikipedia.org/wiki/Xspf
  * http://en.wikipedia.org/wiki/M3u
  * http://schworak.com/programming/music/playlist_m3u.asp
+ * http://gonze.com/playlists/playlist-format-survey.html
  *
  * XSPF Compatiblity (2009.08.05)
  * ------------------------------
@@ -19,11 +20,10 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: rename to output_playlist
+require_once('output_list.php');
+require_once('functions_defaults.php'); //for formatTime()
 
-require_once('functions_defaults.php');
-
-class output_playlist
+class output_playlist extends coredev_output_list
 {
 	var $format = 'xspf';
 	var $entries = array();
@@ -128,30 +128,6 @@ class output_playlist
 	}
 
 
-
-//XZXXX använd i output-rss åxå!!! :::
-
-	/**
-	 * Adds a array of entries to the feed list
-	 */
-	function addList($list)
-	{
-		foreach ($list as $entry)
-			$this->entries[] = $entry;
-	}
-
-	/**
-	 * Adds a entry to the feed list
-	 */
-	function addEntry($entry)
-	{
-		$this->entries[] = $entry;
-	}
-
-	function clearList()
-	{
-		//XXX implement
-	}
 }
 
 ?>
