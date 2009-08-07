@@ -13,13 +13,11 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//TODO: rename file and class to output_feed
-
 require_once('output_list.php');
 require_once('input_http.php'); //for url_handler()
 require_once('functions_time.php');	//for date3339() and date882()
 
-class rss_output extends coredev_output_list
+class output_feed extends coredev_output_list
 {
 	var $version = 'core_dev output_feed 1.0';
 	var $entries = array();
@@ -105,7 +103,7 @@ class rss_output extends coredev_output_list
 	function renderRSS2()
 	{
 		$u = new url_handler($this->link);
-		$u->path = $_SERVER['REQUEST_URI'];
+		$u->path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
@@ -119,8 +117,8 @@ class rss_output extends coredev_output_list
 				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
-			$vid_url = new url_handler($entry['video']);
-			$img_url = new url_handler($entry['image']);
+			if (!empty($entry['video'])) $vid_url = new url_handler($entry['video']);
+			if (!empty($entry['image'])) $img_url = new url_handler($entry['image']);
 
 			$res .=
 			'<item>'.

@@ -1,5 +1,5 @@
 <?php
-require('/var/www/core_dev/core/output_rss.php');
+require('/var/www/core_dev/core/output_feed.php');
 
 $list[] = array(
 	'pubdate' => 127652734,
@@ -22,7 +22,7 @@ $list[] = array(
 	'desc' => 'A short summary'
 );
 
-$feed = new rss_output();
+$feed = new output_feed();
 
 $feed->addList($list);
 $feed->output('rss2');

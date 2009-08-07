@@ -12,11 +12,9 @@
 
 //TODO: extend callback to allow mapping of special fields to standard ones, such as "<svtplay:xmllink svtplay:type="titles">http://xml.svtplay.se/v1/titles/102897</svtplay:xmllink>" to "guid"
 
-//TODO: rename to input_feed
-
 require_once('input_http.php'); //for is_url()
 
-class rss_input
+class input_feed
 {
 	var $inside_item = false;
 	var $current_tag = '';
