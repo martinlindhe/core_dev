@@ -6,7 +6,7 @@
  */
 
 require_once('/var/www/core_dev/core/input_rss.php');
-require_once('/var/www/core_dev/core/output_xspf.php');
+require_once('/var/www/core_dev/core/output_playlist.php');
 require_once('/var/www/core_dev/core/class.Cache.php');
 
 
