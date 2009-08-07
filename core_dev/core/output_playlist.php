@@ -54,7 +54,7 @@ class output_playlist
 			break;
 
 		case 'm3u':
-			//header('Content-type: application/rss+xml');
+			header('Content-type: audio/x-mpegurl'); //XXX some places list "audio/mpegurl"
 			break;
 		}
 
