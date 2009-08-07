@@ -17,17 +17,55 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//TODO: rename to output_playlist
+
 require_once('functions_defaults.php');
 
-class xspf
+class output_playlist
 {
-	function render($items)
+	var $format = 'xspf';
+	var $entries = array();
+
+	function render()
+	{
+		switch ($this->format) {
+		case 'xspf':
+			return $this->renderXSPF();
+
+		case 'm3u':
+			return $this->renderM3U();
+
+		case 'html':
+			return $this->renderHTML();
+		}
+		return false;
+	}
+
+	/**
+	 * Sets mimetype and outputs the playlist
+	 */
+	function output()
+	{
+		switch ($this->format) {
+		case 'xspf':
+			header('Content-type: application/xspf+xml');
+			break;
+
+		case 'm3u':
+			//header('Content-type: application/rss+xml');
+			break;
+		}
+
+		echo $this->render();
+	}
+
+	function renderXSPF()
 	{
 		$res  = '<?xml version="1.0" encoding="UTF-8"?>';
 		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
 		$res .= '<trackList>'."\n";
 
-		foreach ($items as $row) {
+		foreach ($this->entries as $row) {
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 
@@ -57,23 +95,24 @@ class xspf
 		return $res;
 	}
 
-	/**
-	 * Sets mimetype and outputs the playlist
-	 */
-	function output($items)
+	function renderM3U()
 	{
-		header('Content-type: application/xspf+xml');
-		echo $this->render($items);
+		$res = '';
+		foreach ($this->entries as $row) {
+			$res .= $row['video']."\n";
+		}
+
+		return $res;
 	}
 
 	/**
 	 * Renders the playlist as a HTML table
 	 */
-	function html($items)
+	function renderHTML()
 	{
 		$res = '<table border="1">';
 
-		foreach ($items as $row) {
+		foreach ($this->entries as $row) {
 			$res .= '<tr><td>';
 			$res .= '<h2>'.formatTime($row['pubdate']).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>';
 			$res .= '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>';
@@ -83,6 +122,32 @@ class xspf
 		}
 
 		return $res;
+	}
+
+
+
+//XZXXX använd i output-rss åxå!!! :::
+
+	/**
+	 * Adds a array of entries to the feed list
+	 */
+	function addList($list)
+	{
+		foreach ($list as $entry)
+			$this->entries[] = $entry;
+	}
+
+	/**
+	 * Adds a entry to the feed list
+	 */
+	function addEntry($entry)
+	{
+		$this->entries[] = $entry;
+	}
+
+	function clearList()
+	{
+		//XXX implement
 	}
 }
 
