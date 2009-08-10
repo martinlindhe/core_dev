@@ -32,6 +32,7 @@ class xml_input
 			$u = new url_handler($data);
 			$data = $u->fetch($this->cache_time);
 		}
+		//print_r($data);die;
 
 		$this->name = '';
 		$this->attr = '';
@@ -76,6 +77,17 @@ class xml_input
 
 		if (!empty($attr))
 			$this->data[$keys][] = $attr;
+
+/*
+array_key_exists
+		else if (!empty($attr)) {
+			echo "key: ".$keys."\n";
+			
+			print_r($attr);
+			die('special '.$attr);
+			* */
+		//}
+			
 
 		$this->keys = $keys;
 	}

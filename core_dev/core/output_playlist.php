@@ -18,7 +18,8 @@
  * VLC 1.0.1: works (not with rtmp:// content)
  * Totem 2.27: trouble loading xspf from certain url's: http://bugzilla.gnome.org/show_bug.cgi?id=590722
  * SMPlayer 0.67: dont support xspf playlists: https://sourceforge.net/tracker/index.php?func=detail&aid=1920553&group_id=185512&atid=913576
- *
+ * XBMC dont support xspf playlists: http://xbmc.org/trac/ticket/4763
+ * 
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
@@ -27,12 +28,11 @@ require_once('functions_defaults.php'); //for formatTime()
 
 class output_playlist extends coredev_output_list
 {
-	var $format = 'xspf';
 	var $entries = array();
 
-	function render()
+	function render($format = 'xspf')
 	{
-		switch ($this->format) {
+		switch ($format) {
 		case 'xspf':
 			return $this->renderXSPF();
 
@@ -48,19 +48,19 @@ class output_playlist extends coredev_output_list
 	/**
 	 * Sets mimetype and outputs the playlist
 	 */
-	function output()
+	function output($format = 'xspf')
 	{
-		switch ($this->format) {
+		switch ($format) {
 		case 'xspf':
 			header('Content-type: application/xspf+xml');
 			break;
 
 		case 'm3u':
-			header('Content-type: audio/x-mpegurl'); //XXX some places list "audio/mpegurl"
+			header('Content-type: audio/x-mpegurl');
 			break;
 		}
 
-		echo $this->render();
+		echo $this->render($format);
 	}
 
 	function renderXSPF()

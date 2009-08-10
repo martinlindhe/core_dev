@@ -4,6 +4,11 @@
  *
  * Conversion functions for different units of length
  *
+ * Most countries uses the metric system except UK and the US.
+ *
+ * http://en.wikipedia.org/wiki/Metrication_in_the_United_Kingdom
+ * http://en.wikipedia.org/wiki/Metrication_in_the_United_States
+ *
  * References
  * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Length
@@ -60,9 +65,9 @@ class length
 		'inch'       => 'in',
 		'feet'       => 'ft',
 		'yard'       => 'yd',
-		'usmile'     => 'usmile',
 		'ukmile'     => 'ukmile',
-		'mile'       => 'usmile', //XXX US or UK?
+		'usmile'     => 'usmile',
+		'mile'       => 'usmile',
 		'astronomical'=>'au',
 		);
 
