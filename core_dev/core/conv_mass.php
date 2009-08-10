@@ -16,10 +16,11 @@ class mass
 	var $precision = 0; ///< if set, specifies rounding precision
 
 	var $scale = array( ///< unit scale to Gram
-	'g'  => 1,        //Gram
-	'kg' => 1000,     //Kilogram
-	't'  => 1000000,  //Tonne
-	'lb' => 453.59237 //Pound
+	'g'  => 1,           //Gram
+	'kg' => 1000,        //Kilogram
+	't'  => 1000000,     //Tonne
+	'lb' => 453.59237,   //Pound
+	'oz' => 28.349523125 //Ounce (/16 lb)
 	);
 
 	function conv($from, $to, $val)
@@ -46,6 +47,7 @@ class mass
 		'kilo'     => 'kg',
 		'tonne'    => 't',
 		'pound'    => 'lb',
+		'ounce'    => 'oz'
 		);
 
 		if (!empty($lookup[$name])) return $lookup[$name];
