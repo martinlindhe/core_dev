@@ -11,10 +11,14 @@ function rssCallback($data)
 }
 
 $url = 'http://tvrss.net/search/index.php?show_name=24&show_name_exact=true&mode=rss';
+$url = 'http://media.svt.se/download/mcc/vision/kluster/20090814/1131902-RAPPORT1200-PLAY-NY5.asx';
 
-$rss = new input_feed();
-$res = $rss->parseRSS($url, 'rssCallback');
 
-//print_r($res);
+$feed = new input_feed();
+//$res = $feed->parseRSS($url, 'rssCallback');
+
+$res = $feed->parseASX($url, 'rssCallback');
+
+print_r($res);
 
 ?>

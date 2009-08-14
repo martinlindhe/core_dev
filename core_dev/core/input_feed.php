@@ -2,14 +2,15 @@
 /**
  * $Id$
  *
- * Simple RSS feed parser
+ * Simple RSS and ASX feed/playlist parser
+ * 
+ * http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
  *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 //TODO: use input_xml for parsing
 //TODO: parse atom feeds
-//TODO: parse asx feeds
 
 //TODO: extend callback to allow mapping of special fields to standard ones, such as "<svtplay:xmllink svtplay:type="titles">http://xml.svtplay.se/v1/titles/102897</svtplay:xmllink>" to "guid"
 
@@ -57,19 +58,20 @@ class input_feed
 			if ($this->callback) call_user_func($this->callback, $row);
 			$this->entries[] = $row;
 
+			$this->attrs = '';
+			$this->inside_item = false;
+
 			$this->link = '';
 			$this->title = '';
 			$this->desc = '';
 			$this->pubDate = '';
 			$this->guid = '';
 			$this->guid2 = ''; //XXX rmeove hack!
-			$this->attrs = '';
 			$this->video_url  = '';
 			$this->video_type = '';
 			$this->duration   = 0;
 			$this->image_url  = '';
 			$this->image_type = '';
-			$this->inside_item = false;
 		}
 	}
 
@@ -160,16 +162,91 @@ class input_feed
 		if (function_exists($callback)) $this->callback = $callback;
 
 		if (!xml_parse($parser, $data, true)) {
-			echo "input_rss XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
+			echo "parseRSS XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
 		}
 		xml_parser_free($parser);
 
-		if ($this->sort) uasort($this->entries, 'rss_sort_desc');
+		if ($this->sort) uasort($this->entries, 'feed_sort_desc');
+		return $this->entries;
+	}
+	
+
+
+	function ASXstartElement($parser, $name, $attrs = '')
+	{
+		$this->current_tag = $name;
+		$this->attrs = $attrs;
+
+		if ($this->current_tag == 'ENTRY') {
+			$this->inside_item = true;
+		}
+	}
+
+	function ASXendElement($parser, $tagName, $attrs = '')
+	{
+		if ($tagName == 'ENTRY') {
+			$row['link']     = trim($this->link);
+			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
+
+			if ($this->callback) call_user_func($this->callback, $row);
+			$this->entries[] = $row;
+
+			$this->attrs = '';
+			$this->inside_item = false;
+
+			$this->link = '';
+			$this->title = '';
+		}
+	}
+
+	function ASXcharacterData($parser, $data)
+	{
+		if (!$this->inside_item) return;
+		switch ($this->current_tag) {
+		case 'REF':
+			$this->link .= $this->attrs['HREF'];
+			break;
+
+		case 'TITLE':
+			$this->title .= $data;
+			break;
+
+		case 'AUTHOR'://XXX save
+			break;
+			
+		case 'COPYRIGHT': //XXX save
+			break;
+		}
+
+	}
+
+	function parseASX($data, $callback = '')
+	{
+		if (is_url($data)) {
+			$u = new url_handler($data);
+			$data = $u->fetch();
+		}
+
+		$this->entries = array();
+
+		$parser = xml_parser_create();
+		xml_set_object($parser, $this);
+		xml_set_element_handler($parser, 'ASXstartElement', 'ASXendElement');
+		xml_set_character_data_handler($parser, 'ASXcharacterData');
+
+		if (function_exists($callback)) $this->callback = $callback;
+
+		if (!xml_parse($parser, $data, true)) {
+			echo "parseASX XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
+		}
+		xml_parser_free($parser);
+
+		if ($this->sort) uasort($this->entries, 'feed_sort_desc');
 		return $this->entries;
 	}
 }
 
-function rss_sort_desc($a, $b)
+function feed_sort_desc($a, $b)
 {
     return ($a['pubdate'] > $b['pubdate']) ? -1 : 1;
 }
