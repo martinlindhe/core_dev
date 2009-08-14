@@ -18,9 +18,7 @@ $res = $rss->parse($url);
 setlocale(LC_TIME, 'sv_SE.UTF8');
 
 $pl = new output_playlist();
-//$pl->format = 'xspf';
-$pl->format = 'm3u';
 $pl->addList($res);
-echo $pl->output();
+echo $pl->output('pls');
 
 ?>

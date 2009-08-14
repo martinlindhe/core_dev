@@ -2,13 +2,15 @@
 /**
  * $Id$
  *
- * Generates a XSPF or M3U playlist
+ * Generates a XSPF, PLS or M3U playlist
  *
  * References
  * ----------
  * http://validator.xspf.org/
  * http://en.wikipedia.org/wiki/Xspf
  * http://en.wikipedia.org/wiki/M3u
+ * http://en.wikipedia.org/wiki/PLS_(file_format)
+ *
  * http://schworak.com/programming/music/playlist_m3u.asp
  * http://gonze.com/playlists/playlist-format-survey.html
  *
@@ -19,7 +21,7 @@
  * Totem 2.27: trouble loading xspf from certain url's: http://bugzilla.gnome.org/show_bug.cgi?id=590722
  * SMPlayer 0.67: dont support xspf playlists: https://sourceforge.net/tracker/index.php?func=detail&aid=1920553&group_id=185512&atid=913576
  * XBMC dont support xspf playlists: http://xbmc.org/trac/ticket/4763
- * 
+ *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
@@ -39,6 +41,9 @@ class output_playlist extends coredev_output_list
 		case 'm3u':
 			return $this->renderM3U();
 
+		case 'pls':
+			return $this->renderPLS();
+
 		case 'html':
 			return $this->renderHTML();
 		}
@@ -57,6 +62,10 @@ class output_playlist extends coredev_output_list
 
 		case 'm3u':
 			header('Content-type: audio/x-mpegurl');
+			break;
+
+		case 'pls':
+			header('Content-type: audio/x-scpls');
 			break;
 		}
 
@@ -107,6 +116,24 @@ class output_playlist extends coredev_output_list
 			$res .= $row['video']."\n";
 		}
 
+		return $res;
+	}
+
+	function renderPLS()
+	{
+		$res =
+		"[playlist]\n".
+		"NumberOfEntries=".count($this->entries)."\n".
+		"\n";
+
+		$i = 0;
+		foreach ($this->entries as $row) {
+			$i++;
+			$res .= "File".$i."=".$row['video']."\n";
+			$res .= "Title".$i."=".$row['title']."\n";
+			$res .= "Length".$i."=".(!empty($row['duration']) ? $row['duration'] : '-1')."\n\n";
+		}
+		$res .= "Version=2\n";
 		return $res;
 	}
 
