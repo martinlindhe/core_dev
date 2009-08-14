@@ -16,7 +16,10 @@ class cache
 
 	function __construct($server = '127.0.0.1', $port = 11211)
 	{
-		if (!class_exists('Memcache')) return false;
+		if (!class_exists('Memcache')) {
+			echo "ERROR: php5-memcache missing\n";
+			return false;
+		}
 
 		$this->handle = new Memcache;
 		$this->handle->connect($server, $port);

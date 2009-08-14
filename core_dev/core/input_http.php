@@ -20,7 +20,7 @@ class url_handler
 {
 	var $scheme, $host, $port, $path, $param;
 	var $cache;
-	var $cache_time;
+	var $cache_time = 300; //5min
 	var $debug = false;
 
 	function __construct($url = '')
@@ -28,7 +28,6 @@ class url_handler
 		if ($url) $this->parse($url);
 
 		$this->cache = new cache();
-		$this->cache_time = 60*5;
 	}
 
 	function parse($url)
