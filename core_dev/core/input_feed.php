@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Simple RSS, ATOM and ASX feed/playlist parser
+ * Simple feed (RSS, ATOM) and playlist (ASX, M3U) reader
  * 
  * RSS: http://en.wikipedia.org/wiki/Rss
  * ATOM: http://en.wikipedia.org/wiki/Atom_(standard)
@@ -48,6 +48,7 @@ class input_feed
 			$row['link']     = trim($this->link);
 			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
 			$row['desc']     = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
+			if ($row['title'] == $row['desc']) $row['desc'] = '';
 			$row['pubdate']  = strtotime(trim($this->pubDate));
 			$row['guid']     = trim($this->guid);
 			$row['guid2']    = trim($this->guid2); //XXX remove hack!
@@ -224,6 +225,7 @@ class input_feed
 			$row['link']     = trim($this->link);
 			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
 			$row['desc']     = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
+			if ($row['title'] == $row['desc']) $row['desc'] = '';
 			$row['pubdate']  = strtotime(trim($this->pubDate));
 			$row['guid']     = trim($this->guid);
 			//$row['guid2']    = trim($this->guid2); //XXX remove hack!
@@ -345,7 +347,22 @@ class input_feed
 		case 'COPYRIGHT': //XXX save
 			break;
 		}
+	}
+	
+	function parse($data, $callback = '')
+	{
+		if (strpos($data, '<rss ') !== false) {
+			return $this->parseRSS($data, $callback);
+		} else if (strpos($data, '<feed ') !== false) {
+			return $this->parseATOM($data, $callback);
+		} else if (strpos($data, '<asx ') !== false) {
+			return $this->parseASX($data, $callback);
+		} else if (strpos($data, '#EXTM3U') !== false) {
+			return $this->parseM3U($data, $callback);
+		}
 
+		echo "ERROR: unhandled feed: ".substr($data, 0, 200)." ...\n";
+		die;
 	}
 	
 	function fetch($url, $callback = '')
@@ -354,20 +371,9 @@ class input_feed
 
 		$u = new url_handler($url);
 		$data = $u->get();
-
-		if (strpos($data, '<rss ') !== false) {
-			return $this->parseRSS($data, $callback);
-		} else if (strpos($data, '<asx ') !== false) {
-			return $this->parseASX($data, $callback);
-		} else if (strpos($data, '<feed ') !== false) {
-			return $this->parseATOM($data, $callback);
-		}
-
-		echo "ERROR: unhandled feed: ".substr($data, 0, 200)." ...\n";
-		die;
-	
+		
+		return $this->parse($data, $callback);
 	}
-	
 
 	function parseASX($data, $callback = '')
 	{
@@ -386,6 +392,34 @@ class input_feed
 		xml_parser_free($parser);
 
 		if ($this->sort) uasort($this->entries, 'feed_sort_desc');
+		return $this->entries;
+	}
+
+	function parseM3U($data, $callback = '')
+	{
+		$this->entries = array();
+
+		//if (function_exists($callback)) $this->callback = $callback;
+
+		$rows = explode("\n", $data);
+		foreach ($rows as $row) {
+			$p = explode(':', $row, 2);
+			switch ($p[0]) {
+			case '#EXTM3U': case '': break;
+			case '#EXTINF':
+				$x = explode(',', $p[1], 2);
+				$ent['length'] = ($x[0] != '-1' ? $x[0] : '');
+				$ent['title']  = $x[1];
+				break;
+
+			default:
+				$ent['link'] = $row;
+				$this->entries[] = $ent;
+				unset($ent);
+				break;
+			}
+		}
+
 		return $this->entries;
 	}
 }

@@ -47,6 +47,8 @@ class output_playlist extends coredev_output_list
 		case 'html':
 			return $this->renderHTML();
 		}
+		
+		echo "output_playlist: unknown format ".$format."\n";
 		return false;
 	}
 
@@ -112,7 +114,7 @@ class output_playlist extends coredev_output_list
 	{
 		$res = "#EXTM3U\n";
 		foreach ($this->entries as $row) {
-			$res .= "#EXTINF:".(!empty($row['duration']) ? $row['duration'] : '-1').",".$row['title']."\n";
+			$res .= "#EXTINF:".(!empty($row['duration']) ? round($row['duration'], 0) : '-1').",".$row['title']."\n";
 			$res .= $row['video']."\n";
 		}
 

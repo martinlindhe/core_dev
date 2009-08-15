@@ -26,10 +26,9 @@ class url_handler
 
 	function __construct($url = '')
 	{
-		echo phpversion('curl');
-		if (!function_exists('curl_exec')) {
+		if (!function_exists('curl_init')) {
 			echo "ERROR: php5-curl missing\n";
-			//return false;
+			return false;
 		}
 
 		if ($url) $this->parse($url);
