@@ -209,6 +209,12 @@ class input_feed
 					break;
 				}
 				break;
+			case 'replies':
+				//FIXME: handle
+				break;
+			case 'edit': //XXX ???
+			case 'self': //XXX ???
+				break;
 			default:
 				echo "unknown link type: ".$this->attrs['REL']."\n";
 				die;

@@ -12,8 +12,8 @@ function rssCallback($data)
 
 $url = 'http://ezrss.it/search/index.php?show_name=24&show_name_exact=true&mode=rss'; //text/xml
 
-$url = 'http://martin-lindhes.blogspot.com/feeds/posts/default'; //atom
-$url = 'http://martin-lindhes.blogspot.com/feeds/posts/default?alt=rss';
+//$url = 'http://martin-lindhes.blogspot.com/feeds/posts/default'; //atom
+//$url = 'http://martin-lindhes.blogspot.com/feeds/posts/default?alt=rss';
 
 $url = 'https://styggve.dyndns.org:61001/xspf/playrapport.php?format=atom';
 

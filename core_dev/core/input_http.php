@@ -150,13 +150,20 @@ function http_get($url, $head_only = false, $cache_time = 60)
 	$cache = new cache();
 	$key_head = 'url_head//'.htmlspecialchars($url);
 	$key_body = 'url//'.htmlspecialchars($url);
-		
+
+	$u = parse_url($url);
+
 	$ch = curl_init($url);
 	if (!$ch) {
 		echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")\n";
 		return false;
 	}
-	
+
+	if ($u['scheme'] == 'https') {
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	}
+
 	curl_setopt($ch, CURLOPT_USERAGENT, $config['http']['user_agent']);
 	
 	if ($head_only) {
@@ -172,11 +179,6 @@ function http_get($url, $head_only = false, $cache_time = 60)
 	curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_NOBODY, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-
-	if ($u['scheme'] == 'https') {
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	}
 
 	$result = curl_exec($ch);
 	curl_close($ch);
