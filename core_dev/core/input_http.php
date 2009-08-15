@@ -9,8 +9,6 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-$config['http']['user_agent'] = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
-
 require_once('class.Cache.php');
 
 /**
@@ -19,7 +17,11 @@ require_once('class.Cache.php');
 class url_handler
 {
 	var $scheme, $host, $port, $path, $param;
-	var $headers;
+	var $username, $password; ///< for HTTP AUTH
+	
+	var $user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
+	
+	var $headers, $body;
 	var $cache;
 	var $cache_time = 300; //5min
 	var $debug = false;
@@ -74,18 +76,88 @@ class url_handler
 			if ($name == $n)
 				unset($this->param[$n]);
 	}
+	
+	function post($post_params)
+	{
+		return $this->get(false, $post_params);
+	}
 
 	/**
 	 * Fetches the data of the web resource
+	 * uses HTTP AUTH if username is set
 	 */
-	function get($cache_time = false)
+	function get($head_only = false, $post_params = array())
 	{
 		$url = $this->compact();
+		if (!is_url($url)) {
+			echo $url." is not a valid URL\n";
+			return false;
+		}
 
-		$data = http_get($url, false, $cache_time);
-		$this->headers = http_head($url, $cache_time);
+		$ch = curl_init($url);
+		if (!$ch) {
+			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")\n";
+			return false;
+		}
 
-		return $data;
+		$u = parse_url($url);
+		if ($u['scheme'] == 'https') {
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		}
+
+		if ($this->username) {
+			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
+		}
+
+		if (!$this->username && empty($post_params)) {
+			$cache = new cache();
+			$key_head = 'url_head//'.htmlspecialchars($url);
+			$key_body = 'url//'.htmlspecialchars($url);
+
+			if ($head_only) {
+				$headers = $cache->get($key_head);
+				if ($headers)
+					return unserialize($headers);
+			} else {
+				$body = $cache->get($key_body);
+				if ($body)
+					return $body;
+			}
+		}
+
+		curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		curl_setopt($ch, CURLOPT_NOBODY, 0);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+		if (!empty($post_params)) {
+			$var = htmlspecialchars(http_build_query($post_params));
+
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
+		}
+
+		$res = curl_exec($ch);
+		curl_close($ch);
+
+		$pos  = strpos($res, "\r\n\r\n");
+		$head = substr($res, 0, $pos);
+		$this->body    = substr($res, $pos + strlen("\r\n\r\n"));
+		$this->headers = explode("\r\n", $head);
+
+		if (!$this->username && empty($post_params)) {
+			$cache->set($key_head, serialize($this->headers), $this->cache_time);
+			$cache->set($key_body, $this->body, $this->cache_time);
+		}
+
+		if ($head_only)
+			return $this->headers;
+
+		return $this->body;
 	}
 
 	/**
@@ -139,62 +211,10 @@ function is_url($url)
  */
 function http_get($url, $head_only = false, $cache_time = 60)
 {
-	global $config;
-
-	if (!is_url($url)) {
-		echo $url." is not a valid URL\n";
-		return false;
-	}
-
-	$cache = new cache();
-	$key_head = 'url_head//'.htmlspecialchars($url);
-	$key_body = 'url//'.htmlspecialchars($url);
-
-	$u = parse_url($url);
-
-	$ch = curl_init($url);
-	if (!$ch) {
-		echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")\n";
-		return false;
-	}
-
-	if ($u['scheme'] == 'https') {
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	}
-
-	curl_setopt($ch, CURLOPT_USERAGENT, $config['http']['user_agent']);
-	
-	if ($head_only) {
-		$headers = $cache->get($key_head);
-		if ($headers)
-			return unserialize($headers);
-	} else {
-		$body = $cache->get($key_body);
-		if ($body)
-			return $body;
-	}
-
-	curl_setopt($ch, CURLOPT_HEADER, 1);
-	curl_setopt($ch, CURLOPT_NOBODY, 0);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-
-	$result = curl_exec($ch);
-	curl_close($ch);
-
-	//Cut off header
-	$pos = strpos($result, "\r\n\r\n");
-	$result_header = substr($result, 0, $pos);
-	$result_body   = substr($result, $pos + strlen("\r\n\r\n"));
-
-	$headers = explode("\r\n", $result_header);
-	$cache->set($key_head, serialize($headers), $cache_time);
-	$cache->set($key_body, $result_body, $cache_time);
-
-	if ($head_only)
-		return $headers;
-
-	return $result_body;
+	echo "DEPRECTATED http_get. use url_handler instead\n";
+	$h = new url_handler($url);
+	$h->cache_time = $cache_time;
+	return $h->get($head_only);
 }
 
 /**
