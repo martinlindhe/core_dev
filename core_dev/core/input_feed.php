@@ -193,13 +193,13 @@ class input_feed
 			case 'enclosure':
 				switch ($this->attrs['TYPE']) {
 				case 'video/x-flv':
-					$this->video_url  = $this->attrs['URL'];
+					$this->video_url  = $this->attrs['HREF'];
 					$this->video_type = $this->attrs['TYPE'];
 					$this->duration   = $this->attrs['LENGTH'];
 					break;
 
 				case 'image/jpeg':
-					$this->image_url  = $this->attrs['URL'];
+					$this->image_url  = $this->attrs['HREF'];
 					$this->image_type = $this->attrs['TYPE'];
 					break;
 

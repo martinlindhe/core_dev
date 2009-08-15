@@ -135,7 +135,7 @@ function is_url($url)
 
 /**
  * HTTP/HTTPS GET function, using curl
- * works like "file_get_contents()"
+ * 
  * @param $head if true, return HTTP HEADer, else the BODY
  */
 function http_get($url, $head_only = false, $cache_time = 60)
@@ -151,25 +151,6 @@ function http_get($url, $head_only = false, $cache_time = 60)
 	$key_head = 'url_head//'.htmlspecialchars($url);
 	$key_body = 'url//'.htmlspecialchars($url);
 		
-	$u = parse_url($url);
-
-	switch ($u['scheme']) {
-	case 'http':
-		$default_port = 80;
-		break;
-
-	case 'https':
-		$default_port = 443;
-		break;
-
-	default:
-		echo "http_head() unsupported url scheme: ".$u['scheme']."\n";
-		return;
-	}
-
-	if (empty($u['port'])) $u['port'] = $default_port;
-
-			
 	$ch = curl_init($url);
 	if (!$ch) {
 		echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")\n";
