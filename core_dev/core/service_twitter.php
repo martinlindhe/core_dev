@@ -76,8 +76,6 @@ class twitter
 		if ($data != '<ok>true</ok>') return false;
 		return true;
 	}
-
 }
-
 
 ?>

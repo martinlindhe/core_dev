@@ -44,6 +44,7 @@ class output_playlist extends coredev_output_list
 		case 'pls':
 			return $this->renderPLS();
 
+		case 'xhtml':
 		case 'html':
 			return $this->renderHTML();
 		}

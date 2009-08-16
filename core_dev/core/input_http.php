@@ -19,10 +19,9 @@ class url_handler
 	var $scheme, $host, $port, $path, $param;
 	var $username, $password; ///< for HTTP AUTH
 	
-	var $user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; sv-SE; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13';
+	var $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
 	
 	var $headers, $body;
-	var $cache;
 	var $cache_time = 300; //5min
 	var $debug = false;
 
@@ -34,8 +33,6 @@ class url_handler
 		}
 
 		if ($url) $this->parse($url);
-
-		$this->cache = new cache();
 	}
 
 	function parse($url)
@@ -44,6 +41,7 @@ class url_handler
 		switch ($parsed['scheme']) {
 		case 'http':
 		case 'https':
+		case 'rtsp':
 		case 'rtmp':
 			break;
 		default:
@@ -113,6 +111,7 @@ class url_handler
 
 		if (!$this->username && empty($post_params)) {
 			$cache = new cache();
+			//$cache->debug = true;
 			$key_head = 'url_head//'.htmlspecialchars($url);
 			$key_body = 'url//'.htmlspecialchars($url);
 
@@ -129,7 +128,7 @@ class url_handler
 
 		curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
 		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_NOBODY, 0);
+		curl_setopt($ch, CURLOPT_NOBODY, $head_only ? 1 : 0);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -144,20 +143,30 @@ class url_handler
 		$res = curl_exec($ch);
 		curl_close($ch);
 
-		$pos  = strpos($res, "\r\n\r\n");
-		$head = substr($res, 0, $pos);
-		$this->body    = substr($res, $pos + strlen("\r\n\r\n"));
-		$this->headers = explode("\r\n", $head);
+		if (!$head_only) {
+			$pos  = strpos($res, "\r\n\r\n");
+			$head = substr($res, 0, $pos);
+			$this->body    = substr($res, $pos + strlen("\r\n\r\n"));
+			$this->headers = explode("\r\n", $head);
+		} else {
+			$this->body = '';
+			$this->headers = explode("\r\n", $res);
+		}
 
 		if (!$this->username && empty($post_params)) {
 			$cache->set($key_head, serialize($this->headers), $this->cache_time);
-			$cache->set($key_body, $this->body, $this->cache_time);
+			if (!$head_only) $cache->set($key_body, $this->body, $this->cache_time);
 		}
 
 		if ($head_only)
 			return $this->headers;
 
 		return $this->body;
+	}
+	
+	function head()
+	{
+		return $this->get(true);
 	}
 
 	/**
@@ -209,12 +218,11 @@ function is_url($url)
  * 
  * @param $head if true, return HTTP HEADer, else the BODY
  */
-function http_get($url, $head_only = false, $cache_time = 60)
+function http_get($url, $cache_time = 60)
 {
-	echo "DEPRECTATED http_get. use url_handler instead\n";
 	$h = new url_handler($url);
 	$h->cache_time = $cache_time;
-	return $h->get($head_only);
+	return $h->get();
 }
 
 /**
@@ -226,7 +234,9 @@ function http_get($url, $head_only = false, $cache_time = 60)
  */
 function http_head($url, $cache_time = 60)
 {
-	return http_get($url, true, $cache_time);
+	$h = new url_handler($url);
+	$h->cache_time = $cache_time;
+	return $h->head();
 }
 
 /**

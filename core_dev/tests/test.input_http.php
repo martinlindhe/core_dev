@@ -2,8 +2,13 @@
 require_once('/var/www/core_dev/core/core.php');
 require_once('/var/www/core_dev/core/input_http.php');
 
-$url = 'http://mtgnewmedia.se:81/xml/xmltoplayer.php?type=siteMapData&channel=2se&country=se';
+$url = 'https://styggve.dyndns.org:61001/xspf/';
 $u = new url_handler($url);
+
+echo 'mime type: '.http_content_type( $u->head() ). "\n";
+die;
+
+
 echo 'in : '.$url."\n";
 $u->add('category', 0);
 $u->remove('type');
