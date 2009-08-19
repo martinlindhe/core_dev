@@ -68,11 +68,10 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 			++$diffs[$interval];
 		}
 	}
-
 	$stack = array();
 	foreach ($diffs as $interval => $num) {
 		$name = $interval . ($num != 1 ? 's' : '');
-		$stack[] = array($num, t($name));
+		$stack[] = array($num, $name);
 	}
 
 	$ret = array();
