@@ -43,6 +43,7 @@ class db_mysqli extends db_base
 			die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
 		}
 
+		$this->connected = true;
 		$this->driver = 'mysqli';
 		$this->dialect = 'mysql';
 		$this->server_version = $this->db_handle->server_info;
@@ -70,7 +71,14 @@ class db_mysqli extends db_base
 	 */
 	function escape($q)
 	{
+		if (!$this->connected) $this->connect(); //XXX: need connection to use the escape function
 		return $this->db_handle->real_escape_string($q);
+	}
+
+	function real_query($q)
+	{
+		if (!$this->connected) $this->connect();
+		return $this->db_handle->query($q);
 	}
 
 	/**
@@ -83,11 +91,11 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		$result = $this->db_handle->query($q);
+		$result = $this->real_query($q);
 
 		if (!$result) {
 			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-			else die;	//if debug is turned off (production) and a query fail, just die silently
+			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($this->debug) $this->profileQuery($time_started, $q);
@@ -105,7 +113,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		$result = $this->db_handle->query($q);
+		$result = $this->real_query($q);
 
 		$ret_id = 0;
 
@@ -113,7 +121,7 @@ class db_mysqli extends db_base
 			$ret_id = $this->db_handle->insert_id;
 		} else {
 			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-			else die; //if debug is turned off (production) and a query fail, just die silently
+			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($this->debug) $this->profileQuery($time_started, $q);
@@ -131,7 +139,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		$result = $this->db_handle->query($q);
+		$result = $this->real_query($q);
 
 		$affected_rows = false;
 
@@ -139,7 +147,7 @@ class db_mysqli extends db_base
 			$affected_rows = $this->db_handle->affected_rows;
 		} else {
 			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-			else die; //if debug is turned off (production) and a query fail, just die silently
+			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		if ($this->debug) $this->profileQuery($time_started, $q);
@@ -157,7 +165,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($q)) {
+		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
@@ -185,7 +193,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($q)) {
+		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
@@ -213,7 +221,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($q)) {
+		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
@@ -241,7 +249,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($q)) {
+		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
 			return array();
 		}
@@ -270,7 +278,7 @@ class db_mysqli extends db_base
 	{
 		if ($this->debug) $time_started = microtime(true);
 
-		if (!$result = $this->db_handle->query($q)) {
+		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
 			return '';
 		}

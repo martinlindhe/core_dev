@@ -10,6 +10,7 @@
  */
 
 //TODO Make a test script to verify each of the database classes returns data as expected
+//TODO: only mysqli driver uses $this->connected, fix the rest!
 
 abstract class db_base
 {
@@ -20,6 +21,7 @@ abstract class db_base
 	protected $password = '';			///<Password to use to connect to the database
 	protected $database = '';			///<Name of the database to connect to
 	protected $charset = 'utf8';		///<Default charset to use. utf8 should be used always
+	protected $connected = false;		///<Are we connected to the db?
 
 	//db variables
 	public $db_handle = false;			///<Internal db handle
@@ -183,8 +185,6 @@ abstract class db_base
 		if (!empty($conf['charset'])) $this->charset = $conf['charset'];
 
 		if (!empty($config['debug'])) $this->debug = true;
-
-		$this->connect();
 	}
 
 	/**
