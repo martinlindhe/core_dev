@@ -58,9 +58,9 @@ class xhtml_form
 	/**
 	 * Adds a input field to the form
 	 */
-	function input($name, $str, $val = '')
+	function input($name, $str, $val = '', $size = 0)
 	{
-		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $val);
+		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $val, 'size' => $size);
 	}
 
 	/**
@@ -138,8 +138,12 @@ class xhtml_form
 				break;
 
 			case 'INPUT':
-				echo '<td>'.$e['str'].':</td>';
-				echo '<td>'.xhtmlInput($e['name'], $e['default']).'</td>';
+				if ($e['str']) {
+					echo '<td>'.$e['str'].':</td>';
+					echo '<td>'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
+				} else {
+					echo '<td colspan="2">'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
+				}
 				break;
 
 			case 'TEXTAREA':

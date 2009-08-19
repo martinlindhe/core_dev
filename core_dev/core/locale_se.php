@@ -106,6 +106,7 @@ function t_se($s)
 		case 'Referer': return 'Referens';
 		case 'Display': return 'Visa';
 		case 'Anonymous': return 'Anonym';
+		case 'Ask': return 'Fråga';
 
 		//Times
 		case 'Yesterday': return 'Igår';
