@@ -1,0 +1,72 @@
+img {
+	border: 0;
+}
+
+.event_log_notice {
+	color: #000;
+	background-color: #aaeeaa;
+	padding: 4px;
+}
+.event_log_warning {
+	color: #000;
+	background-color: #eeaaaa;
+	padding: 4px;
+}
+.event_log_error {
+	color: #000;
+	background-color: #ee5555;
+	padding: 4px;
+}
+
+.ulli_menu {
+	list-style: none;
+	margin: 0;
+	border-top: 0;
+	padding-left: 0;
+}
+.ulli_menu li {
+	background-color: #d0d0d0;
+	border: 1px solid #888;
+}
+.ulli_menu li:hover {
+	border: 1px solid #000;
+}
+.ulli_menu a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+	padding: 4px 6px;
+}
+.ulli_menu a:hover {
+	background-color: #FFFFFF;
+}
+.ulli_menu ul {
+	list-style: none;
+}
+.ulli_menu_current {
+	background-color: #eee !important;
+}
+
+.clr {
+	clear: both;
+}
+
+.bld {
+	font-weight: bold;
+}
+
+
+.gb_row_even {
+	background-color: #ccc;
+}
+
+.gb_row_odd {
+	background-color: #bbb;
+}
+
+
+/*for star.js ajax rating*/
+#star ul.star { LIST-STYLE: none; MARGIN: 0; PADDING: 0; WIDTH: 85px; HEIGHT: 20px; TOP: -5px; POSITION: relative; FLOAT: left; BACKGROUND: url('../gfx/rate_stars.gif') repeat-x; CURSOR: pointer; }
+#star li { PADDING: 0; MARGIN: 0; FLOAT: left; DISPLAY: block; WIDTH: 85px; HEIGHT: 20px; TEXT-DECORATION: none; text-indent: -9000px; Z-INDEX: 20; POSITION: absolute; PADDING: 0; }
+#star li.curr { BACKGROUND: url('../gfx/rate_stars.gif') left 25px; FONT-SIZE: 1px; }
+#star div.user { LEFT: 5px; POSITION: relative; FLOAT: left; COLOR: #888; }

@@ -1,0 +1,123 @@
+==== Database layer ====
+		- Transparent interface to different SQL databases (currently supports php_mysql, php_mysqli and php_pgsql).
+			Reduce time rewriting already working code for another db driver if you use this well defined class.
+
+		- SQL profiler: Built into the core of the db classes is a accurate profiler that displays
+			which queries failed, or how much time each query took to execute.
+
+
+==== Session handler ====
+		- Deals with all things related to users & sessions.
+
+		- Handles session login, logout, user registration, password reminder.
+
+		- Handles user levels & access restrictions based on userlevels.
+
+		- Can store variables associated with each user for a variety of uses.
+
+		- Editor to modify/delete user settings, using AJAX
+
+
+==== Wiki engine ====
+		- Allows for both open wikis where everyone can edit them, and locked ones only editable by admins.
+
+		- You can easily attach images and other media to any wiki.
+
+		- Every change gets stored in a revision table.
+
+		- Makes editing text trivial for people without html knowledge.
+
+
+==== File handling ====
+		- There's a generic "file area" component which you can configure to allow anonymous uploads or not.
+
+		- The same component also integrates in other components, such as the wiki.
+
+		- File upload progress is available thru ajax + php_apc.dll extension (optional)
+
+		- Image rotate is available
+
+		- Automatically converts uploaded BMP:s or SVG:s to jpeg or png formats using ImageMagick (optional)
+
+		- Automatic creation of thumbnails of any size.
+
+		- Correct aspect ratio scaling.
+
+		- Handling of all popular image formats, such as .bmp, .jpg, .gif and .png.
+
+		- Playing of mp3 audio in embedded flash audio player.
+
+
+==== News module ====
+		- Admins can easily publish news on the site
+
+		- You can easily enter news items in advance and choose when they should be published for general view
+
+		- RSS feeds are automatically created
+
+		- Ability to rate news articles
+
+
+
+==== Blogs ====
+		- Full featured blogging module.
+
+		- Categorized blogs.
+
+		- Blog center, showing latest blogs, most popular etc
+
+		- Attach media to the blogs such as images or video clips.
+
+
+
+==== Personal areas ====
+		- Personal page
+
+		- Friend lists
+
+		- Personal file area
+
+		- Guest book
+
+
+==== Blocking users ====
+		- Users can be blacklisted by IP-address
+
+
+==== Moderation ====
+		- Several types of moderation functionality exists, such as
+			automatic moderation of text containing sensitive words.
+
+		- Users can report blogs, forum posts, images or other users for moderation to a admin.
+
+		- The admin can list words that is forbidden to exist in usernames.
+
+
+==== Polls ====
+		- Poll module can be self-contained or attached to a news post, blog or your personal page.
+
+		- Multi choice polls and statistics.
+
+==== Ratings ====
+		- You can have ratings enabled on uploaded images, blogs or news posts.
+
+
+==== Subscriptions ====
+		- People can subscribe to forum threads.
+
+
+==== Contacts ====
+		- People can have two kinds of contact lists: friends & blocked users.
+
+		- The users can put their friends in different contact groups.
+
+==== FAQ module ====
+		- There exists a dynamic FAQ module
+
+
+==== Forum ====
+		- A full forum module exists with all common forum features.
+
+
+==== Messaging ====
+		- The ability to send private messages and/or write in eachothers guestbooks exists.
