@@ -12,6 +12,9 @@
 //TODO Make a test script to verify each of the database classes returns data as expected
 //TODO: only mysqli driver uses $this->connected, fix the rest!
 
+//TODO: use register_shutdown_function('myfunc') to add profiler at end of script if debug=true
+//TODO: move out the profiling stuff from here
+
 abstract class db_base
 {
 	//db settings
@@ -32,7 +35,9 @@ abstract class db_base
 
 	//profiling variables
 	public $debug = false;				///<Debugging enabled?
-	public $connect_time = 0;			///<Used internally for the SQL profiler
+	public $time_initial = 0;			///< profiler: microtime for db instance
+	public $time_measure = 0;			///< profiler: time when profiling started
+	public $time_connect = 0;			///< profiler: time it took to connect to db
 	public $time_spent = array();		///<Used internally for the SQL profiler
 	public $queries_cnt = 0;			///<Used internally for the SQL profiler
 	public $queries = array();			///<Used internally for the SQL profiler
@@ -184,7 +189,10 @@ abstract class db_base
 		if (!empty($conf['database'])) $this->database = $conf['database'];
 		if (!empty($conf['charset'])) $this->charset = $conf['charset'];
 
-		if (!empty($config['debug'])) $this->debug = true;
+		if (!empty($config['debug'])) {
+			$this->debug = true;
+			$this->time_initial = microtime(true);
+		}
 	}
 
 	/**
@@ -240,31 +248,36 @@ abstract class db_base
 				echo 'Free blocks: '. formatNumber($data['Qcache_free_blocks']).'<br/>';
 				echo 'Lowmem prunes: '. formatNumber($data['Qcache_lowmem_prunes']);
 			} else {
-				echo '<h2>MySQL Qcache is disabled!</h2>';
+				echo '<h2>MySQL query cache is disabled</h2>';
 			}
 		}
 		echo '</div>';
 	}
 
 	/**
-	 * Stores profiling information about connect time to database
-	 *
-	 * @param $time_started is the microtime of when the script execution started
+	 * Saves time for profiling current action (connect, execute query, ...)
 	 */
-	function profileConnect($time_started)
+	function measure_time()
 	{
-		$this->connect_time = microtime(true) - $time_started;
+		if (!$this->debug) return;
+		$this->time_measure = microtime(true);
 	}
 
 	/**
-	 * Stores profiling information about query execution time
-	 *
-	 * @param $time_started is microtime from when the execution of this query begun
-	 * @param $q is the query being profiled
+	 * Calculates the time it took to connect to database
 	 */
-	function profileQuery($time_started, $q)
+	function measure_connect()
 	{
-		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $time_started;
+		$this->time_connect = microtime(true) - $this->time_measure;
+	}
+
+	/**
+	 * Calculates the time it took to execute a query
+	 */
+	function measure_query($q)
+	{
+		if (!$this->debug) return;
+		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $this->time_measure;
 		$this->queries[ $this->queries_cnt ] = $q;
 		$this->queries_cnt++;
 	}
@@ -284,15 +297,11 @@ abstract class db_base
 
 	/**
 	 * Shows SQL query profiling information
-	 *
-	 * @param $pageload_start is the microtime of when the script execution started
 	 */
-	function showProfile($pageload_start = 0)
+	function showProfile()
 	{
 		global $config;
 		if (!$this->debug) return;
-
-		$total_time = microtime(true) - $pageload_start;
 
 		$rand_id = mt_rand(1,5000000);
 
@@ -304,8 +313,7 @@ abstract class db_base
 
 		$sql_time = 0;
 
-		if (count($this->query_error)) $css_display = '';
-		else $css_display = ' display: none;';
+		$css_display = count($this->query_error) ? '' : ' display: none;';
 
 		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
@@ -315,8 +323,8 @@ abstract class db_base
 
 			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
-			$sql_syntax = array('SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER');
-			$encoded_syntax = array('<br/>SET', '<br/>WHERE', '<br/>LEFT', '<br/>GROUP', '<br/>ORDER');
+			$sql_syntax = array('FROM', 'SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER');
+			$encoded_syntax = array('<br/>FROM', '<br/>SET', '<br/>WHERE', '<br/>LEFT', '<br/>GROUP', '<br/>ORDER');
 			$query = str_replace($sql_syntax, $encoded_syntax, $query);
 
 			echo '<table summary=""><tr><td width="40">';
@@ -336,12 +344,10 @@ abstract class db_base
 			echo '<hr/>';
 		}
 
-		if ($pageload_start) {
-			$php_time = $total_time - $this->connect_time - $sql_time;
-			echo 'Total time spent: '.round($total_time, 2).'s '.' (SQL connect: '.round($this->connect_time, 2).'s, SQL queries: '.round($sql_time, 2).'s, PHP: '.round($php_time, 2).'s)<br/>';
-		} else {
-			echo 'Time spent - SQL: '.round($sql_time, 2).'<br/>';
-		}
+		$total_time = microtime(true) - $this->time_initial;
+		$php_time = $total_time - $sql_time - $this->time_connect;
+
+		echo 'Time spent: '.round($total_time, 2).'s '.' (SQL connect: '.round($this->time_connect, 2).'s, SQL queries: '.round($sql_time, 2).'s, PHP: '.round($php_time, 2).'s)<br/>';
 
 		//Show script memory usage
 		echo '<pre>';

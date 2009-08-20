@@ -24,7 +24,7 @@ class db_mysqli extends db_base
 	 */
 	function connect()
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		//MySQL defaults
 		if (!$this->host) $this->host = 'localhost';
@@ -49,7 +49,7 @@ class db_mysqli extends db_base
 		$this->server_version = $this->db_handle->server_info;
 		$this->client_version = $this->db_handle->client_info;
 
-		if ($this->debug) $this->profileConnect($time_started);
+		parent::measure_connect();
 	}
 
 	/**
@@ -89,7 +89,7 @@ class db_mysqli extends db_base
 	 */
 	function query($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		$result = $this->real_query($q);
 
@@ -98,7 +98,7 @@ class db_mysqli extends db_base
 			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $result;
 	}
@@ -111,7 +111,7 @@ class db_mysqli extends db_base
 	 */
 	function insert($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		$result = $this->real_query($q);
 
@@ -124,7 +124,7 @@ class db_mysqli extends db_base
 			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $ret_id;
 	}
@@ -137,7 +137,7 @@ class db_mysqli extends db_base
 	 */
 	function delete($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		$result = $this->real_query($q);
 
@@ -150,7 +150,7 @@ class db_mysqli extends db_base
 			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $affected_rows;
 	}
@@ -163,7 +163,7 @@ class db_mysqli extends db_base
 	 */
 	function getArray($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
@@ -178,7 +178,7 @@ class db_mysqli extends db_base
 
 		$result->free();
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $data;
 	}
@@ -191,7 +191,7 @@ class db_mysqli extends db_base
 	 */
 	function getMappedArray($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
@@ -206,7 +206,7 @@ class db_mysqli extends db_base
 
 		$result->free();
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $data;
 	}
@@ -219,7 +219,7 @@ class db_mysqli extends db_base
 	 */
 	function getNumArray($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
@@ -234,7 +234,7 @@ class db_mysqli extends db_base
 
 		$result->free();
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $data;
 	}
@@ -247,7 +247,7 @@ class db_mysqli extends db_base
 	 */
 	function getOneRow($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
@@ -263,7 +263,7 @@ class db_mysqli extends db_base
 		$data = $result->fetch_array(MYSQLI_ASSOC);
 		$result->free();
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		return $data;
 	}
@@ -276,7 +276,7 @@ class db_mysqli extends db_base
 	 */
 	function getOneItem($q)
 	{
-		if ($this->debug) $time_started = microtime(true);
+		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
 			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
@@ -292,7 +292,7 @@ class db_mysqli extends db_base
 		$data = $result->fetch_row();
 		$result->free();
 
-		if ($this->debug) $this->profileQuery($time_started, $q);
+		parent::measure_query($q);
 
 		if (!$data) return false;
 		return $data[0];
