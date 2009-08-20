@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Collection of utilities to deal with HTTP requests
+ * Collection of utilities to deal with HTTP/HTTPS servers
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
@@ -18,9 +18,9 @@ class url_handler
 {
 	var $scheme, $host, $port, $path, $param;
 	var $username, $password; ///< for HTTP AUTH
-	
+
 	var $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
-	
+
 	var $headers, $body;
 	var $cache_time = 300; //5min
 	var $debug = false;
@@ -74,7 +74,7 @@ class url_handler
 			if ($name == $n)
 				unset($this->param[$n]);
 	}
-	
+
 	function post($post_params)
 	{
 		return $this->get(false, $post_params);
@@ -163,7 +163,7 @@ class url_handler
 
 		return $this->body;
 	}
-	
+
 	function head()
 	{
 		return $this->get(true);
@@ -215,7 +215,7 @@ function is_url($url)
 
 /**
  * HTTP/HTTPS GET function, using curl
- * 
+ *
  * @param $head if true, return HTTP HEADer, else the BODY
  */
 function http_get($url, $cache_time = 60)
@@ -313,7 +313,7 @@ function http_content_type($p)
 		$col = explode(': ', $h);
 		switch (strtolower($col[0])) {
 		case 'content-type':
-			//text/xml;charset=UTF-8 
+			//text/xml;charset=UTF-8
 			$param = explode(';', $col[1]);
 			return $param[0];
 		}

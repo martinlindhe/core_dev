@@ -28,6 +28,7 @@ function showLoginForm()
 	$tab = 'login';	//default tab show login form
 
 	$allow_superadmin_reg = false;
+
 	if (!Users::cnt()) {
 		$allow_superadmin_reg = true;
 		$tab = 'register';

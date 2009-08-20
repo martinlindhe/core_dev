@@ -2,10 +2,16 @@
 /**
  * $Id$
  *
- * Collection of utilities to deal with FTP servers
+ * Collection of utilities to deal with FTP/FTPES servers
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
+
+class ftp_handler
+{
+	//XXX implement. add FTPES support. get ftp directory content, get file, use curl!
+	//XXX: autodetect FTP/FTPES
+}
 
 /**
  * XXX: file_get_contents() do support FTP url's but it is very crappy.
