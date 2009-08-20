@@ -1,0 +1,23 @@
+process server project, based on core_dev project
+
+IMPORTANT: This REQUIRES you to have full access to the server, set up custom php modules & install programs
+
+it is a server accessible over the http protocol capable of remote enqueueing of tasks such as:
+
+	* order server to download a remote file, and optionally extract other content from it (torrent, html embedded video)
+	* uses mencoder for video & audio recoding
+	* uses imagemagick for image recoding
+
+
+
+
+planned features:
+	* ip-based access restriction
+	* soap based api
+
+
+implemented features:
+	* none yet. fixme - update!
+
+
+tightly tied to the dbSample db structure, especially tblProcessQueue

@@ -1,0 +1,35 @@
+﻿todo:
+	- lagra hur ofta ord förekommer vid import av textstycken. räkna+1 för varje gång man ser ett ord
+
+===== Database layout =====
+	tblWords
+		id					(UNIQUE)
+		lang				tblCategories.id
+		word				tblWords.id
+
+	tblWordRelations
+		entryId					UNIQUE
+		relationType 		START I MENING
+										SLUT I MENING
+										KAN FÖREKOMMA ENSAM I MENING (enskilt ord är hela meningen)
+										KAN KOMMA FÖRE X
+										KAN KOMMA EFTER X
+		wordId					tblWords.id
+		otherId					tblWords.id when needed
+
+-----
+2008.05.15:
+	- acronym.php: new file
+	- show_words.php: can now delete words
+	- no longer learns numbers as words
+
+
+2007.12.03:
+	- show_words.php: made it work again
+	- functions_lang.php: doxygenified comments & translated all comments to english
+	- functions_lang.php: learns word relations
+
+
+2006.12.03:
+	- show_words.php skapad
+	- add_text.php skapad, för snabbare import av längre stycken text
