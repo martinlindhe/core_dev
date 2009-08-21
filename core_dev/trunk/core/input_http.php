@@ -32,10 +32,10 @@ class url_handler
 			return false;
 		}
 
-		if ($url) $this->parse($url);
+		if ($url) $this->parse_url($url);
 	}
 
-	function parse($url)
+	function parse_url($url)
 	{
 		$parsed = parse_url($url);
 		switch ($parsed['scheme']) {
