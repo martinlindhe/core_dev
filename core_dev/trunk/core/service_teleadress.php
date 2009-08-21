@@ -116,11 +116,10 @@ class Teleadress
 
 	function showError($res)
 	{
-		if ($res->api_result->error_code) {
-			echo "teleadress ERROR ".$res->api_result->error_code.": ".$res->api_result->error_text."\n";
-			return true;
-		}
-		return false;
+		if (!$res->api_result->error_code) return false;
+
+		echo "teleadress ERROR ".$res->api_result->error_code.": ".$res->api_result->error_text."\n";
+		return true;
 	}
 
 	function firstResult($res, $return_first = true)
@@ -176,22 +175,23 @@ class Teleadress
 
 	function findTelephone($number)
 	{
+		//XXX api dok sid 13 "landskod stöds ej"
+		if (substr($number, 0, 2) == '46') $number = '0'.substr($number, 2);
+
 		$key = 'teleadress//findtelephone//'.$number.'//first';
 
 		$res = $this->cache->get($key);
 		if ($res) {
-			$res = unserialize($res);
-		} else {
-			$params->FindPerson = new TA_findTelephone($this->username, $this->password, 4, $number);
-			$res = $this->client->Find($params);
+			return unserialize($res);
 		}
 
-		$post = false;
-		if (!$this->showError($res)) {
-			$post = $this->firstResult($res);
-		}
+		$params->FindPerson = new TA_findTelephone($this->username, $this->password, 4, $number);
+		$res = $this->client->Find($params);
 
-		$this->cache->set($key, serialize($res), $this->cache_expire);
+		if ($this->showError($res)) return false;
+
+		$post = $this->firstResult($res);
+		$this->cache->set($key, serialize($post), $this->cache_expire);
 		return $post;
 	}
 }
