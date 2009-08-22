@@ -19,8 +19,6 @@
 
 //XXX: rename to "client_ftp.php", it is both input & output...
 
-//XXX verify file get & put properly
-
 class ftp
 {
 	//XXX to support implicit SSL we might need to do a full ftp implementation, or maybe curl can help us?
@@ -99,25 +97,51 @@ class ftp
 		$this->path = $path;
 	}
 
-	function dir($path = '')
+	function dir($remote_path)
 	{
-		if ($path) $this->chdir($path);
+		$list = ftp_rawlist($this->handle, $remote_path);
 
-		$list = ftp_rawlist($this->handle, $this->path);
-		//XXX parse list
-/*
-    [1] => drwxr-xr-x    2 1000     1000         4096 Aug 09 15:54 Documents
-    [2] => drwxr-xr-x    2 1000     1000         4096 Aug 09 15:54 Music
-    [3] => drwxr-xr-x    2 1000     1000         4096 Aug 09 15:54 Pictures
-    [4] => drwxr-xr-x    2 1000     1000         4096 Aug 09 15:54 Public
-    [5] => drwxr-xr-x    2 1000     1000         4096 Aug 09 15:54 Templates
-    [6] => drwxr-xr-x    2 1000     1000         4096 Aug 09 15:54 Videos
-    [7] => drwxr-xr-x    3 1000     1000         4096 Aug 10 17:40 dev
-    [8] => -rw-r--r--    1 1000     1000          357 Aug 08 23:24 examples.desktop
-    [9] => -rwxrwxrwx    1 1000     1000          132 Aug 04 09:52 ipblock.sh
-*/
+		foreach ($list as $row) {
+			$s = preg_split("/[\s]+/", $row, 9);
 
-		return $list;
+			if (strpos($s[7], ':') !== false) //"Aug 09 15:54" => "09 Aug 2009 15:54"
+				$ts = strtotime($s[6].' '.$s[5].' '.date('Y').' '.$s[7]);
+			else //"Aug 09 2007" => "09 Aug 2007"
+				$ts = strtotime($s[6].' '.$s[5].' '.$s[7]);
+
+			$res[] = array(
+			'name'  => $s[8],
+			'dir'   => $s[0]{0} == 'd',
+			'size'  => $s[4],
+			'chmod' => $this->chmodnum($s[0]),
+			'date'  => $ts
+			);
+		}
+
+		return $res;
+	}
+
+	function is_dir($path)
+	{
+		die('FIXME implement');
+		$x = $this->dir($path); //XXX list 1 directory below path. needs path parsing, explode by /
+		print_r($x);
+	}
+
+	function is_file($path)
+	{
+		die('FIXME implement');
+	}
+
+	/**
+	 * Translates FTP file mode code to Unix file mode code
+	 */
+	function chmodnum($chmod)
+	{
+		$trans = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
+		$chmod = substr(strtr($chmod, $trans), 1);
+		$array = str_split($chmod, 3);
+		return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
 	}
 
 	/**
