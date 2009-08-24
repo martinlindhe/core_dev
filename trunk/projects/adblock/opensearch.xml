@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-	<ShortName>Adblock Ruleset Search</ShortName>
-	<Description>Search for adblock rules</Description>
-	<Tags>adblock</Tags>
-	<Url type="text/html" template="http://adblockrules.org/ruleset.php?s={searchTerms}" />
-	<Query role="example" searchTerms="cat" />
-</OpenSearchDescription>
