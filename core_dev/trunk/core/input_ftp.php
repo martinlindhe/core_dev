@@ -19,6 +19,10 @@
 
 //XXX: rename to "client_ftp.php", it is both input & output...
 
+//XXX sftp support, use CURL CURLPROTO_SFTP .... http://phpseclib.sourceforge.net/documentation/net.html#net_sftp
+
+//XXX research scp support
+
 class ftp
 {
 	//XXX to support implicit SSL we might need to do a full ftp implementation, or maybe curl can help us?
