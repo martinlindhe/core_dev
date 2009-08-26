@@ -107,6 +107,9 @@ function t_swe($s)
 		case 'Display': return 'Visa';
 		case 'Anonymous': return 'Anonym';
 		case 'Ask': return 'Fråga';
+		case 'Overview': return 'Översikt';
+		case 'Import': return 'Importera';
+		case 'Export': return 'Exportera';
 
 		//Times
 		case 'Yesterday': return 'Igår';
@@ -223,6 +226,7 @@ function t_swe($s)
 		case 'Username': return 'Användarnamn';
 		case 'Password': return 'Lösenord';
 		case 'Log in': return 'Logga in';
+		case 'Log out': return 'Logga ut';
 		case 'Register': return 'Registrera konto';
 		case 'Again': return 'Upprepa';
 		case 'The account you create now will be the super administrator account.'; return 'Kontot du skapar nu kommer att bli super admin kontot.';
@@ -339,6 +343,7 @@ function t_swe($s)
 		case 'never': return 'aldrig';
 		case 'The wiki': return 'Wikin';
 		case 'does not yet exist': return 'existerar ännu inte';
+		case 'Wiki': return 'Wiki';
 
 		//Change password
 		case 'Current password': return 'Nuvarande lösenord';
@@ -399,6 +404,8 @@ function t_swe($s)
 		case 'Subject': return 'Ämne';
 		case 'Attach a file': return 'Bifoga en fil';
 		case 'Write a motivation': return 'Skriv en motivering';
+		case 'Forum': return 'Forum';
+		case 'Forums': return 'Forum';
 
 		//Subscriptions
 		case 'The user': return 'Användaren';

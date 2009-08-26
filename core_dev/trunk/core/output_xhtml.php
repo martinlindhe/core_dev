@@ -43,7 +43,7 @@ function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu
 			if ($cur == $url) echo '<li class="'.$current_class.'">';
 			else echo '<li>';
 
-			if ($url) echo '<a href="'.($url[0] != '/' ? getProjectPath(3) : '').$url.'">'.$text.'</a>';
+			if ($url) echo '<a href="'.$url.'">'.$text.'</a>';
 			else echo $text;
 			echo '</li>';
 		}

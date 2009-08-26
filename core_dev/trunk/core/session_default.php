@@ -141,18 +141,23 @@ class session_default extends session_base
 	}
 
 	/**
+	 * Redirects the user to a different page
+	 */
+	function redirect($path)
+	{
+		header('Location: '.$path);
+		die;
+	}
+
+	/**
 	 * Redirects user to default start page (logged in)
 	 */
 	function startPage()
 	{
-		global $config;
+		if (!empty($this->referer))
+			$this->redirect($this->referer);
 
-		if (!empty($this->referer)) {
-			header('Location: '.$this->referer);
-		} else {
-			header('Location: '.$config['app']['web_root'].$this->start_page);
-		}
-		die;
+		$this->redirect($this->start_page);
 	}
 
 	/**
@@ -160,9 +165,7 @@ class session_default extends session_base
 	 */
 	function loggedOutStartPage()
 	{
-		global $config;
-		header('Location: '.$config['app']['web_root'].$this->logged_out_start_page);
-		die;
+		$this->redirect($this->logged_out_start_page);
 	}
 
 	/**
@@ -170,9 +173,7 @@ class session_default extends session_base
 	 */
 	function errorPage()
 	{
-		global $config;
-		header('Location: '.$config['app']['web_root'].$this->error_page);
-		die;
+		$this->redirect($this->error_page);
 	}
 
 //XXX below functions fit in a "auth" submodule:
