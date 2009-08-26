@@ -7,8 +7,6 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: deprecate output_xhtml.php createXHTMLHeader()
-
 require_once('output_xhtml.php');
 
 class xhtml_header
@@ -143,8 +141,8 @@ class xhtml_header
 		}
 
 		if (!empty($config['core']['web_root'])) {
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/coredev.js"></script>';
+			//echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
 
 			/*
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';

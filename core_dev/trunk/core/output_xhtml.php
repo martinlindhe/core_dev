@@ -9,6 +9,7 @@
  */
 
 require_once('locale.php');
+require_once('xhtml_header.php');
 
 /**
  * Creates a complete XHTML header, showing rss feeds if available, etc
@@ -23,89 +24,8 @@ require_once('locale.php');
  */
 function createXHTMLHeader()
 {
-	global $h, $config, $title;
-	global $meta_rss, $meta_js, $meta_css, $meta_search, $meta_favicon;
-	global $body_onload;
-
-	if (!$title && !empty($config['default_title'])) $title = $config['default_title'];
-
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-	echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
-	echo '<head>';
-	echo '<title>'.$title.'</title>';
-	echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
-
-	if (!empty($config['core']['web_root'])) echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
-
-	if ($meta_css) {
-		foreach ($meta_css as $css) {
-			echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
-		}
-	}
-
-	$theme_dir = '';
-	if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
-	else if (!empty($config['core']['web_root'])) $theme_dir = $config['core']['web_root'].'css/themes/';
-
-	if (!empty($h->session) && $theme_dir) echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';
-
-	if ($meta_rss) {
-		foreach ($meta_rss as $feed) {
-			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
-			else $extra = '';
-			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core']['web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
-		}
-	}
-	if ($meta_search) {
-		foreach ($meta_search as $search) {
-			echo '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
-		}
-	}
-
-	if ($meta_favicon) {
-		echo '<link rel="icon" type="image/png" href="'.$meta_favicon.'"/>';
-	}
-
-	if (!empty($config['core']['web_root'])) {
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/coredev.js"></script>';
-
-		/*
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/chat_1on1.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-		echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
-		*/
-		if (!empty($h->files) && $h->files->allow_rating) {
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
-		}
-	}
-
-	if ($meta_js) {
-		foreach ($meta_js as $script) {
-			echo '<script type="text/javascript" src="'.$script.'"></script>';
-		}
-	}
-
-	echo '</head>';
-	if ($body_onload) {
-
-		echo '<body onload="';
-		foreach ($body_onload as $row) {
-			echo $row;
-		}
-		echo '">';
-	} else {
-		echo '<body>';
-	}
-
-	if (function_exists('getProjectPath') && !empty($config['core']['web_root'])) {	//XXX: remove getProjectPath eventually
-		echo '<script type="text/javascript">';
-		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core']['web_root'].'api/";';
-		echo '</script>';
-	}
+	$header = new xhtml_header();
+	echo $header->render();
 }
 
 /**

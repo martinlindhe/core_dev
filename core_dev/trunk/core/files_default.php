@@ -80,60 +80,59 @@ class files_default
 
 	public $media_types = array(
 		MEDIATYPE_IMAGE => array(
-			array('image/png', 'PNG Image'),
+			array('image/png',  'PNG Image'),
 			array('image/jpeg', 'JPEG Image'),
-			array('image/gif', 'GIF Image'),
-			array('image/bmp', 'BMP Image'),
+			array('image/gif',  'GIF Image'),
+			array('image/bmp',  'BMP Image'),
 		),
 		MEDIATYPE_VIDEO => array(
 			array('video/x-ms-wmv', 'Windows Media Video'),
-			array('video/avi', 'DivX 3 Video'),
-			array('video/mpeg', 'MPEG-2 Video'),
-			array('video/3gpp', '3GP Video (cellphones)'),
-			array('video/x-flv', 'Flash Video'),
-			array('video/mp4', 'MPEG-4 Video'),
+			array('video/avi',      'DivX 3 Video'),
+			array('video/mpeg',     'MPEG-2 Video'),
+			array('video/3gpp',     '3GP Video (cellphones)'),
+			array('video/x-flv',    'Flash Video'),
+			array('video/mp4',      'MPEG-4 Video'),
 		),
 		MEDIATYPE_AUDIO => array(
-			array('audio/x-ms-wma', 'Windows Media Audio'),
-			array('audio/mpeg', 'MP3 Audio'),
-			array('audio/x-mpeg', 'MP3 Audio'),
+			array('audio/x-ms-wma',    'Windows Media Audio'),
+			array('audio/mpeg',        'MP3 Audio'),
+			array('audio/x-mpeg',      'MP3 Audio'),
 			array('application/x-ogg', 'OGG Audio'),
 		),
 		MEDIATYPE_DOCUMENT => array(
-			array('text/plain', 'Text Document'),
+			array('text/plain',         'Text Document'),
 			array('application/msword', 'Word Document'),
-			array('application/pdf', 'PDF Document'),
+			array('application/pdf',    'PDF Document'),
 		),
 		MEDIATYPE_WEBRESOURCE => array(
-			array('text/html', 'HTML Page'),
+			array('text/html',                'HTML Page'),
 			array('application/x-bittorrent', 'BitTorrent File'),
 		)
 	); ///<mimetype to media type mapping table
 
 	/* User configurable settings */
-	public $upload_dir = '/webupload/';				///< Default upload directory
+	public $upload_dir = '/webupload/';       ///< Default upload directory
+	public $tmp_dir    = '/tmp/';             ///< temp directory
 
-	public $tmp_dir = '/tmp/';								///< temp directory
+	public $thumb_default_width		= 80;     ///< Default width of thumbnails
+	public $thumb_default_height	= 80;     ///< Default height of thumbnails
 
-	public $thumb_default_width		= 80;				///< Default width of thumbnails
-	public $thumb_default_height	= 80;				///< Default height of thumbnails
-
-	public $image_max_width			= 900;			///< bigger images will be resized to this size
+	public $image_max_width			= 900;    ///< bigger images will be resized to this size
 	public $image_max_height		= 800;
 
-	public $anon_uploads			= false;		///< allow unregisterd users to upload files
-	public $count_file_views		= false;		///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
-	public $apc_uploads				= false;		///< enable support for php_apc + php_uploadprogress calls
-	public $image_convert			= true;			///< use imagemagick to handle exotic image formats
+	public $anon_uploads			= false;  ///< allow unregisterd users to upload files
+	public $count_file_views		= false;  ///< FIXME REMOVE! auto increments the "cnt" in tblFiles in each $files->sendFile() call
+	public $apc_uploads				= false;  ///< enable support for php_apc + php_uploadprogress calls
+	public $image_convert			= true;   ///< use imagemagick to handle exotic image formats
 
-	public $process_callback		= false;		///< script to callback on process server completition (optional)
+	public $process_callback		= false;  ///< script to callback on process server completition (optional)
 
-	public $allow_rating			= true;			///< allow file rating?
-	public $allow_user_categories	= true;			///< allow normal users to create own file categories
-	public $allow_root_level		= true;			///< shows root level of file categories, allowing users to upload there
+	public $allow_rating			= false;  ///< allow file rating?
+	public $allow_user_categories	= true;   ///< allow normal users to create own file categories
+	public $allow_root_level		= true;   ///< shows root level of file categories, allowing users to upload there
 
-	public $default_video = 'video/x-flv';	///< FLV = default fileformat to convert video to
-	public $default_audio = 'audio/x-mpeg';	///< MP3 = default fileformat to convert audio to
+	public $default_video = 'video/x-flv';    ///< FLV = default fileformat to convert video to
+	public $default_audio = 'audio/x-mpeg';   ///< MP3 = default fileformat to convert audio to
 
 	/**
 	 * Constructor. Initializes class configuration
@@ -144,23 +143,23 @@ class files_default
 	function __construct($config = '')
 	{
 		if (isset($config['upload_dir'])) $this->upload_dir = $config['upload_dir'];
-		if (isset($config['tmp_dir'])) $this->tmp_dir = $config['tmp_dir'];
+		if (isset($config['tmp_dir']))    $this->tmp_dir = $config['tmp_dir'];
 
-		if (isset($config['image_max_width'])) $this->image_max_width = $config['image_max_width'];
-		if (isset($config['image_max_height'])) $this->image_max_height = $config['image_max_height'];
-		if (isset($config['thumb_default_width'])) $this->thumb_default_width = $config['thumb_default_width'];
+		if (isset($config['image_max_width']))      $this->image_max_width = $config['image_max_width'];
+		if (isset($config['image_max_height']))     $this->image_max_height = $config['image_max_height'];
+		if (isset($config['thumb_default_width']))  $this->thumb_default_width = $config['thumb_default_width'];
 		if (isset($config['thumb_default_height'])) $this->thumb_default_height = $config['thumb_default_height'];
 
 		if (isset($config['count_file_views'])) $this->count_file_views = $config['count_file_views'];
-		if (isset($config['anon_uploads'])) $this->anon_uploads = $config['anon_uploads'];
-		if (isset($config['apc_uploads'])) $this->apc_uploads = $config['apc_uploads'];
-		if (isset($config['image_convert'])) $this->image_convert = $config['image_convert'];
+		if (isset($config['anon_uploads']))     $this->anon_uploads = $config['anon_uploads'];
+		if (isset($config['apc_uploads']))      $this->apc_uploads = $config['apc_uploads'];
+		if (isset($config['image_convert']))    $this->image_convert = $config['image_convert'];
 
-		if (isset($config['allow_rating'])) $this->allow_rating = $config['allow_rating'];
+		if (isset($config['allow_rating']))          $this->allow_rating = $config['allow_rating'];
 		if (isset($config['allow_user_categories'])) $this->allow_user_categories = $config['allow_user_categories'];
-		if (isset($config['allow_root_level'])) $this->allow_root_level = $config['allow_root_level'];
+		if (isset($config['allow_root_level']))      $this->allow_root_level = $config['allow_root_level'];
 
-		if (isset($config['process_callback'])) $this->process_callback = $config['process_callback'];
+		if (isset($config['process_callback']))      $this->process_callback = $config['process_callback'];
 	}
 
 	/**
