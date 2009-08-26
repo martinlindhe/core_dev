@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-require_once('locale_se.php');
+require_once('locale_swe.php');
 
 /**
  * Translates strings into other languages
@@ -19,7 +19,7 @@ function t($s)
 
 	switch ($config['language']) {
 		case 'en': return $s;		//English (System default)
-		case 'se': return t_se($s);	//Swedish
+		case 'swe': case 'se': return t_swe($s);	//Swedish
 		default: die('Unhandled language: '.$config['language']);
 	}
 }
