@@ -19,33 +19,33 @@
 
 //XXX: rename to "client_ftp.php", it is both input & output...
 
-//XXX sftp support, use CURL CURLPROTO_SFTP .... http://phpseclib.sourceforge.net/documentation/net.html#net_sftp
-
-//XXX research scp support
+//XXX for sftp support, curl needs to be recompiled with sftp support (for ubuntu 9.04) https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
 class ftp
 {
-	//XXX to support implicit SSL we might need to do a full ftp implementation, or maybe curl can help us?
-	//    more "full" ftp implementation: http://kacke.de/php_samples/source.php?f=ftp.cls.php
-
 	var $scheme, $host, $port, $path;
-	var $username = 'anonymous';
-	var $password = 'anon@ftp.com';
-
-	var $handle = false, $pipes;
+	var $username, $password;
+	var $curl = false; ///< curl handle
+	var $debug = false;
 
 	function __construct()
 	{
+		if (!function_exists('curl_init')) {
+			echo "ERROR: php5-curl missing\n";
+			return false;
+		}
 	}
 
 	function __destruct()
 	{
-		if (!$this->handle) return;
+		if ($this->debug) {
+			print_r(curl_getinfo($this->curl));
+			echo "cURL error number:" .curl_errno($this->curl)."\n";
+			echo "cURL error:" . curl_error($this->curl)."\n";
+			print_r(curl_version());
+		}
 
-		ftp_close($this->handle);
-
-		fclose($this->pipes[0]);
-		fclose($this->pipes[1]);
+		curl_close($this->curl);
 	}
 
 	function parse_url($url)
@@ -57,6 +57,8 @@ class ftp
 
 		$this->path = '/';
 		$this->port = 21;
+		$this->username = 'anonymous';
+		$this->password = 'anon@ftp.com';
 
 		$this->host = $p['host'];
 
@@ -68,41 +70,180 @@ class ftp
 		return true;
 	}
 
+	/**
+	 * Returns a string representing the current URL
+	 */
+	function url()
+	{
+		return $this->scheme.'://'.urlencode($this->username).':'.urlencode($this->password).'@'.$this->host.':'.$this->port.'/'.$this->path;
+	}
+
 	function connect($url)
 	{
-		if ($this->handle) return true;
 		if (!$this->parse_url($url)) return false;
+		if ($this->curl) return true;
+
+		$this->curl = curl_init();
+
+		if ($this->debug)
+			curl_setopt($this->curl, CURLOPT_VERBOSE, true);
+
+		curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
 
 		switch ($this->scheme) {
-		case 'ftp':   $this->handle = ftp_connect($this->host, $this->port); break;
-		case 'ftpes': $this->handle = ftp_ssl_connect($this->host, $this->port); break;
-		default: die('ftp class: unhandled scheme '.$this->scheme);
+		case 'ftp':
+			curl_setopt($this->curl, CURLOPT_URL, $this->url() );
+			break;
+
+		case 'sftp': //Protocol sftp not supported or disabled in libcurl
+			curl_setopt($this->curl, CURLOPT_URL, $this->url() );
+			break;
+
+		case 'ftpes':
+			$this->scheme = 'ftp';
+			curl_setopt($this->curl, CURLOPT_URL, $this->url() );
+			curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt($this->curl, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
+			curl_setopt($this->curl, CURLOPT_FTP_SSL, CURLFTPSSL_ALL);
+			break;
+
+		default:
+			die('ftp class: unhandled scheme '.$this->scheme."\n");
 		}
-		if (!$this->handle) return false;
-
-		if (!ftp_login($this->handle, $this->username, $this->password)) return false;
-
-		$this->pipes = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
-		stream_set_blocking($this->pipes[1], 0);
 		return true;
 	}
 
 	/**
+	 * Get a file from a FTP server
+	 *
+	 * @param $url ftp://usr:pwd@host/file
+	 * @param $local_file write to local file (if set)
+	 */
+	function get($url, $local_file = '')
+	{
+		if (!$this->connect($url)) return false;
+
+		if ($local_file) {
+			$fp = fopen($local_file, 'w');
+			if (!$fp) {
+				echo "ftp->get failed to open local file for writing\n";
+				return false;
+			}
+			curl_setopt($this->curl, CURLOPT_FILE, $fp);
+			curl_exec($this->curl);
+			fclose($fp);
+
+			if (curl_errno($this->curl)) {
+				echo "File download error: ".curl_error($this->curl)."\n";
+				return false;
+			}
+
+			if ($this->debug) echo 'md5: '.md5_file($local_file)."\n";
+
+			return true;
+		} else {
+			curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
+			$res = curl_exec($this->curl);
+
+			if (curl_errno($this->curl)) {
+				echo "File download error: ".curl_error($this->curl)."\n";
+				return false;
+			}
+
+			return $res;
+		}
+	}
+
+	/**
+	 * Uploads a file to the ftp
+	 *
+	 * @param $local_file path to local file
+	 * @param $remote_file path to remote file
+	 */
+	function put($url, $local_file)
+	{
+		if (!$this->connect($url)) return false;
+
+		if (!file_exists($local_file)) {
+			echo "ftp: local file ".$local_file." dont exist!\n";
+			return false;
+		}
+
+		if ($this->debug) echo 'md5: '.md5_file($local_file)."\n";
+
+		$fp = fopen($local_file, 'r');
+		curl_setopt($this->curl, CURLOPT_UPLOAD, 1);
+		curl_setopt($this->curl, CURLOPT_INFILE, $fp);
+		curl_setopt($this->curl, CURLOPT_INFILESIZE, filesize($local_file));
+		curl_exec($this->curl);
+		fclose($fp);
+
+        if (curl_errno($this->curl)) {
+        	echo "File upload error: ".curl_error($this->curl);
+			return false;
+        }
+
+		return true;
+	}
+
+
+
+
+
+
+
+
+	/**
 	 * Returns current working directory for the FTP connection
 	 */
-	function getcwd()
+	function pwd()
 	{
-		return $this->path;
+		die('implement pwd()');
+		//return $this->path;
 	}
 
 	function chdir($path)
 	{
+		die('impĺement chdir()');
 		//XXX: verify if remote path exists!
 		$this->path = $path;
 	}
 
+	function mkdir($path)
+	{
+		die('implement mkdir()');
+	}
+
+	function rmdir($path)
+	{
+		die('implement rmdir()');
+	}
+
+	function chmod()
+	{
+		die('implement chmod()');
+	}
+
+	function nlist()
+	{
+		//return raw directory list of current directory
+		die('implement nlist()');
+	}
+
+	function delete()
+	{
+		die('implement delete()');
+	}
+
+	function rename()
+	{
+		die('implement rename()');
+	}
+
 	function dir($remote_path)
 	{
+		die('implement dir()');
 		$list = ftp_rawlist($this->handle, $remote_path);
 
 		foreach ($list as $row) {
@@ -125,18 +266,6 @@ class ftp
 		return $res;
 	}
 
-	function is_dir($path)
-	{
-		die('FIXME implement');
-		$x = $this->dir($path); //XXX list 1 directory below path. needs path parsing, explode by /
-		print_r($x);
-	}
-
-	function is_file($path)
-	{
-		die('FIXME implement');
-	}
-
 	/**
 	 * Translates FTP file mode code to Unix file mode code
 	 */
@@ -146,48 +275,6 @@ class ftp
 		$chmod = substr(strtr($chmod, $trans), 1);
 		$array = str_split($chmod, 3);
 		return array_sum(str_split($array[0])) . array_sum(str_split($array[1])) . array_sum(str_split($array[2]));
-	}
-
-	/**
-	 * Get a file from a FTP server
-	 * @param $url ftp://usr:pwd@host/file
-	 */
-	function get($url)
-	{
-		if (!$this->connect($url)) return false;
-
-		$data = '';
-
-		$ret = ftp_nb_fget($this->handle, $this->pipes[0], $this->path, FTP_BINARY);
-
-		while ($ret == FTP_MOREDATA && !feof($this->pipes[1])) {
-			$r = fread($this->pipes[1], 8192);
-			if (!$r) break;
-			$data .= $r;
-			$ret = ftp_nb_continue($this->handle);
-		}
-
-		while (!feof($this->pipes[1])) {
-			$r = fread($this->pipes[1], 8192);
-			if (!$r) break;
-			$data .= $r;
-		}
-
-		if ($ret != FTP_FINISHED) return false;
-		return $data;
-	}
-
-	/**
-	 * Uploads a file to the ftp
-	 *
-	 * @param $local_file path to local file
-	 * @param $remote_file path to remote file
-	 */
-	function put($local_file, $remote_file)
-	{
-		if (!$this->handle) return false;
-
-		return ftp_put($this->handle, $remote_file, $local_file, FTP_BINARY);
 	}
 
 }
