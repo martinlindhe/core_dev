@@ -39,9 +39,8 @@ class db_mysqli extends db_base
 			else die('Database not responding');
 		}
 
-		if (!$this->db_handle->set_charset($this->charset)) {
+		if (!$this->db_handle->set_charset($this->charset))
 			die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
-		}
 
 		$this->connected = true;
 		$this->driver = 'mysqli';
@@ -166,7 +165,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
@@ -175,6 +174,33 @@ class db_mysqli extends db_base
 		while ($row = $result->fetch_assoc()) {
 			$data[] = $row;
 		}
+
+		$result->free();
+
+		parent::measure_query($q);
+
+		return $data;
+	}
+
+	/**
+	 * For SQL SELECT queries who returns multiple rows with 1 column of data
+	 *
+	 * @param $q the query to execute
+	 * @return result
+	 */
+	function get1dArray($q)
+	{
+		parent::measure_time();
+
+		if (!$result = $this->real_query($q)) {
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			return array();
+		}
+
+		$data = array();
+
+		while ($row = $result->fetch_row())
+			$data[] = $row[0];
 
 		$result->free();
 
@@ -194,15 +220,14 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
 		$data = array();
 
-		while ($row = $result->fetch_row()) {
+		while ($row = $result->fetch_row())
 			$data[ $row[0] ] = $row[1];
-		}
 
 		$result->free();
 
@@ -222,15 +247,14 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
 		$data = array();
 
-		while ($row = $result->fetch_row()) {
+		while ($row = $result->fetch_row())
 			$data[] = $row;
-		}
 
 		$result->free();
 
@@ -250,7 +274,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
@@ -279,7 +303,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($time_started, $q, $this->db_handle->error);
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
 			return '';
 		}
 
@@ -322,9 +346,10 @@ class db_mysqli extends db_base
 	function findDatabase($dbname)
 	{
 		$list = $this->getArray('SHOW DATABASES');
-		foreach ($list as $row) {
+
+		foreach ($list as $row)
 			if ($row['Database'] == $dbname) return true;
-		}
+
 		return false;
 	}
 
@@ -348,9 +373,10 @@ class db_mysqli extends db_base
 	function findTable($tblname)
 	{
 		$list = $this->getNumArray('SHOW TABLES FROM '.$this->database);
-		foreach ($list as $row) {
+
+		foreach ($list as $row)
 			if ($row[0] == $tblname) return true;
-		}
+
 		return false;
 	}
 

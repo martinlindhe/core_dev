@@ -110,6 +110,12 @@ abstract class db_base
 	abstract function getArray($q);
 
 	/**
+	 * Selects data, 1 column result
+	 * Example: SELECT val FROM t WHERE id=3
+	 */
+	abstract function get1dArray($q);
+
+	/**
 	 * Selects data
 	 * Example: SHOW VARIABLES LIKE "%cache%"
 	 *
@@ -289,10 +295,10 @@ abstract class db_base
 	 * @param $q is the query being profiled
 	 * @param $err is the error message returned by the db driver in use
 	 */
-	function profileError($time_started, $q, $err)
+	function profileError($q, $err)
 	{
 		$this->query_error[ $this->queries_cnt ] = $err;
-		$this->profileQuery($time_started, $q);
+		$this->measure_query($q);
 	}
 
 	/**
