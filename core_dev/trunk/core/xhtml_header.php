@@ -13,81 +13,67 @@ require_once('output_xhtml.php');
 
 class xhtml_header
 {
-	var $title       = '';
-	var $favicon     = '';
-	var $reload_time = 0;    ///< time after page load to reload the page, in seconds
-	var $set_mime    = true; ///< set the page mime-type to text/html
+	private $title, $favicon;
+	private $reload_time = 0;          ///< time after page load to reload the page, in seconds
+	private $mimetype   = 'text/html';
 
-	var $feeds  = array();
-	var $search = array();
-	var $js     = array();
-	var $css    = array();
-	var $onLoad = array();
+	private $js, $css, $feeds, $search, $onload;
+
+	function __construct()
+	{
+		$this->js     = array();
+		$this->css    = array();
+		$this->feeds  = array();
+		$this->search = array();
+		$this->onload = array();
+	}
 
 	/**
-	 * <title> of current page
+	 * Set the <title> of current page
 	 */
-	function title($t)
-	{
-		$this->title = $t;
-	}
+	function setTitle($t) { $this->title = $t; }
 
 	/**
 	 * Sets URI of favicon to use
 	 */
-	function favicon($uri)
-	{
-		$this->favicon = $uri;
-	}
+	function setFavicon($uri) { $this->favicon = $uri; }
+
+	/**
+	 * Set reload time of active page
+	 * @param $secs seconds until reload
+	 */
+	function setReloadTime($secs) { $this->reload_time = $secs; }
+
+	/**
+	 * Set mime type of output document
+	 * @param $type mime type
+	 */
+	function setMimeType($type) { $this->mimetype = $mime; }
 
 	/**
 	 * Adds a RSS feed to expose for current page
 	 */
-	function addFeed($uri)
-	{
-		$this->feeds[] = $uri;
-	}
+	function addFeed($uri) { $this->feeds[] = $uri; }
 
 	/**
 	 * Adds a OpenSearch search engine to expose for current page
 	 */
-	function opensearch($uri)
-	{
-		$this->search[] = $uri;
-	}
+	function addOpensearch($uri) { $this->search[] = $uri; }
 
 	/**
-	 * Adds a JS file that needs to be included for current page
+	 * Adds a Javascript file that needs to be included for current page
 	 */
-	function js($uri)
-	{
-		$this->js[] = $uri;
-	}
+	function addJs($uri) { $this->js[] = $uri; }
 
 	/**
 	 * Adds a CSS file that needs to be included for current page
 	 */
-	function css($uri)
-	{
-		$this->css[] = $uri;
-	}
+	function addCss($uri) { $this->css[] = $uri; }
 
 	/**
 	 * Javascript functions/code to execute on page load
 	 */
-	function onload($js)
-	{
-		$this->onLoad[] = $js;
-	}
-
-	/**
-	 * Adds Javascript to reload the page after a period of time
-	 * @param $secs seconds until reload
-	 */
-	function reload_time($secs)
-	{
-		$this->reload_time = $secs;
-	}
+	function addOnload($js) { $this->onload[] = $js; }
 
 	/**
 	 * Creates a complete XHTML header, showing rss feeds if available, etc
@@ -96,8 +82,8 @@ class xhtml_header
 	{
 		global $config, $h;
 
-		if ($this->set_mime)
-			header('Content-type: text/html');
+		if ($this->mimetype)
+			header('Content-type: '.$this->mimetype);
 
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
@@ -152,9 +138,9 @@ class xhtml_header
 			echo '<script type="text/javascript" src="'.$uri.'"></script>';
 
 		echo '</head>';
-		if (count($this->onLoad)) {
+		if (count($this->onload)) {
 			echo '<body class="yui-skin-sam" onload="';
-			foreach ($this->onLoad as $row)
+			foreach ($this->onload as $row)
 				echo $row;
 			echo '">';
 		} else {
