@@ -344,6 +344,10 @@ function t_swe($s)
 		case 'The wiki': return 'Wikin';
 		case 'does not yet exist': return 'existerar ännu inte';
 		case 'Wiki': return 'Wiki';
+		case 'characters': return 'tecken';
+		case 'Edited': return 'Redigerad';
+		case 'Edited by': return 'Redigerad av';
+		case 'Current version': return 'Aktuell version';
 
 		//Change password
 		case 'Current password': return 'Nuvarande lösenord';
