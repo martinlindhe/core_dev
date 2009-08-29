@@ -198,7 +198,7 @@ function showFiles($fileType, $ownerId = 0, $categoryId = 0)
 					($fileType == FILETYPE_USERFILE && !$categoryId && $h->session->id == $userid) ||
 					$fileType == FILETYPE_WIKI
 			) ) {
-				echo '<input type="button" class="button" value="'.t('New file category').'" onclick="show_element_by_name(\'file_gadget_category\'); hide_element_by_name(\'file_gadget_upload\');"/><br/>';
+				echo '<input type="button" class="button" value="'.t('New file category').'" onclick="show_element(\'file_gadget_category\'); hide_element(\'file_gadget_upload\');"/><br/>';
 			}
 
 			if ($h->files->apc_uploads) {

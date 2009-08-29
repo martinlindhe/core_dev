@@ -4,14 +4,13 @@
  *
  * Functions assumed to always be available
  *
- * @disclaimer This file is a required component of core_dev
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-//Include required core_dev files:
+//FIXME: get rid of getProjectPath()
+
 require_once('locale.php');	//for translations
 require_once('output_xhtml.php');	//for XHTML output helper functions
-require_once('functions_defaults.php');	//default appearance such as time display
 require_once('functions_general.php');	//FIXME: anything in there worth keeping?
 require_once('functions_textformat.php');	//for decodeDataSize()
 
@@ -38,6 +37,14 @@ function d($v)
 }
 
 /**
+ * Returns appropriate line feed character
+ */
+function dln()
+{
+	return php_sapi_name() == 'cli' ? "\n" : "<br/>";
+}
+
+/**
  * Debug function. Prints $str to Apache log file
  */
 function dp($str)
@@ -48,6 +55,20 @@ function dp($str)
 	if (!empty($config['debug'])) {
 		error_log(date('[r] ').$str."\n", 3, '/tmp/core_dev.log');
 	}
+}
+
+/**
+ * Debug function. Returns memory usage
+ */
+function dm()
+{
+	$limit = decodeDataSize(ini_get('memory_limit'));
+
+	return
+		"[Memory usage]".dln().
+		"Limit  : ".formatDataSize($limit).dln().
+		"Peak   : ".formatDataSize(memory_get_peak_usage(false)).
+		" (".round(memory_get_peak_usage(false) / $limit * 100, 2)." %)".dln().dln();
 }
 
 /**
@@ -86,48 +107,6 @@ function dh($m)
 }
 
 /**
- * Debug function. Dumps memory usage
- */
-function dm($db = '')
-{
-	$limit = decodeDataSize(ini_get('memory_limit'));
-
-	require_once('functions_textformat.php');	//for formatDataSize()
-	echo "[Memory usage]\n";
-	echo "Limit  : ".formatDataSize($limit)."\n";
-	echo "Current: ".formatDataSize(memory_get_usage(true))." (".round(memory_get_usage(true) / $limit * 100, 2)." %)\n";
-	echo "Peak   : ".formatDataSize(memory_get_peak_usage(true))." (".round(memory_get_peak_usage(true) / $limit * 100, 2)." %)\n\n";
-
-	echo "[emalloc memory report]\n";
-	echo "Current: ".formatDataSize(memory_get_usage(false))." (".round(memory_get_usage(false) / $limit * 100, 2)." %)\n";
-	echo "Peak   : ".formatDataSize(memory_get_peak_usage(false))." (".round(memory_get_peak_usage(false) / $limit * 100, 2)." %)\n\n";
-
-	if (extension_loaded('xdebug')) {
-		echo "[Xdebug Memory report]\n";
-		echo "Current: ".formatDataSize(xdebug_memory_usage())." (".round(xdebug_memory_usage() / $limit * 100, 2)." %)\n";
-		echo "Peak   : ".formatDataSize(xdebug_peak_memory_usage())." (".round(xdebug_peak_memory_usage() / $limit * 100, 2)." %)\n\n";
-	}
-
-	if ($db) {
-		echo "[DB driver memory usage]\n";
-		echo "Query history: ".sizeof($db->queries)."\n";	//XXX how to get actual size of the array?
-	}
-
-	echo "---\n";
-}
-
-/**
- * Includes a core function file
- *
- * @param $file filename to include
- */
-function require_core($file)
-{
-	global $config;
-	require_once($config['core']['fs_root'].'core/'.$file);
-}
-
-/**
  * Loads all active plugins
  */
 function loadPlugins()
@@ -161,7 +140,7 @@ function exectime($c, &$retval = 0)
  * Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
  * run from the / path it will return nothing, else the directory name of the directory script are run from
  */
-function getProjectPath($_amp = 1)	//FIXME: get rid of this function
+function getProjectPath($_amp = 1)
 {
 	global $config;
 
@@ -239,9 +218,10 @@ function datetime_less($d1, $d2)
  */
 function goLoc($url)
 {
-	echo '<script type="text/javascript">';
-	echo 'document.location.href = "'.$url.'";';
-	echo '</script>';
+	echo
+		'<script type="text/javascript">'.
+		'document.location.href="'.$url.'";'.
+		'</script>';
 }
 
 /**
@@ -273,8 +253,44 @@ function numbers_only($s)
 		$c = substr($s, $i, 1);
 		if (!in_array($c, $ok)) return false;
 	}
-
 	return true;
+}
+
+/**
+ * Default time format display
+ *
+ * @param $ts unix timestamp or SQL DATETIME format
+ */
+function formatTime($ts = 0)
+{
+	if (!$ts) $ts = time();
+
+	if (function_exists('formatTimeOverride'))
+		return formatTimeOverride($ts);
+
+	if (!is_numeric($ts)) $ts = strtotime($ts);
+
+	$datestamp = mktime (0,0,0,date('m',$ts), date('d',$ts), date('Y',$ts));
+	$yesterday = mktime (0,0,0,date('m') ,date('d')-1,  date('Y'));
+	$tomorrow  = mktime (0,0,0,date('m') ,date('d')+1,  date('Y'));
+
+	$timediff = time() - $ts;
+
+	if (date('Y-m-d', $ts) == date('Y-m-d')) {
+		//Today 18:13
+		$res = date('H:i',$ts);
+	} else if ($datestamp == $yesterday) {
+		//Yesterday 18:13
+		$res = t('Yesterday').' '.date('H:i',$ts);
+	} else if ($datestamp == $tomorrow) {
+		//Tomorrow 18:13
+		$res = t('Tomorrow').' '.date('H:i',$ts);
+	} else {
+		//2007-04-14 15:22
+		$res = date('Y-m-d H:i', $ts);
+	}
+
+	return $res;
 }
 
 ?>
