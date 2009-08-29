@@ -77,10 +77,10 @@ function showLoginForm()
 	echo '<br/>';
 	echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
 	if (($h->auth->allow_login && $h->auth->allow_registration) || $allow_superadmin_reg) {
-		echo xhtmlButton('Register', "hide_element_by_name('login_form_layer'); show_element_by_name('login_register_layer')");
+		echo xhtmlButton('Register', "hide_element('login_form_layer'); show_element('login_register_layer')");
 	}
 	if ($forgot_pwd) {
-		echo xhtmlButton('Forgot password', "hide_element_by_name('login_form_layer'); show_element_by_name('login_forgot_pwd_layer')");
+		echo xhtmlButton('Forgot password', "hide_element('login_form_layer'); show_element('login_forgot_pwd_layer')");
 	}
 	echo xhtmlFormClose();
 	echo '</div>';
@@ -128,11 +128,11 @@ function showLoginForm()
 				echo '</table><br/>';
 
 				if (!$allow_superadmin_reg) {
-					echo xhtmlButton('Log in', "hide_element_by_name('login_register_layer'); show_element_by_name('login_form_layer')");
+					echo xhtmlButton('Log in', "hide_element('login_register_layer'); show_element('login_form_layer')");
 				}
 				echo xhtmlSubmit('Register', 'button', 'font-weight: bold');
 				if ($forgot_pwd) {
-					echo xhtmlButton('Forgot password', "hide_element_by_name('login_register_layer'); show_element_by_name('login_forgot_pwd_layer')");
+					echo xhtmlButton('Forgot password', "hide_element('login_register_layer'); show_element('login_forgot_pwd_layer')");
 				}
 				echo xhtmlFormClose();
 			echo '</div>';
@@ -154,8 +154,8 @@ function showLoginForm()
 			echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td>'.xhtmlInput('forgot_pwd', '', 26).' <img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('E-mail').'"/></td></tr>';
 			echo '</table><br/>';
 
-			echo xhtmlButton('Log in', "hide_element_by_name('login_forgot_pwd_layer'); show_element_by_name('login_form_layer')");
-			echo xhtmlButton('Register', "hide_element_by_name('login_forgot_pwd_layer'); show_element_by_name('login_register_layer')");
+			echo xhtmlButton('Log in', "hide_element('login_forgot_pwd_layer'); show_element('login_form_layer')");
+			echo xhtmlButton('Register', "hide_element('login_forgot_pwd_layer'); show_element('login_register_layer')");
 			echo xhtmlSubmit('Forgot password', 'button', 'font-weight: bold');
 			echo xhtmlFormClose();
 		}

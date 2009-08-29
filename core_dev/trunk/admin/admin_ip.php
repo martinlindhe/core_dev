@@ -74,7 +74,6 @@ if ($ip && !$block) {
 } else {
 	echo 'Your IP is '.$_SERVER['REMOTE_ADDR'].'<br/>';
 	echo '<form method="get" action="'.$_SERVER['PHP_SELF'].'">';
-	if (!empty($_GET['pr'])) echo '<input type="hidden" name="pr" value="'.$_GET['pr'].'"/>';
 	echo 'IP: '.xhtmlInput('ip', $ip).'<br/><br/>';
 	echo 'or<br/>';
 	echo 'User: '.xhtmlInput('user', $ip).'<br/>';

@@ -117,8 +117,8 @@ function AJAX()
 }
 //todo: i show_ajax_anim kolla om den fortfarande behövs visas!
 var ajax_anim_abort = 0;
-function show_ajax_anim() { if (!ajax_anim_abort) show_element_by_name('ajax_anim'); ajax_anim_abort = 0; }
-function hide_ajax_anim() { hide_element_by_name('ajax_anim'); }
+function show_ajax_anim() { if (!ajax_anim_abort) show_element('ajax_anim'); ajax_anim_abort = 0; }
+function hide_ajax_anim() { hide_element('ajax_anim'); }
 
 //todo: försök kom på ett mer standardiserat interface till GET-funktionen så att mindre sådan här init&callback kod behövs
 
@@ -181,7 +181,7 @@ function ajax_get_rategadget_callback()
 {
 	if (!rategadget_request.ResultReady()) return;
 
-	fill_element_by_name('rate_file', rategadget_request._request.responseText);
+	fill_element('rate_file', rategadget_request._request.responseText);
 	ajax_anim_abort = true;
 	hide_ajax_anim();
 
@@ -199,7 +199,7 @@ function ajax_rate_callback()
 {
 	if (!rate_request.ResultReady()) return;
 
-	fill_element_by_name('rate_file', rate_request._request.responseText);
+	fill_element('rate_file', rate_request._request.responseText);
 	ajax_anim_abort = true;
 
 	rate_request = null;
@@ -209,7 +209,7 @@ function submit_apc_upload(id)
 {
 	//submit form
 	document.ajax_file_upload.submit();
-	show_element_by_name('file_gadget_apc_progress');
+	show_element('file_gadget_apc_progress');
 
 	ajax_get_upload_progress(id,_ext_ref);
 

@@ -1,14 +1,8 @@
-function trace(s)
-{
-	console.debug(s);
-}
+function trace(s) { console.debug(s); }
 
 function urlencode(str)	//function borrowed from http://www.albionresearch.com/misc/urlencode.php
 {
-	var SAFECHARS = "0123456789" +					// Numeric
-					"ABCDEFGHIJKLMNOPQRSTUVWXYZ" +	// Alphabetic
-					"abcdefghijklmnopqrstuvwxyz" +
-					"-_.!~*'()";					// RFC2396 Mark characters
+	var SAFE = "0123456789" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "-_.!~*'()";
 	var HEX = "0123456789ABCDEF";
 
 	var encoded = "";
@@ -16,7 +10,7 @@ function urlencode(str)	//function borrowed from http://www.albionresearch.com/m
 		var ch = str.charAt(i);
 	    if (ch == " ") {
 		    encoded += "+";				// x-www-urlencoded, rather than %20
-		} else if (SAFECHARS.indexOf(ch) != -1) {
+		} else if (SAFE.indexOf(ch) != -1) {
 		    encoded += ch;
 		} else {
 		    var charCode = ch.charCodeAt(0);
@@ -44,18 +38,14 @@ function trim(str)
 }
 
 //Toggles element with name "n" between visible and hidden
-//
-//If this function makes an element "hidden" the browser
-//regards it as non-existent and does not regard it as being
-//part of the page-layout
-function toggle_element_by_name(n)
+function toggle_element(n)
 {
 	var e = document.getElementById(n);
 	e.style.display = (e.style.display?'':'none');
 }
 
 //Makes element with name "n" invisible in browser
-function hide_element_by_name(n)
+function hide_element(n)
 {
 	var e = document.getElementById(n);
 	if (!e) {
@@ -66,11 +56,11 @@ function hide_element_by_name(n)
 }
 
 //Makes element with name "n" visible in browser
-function show_element_by_name(n)
+function show_element(n)
 {
 	var e = document.getElementById(n);
 	if (!e) {
-		//alert('fixme: element ' + n + ' not found');
+		trace('ERROR: element ' + n + ' not found');
 		return;
 	}
 	e.style.display = '';
@@ -78,24 +68,43 @@ function show_element_by_name(n)
 
 //This function, as opposed to the ones above, has the
 //browser render the content but show / dont show it
-function set_visible_by_name(n)
+function set_visible(n)
 {
 	var e = document.getElementById(n);
 	if (!e) {
-		//alert('fixme: element ' + n + ' not found');
+		trace('ERROR: element ' + n + ' not found');
 		return;
 	}
 	e.style.visibility="visible";
 }
 
-function set_invisible_by_name(n)
+function set_invisible(n)
 {
 	var e = document.getElementById(n);
 	if (!e) {
-		//alert('fixme: element ' + n + ' not found');
+		trace('ERROR: element ' + n + ' not found');
 		return;
 	}
 	e.style.visibility="hidden";
+}
+
+function empty_element(n)
+{
+	/*if (n ÄR NUMERISK)           FIXME hur kollar man det
+		var e=document.getElementById(n);
+	else*/
+		e=n;
+
+	while (e.hasChildNodes())
+		e.removeChild(e.firstChild);
+}
+
+function fill_element(n,txt)
+{
+	var e = document.getElementById(n);
+	empty_element(e);
+
+	e.innerHTML = txt;
 }
 
 function add_div(e, idname, style)
@@ -119,26 +128,6 @@ function add_span(e)
 
 	return c;
 }
-function empty_element_by_name(n)
-{
-	var e=document.getElementById(n);
-
-	while (e.hasChildNodes())
-		e.removeChild(e.firstChild);
-}
-
-function fill_element_by_name(n,txt)
-{
-	var e = document.getElementById(n);
-	empty_element(e);
-
-	e.innerHTML = txt;
-}
-
-function empty_element(e)
-{
-	while (e.hasChildNodes()) e.removeChild(e.firstChild);
-}
 
 //checks if image n has been loaded, waits until it is done otherwise
 function image_loaded(n)
@@ -147,15 +136,12 @@ function image_loaded(n)
 
 	trace('image_loaded('+n+') w:'+e.width+',h:'+e.height);
 
-	//IE. fixme:untested
-	if (!e.complete) {
-		return false;
-	}
+	//IE FIXME untested
+	if (!e.complete) return false;
 
 	//Firefox
-	if (typeof e.naturalWidth != "undefined" && e.naturalWidth == 0) {
+	if (typeof e.naturalWidth != "undefined" && e.naturalWidth == 0)
 		return false;
-	}
 
 	return true;
 }
@@ -186,14 +172,13 @@ function pause(ms)
 	}
 }
 
-/* sends a ajax poll submit */
+//sends a ajax poll submit
 function submit_poll(id,opt)
 {
-	//alert('fixme: submit_poll() add ajax submit. id ' + id + ', opt ' + opt);
 	ajax_poll(id,opt);
 
-	hide_element_by_name('poll'+id);
-	show_element_by_name('poll_voted'+id);
+	hide_element('poll'+id);
+	show_element('poll_voted'+id);
 }
 
 function get_poll_csv(id)
@@ -292,7 +277,7 @@ function add_node_and_focus(e,t,s) {
 	c.scrollIntoView(false);
 }
 
-/* focuses on the faq item #i */
+//focuses on the faq item #i
 function faq_focus(n) {
 	e = document.getElementById('faq_'+n);
 	if (!e) return;
@@ -304,8 +289,8 @@ function faq_focus(n) {
 		if (!e) return;
 		e.style.display = 'none';	//hide
 
-		hide_element_by_name('faq_edit_'+i);
-		show_element_by_name('faq_holder_'+i);
+		hide_element('faq_edit_'+i);
+		show_element('faq_holder_'+i);
 	}
 }
 
@@ -318,7 +303,7 @@ function show_image_comments(n)
 	e = document.getElementById('img_'+n);
 
 	if (!comments_shown) {
-		show_element_by_name('image_comments_content');
+		show_element('image_comments_content');
 		comments_shown = true;
 		org_w = e.width;
 		org_h = e.height;
@@ -328,7 +313,7 @@ function show_image_comments(n)
 		return;
 	}
 
-	hide_element_by_name('image_comments_content');
+	hide_element('image_comments_content');
 	comments_shown = false;
 	e.width = org_w;
 	e.height = org_h;
@@ -350,7 +335,7 @@ function set_div_content(n, txt)
 	empty_element(e);
 
 	e.innerHTML = txt;
-	show_element_by_name(n);
+	show_element(n);
 }
 
 //toggles all checkboxes in form "frm" on/off
@@ -461,7 +446,6 @@ function insertTags(edid,tagOpen, tagClose, sampleText) {
     if(!is_safari) {
       txtarea.focus();
     }
-
   }
   // reposition cursor if possible
   if (txtarea.createTextRange){

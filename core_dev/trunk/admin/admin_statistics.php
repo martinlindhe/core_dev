@@ -6,7 +6,7 @@
 require_once('find_config.php');
 $h->session->requireAdmin();
 
-require_core('functions_statistics.php');
+require_once('functions_statistics.php');
 
 require('design_admin_head.php');
 

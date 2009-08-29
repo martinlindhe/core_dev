@@ -6,7 +6,7 @@
 //FIXME: kunna se nyheter som ska publiceras i framtiden
 
 require_once('find_config.php');
-require_core('functions_news.php');
+require_once('functions_news.php');
 
 $h->session->requireAdmin();
 

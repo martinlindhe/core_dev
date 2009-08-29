@@ -50,7 +50,7 @@ echo '<br/>';
 echo '<h2>Apache</h2>';
 $current_apache = apache_get_version();
 if ($current_apache == 'Apache') {
-	echo '<div class="okay" onclick="toggle_element_by_name(\'apache_info_noversion\')">';
+	echo '<div class="okay" onclick="toggle_element(\'apache_info_noversion\')">';
 	echo ' Version information not available';
 	echo ' <img src="'.$config['core']['web_root'].'gfx/icon_info.png">';
 	echo '</div>';

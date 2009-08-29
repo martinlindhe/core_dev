@@ -4,7 +4,7 @@
  */
 
 require_once('find_config.php');
-require_core('atom_polls.php');
+require_once('atom_polls.php');
 
 $h->session->requireAdmin();
 

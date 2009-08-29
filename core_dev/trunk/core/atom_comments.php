@@ -250,7 +250,7 @@ function showComments($_type, $ownerId = 0, $col_w = 30, $col_h = 6, $limit = 15
 	//Gets all comments for this item
 	$cnt = getCommentsCount($_type, $ownerId);
 
-	$res = '<div class="comment_header" onclick="toggle_element_by_name(\'comments_holder\')">'.$cnt.' '.($cnt == 1 ? t('comment'):t('comments')).'</div>';
+	$res = '<div class="comment_header" onclick="toggle_element(\'comments_holder\')">'.$cnt.' '.($cnt == 1 ? t('comment'):t('comments')).'</div>';
 
 	$res .= '<div id="comments_holder">';
 	$res .= '<div id="comments_only">';

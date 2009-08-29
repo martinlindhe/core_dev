@@ -46,12 +46,12 @@ function chat_request_callback()
 				'<a href="javascript:return false;" onClick="set_invisible_by_'+
 				'name(\'popup_chat\');chat_link_chatreq_clicked=1;">Nej</a>';
 		if (getElementById('popup_chat').style.display == 'none') {
-			show_element_by_name('popup_chat');
+			show_element('popup_chat');
 		}
 		set_div_content('popup_chat', html);
-		set_visible_by_name('popup_chat');
+		set_visible('popup_chat');
 	} else if (chat_link_chatreq_clicked) {
-		set_invisible_by_name('popup_chat');
+		set_invisible('popup_chat');
 		chat_link_chatreq = chat_link_chatreq_org;
 	}
 	chat_request_request = new AJAX();

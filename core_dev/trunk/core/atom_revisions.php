@@ -47,10 +47,9 @@ function showRevisions($articleType, $articleId, $articleName)
 	$tot_cnt = $db->getOneItem($q);
 	$pager = makePager($tot_cnt, 5);
 
-	$q  = 'SELECT t1.*,t2.userName AS creatorName FROM tblRevisions AS t1 ';
-	$q .= 'LEFT JOIN tblUsers AS t2 ON (t1.createdBy=t2.userId) ';
-	$q .= 'WHERE t1.fieldId='.$articleId.' AND t1.fieldType='.$articleType;
-	$q .= ' ORDER BY t1.timeCreated DESC'.$pager['limit'];
+	$q  = 'SELECT * FROM tblRevisions ';
+	$q .= 'WHERE fieldId='.$articleId.' AND fieldType='.$articleType;
+	$q .= ' ORDER BY timeCreated DESC'.$pager['limit'];
 	$list = $db->getArray($q);
 
 	echo $pager['head'];
@@ -60,32 +59,31 @@ function showRevisions($articleType, $articleId, $articleName)
 		return;
 	}
 
-	echo 'Archived versions ('.count($list).' entries):<br/>';
 	foreach ($list as $row) {
-		echo $row['timeCreated'].': ';
+		echo formatTime($row['timeCreated']).': ';
 		switch ($row['categoryId']) {
 			case REV_CAT_LOCKED:
 				echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
-				echo ' Locked by '.$row['creatorName'].'<br/>';
+				echo ' Locked by '.Users::getName($row['createdBy']).'<br/>';
 				break;
 
 			case REV_CAT_UNLOCKED:
 				echo '<img src="'.$config['core']['web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
-				echo ' Unlocked by '.$row['creatorName'].'<br/>';
+				echo ' Unlocked by '.Users::getName($row['createdBy']).'<br/>';
 				break;
 
 			case REV_CAT_FILE_UPLOADED:
-				echo ' File uploaded by '.$row['creatorName'].'<br/>';
+				echo ' File uploaded by '.Users::getName($row['createdBy']).'<br/>';
 				break;
 
 			case REV_CAT_FILE_DELETED:
-				echo ' File deleted by '.$row['creatorName'].'<br/>';
+				echo ' File deleted by '.Users::getName($row['createdBy']).'<br/>';
 				break;
 
 			case REV_CAT_TEXT_CHANGED:
 			default:
-				echo '<a href="#" onclick="return toggle_element_by_name(\'layer_history'.$row['indexId'].'\')">';
-				echo 'Text edited by '.$row['creatorName']. ' ('.strlen($row['fieldText']).' bytes)</a><br/>';
+				echo '<a href="#" onclick="return toggle_element(\'layer_history'.$row['indexId'].'\')">';
+				echo t('Edited by').' '.Users::getName($row['createdBy']). ' ('.strlen($row['fieldText']).' '.t('characters').')</a><br/>';
 				echo '<div id="layer_history'.$row['indexId'].'" class="revision_entry" style="display: none;">';
 				echo nl2br(htmlentities($row['fieldText'], ENT_COMPAT, 'UTF-8'));
 				echo '</div>';

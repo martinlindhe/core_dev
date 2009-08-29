@@ -308,7 +308,7 @@ function showGuestbook($userId)
 		}
 
 		if ($h->session->id == $row['userId']) {
-			echo ' | <a href="#" onclick="show_element_by_name(\'gb_reply_'.$row['entryId'].'\')">'.t('Reply').'</a>';
+			echo ' | <a href="#" onclick="show_element(\'gb_reply_'.$row['entryId'].'\')">'.t('Reply').'</a>';
 		}
 
 		if (!$historyId && ($h->session->id == $row['authorId'] || $h->session->id == $row['userId'])) {

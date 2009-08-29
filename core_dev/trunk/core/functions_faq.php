@@ -104,7 +104,7 @@ function showFAQ()
 
 				if ($h->session->isAdmin) {
 					echo '<br/><br/>';
-					echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_element_by_name(\'faq_holder_'.$i.'\'); show_element_by_name(\'faq_edit_'.$i.'\');"/> ';
+					echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_element(\'faq_holder_'.$i.'\'); show_element(\'faq_edit_'.$i.'\');"/> ';
 					echo '<input type="button" class="button" value="'.t('Delete').'" onclick="document.location=\'?fdel='.$list[$i]['faqId'].'\'"/>';
 				}
 

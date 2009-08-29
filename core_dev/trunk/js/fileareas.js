@@ -10,11 +10,11 @@ function zoomImage(id, nfo, rate)
 	if (nfo) ajax_get_fileinfo(id);
 	if (rate) ajax_get_rategadget(id,3);//3=rate file
 
-	hide_element_by_name('file_gadget_content');
-	hide_element_by_name('zoom_video_layer');
-	hide_element_by_name('zoom_audio_layer');
-	hide_element_by_name('zoom_file_layer');
-	show_element_by_name('zoom_image_layer');
+	hide_element('file_gadget_content');
+	hide_element('zoom_video_layer');
+	hide_element('zoom_audio_layer');
+	hide_element('zoom_file_layer');
+	show_element('zoom_image_layer');
 }
 
 //show file details of general file
@@ -24,11 +24,11 @@ function zoomFile(id, nfo)
 
 	if (nfo) ajax_get_fileinfo(id);
 
-	hide_element_by_name('file_gadget_content');
-	hide_element_by_name('zoom_video_layer');
-	hide_element_by_name('zoom_audio_layer');
-	hide_element_by_name('zoom_image_layer');
-	show_element_by_name('zoom_file_layer');
+	hide_element('file_gadget_content');
+	hide_element('zoom_video_layer');
+	hide_element('zoom_audio_layer');
+	hide_element('zoom_image_layer');
+	show_element('zoom_file_layer');
 }
 
 //closeup view of audio file
@@ -36,7 +36,7 @@ function zoomAudio(id, name, nfo)
 {
 	zoomed_id = id;
 
-	empty_element_by_name('zoom_audio');
+	empty_element('zoom_audio');
 
 	url = _ext_core+'flash/mp3_player.swf?n='+name+'&s='+_ext_core+urlencode('file.php?id=')+id+urlencode(_ext_ref);
 	trace(url);
@@ -48,11 +48,11 @@ function zoomAudio(id, name, nfo)
 
 	if (nfo) ajax_get_fileinfo(id);
 
-	hide_element_by_name('file_gadget_content');
-	hide_element_by_name('zoom_video_layer');
-	hide_element_by_name('zoom_image_layer');
-	hide_element_by_name('zoom_file_layer');
-	show_element_by_name('zoom_audio_layer');
+	hide_element('file_gadget_content');
+	hide_element('zoom_video_layer');
+	hide_element('zoom_image_layer');
+	hide_element('zoom_file_layer');
+	show_element('zoom_audio_layer');
 }
 
 //closeup view of video file
@@ -60,7 +60,7 @@ function zoomVideo(id, name, nfo)
 {
 	zoomed_id = id;
 
-	empty_element_by_name('zoom_video');
+	empty_element('zoom_video');
 
 	//url = _ext_core+'flash/flv_player.swf?movie='+urlencode('/video/')+id+'.flv'+urlencode(_ext_ref)+params;
 	url = _ext_core+'flash/mediaplayer.swf';
@@ -78,31 +78,31 @@ function zoomVideo(id, name, nfo)
 
 	if (nfo) ajax_get_fileinfo(id);
 
-	hide_element_by_name('file_gadget_content');
-	hide_element_by_name('zoom_audio_layer');
-	hide_element_by_name('zoom_image_layer');
-	hide_element_by_name('zoom_file_layer');
-	show_element_by_name('zoom_video_layer');
+	hide_element('file_gadget_content');
+	hide_element('zoom_audio_layer');
+	hide_element('zoom_image_layer');
+	hide_element('zoom_file_layer');
+	show_element('zoom_video_layer');
 }
 
 function zoomShowFileInfo(txt)
 {
-	fill_element_by_name('zoom_fileinfo', txt);
-	show_element_by_name('zoom_fileinfo');
+	fill_element('zoom_fileinfo', txt);
+	show_element('zoom_fileinfo');
 }
 
 function zoom_hide_elements()
 {
-	hide_element_by_name('zoom_video_layer');
-	hide_element_by_name('zoom_audio_layer');
-	hide_element_by_name('zoom_image_layer');
-	hide_element_by_name('zoom_file_layer');
-	hide_element_by_name('zoom_fileinfo');
-	hide_element_by_name('filearea_mover');
+	hide_element('zoom_video_layer');
+	hide_element('zoom_audio_layer');
+	hide_element('zoom_image_layer');
+	hide_element('zoom_file_layer');
+	hide_element('zoom_fileinfo');
+	hide_element('filearea_mover');
 	hide_cropper();
 	hide_resizer();
 
-	show_element_by_name('file_gadget_content');
+	show_element('file_gadget_content');
 
 	var e = document.getElementById('zoom_image');
 	e.setAttribute('src', _ext_core+'gfx/ajax_loading.gif');
@@ -113,7 +113,7 @@ function zoom_hide_elements()
 function hide_cropper()
 {
 	if (this.curCrop != null) this.curCrop.remove();
-	hide_element_by_name('cropper_toolbar');
+	hide_element('cropper_toolbar');
 }
 
 /* draws a square box on the image, box is resizable to select what area to cut */
@@ -121,7 +121,7 @@ function crop_selected_file()
 {
 	if (this.curCrop != null) this.curCrop.remove();
 	this.curCrop = new Cropper.Img("zoom_image", { onEndCrop: onEndCrop1 } );
-	show_element_by_name('cropper_toolbar');
+	show_element('cropper_toolbar');
 	hide_resizer();
 }
 
@@ -147,7 +147,7 @@ var slide_org_w, slide_org_h, slide_curr_pct;
 function resize_selected_file()
 {
 	hide_cropper();
-	show_element_by_name('slider_toolbar');
+	show_element('slider_toolbar');
 
 	e = document.getElementById('zoom_image');
 	slide_org_w = e.width;
@@ -188,13 +188,13 @@ function cancel_resizer()
 function hide_resizer()
 {
 	if (this.curSlider != null) this.curSlider = null;
-	hide_element_by_name('slider_toolbar');
+	hide_element('slider_toolbar');
 }
 
 /* displays dialog for moving selected file to another file area category */
 function move_selected_file()
 {
-	show_element_by_name('filearea_mover');
+	show_element('filearea_mover');
 }
 
 function download_selected_file()
@@ -238,7 +238,7 @@ function delete_selected_file()
 	zoom_hide_elements();
 
 	//remove zoomed_id thumbnail from file gadget
-	hide_element_by_name('file_' + zoomed_id);
+	hide_element('file_' + zoomed_id);
 
 	zoomed_id = 0;
 }
@@ -253,7 +253,7 @@ function rotate_selected_file(angle)
 
 function filearea_mover_close()
 {
-	hide_element_by_name('filearea_mover');
+	hide_element('filearea_mover');
 }
 
 function filearea_move_file(cat)
@@ -264,5 +264,5 @@ function filearea_move_file(cat)
 	zoom_hide_elements();
 
 	//remove zoomed_id thumbnail from file gadget
-	hide_element_by_name('file_' + zoomed_id)
+	hide_element('file_' + zoomed_id)
 }

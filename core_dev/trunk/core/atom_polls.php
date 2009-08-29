@@ -423,7 +423,7 @@ function managePolls($_type, $_owner = 0)
 		$title = 'Add new poll';
 	}
 
-	echo '<h2 onclick="toggle_element_by_name(\'new_poll_form\')">'.$title.'</h2>';
+	echo '<h2 onclick="toggle_element(\'new_poll_form\')">'.$title.'</h2>';
 	echo '<div id="new_poll_form" style="display: none;">';
 	echo '<form method="post" action="">';
 	echo 'Question: '.xhtmlInput('poll_q', '', 30).'<br/>';
@@ -442,12 +442,12 @@ function managePolls($_type, $_owner = 0)
 		echo '<option value="nextmonday">monday next week</option>';
 		echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
 		echo '</select><br/>';
-		echo '<a href="#" onclick="hide_element_by_name(\'poll_period_selector\');show_element_by_name(\'poll_period_manual\')">Enter dates manually</a>';
+		echo '<a href="#" onclick="hide_element(\'poll_period_selector\');show_element(\'poll_period_manual\')">Enter dates manually</a>';
 		echo '</div>';
 		echo '<div id="poll_period_manual" style="display: none;">';
 			echo 'Start time: '.xhtmlInput('poll_start_man').' (format YYYY-MM-DD HH:MM)<br/>';
 			echo 'End time: '.xhtmlInput('poll_end_man').'<br/>';
-			echo '<a href="#" onclick="hide_element_by_name(\'poll_period_manual\');show_element_by_name(\'poll_period_selector\')">Use dropdown menus instead</a>';
+			echo '<a href="#" onclick="hide_element(\'poll_period_manual\');show_element(\'poll_period_selector\')">Use dropdown menus instead</a>';
 		echo '</div>';
 		echo '<br/><br/>';
 	}
