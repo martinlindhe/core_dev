@@ -43,11 +43,13 @@ function trim(str)
 	return str.replace(/^\s*|\s*$/g,"");
 }
 
+//XXX compatiblity functions
+function toggle_element(n) { return toggle_element_by_name(n) }
+function hide_element(n) { return hide_element_by_name(n) }
+function show_element(n) { return show_element_by_name(n) }
+
+
 //Toggles element with name "n" between visible and hidden
-//
-//If this function makes an element "hidden" the browser
-//regards it as non-existent and does not regard it as being
-//part of the page-layout
 function toggle_element_by_name(n)
 {
 	var e = document.getElementById(n);
