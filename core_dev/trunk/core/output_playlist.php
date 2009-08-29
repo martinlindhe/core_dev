@@ -26,7 +26,6 @@
  */
 
 require_once('output_list.php');
-require_once('functions_defaults.php'); //for formatTime()
 
 class output_playlist extends coredev_output_list
 {
@@ -48,7 +47,7 @@ class output_playlist extends coredev_output_list
 		case 'html':
 			return $this->renderHTML();
 		}
-		
+
 		echo "output_playlist: unknown format ".$format."\n";
 		return false;
 	}
