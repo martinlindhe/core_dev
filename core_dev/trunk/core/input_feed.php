@@ -3,7 +3,7 @@
  * $Id$
  *
  * Simple feed (RSS, ATOM) and playlist (ASX, M3U) reader
- * 
+ *
  * RSS: http://en.wikipedia.org/wiki/Rss
  * ATOM: http://en.wikipedia.org/wiki/Atom_(standard)
  * ASX: http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
@@ -19,18 +19,20 @@ require_once('input_http.php'); //for is_url()
 
 class input_feed
 {
-	var $inside_item = false;
-	var $current_tag = '';
-	
-	var $link, $title, $desc, $pubDate, $guid;
-	var $attrs;
-	var $video_url, $video_type, $duration;
-	var $image_url, $image_type;
-	var $entries;
-	var $callback = '';
-	var $guid2 = ''; //XXX remove this hack
+	private $inside_item = false;
+	private $current_tag = '';
 
-	var $sort = true;	///< sort output array?
+	private $link, $title, $desc, $pubDate, $guid;
+	private $attrs;
+	private $video_url, $video_type, $duration;
+	private $image_url, $image_type;
+	private $entries;
+	private $callback = '';
+	private $guid2 = ''; //XXX remove this hack
+
+	private $sort = true;	///< sort output array?
+
+	function setSort($n) { $this->sort = $n; }
 
 	function RSSstartElement($parser, $name, $attrs = '')
 	{
@@ -119,14 +121,16 @@ class input_feed
 			case 'video/x-flv':
 				$this->video_url  = $this->attrs['URL'];
 				$this->video_type = $this->attrs['TYPE'];
-				$this->duration   = $this->attrs['DURATION'];
+				if (!empty($this->attrs['DURATION']))
+					$this->duration = $this->attrs['DURATION'];
 				break;
 
 			case 'video/x-ms-asf':
 				if (!$this->video_url) { //XXX prefer flv over asf
 					$this->video_url  = $this->attrs['URL'];
 					$this->video_type = $this->attrs['TYPE'];
-					$this->duration   = $this->attrs['DURATION'];
+					if (!empty($this->attrs['DURATION']))
+						$this->duration = $this->attrs['DURATION'];
 				}
 				break;
 
@@ -343,12 +347,12 @@ class input_feed
 
 		case 'AUTHOR'://XXX save
 			break;
-			
+
 		case 'COPYRIGHT': //XXX save
 			break;
 		}
 	}
-	
+
 	function parse($data, $callback = '')
 	{
 		if (strpos($data, '<rss ') !== false) {
@@ -364,14 +368,14 @@ class input_feed
 		echo "ERROR: unhandled feed: ".substr($data, 0, 200)." ...\n";
 		die;
 	}
-	
+
 	function fetch($url, $callback = '')
 	{
 		if (!is_url($url)) return false;
 
 		$u = new url_handler($url);
 		$data = $u->get();
-		
+
 		return $this->parse($data, $callback);
 	}
 

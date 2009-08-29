@@ -19,13 +19,15 @@ require_once('functions_time.php');	//for date3339() and date882()
 
 class output_feed extends coredev_output_list
 {
-	var $version = 'core_dev output_feed 1.0';
-	var $entries = array();
+	private $version = 'core_dev output_feed 1.0';
+	private $entries = array();
 
-	var $ttl = 15;	///< time to live, in minutes
-	var $title = 'Untitled news feed';
-	var $desc = '';
-	var $link = '';
+	private $title = 'Untitled news feed';
+	private $desc, $link;
+	private $ttl = 15;	///< time to live, in minutes
+
+	function setTitle($n) { $this->title = $n; }
+	function setLink($n) { $this->link = $n; }
 
 	/**
 	 * Generates XML for feed

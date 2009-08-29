@@ -6,7 +6,6 @@
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=19
  */
 
-require_once('functions_defaults.php');
 require_once('input_xml.php');
 
 define('WEBSERVICEX_STOCK_API', 'http://www.webservicex.net/stockquote.asmx?wsdl');

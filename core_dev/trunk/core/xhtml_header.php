@@ -28,51 +28,15 @@ class xhtml_header
 		$this->onload = array();
 	}
 
-	/**
-	 * Set the <title> of current page
-	 */
 	function setTitle($t) { $this->title = $t; }
-
-	/**
-	 * Sets URI of favicon to use
-	 */
 	function setFavicon($uri) { $this->favicon = $uri; }
-
-	/**
-	 * Set reload time of active page
-	 * @param $secs seconds until reload
-	 */
 	function setReloadTime($secs) { $this->reload_time = $secs; }
-
-	/**
-	 * Set mime type of output document
-	 * @param $type mime type
-	 */
 	function setMimeType($type) { $this->mimetype = $mime; }
 
-	/**
-	 * Adds a RSS feed to expose for current page
-	 */
 	function addFeed($uri) { $this->feeds[] = $uri; }
-
-	/**
-	 * Adds a OpenSearch search engine to expose for current page
-	 */
 	function addOpensearch($uri) { $this->search[] = $uri; }
-
-	/**
-	 * Adds a Javascript file that needs to be included for current page
-	 */
 	function addJs($uri) { $this->js[] = $uri; }
-
-	/**
-	 * Adds a CSS file that needs to be included for current page
-	 */
 	function addCss($uri) { $this->css[] = $uri; }
-
-	/**
-	 * Javascript functions/code to execute on page load
-	 */
 	function addOnload($js) { $this->onload[] = $js; }
 
 	/**
