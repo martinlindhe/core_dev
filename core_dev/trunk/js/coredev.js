@@ -37,6 +37,18 @@ function trim(str)
 	return str.replace(/^\s*|\s*$/g,"");
 }
 
+function is_numeric(n)
+{
+	var VALID = "0123456789.";
+
+	for (i = 0; i < n.length; i++) {
+		var c = n.charAt(i);
+		if (VALID.indexOf(c) == -1)
+			return false;
+	}
+   return true;
+}
+
 //Toggles element with name "n" between visible and hidden
 function toggle_element(n)
 {
@@ -90,9 +102,9 @@ function set_invisible(n)
 
 function empty_element(n)
 {
-	/*if (n ÄR NUMERISK)           FIXME hur kollar man det
+	if (is_numeric(n))
 		var e=document.getElementById(n);
-	else*/
+	else
 		e=n;
 
 	while (e.hasChildNodes())
