@@ -65,10 +65,10 @@ function dm()
 	$limit = decodeDataSize(ini_get('memory_limit'));
 
 	return
-		"[Memory usage]".dln().
-		"Limit  : ".formatDataSize($limit).dln().
-		"Peak   : ".formatDataSize(memory_get_peak_usage(false)).
-		" (".round(memory_get_peak_usage(false) / $limit * 100, 2)." %)".dln().dln();
+		"Memory usage: ".
+		formatDataSize(memory_get_peak_usage(false)).
+		" (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
+		formatDataSize($limit).")".dln().dln();
 }
 
 /**
