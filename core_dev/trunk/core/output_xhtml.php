@@ -429,8 +429,9 @@ function coreButton($name, $dst = '')
 
 	switch ($name) {
 		case 'Edit': $src = ''; break;
-		case 'Create': $src = ''; break;
+		case 'Create': $src = 'icon_create.png'; break;
 		case 'Delete': $src = 'icon_delete.png'; break;
+		case 'Folder': $src = 'icon_folder.png'; break;
 
 		default:
 			echo '<h1>ERROR unknown coreButton '.$name.'</h1>';

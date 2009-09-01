@@ -348,7 +348,7 @@ function displayRootForumContent()
 			}
 
 			echo '<tr class="forum_overview_item_'.($i%2?'even':'odd').'" >';
-			echo '<td align="center"><img src="'.$config['core']['web_root'].'gfx/icon_forum_folder.png" alt="Folder"/></td>';
+			echo '<td align="center">'.coreButton('Folder').'</td>';
 			echo '<td class="forum_item_text">';
 				echo '<a href="forum.php?id='.$row['itemId'].'">'.$subject.'</a><br/>';
 				echo $row['itemBody'];
@@ -500,7 +500,7 @@ function displayForumContentFlat($itemId)
 		if ($row['sticky'] == 2) {
 			echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_announcement.png" alt="Announcement" title="Announcement"/>';
 		} else if ($data['parentId'] == 0) {
-			echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_folder.png" alt="Folder" title="Folder"/>';
+			echo coreButton('Folder');
 		} else {
 			echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_topic.png" alt="Message" title="Message"/>';
 		}
