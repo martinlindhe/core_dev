@@ -1,7 +1,7 @@
 <?php
 
 require_once('config.php');
-require_core('functions_faq.php');
+require_once('functions_faq.php');
 require('design_head.php');
 
 echo '<h1>Frequently Asked Questions</h1>';
