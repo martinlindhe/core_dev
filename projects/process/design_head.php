@@ -1,6 +1,8 @@
 <?php
-$meta_css[] = 'css/site.css';
-createXHTMLHeader();
+$head = new xhtml_header();
+$head->addCss('css/site.css');
+echo $head->render();
+
 ?>
 <div id="header">
 	<div id="header-logo">
