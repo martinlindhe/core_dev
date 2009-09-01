@@ -13,12 +13,12 @@ $config['default_title'] = 'process server project';					//default title for pag
 
 $config['language'] = 'se';
 
-set_include_path($config['core']['fs_root'].'core/');
+set_include_path(get_include_path() . PATH_SEPARATOR . $config['core']['fs_root'].'core/');
 require_once('core.php');
 require_once('handler.php');
 require_once('functions_wiki.php');
 require_once('functions_process.php');
-restore_include_path();
+
 
 $config['db']['username']	= 'ml';
 $config['db']['password']	= 'nutana';
