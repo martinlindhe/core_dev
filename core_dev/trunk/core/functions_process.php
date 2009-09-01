@@ -315,19 +315,19 @@ function processQueue()
 				case 'application/x-ogg':
 					//FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
 					$dst_file = 'tmpfile.ogg';
-					$c = 'ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
+					$c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
 					break;
 
 				case 'audio/x-ms-wma':
 					$dst_file = 'tmpfile.wma';
-					$c = 'ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
+					$c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
 					break;
 
 				case 'audio/mpeg':
 				case 'audio/x-mpeg':
 					//fixme: source & destination should not be able to be the same!
 					$dst_file = 'tmpfile.mp3';
-					$c = 'ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
+					$c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
 					break;
 
 				default:
@@ -472,7 +472,7 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 	switch ($mime) {
 		case 'video/x-flv':
 			//Flash video. Confirmed working
-			$c = 'ffmpeg -i '.$h->files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
+			$c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
 			//XXX: vhook is disabled in ffmpeg, replacement in libavfilter is not yet committed in ffmpeg-svn (2009-09-01)
 			///if ($watermark) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$watermark.'" ';
 			$c .= $h->files->findUploadPath($newId);
@@ -538,7 +538,7 @@ function convertAudio($fileId, $mime)
 	switch ($mime) {
 		case 'audio/x-mpeg':
 			//MP3 audio
-			$c = 'ffmpeg -i '.$h->files->findUploadPath($fileId).' -f mp3 -ac 2 -ar 22050 ';
+			$c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -f mp3 -ac 2 -ar 22050 ';
 			$c .= $h->files->findUploadPath($newId);
 			break;
 
@@ -614,7 +614,7 @@ function generateVideoThumbs($fileId)
 
 	$newId = $h->files->cloneFile($fileId, FILETYPE_CLONE_VIDEOTHUMB10);
 
-	$c = 'ffmpeg -i '.$h->files->findUploadPath($fileId).' -ss '.$pos10.' -vframes 1 -f image2 '.$h->files->findUploadPath($newId).' 2> /dev/null';
+	$c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -ss '.$pos10.' -vframes 1 -f image2 '.$h->files->findUploadPath($newId).' 2> /dev/null';
 	echo "$ ".$c."\n";
 	exec($c);
 
