@@ -129,7 +129,7 @@ class output_feed extends coredev_output_list
 				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.
 				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
-				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$vid_url->render().'" duration="'.$entry['duration'].'"/>' : '').
+				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$vid_url->render().'"'.(!empty($entry['duration']) ? ' duration="'.$entry['duration'].'"' : '').'/>' : '').
 				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$img_url->render().'"/>' : '').
 			'</item>'."\n";
 		}
