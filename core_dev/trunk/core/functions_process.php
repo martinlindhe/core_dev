@@ -473,8 +473,8 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
 		case 'video/x-flv':
 			//Flash video. Confirmed working
 			$c = 'ffmpeg -i '.$h->files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
-			//XXX: Yes, ffmpeg does allow http://-locations for watermark files
-			if ($watermark) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$watermark.'" ';
+			//XXX: vhook is disabled in ffmpeg, replacement in libavfilter is not yet committed in ffmpeg-svn (2009-09-01)
+			///if ($watermark) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$watermark.'" ';
 			$c .= $h->files->findUploadPath($newId);
 			break;
 
