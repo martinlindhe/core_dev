@@ -428,7 +428,7 @@ function coreButton($name, $dst = '')
 	global $config;
 
 	switch ($name) {
-		case 'Edit': $src = ''; break;
+		case 'Edit': $src = 'icon_edit.png'; break;
 		case 'Create': $src = 'icon_create.png'; break;
 		case 'Delete': $src = 'icon_delete.png'; break;
 		case 'Folder': $src = 'icon_folder.png'; break;

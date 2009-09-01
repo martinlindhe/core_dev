@@ -35,15 +35,30 @@ class sql_id_list
 	/**
 	 * Adds a entry to the list
 	 */
-	function add($child)
+	function add($id)
 	{
 		global $db;
-		if (!is_numeric($child)) return false;
+		if (!is_numeric($id)) return false;
 
-		$this->list[] = $child;
+		$this->list[] = $id;
 
-		$q = 'INSERT INTO '.$this->tbl_name.' SET '.$this->owner_name.'='.$this->owner.','.$this->child_name.'='.$child;
+		$q = 'INSERT INTO '.$this->tbl_name.' SET '.$this->owner_name.'='.$this->owner.','.$this->child_name.'='.$id;
 		return $db->insert($q);
+	}
+
+	/**
+	 * Removes a entry from the list
+	 */
+	function remove($id)
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
+
+		$key = array_search($id, $this->list);
+		unset($this->list[$key]);
+
+		$q = 'DELETE FROM '.$this->tbl_name.' WHERE '.$this->owner_name.'='.$this->owner.' AND '.$this->child_name.'='.$id;
+		return $db->delete($q);
 	}
 
 }
