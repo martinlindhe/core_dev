@@ -360,7 +360,7 @@ abstract class db_base
 		$php_time = $total_time - $sql_time - $this->time_connect;
 
 		echo 'Time spent: '.round($total_time, 2).'s '.
-			' (SQL connect: '.round($this->time_connect, 2).'s, '.
+			' (DB connect: '.round($this->time_connect, 2).'s, '.
 			sizeof($this->queries).' SQL queries: '.round($sql_time, 2).'s, '.
 			'PHP: '.round($php_time, 2).'s)<br/><br/>';
 
