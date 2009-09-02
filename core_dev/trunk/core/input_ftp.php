@@ -4,13 +4,11 @@
  *
  * Collection of utilities to deal with FTP/FTPES servers
  *
- * upload and download has been verified to work with a ~10MB file (over ftp and ftpes)
- *
  * URL schemes:
  * ftp:// - Classic FTP
  * ftpes:// - FTP over Explicit SSL/TLS
  * ftps:// - FTP over Implicit SSL/TLS (XXX NOT SUPPORTED) - vsftp 2.0.7 support this, try it out
- * sftp:// - SSH FTP (XXX not supported here!!!)
+ * sftp:// - FTP over SSH (requires curl compiled --with-libssh2)
  *
  * http://en.wikipedia.org/wiki/FTPS
  *
@@ -19,7 +17,7 @@
 
 //XXX: rename to "client_ftp.php", it is both input & output...
 
-//XXX for sftp support, curl needs to be recompiled with sftp support (for ubuntu 9.04) https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
+//XXX for sftp support, curl needs to be recompiled with sftp support (ubuntu 9.04) https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
 class ftp
 {
@@ -88,14 +86,12 @@ class ftp
 		if ($this->debug)
 			curl_setopt($this->curl, CURLOPT_VERBOSE, true);
 
-		curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
-
 		switch ($this->scheme) {
 		case 'ftp':
 			curl_setopt($this->curl, CURLOPT_URL, $this->url() );
 			break;
 
-		case 'sftp': //Protocol sftp not supported or disabled in libcurl
+		case 'sftp':
 			curl_setopt($this->curl, CURLOPT_URL, $this->url() );
 			break;
 
@@ -123,6 +119,8 @@ class ftp
 	function get($url, $local_file = '')
 	{
 		if (!$this->connect($url)) return false;
+
+		curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
 
 		if ($local_file) {
 			$fp = fopen($local_file, 'w');
@@ -158,8 +156,8 @@ class ftp
 	/**
 	 * Uploads a file to the ftp
 	 *
+	 * @param $url destination path
 	 * @param $local_file path to local file
-	 * @param $remote_file path to remote file
 	 */
 	function put($url, $local_file)
 	{
