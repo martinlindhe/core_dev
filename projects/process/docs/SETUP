@@ -1,0 +1,12 @@
+requirements:
+
+  sudo aptitude install php5-curl php5-memcache memcached
+
+  sudo /etc/init.d/memcached start
+
+
+ffmpeg requirements:
+
+  recent svn build (SVN-r19750 is fine) of ffmpeg placed in /usr/local/bin
+
+
