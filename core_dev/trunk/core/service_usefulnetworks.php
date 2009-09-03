@@ -17,10 +17,11 @@
 //QUESTION: why is MDN & Sprint in the response xml's rather than correct info?
 //QUESTION: 12000 meter precision always on Tre phones?
 
-require_once('output_http.php');
+require_once('input_http.php');
 
 class un_request
 {
+	var $debug = false; ///XXX todo: use http client class and inherit debug to it
 	private $app_id, $user, $pass, $base_url; ///< auth credentials
 
 	private $active_token = '';  ///< set with active token if authenticated
@@ -117,11 +118,11 @@ class un_request
 
 		$res = http_post($uri, $x);
 
-		if ($res['status'] == 410) return false; //pos has already been polled, use pos_audit() instead
+		///if ($res['status'] == 410) return false; //pos has already been polled, use pos_audit() instead
 
 		$parsed = $this->parse_loc_response($res['body']);
 
-		if ($parsed['status_code'] != 'OK') return false;
+		if (!$parsed || $parsed['status_code'] != 'OK') return false;
 		return $parsed;
 	}
 
@@ -165,15 +166,17 @@ class un_request
 			$uri = $this->base_url.'/location/submit';
 		}
 
+		$carrier = strtoupper($carrier);
+
 		switch ($carrier) {
-			case 'Tre':
-			case 'Telia':
-			case 'Telenor':
-			case 'Tele2': //XXX untested!
+			case 'TRE':
+			case 'TELIA':
+			case 'TELENOR':
+			case 'TELE2': //XXX untested!
 				$type = 'MSISDN';
 				break;
 
-			case 'Sprint':
+			case 'SPRINT':
 				$type = 'MDN';
 				break;
 

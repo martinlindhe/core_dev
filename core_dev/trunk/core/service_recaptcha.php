@@ -18,8 +18,6 @@
  * TODO: recaptchaVerify() returns a 2nd line of fail reason, which could be displayed to the user
  */
 
-require_once('output_http.php');
-
 define('RECAPTCHA_API',     'http://api.recaptcha.net');
 define('RECAPTCHA_API_SSL', 'https://api-secure.recaptcha.net');
 define('RECAPTCHA_VERIFY',  'http://api-verify.recaptcha.net/verify');

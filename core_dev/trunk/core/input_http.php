@@ -11,19 +11,21 @@
 
 require_once('class.Cache.php');
 
+//XXX rename to client_http.php
+
 /**
  * Utility class for url manipulation and cached reads
  */
 class url_handler
 {
-	var $scheme, $host, $port, $path, $param;
-	var $username, $password; ///< for HTTP AUTH
-
-	var $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
-
-	var $headers, $body;
-	var $cache_time = 300; //5min
 	var $debug = false;
+	private $scheme, $host, $port, $path, $param;
+	private $username, $password; ///< for HTTP AUTH
+
+	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
+
+	private $headers, $body;
+	private $cache_time = 300; //5min
 
 	function __construct($url = '')
 	{
@@ -35,6 +37,9 @@ class url_handler
 		if ($url) $this->parse_url($url);
 	}
 
+	function getBody() { return $this->body; }
+	function getHeaders() { return $this->headers; }
+
 	function parse_url($url)
 	{
 		$parsed = parse_url($url);
@@ -45,7 +50,7 @@ class url_handler
 		case 'rtmp':
 			break;
 		default:
-			echo "unhandled url scheme ".$parsed['scheme']."\n";
+			echo "unhandled url scheme ".$parsed['scheme'].dln();
 			return false;
 		}
 		$this->scheme = $parsed['scheme'];
@@ -88,13 +93,13 @@ class url_handler
 	{
 		$url = $this->compact();
 		if (!is_url($url)) {
-			echo $url." is not a valid URL\n";
+			echo $url." is not a valid URL".dln();
 			return false;
 		}
 
 		$ch = curl_init($url);
 		if (!$ch) {
-			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")\n";
+			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".dln();
 			return false;
 		}
 
@@ -111,7 +116,7 @@ class url_handler
 
 		if (!$this->username && empty($post_params)) {
 			$cache = new cache();
-			//$cache->debug = true;
+			if ($this->debug) $cache->debug = true;
 			$key_head = 'url_head//'.htmlspecialchars($url);
 			$key_body = 'url//'.htmlspecialchars($url);
 
@@ -134,14 +139,26 @@ class url_handler
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		if (!empty($post_params)) {
-			$var = htmlspecialchars(http_build_query($post_params));
+			if ($this->debug) echo "HTTP POST ".$this->render()." ... ";
+
+			if (is_array($post_params)) {
+				$var = htmlspecialchars(http_build_query($post_params));
+			} else {
+				$var = $post_params;
+			}
+			if ($this->debug) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.dln();
 
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
+		} else {
+			if ($this->debug) echo "HTTP GET ".$this->render()." ...";
 		}
-
 		$res = curl_exec($ch);
 		curl_close($ch);
+		if ($this->debug) {
+			echo "Got ".strlen($res)." bytes:".dln();
+			echo '<pre>'.htmlspecialchars($res).'</pre>';
+		}
 
 		if (!$head_only) {
 			$pos  = strpos($res, "\r\n\r\n");
@@ -321,4 +338,18 @@ function http_content_type($p)
 	return false;
 }
 
+
+/**
+ * Performs a HTTP POST request on given url
+ */
+function http_post($url, $data)
+{
+	$x = new url_handler($url);
+	$x->post($data);
+
+	$res['body'] = $x->getBody();
+	$res['header'] = $x->getHeaders();
+
+	return $res;
+}
 ?>

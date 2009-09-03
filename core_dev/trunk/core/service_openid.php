@@ -45,7 +45,6 @@
 //STATUS: this code is working but needs a cleanup
 
 require_once('output_xhtml.php');
-require_once('output_http.php');
 
 define('OPENID_GOOGLE_XRDS',  'https://www.google.com/accounts/o8/id');	//XXX this should be parsed to get login URL, its currently static on google but that might change
 define('OPENID_GOOGLE_LOGIN', 'https://www.google.com/accounts/o8/ud');
@@ -130,5 +129,22 @@ function openidLogin($site_url)
 	echo xhtmlFormClose();
 	return false;
 }
+
+/**
+ * Encodes parameters to a HTTP GET/POST request
+ * For GET requests in URL
+ * For POST requests with "Content-Type: application/x-www-form-urlencoded"
+ */
+function http_encode_params($params)
+{
+	//XXX only used with service_openid.php, can "http_build_query" be used instead?
+	$res = '';
+	foreach ($params as $key => $val) {
+		$res .= $key.'='.urlencode($val).'&';
+	}
+
+	return substr($res, 0, strlen($res)-1);
+}
+
 
 ?>

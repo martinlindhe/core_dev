@@ -28,6 +28,7 @@ class Sendmail
 
 	private $from_adr, $from_name;
 	private $rply_adr, $rply_name;
+	private $subject;
 	private $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
 	private $html = false;
 	private $attachments = array();
@@ -52,7 +53,9 @@ class Sendmail
 		$this->rply_name = $n;
 	}
 
-	function setHTML($bool) { $this->html = $bool; }
+	function setSubject($s) { $this->subject = $s; }
+
+	function setHTML($bool = true) { $this->html = $bool; }
 
 	function addRecipient($s) { $this->to_adr[] = $s; }
 	function addCc($s) { $this->cc_adr[] = $s; }
@@ -77,7 +80,7 @@ class Sendmail
 	/**
 	 * Sends a email
 	 */
-	function send($subject, $msg)
+	function send($msg)
 	{
 		if ($this->debug) $this->smtp->debug = true;
 
@@ -87,7 +90,7 @@ class Sendmail
 		$header =
 			"Date: ".date('r')."\r\n".
 			"From: ".(mb_encode_mimeheader($this->from_name, 'UTF-8') ? mb_encode_mimeheader($this->from_name, 'UTF-8')." <".$this->from_adr.">" : $this->from_adr)."\r\n".
-			"Subject: ".mb_encode_mimeheader($subject, 'UTF-8')."\r\n".
+			"Subject: ".mb_encode_mimeheader($this->subject, 'UTF-8')."\r\n".
 			"User-Agent: core_dev\r\n".	//XXX version string
 			"MIME-Version: 1.0\r\n";
 
