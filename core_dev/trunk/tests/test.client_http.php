@@ -1,9 +1,9 @@
 <?php
 require_once('/var/www/core_dev/core/core.php');
-require_once('/var/www/core_dev/core/input_http.php');
+require_once('/var/www/core_dev/core/client_http.php');
 
 $url = 'https://styggve.dyndns.org:61001/xspf/';
-$u = new url_handler($url);
+$u = new http($url);
 
 echo 'mime type: '.http_content_type( $u->head() ). "\n";
 die;

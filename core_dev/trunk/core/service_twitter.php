@@ -11,13 +11,11 @@
  */
 
 require_once('input_feed.php');
-require_once('input_http.php');
+require_once('client_http.php');
 
 class twitter
 {
-	var $username, $password;
-
-	var $api_url = 'http://twitter.com/';
+	private $username, $password;
 
 	function __construct($username = '', $password = '')
 	{
@@ -27,11 +25,11 @@ class twitter
 
 	function command($url_part, $params = array())
 	{
-		$h = new url_handler($this->api_url.$url_part);
+		$h = new http('http://twitter.com/'.$url_part);
 
 		$h->username = $this->username;
 		$h->password = $this->password;
-		
+
 		return $h->post($params);
 	}
 
@@ -39,7 +37,7 @@ class twitter
 	{
 		if (!$user) $user = $this->username;
 		$c = 'statuses/user_timeline.rss?screen_name='.$user; //&count=30
-		
+
 		$data = $this->command($c);
 		$feed = new input_feed();
 
@@ -49,7 +47,7 @@ class twitter
 	function getFriendsTimeline()
 	{
 		$c = 'statuses/friends_timeline.rss'; //&count=30
-		
+
 		$data = $this->command($c);
 		$feed = new input_feed();
 

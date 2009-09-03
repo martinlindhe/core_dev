@@ -84,8 +84,8 @@ class output_playlist extends coredev_output_list
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 
-			$vid_url = new url_handler($row['video']);
-			$img_url = new url_handler($row['image']);
+			$vid_url = new http($row['video']);
+			$img_url = new http($row['image']);
 
 			$res .= '<track>';
 			$title = formatTime($row['pubdate']).' '.$row['title'];

@@ -15,7 +15,7 @@
 
 //TODO: extend callback to allow mapping of special fields to standard ones, such as "<svtplay:xmllink svtplay:type="titles">http://xml.svtplay.se/v1/titles/102897</svtplay:xmllink>" to "guid"
 
-require_once('input_http.php'); //for is_url()
+require_once('client_http.php'); //for is_url()
 
 class input_feed
 {
@@ -156,7 +156,7 @@ class input_feed
 	function parseRSS($data, $callback = '')
 	{
 		if (is_url($data)) {
-			$u = new url_handler($data);
+			$u = new http($data);
 			$data = $u->fetch();
 		}
 
@@ -284,7 +284,7 @@ class input_feed
 	function parseATOM($data, $callback = '')
 	{
 		if (is_url($data)) {
-			$u = new url_handler($data);
+			$u = new http($data);
 			$data = $u->fetch();
 		}
 
@@ -373,7 +373,7 @@ class input_feed
 	{
 		if (!is_url($url)) return false;
 
-		$u = new url_handler($url);
+		$u = new http($url);
 		$data = $u->get();
 
 		return $this->parse($data, $callback);

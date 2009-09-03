@@ -9,7 +9,7 @@
 
 //TODO: use this class in many more places
 
-require_once('input_http.php'); //for url_handler
+require_once('client_http.php');
 
 class xml_input
 {
@@ -29,7 +29,7 @@ class xml_input
     function parse($data, $index = '', $value = '')
     {
 		if (is_url($data)) {
-			$u = new url_handler($data);
+			$u = new http($data);
 			$u->cache_time = $this->cache_time;
 			$data = $u->get();
 		}
@@ -82,12 +82,12 @@ class xml_input
 array_key_exists
 		else if (!empty($attr)) {
 			echo "key: ".$keys."\n";
-			
+
 			print_r($attr);
 			die('special '.$attr);
 			* */
 		//}
-			
+
 
 		$this->keys = $keys;
 	}

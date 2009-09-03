@@ -14,7 +14,7 @@
  */
 
 require_once('output_list.php');
-require_once('input_http.php'); //for url_handler()
+require_once('client_http.php');
 require_once('functions_time.php');	//for date3339() and date882()
 
 class output_feed extends coredev_output_list
@@ -67,7 +67,7 @@ class output_feed extends coredev_output_list
 	 */
 	function renderATOM()
 	{
-		$u = new url_handler($this->link);
+		$u = new http($this->link);
 		$u->path = $_SERVER['REQUEST_URI'];
 
 		$res =
@@ -80,8 +80,8 @@ class output_feed extends coredev_output_list
 			'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
-			$vid_url = new url_handler($entry['video']);
-			$img_url = new url_handler($entry['image']);
+			$vid_url = new http($entry['video']);
+			$img_url = new http($entry['image']);
 			$res .=
 			'<entry>'.
 				'<id>'.(!empty($entry['guid']) ? $entry['guid'] : htmlspecialchars($entry['link']) ).'</id>'.
@@ -104,7 +104,7 @@ class output_feed extends coredev_output_list
 	 */
 	function renderRSS2()
 	{
-		$u = new url_handler($this->link);
+		$u = new http($this->link);
 		$u->path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 
 		$res =
@@ -119,8 +119,8 @@ class output_feed extends coredev_output_list
 				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->entries as $entry) {
-			if (!empty($entry['video'])) $vid_url = new url_handler($entry['video']);
-			if (!empty($entry['image'])) $img_url = new url_handler($entry['image']);
+			if (!empty($entry['video'])) $vid_url = new http($entry['video']);
+			if (!empty($entry['image'])) $img_url = new http($entry['image']);
 
 			$res .=
 			'<item>'.

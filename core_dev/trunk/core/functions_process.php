@@ -19,7 +19,7 @@
  */
 
 require_once('atom_customers.php');
-require_once('input_http.php');
+require_once('client_http.php');
 require_once('functions_image.php');
 require_once('functions_fileareas.php');
 
