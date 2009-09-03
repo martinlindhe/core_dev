@@ -90,8 +90,7 @@ class sql_id_list
 		global $db;
 		if (!is_numeric($id)) return false;
 
-		$key = array_search($id, $this->list);
-		unset($this->list[$key]);
+		unset($this->list[$id]);
 
 		$q = 'DELETE FROM '.$this->tbl_name.' WHERE '.$this->owner_name.'='.$this->owner.' AND '.$this->child_name.'='.$id;
 		return $db->delete($q);
