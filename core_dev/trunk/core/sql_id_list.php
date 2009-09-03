@@ -23,6 +23,24 @@ class sql_id_list
 	function getList() { return $this->list; }
 
 	/**
+	 * Returns owner count for each child and child name
+	 * @return array with indexes 'name' and 'cnt'
+	 */
+	function getSummary()
+	{
+		global $db;
+		if (!$this->child_obj) {
+			die('summary without child not implemented');
+		}
+		$q = 'SELECT '.$this->child_obj->getKeyName().' AS name, (SELECT COUNT(*) FROM '.$this->tbl_name;
+		$q .= ' WHERE '.$this->child_name.'=t1.'.$this->child_obj->getIdName();
+		if ($this->owner) $q .= ' AND '.$this->owner_name.'='.$this->owner;
+		$q .= ') AS cnt FROM '.$this->child_obj->getTableName().' AS t1';
+
+		return $db->getArray($q);
+	}
+
+	/**
 	 * Loads a list for the owner
 	 *
 	 * @param $owner Owner id
@@ -42,7 +60,7 @@ class sql_id_list
 			$q .= ' LEFT JOIN '.$this->child_obj->getTableName().' ON';
 			$q .= ' ('.$this->tbl_name.'.'.$this->child_name.'='.$this->child_obj->getTableName().'.'.$this->child_obj->getIdName().')';
 		}
-		if ($owner) $q .= ' WHERE '.$this->owner_name.'='.$this->owner;
+		if ($this->owner) $q .= ' WHERE '.$this->owner_name.'='.$this->owner;
 
 		$this->list = $db->getMappedArray($q);
 		return true;

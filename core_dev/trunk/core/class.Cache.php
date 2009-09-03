@@ -16,6 +16,9 @@ class cache
 	var $debug  = false;
 	private $handle = false;
 
+	/**
+	 * @param $server_pool array of "host[:port]" addresses to memcache servers
+	 */
 	function __construct($server_pool = false)
 	{
 		if (!class_exists('Memcache')) {

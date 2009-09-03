@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Collection of utilities to deal with HTTP/HTTPS servers
+ * Utility class for HTTP GET/POST requests with cache and url manipulation
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
@@ -11,19 +11,15 @@
 
 require_once('class.Cache.php');
 
-/**
- * Utility class for url manipulation and cached reads
- */
 class http
 {
 	var $debug = false;
 	private $scheme, $host, $port, $path, $param;
 	private $username, $password; ///< for HTTP AUTH
 
-	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
-
 	private $headers, $body;
 	private $cache_time = 300; //5min
+	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
 
 	function __construct($url = '')
 	{
@@ -39,6 +35,7 @@ class http
 	function getHeaders() { return $this->headers; }
 
 	function setCacheTime($sec) { $this->cache_time = $sec; }
+	function setUserAgent($ua) { $this->user_agent = $ua; }
 
 	function parse_url($url)
 	{
