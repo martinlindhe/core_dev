@@ -15,8 +15,6 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//XXX: rename to "client_ftp.php", it is both input & output...
-
 //XXX for sftp support, curl needs to be recompiled with sftp support (ubuntu 9.04) https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
 class ftp
