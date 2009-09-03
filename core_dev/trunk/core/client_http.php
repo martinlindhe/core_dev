@@ -38,6 +38,8 @@ class http
 	function getBody() { return $this->body; }
 	function getHeaders() { return $this->headers; }
 
+	function setCacheTime($sec) { $this->cache_time = $sec; }
+
 	function parse_url($url)
 	{
 		$parsed = parse_url($url);
@@ -236,7 +238,7 @@ function is_url($url)
 function http_get($url, $cache_time = 60)
 {
 	$h = new http($url);
-	$h->cache_time = $cache_time;
+	$h->setCacheTime($cache_time);
 	return $h->get();
 }
 
@@ -264,7 +266,7 @@ function http_post($url, $data)
 function http_head($url, $cache_time = 60)
 {
 	$h = new http($url);
-	$h->cache_time = $cache_time;
+	$h->setCacheTime($cache_time);
 	return $h->head();
 }
 

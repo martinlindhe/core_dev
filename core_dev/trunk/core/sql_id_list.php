@@ -8,7 +8,7 @@ class sql_id_list
 	private $tbl_name, $owner_name, $child_name;
 	private $owner;
 	private $list = array();
-	private $child_obj = false; ///< child id table is described by this object
+	private $child_obj = false; ///< child id table is described by this sql_id_key object
 
 	function __construct($obj = false)
 	{

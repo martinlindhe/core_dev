@@ -13,9 +13,8 @@
 
 class cache
 {
-	var $handle = false;
 	var $debug  = false;
-	var $mode   = '';
+	private $handle = false;
 
 	function __construct($server_pool = false)
 	{
@@ -24,7 +23,6 @@ class cache
 			return false;
 		}
 
-		$this->mode = 'memcache';
 		$this->handle = new Memcache;
 
 		if (!$server_pool) $server_pool = array('127.0.0.1:11211');
