@@ -11,11 +11,9 @@
 
 class diff
 {
-	var $diff = array();
+	private $diff = array();
 
-	function __construct()
-	{
-	}
+	function getDiff() { return implode("\n", $this->diff); }
 
 	function strings($str1, $str2)
 	{
@@ -30,12 +28,14 @@ class diff
 
 		unlink($f2);
 		unlink($f1);
+		return $this->getDiff();
 	}
 
 	function files($file1, $file2)
 	{
 		$c = 'diff --unified '.escapeshellarg($file1).' '.escapeshellarg($file2);
 		exec($c, $this->diff);
+		return $this->getDiff();
 	}
 
 	function output()
