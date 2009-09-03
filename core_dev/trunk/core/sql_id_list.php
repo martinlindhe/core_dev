@@ -24,7 +24,7 @@ class sql_id_list
 
 	/**
 	 * Returns owner count for each child and child name
-	 * @return array with indexes 'name' and 'cnt'
+	 * @return array with indexes 'id', 'name' and 'cnt'
 	 */
 	function getSummary()
 	{
@@ -32,7 +32,9 @@ class sql_id_list
 		if (!$this->child_obj) {
 			die('summary without child not implemented');
 		}
-		$q = 'SELECT '.$this->child_obj->getKeyName().' AS name, (SELECT COUNT(*) FROM '.$this->tbl_name;
+		$q = 'SELECT '.$this->child_obj->getIdName().' AS id,';
+		$q .= $this->child_obj->getKeyName().' AS name,';
+		$q .= ' (SELECT COUNT(*) FROM '.$this->tbl_name;
 		$q .= ' WHERE '.$this->child_name.'=t1.'.$this->child_obj->getIdName();
 		if ($this->owner) $q .= ' AND '.$this->owner_name.'='.$this->owner;
 		$q .= ') AS cnt FROM '.$this->child_obj->getTableName().' AS t1';
