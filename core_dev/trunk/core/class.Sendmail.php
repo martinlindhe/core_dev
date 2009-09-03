@@ -19,7 +19,7 @@
  *    are fully loaded (no gem next to mail)
  */
 
-require_once('output_smtp.php');
+require_once('client_smtp.php');
 
 class Sendmail
 {

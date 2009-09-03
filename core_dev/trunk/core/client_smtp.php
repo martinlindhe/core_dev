@@ -29,8 +29,6 @@
 
 require_once('input_mime.php');	//for parseAuthRequest()
 
-//XXX rename to client_smtp.php
-
 class smtp
 {
 	var     $debug  = false;

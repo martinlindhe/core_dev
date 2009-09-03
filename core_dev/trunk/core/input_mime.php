@@ -177,7 +177,7 @@ function mimeParseAttachments(&$header, &$body)
 }
 
 /**
- * Parses a MIME Authenticate response, useful for output_smtp.php, input_sip.php etc
+ * Parses a MIME Authenticate response, useful for client_smtp.php, input_sip.php etc
  */
 function parseAuthRequest($s)
 {

@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-//TODO: handleForgotPassword(): use output_smtp.php instead!
+//TODO: handleForgotPassword(): use client_smtp.php instead!
 
 require_once('auth_base.php');
 require_once('design_auth.php');		//default functions for auth xhtml forms
