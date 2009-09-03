@@ -8,8 +8,14 @@ class sql_id_list
 	private $tbl_name, $owner_name, $child_name;
 	private $owner;
 	private $list = array();
+	private $child_obj = false; ///< child id table is described by this object
 
-	function setTable($n) { $this->tbl_name = $n; }
+	function __construct($obj = false)
+	{
+		if ($obj) $this->child_obj = $obj;
+	}
+
+	function setTableName($n) { $this->tbl_name = $n; }
 	function setOwnerName($n) { $this->owner_name = $n; }
 	function setChildName($n) { $this->child_name = $n; }
 
@@ -21,14 +27,24 @@ class sql_id_list
 	 *
 	 * @param $owner Owner id
 	 */
-	function load($owner)
+	function load($owner = 0)
 	{
 		global $db;
 		if (!is_numeric($owner)) return false;
 		$this->owner = $owner;
 
-		$q = 'SELECT '.$this->child_name.' FROM '.$this->tbl_name.' WHERE '.$this->owner_name.'='.$this->owner;
-		$this->list = $db->get1dArray($q);
+		$q = 'SELECT '.$this->child_name;
+		if ($this->child_obj)
+			$q .= ','.$this->child_obj->getKeyName();
+
+		$q .= ' FROM '.$this->tbl_name;
+		if ($this->child_obj) {
+			$q .= ' LEFT JOIN '.$this->child_obj->getTableName().' ON';
+			$q .= ' ('.$this->tbl_name.'.'.$this->child_name.'='.$this->child_obj->getTableName().'.'.$this->child_obj->getIdName().')';
+		}
+		if ($owner) $q .= ' WHERE '.$this->owner_name.'='.$this->owner;
+
+		$this->list = $db->getMappedArray($q);
 		return true;
 	}
 

@@ -9,12 +9,15 @@ class sql_id_key
 	private $tbl_name, $id_name, $key_name;
 	private $id, $key;
 
-	function setTable($n) { $this->tbl_name = $n; }
+	function setTableName($n) { $this->tbl_name = $n; }
 	function setIdName($n) { $this->id_name = $n; }
 	function setKeyName($n) { $this->key_name = $n; }
 
 	function getId() { return $this->id; }
 	function getKey() { return $this->key; }
+	function getTableName() { return $this->tbl_name; }
+	function getIdName() { return $this->id_name; }
+	function getKeyName() { return $this->key_name; }
 
 	/**
 	 * Loads a key value
