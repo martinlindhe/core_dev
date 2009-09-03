@@ -21,10 +21,10 @@ require_once('output_http.php');
 
 class un_request
 {
-	var $app_id, $user, $pass, $base_url; ///< auth credentials
+	private $app_id, $user, $pass, $base_url; ///< auth credentials
 
-	var $active_token = '';  ///< set with active token if authenticated
-	var $response_code = ''; ///< holds the response code of last server response
+	private $active_token = '';  ///< set with active token if authenticated
+	private $response_code = ''; ///< holds the response code of last server response
 
 	function __construct($url)
 	{

@@ -4,7 +4,7 @@
  *
  * Sends mail through a SMTP email server
  *
- * See class.Sendmail.php for a easier to use API
+ * Use class.Sendmail.php for a easy to use "send mail" API
  *
  * References
  * http://tools.ietf.org/html/rfc5321
@@ -16,7 +16,7 @@
  * AUTH CRAM-MD5    http://www.ietf.org/rfc/rfc2195.txt
  * AUTH DIGEST-MD5  http://www.ietf.org/rfc/rfc2831.txt
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 /**
@@ -29,25 +29,26 @@
 
 require_once('input_mime.php');	//for parseAuthRequest()
 
+//XXX rename to client_smtp.php
+
 class smtp
 {
-	var $handle = false, $debug = false;
+	var     $debug  = false;
+	private $handle = false;
 
-	var $server, $port;
-	var $username, $password;
+	private $server, $port;
+	private $username, $password;
 
-	var $hostname = 'localhost.localdomain';	///< our hostname, sent with HELO requests (XXX be dynamic)
-	var $servername = '';
+	private $hostname   = 'localhost.localdomain';  ///< our hostname, sent with HELO requests (XXX be dynamic)
+	private $servername = '';
 
-	var $status = 0;		///< the last status code returned from the server
-	var $lastreply = '';	///< the last reply from the server with status code stripped out
-	var $esmtp = false;		///< is server ESMTP capable?
-	var $ability;			///< server abilities (response from EHLO)
+	private $status = 0;       ///< the last status code returned from the server
+	private $lastreply = '';   ///< the last reply from the server with status code stripped out
+	private $esmtp = false;    ///< is server ESMTP capable?
+	private $ability;          ///< server abilities (response from EHLO)
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
-		global $config;
-		if (!empty($config['debug'])) $this->debug = true;
 		$this->server = $server;
 		$this->port = $port;
 		$this->username = $username;
@@ -63,12 +64,12 @@ class smtp
 	{
 		$this->handle = fsockopen($this->server, $this->port, $errno, $errstr, $timeout);
 		if (!$this->handle) {
-			if ($this->debug) echo "smtp->login() connection failed: ".$errno.": ".$errstr."\n";
+			if ($this->debug) echo "smtp->login() connection failed: ".$errno.": ".$errstr.dln();
 			return false;
 		}
 		$this->read();
 		if ($this->status != 220) {
-			echo "smtp->login() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->login() [".$this->status."]: ".$this->lastreply.dln();
 			$this->_QUIT();
 			return false;
 		}
@@ -86,7 +87,7 @@ class smtp
 		$code = '';
 		while ($row = fgets($this->handle, 512)) {
 			if ($this->debug && $code && substr($row, 0, 3) != $code) {
-				echo "smtp->read() ERROR status changed from ".$code." to ".substr($row, 0, 3)."\n";
+				echo "smtp->read() ERROR status changed from ".$code." to ".substr($row, 0, 3).dln();
 			}
 			$code = substr($row, 0, 3);
 			$str .= substr($row, 4);
@@ -95,12 +96,12 @@ class smtp
 		$this->status = intval($code);
 		if (substr($str, -2) == "\r\n") $str = substr($str, 0, -2);
 		$this->lastreply = $str;
-		if ($this->debug) echo "Read [".$code."]: ".$str."\n";
+		if ($this->debug) echo "Read [".$code."]: ".$str.dln();
 	}
 
 	function write($str)
 	{
-		if ($this->debug) echo "Write: ".$str."\n";
+		if ($this->debug) echo "Write: ".$str.dln();
 		fputs($this->handle, $str."\r\n");
 		$this->read();	//read response
 	}
@@ -110,7 +111,7 @@ class smtp
 		if (!$this->handle) return;
 		$this->write('QUIT');
 		if ($this->status != 221) {
-			echo "smtp->_QUIT() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_QUIT() [".$this->status."]: ".$this->lastreply.dln();
 		}
 		fclose($this->handle);
 		$this->handle = false;
@@ -120,7 +121,7 @@ class smtp
 	{
 		$this->write('HELO '.$this->hostname);
 		if ($this->status != 250) {
-			echo "smtp->_HELO() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_HELO() [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 		$this->servername = $this->lastreply;
@@ -134,7 +135,7 @@ class smtp
 
 		$this->write('EHLO '.$this->hostname);
 		if ($this->status != 250) {
-			echo "smtp->_EHLO() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_EHLO() [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 
@@ -164,11 +165,11 @@ class smtp
 		if (isset($this->ability['STARTTLS'])) {
 			$this->write('STARTTLS');
 			if ($this->status != 220) {
-				echo "smtp->_STARTTLS() [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_STARTTLS() [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			if (!stream_socket_enable_crypto($this->handle, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-				echo "smtp->_STARTTLS() enable crypto failed\n";
+				echo "smtp->_STARTTLS() enable crypto failed".dln();
 				return false;
 			}
 			$this->_EHLO();	//must resend EHLO after STARTTLS
@@ -182,7 +183,7 @@ class smtp
 			//XXX: this implementation might be buggy in regards to charset (non latin1 letters in username / password)
 			$this->write('AUTH DIGEST-MD5');
 			if ($this->status != 334) {
-				echo "smtp->_AUTH() DIGEST-MD5 [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() DIGEST-MD5 [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			//echo "challenge: ".base64_decode($this->lastreply)."\n";
@@ -191,7 +192,7 @@ class smtp
 			if (empty($chal['qop'])) $chal['qop'] = 'auth';	//default
 
 			if ($chal['algorithm'] != 'md5-sess') {
-				echo "smtp->_AUTH() DIGEST-MD5 unknown algorithm: ".$chal['algorithm']."\n";
+				echo "smtp->_AUTH() DIGEST-MD5 unknown algorithm: ".$chal['algorithm'].dln();
 				return false;
 			}
 
@@ -220,7 +221,7 @@ class smtp
 
 			$this->write(base64_encode($cmd));
 			if ($this->status != 334) {
-				echo "smtp->_AUTH() DIGEST-MD5 challenge [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() DIGEST-MD5 challenge [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			//XXX validate server response, RFC 2831 @ 2.1.3
@@ -228,7 +229,7 @@ class smtp
 
 			$this->write('NOOP');	//FIXME figure out why we need to send 1 more command to get the 235 status
 			if ($this->status != 235) {
-				echo "smtp->_AUTH() DIGEST-MD5 auth failed [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() DIGEST-MD5 auth failed [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			return true;
@@ -237,13 +238,13 @@ class smtp
 		if (isset($this->ability['AUTH']['CRAM-MD5'])) {
 			$this->write('AUTH CRAM-MD5');
 			if ($this->status != 334) {
-				echo "smtp->_AUTH() CRAM-MD5 [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() CRAM-MD5 [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			$digest = hash_hmac('md5', base64_decode($this->lastreply), $this->password);
 			$this->write(base64_encode($this->username.' '.$digest));
 			if ($this->status != 235) {
-				echo "smtp->_AUTH() CRAM-MD5 challenge [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() CRAM-MD5 challenge [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			return true;
@@ -252,19 +253,19 @@ class smtp
 		if (isset($this->ability['AUTH']['LOGIN'])) {
 			$this->write('AUTH LOGIN');
 			if ($this->status != 334) {
-				echo "smtp->_AUTH() LOGIN [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() LOGIN [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 
 			$this->write(base64_encode($this->username));
 			if ($this->status != 334) {
-				echo "smtp->_AUTH() LOGIN username [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() LOGIN username [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 
 			$this->write(base64_encode($this->password));
 			if ($this->status != 235) {
-				echo "smtp->_AUTH() LOGIN password [".$this->status."]: ".$this->lastreply."\n";
+				echo "smtp->_AUTH() LOGIN password [".$this->status."]: ".$this->lastreply.dln();
 				return false;
 			}
 			return true;
@@ -274,13 +275,13 @@ class smtp
 		$this->write('AUTH PLAIN');
 		if ($this->status == 503) return true; //authentication not enabled
 		if ($this->status != 334) {
-			echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 		$cmd = base64_encode(chr(0).$this->username.chr(0).$this->password);
 		$this->write($cmd);
 		if ($this->status != 235) {
-			echo "smtp->_AUTH() PLAIN error [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_AUTH() PLAIN error [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 		return true;
@@ -290,7 +291,7 @@ class smtp
 	{
 		$this->write('MAIL FROM:<'.$f.'>');
 		if ($this->status != 250) {
-			echo "smtp->_MAIL_FROM() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_MAIL_FROM() [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 		return true;
@@ -300,7 +301,7 @@ class smtp
 	{
 		$this->write('RCPT TO:<'.$t.'>');
 		if ($this->status != 250) {
-			echo "smtp->_RCPT_TO() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_RCPT_TO() [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 		return true;
@@ -310,13 +311,13 @@ class smtp
 	{
 		$this->write('DATA');
 		if ($this->status != 354) {
-			echo "smtp->_DATA() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_DATA() [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 
 		$this->write($d."\r\n.");
 		if ($this->status != 250) {
-			echo "smtp->_DATA() [".$this->status."]: ".$this->lastreply."\n";
+			echo "smtp->_DATA() [".$this->status."]: ".$this->lastreply.dln();
 			return false;
 		}
 		return true;

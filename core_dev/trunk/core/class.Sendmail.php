@@ -23,51 +23,40 @@ require_once('output_smtp.php');
 
 class Sendmail
 {
-	var $smtp, $debug = false;
+	var     $debug = false;
+	private $smtp;
 
-	var $from_adr, $from_name;
-	var $rply_adr, $rply_name;
-	var $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
-	var $html = false;
-	var $attachments = array();
+	private $from_adr, $from_name;
+	private $rply_adr, $rply_name;
+	private $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
+	private $html = false;
+	private $attachments = array();
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
-		global $config;
-		if (!empty($config['debug'])) $this->debug = true;
-
 		mb_internal_encoding('UTF-8');	//XXX: required for uf8-encoded text to work
 
 		$this->smtp = new smtp($server, $username, $password, $port);
 		$this->from_adr = $username;
 	}
 
-	function from($s, $n = '')
+	function setFrom($s, $n = '')
 	{
 		$this->from_adr = $s;
 		$this->from_name = $n;
 	}
 
-	function reply_to($s, $n = '')
+	function setReplyTo($s, $n = '')
 	{
 		$this->rply_adr = $s;
 		$this->rply_name = $n;
 	}
 
-	function to($s)
-	{
-		$this->to_adr[] = $s;
-	}
+	function setHTML($bool) { $this->html = $bool; }
 
-	function cc($s)
-	{
-		$this->cc_adr[] = $s;
-	}
-
-	function bcc($s)
-	{
-		$this->bcc_adr[] = $s;
-	}
+	function addRecipient($s) { $this->to_adr[] = $s; }
+	function addCc($s) { $this->cc_adr[] = $s; }
+	function addBcc($s) { $this->bcc_adr[] = $s; }
 
 	function attach($file)
 	{
@@ -78,7 +67,7 @@ class Sendmail
 	function embed($file, $cid)
 	{
 		if (!file_exists($file)) {
-			echo "Error: File ".$file." not found\n";
+			echo "Error: File ".$file." not found".dln();
 			return false;
 		}
 		$this->attachments[] = array($file, $cid);
@@ -90,6 +79,8 @@ class Sendmail
 	 */
 	function send($subject, $msg)
 	{
+		if ($this->debug) $this->smtp->debug = true;
+
 		if (!$this->smtp->login()) return false;
 		if (!$this->smtp->_MAIL_FROM($this->from_adr)) return false;
 
