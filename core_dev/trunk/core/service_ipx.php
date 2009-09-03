@@ -139,16 +139,7 @@ function sendSMS($customerId, $from_number, $dst_number, $msg, $tariff = '', $re
  */
 function sendSmsBatch($customerId, $from_number, $dst, $msg)
 {
-	$dst = str_replace("\n", ' ', $dst);
-	$dst = str_replace("\t", ' ', $dst);
-	$dst = str_replace(',', ' ', $dst);
-	$dst = str_replace(';', ' ', $dst);
-	$dst = trim($dst);
-
-	do {
-		$orgdst = $dst;
-		$dst = str_replace('  ', ' ', $dst);
-	} while ($orgdst != $dst);
+	$dst = normalizeString($dst, array("\n", "\t", ",", ";"));
 
 	$nums = explode(' ', $dst);
 

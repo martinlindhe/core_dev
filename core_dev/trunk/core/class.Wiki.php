@@ -57,11 +57,9 @@ class Wiki
 	 */
 	function formatName()
 	{
-		$s = strtolower(trim($this->name));
-		$s = str_replace("\t", ' ', $s);
-		$s = str_replace('  ', ' ', $s);
+		$s = normalizeString($this->name, array("\t"));
 		$s = str_replace(' ', '_', $s);
-		return $s;
+		return strtolower($s);
 	}
 
 	/**

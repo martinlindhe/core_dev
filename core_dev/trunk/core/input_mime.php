@@ -53,11 +53,7 @@ function mimeParseHeader($raw_head)
 			$header[ $curr_key ] .= $row;
 		}
 
-		$header[ $curr_key ] = str_replace("\r", ' ', $header[ $curr_key ]);
-		$header[ $curr_key ] = str_replace("\n", ' ', $header[ $curr_key ]);
-		$header[ $curr_key ] = str_replace("\t", ' ', $header[ $curr_key ]);
-		$header[ $curr_key ] = str_replace('  ', ' ', $header[ $curr_key ]);
-		$header[ $curr_key ] = trim($header[ $curr_key ]);
+		$header[ $curr_key ] = normalizeString($header[ $curr_key ]);
 	}
 
 	return $header;

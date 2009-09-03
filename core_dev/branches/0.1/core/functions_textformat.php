@@ -407,4 +407,22 @@ function ValidEmail($email)
 	return false;
 }
 
+/**
+ * Trims and removes excess spaces, tabs, linefeeds from a string
+ */
+function normalizeString($s, $tokens = array("\r", "\n", "\t"))
+{
+	foreach ($tokens as $t)
+		$s = str_replace($t, ' ', $s);
+
+	$s = trim($s);
+
+	do { //Remove chunks of whitespace
+		$tmp = $s;
+		$s = str_replace('  ', ' ', $s);
+	} while ($s != $tmp);
+
+	return $s;
+}
+
 ?>

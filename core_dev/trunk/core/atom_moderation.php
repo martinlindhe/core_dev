@@ -89,8 +89,6 @@ function checkStopword($text, $_type)
 	if (!is_numeric($_type)) return false;
 
 	//Removes non-letters
-	$text = str_replace("\n", ' ', $text);
-	$text = str_replace("\r", ' ', $text);
 	$text = str_replace('.', '', $text);
 	$text = str_replace(',', '', $text);
 	$text = str_replace('!', '', $text);
@@ -98,12 +96,9 @@ function checkStopword($text, $_type)
 	$text = str_replace('(', '', $text);
 	$text = str_replace(')', '', $text);
 
-	while (1) {
-		$newtext = str_replace('  ', ' ', $text);
-		if ($newtext == $text) break;
-		$text = $newtext;
-	}
-	$text = $db->escape(trim($text));
+	$text = normalizeString($text, array("\n", "\r"));
+
+	$text = $db->escape($text);
 
 	$list = explode(' ', $text);
 	$list = array_unique($list);

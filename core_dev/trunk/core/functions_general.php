@@ -125,12 +125,7 @@ function cleanupText($text)
 {
 	global $db;
 
-	$text = trim($text);
-
-	do { //Remove chunks of whitespace
-		$temp = $text;
-		$text = str_replace('  ', ' ', $text);
-	} while ($text != $temp);
+	$text = normalizeString($text, false);
 
 	$text = str_replace('\n', "\n", $text);
 	$text = str_replace('\r', "\r", $text);
