@@ -30,7 +30,7 @@ class xml_input
     {
 		if (is_url($data)) {
 			$u = new http($data);
-			$u->cache_time = $this->cache_time;
+			$u->setCacheTime($this->cache_time);
 			$data = $u->get();
 		}
 

@@ -15,6 +15,7 @@ class cache
 {
 	var $debug  = false;
 	private $handle = false;
+	private $persistent = true; ///< use persistent connections?
 
 	/**
 	 * @param $server_pool array of "host[:port]" addresses to memcache servers
@@ -36,7 +37,7 @@ class cache
 			if (empty($ex[1])) $ex[1] = 11211;
 			list($host, $port) = $ex;
 
-			$this->handle->addServer($host, $port, true);
+			$this->handle->addServer($host, $port, $this->persistent);
 		}
 
 		return true;
@@ -48,7 +49,7 @@ class cache
 
 		$val = $this->handle->get($key);
 
-		if ($this->debug) echo "CACHE READ ".$key." = ".$val."\n";
+		if ($this->debug) echo "CACHE READ ".$key." = ".substr($val, 0, 200)."...\n";
 		return $val;
 	}
 
@@ -58,7 +59,7 @@ class cache
 
 		$ret = $this->handle->set($key, $val, false, $expire);
 
-		if ($this->debug) echo "CACHE WRITE ".$key." = ".$val." (".$expire." sec)\n";
+		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$expire." sec)\n";
 		return $ret;
 	}
 }

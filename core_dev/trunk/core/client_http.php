@@ -153,8 +153,8 @@ class http
 		$res = curl_exec($ch);
 		curl_close($ch);
 		if ($this->debug) {
-			echo "Got ".strlen($res)." bytes:".dln();
-			echo '<pre>'.htmlspecialchars($res).'</pre>';
+			echo "Got ".strlen($res)." bytes, showing first 2000:".dln();
+			echo '<pre>'.htmlspecialchars(substr($res,0,2000)).'</pre>';
 		}
 
 		if (!$head_only) {

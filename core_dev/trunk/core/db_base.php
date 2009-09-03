@@ -314,7 +314,7 @@ abstract class db_base
 		echo '<a href="#" onclick="return toggle_element(\'sql_profiling'.$rand_id.'\');">'.$this->queries_cnt.' sql</a>';
 
 		//Shows all SQL queries from this page view
-		$sql_height = ($this->queries_cnt+1)*40;
+		$sql_height = ($this->queries_cnt*60)+60;
 		if ($sql_height > 400) $sql_height = 400;
 
 		$sql_time = 0;
