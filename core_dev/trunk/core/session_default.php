@@ -145,8 +145,15 @@ class session_default extends session_base
 	 */
 	function redirect($path)
 	{
-		header('Location: '.$path);
-		die;
+		if (headers_sent()) {
+			die(
+			'<script type="text/javascript">'.
+			'document.location.href="'.$path.'";'.
+			'</script>');
+		} else {
+			header('Location: '.$path);
+			die;
+		}
 	}
 
 	/**
