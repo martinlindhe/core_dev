@@ -1,6 +1,6 @@
 <?
-require('/var/www/core_dev/core/core.php');
-require('/var/www/core_dev/core/input_pop3.php');
+require('/var/www/core_dev/trunk/core/core.php');
+require('/var/www/core_dev/trunk/core/client_pop3.php');
 
 //$config['debug'] = true;
 

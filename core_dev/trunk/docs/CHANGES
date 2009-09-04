@@ -1,0 +1,6 @@
+0.2 - in progress
+	config.php variable $config['core']['fs_root'] has been removed. specify exact location directly with set_include_path()
+
+
+0.1 - 2009.08.xx
+	Initial branch.
