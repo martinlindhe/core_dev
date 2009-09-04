@@ -66,9 +66,9 @@ class xhtml_form
 	/**
 	 * Adds a textarea to the form
 	 */
-	function textarea($name, $str)
+	function textarea($name, $str, $val = '')
 	{
-		$this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str);
+		$this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val);
 	}
 
 	/**
@@ -148,7 +148,7 @@ class xhtml_form
 
 			case 'TEXTAREA':
 				echo '<td>'.$e['str'].':</td>';
-				echo '<td>'.xhtmlTextarea($e['name']).'</td>';
+				echo '<td>'.xhtmlTextarea($e['name'], $e['default']).'</td>';
 				break;
 
 			case 'TEXT':
