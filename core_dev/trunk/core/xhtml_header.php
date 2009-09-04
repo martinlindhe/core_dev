@@ -34,10 +34,15 @@ class xhtml_header
 	function setMimeType($type) { $this->mimetype = $mime; }
 
 	function addFeed($uri) { $this->feeds[] = $uri; }
-	function addOpensearch($uri) { $this->search[] = $uri; }
 	function addJs($uri) { $this->js[] = $uri; }
 	function addCss($uri) { $this->css[] = $uri; }
 	function addOnload($js) { $this->onload[] = $js; }
+
+	function addOpenSearch($uri, $name = 'Search box')
+	{
+		$arr = array('url' => $uri, 'name' => $name);
+		$this->search[] = $arr;
+	}
 
 	/**
 	 * Creates a complete XHTML header, showing rss feeds if available, etc

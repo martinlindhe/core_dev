@@ -111,6 +111,7 @@ function t_swe($s)
 		case 'Import': return 'Importera';
 		case 'Export': return 'Exportera';
 		case 'Admin': return 'Admin';
+		case 'Details': return 'Detaljer';
 
 		//Times
 		case 'Yesterday': return 'Igår';
