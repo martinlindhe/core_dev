@@ -21,10 +21,16 @@ class xhtml_form
 	private $elems = array();
 	private $yui   = false;    ///< include yui js files?
 
+	private $success = 'Form data processed successfully!';
+	private $error   = 'Submitted form was rejected!';
+
 	function __construct($name = '')
 	{
 		$this->name = $name;
 	}
+
+	function setError($s) { $this->error = $s; }
+	function setSuccess($s) { $this->success = $s; }
 
 	/**
 	 * Defines the function that will handle form submit processing
@@ -34,14 +40,13 @@ class xhtml_form
 
 		if (!empty($_POST)) {
 
-			if (call_user_func($this->handler, $_POST)) {
-				//TODO: customize success message
-				echo 'Form data processed successfully!<br/>';
+			if (call_user_func($this->handler, $_POST, $this)) {
 				$this->handled = true;
+				echo '<div class="okay">'.$this->success.'</div>';
 				return;
 			} else {
 				$this->failPOST = $_POST;
-				echo 'Submitted form was rejected<br/>';
+				echo '<div class="critical">'.$this->error.'</div>';
 			}
 		}
 	}
@@ -128,8 +133,6 @@ class xhtml_form
 		}
 
 		echo xhtmlForm($this->name, '', 'post', $this->enctype);
-
-		//TODO use xhtml_table class when it is created
 
 		echo '<table cellpadding="10" cellspacing="0" border="1">';
 
