@@ -18,6 +18,8 @@ class xhtml_form
 	private $handler;
 	private $failPOST = array();
 
+	private $listenGet = false; ///< if true, looks for form parameters in _GET
+
 	private $elems = array();
 	private $yui   = false;    ///< include yui js files?
 
@@ -38,23 +40,35 @@ class xhtml_form
 	function setHandler($f) {
 		$this->handler = $f;
 
-		if (!empty($_POST)) {
+		$p = array();
 
-			if (call_user_func($this->handler, $_POST, $this)) {
-				$this->handled = true;
-				echo '<div class="okay">'.$this->success.'</div>';
-				return;
-			} else {
-				$this->failPOST = $_POST;
-				echo '<div class="critical">'.$this->error.'</div>';
-			}
+		if (!empty($_POST))
+			$p = $_POST;
+
+		if ($this->listenGet && !empty($_GET))
+			foreach ($_GET as $key => $val)
+				foreach ($this->elems as $row)
+					if (!empty($row['name']) && $row['name'] == $key)
+						$p[ $key ] = $val;
+
+		if (!$p) return;
+
+		if (call_user_func($this->handler, $p, $this)) {
+			$this->handled = true;
+			echo '<div class="okay">'.$this->success.'</div><br/>';
+			return;
+		} else {
+			$this->failPOST = $p;
+			echo '<div class="critical">'.$this->error.'</div><br/>';
 		}
 	}
+
+	function setListenGet($bool) { $this->listenGet = $bool; }
 
 	/**
 	 * Adds a hidden input field to the form
 	 */
-	function hidden($name, $val)
+	function addHidden($name, $val)
 	{
 		$this->elems[] = array('type' => 'HIDDEN', 'name' => $name, 'value' => $val);
 	}
@@ -62,7 +76,7 @@ class xhtml_form
 	/**
 	 * Adds a input field to the form
 	 */
-	function input($name, $str, $val = '', $size = 0)
+	function addInput($name, $str, $val = '', $size = 0)
 	{
 		$this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $val, 'size' => $size);
 	}
@@ -70,7 +84,7 @@ class xhtml_form
 	/**
 	 * Adds a textarea to the form
 	 */
-	function textarea($name, $str, $val = '')
+	function addTextarea($name, $str, $val = '')
 	{
 		$this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val);
 	}
@@ -78,7 +92,7 @@ class xhtml_form
 	/**
 	 * Adds a text string to the form
 	 */
-	function text($str)
+	function addText($str)
 	{
 		$this->elems[] = array('type' => 'TEXT', 'str' => $str);
 	}
@@ -86,7 +100,7 @@ class xhtml_form
 	/**
 	 * Adds a submit button to the form
 	 */
-	function submit($str)
+	function addSubmit($str)
 	{
 		$this->elems[] = array('type' => 'SUBMIT', 'str' => $str);
 	}
@@ -94,12 +108,12 @@ class xhtml_form
 	/**
 	 * Adds a select dropdown list to the form
 	 */
-	function dropdown($name, $str, $arr, $default = 0)
+	function addDropdown($name, $str, $arr, $default = 0)
 	{
 		$this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
 	}
 
-	function radio($name, $str, $arr, $default = 0)
+	function addRadio($name, $str, $arr, $default = 0)
 	{
 		$this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
 	}
@@ -107,7 +121,7 @@ class xhtml_form
 	/**
 	 * Adds a calendar date selector
 	 */
-	function dateinterval($namefrom, $nameto, $str)
+	function addDateInterval($namefrom, $nameto, $str)
 	{
 		$this->yui = true;
 		$this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str);
@@ -118,12 +132,10 @@ class xhtml_form
 	 */
 	function render()
 	{
-		if (!function_exists($this->handler)) {
-			die('FATAL: xhtml_form() does not have a defined data handler');
-		}
-
 		global $config;
-		if ($this->handled) return;
+
+		if (!function_exists($this->handler))
+			die('FATAL: xhtml_form() does not have a defined data handler');
 
 		if ($this->yui) {
 			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/yahoo-dom-event/yahoo-dom-event.js"></script>';
