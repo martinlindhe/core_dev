@@ -11,12 +11,15 @@ require_once('output_xhtml.php');
 
 class xhtml_form
 {
-	var $enctype = '';     ///< TODO: set multipart type if form contains file upload parts
-	var $handled = false;  ///< is set to true when form data has been processed by callback function
-	var $name    = '';
+	private $enctype = '';     ///< TODO: set multipart type if form contains file upload parts
+	private $handled = false;  ///< is set to true when form data has been processed by callback function
+	private $name    = '';
 
-	var $elems = array();
-	var $yui   = false;    ///< include yui js files?
+	private $handler;
+	private $failPOST = array();
+
+	private $elems = array();
+	private $yui   = false;    ///< include yui js files?
 
 	function __construct($name = '')
 	{
@@ -26,23 +29,19 @@ class xhtml_form
 	/**
 	 * Defines the function that will handle form submit processing
 	 */
-	function handler($func)
-	{
-		$this->handled = false;
-
-		if (!$func || !function_exists($func)) {
-			die('FATAL: xhtml_form() does not have a defined data handler');
-		}
+	function setHandler($f) {
+		$this->handler = $f;
 
 		if (!empty($_POST)) {
-			if (call_user_func($func, $_POST)) {
+
+			if (call_user_func($this->handler, $_POST)) {
 				//TODO: customize success message
 				echo 'Form data processed successfully!<br/>';
 				$this->handled = true;
 				return;
 			} else {
-				//TODO: fill in form with previous entered data
-				echo 'Failed to process form data!<br/>';
+				$this->failPOST = $_POST;
+				echo 'Submitted form was rejected<br/>';
 			}
 		}
 	}
@@ -114,6 +113,10 @@ class xhtml_form
 	 */
 	function render()
 	{
+		if (!function_exists($this->handler)) {
+			die('FATAL: xhtml_form() does not have a defined data handler');
+		}
+
 		global $config;
 		if ($this->handled) return;
 
@@ -130,7 +133,12 @@ class xhtml_form
 
 		echo '<table cellpadding="10" cellspacing="0" border="1">';
 
-		foreach ($this->elems as $e) {
+		foreach ($this->elems as $e)
+		{
+			//fills in form with previous entered data
+			if (!empty($e['name']) && !empty($this->failPOST[$e['name']]))
+				$e['default'] = $this->failPOST[$e['name']];
+
 			echo '<tr>';
 			switch ($e['type']) {
 			case 'HIDDEN':
