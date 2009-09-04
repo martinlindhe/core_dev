@@ -70,3 +70,22 @@ img {
 #star li { PADDING: 0; MARGIN: 0; FLOAT: left; DISPLAY: block; WIDTH: 85px; HEIGHT: 20px; TEXT-DECORATION: none; text-indent: -9000px; Z-INDEX: 20; POSITION: absolute; PADDING: 0; }
 #star li.curr { BACKGROUND: url('../gfx/rate_stars.gif') left 25px; FONT-SIZE: 1px; }
 #star div.user { LEFT: 5px; POSITION: relative; FLOAT: left; COLOR: #888; }
+
+/* used to mark something important, like a error message */
+.critical {
+	color: #000;
+	padding: 5px;
+	padding-left: 25px;
+	line-height: 20px;
+	background: #FB9B9B url('../gfx/icon_error.png') no-repeat;
+	background-position: 5px 50%;
+}
+
+.okay {
+	color: #000;
+	padding: 5px;
+	padding-left: 25px;
+	line-height: 20px;
+	background: #B1F9AA url('../gfx/icon_good.png') no-repeat;
+	background-position: 5px 50%;
+}
