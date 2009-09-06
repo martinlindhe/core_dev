@@ -49,6 +49,25 @@ function is_numeric(n)
    return true;
 }
 
+function enable_element(n)
+{
+	var e = document.getElementById(n);
+	e.disabled=false;
+}
+
+function disable_element(n)
+{
+	var e = document.getElementById(n);
+	e.disabled=true;
+}
+
+function toggle_enabled_element(n)
+{
+	var e = document.getElementById(n);
+	e.disabled=!e.disabled;
+}
+
+
 //Toggles element with name "n" between visible and hidden
 function toggle_element(n)
 {
@@ -60,10 +79,6 @@ function toggle_element(n)
 function hide_element(n)
 {
 	var e = document.getElementById(n);
-	if (!e) {
-		//alert('fixme: element ' + n + ' not found');
-		return;
-	}
 	e.style.display = 'none';
 }
 
@@ -71,10 +86,6 @@ function hide_element(n)
 function show_element(n)
 {
 	var e = document.getElementById(n);
-	if (!e) {
-		trace('ERROR: element ' + n + ' not found');
-		return;
-	}
 	e.style.display = '';
 }
 
@@ -83,20 +94,12 @@ function show_element(n)
 function set_visible(n)
 {
 	var e = document.getElementById(n);
-	if (!e) {
-		trace('ERROR: element ' + n + ' not found');
-		return;
-	}
 	e.style.visibility="visible";
 }
 
 function set_invisible(n)
 {
 	var e = document.getElementById(n);
-	if (!e) {
-		trace('ERROR: element ' + n + ' not found');
-		return;
-	}
 	e.style.visibility="hidden";
 }
 

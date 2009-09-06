@@ -319,7 +319,7 @@ abstract class db_base
 
 		$sql_time = 0;
 
-		$css_display = count($this->query_error) ? '' : ' display: none;';
+		$css_display = count($this->query_error) ? '' : ' display:none;';
 
 		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 

@@ -1,20 +1,22 @@
 <?php
 
+//XXX separate sql to a sql_xxx base class
+
 class category
 {
 	//tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
-	const USERFILE = 1;   ///< normal, public userfile
-	const WIKIFILE = 4;   ///< category for wiki file attachments, to allow better organization if needed
-	const TODOLIST = 5;   ///< todo list categories
+	const USERFILE =  1; ///< normal, public userfile
+	const WIKIFILE =  4; ///< category for wiki file attachments, to allow better organization if needed
+	const TODOLIST =  5; ///< todo list categories
 
-	const BLOG     = 10;  ///< normal, personal blog category
-	const CONTACT  = 11;  ///< friend relation category, like "Old friends", "Family"
-	const USERDATA = 12;  ///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
-	const POLL     = 13;  ///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
-	const LANGUAGE = 14;  ///< represents a language, for multi-language features
-	const NEWS     = 20;  ///< news categories
+	const BLOG     = 10; ///< normal, personal blog category
+	const CONTACT  = 11; ///< friend relation category, like "Old friends", "Family"
+	const USERDATA = 12; ///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
+	const POLL     = 13; ///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
+	const LANGUAGE = 14; ///< represents a language, for multi-language features
+	const NEWS     = 20; ///< news categories
 
-	const GENERIC  = 30;  ///< application specific categories
+	const GENERIC  = 30; ///< application specific categories
 
 
 	//tblCategory.permissions:
@@ -26,15 +28,17 @@ class category
 	const PERM_GLOBAL  = 0x80; ///< category is globally available to all users
 
 
-	private $type;  ///< category type
-	private $owner; ///< owner id, the meaning depends on category type
-	private $permissions = 0;
-	private $creator; ///< if set, stores creatorId when categories are created
+	private $type;            ///< category type
+	private $owner;           ///< owner id, the meaning depends on category type
+	private $permissions = 0; ///<
+	private $creator;         ///< if set, stores creatorId when categories are created
+	private $tbl_name;        ///< table name
 
-	function __construct($type)
+	function __construct($type, $tbl_name = 'tblCategories')
 	{
 		if (!is_numeric($type)) return false;
 		$this->type = $type;
+		$this->tbl_name = $tbl_name;
 	}
 
 	function setOwner($id)
@@ -68,13 +72,13 @@ class category
 		$name = $db->escape(trim($name));
 		if (!$name) return false;
 
-		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$this->type.' AND categoryName="'.$name.'"';
+		$q = 'SELECT categoryId FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' AND categoryName="'.$name.'"';
 		if ($this->owner) $q .= ' AND ownerId='.$this->owner;
 		if ($this->creator) $q .= ' AND creatorId='.$h->creator;
 		$id = $db->getOneItem($q);
 		if ($id) return $id;
 
-		$q = 'INSERT INTO tblCategories SET categoryType='.$this->type.',categoryName="'.$name.'"';
+		$q = 'INSERT INTO '.$this->tbl_name.' SET categoryType='.$this->type.',categoryName="'.$name.'"';
 		$q .= ',timeCreated=NOW(),permissions='.$this->permissions;
 		if ($this->owner) $q .= ',ownerId='.$this->owner;
 		if ($this->creator) $q .= ',creatorId='.$h->creator;
@@ -88,7 +92,7 @@ class category
 	{
 		global $db;
 
-		$q  = 'SELECT categoryId,categoryName FROM tblCategories WHERE categoryType='.$this->type.' ';
+		$q  = 'SELECT categoryId,categoryName FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' ';
 		if ($this->owner) $q .= 'AND ownerId='.$this->owner.' ';
 		$q .= 'ORDER BY categoryName ASC';
 

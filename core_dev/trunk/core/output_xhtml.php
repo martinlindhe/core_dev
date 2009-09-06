@@ -201,13 +201,14 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 /**
  * Helper to create a input field
  */
-function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0)
+function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled = false)
 {
 	if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
 	return '<input type="text" name="'.$_name.'" id="'.$_name.'"'.
 		($_value ? ' value="'.$_value.'"' : '').
 		($_size ? ' size="'.$_size.'"': '').
 		($_maxlen ? ' maxlength="'.$_maxlen.'"': '').
+		($_disabled ? ' disabled': '').
 		'/>';
 }
 
@@ -428,10 +429,11 @@ function coreButton($name, $dst = '')
 	global $config;
 
 	switch ($name) {
-		case 'Edit': $src = 'icon_edit.png'; break;
+		case 'Edit':   $src = 'icon_edit.png'; break;
 		case 'Create': $src = 'icon_create.png'; break;
 		case 'Delete': $src = 'icon_delete.png'; break;
 		case 'Folder': $src = 'icon_folder.png'; break;
+		case 'Add':    $src = 'icon_add.png'; break;
 
 		default:
 			echo '<h1>ERROR unknown coreButton '.$name.'</h1>';

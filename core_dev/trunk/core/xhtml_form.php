@@ -65,6 +65,18 @@ class xhtml_form
 
 		if (!$p) return;
 
+		//find new_catname tag and handle it
+		foreach ($this->elems as $id => $e) {
+			if (!empty($e['name']) && !empty($p['new_'.$e['name']])) {
+				//add category
+				$id = $this->elems[ $id ]['obj']->add($p['new_'.$e['name']]);
+
+				//modify post form category id, unset new_catname
+				$p[ $e['name'] ] = $id;
+				unset( $p['new_'.$e['name']] );
+			}
+		}
+
 		if (call_user_func($this->handler, $p, $this)) {
 			$this->handled = true;
 			echo '<div class="okay">'.$this->success.'</div><br/>';
@@ -129,6 +141,15 @@ class xhtml_form
 	function addRadio($name, $str, $arr, $default = 0)
 	{
 		$this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
+	}
+
+	/**
+	 * Adds a category object to the form
+	 * @param $obj category object
+	 */
+	function addCategory($name, $str, $obj, $default = 0)
+	{
+		$this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $str, 'obj' => $obj, 'default' => $default);
 	}
 
 	/**
@@ -203,6 +224,19 @@ class xhtml_form
 
 			case 'SUBMIT':
 				echo '<td colspan="2">'.xhtmlSubmit($e['str']).'</td>';
+				break;
+
+			case 'CATEGORY':
+				echo '<td>'.$e['str'].'</td>';
+				echo '<td>';
+				$list = $e['obj']->getList();
+				echo xhtmlSelectArray($e['name'], $list, $e['default']).' ';
+				//add new category widget
+				echo '<a href="#" onClick="toggle_element(\'cd_new_'.$e['name'].'\');toggle_enabled_element(\'new_'.$e['name'].'\');">'.coreButton('Add').'</a>';
+				echo '<span id="cd_new_'.$e['name'].'" style="display:none;">';
+				echo xhtmlInput('new_'.$e['name'], 'new category', 15, 0, true);
+				echo '</span>';
+				echo '</td>';
 				break;
 
 			case 'DATEINTERVAL':
