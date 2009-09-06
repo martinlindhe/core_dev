@@ -331,11 +331,13 @@ abstract class db_base
 
 			$keywords = array(
 			'SELECT', 'UPDATE', 'INSERT', 'DELETE',
-			'FROM', 'SET', 'WHERE', 'LEFT', 'GROUP', 'ORDER'
+			'ON', 'AND', 'OR', 'NOT NULL',
+			'FROM', 'SET', 'WHERE', 'LEFT JOIN', 'GROUP', 'ORDER'
 			);
 			$decorated = array(
 			'<b>SELECT</b>', '<b>UPDATE</b>', '<b>INSERT</b>', '<b>DELETE</b>',
-			'<br/><b>FROM</b>', '<br/><b>SET</b>', '<br/><b>WHERE</b>', '<br/><b>LEFT</b>', '<br/><b>GROUP</b>', '<br/><b>ORDER</b>'
+			'<b>ON</b>', '<b>AND</b>', '<b>OR</b>', '<b>NOT NULL</b>',
+			'<br/><b>FROM</b>', '<br/><b>SET</b>', '<br/><b>WHERE</b>', '<br/><b>LEFT JOIN</b>', '<br/><b>GROUP</b>', '<br/><b>ORDER</b>'
 			);
 			$query = str_replace($keywords, $decorated, $query);
 
