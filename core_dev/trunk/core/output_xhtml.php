@@ -358,7 +358,7 @@ function xhtmlTable($arr, $heads = '', $callback = '')
  * Helper to generate select-dropdown menus out of specified category
  */
 function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
-{	//FIXME: rename to xhtmlSelectCategory()
+{
 	global $h, $config;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 

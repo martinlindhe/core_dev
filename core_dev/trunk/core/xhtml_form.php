@@ -119,6 +119,7 @@ class xhtml_form
 
 	/**
 	 * Adds a select dropdown list to the form
+	 * @param $arr array with id=>name pairs
 	 */
 	function addDropdown($name, $str, $arr, $default = 0)
 	{

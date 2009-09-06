@@ -76,7 +76,7 @@ class sql_id_list
 			' LEFT JOIN '.$this->child_obj->getTableName().
 			' ON ('.$this->child_name.'='.$this->child_obj->getTableName().'.'.$this->child_obj->getIdName().')';
 
-		if ($this->owner) $q .= 'WHERE '.$this->owner_name.'='.$this->owner;
+		if ($this->category) $q .= 'WHERE '.$this->category_name.'='.$this->category;
 
 		$q .= ' GROUP BY '.$this->child_obj->getIdName();
 
