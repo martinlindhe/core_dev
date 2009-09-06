@@ -29,6 +29,7 @@ class category
 	private $type;  ///< category type
 	private $owner; ///< owner id, the meaning depends on category type
 	private $permissions = 0;
+	private $creator; ///< if set, stores creatorId when categories are created
 
 	function __construct($type)
 	{
@@ -41,6 +42,13 @@ class category
 		if (!is_numeric($id)) return false;
 		$this->owner = $id;
 	}
+
+	function setCreator($id)
+	{
+		if (!is_numeric($id)) return false;
+		$this->creator = $id;
+	}
+
 	function setPermissions($flags)
 	{
 		if (!is_numeric($flags)) return false;
@@ -55,34 +63,36 @@ class category
 	 */
 	function add($name)
 	{
-		global $h, $db;
+		global $db;
 
 		$name = $db->escape(trim($name));
 		if (!$name) return false;
 
 		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$this->type.' AND categoryName="'.$name.'"';
 		if ($this->owner) $q .= ' AND ownerId='.$this->owner;
-		//$q .= ' AND creatorId='.$h->session->id;
+		if ($this->creator) $q .= ' AND creatorId='.$h->creator;
 		$id = $db->getOneItem($q);
 		if ($id) return $id;
 
-		//XXX reimplement creator?
 		$q = 'INSERT INTO tblCategories SET categoryType='.$this->type.',categoryName="'.$name.'"';
-		if ($this->owner) $q .= ',ownerId='.$this->owner;
 		$q .= ',timeCreated=NOW(),permissions='.$this->permissions;
-		//,creatorId='.$h->session->id.'
+		if ($this->owner) $q .= ',ownerId='.$this->owner;
+		if ($this->creator) $q .= ',creatorId='.$h->creator;
 		return $db->insert($q);
 	}
 
+	/**
+	 * Returns a list of id->name pairs for the list
+	 */
 	function getList()
 	{
 		global $db;
 
-		$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$this->type.' ';
+		$q  = 'SELECT categoryId,categoryName FROM tblCategories WHERE categoryType='.$this->type.' ';
 		if ($this->owner) $q .= 'AND ownerId='.$this->owner.' ';
 		$q .= 'ORDER BY categoryName ASC';
 
-		return $db->getArray($q);
+		return $db->getMappedArray($q);
 	}
 
 
