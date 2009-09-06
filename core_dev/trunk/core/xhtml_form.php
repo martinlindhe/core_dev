@@ -36,10 +36,22 @@ class xhtml_form
 
 	/**
 	 * Defines the function that will handle form submit processing
+	 * Call this function when all form elements have been added in order to fetch
+	 * GET/POST parameters from previous page view
+	 *
+	 * @param $f function name to process form data
 	 */
 	function setHandler($f) {
 		$this->handler = $f;
 
+		$this->handle();
+	}
+
+	/**
+	 * Processes the form
+	 */
+	function handle()
+	{
 		$p = array();
 
 		if (!empty($_POST))

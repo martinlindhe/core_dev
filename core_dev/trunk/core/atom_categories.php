@@ -234,7 +234,7 @@ function getGlobalAndUserCategories($_type, $_owner = 0)
 function manageCategoriesDialog($_type)
 {
 	global $h, $config;
-	if (!$h->session->id) return getCategoriesSelect($_type);
+	if (!$h->session->id) return xhtmlSelectCategory($_type);
 
 	if (($h->session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category'])) {
 		//Create new category. Only allow categories inside root level
@@ -270,7 +270,7 @@ function manageCategoriesDialog($_type)
 		return;
 	}
 
-	echo 'Existing categories: '.getCategoriesSelect($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
+	echo 'Existing categories: '.xhtmlSelectCategory($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
 
 	echo 'Select one from the dropdown list to edit it.<br/><br/>';
 

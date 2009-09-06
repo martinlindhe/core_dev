@@ -279,7 +279,7 @@ function getUserdataInput($row, $fill = false)
 		case USERDATA_TYPE_THEME:
 		case USERDATA_TYPE_SELECT:
 			$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
-			$result .= getCategoriesSelect(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
+			$result .= xhtmlSelectCategory(CATEGORY_USERDATA, $fieldId, 'userdata_'.$fieldId, $value);
 			$result .= '</td>';
 			break;
 
@@ -915,7 +915,7 @@ function editUserdataDropdown($name, $field, $default = '')
 
 	if (!$curr) $curr = $default;
 
-	return getCategoriesSelect(CATEGORY_USERDATA, $fieldId, $field, $curr);
+	return xhtmlSelectCategory(CATEGORY_USERDATA, $fieldId, $field, $curr);
 }
 
 function editUserdataInput($name, $field)

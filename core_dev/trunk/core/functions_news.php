@@ -199,7 +199,7 @@ function showNewsArticle($_id = 0)
 		$res .= ' <label for="rss_check">';
 		$res .= '<img src="'.$config['core']['web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
 		$res .= t('Include this news in the RSS feed').'</label><br/><br/>';
-		$res .= t('Category').': '.getCategoriesSelect(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
+		$res .= t('Category').': '.xhtmlSelectCategory(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
 		$res .= t('Time for publication').': ';
 		$res .= xhtmlInput('news_publish', $item['timeToPublish']).'<br/>';
 		$res .= xhtmlSubmit('Save changes');

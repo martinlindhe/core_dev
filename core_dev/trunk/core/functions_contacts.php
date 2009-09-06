@@ -429,7 +429,7 @@ function displayFriendList()
 			echo '<form method="post" action="">';
 			echo 'So you wish to send a friend request to '.Users::link($userId).'?<br/>';
 			echo 'First, you need to choose relation type: ';
-			echo getCategoriesSelect(CATEGORY_CONTACT, 0, 'type_id').'<br/>';
+			echo xhtmlSelectCategory(CATEGORY_CONTACT, 0, 'type_id').'<br/>';
 			echo '(Optional) send a message:<br/>';
 			echo '<textarea name="msg" cols="40" rows="6"></textarea><br/>';
 			echo '<input type="submit" class="button" value="Send request"/>';

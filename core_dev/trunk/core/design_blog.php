@@ -57,7 +57,7 @@ function showBlog()
 		echo '<input type="text" name="blog_title" value="'.$blog['subject'].'" size="40" maxlength="40"/>';
 
 		echo ' Category: ';
-		echo getCategoriesSelect(CATEGORY_BLOG, 0, 'blog_cat', $blog['categoryId']);
+		echo xhtmlSelectCategory(CATEGORY_BLOG, 0, 'blog_cat', $blog['categoryId']);
 		echo '<br/><br/>';
 
 		$body = trim($blog['body']);
