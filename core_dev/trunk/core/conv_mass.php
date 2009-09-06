@@ -19,8 +19,9 @@ class mass
 	'g'  => 1,           //Gram
 	'kg' => 1000,        //Kilogram
 	't'  => 1000000,     //Tonne
+	'oz' => 28.349523125,//Ounce (1/16 lb)
 	'lb' => 453.59237,   //Pound
-	'oz' => 28.349523125 //Ounce (/16 lb)
+	'st' => 6350.29318   //Stone (14 lb)
 	);
 
 	function conv($from, $to, $val)
@@ -46,8 +47,9 @@ class mass
 		'kilogram' => 'kg',
 		'kilo'     => 'kg',
 		'tonne'    => 't',
+		'ounce'    => 'oz',
 		'pound'    => 'lb',
-		'ounce'    => 'oz'
+		'stone'    => 'st'
 		);
 
 		if (!empty($lookup[$name])) return $lookup[$name];
