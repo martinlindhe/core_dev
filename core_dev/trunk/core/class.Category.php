@@ -34,11 +34,11 @@ class category
 	private $creator;         ///< if set, stores creatorId when categories are created
 	private $tbl_name;        ///< table name
 
-	function __construct($type, $tbl_name = 'tblCategories')
+	function __construct($type)
 	{
 		if (!is_numeric($type)) return false;
 		$this->type = $type;
-		$this->tbl_name = $tbl_name;
+		$this->tbl_name = 'tblCategories';
 	}
 
 	function setOwner($id)
@@ -74,14 +74,14 @@ class category
 
 		$q = 'SELECT categoryId FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' AND categoryName="'.$name.'"';
 		if ($this->owner) $q .= ' AND ownerId='.$this->owner;
-		if ($this->creator) $q .= ' AND creatorId='.$h->creator;
+		if ($this->creator) $q .= ' AND creatorId='.$this->creator;
 		$id = $db->getOneItem($q);
 		if ($id) return $id;
 
 		$q = 'INSERT INTO '.$this->tbl_name.' SET categoryType='.$this->type.',categoryName="'.$name.'"';
 		$q .= ',timeCreated=NOW(),permissions='.$this->permissions;
 		if ($this->owner) $q .= ',ownerId='.$this->owner;
-		if ($this->creator) $q .= ',creatorId='.$h->creator;
+		if ($this->creator) $q .= ',creatorId='.$this->creator;
 		return $db->insert($q);
 	}
 
