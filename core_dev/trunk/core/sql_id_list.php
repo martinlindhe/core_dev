@@ -5,9 +5,9 @@
 
 class sql_id_list
 {
-	private $tbl_name, $owner_name, $child_name;
-	private $owner;
-	private $list = array();
+	private $tbl_name, $owner_name, $child_name, $category_name;
+	private $owner;             ///< list entry owner
+	private $category = false;  ///< list entry category
 	private $child_obj = false; ///< child id table is described by this sql_id_key object
 
 	function __construct($obj = false)
@@ -18,40 +18,28 @@ class sql_id_list
 	function setTableName($n) { $this->tbl_name = $n; }
 	function setOwnerName($n) { $this->owner_name = $n; }
 	function setChildName($n) { $this->child_name = $n; }
+	function setCategoryName($n) { $this->category_name = $n; }
+
+	function setOwner($id)
+	{
+		if (!is_numeric($id)) return false;
+		$this->owner = $id;
+	}
+
+	function setCategory($id)
+	{
+		if (!is_numeric($id)) return false;
+		$this->category = $id;
+	}
 
 	function countItems() { return count($this->list); }
-	function getList() { return $this->list; }
-
-	/**
-	 * Returns owner count for each child and child name
-	 * @return array with indexes 'id', 'name' and 'cnt'
-	 */
-	function getSummary()
-	{
-		global $db;
-		if (!$this->child_obj) {
-			die('summary without child not implemented');
-		}
-		$q = 'SELECT '.$this->child_obj->getIdName().' AS id,';
-		$q .= $this->child_obj->getKeyName().' AS name,';
-		$q .= ' (SELECT COUNT(*) FROM '.$this->tbl_name;
-		$q .= ' WHERE '.$this->child_name.'=t1.'.$this->child_obj->getIdName();
-		if ($this->owner) $q .= ' AND '.$this->owner_name.'='.$this->owner;
-		$q .= ') AS cnt FROM '.$this->child_obj->getTableName().' AS t1';
-
-		return $db->getArray($q);
-	}
 
 	/**
 	 * Loads a list for the owner
-	 *
-	 * @param $owner Owner id
 	 */
-	function load($owner = 0)
+	function getList()
 	{
 		global $db;
-		if (!is_numeric($owner)) return false;
-		$this->owner = $owner;
 
 		$q = 'SELECT '.$this->child_name;
 		if ($this->child_obj)
@@ -62,10 +50,37 @@ class sql_id_list
 			$q .= ' LEFT JOIN '.$this->child_obj->getTableName().' ON';
 			$q .= ' ('.$this->tbl_name.'.'.$this->child_name.'='.$this->child_obj->getTableName().'.'.$this->child_obj->getIdName().')';
 		}
-		if ($this->owner) $q .= ' WHERE '.$this->owner_name.'='.$this->owner;
+		if ($this->owner || $this->category !== false) $q .= ' WHERE ';
+		if ($this->owner) $q .= $this->owner_name.'='.$this->owner;
+		if ($this->owner && $this->category !== false) $q .= ' AND ';
+		if ($this->category !== false) $q .= $this->category_name.'='.$this->category;
 
-		$this->list = $db->getMappedArray($q);
-		return true;
+		return $db->getMappedArray($q);
+	}
+
+	/**
+	 * Returns list with subscribed links & number of subscribers
+	 * @return array with indexes 'id', 'name' and 'cnt'
+	 */
+	function getSummary()
+	{
+		global $db;
+		if (!$this->child_obj) {
+			die('summary without child not implemented');
+		}
+
+		$q = 'SELECT COUNT('.$this->owner_name.') AS cnt,'.
+			$this->child_name.' AS id, '.
+			$this->child_obj->getKeyName().' AS name'.
+			' FROM '.$this->tbl_name.
+			' LEFT JOIN '.$this->child_obj->getTableName().
+			' ON ('.$this->child_name.'='.$this->child_obj->getTableName().'.'.$this->child_obj->getIdName().')';
+
+		if ($this->owner) $q .= 'WHERE '.$this->owner_name.'='.$this->owner;
+
+		$q .= ' GROUP BY '.$this->child_obj->getIdName();
+
+		return $db->getArray($q);
 	}
 
 	/**
@@ -79,6 +94,7 @@ class sql_id_list
 		$this->list[] = $id;
 
 		$q = 'INSERT INTO '.$this->tbl_name.' SET '.$this->owner_name.'='.$this->owner.','.$this->child_name.'='.$id;
+		if ($this->category !== false) $q .= ','.$this->category_name.'='.$this->category;
 		return $db->insert($q);
 	}
 
@@ -93,6 +109,7 @@ class sql_id_list
 		unset($this->list[$id]);
 
 		$q = 'DELETE FROM '.$this->tbl_name.' WHERE '.$this->owner_name.'='.$this->owner.' AND '.$this->child_name.'='.$id;
+		if ($this->category !== false) $q .= ' AND '.$this->category_name.'='.$this->category;
 		return $db->delete($q);
 	}
 
