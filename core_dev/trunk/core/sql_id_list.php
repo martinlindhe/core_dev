@@ -15,10 +15,17 @@ class sql_id_list
 		if ($obj) $this->child_obj = $obj;
 	}
 
+	//table & column names
 	function setTableName($n) { $this->tbl_name = $n; }
 	function setOwnerName($n) { $this->owner_name = $n; }
 	function setChildName($n) { $this->child_name = $n; }
 	function setCategoryName($n) { $this->category_name = $n; }
+
+	function setChildId($id)
+	{
+		if (!$this->child_obj) return false;
+		$this->child_obj->setId($id);
+	}
 
 	function setOwner($id)
 	{
@@ -33,6 +40,12 @@ class sql_id_list
 	}
 
 	function countItems() { return count($this->list); }
+
+	function getChildKey()
+	{
+		if (!$this->child_obj) return false;
+		return $this->child_obj->getKey();
+	}
 
 	function getChild() { return $this->child_obj; }
 
