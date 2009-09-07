@@ -19,15 +19,17 @@ require_once('functions_time.php');	//for date3339() and date882()
 
 class output_feed extends coredev_output_list
 {
-	private $version = 'core_dev output_feed 1.0';
-	private $entries = array();
-
-	private $title = 'Untitled news feed';
+	private $version     = 'core_dev output_feed 1.0';
+	private $title       = 'Untitled news feed';
+	private $entries     = array();
 	private $desc, $link;
-	private $ttl = 15;	///< time to live, in minutes
+	private $ttl         = 15;    ///< time to live, in minutes
+	private $sendHeaders = false; ///< shall we send mime type?
 
 	function setTitle($n) { $this->title = $n; }
 	function setLink($n) { $this->link = $n; }
+	function enableHeaders() { $this->sendHeaders = true; }
+	function disableHeaders() { $this->sendHeaders = false; }
 
 	/**
 	 * Generates XML for feed
@@ -36,30 +38,14 @@ class output_feed extends coredev_output_list
 	{
 		switch ($format) {
 		case 'atom':
+			if ($this->sendHeaders) header('Content-type: application/atom+xml');
 			return $this->renderATOM();
 
 		case 'rss2':
+			if ($this->sendHeaders) header('Content-type: application/rss+xml');
 			return $this->renderRSS2();
 		}
 		return false;
-	}
-
-	/**
-	 * Outputs the feed and set HTTP header
-	 */
-	function output($format = 'rss2')
-	{
-		switch ($format) {
-		case 'atom':
-			header('Content-type: application/atom+xml');
-			break;
-
-		case 'rss2':
-			header('Content-type: application/rss+xml');
-			break;
-		}
-
-		echo $this->render($format);
 	}
 
 	/**
