@@ -9,8 +9,12 @@
 
 //TODO: use with table output code (and call it output_table.php)
 
-class coredev_output_list
+class list
 {
+	private $entries = array();
+
+	function getEntries() { return $this->entries; }
+
 	/**
 	 * Adds a array of entries to the feed list
 	 */

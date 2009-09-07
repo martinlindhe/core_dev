@@ -17,11 +17,11 @@ require_once('output_list.php');
 require_once('client_http.php');
 require_once('functions_time.php');	//for date3339() and date882()
 
-class output_feed extends coredev_output_list
+class output_feed extends list
 {
 	private $version     = 'core_dev output_feed 1.0';
 	private $title       = 'Untitled news feed';
-	private $entries     = array();
+
 	private $desc, $link;
 	private $ttl         = 15;    ///< time to live, in minutes
 	private $sendHeaders = false; ///< shall we send mime type?
@@ -54,7 +54,7 @@ class output_feed extends coredev_output_list
 	function renderATOM()
 	{
 		$u = new http($this->link);
-		$u->path = $_SERVER['REQUEST_URI'];
+		$u->setPath($_SERVER['REQUEST_URI']);
 
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
@@ -65,7 +65,7 @@ class output_feed extends coredev_output_list
 			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->entries as $entry) {
+		foreach ($this->getEntries() as $entry) {
 			$vid_url = new http($entry['video']);
 			$img_url = new http($entry['image']);
 			$res .=
@@ -91,7 +91,7 @@ class output_feed extends coredev_output_list
 	function renderRSS2()
 	{
 		$u = new http($this->link);
-		$u->path = !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+		$u->setPath(!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
@@ -104,7 +104,7 @@ class output_feed extends coredev_output_list
 				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($u->render()).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->entries as $entry) {
+		foreach ($this->getEntries() as $entry) {
 			if (!empty($entry['video'])) $vid_url = new http($entry['video']);
 			if (!empty($entry['image'])) $img_url = new http($entry['image']);
 
@@ -125,31 +125,6 @@ class output_feed extends coredev_output_list
 		'</rss>';
 
 		return $res;
-	}
-
-
-//XZXXX använd i output-rss åxå!!! :::
-
-	/**
-	 * Adds a array of entries to the feed list
-	 */
-	function addList($list)
-	{
-		foreach ($list as $entry)
-			$this->entries[] = $entry;
-	}
-
-	/**
-	 * Adds a entry to the feed list
-	 */
-	function addEntry($entry)
-	{
-		$this->entries[] = $entry;
-	}
-
-	function clearList()
-	{
-		//XXX implement
 	}
 }
 

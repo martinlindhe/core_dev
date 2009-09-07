@@ -27,20 +27,26 @@
 
 require_once('output_list.php');
 
-class output_playlist extends coredev_output_list
+class output_playlist extends list
 {
-	var $entries = array();
+	private $sendHeaders = false; ///< shall we send mime type?
+
+	function enableHeaders() { $this->sendHeaders = true; }
+	function disableHeaders() { $this->sendHeaders = false; }
 
 	function render($format = 'xspf')
 	{
 		switch ($format) {
 		case 'xspf':
+			if ($this->sendHeaders) header('Content-type: application/xspf+xml');
 			return $this->renderXSPF();
 
 		case 'm3u':
+			if ($this->sendHeaders) header('Content-type: audio/x-mpegurl');
 			return $this->renderM3U();
 
 		case 'pls':
+			if ($this->sendHeaders) header('Content-type: audio/x-scpls');
 			return $this->renderPLS();
 
 		case 'xhtml':
@@ -52,35 +58,13 @@ class output_playlist extends coredev_output_list
 		return false;
 	}
 
-	/**
-	 * Sets mimetype and outputs the playlist
-	 */
-	function output($format = 'xspf')
-	{
-		switch ($format) {
-		case 'xspf':
-			header('Content-type: application/xspf+xml');
-			break;
-
-		case 'm3u':
-			header('Content-type: audio/x-mpegurl');
-			break;
-
-		case 'pls':
-			header('Content-type: audio/x-scpls');
-			break;
-		}
-
-		echo $this->render($format);
-	}
-
 	function renderXSPF()
 	{
 		$res  = '<?xml version="1.0" encoding="UTF-8"?>';
 		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
 		$res .= '<trackList>'."\n";
 
-		foreach ($this->entries as $row) {
+		foreach ($this->getEntries() as $row) {
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 
@@ -113,7 +97,7 @@ class output_playlist extends coredev_output_list
 	function renderM3U()
 	{
 		$res = "#EXTM3U\n";
-		foreach ($this->entries as $row) {
+		foreach ($this->getEntries() as $row) {
 			$res .= "#EXTINF:".(!empty($row['duration']) ? round($row['duration'], 0) : '-1').",".$row['title']."\n";
 			$res .= $row['video']."\n";
 		}
@@ -129,7 +113,7 @@ class output_playlist extends coredev_output_list
 		"\n";
 
 		$i = 0;
-		foreach ($this->entries as $row) {
+		foreach ($this->getEntries() as $row) {
 			$i++;
 			$res .= "File".$i."=".$row['video']."\n";
 			$res .= "Title".$i."=".$row['title']."\n";
@@ -146,7 +130,7 @@ class output_playlist extends coredev_output_list
 	{
 		$res = '<table border="1">';
 
-		foreach ($this->entries as $row) {
+		foreach ($this->getEntries() as $row) {
 			$res .= '<tr><td>';
 			$res .= '<h2>'.formatTime($row['pubdate']).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>';
 			$res .= '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>';
