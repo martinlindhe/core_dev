@@ -196,7 +196,7 @@ class xhtml_form
 
 			case 'INPUT':
 				if ($e['str']) {
-					echo '<td>'.$e['str'].':</td>';
+					echo '<td>'.$e['str'].'</td>';
 					echo '<td>'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
 				} else {
 					echo '<td colspan="2">'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
@@ -204,7 +204,7 @@ class xhtml_form
 				break;
 
 			case 'TEXTAREA':
-				echo '<td>'.$e['str'].':</td>';
+				echo '<td>'.$e['str'].'</td>';
 				echo '<td>'.xhtmlTextarea($e['name'], $e['default']).'</td>';
 				break;
 
