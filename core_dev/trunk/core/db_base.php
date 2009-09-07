@@ -331,13 +331,15 @@ abstract class db_base
 
 			$keywords = array(
 			'SELECT', 'UPDATE', 'INSERT', 'DELETE',
-			'ON', 'AND', 'OR', 'NOT NULL',
-			'FROM', 'SET', 'WHERE', 'LEFT JOIN', 'GROUP', 'ORDER'
+			'FROM', 'SET', 'WHERE', 'LEFT JOIN', 'GROUP', 'ORDER BY',
+			'ON', 'AS', 'AND', 'OR', 'IS NULL', 'NOT NULL', 'DESC', 'ASC',
+			'NOW()'
 			);
 			$decorated = array(
 			'<b>SELECT</b>', '<b>UPDATE</b>', '<b>INSERT</b>', '<b>DELETE</b>',
-			'<b>ON</b>', '<b>AND</b>', '<b>OR</b>', '<b>NOT NULL</b>',
-			'<br/><b>FROM</b>', '<br/><b>SET</b>', '<br/><b>WHERE</b>', '<br/><b>LEFT JOIN</b>', '<br/><b>GROUP</b>', '<br/><b>ORDER</b>'
+			'<br/><b>FROM</b>', '<br/><b>SET</b>', '<br/><b>WHERE</b>', '<br/><b>LEFT JOIN</b>', '<br/><b>GROUP</b>', '<br/><b>ORDER BY</b>',
+			'<b>ON</b>', '<b>AS</b>', '<b>AND</b>', '<b>OR</b>', '<b>IS NULL</b>', '<b>NOT NULL</b>', '<b>DESC</b>', '<b>ASC</b>',
+			'<b>NOW()</b>',
 			);
 			$query = str_replace($keywords, $decorated, $query);
 

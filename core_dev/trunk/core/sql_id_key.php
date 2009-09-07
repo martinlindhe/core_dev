@@ -20,17 +20,17 @@ class sql_id_key
 	function getKeyName() { return $this->key_name; }
 
 	/**
-	 * Loads a key value
+	 * Sets key id and loads it from db
 	 */
-	function load($id)
+	function setId($id)
 	{
 		global $db;
 		if (!is_numeric($id)) return false;
 
-		$q = 'SELECT * FROM '.$this->tbl_name.' WHERE '.$this->id_name.'='.$id;
-		$res = $db->getOneRow($q);
-		$this->id  = $res[$this->id_name];
-		$this->key = $res[$this->key_name];
+		$this->id = $id;
+
+		$q = 'SELECT '.$this->key_name.' FROM '.$this->tbl_name.' WHERE '.$this->id_name.'='.$this->id;
+		$this->key = $db->getOneItem($q);
 	}
 
 	/**
@@ -47,7 +47,7 @@ class sql_id_key
 			return $this->id;
 		}
 
-		$q = 'SELECT id FROM '.$this->tbl_name.' WHERE '.$this->key_name.'="'.$db->escape($key).'"';
+		$q = 'SELECT '.$this->id_name.' FROM '.$this->tbl_name.' WHERE '.$this->key_name.'="'.$db->escape($key).'"';
 		$id = $db->getOneItem($q);
 		if (!$id) {
 			$q = 'INSERT INTO '.$this->tbl_name.' SET '.$this->key_name.'="'.$db->escape($key).'",created=NOW()';

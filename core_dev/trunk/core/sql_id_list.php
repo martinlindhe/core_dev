@@ -7,7 +7,7 @@ class sql_id_list
 {
 	private $tbl_name, $owner_name, $child_name, $category_name;
 	private $owner;             ///< list entry owner
-	private $category = false;  ///< list entry category
+	private $category  = false; ///< list entry category
 	private $child_obj = false; ///< child id table is described by this sql_id_key object
 
 	function __construct($obj = false)
@@ -33,6 +33,8 @@ class sql_id_list
 	}
 
 	function countItems() { return count($this->list); }
+
+	function getChild() { return $this->child_obj; }
 
 	/**
 	 * Loads a list for the owner

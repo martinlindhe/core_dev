@@ -4,12 +4,14 @@
  *
  * Uses GNU 'diff' to produce a visual diff between two texts
  *
- * Tested with: diff (GNU diffutils) 2.8.1
+ * Tested with gnu diff 2.8.1
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
 //XXX cache diff output?
+
+//XXX filename is retarded
 
 class diff
 {
@@ -172,7 +174,7 @@ class diff
 				$col = '#000';
 				$bg  = '#fff';
 			}
-			$out .= '<div class="diff_line" style="color: '.$col.'; background-color: '.$bg.'">'.$l.'</div>';
+			$out .= '<div class="diff_line" style="color: '.$col.'; background-color: '.$bg.';">'.htmlspecialchars($l).'</div>';
 		}
 		return $out;
 	}
