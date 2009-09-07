@@ -76,7 +76,8 @@ class output_feed extends core_list
 				'<summary><![CDATA['.(!empty($entry['desc']) ? $entry['desc'] : ' ').']]></summary>'.
 				'<updated>'.date3339($entry['pubdate']).'</updated>'.
 				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$vid_url->render().'"'.(!empty($entry['duration']) ? ' length="'.$entry['duration'].'"' : '').'/>' : '').
+				//XXX no way to embed video duration, <link length="x"> is length of the resource, in bytes.
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$vid_url->render().'"/>' : '').
 				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$img_url->render().'"/>' : '').
 			'</entry>'."\n";
 		}
