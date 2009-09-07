@@ -13,13 +13,14 @@ require_once('class.Cache.php');
 
 class http
 {
-	var $debug = false;
+	var     $debug = false;
 	private $scheme, $host, $port, $path, $param;
 	private $username, $password; ///< for HTTP AUTH
 
 	private $headers, $body;
 	private $cache_time = 300; //5min
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
+	private $schemes    = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe');
 
 	function __construct($url = '')
 	{
@@ -36,7 +37,6 @@ class http
 
 	function setCacheTime($sec) { $this->cache_time = $sec; }
 	function setUserAgent($ua) { $this->user_agent = $ua; }
-
 	function setPath($path) { $this->path = $path; }
 
 	/**
@@ -46,16 +46,11 @@ class http
 	{
 		$parsed = parse_url($url);
 
-		switch ($parsed['scheme']) {
-		case 'http':
-		case 'https':
-		case 'rtsp':
-		case 'rtmp':
-			break;
-		default:
+		if (!in_array($parsed['scheme'], $this->schemes)) {
 			echo "unhandled url scheme ".$parsed['scheme'].dln();
 			return false;
 		}
+
 		$this->scheme = $parsed['scheme'];
 		$this->host = $parsed['host'];
 		$this->path = $parsed['path'];
