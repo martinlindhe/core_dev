@@ -37,9 +37,15 @@ class http
 	function setCacheTime($sec) { $this->cache_time = $sec; }
 	function setUserAgent($ua) { $this->user_agent = $ua; }
 
+	function setPath($path) { $this->path = $path; }
+
+	/**
+	 * Parses url and initializes the object for this url
+	 */
 	function parse_url($url)
 	{
 		$parsed = parse_url($url);
+
 		switch ($parsed['scheme']) {
 		case 'http':
 		case 'https':
@@ -64,13 +70,16 @@ class http
 	/**
 	 * Adds/sets a parameter to the url
 	 */
-	function set($name, $val = false)
+	function setParam($name, $val = false)
 	{
 		unset($this->param[$name]);
 		$this->param[$name] = $val;
 	}
 
-	function remove($name)
+	/**
+	 * Removes a parameter from the url
+	 */
+	function removeParam($name)
 	{
 		foreach ($this->param as $n=>$val)
 			if ($name == $n)
