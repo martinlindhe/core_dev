@@ -9,6 +9,9 @@
 
 require_once('output_xhtml.php');
 
+//TODO render() use xhtml_table class when it is created
+//TODO add yui interactive editor to superTextarea field
+
 class xhtml_form
 {
 	private $enctype = '';     ///< TODO: set multipart type if form contains file upload parts
