@@ -112,6 +112,7 @@ function t_swe($s)
 		case 'Export': return 'Exportera';
 		case 'Admin': return 'Admin';
 		case 'Details': return 'Detaljer';
+		case 'Date': return 'Datum';
 
 		//Times
 		case 'Yesterday': return 'Igår';

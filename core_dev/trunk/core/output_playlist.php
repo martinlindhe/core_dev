@@ -27,7 +27,7 @@
 
 require_once('output_list.php');
 
-class output_playlist extends list
+class output_playlist extends core_list
 {
 	private $sendHeaders = false; ///< shall we send mime type?
 

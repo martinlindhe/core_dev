@@ -17,7 +17,7 @@ require_once('output_list.php');
 require_once('client_http.php');
 require_once('functions_time.php');	//for date3339() and date882()
 
-class output_feed extends list
+class output_feed extends core_list
 {
 	private $version     = 'core_dev output_feed 1.0';
 	private $title       = 'Untitled news feed';

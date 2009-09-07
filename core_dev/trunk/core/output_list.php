@@ -7,9 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: use with table output code (and call it output_table.php)
-
-class list
+class core_list
 {
 	private $entries = array();
 
