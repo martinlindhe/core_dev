@@ -13,9 +13,10 @@
 
 class cache
 {
-	var $debug  = false;
-	private $handle = false;
-	private $persistent = true; ///< use persistent connections?
+	var $debug           = false;
+	private $handle      = false;
+	private $persistent  = true; ///< use persistent connections?
+	private $expire_time = 60; ///< expiration time, in seconds
 
 	/**
 	 * @param $server_pool array of "host[:port]" addresses to memcache servers
@@ -43,6 +44,8 @@ class cache
 		return true;
 	}
 
+	function setCacheTime($s) { $this->expire_time = $s; }
+
 	function get($key)
 	{
 		if (!$this->handle) return false;
@@ -53,13 +56,15 @@ class cache
 		return $val;
 	}
 
-	function set($key, $val, $expire = 60)
+	function set($key, $val, $expire = 'REMOVEME') //XXX remove expire parameter
 	{
 		if (!$this->handle) return false;
 
-		$ret = $this->handle->set($key, $val, false, $expire);
+		if (is_numeric($expire)) die('FIXME USE $cache->setCacheTime() instead!');
 
-		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$expire." sec)\n";
+		$ret = $this->handle->set($key, $val, false, $this->expire_time);
+
+		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)\n";
 		return $ret;
 	}
 }
