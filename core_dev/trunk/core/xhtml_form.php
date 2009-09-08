@@ -19,7 +19,7 @@ class xhtml_form
 	private $name    = '';
 
 	private $handler;
-	private $failPOST = array();
+	private $formData = array();
 
 	private $listenGet = false; ///< if true, looks for form parameters in _GET
 
@@ -80,12 +80,13 @@ class xhtml_form
 			}
 		}
 
-		if (call_user_func($this->handler, $p, $this)) {
+		$this->formData = $p;
+
+		if (call_user_func($this->handler, $this->formData, $this)) {
 			$this->handled = true;
 			echo '<div class="okay">'.$this->success.'</div><br/>';
 			return;
 		} else {
-			$this->failPOST = $p;
 			echo '<div class="critical">'.$this->error.'</div><br/>';
 		}
 	}
@@ -188,8 +189,8 @@ class xhtml_form
 		foreach ($this->elems as $e)
 		{
 			//fills in form with previous entered data
-			if (!empty($e['name']) && !empty($this->failPOST[$e['name']]))
-				$e['default'] = $this->failPOST[$e['name']];
+			if (!empty($e['name']) && !empty($this->formData[$e['name']]))
+				$e['default'] = $this->formData[$e['name']];
 
 			echo '<tr>';
 			switch ($e['type']) {
