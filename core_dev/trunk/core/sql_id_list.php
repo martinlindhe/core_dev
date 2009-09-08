@@ -10,6 +10,9 @@ class sql_id_list
 	private $category  = false; ///< list entry category
 	private $child_obj = false; ///< child id table is described by this sql_id_key object
 
+	/**
+	 * @param $obj object of type sql_id_key
+	 */
 	function __construct($obj = false)
 	{
 		if ($obj) $this->child_obj = $obj;
@@ -51,6 +54,8 @@ class sql_id_list
 
 	/**
 	 * Loads a list for the owner
+	 *
+	 * @return array with id=>key values
 	 */
 	function getList()
 	{
@@ -75,6 +80,7 @@ class sql_id_list
 
 	/**
 	 * Returns list with subscribed links & number of subscribers
+	 *
 	 * @return array with indexes 'id', 'name' and 'cnt'
 	 */
 	function getSummary()
@@ -101,7 +107,7 @@ class sql_id_list
 	/**
 	 * Adds a entry to the list
 	 */
-	function add($id)
+	function addEntry($id)
 	{
 		global $db;
 		if (!is_numeric($id)) return false;
@@ -116,7 +122,7 @@ class sql_id_list
 	/**
 	 * Removes a entry from the list
 	 */
-	function remove($id)
+	function removeEntry($id)
 	{
 		global $db;
 		if (!is_numeric($id)) return false;
