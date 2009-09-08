@@ -12,7 +12,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class temp
+class temperature
 {
 	var $precision = 2; ///< if set, specifies rounding precision
 
