@@ -8,7 +8,7 @@
  */
 
 require_once('class.Cache.php');
-require_once('service_weather_webservicex.php');
+require_once('client_weather_webservicex.php');
 
 class weather
 {
