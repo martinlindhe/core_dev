@@ -60,10 +60,11 @@ class xhtml_form
 		if (!empty($_POST))
 			$p = $_POST;
 
+		//catch named GET parameters if no POST parameters are found
 		if ($this->listenGet && !empty($_GET))
 			foreach ($_GET as $key => $val)
 				foreach ($this->elems as $row)
-					if (!empty($row['name']) && $row['name'] == $key)
+					if (!empty($row['name']) && empty($_POST[$row['name']]) && $row['name'] == $key)
 						$p[ $key ] = $val;
 
 		if (!$p) return;
