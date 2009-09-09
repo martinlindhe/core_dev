@@ -8,7 +8,7 @@
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=48
  */
 
-require_once('conv_temp.php');
+require_once('conv_temperature.php');
 require_once('input_xml.php');
 
 class weather_webservicex

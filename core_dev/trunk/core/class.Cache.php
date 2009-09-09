@@ -24,7 +24,7 @@ class cache
 	function __construct($server_pool = false)
 	{
 		if (!class_exists('Memcache')) {
-			echo "cache FAIL: php5-xcache or php5-memcache not found\n";
+			echo "cache FAIL: php5-memcache not found\n";
 			return false;
 		}
 
