@@ -568,7 +568,7 @@ function formatMSID($anr)
 		//Swedish numer without country code
 		$anr = '46'.substr($anr, 1);
 	}
-	if (strlen($anr) < 10) return false;
+	if (strlen($anr) <= 8) return false;
 	return $anr;
 }
 
