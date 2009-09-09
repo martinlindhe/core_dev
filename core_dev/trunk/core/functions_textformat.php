@@ -425,4 +425,12 @@ function normalizeString($s, $tokens = array("\r", "\n", "\t"))
 	return $s;
 }
 
+/**
+ * Removes all spaces from input string
+ */
+function strip_spaces($s)
+{
+	return str_replace(' ', '', $s);
+}
+
 ?>
