@@ -1,0 +1,6 @@
+Ideas planned for the future:
+
+* Make a static "users" class:
+	users::getCount(), users::getList(), users::searchByName(), ...
+
+

@@ -48,11 +48,4 @@ class shorturl
 	}
 }
 
-
-
-$url = 'http://developer.yahoo.com/yui/editor/';
-$s = new shorturl(shorturl::TR_IM);
-echo $s->getShortUrl($url)."\n";
-
-
 ?>

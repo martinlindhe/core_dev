@@ -1,6 +1,6 @@
 <?php
 
-require_once('/var/www/core_dev/core/conv_temp.php');
+require_once('/var/www/core_dev/core/conv_temperature.php');
 
 $t = new temp();
 $t->precision = 2;
