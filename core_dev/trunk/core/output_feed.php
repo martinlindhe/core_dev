@@ -112,7 +112,7 @@ class output_feed extends core_list
 				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.
 				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
-				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$entry['video']'"'.(!empty($entry['duration']) ? ' duration="'.$entry['duration'].'"' : '').'/>' : '').
+				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$entry['video'].'"'.(!empty($entry['duration']) ? ' duration="'.$entry['duration'].'"' : '').'/>' : '').
 				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$entry['image'].'"/>' : '').
 			'</item>'."\n";
 		}
