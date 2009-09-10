@@ -29,9 +29,9 @@ function d($v)
 	else {
 		if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
 		else {
-			echo '<pre>';
+			if (php_sapi_name() != 'cli') echo '<pre>';
 			print_r($v);
-			echo '</pre>';
+			if (php_sapi_name() != 'cli') echo '</pre>';
 		}
 	}
 }
@@ -69,6 +69,35 @@ function dm()
 		formatDataSize(memory_get_peak_usage(false)).
 		" (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
 		formatDataSize($limit).")".dln().dln();
+}
+
+/**
+ * Debug function. Prints backtrace
+ */
+function dtrace()
+{
+	$bt = debug_backtrace();
+	if (php_sapi_name() != 'cli') echo '<pre>';
+
+	foreach ($bt as $idx => $l)
+	{
+		echo $l['line'].': '.$l['function'].'(';
+
+		//echo count($l['args']).' args'.dln();
+		$i = 0;
+		foreach ($l['args'] as $arg) {
+			$i++;
+			echo $arg;
+			if ($i < count($l['args'])) echo ', ';
+		}
+		echo ') from '.$l['file'].dln();
+
+		if (!empty($l['class'])) echo 'XXX class '.$l['class'].dln();
+		if (!empty($l['object'])) echo 'XXX object '.d($l['object']).dln();
+		if (!empty($l['type'])) echo 'XXX type '.$l['type'].dln();
+	}
+
+	if (php_sapi_name() != 'cli') echo '</pre>';
 }
 
 /**
