@@ -51,9 +51,7 @@ class auth_default extends auth_base
 		$this->ip = &$_SESSION['ip'];
 		$this->user_agent = &$_SESSION['user_agent'];
 
-		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {
-			$this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-		}
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip());
 	}
 
 	/**

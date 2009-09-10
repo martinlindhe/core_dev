@@ -59,7 +59,7 @@ The link will expire in __EXPIRETIME__";
 		$pattern = array('/__USERNAME__/', '/__IP__/', '/__CODE__/', '/__URL__/', '/__EXPIRETIME__/');
 		$replacement = array(
 			Users::getName($_id),
-			$_SERVER['REMOTE_ADDR'],
+			client_ip(),
 			$code,
 			$config['app']['full_url']."activate.php?id=".$_id."&code=".$code,
 			shortTimePeriod($config['activate']['expire_time_email'])
@@ -129,7 +129,7 @@ The link will expire in __EXPIRETIME__";
 		$pattern = array('/__USERNAME__/', '/__IP__/', '/__URL__/', '/__EXPIRETIME__/');
 		$replacement = array(
 			Users::getName($_id),
-			$_SERVER['REMOTE_ADDR'],
+			client_ip(),
 			$config['app']['full_url']."reset_password.php?id=".$_id."&code=".$code,
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);

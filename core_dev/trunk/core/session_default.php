@@ -95,9 +95,7 @@ class session_default extends session_base
 		$this->theme = &$_SESSION['theme'];
 		$this->referer = &$_SESSION['referer'];
 
-		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) {	//FIXME map to $this->auth->ip
-			$this->ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
-		}
+		if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip()); //FIXME map to $this->auth->ip
 	}
 
 	/**

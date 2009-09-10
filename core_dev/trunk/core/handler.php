@@ -194,9 +194,11 @@ class handler
 		}
 
 		//Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-		if ($this->session->id && $this->auth->check_ip && $this->auth->ip && ($this->auth->ip != IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']))) {
-			//$this->error = t('Client IP changed.');
-			$this->log('Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4($_SERVER['REMOTE_ADDR']), LOGLEVEL_ERROR);
+		if ($this->session->id && $this->auth->check_ip && $this->auth->ip && ($this->auth->ip != IPv4_to_GeoIP(client_ip())) ) {
+			$msg = t('Client IP changed.').'Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4(client_ip());
+			$this->session->error = $msg; //XXX set error properly
+
+			$this->log($msg, LOGLEVEL_ERROR);
 			$this->session->end();
 			$this->session->errorPage();
 		}

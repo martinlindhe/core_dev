@@ -34,7 +34,7 @@ function recaptchaVerify($priv_key)
 
 	$params = array (
 		'privatekey' => $priv_key,
-		'remoteip' => $_SERVER['REMOTE_ADDR'],
+		'remoteip' => client_ip(),
 		'challenge' => $_POST['recaptcha_challenge_field'],
 		'response' => $_POST['recaptcha_response_field']
 	);

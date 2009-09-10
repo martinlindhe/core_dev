@@ -84,7 +84,7 @@ function allowedIP($whitelist)
 {
 	if (php_sapi_name() == 'cli') return true;
 
-	$ip = IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']);
+	$ip = IPv4_to_GeoIP(client_ip());
 
 	return matchIP($ip, $whitelist);
 }
