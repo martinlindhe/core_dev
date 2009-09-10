@@ -44,6 +44,9 @@ class cache
 		return true;
 	}
 
+	/**
+	 * @param $s cache time in seconds; max 2592000 (30 days)
+	 */
 	function setCacheTime($s) { $this->expire_time = $s; }
 
 	function get($key)
