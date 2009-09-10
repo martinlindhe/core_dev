@@ -66,8 +66,6 @@ class output_feed extends core_list
 			'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->getEntries() as $entry) {
-			$vid_url = new http($entry['video']);
-			$img_url = new http($entry['image']);
 			$res .=
 			'<entry>'.
 				'<id>'.(!empty($entry['guid']) ? $entry['guid'] : htmlspecialchars($entry['link']) ).'</id>'.
@@ -77,8 +75,8 @@ class output_feed extends core_list
 				'<updated>'.date3339($entry['pubdate']).'</updated>'.
 				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
 				//XXX no way to embed video duration, <link length="x"> is length of the resource, in bytes.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$vid_url->render().'"/>' : '').
-				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$img_url->render().'"/>' : '').
+				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$entry['video'].'"/>' : '').
+				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$entry['image'].'"/>' : '').
 			'</entry>'."\n";
 		}
 		$res .=
@@ -106,8 +104,6 @@ class output_feed extends core_list
 				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->getEntries() as $entry) {
-			if (!empty($entry['video'])) $vid_url = new http($entry['video']);
-			if (!empty($entry['image'])) $img_url = new http($entry['image']);
 
 			$res .=
 			'<item>'.
@@ -116,8 +112,8 @@ class output_feed extends core_list
 				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
 				'<pubDate>'.date882($entry['pubdate']).'</pubDate>'.
 				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
-				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$vid_url->render().'"'.(!empty($entry['duration']) ? ' duration="'.$entry['duration'].'"' : '').'/>' : '').
-				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$img_url->render().'"/>' : '').
+				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$entry['video']'"'.(!empty($entry['duration']) ? ' duration="'.$entry['duration'].'"' : '').'/>' : '').
+				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$entry['image'].'"/>' : '').
 			'</item>'."\n";
 		}
 

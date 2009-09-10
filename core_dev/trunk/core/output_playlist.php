@@ -131,17 +131,17 @@ class output_playlist extends core_list
 		$res = '<table border="1">';
 
 		foreach ($this->getEntries() as $row) {
-			$res .= '<tr><td>';
-			$res .= '<h2>'.formatTime($row['pubdate']).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>';
-			$res .= '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>';
-			$res .= '<p>'.$row['desc'].'</p>';
-			if (!empty($row['video'])) $res .= '<a href="'.$row['video'].'">Play video</a>';
-			$res .= '</td></tr>';
+			$res .=
+			'<tr><td>'.
+			'<h2>'.formatTime($row['pubdate']).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>'.
+			(!empty($row['image']) ? '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>' : '').
+			'<p>'.$row['desc'].'</p>'.
+			(!empty($row['video']) ? '<a href="'.$row['video'].'">Play video</a>' : '').
+			'</td></tr>';
 		}
 
 		return $res;
 	}
-
 
 }
 
