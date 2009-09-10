@@ -1,16 +1,19 @@
 <?php
 
-require_once('/var/www/core_dev/core/class.Comment.php');
+require_once('/var/www/core_dev/trunk/core/class.Comment.php');
+
+require_once('/var/www/fmf/sitewatch/config.php');
+
+$c = new Comment(Comment::BLOG);
+$c->setOwner(0);
 
 
-$c = new Comment(Comment::NEWS);
-$c->create(0, 'hej hej!');
+$c->setId(1);
 
-$list = $c->children(0);
+echo $c->render();
 
-$c->delete(1);
+//$c->newComment('hej hej!');
 
-print_r($c);
 
 
 ?>
