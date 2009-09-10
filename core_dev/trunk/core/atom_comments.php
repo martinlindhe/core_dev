@@ -52,7 +52,7 @@ function addComment($_type, $ownerId, $commentText, $privateComment = false)
 
 	$userId = !empty($h->session->id) ? $h->session->id : 0;
 
-	$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$userId.', userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
+	$q = 'INSERT INTO tblComments SET ownerId='.$ownerId.', userId='.$userId.', userIP='.IPv4_to_GeoIP(client_ip()).', commentType='.$_type.', commentText="'.$commentText.'", commentPrivate='.$private.', timeCreated=NOW()';
 	return $db->insert($q);
 }
 
@@ -66,7 +66,7 @@ function updateComment($commentType, $ownerId, $commentId, $commentText)
 
 	$commentText = $db->escape(htmlspecialchars($commentText));
 
-	$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP($_SERVER['REMOTE_ADDR']).' ';
+	$q  = 'UPDATE tblComments SET commentText="'.$commentText.'",timeCreated=NOW(),userIP='.IPv4_to_GeoIP(client_ip()).' ';
 	if (empty($h->session->id)) {
 		$q .= 'WHERE ownerId='.$ownerId.' AND commentType='.$commentType.' AND userId=0';
 	} else {
