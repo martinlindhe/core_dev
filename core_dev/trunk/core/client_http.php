@@ -33,10 +33,16 @@ class http
 	}
 
 	function getBody() { return $this->body; }
+
 	function getHeaders() { return $this->headers; }
 
-	function setCacheTime($sec) { $this->cache_time = $sec; }
+	/**
+	 * @param $s cache time in seconds; max 2592000 (30 days)
+	 */
+	function setCacheTime($s) { $this->cache_time = $s; }
+
 	function setUserAgent($ua) { $this->user_agent = $ua; }
+
 	function setPath($path) { $this->path = $path; }
 
 	/**
@@ -172,8 +178,9 @@ class http
 		}
 
 		if (!$this->username && empty($post_params)) {
-			$cache->set($key_head, serialize($this->headers), $this->cache_time);
-			if (!$head_only) $cache->set($key_body, $this->body, $this->cache_time);
+			$cache->setCacheTime($this->cache_time);
+			$cache->set($key_head, serialize($this->headers));
+			if (!$head_only) $cache->set($key_body, $this->body);
 		}
 
 		if ($head_only)
