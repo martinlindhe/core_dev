@@ -184,6 +184,33 @@ class db_mysqli extends db_base
 	}
 
 	/**
+	 * For SQL SELECT queries who returns multiple rows with 1 column of data
+	 *
+	 * @param $q the query to execute
+	 * @return result
+	 */
+	function get1dArray($q)
+	{
+		parent::measure_time();
+
+		if (!$result = $this->real_query($q)) {
+			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			return array();
+		}
+
+		$data = array();
+
+		while ($row = $result->fetch_row())
+			$data[] = $row[0];
+
+		$result->free();
+
+		parent::measure_query($q);
+
+		return $data;
+	}
+
+	/**
 	 * For SQL SELECT queries who returns mapped array of data
 	 *
 	 * @param $q the query to execute
