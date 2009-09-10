@@ -19,6 +19,8 @@ class shorturl
 
 	function __construct($service = IS_GD)
 	{
+		$this->setCacheTime(3600 * 24); //24 hours
+
 		switch ($service) {
 		case shorturl::IS_GD:
 			$this->client = new shorturl_isgd();
