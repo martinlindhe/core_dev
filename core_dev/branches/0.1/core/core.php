@@ -15,6 +15,8 @@ require_once('functions_defaults.php');	//default appearance such as time displa
 require_once('functions_general.php');	//FIXME: anything in there worth keeping?
 require_once('functions_textformat.php');	//for decodeDataSize()
 
+require_once('atom_ip.php'); //included here for compatiblity: it is renamed to network.php in TRUNK and always available
+
 /**
  * Debug function. Prints out variable $v
  *
