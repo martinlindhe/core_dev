@@ -14,7 +14,6 @@ require_once('design_auth.php');		//default functions for auth xhtml forms
 require_once('class.Users.php');
 
 require_once('atom_events.php');		//for event logging
-require_once('atom_ip.php');			//for IPv4_to_GeoIP()
 require_once('atom_blocks.php');		//for isBlocked()
 require_once('atom_activation.php');	//for generateActivationCode()
 

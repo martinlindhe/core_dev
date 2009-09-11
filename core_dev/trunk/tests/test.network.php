@@ -1,5 +1,5 @@
 <?php
-require_once('/var/www/core_dev/core/atom_ip.php');
+require_once('/var/www/core_dev/core/network.php');
 
 $x = IPv4_to_GeoIP('192.168.0.1');
 $valid = array(

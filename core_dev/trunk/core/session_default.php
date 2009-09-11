@@ -10,7 +10,6 @@
 require_once('session_base.php');
 require_once('class.Users.php');
 
-require_once('atom_ip.php');        //for IPv4_to_GeoIP()
 require_once('atom_settings.php');  //for storing userdata
 require_once('atom_logging.php');   //for logEntry()
 
