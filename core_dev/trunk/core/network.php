@@ -117,4 +117,28 @@ function matchIP($ip, $matches)
 	return false;
 }
 
+/**
+ * Returns client IP address as a literal string
+ */
+function client_ip()
+{
+	if (php_sapi_name() == 'cli') return '127.0.0.1';
+	return $ip = $_SERVER['REMOTE_ADDR'];
+}
+
+/**
+ * Checks if input string is a valid http or https URL
+ *
+ * @param $url string
+ * @return true if input is a url
+ */
+function is_url($url)
+{
+	if (strpos($url, ' ')) return false; //FIXME: the regexp allows spaces in domain name
+	$pattern = "(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)";
+
+	if (preg_match($pattern, $url)) return true;
+	return false;
+}
+
 ?>

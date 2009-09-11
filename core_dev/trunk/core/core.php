@@ -137,15 +137,6 @@ function dh($m)
 }
 
 /**
- * Returns client IP address as a literal string
- */
-function client_ip()
-{
-	if (php_sapi_name() == 'cli') return '127.0.0.1';
-	return $ip = $_SERVER['REMOTE_ADDR'];
-}
-
-/**
  * Loads all active plugins
  */
 function loadPlugins()
