@@ -63,7 +63,10 @@ class cache
 	{
 		if (!$this->handle) return false;
 
-		if (is_numeric($expire)) die('FIXME USE $cache->setCacheTime() instead!');
+		if (is_numeric($expire)) {
+			dtrace();
+			die('FIXME USE $cache->setCacheTime() instead!');
+		}
 
 		$ret = $this->handle->set($key, $val, false, $this->expire_time);
 
