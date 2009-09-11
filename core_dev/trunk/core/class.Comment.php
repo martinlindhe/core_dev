@@ -7,8 +7,6 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: create class.Comments.php for a list of comment objects
-
 class Comment
 {
 	const NEWS     = 1;
@@ -29,10 +27,9 @@ class Comment
 
 	private $type, $id, $userId, $ownerId;
 
-	var $table_layout;
 	private $tbl_name = 'tblComments';
 
-	function __construct($type, $id = 0)
+	function __construct($type = 0, $id = 0)
 	{
 		global $h, $db;
 
@@ -41,26 +38,10 @@ class Comment
 			return false;
 		}
 
-		$this->setType($type);
+		if ($type) $this->setType($type);
 		if ($id) $this->setId($id);
 
 		if ($h) $this->userId = $h->session->id;
-/*
-		//XXX make use of this info
-		$this->table_name = 'tblComments';
-		$this->table_layout = array(
-		'commentId'      => array('bigint:20:unsigned','null:NO','key:PRI','extra:auto_increment'),
-		'commentType'    => array('tinyint:3:unsigned','null:NO'),
-		'commentText'    => array('text'),
-		'commentPrivate' => array('tinyint:3:unsigned','null:NO'),
-		'timeCreated'    => array('datetime','null:YES'),
-		'timeDeleted'    => array('datetime','null:YES'),
-		'deletedBy'      => array('bigint:20:unsigned','null:NO'),
-		'ownerId'        => array('bigint:20:unsigned','null:NO'),
-		'userId'         => array('bigint:20:unsigned','null:NO'),
-		'userIP'         => array('bigint:20:unsigned','null:NO')
-		);
-*/
 	}
 
 	function setType($type)
@@ -78,7 +59,6 @@ class Comment
 	function setId($id = 0)
 	{
 		if (!is_numeric($id)) return false;
-
 		$this->id = $id;
 	}
 
@@ -98,19 +78,21 @@ class Comment
 	}
 
 	//XXX snygga till utseendet
-	function render()
+	function render($row = false)
 	{
 		global $db, $h;
-		if (!$this->id) return false;
 
-		$q = 'SELECT * FROM tblComments';
-		$q .= ' WHERE commentId='.$this->id;
-		if ($this->type)    $q .= ' AND commentType='.$this->type;
-		if ($this->ownerId) $q .= ' AND ownerId='.$this->ownerId;
-		$q .= ' AND deletedBy=0 LIMIT 1';
-		$row = $db->getOneRow($q);
-		if (!$row) return false;
+		if (!$row) {
+			$q = 'SELECT * FROM tblComments';
+			$q .= ' WHERE commentId='.$this->id;
+			if ($this->type)    $q .= ' AND commentType='.$this->type;
+			if ($this->ownerId) $q .= ' AND ownerId='.$this->ownerId;
+			$q .= ' AND deletedBy=0 LIMIT 1';
+			$row = $db->getOneRow($q);
+			if (!$row) return false;
+		}
 
+		$this->setId($row['commentId']);
 		$this->setType($row['commentType']);
 		$this->setOwner($row['ownerId']);
 

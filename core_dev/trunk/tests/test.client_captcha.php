@@ -11,7 +11,6 @@ $captcha->setPubKey( '6LfqDQQAAAAAAMF-GaCBYHRJFetLd_BrjO8-2HBW');
 if ($captcha->verify()) {
 	echo "correct! saving ".$_POST['var'];
 } else {
-	echo createXHTMLHeader();
 
 	echo xhtmlForm();
 	echo xhtmlInput('var');
@@ -19,5 +18,6 @@ if ($captcha->verify()) {
 	echo xhtmlSubmit();
 	echo xhtmlFormClose();
 }
+
 
 ?>

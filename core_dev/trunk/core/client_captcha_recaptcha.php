@@ -37,6 +37,7 @@ class captcha_recaptcha
 	function verify()
 	{
 		if (!isset($_POST['recaptcha_challenge_field']) || !isset($_POST['recaptcha_response_field'])) return false;
+		if (!$this->pub_key || !$this->priv_key) die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
 
 		$params = array (
 			'privatekey' => $this->priv_key,
@@ -60,6 +61,7 @@ class captcha_recaptcha
 	 */
 	function render($ssl = true)
 	{
+		if (!$this->pub_key || !$this->priv_key) die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
 		$server = ($ssl ? $this->api_url_ssl : $this->api_url);
 
 		return
