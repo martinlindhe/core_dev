@@ -99,20 +99,26 @@ class TA_findTelephone
 
 class Teleadress
 {
-	var $username = 'test';
-	var $password = 'TEST';
-	var $api_url  = 'http://api.teleadress.se/WSDL/nnapiwebservice.wsdl';
+	private $api_url  = 'http://api.teleadress.se/WSDL/nnapiwebservice.wsdl';
+	private $username, $password;
 
-	var $client   = false;
-	var $cache    = false;
-	var $cache_expire = 86400; ///<  expire time in seconds for local cache (24h default)
+	private $client   = false;
+	private $cache    = false;
+	private $cache_expire;        ///<  expire time in seconds for lookup cache
 
-	function __construct()
+	function __construct($username = 'test', $password = 'TEST')
 	{
-		$this->client = new SoapClient($this->api_url, array( "trace" => 1, "exceptions" => 0 ) );
+		$this->username = $username;
+		$this->password = $password;
+
+		$this->setCacheTime(3600*24); //24 hour cache
+		$this->client = new SoapClient($this->api_url);//, array( "trace" => 1, "exceptions" => 0 ) );
 		$this->cache  = new cache();
+		$this->cache->setCacheTime($this->cache_expire);
 		//$this->cache->debug = true;
 	}
+
+	function setCacheTime($s) { $this->cache_expire = $s; }
 
 	function showError($res)
 	{
@@ -169,7 +175,7 @@ class Teleadress
 			$post = $this->firstResult($res, $return_first);
 		}
 
-		$this->cache->set($key, serialize($res), $this->cache_expire);
+		$this->cache->set($key, serialize($res));
 		return $post;
 	}
 
@@ -191,7 +197,7 @@ class Teleadress
 		if ($this->showError($res)) return false;
 
 		$post = $this->firstResult($res);
-		$this->cache->set($key, serialize($post), $this->cache_expire);
+		$this->cache->set($key, serialize($post));
 		return $post;
 	}
 }
