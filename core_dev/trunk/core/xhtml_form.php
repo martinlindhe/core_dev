@@ -9,8 +9,7 @@
 
 require_once('output_xhtml.php');
 
-//TODO render() use xhtml_table class when it is created
-//TODO add yui interactive editor to superTextarea field
+//TODO add yui interactive editor as addRichedit()
 
 class xhtml_form
 {
@@ -23,12 +22,12 @@ class xhtml_form
 
 	private $formData = array();
 
-	private $listenGet = false; ///< if true, looks for form parameters in _GET
+	private $listenGet = false;
 
 	private $elems = array();
 	private $yui   = false;    ///< include yui js files?
 
-	private $success = 'Form data processed successfully!';
+	private $success = '';
 	private $error   = 'Submitted form was rejected!';
 
 	function __construct($name = '')
@@ -37,15 +36,21 @@ class xhtml_form
 	}
 
 	function setError($s) { $this->error = $s; }
+
 	function setSuccess($s) { $this->success = $s; }
 
 	/**
-	 * Defines the function that will handle form submit processing
-	 * Call this function when all form elements have been added in order to fetch
-	 * GET/POST parameters from previous page view
+	 * $param $bool set to true to look for form parameters in _GET if not found in _POST
+	 */
+	function setListenGet($bool) { $this->listenGet = $bool; }
+
+	/**
+	 * Defines the function/object->method that will handle form submit processing
+	 * Call this function when all form elements have been added in order
+	 * to fetch GET/POST parameters from previous page view
 	 *
-	 * @param $f function name to process form data
-	 * @param $objectinstance for objects: name of function
+	 * @param $f function/method name to process form data
+	 * @param $objectinstance for objects
 	 */
 	function setHandler($f, $objectinstance = false)
 	{
@@ -101,14 +106,12 @@ class xhtml_form
 		}
 
 		if ($this->handled) {
-			echo '<div class="okay">'.$this->success.'</div><br/>';
+			if ($this->success) echo '<div class="okay">'.$this->success.'</div><br/>';
 			return true;
 		}
 		echo '<div class="critical">'.$this->error.'</div><br/>';
 		return false;
 	}
-
-	function setListenGet($bool) { $this->listenGet = $bool; }
 
 	/**
 	 * Adds a hidden input field to the form
@@ -129,9 +132,9 @@ class xhtml_form
 	/**
 	 * Adds a textarea to the form
 	 */
-	function addTextarea($name, $str, $val = '', $width = x, $height = z)
+	function addTextarea($name, $str, $val = '', $width = 0, $height = 0)
 	{
-		$this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val);
+		$this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
 	}
 
 	/**
@@ -227,7 +230,7 @@ class xhtml_form
 
 			case 'TEXTAREA':
 				$res .= '<td>'.$e['str'].'</td>';
-				$res .= '<td>'.xhtmlTextarea($e['name'], $e['default']).'</td>';
+				$res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
 				break;
 
 			case 'TEXT':
