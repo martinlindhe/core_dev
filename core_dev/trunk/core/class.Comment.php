@@ -62,7 +62,7 @@ class Comment
 		$this->id = $id;
 	}
 
-	function newComment($text, $private = false)
+	function add($text, $private = false)
 	{
 		global $db;
 		if (!is_bool($private)) return false;

@@ -19,6 +19,8 @@ class xhtml_form
 	private $name    = '';
 
 	private $handler;
+	private $objectinstance = false;
+
 	private $formData = array();
 
 	private $listenGet = false; ///< if true, looks for form parameters in _GET
@@ -43,9 +45,14 @@ class xhtml_form
 	 * GET/POST parameters from previous page view
 	 *
 	 * @param $f function name to process form data
+	 * @param $objectinstance for objects: name of function
 	 */
-	function setHandler($f) {
+	function setHandler($f, $objectinstance = false)
+	{
 		$this->handler = $f;
+
+		if (is_object($objectinstance))
+			$this->objectinstance = $objectinstance;
 
 		$this->handle();
 	}
@@ -67,7 +74,7 @@ class xhtml_form
 					if (!empty($row['name']) && empty($_POST[$row['name']]) && $row['name'] == $key)
 						$p[ $key ] = $val;
 
-		if (!$p) return;
+		if (!$p) return false;
 
 		//find new_catname tag and handle it
 		foreach ($this->elems as $id => $e) {
@@ -83,13 +90,22 @@ class xhtml_form
 
 		$this->formData = $p;
 
-		if (call_user_func($this->handler, $this->formData, $this)) {
-			$this->handled = true;
-			echo '<div class="okay">'.$this->success.'</div><br/>';
-			return;
+		if ($this->objectinstance) {
+			$call = array($this->objectinstance, $this->handler);
 		} else {
-			echo '<div class="critical">'.$this->error.'</div><br/>';
+			$call = $this->handler;
 		}
+
+		if (call_user_func($call, $this->formData, $this)) {
+			$this->handled = true;
+		}
+
+		if ($this->handled) {
+			echo '<div class="okay">'.$this->success.'</div><br/>';
+			return true;
+		}
+		echo '<div class="critical">'.$this->error.'</div><br/>';
+		return false;
 	}
 
 	function setListenGet($bool) { $this->listenGet = $bool; }
@@ -113,7 +129,7 @@ class xhtml_form
 	/**
 	 * Adds a textarea to the form
 	 */
-	function addTextarea($name, $str, $val = '')
+	function addTextarea($name, $str, $val = '', $width = x, $height = z)
 	{
 		$this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val);
 	}
@@ -173,19 +189,20 @@ class xhtml_form
 	{
 		global $config;
 
-		if (!function_exists($this->handler))
+		if (!$this->objectinstance && !function_exists($this->handler))
 			die('FATAL: xhtml_form() does not have a defined data handler');
 
+		$res = '';
 		if ($this->yui) {
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/yahoo-dom-event/yahoo-dom-event.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/calendar/calendar-min.js"></script>';
+			$res .= '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/yahoo-dom-event/yahoo-dom-event.js"></script>';
+			$res .= '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/calendar/calendar-min.js"></script>';
 
-			echo '<link type="text/css" rel="stylesheet" href="'.$config['core']['web_root'].'js/yui/calendar/assets/skins/sam/calendar.css">';
+			$res .= '<link type="text/css" rel="stylesheet" href="'.$config['core']['web_root'].'js/yui/calendar/assets/skins/sam/calendar.css">';
 		}
 
-		echo xhtmlForm($this->name, '', 'post', $this->enctype);
+		$res .= xhtmlForm($this->name, '', 'post', $this->enctype);
 
-		echo '<table cellpadding="10" cellspacing="0" border="1">';
+		$res .= '<table cellpadding="10" cellspacing="0" border="1">';
 
 		foreach ($this->elems as $e)
 		{
@@ -193,79 +210,81 @@ class xhtml_form
 			if (!empty($e['name']) && !empty($this->formData[$e['name']]))
 				$e['default'] = $this->formData[$e['name']];
 
-			echo '<tr>';
+			$res .= '<tr>';
 			switch ($e['type']) {
 			case 'HIDDEN':
-				echo xhtmlHidden($e['name'], $e['value']);
+				$res .= xhtmlHidden($e['name'], $e['value']);
 				break;
 
 			case 'INPUT':
 				if ($e['str']) {
-					echo '<td>'.$e['str'].'</td>';
-					echo '<td>'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
+					$res .= '<td>'.$e['str'].'</td>';
+					$res .= '<td>'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
 				} else {
-					echo '<td colspan="2">'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
+					$res .= '<td colspan="2">'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
 				}
 				break;
 
 			case 'TEXTAREA':
-				echo '<td>'.$e['str'].'</td>';
-				echo '<td>'.xhtmlTextarea($e['name'], $e['default']).'</td>';
+				$res .= '<td>'.$e['str'].'</td>';
+				$res .= '<td>'.xhtmlTextarea($e['name'], $e['default']).'</td>';
 				break;
 
 			case 'TEXT':
-				echo '<td colspan="2">'.$e['str'].'</td>';
+				$res .= '<td colspan="2">'.$e['str'].'</td>';
 				break;
 
 			case 'DROPDOWN':
-				echo '<td>'.$e['str'].'</td>';
-				echo '<td>'.xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
+				$res .= '<td>'.$e['str'].'</td>';
+				$res .= '<td>'.xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
 				break;
 
 			case 'RADIO':
-				echo '<td>'.$e['str'].'</td>';
-				echo '<td>'.xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
+				$res .= '<td>'.$e['str'].'</td>';
+				$res .= '<td>'.xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
 				break;
 
 			case 'SUBMIT':
-				echo '<td colspan="2">'.xhtmlSubmit($e['str']).'</td>';
+				$res .= '<td colspan="2">'.xhtmlSubmit($e['str']).'</td>';
 				break;
 
 			case 'CATEGORY':
-				echo '<td>'.$e['str'].'</td>';
-				echo '<td>';
 				$list = $e['obj']->getList();
-				echo xhtmlSelectArray($e['name'], $list, $e['default']).' ';
+
+				$res .= '<td>'.$e['str'].'</td>';
+				$res .= '<td>';
+				$res .= xhtmlSelectArray($e['name'], $list, $e['default']).' ';
 				//add new category widget
-				echo '<a href="#" onClick="toggle_element(\'cd_new_'.$e['name'].'\');toggle_enabled_element(\'new_'.$e['name'].'\');">'.coreButton('Add').'</a>';
-				echo '<span id="cd_new_'.$e['name'].'" style="display:none;">';
-				echo xhtmlInput('new_'.$e['name'], 'new category', 15, 0, true);
-				echo '</span>';
-				echo '</td>';
+				$res .= '<a href="#" onClick="toggle_element(\'cd_new_'.$e['name'].'\');toggle_enabled_element(\'new_'.$e['name'].'\');">'.coreButton('Add').'</a>';
+				$res .= '<span id="cd_new_'.$e['name'].'" style="display:none;">';
+				$res .= xhtmlInput('new_'.$e['name'], 'new category', 15, 0, true);
+				$res .= '</span>';
+				$res .= '</td>';
 				break;
 
 			case 'DATEINTERVAL':
-				echo '<td colspan="2">';
+				$res .= '<td colspan="2">';
 
-				echo '<div id="cal1Container"></div>';
-				echo '<div style="clear:both"></div>';
+				$res .= '<div id="cal1Container"></div>';
+				$res .= '<div style="clear:both"></div>';
 
-				echo xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
+				$res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
 				require_once('js_calendar.js');
-				echo '</td>';
+				$res .= '</td>';
 				break;
 
 			default:
-				echo '<h1>'.$e['type'].' not implemented</h1>';
+				$res .= '<h1>'.$e['type'].' not implemented</h1>';
 				break;
 			}
-			echo '</tr>';
+			$res .= '</tr>';
 		}
 
-		echo '</table>';
+		$res .= '</table>';
 
-		echo xhtmlFormClose();
+		$res .= xhtmlFormClose();
+		return $res;
 	}
 }
 

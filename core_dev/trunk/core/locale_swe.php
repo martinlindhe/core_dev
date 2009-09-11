@@ -266,7 +266,7 @@ function t_swe($s)
 		//Comments
 		case 'comment': return 'kommentar';
 		case 'comments': return 'kommentarer';
-		case 'Add comment': return 'Spara';
+		case 'Add comment': return 'Spara kommentar';
 
 		//News
 		case 'Add news': return 'Skapa nyhet';
