@@ -9,25 +9,28 @@
 
 class Comment
 {
-	const NEWS     = 1;
-	const BLOG     = 2; ///< anonymous or registered users comments on a blog
-	const FILE     = 3; ///< anonymous or registered users comments on a image
-	const TODOLIST = 4;	///< todolist item comments
-	const GENERIC  = 5; ///< generic comment type
-	const PASTEBIN = 6; ///< "pastebin" text. anonymous submissions are allowed
-	const SCRIBBLE = 7; ///< scribble board
-	const CUSTOMER = 8; ///< customer comments
-	const FILEDESC = 9; ///< this is a file description, only one per file can exist
-	const ADMIN_IP = 10;///< a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
-	const WIKI     = 11;///< a comment to a wiki article
+	const NEWS       =  1;
+	const BLOG       =  2; ///< anonymous or registered users comments on a blog
+	const FILE       =  3; ///< anonymous or registered users comments on a image
+	const TODOLIST   =  4; ///< todolist item comments
+	const GENERIC    =  5; ///< generic comment type
+	const PASTEBIN   =  6; ///< "pastebin" text. anonymous submissions are allowed
+	const SCRIBBLE   =  7; ///< scribble board
+	const CUSTOMER   =  8; ///< customer comments
+	const FILEDESC   =  9; ///< this is a file description, only one per file can exist
+	const ADMIN_IP   = 10; ///< a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
+	const WIKI       = 11; ///< a comment to a wiki article
 
-	/* Comment types only meant for the admin's eyes */
+	//Comment types only meant for the admin's eyes
 	const MODERATION = 30; ///< owner = tblModeration.queueId
 	const USER       = 31; ///< owner = tblUsers.userId, admin comments for a user
 
 	private $type, $id, $userId, $ownerId;
 
 	private $tbl_name = 'tblComments';
+	private $error;
+
+	private $add_interval = 30; ///< max time in seconds to look for duplicate comment adds
 
 	function __construct($type = 0, $id = 0)
 	{
@@ -62,15 +65,35 @@ class Comment
 		$this->id = $id;
 	}
 
+	function getError() { return $this->error; }
+	function setError($e) { $this->error = $e; }
+
 	function add($text, $private = false)
 	{
 		global $db;
 		if (!is_bool($private)) return false;
 
+		$ip_num = IPv4_to_GeoIP(client_ip());
+
 		$q =
-		'INSERT INTO '.$this->tbl_name.' SET ownerId='.$this->ownerId.',userId='.$this->userId.
-		',userIP='.IPv4_to_GeoIP(client_ip()).',commentType='.$this->type.
-		',commentText="'.$db->escape($text).'",timeCreated=NOW()';
+		'SELECT COUNT(*) FROM '.$this->tbl_name.
+		' WHERE commentType='.$this->type.
+		' AND ownerId='.$this->ownerId.
+		($this->userId ? ' AND userId='.$this->userId : '').
+		' AND userIP='.$ip_num.
+		' AND commentText="'.$db->escape($text).'"'.
+		' AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$this->add_interval.' SECOND)';
+
+		if ($db->getOneItem($q)) {
+			$this->setError('Your comment has already been stored.');
+			return false;
+		}
+
+		$q =
+		'INSERT INTO '.$this->tbl_name.' SET commentType='.$this->type.
+		',ownerId='.$this->ownerId.',userId='.$this->userId.
+		',userIP='.$ip_num.',timeCreated=NOW()'.
+		',commentText="'.$db->escape($text).'"';
 		if ($private) $q .= ',commentPrivate=1';
 
 		$this->id = $db->insert($q);

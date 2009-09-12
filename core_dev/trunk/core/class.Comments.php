@@ -10,6 +10,8 @@
 require_once('class.Comment.php');
 require_once('xhtml_form.php');
 
+//FIXME: the pager is half broken, limit is ignored in render()
+
 class Comments
 {
 	private $tbl_layout;
@@ -20,6 +22,7 @@ class Comments
 	private $type;
 	private $showDeleted = false; ///< shall deleted comments be included?
 	private $showPrivate = false; ///< shall private comments be included?
+	private $allowAnon   = false; ///< do we allow anonymous comments?
 	private $limit       = 5;     ///< number of items per page
 
 	private $comment;             ///< Comment object
@@ -43,6 +46,8 @@ class Comments
 		if (!is_numeric($l)) return false;
 		$this->limit = $l;
 	}
+
+	function setAnonAccess($bool) { $this->allowAnon = $bool; }
 
 	function showDeleted() { $this->showDeleted = true; }
 	function showPrivate() { $this->showPrivate = true; }
@@ -80,14 +85,23 @@ class Comments
 	/**
 	 * Handles new form post
 	 */
-	function handleSubmit($p)
+	function handleSubmit($p, $caller)
 	{
-		if (!empty($_POST['cmt_'.$this->type])) {
-	//XXX check for logged in or anon post allowed
-			$this->comment->add($_POST['cmt_'.$this->type]);
-			unset($_POST['cmt_'.$this->type]);
-			return true;
+		global $h;
+		if (empty($_POST['cmt_'.$this->type])) {
+			$caller->setError('No text entered.');
+			return false;
 		}
+
+		if ($h->session->id || $this->allowAnon) {
+			$id = $this->comment->add($_POST['cmt_'.$this->type]);
+			if (!$id) $caller->setError( $this->comment->getError() );
+			unset($_POST['cmt_'.$this->type]);
+			return $id;
+		}
+
+		$caller->setError('Unauthorized submit');
+		return false;
 	}
 
 	function render()
@@ -122,7 +136,7 @@ class Comments
 		if ($cnt >= 5) $res .= $pager['head'];
 		$res .= '</div>'; //id="comments_only"
 
-		if ($h->session->id) {  //XXX allow anonym post
+		if ($h->session->id || $this->allowAnon) {
 			$res .= $form->render();
 		}
 
