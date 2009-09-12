@@ -17,7 +17,6 @@ require_once('atom_comments.php');		//for image comments support
 require_once('atom_categories.php');	//for file categories support
 require_once('atom_subscriptions.php');	//for userfile area subscriptions
 require_once('functions_image.php');
-require_once('functions_time.php');		//for ago()
 
 define('FILETYPE_WIKI',					1);		// The file is a wiki attachment
 define('FILETYPE_BLOG',					2);		// The file is a blog attachment

@@ -8,6 +8,7 @@
  */
 
 require_once('atom_rating.php');	//for file rating
+require_once('functions_time.php');		//for ago()
 
 /**
  * Displays a file, depending on file type

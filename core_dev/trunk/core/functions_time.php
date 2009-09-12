@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
 /**
@@ -13,6 +13,7 @@
  */
 function ago($sql_time)
 {
+	//XXX deprecate!!! use Timestamp->getRelative() instead
 	if (function_exists('agoOverride')) {
 		return agoOverride($sql_time);
 	}

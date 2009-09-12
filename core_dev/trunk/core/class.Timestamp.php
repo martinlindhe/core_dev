@@ -3,7 +3,11 @@
  * $Id$
  *
  * Present a UNIX timestamp in different ways
+ *
+ * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
+
+require_once('functions_time.php'); //for shortTimePeriod()
 
 class Timestamp
 {
@@ -66,8 +70,10 @@ class Timestamp
 	 */
 	function getRelative()
 	{
-		//XXX FIXME implement
-		return $this->render();
+		if (time() >= $this->ts)
+			return shortTimePeriod(time() - $this->ts).' ago';
+
+		return shortTimePeriod($this->ts - time()).' in the future';
 	}
 
 	/**
