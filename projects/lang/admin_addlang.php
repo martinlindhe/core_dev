@@ -12,7 +12,7 @@ require('design_head.php');
 
 <h2>Add new language</h2>
 
-These languages already exist: <?=getCategoriesSelect(CATEGORY_LANGUAGE)?>
+These languages already exist: <?=xhtmlSelectCategory(CATEGORY_LANGUAGE)?>
 <br/><br/>
 
 <form method="post" action="">

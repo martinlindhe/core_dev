@@ -24,7 +24,7 @@ Each unique words, and their relations with other words within the sentences wil
 Only useful for natural written language.<br/>
 
 <form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-	Language: <?=getCategoriesSelect(CATEGORY_LANGUAGE, 0, 'lang', !empty($_POST['lang']) ? $_POST['lang'] : '')?><br/>
+	Language: <?=xhtmlSelectCategory(CATEGORY_LANGUAGE, 0, 'lang', !empty($_POST['lang']) ? $_POST['lang'] : '')?><br/>
 	Text:<br/>
 	<textarea name="text" cols="70" rows="20"></textarea><br/>
 	<input type="submit" class="button" value="Add"/>

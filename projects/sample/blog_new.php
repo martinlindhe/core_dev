@@ -22,7 +22,7 @@ echo '<input type="text" name="title" size="67" maxlength="40"/><br/>';
 echo '<br/>';
 
 echo 'Select blog category:<br/>';
-echo getCategoriesSelect(CATEGORY_BLOG, 0, 'catid');
+echo xhtmlSelectCategory(CATEGORY_BLOG, 0, 'catid');
 echo '<br/><br/>';
 
 echo '<textarea name="body" cols="64" rows="24"></textarea><br/><br/>';
