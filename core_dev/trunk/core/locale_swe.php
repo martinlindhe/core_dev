@@ -118,6 +118,7 @@ function t_swe($s)
 		//Times
 		case 'Yesterday': return 'Igår';
 		case 'Tomorrow': return 'I morgon';
+		case 'Today': return 'Idag';
 
 		//Search
 		case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';

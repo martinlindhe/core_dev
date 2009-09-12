@@ -8,7 +8,7 @@
  */
 
 require_once('input_sdp.php');
-require_once('functions_time.php');	//for ntptime()
+require_once('class.Timestamp.php');	//Timestamp::getNTP()
 
 
 //SDP media stream types
@@ -51,10 +51,12 @@ function generate_sdp($raw_sdp, $dst_ip, $port)
 {
 	$sdp_arr = parse_sdp($raw_sdp);
 
+	$ts = new Timestamp();
+
 	//Session description
 	$sdp =
 	"v=0\r\n".
-	"o=- ".ntptime()." 0 IN IP4 ".$sdp_arr['ip']."\r\n".	//Origin (this string is used as a "session identifier")
+	"o=- ".$ts->asNTP()." 0 IN IP4 ".$sdp_arr['ip']."\r\n".	//Origin (this string is used as a "session identifier")
 	"s=core_dev\r\n".										//XXX core_dev version
 	"c=IN IP4 ".$dst_ip."\r\n".								//Connection data (send RTP data to this IP)
 	//Time description

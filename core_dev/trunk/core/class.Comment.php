@@ -151,7 +151,7 @@ class Comment
 
 		$time = new Timestamp($row['timeCreated']);
 
-		$res .= ', <font size="1">'.$time->renderRelative().'</font>';
+		$res .= ', <font size="1">'.$time->getRelative().'</font>';
 		$res .= '</div>';
 		$res .= '<div class="'.$style_body.'">'.$txt;
 		if ($h->session->id && ($h->session->isAdmin ||
