@@ -12,6 +12,8 @@ require_once('functions_messages.php');	//for sendMessage()
 
 $config['user']['log_visitors'] = true;	//XXX move setting somewhere else!
 
+//TODO: separate into one  User() and one Users() class and make it actually OO -will break much code so do this LATER!
+
 class Users
 {
 	function reserveId()
@@ -481,12 +483,11 @@ class Users
 	 */
 	function link($id, $name = '', $class = '')
 	{
-		global $config;
 		if (!$id) return t('System message');
 		if (!$name) $name = Users::getName($id);
 		if (!$name) return t('User not found');
 
-		return '<a '.($class?' class="'.$class.'"':'').'href="'.$config['app']['web_root'].'user.php?id='.$id.'">'.$name.'</a>';
+		return '<a '.($class?' class="'.$class.'"':'').'href="user.php?id='.$id.'">'.$name.'</a>';
 	}
 
 	/**
@@ -494,12 +495,11 @@ class Users
 	 */
 	function linkThumb($id, $alt = '', $w = 50, $h = 50)
 	{
-		global $config;
 		if (!$id) return t('System message');
 		if (!$alt) $alt = Users::getName($id);
 		if (!$alt) return t('User deleted');
 
-		$out  = '<a href="'.$config['app']['web_root'].'user.php?id='.$id.'">';
+		$out  = '<a href="user.php?id='.$id.'">';
 		$out .= Users::thumb($id, $alt, $w, $h).'</a>';
 		return $out;
 	}

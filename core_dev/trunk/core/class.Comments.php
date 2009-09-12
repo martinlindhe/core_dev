@@ -20,7 +20,7 @@ class Comments
 	private $sql_limit = ''; ///< used by the pager
 
 	private $ownerId;
-	private $type;
+	private $type;                ///< Comment::type
 	private $showDeleted = false; ///< shall deleted comments be included?
 	private $showPrivate = false; ///< shall private comments be included?
 	private $allowAnon   = false; ///< do we allow anonymous comments?

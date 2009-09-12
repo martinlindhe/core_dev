@@ -10,6 +10,7 @@
  */
 
 require_once('class.Cache.php');
+require_once('network.php');
 
 class http
 {

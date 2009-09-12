@@ -69,7 +69,7 @@ function dm()
 		"Memory usage: ".
 		formatDataSize(memory_get_peak_usage(false)).
 		" (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
-		formatDataSize($limit).")".dln().dln();
+		formatDataSize($limit).")".dln();
 }
 
 /**

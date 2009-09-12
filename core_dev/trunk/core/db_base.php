@@ -333,12 +333,14 @@ abstract class db_base
 			'SELECT', 'UPDATE', 'INSERT', 'DELETE',
 			'FROM', 'SET', 'WHERE', 'LEFT JOIN', 'GROUP', 'ORDER BY',
 			'ON', 'AS', 'AND', 'OR', 'IS NULL', 'NOT NULL', 'DESC', 'ASC',
+			'LIMIT',
 			'NOW()'
 			);
 			$decorated = array(
 			'<b>SELECT</b>', '<b>UPDATE</b>', '<b>INSERT</b>', '<b>DELETE</b>',
 			'<br/><b>FROM</b>', '<br/><b>SET</b>', '<br/><b>WHERE</b>', '<br/><b>LEFT JOIN</b>', '<br/><b>GROUP</b>', '<br/><b>ORDER BY</b>',
 			'<b>ON</b>', '<b>AS</b>', '<b>AND</b>', '<b>OR</b>', '<b>IS NULL</b>', '<b>NOT NULL</b>', '<b>DESC</b>', '<b>ASC</b>',
+			'<b>LIMIT</b>',
 			'<b>NOW()</b>',
 			);
 			$query = str_replace($keywords, $decorated, $query);
@@ -366,12 +368,14 @@ abstract class db_base
 		echo 'Time spent: '.round($total_time, 2).'s '.
 			' (DB connect: '.round($this->time_connect, 2).'s, '.
 			sizeof($this->queries).' SQL queries: '.round($sql_time, 2).'s, '.
-			'PHP: '.round($php_time, 2).'s)<br/><br/>';
+			'PHP: '.round($php_time, 2).'s)<br/>';
 
 		//Show memory usage
 		echo dm();
 
-		echo date('r');
+		echo 'PHP '.phpversion().'<br/>';
+		echo 'MySQL '.$this->server_version.'<br/>';
+		echo date('r').'<br/>';
 
 		echo '</div>';
 	}

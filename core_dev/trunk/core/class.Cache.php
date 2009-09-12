@@ -64,6 +64,7 @@ class cache
 		if (!$this->handle) return false;
 
 		if (is_numeric($expire)) {
+			require_once('core.php');
 			dtrace();
 			die('FIXME USE $cache->setCacheTime() instead!');
 		}

@@ -113,6 +113,7 @@ function t_swe($s)
 		case 'Admin': return 'Admin';
 		case 'Details': return 'Detaljer';
 		case 'Date': return 'Datum';
+		case 'Home': return 'Hem';
 
 		//Times
 		case 'Yesterday': return 'Igår';

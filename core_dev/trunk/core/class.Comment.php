@@ -7,6 +7,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+require_once('class.User.php');
+require_once('class.Timestamp.php');
+
 class Comment
 {
 	const NEWS       =  1;
@@ -137,14 +140,18 @@ class Comment
 			}
 		}
 
+		$user = new User($row['userId']);
+
 		$res = '<div class="'.$style_head.'">';
 		//echo makeThumbLink($row['ownerId']);
 
-		$res .= $row['userId'] ? Users::link($row['userId']) : t('Anonymous');
+		$res .= $user->link();
 
 		$txt = formatUserInputText($row['commentText']);
 
-		$res .= ', <font size="1">'.formatTime($row['timeCreated']).'</font>';
+		$time = new Timestamp($row['timeCreated']);
+
+		$res .= ', <font size="1">'.$time->renderRelative().'</font>';
 		$res .= '</div>';
 		$res .= '<div class="'.$style_body.'">'.$txt;
 		if ($h->session->id && ($h->session->isAdmin ||
