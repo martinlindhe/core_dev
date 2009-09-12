@@ -7,6 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
 //TODO add yui interactive editor as addRichedit()
@@ -185,6 +186,11 @@ class xhtml_form
 		$this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str);
 	}
 
+	function addCaptcha($objectinstance)
+	{
+		$this->elems[] = array('type' => 'CAPTCHA', 'obj' => $objectinstance);
+	}
+
 	/**
 	 * Renders the form in XHTML
 	 */
@@ -274,6 +280,12 @@ class xhtml_form
 				$res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
 				require_once('js_calendar.js');
+				$res .= '</td>';
+				break;
+
+			case 'CAPTCHA':
+				$res .= '<td colspan="2">';
+				$res .= $e['obj']->render();
 				$res .= '</td>';
 				break;
 

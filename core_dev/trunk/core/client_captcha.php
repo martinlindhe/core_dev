@@ -7,7 +7,7 @@
 
 require_once('client_captcha_recaptcha.php');
 
-class captcha
+class Captcha
 {
 	const RECAPTCHA   = 1;
 

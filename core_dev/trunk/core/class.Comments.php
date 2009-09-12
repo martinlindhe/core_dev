@@ -9,6 +9,7 @@
 
 require_once('class.Comment.php');
 require_once('xhtml_form.php');
+require_once('client_captcha.php');
 
 //FIXME: the pager is half broken, limit is ignored in render()
 
@@ -23,9 +24,11 @@ class Comments
 	private $showDeleted = false; ///< shall deleted comments be included?
 	private $showPrivate = false; ///< shall private comments be included?
 	private $allowAnon   = false; ///< do we allow anonymous comments?
+	private $use_captcha = true;  ///< shall we use captchas for anonymous comments?
 	private $limit       = 5;     ///< number of items per page
 
 	private $comment;             ///< Comment object
+	private $captcha;             ///< Captcha object
 
 	function __construct($type)
 	{
@@ -33,6 +36,10 @@ class Comments
 		$this->type = $type;
 
 		$this->comment = new Comment();
+		$this->captcha = new Captcha();
+
+		$this->captcha->setPrivKey('6LfqDQQAAAAAAKOMPfoJYcpqfZBlWQZf1BYiq7qt');
+		$this->captcha->setPubKey( '6LfqDQQAAAAAAMF-GaCBYHRJFetLd_BrjO8-2HBW');
 	}
 
 	function setOwner($id)
@@ -48,6 +55,7 @@ class Comments
 	}
 
 	function setAnonAccess($bool) { $this->allowAnon = $bool; }
+	function disableCaptcha() { $this->use_captcha = false; }
 
 	function showDeleted() { $this->showDeleted = true; }
 	function showPrivate() { $this->showPrivate = true; }
@@ -88,16 +96,24 @@ class Comments
 	function handleSubmit($p, $caller)
 	{
 		global $h;
-		if (empty($_POST['cmt_'.$this->type])) {
+		if (empty($p['cmt_'.$this->type])) {
 			$caller->setError('No text entered.');
 			return false;
 		}
 
-		if ($h->session->id || $this->allowAnon) {
-			$id = $this->comment->add($_POST['cmt_'.$this->type]);
+		if ($h->session->id || //logged in
+			(!$h->session->id && $this->allowAnon && !$this->use_captcha) || //anon + captcha disabled
+			(!$h->session->id && $this->allowAnon && $this->captcha->verify()) //anon + captcha accepted
+			) {
+			$id = $this->comment->add($p['cmt_'.$this->type]);
 			if (!$id) $caller->setError( $this->comment->getError() );
-			unset($_POST['cmt_'.$this->type]);
+			unset($p['cmt_'.$this->type]);
 			return $id;
+		}
+
+		if (!$h->session->id && $this->allowAnon && !$this->captcha->verify()) {
+			$caller->setError('Incorrect captcha');
+			return false;
 		}
 
 		$caller->setError('Unauthorized submit');
@@ -116,6 +132,7 @@ class Comments
 
 		$form = new xhtml_form('addcomment');
 		$form->addTextarea('cmt_'.$this->type, 'Write a comment', '', $col_w, $col_h);
+		if ($this->use_captcha && !$h->session->id) $form->addCaptcha($this->captcha);
 		$form->addSubmit('Add comment');
 		$form->setHandler('handleSubmit', $this);
 
@@ -137,6 +154,7 @@ class Comments
 		$res .= '</div>'; //id="comments_only"
 
 		if ($h->session->id || $this->allowAnon) {
+			//add comment form
 			$res .= $form->render();
 		}
 
