@@ -57,9 +57,11 @@ function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu
  *
  * @return $pager array with some properties filled
  */
-function makePager($_total_cnt, $_items_per_page, $_add_value = '')
+function makePager($_total_cnt, $_items_per_page = 0, $_add_value = '')
 {
 	global $config;
+
+	if (!$_items_per_page) $_items_per_page = $_total_cnt;
 
 	$pager['page'] = 1;
 	$pager['items_per_page'] = $_items_per_page;

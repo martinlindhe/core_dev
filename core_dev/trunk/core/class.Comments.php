@@ -25,7 +25,7 @@ class Comments
 	private $showPrivate = false; ///< shall private comments be included?
 	private $allowAnon   = false; ///< do we allow anonymous comments?
 	private $use_captcha = true;  ///< shall we use captchas for anonymous comments?
-	private $limit       = 5;     ///< number of items per page
+	private $limit       = 0;     ///< number of items per page
 
 	private $comment;             ///< Comment object
 	private $captcha;             ///< Captcha object
