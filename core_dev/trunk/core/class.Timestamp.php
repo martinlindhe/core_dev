@@ -78,7 +78,7 @@ class Timestamp
 	function set($ts)
 	{
 		if (!is_numeric($ts)) $ts = strtotime($ts);
-		$this->timestamp = $ts;
+		$this->ts = $ts;
 	}
 
 	/**
