@@ -80,6 +80,25 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 }
 
 /**
+ * Validates a Swedish ORG SSN
+ *
+ * @param $_yr year
+ * @param $_mn month
+ * @param $_dy day
+ * @param $_last4 last 4 digits
+ * @return True if valid, or a SSN error
+ */
+function SsnValidateSwedishOrgNum($_yr, $_mn, $_dy, $_last4)
+{
+	if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
+	$ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
+
+	if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_ERR_WRONG_CHECKSUM;
+
+	return true;
+}
+
+/**
  * Validates a Swedish SSN
  *
  * @param $_yr year
