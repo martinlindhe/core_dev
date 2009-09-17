@@ -11,4 +11,8 @@ $val = $x->get('Category', 'spex');
 echo "category->val: ".$val."\n";
 
 
+$l = $x->getAsArray();
+print_r($l);
+
+
 ?>

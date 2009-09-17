@@ -42,47 +42,55 @@ class ini
 		}
 	}
 
-	function set($section, $key, $val)
+	/**
+	 * Returns ini content parsed, used by set()
+	 */
+	function getAsArray()
 	{
-		die('ini WIP-rewrite parser');
+		if (!file_exists($this->filename)) return false;
 
-		if (!file_exists($this->filename)) $lines = array();
-		else $lines = file($this->filename, FILE_IGNORE_NEW_LINES);
+		$lines = file($this->filename, FILE_IGNORE_NEW_LINES);
 
-		$changed         = false;
 		$current_section = '';
 		$current_key     = '';
+		$res = array();
 
 		foreach ($lines as $line_num => $l) {
 
 			if (substr($l, 0, 1) == '[' && substr($l, -1) == ']') {
-				if ($current_section == $section) {
-					die('XXX appenda val på slutet av section'); //XXX sker aldrig om filen bara innehåller en sektion
-
-					$changed = true;
-				}
 				$current_section = substr($l, 1, -1);
+				$res[ $current_section ] = array();
 			}
 
 			if (strpos($l, '=') !== false) {
-				list($current_key, $current_val) = explode('=', $l, 2);
+				list($current_key, $val) = explode('=', $l, 2);
 
-				if ($current_section == $section && $current_key == $key) {
-					echo "XXX UPDATE val=".$val." from ".$current_val."\n";
-					$lines[$line_num] = $current_key.'='.$val;
-					$changed = true;
-				}
+				$res[ $current_section ][ $current_key ] = $val;
 			}
 		}
 
-		if (!$changed) {
-			//om ingen append/update, insert at end
-			$lines[] = '['.$section.']';
-			$lines[] = $key.'='.$val;
+		return $res;
+	}
+
+	function set($section, $key, $val)
+	{
+		$data = $this->getAsArray();
+
+		$data[ $section ][ $key ] = $val;
+
+		$out = '';
+
+		foreach ($data as $section => $values) {
+
+			$out .= "[".$section."]\n";
+
+			foreach ($values as $key => $val)
+				$out .= $key."=".$val."\n";
+
+			$out .= "\n";
 		}
 
-		print_r($lines);
-		die('XXX write to disk');
+		file_put_contents($this->filename, $out);
 	}
 
 }
