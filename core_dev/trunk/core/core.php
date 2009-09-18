@@ -323,4 +323,18 @@ function formatTime($ts = 0)
 	return $res;
 }
 
+/**
+ * Rounds a number to exactly $precision number of decimals, padding with zeros if nessecary
+ */
+function round_decimals($val, $precision = 0)
+{
+	$ex = explode('.', round($val, $precision));
+
+	if (empty($ex[1]) || strlen($ex[1]) < $precision) {
+		$ex[1] = str_pad(@$ex[1], $precision, '0');
+	}
+
+	return implode('.', $ex);
+}
+
 ?>
