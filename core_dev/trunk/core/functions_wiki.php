@@ -24,15 +24,6 @@ function wiki($name = '')
 {
 	$w = new wiki($name);
 
-	if (!$name) {
-		//Fetch special "Wiki:pagename"
-		$cmd = fetchSpecialParams($w->getTabs());
-		if ($cmd) {
-			list($current_tab, $name) = $cmd;
-			$w->setName($name);
-		}
-	}
-
 	$w->render();
 }
 ?>

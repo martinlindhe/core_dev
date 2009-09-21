@@ -27,31 +27,44 @@ class Wiki
 	var $allow_html = false; ///< allow html code in the wiki article? VERY UNSAFE to allow others do this
 	var $allow_files = true; ///< allow file uploads to the wiki
 
-	function getId() { return $this->id; }
 	function getName() { return $this->name; }
+
+	function getId() { return $this->id; }
 	function getText() { return $this->text; }
 	function getTabs() { return $this->tabs; }
 
-	function setName($n) { $this->name = $n; }
+	/**
+	 * Sets wiki name formated for tblWiki.wikiName
+	 * "Install Guide" => "Install_Guide"
+	 */
+	function setName($n)
+	{
+		$n = normalizeString($n, array("\t"));
+		$n = str_replace(' ', '_', $n);
+
+		$this->name = $n;
+	}
 
 	function __construct($name = '')
 	{
 		global $h;
 
-		$this->name = $name;
+		$this->setName($name);
 
 		if ($h->files)
 			$this->tabs[] = 'WikiFiles';
+		else
+			$this->allow_files = false;
 	}
 
 	function load($name = '')
 	{
 		global $db;
-		if ($name) $this->name = $name;
+		if ($name) $this->setName($name);
 
 		$q =
 		'SELECT * FROM tblWiki AS t1'.
-		' WHERE wikiName="'.$db->escape($this->formatName()).'"';
+		' WHERE wikiName="'.$db->escape($this->name).'"';
 		$data = $db->getOneRow($q);
 		if (!$data) return false;
 
@@ -65,18 +78,6 @@ class Wiki
 	}
 
 	/**
-	 * Returns wiki name formated as a article title
-	 * "Install Guide" => "install_guide"
-	 */
-	function formatName()
-	{
-		//XXX move out of class!
-		$s = normalizeString($this->name, array("\t"));
-		$s = str_replace(' ', '_', $s);
-		return strtolower($s);
-	}
-
-	/**
 	 * Formats text for wiki output
 	 */
 	function formatText()
@@ -86,9 +87,9 @@ class Wiki
 		if (empty($this->text)) {
 			echo '<div class="wiki">';
 			echo '<div class="wiki_body">';
-			echo t('The wiki').' "'.$this->formatName().'" '.t('does not yet exist').'!<br/>';
+			echo t('The wiki').' "'.$this->name.'" '.t('does not yet exist').'!<br/>';
 			if ($h->session->id && $h->session->isWebmaster) {
-				echo coreButton('Create', $_SERVER['PHP_SELF'].'?WikiEdit:'.$this->formatName());
+				echo coreButton('Create', $_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name);
 			}
 			echo '</div>';
 			echo '</div>';
@@ -108,9 +109,9 @@ class Wiki
 	{
 		global $h, $db;
 
-		$text = $db->escape(trim($text));
+		$text = trim($text);
 
-		$q = 'SELECT * FROM tblWiki WHERE wikiName="'.$this->formatName().'"';
+		$q = 'SELECT * FROM tblWiki WHERE wikiName="'.$db->escape($this->name).'"';
 		$data = $db->getOneRow($q);
 
 		//Aborts if we are trying to save a exact copy as the last one
@@ -119,10 +120,10 @@ class Wiki
 		if (!empty($data) && $data['wikiId']) {
 			addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
 
-			$db->update('UPDATE tblWiki SET msg="'.$text.'",createdBy='.$h->session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$this->formatName().'"');
+			$db->update('UPDATE tblWiki SET msg="'.$text.'",createdBy='.$h->session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$db->escape($this->name).'"');
 			return;
 		}
-		$q = 'INSERT INTO tblWiki SET wikiName="'.$this->formatName().'",msg="'.$text.'",createdBy='.$h->session->id.',revision=1,timeCreated=NOW()';
+		$q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($this->name).'",msg="'.$text.'",createdBy='.$h->session->id.',revision=1,timeCreated=NOW()';
 		$db->insert($q);
 	}
 
@@ -130,17 +131,20 @@ class Wiki
 	{
 		global $h, $db, $config;
 
-		//loads the wiki to display
-		$this->load();
-
 		$current_tab = $this->first_tab;
 
 		//Looks for formatted wiki section commands: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
 		$cmd = fetchSpecialParams($this->tabs);
-		if ($cmd) list($current_tab, $this->name) = $cmd;
+		if ($cmd) {
+			list($current_tab, $name) = $cmd;
+			$this->setName($name);
+		}
 
-		$name = $this->formatName();
-		if (!$name) return false;
+		//loads the wiki to display
+		$this->load();
+
+		if (!$this->name) return false;
+
 		$id = $this->getId();
 
 		if (!$this->lockerId && isset($_POST['wiki_'.$id])) {
@@ -175,16 +179,16 @@ class Wiki
 		//Show files tab? also hide files tab if wiki isn't yet created
 		if (in_array('WikiFiles', $this->tabs) && $this->text) {
 			$wiki_menu = array(
-			$_SERVER['PHP_SELF'].'?Wiki:'.$name => 'Wiki:'.str_replace('_', ' ', $name),
-			$_SERVER['PHP_SELF'].'?WikiEdit:'.$name => t('Edit'),
-			$_SERVER['PHP_SELF'].'?WikiHistory:'.$name => t('History'),
-			$_SERVER['PHP_SELF'].'?WikiFiles:'.$name => t('Files').' ('.$h->files->getFileCount(FILETYPE_WIKI, $id).')'
+			$_SERVER['PHP_SELF'].'?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
+			$_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name => t('Edit'),
+			$_SERVER['PHP_SELF'].'?WikiHistory:'.$this->name => t('History'),
+			$_SERVER['PHP_SELF'].'?WikiFiles:'.$this->name => t('Files').' ('.$h->files->getFileCount(FILETYPE_WIKI, $id).')'
 			);
 		} else {
 			$wiki_menu = array(
-			$_SERVER['PHP_SELF'].'?Wiki:'.$name => 'Wiki:'.str_replace('_', ' ', $name),
-			$_SERVER['PHP_SELF'].'?WikiEdit:'.$name => t('Edit'),
-			$_SERVER['PHP_SELF'].'?WikiHistory:'.$name => t('History')
+			$_SERVER['PHP_SELF'].'?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
+			$_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name => t('Edit'),
+			$_SERVER['PHP_SELF'].'?WikiHistory:'.$this->name => t('History')
 			);
 		}
 
@@ -195,7 +199,7 @@ class Wiki
 		//Display the wiki toolbar for super admins
 		if ($current_tab == 'WikiEdit' && ($h->session->isAdmin || !$this->lockerId)) {
 
-			echo xhtmlForm('wiki_edit', URLadd('WikiEdit:'.$name));
+			echo xhtmlForm('wiki_edit', URLadd('WikiEdit:'.$this->name));
 
 			$wikiRandId = 'wiki_'.$id.'_'.rand(0, 9999999);
 
@@ -231,11 +235,11 @@ class Wiki
 
 			if ($h->session->isAdmin) {
 				if ($this->lockerId) {
-					echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$name, '&amp;wikilock=0').'\'"/>';
+					echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$this->name, '&amp;wikilock=0').'\'"/>';
 					echo xhtmlImage($config['core']['web_root'].'gfx/icon_locked.png', 'This wiki is currently locked');
 					echo '<b>Locked by '.Users::getName($this->lockerId).' at '.formatTime($this->timeLocked).'</b><br/>';
 				} else if ($this->text) {
-					echo '<input type="button" class="button" value="'.t('Lock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$name, '&amp;wikilock=1').'\'"/>';
+					echo '<input type="button" class="button" value="'.t('Lock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$this->name, '&amp;wikilock=1').'\'"/>';
 					echo xhtmlImage($config['core']['web_root'].'gfx/icon_unlocked.png', 'This article is open for edit by anyone');
 				}
 			}
@@ -276,7 +280,7 @@ class Wiki
 				echo nl2br(htmlentities($this->text, ENT_COMPAT, 'UTF-8'));
 				echo '</div>';
 
-				showRevisions(REVISIONS_WIKI, $id, $name);
+				showRevisions(REVISIONS_WIKI, $id, $this->name);
 			} else {
 				echo 'There is no history for this wiki.';
 			}
