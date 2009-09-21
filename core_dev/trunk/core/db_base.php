@@ -188,6 +188,8 @@ abstract class db_base
 	{
 		global $config;
 
+		$this->time_initial = microtime(true);
+
 		if (!empty($conf['host'])) $this->host = $conf['host'];
 		if (!empty($conf['port'])) $this->port = $conf['port'];
 		if (!empty($conf['username'])) $this->username = $conf['username'];
@@ -195,10 +197,8 @@ abstract class db_base
 		if (!empty($conf['database'])) $this->database = $conf['database'];
 		if (!empty($conf['charset'])) $this->charset = $conf['charset'];
 
-		if (!empty($config['debug'])) {
+		if (!empty($config['debug']))
 			$this->debug = true;
-			$this->time_initial = microtime(true);
-		}
 	}
 
 	/**
@@ -317,12 +317,11 @@ abstract class db_base
 		$sql_height = ($this->queries_cnt*60)+60;
 		if ($sql_height > 400) $sql_height = 400;
 
-		$sql_time = 0;
-
 		$css_display = count($this->query_error) ? '' : ' display:none;';
 
 		echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
+		$sql_time = 0;
 		for ($i=0; $i<$this->queries_cnt; $i++)
 		{
 			$sql_time += $this->time_spent[$i];
@@ -363,7 +362,7 @@ abstract class db_base
 			echo '<hr/>';
 		}
 
-		$total_time = microtime(true) - $this->time_initial;
+		$total_time = microtime(true) - $this->time_initial + $sql_time + $this->time_connect;
 		$php_time = $total_time - $sql_time - $this->time_connect;
 
 		echo 'Time spent: '.round($total_time, 2).'s '.
