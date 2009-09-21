@@ -455,23 +455,61 @@ function coreButton($name, $link = '', $title = '')
 
 /**
  * Implements a OpenSearch compatible search engine
+ *
+ * @param $url relative link to the script handling searches on the server including search parameter
+ *             example: "search.php?s="
+ * @param $name name of search engine
+ * @param $icon (optional) url to icon resource
  */
-function xhtmlOpenSearch($url, $name, $icon_url = '')
+function xhtmlOpenSearch($script, $name, $icon = '')
 {
+	//header('Content-type: application/opensearchdescription+xml');
+	header('Content-type: application/xml');
+
 	echo '<?xml version="1.0" encoding="UTF-8"?>';
 	echo '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">';
 		echo '<ShortName>'.$name.'</ShortName>';
 		echo '<Description>'.$name.'</Description>';
 
-		if ($icon_url) {
-			echo '<Image height="16" width="16" type="image/x-icon">'.$icon_url.'</Image>';
-		}
+		if ($icon)
+			echo '<Image height="16" width="16" type="image/x-icon">'.$icon.'</Image>';
 
-		echo '<Url type="text/html" template="'.$url.'{searchTerms}"/>';
+		echo '<Url type="text/html" template="'.xhtmlGetUrl($script).'{searchTerms}"/>';
 
-		//FIXME: implement search suggestion support:
-		//echo	'<Url type="application/x-suggestions+json" method="get" template="http://en.wikipedia.org/w/api.php?action=opensearch&amp;search={searchTerms}&amp;namespace=0"/>';
 	echo '</OpenSearchDescription>';
+}
+
+/**
+ * Creates a full url to the currently executed script, only usable in browser sessions
+ *
+ * @param $script (optional) if unset, returns currently executing script
+ */
+function xhtmlGetUrl($script = '')
+{
+	$default_port = 0;
+	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+		$scheme = 'https';
+		$default_port = 551;
+	} else {
+		$scheme = 'http';
+		$default_port = 80;
+	}
+
+	$port = '';
+	if ($_SERVER['SERVER_PORT'] != $default_port) $port = $_SERVER['SERVER_PORT'];
+
+	if (substr($script, 0, 4) == 'http')
+		return $script;
+
+	if (strpos($script, '/') !== false)
+		die('xhtmlLocalUrl FIXME handle incomplete paths with / in em');
+	else if ($script)
+		$path = dirname($_SERVER['PHP_SELF']).'/'.$script;
+	else
+		$path = $_SERVER['PHP_SELF'];
+
+	$extern_url = $scheme.'://'.$_SERVER['SERVER_NAME'].':'.$port.$path;
+	return $extern_url;
 }
 
 /**
