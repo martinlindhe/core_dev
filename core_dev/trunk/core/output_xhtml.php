@@ -426,7 +426,7 @@ function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $sele
 /**
  * Helper to display one of core_dev's default action buttons
  */
-function coreButton($name, $dst = '')
+function coreButton($name, $dst = '', $title = '')
 {
 	global $config;
 
@@ -436,6 +436,7 @@ function coreButton($name, $dst = '')
 		case 'Delete': $src = 'icon_delete.png'; break;
 		case 'Folder': $src = 'icon_folder.png'; break;
 		case 'Add':    $src = 'icon_add.png'; break;
+		case 'Error':  $src = 'icon_error.png'; break;
 
 		default:
 			echo '<h1>ERROR unknown coreButton '.$name.'</h1>';
@@ -444,8 +445,9 @@ function coreButton($name, $dst = '')
 
 	$out = '';
 	if ($dst) $out .= '<a href="'.$dst.'">';
+	if (!$title) $title = t($name);
 	//FIXME: make path configurable, so user can override core_dev icon set
-	$out .= '<img src="'.$config['core']['web_root'].'gfx/'.$src.'" alt="'.t($name).'" title="'.t($name).'"/>';
+	$out .= '<img src="'.$config['core']['web_root'].'gfx/'.$src.'" alt="'.$title.'" title="'.$title.'"/>';
 	if ($dst) $out .= '</a>';
 	return $out;
 }

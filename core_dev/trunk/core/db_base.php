@@ -330,34 +330,35 @@ abstract class db_base
 			$query = htmlentities(nl2br($this->queries[$i]), ENT_COMPAT, 'UTF-8');
 
 			$keywords = array(
-			'SELECT', 'UPDATE', 'INSERT', 'DELETE',
-			'FROM', 'SET', 'WHERE', 'LEFT JOIN', 'GROUP', 'ORDER BY',
-			'ON', 'AS', 'AND', 'OR', 'IS NULL', 'NOT NULL', 'DESC', 'ASC',
-			'LIMIT',
-			'NOW()'
+			'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ',
+			' FROM ', ' SET ', ' WHERE ', ' LEFT JOIN ', ' GROUP ', ' ORDER BY ',
+			' ON ', ' AS ', ' AND ', ' OR ', ' LIMIT ',
+			' IS NULL', ' NOT NULL ', ' DESC', ' ASC',
+			' != ',
+			'NOW()', 'COUNT',
 			);
 			$decorated = array(
-			'<b>SELECT</b>', '<b>UPDATE</b>', '<b>INSERT</b>', '<b>DELETE</b>',
-			'<br/><b>FROM</b>', '<br/><b>SET</b>', '<br/><b>WHERE</b>', '<br/><b>LEFT JOIN</b>', '<br/><b>GROUP</b>', '<br/><b>ORDER BY</b>',
-			'<b>ON</b>', '<b>AS</b>', '<b>AND</b>', '<b>OR</b>', '<b>IS NULL</b>', '<b>NOT NULL</b>', '<b>DESC</b>', '<b>ASC</b>',
-			'<b>LIMIT</b>',
-			'<b>NOW()</b>',
+			'<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ',
+			'<br/><b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ', '<br/><b>LEFT JOIN</b> ', '<br/><b>GROUP</b> ', '<br/><b>ORDER BY</b> ',
+			' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ',
+			' <b>IS NULL</b>', ' <b>NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
+			' <b>!=</b> ',
+			'<b>NOW()</b>', '<b>COUNT</b>',
 			);
 			$query = str_replace($keywords, $decorated, $query);
 
 			echo '<table summary=""><tr><td width="40">';
 			if (!empty($this->query_error[$i])) {
-				echo '<img src="'.$config['core']['web_root'].'gfx/icon_error.png" alt="SQL Error" title="SQL Error"/>';
+				echo coreButton('Error', '', 'SQL Error');
 			} else {
 				echo round($this->time_spent[$i], 2).'s';
 			}
 			echo '</td><td>';
-			if (!empty($this->query_error[$i])) {
+
+			if (!empty($this->query_error[$i]))
 				echo 'Error: <b>'.$this->query_error[$i].'</b><br/><br/>';
-				echo $query.'<br/>';
-			} else {
-				echo $query;
-			}
+
+			echo $query;
 			echo '</td></tr></table>';
 			echo '<hr/>';
 		}
@@ -375,7 +376,7 @@ abstract class db_base
 
 		echo 'PHP '.phpversion().'<br/>';
 		echo 'MySQL '.$this->server_version.'<br/>';
-		echo date('r').'<br/>';
+		echo date('r');
 
 		echo '</div>';
 	}
