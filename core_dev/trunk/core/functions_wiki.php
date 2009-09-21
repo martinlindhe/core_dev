@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-//XXX drop file!
+//XXX DEPRECATE drop this file!
 
 require_once('class.Wiki.php');
 
@@ -20,9 +20,19 @@ require_once('class.Wiki.php');
  * but you can override defaults with config settings.
  * Also, you can lock a specific wiki from editing by normal users.
  */
-function wiki($wikiName = '')
+function wiki($name = '')
 {
-	$w = new wiki('Index');
+	$w = new wiki($name);
+
+	if (!$name) {
+		//Fetch special "Wiki:pagename"
+		$cmd = fetchSpecialParams($w->getTabs());
+		if ($cmd) {
+			list($current_tab, $name) = $cmd;
+			$w->setName($name);
+		}
+	}
+
 	$w->render();
 }
 ?>

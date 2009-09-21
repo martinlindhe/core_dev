@@ -25,6 +25,7 @@ function createXHTMLHeader()
 {
 	$header = new xhtml_header();
 	echo $header->render();
+//TODO DEPRECATE this function, use xhtml_header class instead
 }
 
 /**

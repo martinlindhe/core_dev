@@ -21,7 +21,7 @@ class Wiki
 	private $editorId, $lockerId;
 	private $timeEdited, $timeLocked;
 
-	var $allowed_tabs = array('Wiki', 'WikiEdit', 'WikiHistory', 'WikiFiles');
+	private $tabs = array('Wiki', 'WikiEdit', 'WikiHistory');
 	var $first_tab = 'Wiki';
 	var $allow_edit = false;	///< false = only allow admins to edit the wiki articles. true = allow all, even anonymous
 	var $allow_html = false; ///< allow html code in the wiki article? VERY UNSAFE to allow others do this
@@ -30,18 +30,30 @@ class Wiki
 	function getId() { return $this->id; }
 	function getName() { return $this->name; }
 	function getText() { return $this->text; }
+	function getTabs() { return $this->tabs; }
 
-	function __construct($name)
+	function setName($n) { $this->name = $n; }
+
+	function __construct($name = '')
+	{
+		global $h;
+
+		$this->name = $name;
+
+		if ($h->files)
+			$this->tabs[] = 'WikiFiles';
+	}
+
+	function load($name = '')
 	{
 		global $db;
-
-		if (!$name) die('wiki fail');
-		$this->name = $name;
+		if ($name) $this->name = $name;
 
 		$q =
 		'SELECT * FROM tblWiki AS t1'.
 		' WHERE wikiName="'.$db->escape($this->formatName()).'"';
 		$data = $db->getOneRow($q);
+		if (!$data) return false;
 
 		$this->id         = $data['wikiId'];
 		$this->text       = $data['msg'];
@@ -49,6 +61,7 @@ class Wiki
 		$this->lockerId   = $data['lockedBy'];   //XXX rename to lockerId
 		$this->timeEdited = $data['timeCreated'];//XXX rename to timeEdited
 		$this->timeLocked = $data['timeLocked'];
+		return true;
 	}
 
 	/**
@@ -57,6 +70,7 @@ class Wiki
 	 */
 	function formatName()
 	{
+		//XXX move out of class!
 		$s = normalizeString($this->name, array("\t"));
 		$s = str_replace(' ', '_', $s);
 		return strtolower($s);
@@ -116,10 +130,13 @@ class Wiki
 	{
 		global $h, $db, $config;
 
+		//loads the wiki to display
+		$this->load();
+
 		$current_tab = $this->first_tab;
 
 		//Looks for formatted wiki section commands: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
-		$cmd = fetchSpecialParams($this->allowed_tabs);
+		$cmd = fetchSpecialParams($this->tabs);
 		if ($cmd) list($current_tab, $this->name) = $cmd;
 
 		$name = $this->formatName();
@@ -156,7 +173,7 @@ class Wiki
 		}
 
 		//Show files tab? also hide files tab if wiki isn't yet created
-		if (in_array('WikiFiles', $this->allowed_tabs) && $this->text) {
+		if (in_array('WikiFiles', $this->tabs) && $this->text) {
 			$wiki_menu = array(
 			$_SERVER['PHP_SELF'].'?Wiki:'.$name => 'Wiki:'.str_replace('_', ' ', $name),
 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$name => t('Edit'),

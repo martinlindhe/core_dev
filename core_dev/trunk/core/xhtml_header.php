@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Class to generate XHTML compilant header
+ * Class to generate a XHTML compilant header
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
@@ -14,10 +14,11 @@ require_once('output_xhtml.php');
 class xhtml_header
 {
 	private $title, $favicon;
-	private $reload_time = 0;          ///< time after page load to reload the page, in seconds
-	private $mimetype   = 'text/html';
-
 	private $js, $css, $feeds, $search, $onload;
+
+	private $reload_time   = 0;          ///< time after page load to reload the page, in seconds
+	private $mimetype      = 'text/html';
+	private $core_dev_root = 'core_dev/'; ///< web path to core_dev for ajax api calls
 
 	function __construct()
 	{
@@ -26,12 +27,26 @@ class xhtml_header
 		$this->feeds  = array();
 		$this->search = array();
 		$this->onload = array();
+
+		//XXX DEPRECATE remove this backward compatiblity hack when all
+		//  use of $config['core']['web_root'] has been removed
+		//  use setWebRootCoreDev() if needed instead
+		global $config;
+		if (!empty($config['core']['web_root']))
+			$this->core_dev_root = $config['core']['web_root'];
 	}
+
+	function getWebRootCoreDev() { return $this->core_dev_root; }
 
 	function setTitle($t) { $this->title = $t; }
 	function setFavicon($uri) { $this->favicon = $uri; }
 	function setReloadTime($secs) { $this->reload_time = $secs; }
 	function setMimeType($type) { $this->mimetype = $mime; }
+
+	/**
+	 * Sets the web root to core_dev (preferrably a symlink to appropriate branch/trunk)
+	 */
+	function setWebRootCoreDev($path) { $this->core_dev_root = $path; }
 
 	function addFeed($uri) { $this->feeds[] = $uri; }
 	function addJs($uri) { $this->js[] = $uri; }
@@ -116,9 +131,10 @@ class xhtml_header
 			echo '<body class="yui-skin-sam">';
 		}
 
-		if (function_exists('getProjectPath') && !empty($config['core']['web_root'])) {
+		if (function_exists('getProjectPath')) {
 			echo '<script type="text/javascript">';
-			echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$config['core']['web_root'].'api/";';
+			//XXX rename _ext_core to _core_api since its url to coredev api
+			echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
 			echo '</script>';
 		}
 
