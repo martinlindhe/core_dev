@@ -814,31 +814,6 @@ class files_default
 	}
 
 	/**
-	 * Sends text file to user
-	 *
-	 * @param $filename name of file to send
-	 */
-	function sendTextfile($filename)
-	{
-		//required for IE6:
-		header('Cache-Control: cache, must-revalidate');
-
-		//header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($realFileName)) . ' GMT');
-		header('Content-Length: '.filesize($filename));
-		header('Content-Type: text/plain; charset="UTF-8"');
-
-		if (isset($_GET['dl'])) {
-			/* Prompts the user to save the file */
-			header('Content-Disposition: attachment; filename="'.basename($filename).'"');
-		} else {
-			/* Displays the file in the browser, and assigns a filename for the browser's "save as..." features */
-			header('Content-Disposition: inline; filename="'.basename($filename).'"');
-		}
-
-		readfile($filename);
-	}
-
-	/**
 	 * Send image to user
 	 *
 	 * Optional parametera:
