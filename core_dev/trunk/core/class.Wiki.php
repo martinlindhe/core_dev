@@ -149,24 +149,22 @@ class Wiki
 
 		if (!$this->name) return false;
 
-		$id = $this->getId();
-
-		if (!$this->lockerId && isset($_POST['wiki_'.$id])) {
+		if (!$this->lockerId && isset($_POST['wiki_'.$this->id])) {
 			//save changes
-			$this->update($_POST['wiki_'.$id]);
-			unset($_POST['wiki_'.$id]);
+			$this->update($_POST['wiki_'.$this->id]);
+			unset($_POST['wiki_'.$this->id]);
 		}
 
 		if ($h->session->isAdmin && !empty($_GET['wikilock'])) {
-			$q = 'UPDATE tblWiki SET lockedBy='.$h->session->id.',timeLocked=NOW() WHERE wikiId='.$id;
+			$q = 'UPDATE tblWiki SET lockedBy='.$h->session->id.',timeLocked=NOW() WHERE wikiId='.$this->id;
 			$db->update($q);
 			$this->lockerId = $h->session->id;
-			addRevision(REVISIONS_WIKI, $id, 'The wiki has been locked', now(), $h->session->id, REV_CAT_LOCKED);
+			addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been locked', now(), $h->session->id, REV_CAT_LOCKED);
 		} else if ($h->session->isAdmin && isset($_GET['wikilock'])) {
-			$q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$id;
+			$q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$this->id;
 			$db->update($q);
 			$this->lockerId = 0;
-			addRevision(REVISIONS_WIKI, $id, 'The wiki has been unlocked', now(), $h->session->id, REV_CAT_UNLOCKED);
+			addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been unlocked', now(), $h->session->id, REV_CAT_UNLOCKED);
 		}
 
 		//Only display the text for normal visitors
@@ -183,7 +181,7 @@ class Wiki
 			$_SERVER['PHP_SELF'].'?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
 			$_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name => t('Edit'),
 			$_SERVER['PHP_SELF'].'?WikiHistory:'.$this->name => t('History'),
-			$_SERVER['PHP_SELF'].'?WikiFiles:'.$this->name => t('Files').' ('.$h->files->getFileCount(FILETYPE_WIKI, $id).')'
+			$_SERVER['PHP_SELF'].'?WikiFiles:'.$this->name => t('Files').' ('.$h->files->getFileCount(FILETYPE_WIKI, $this->id).')'
 			);
 		} else {
 			$wiki_menu = array(
@@ -197,12 +195,12 @@ class Wiki
 		createMenu($wiki_menu, 'wiki_menu');
 		echo '<div class="wiki_body">';
 
-		//Display the wiki toolbar for super admins
+		//Display the wiki toolbar for admins
 		if ($current_tab == 'WikiEdit' && ($h->session->isAdmin || !$this->lockerId)) {
 
 			echo xhtmlForm('wiki_edit', URLadd('WikiEdit:'.$this->name));
 
-			$wikiRandId = 'wiki_'.$id.'_'.rand(0, 9999999);
+			$wikiRandId = 'wiki_'.$this->id.'_'.rand(0, 9999999);
 
 			echo
 				'<input type="button" class="button" value="[h1]" onclick="insertTags(\''.$wikiRandId.'\',\'[h1]\',\'[/h1]\',\'headline level 1\')"/>'.
@@ -214,6 +212,7 @@ class Wiki
 				'<input type="button" class="button" value="S" style="text-decoration: line-through" onclick="insertTags(\''.$wikiRandId.'\',\'[s]\',\'[/s]\',\'strikethru text\')"/>'.
 				//'<input type="button" class="button" value="[hr] (broken)" onclick="insertTags(\''.$wikiRandId.'\',\'[hr]\')"/>'.
 				'<input type="button" class="button" value="[code]" onclick="insertTags(\''.$wikiRandId.'\',\'[code]\',\'[/code]\',\'code block\')"/>'.
+				'<input type="button" class="button" value="[raw]" onclick="insertTags(\''.$wikiRandId.'\',\'[raw]\',\'[/raw]\',\'raw block\')"/>'.
 				'<input type="button" class="button" value="[quote]" onclick="insertTags(\''.$wikiRandId.'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
 				'<br/>';
 
@@ -224,7 +223,7 @@ class Wiki
 			$rows = 8+substr_count($this->text, "\n");
 			if ($rows > 36) $rows = 36;
 
-			echo '<textarea name="wiki_'.$id.'" id="'.$wikiRandId.'" cols="60" rows="'.$rows.'"'.($this->lockerId ? ' readonly': '').'>'.$this->text.'</textarea><br/>';
+			echo '<textarea name="wiki_'.$this->id.'" id="'.$wikiRandId.'" cols="60" rows="'.$rows.'"'.($this->lockerId ? ' readonly': '').'>'.$this->text.'</textarea><br/>';
 
 			echo t('Last edited').' ';
 			if ($this->timestamp) echo formatTime($this->timestamp).' '.t('by').' '.Users::getName($this->editorId);
@@ -247,7 +246,7 @@ class Wiki
 
 			//List "unused files" for this Wiki when in edit mode
 			if ($this->allow_files) {
-				$filelist = $h->files->getFiles(FILETYPE_WIKI, $id);
+				$filelist = $h->files->getFiles(FILETYPE_WIKI, $this->id);
 				if ($filelist) {
 					$str = '';
 
@@ -272,7 +271,7 @@ class Wiki
 			}
 			echo xhtmlFormClose();
 		} else if ($current_tab == 'WikiFiles') {
-			echo showFiles(FILETYPE_WIKI, $id);
+			echo showFiles(FILETYPE_WIKI, $this->id);
 		} else if ($current_tab == 'WikiHistory') {
 			if ($this->text) {
 				echo t('Current version').':<br/>';
@@ -281,7 +280,7 @@ class Wiki
 				echo nl2br(htmlentities($this->text, ENT_COMPAT, 'UTF-8'));
 				echo '</div>';
 
-				showRevisions(REVISIONS_WIKI, $id, $this->name);
+				showRevisions(REVISIONS_WIKI, $this->id, $this->name);
 			} else {
 				echo 'There is no history for this wiki.';
 			}
