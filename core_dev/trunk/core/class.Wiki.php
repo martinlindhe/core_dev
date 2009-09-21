@@ -19,7 +19,7 @@ class Wiki
 {
 	private $id, $name, $text;
 	private $editorId, $lockerId;
-	private $timeEdited, $timeLocked;
+	private $timestamp, $timeLocked;
 
 	private $tabs = array('Wiki', 'WikiEdit', 'WikiHistory');
 	var $first_tab = 'Wiki';
@@ -72,7 +72,7 @@ class Wiki
 		$this->text       = $data['msg'];
 		$this->editorId   = $data['createdBy'];	 //XXX rename tblWiki.createdBy to .editorId
 		$this->lockerId   = $data['lockedBy'];   //XXX rename to lockerId
-		$this->timeEdited = $data['timeCreated'];//XXX rename to timeEdited
+		$this->timestamp  = $data['timeCreated'];//XXX rename to timestamp
 		$this->timeLocked = $data['timeLocked'];
 		return true;
 	}
@@ -117,13 +117,17 @@ class Wiki
 		//Aborts if we are trying to save a exact copy as the last one
 		if (!empty($data) && $data['msg'] == $text) return false;
 
+		$this->text      = $text;
+		$this->timestamp = time();
+
 		if (!empty($data) && $data['wikiId']) {
 			addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
 
-			$db->update('UPDATE tblWiki SET msg="'.$text.'",createdBy='.$h->session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$db->escape($this->name).'"');
+			$q = 'UPDATE tblWiki SET msg="'.$db->escape($this->text).'",createdBy='.$h->session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$db->escape($this->name).'"';
+			$db->update($q);
 			return;
 		}
-		$q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($this->name).'",msg="'.$text.'",createdBy='.$h->session->id.',revision=1,timeCreated=NOW()';
+		$q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($this->name).'",msg="'.$db->escape($this->text).'",createdBy='.$h->session->id.',revision=1,timeCreated=NOW()';
 		$db->insert($q);
 	}
 
@@ -148,12 +152,9 @@ class Wiki
 		$id = $this->getId();
 
 		if (!$this->lockerId && isset($_POST['wiki_'.$id])) {
-			//save changes to database
+			//save changes
 			$this->update($_POST['wiki_'.$id]);
-			$this->text = $_POST['wiki_'.$id];
-			$this->timeEdited = time();
 			unset($_POST['wiki_'.$id]);
-			//JS_Alert('Changes saved!');
 		}
 
 		if ($h->session->isAdmin && !empty($_GET['wikilock'])) {
@@ -226,7 +227,7 @@ class Wiki
 			echo '<textarea name="wiki_'.$id.'" id="'.$wikiRandId.'" cols="60" rows="'.$rows.'"'.($this->lockerId ? ' readonly': '').'>'.$this->text.'</textarea><br/>';
 
 			echo t('Last edited').' ';
-			if ($this->timeEdited) echo formatTime($this->timeEdited).' '.t('by').' '.Users::getName($this->editorId);
+			if ($this->timestamp) echo formatTime($this->timestamp).' '.t('by').' '.Users::getName($this->editorId);
 			else echo t('never');
 			echo '<br>';
 
@@ -275,7 +276,7 @@ class Wiki
 		} else if ($current_tab == 'WikiHistory') {
 			if ($this->text) {
 				echo t('Current version').':<br/>';
-				echo '<b><a href="#" onclick="return toggle_element(\'layer_history_current\')">'.t('Edited').' '.formatTime($this->timeEdited).' '.t('by').' '.Users::getName($this->editorId).' ('.strlen($this->text).' '.t('characters').')</a></b><br/>';
+				echo '<b><a href="#" onclick="return toggle_element(\'layer_history_current\')">'.t('Edited').' '.formatTime($this->timestamp).' '.t('by').' '.Users::getName($this->editorId).' ('.strlen($this->text).' '.t('characters').')</a></b><br/>';
 				echo '<div id="layer_history_current" class="revision_entry">';
 				echo nl2br(htmlentities($this->text, ENT_COMPAT, 'UTF-8'));
 				echo '</div>';
