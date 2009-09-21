@@ -120,21 +120,4 @@ function fetchSpecialParams($allowed_tabs)
 	return false;
 }
 
-//FIXME: used by lyrics project only - maybe remove?
-function cleanupText($text)
-{
-	global $db;
-
-	$text = normalizeString($text, false);
-
-	$text = str_replace('\n', "\n", $text);
-	$text = str_replace('\r', "\r", $text);
-
-	$text = str_replace("\r\n", "\n", $text);
-	$text = str_replace(" \n", "\n", $text);
-	$text = str_replace("\n ", "\n", $text);
-
-	return $text;
-}
-
 ?>
