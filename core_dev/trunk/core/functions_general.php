@@ -103,7 +103,7 @@ function confirmed($text, $_var, $_id = 0)
 
 /**
  * Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
- * used by functions_wiki.php, functions_blogs.php for special url creation to allow these modules to be embedded in other pages
+ * used by class.Wiki.php, class.Blogs.php for special url creation to allow these modules to be embedded in other pages
  */
 function fetchSpecialParams($allowed_tabs)
 {

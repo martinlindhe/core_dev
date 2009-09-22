@@ -14,6 +14,7 @@ require_once('functions_textformat.php');
 
 //FIXME: URLadd() messar upp länkarna med extradata vid lock/unlock
 //TODO: kunna resiza textarean me js som i dokuwiki
+//TODO: use recaptcha to validate anon editors
 
 class Wiki
 {
@@ -21,17 +22,19 @@ class Wiki
 	private $editorId, $lockerId;
 	private $timestamp, $timeLocked;
 
-	private $tabs = array('Wiki', 'WikiEdit', 'WikiHistory');
-	var $first_tab = 'Wiki';
-	var $allow_edit = false;	///< false = only allow admins to edit the wiki articles. true = allow all, even anonymous
-	var $allow_html = false; ///< allow html code in the wiki article? VERY UNSAFE to allow others do this
-	var $allow_files = true; ///< allow file uploads to the wiki
+	private $tabs    = array('Wiki', 'WikiEdit', 'WikiHistory');
+	var $first_tab   = 'Wiki';
+	var $allow_edit  = false;  ///< false = only allow admins to edit the wiki articles. true = allow all, even anonymous
+	var $allow_html  = false;  ///< allow html code in the wiki article? VERY UNSAFE to allow others do this
+	var $allow_files = true;   ///< allow file uploads to the wiki
 
 	function getName() { return $this->name; }
 
 	function getId() { return $this->id; }
 	function getText() { return $this->text; }
 	function getTabs() { return $this->tabs; }
+
+	function enableHtml() { $this->allow_html = true; }
 
 	/**
 	 * Sets wiki name formated for tblWiki.wikiName
@@ -82,24 +85,20 @@ class Wiki
 	 */
 	function formatText()
 	{
-		global $h, $db;
+		global $h;
 
 		if (empty($this->text)) {
-			echo '<div class="wiki">';
-			echo '<div class="wiki_body">';
-			echo t('The wiki').' "'.$this->name.'" '.t('does not yet exist').'!<br/>';
-			if ($h->session->id && $h->session->isWebmaster) {
-				echo coreButton('Create', $_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name);
-			}
-			echo '</div>';
-			echo '</div>';
-			return '';
+			$res = t('The wiki').' "'.$this->name.'" '.t('does not yet exist').'!<br/>';
+			if ($h->session->id && $h->session->isWebmaster)
+				$res .= coreButton('Create', '?WikiEdit:'.$this->name);
+
+			return $res;
 		}
 
-		$text = stripslashes($this->text);
-		$text = formatUserInputText($text, !$this->allow_html);
+		$res = stripslashes($this->text);
+		$res = formatUserInputText($res, !$this->allow_html);
 
-		return $text;
+		return $res;
 	}
 
 	/**
@@ -290,7 +289,5 @@ class Wiki
 
 		echo 	'</div>';
 		echo '</div>';
-
-		return true;
 	}
 }

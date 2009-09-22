@@ -176,13 +176,17 @@ function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $oncl
 
 /**
  * Helper to create a bunch of checkboxes out of an array
+ *
+ * @param $arr id=>name array
+ * @param $prefix (optional) add prefix to checkbox id
  */
-function xhtmlCheckboxArray($_arr, $all_checked = false)
+function xhtmlCheckboxArray($arr, $prefix = '')
 {
 	$out = '';
-	foreach ($_arr as $id => $title) {
-		$out .= '<input type="checkbox" class="checkbox" name="'.$id.'" value="1" id="lab_'.$id.'"'.($all_checked ? ' checked':'').'/>';
-		$out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
+	foreach ($arr as $id => $title) {
+		$checked = false;
+		if (!empty($_POST[$prefix.$id])) $checked = true;
+		$out .= xhtmlCheckbox($prefix.$id, $title, $id, $checked).'<br/>';
 	}
 	return $out;
 }

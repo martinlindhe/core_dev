@@ -165,7 +165,7 @@ function formatUserInputText($text, $convert_html = true)
 		$codeblock = trim(substr($text, $pos1+strlen('[raw]'), $pos2-$pos1-strlen('[raw]')));
 		$codeblock = str_replace("\n", '(_br_)', $codeblock);
 
-		$text = substr($text, 0, $pos1) . $codeblock . substr($text, $pos2+strlen('[/raw]'));
+		$text = substr($text, 0, $pos1).$codeblock.substr($text, $pos2+strlen('[/raw]'));
 	} while (1);
 
 	//code block, example: [code]text text[/code]
