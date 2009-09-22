@@ -284,7 +284,13 @@ function formatUserInputText($text, $convert_html = true)
 				break;
 
 			default:
-				die('unknown command: '. $link['cmd']);
+				if (!empty($link['title'])) {
+					//[[About|read about us]] format
+					$result = '<a href="wiki.php?Wiki:'.$link['cmd'].'">'.$link['title'].'</a>';
+				} else {
+					//[[About]] format
+					$result = '<a href="wiki.php?Wiki:'.$link['cmd'].'">'.$link['cmd'].'</a>';
+				}
 				break;
 		}
 
