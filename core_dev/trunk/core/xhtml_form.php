@@ -196,17 +196,14 @@ class xhtml_form
 	 */
 	function render()
 	{
-		global $config;
-
 		if (!$this->objectinstance && !function_exists($this->handler))
 			die('FATAL: xhtml_form() does not have a defined data handler');
 
 		$res = '';
 		if ($this->yui) {
-			$res .= '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/yahoo-dom-event/yahoo-dom-event.js"></script>';
-			$res .= '<script type="text/javascript" src="'.$config['core']['web_root'].'js/yui/calendar/calendar-min.js"></script>';
-
-			$res .= '<link type="text/css" rel="stylesheet" href="'.$config['core']['web_root'].'js/yui/calendar/assets/skins/sam/calendar.css">';
+			//use http://developer.yahoo.com/yui/articles/hosting/ to generate urls:
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js"></script>';
+			$res .= '<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css">';
 		}
 
 		$res .= xhtmlForm($this->name, '', 'post', $this->enctype);
@@ -279,7 +276,8 @@ class xhtml_form
 
 				$res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
-				require_once('js_calendar.js');
+				//XXX ability att ange div id och input fält namn:
+				$res .= file_get_contents('core_dev/core/js_calendar.js');
 				$res .= '</td>';
 				break;
 

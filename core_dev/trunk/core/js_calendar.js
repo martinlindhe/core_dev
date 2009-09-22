@@ -258,13 +258,16 @@
 
 YAHOO.util.Event.onDOMReady(function() {
 
-    var inTxt = YAHOO.util.Dom.get("<?=$e['namefrom']?>"),
-        outTxt = YAHOO.util.Dom.get("<?=$e['nameto']?>"),
-        inDate, outDate, interval;
+	//FIXME ability to set names:
+    var inTxt  = YAHOO.util.Dom.get('afrom');
+	var outTxt = YAHOO.util.Dom.get('ato');
 
-    inTxt.value = "";
+    var inDate, outDate, interval;
+
+    inTxt.value  = "";
     outTxt.value = "";
 
+	//FIXME ability to set calendar div id:
     var cal = new YAHOO.example.calendar.IntervalCalendar("cal1Container", {pages:2});
 
     cal.selectEvent.subscribe(function() {
