@@ -494,7 +494,7 @@ function xhtmlGetUrl($script = '')
 	$default_port = 0;
 	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 		$scheme = 'https';
-		$default_port = 551;
+		$default_port = 443;
 	} else {
 		$scheme = 'http';
 		$default_port = 80;
