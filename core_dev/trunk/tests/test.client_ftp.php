@@ -2,35 +2,35 @@
 require_once('/var/www/core_dev/trunk/core/core.php');
 require_once('/var/www/core_dev/trunk/core/client_ftp.php');
 
-die;
-
-
 //normal anon ftp:
-$url = 'ftp://ftp.sunet.se/pub/multimedia/audio/gsm/README';
+$url = 'ftp://ftp.sunet.se/';
 
 //normal ftp med konto:
-$url = 'ftp://username:password@ftp.server.com/directory/file.rar';
+$url = 'ftp://username:password@ftp.server.com/';
 
 
 
 //FTPES: explicit SSL/TLS
 //XXX "kan" fungera. problem att prova mot localhost
 //XXX2: blir error 35: Unknown SSL protocol error in connection to host:port
-$url = 'ftpes://user:pwd@host:port/direcotry/file.sh';
+$url = 'ftpes://user:pwd@host:port/';
 
 
 
 //sftp: ftp over ssh
 //XXX requires curl built with "--with-libssh2", wont work with ubuntu packages (9.04 or 9.10)
-$url = 'sftp://user:pass@host:port/path/file.xx';
+$host = 'sftp://user:pass@host:port/path/file.xx';
 
-
-$f = new ftp();
-$f->debug = true;
+$f = new ftp($host);
+$f->setDebug(true);
 //$x = $f->get($url); echo $x;die;
 
-$f->put($url, '/path/00007.mts');
+/*
+$str = 'kalle anka blabla hahaha';
+$f->putData('/home/ml/KALLE.ANKA', $str);
+*/
 
+$f->rename('/home/ml/KALLE.ANKA', '/home/ml/test.RENAMED');
 
 //$dir = $f->dir(); print_r($dir);
 
