@@ -371,10 +371,10 @@ abstract class db_base
 			'PHP: '.round($php_time, 2).'s)<br/>';
 
 		//Show memory usage
-		echo dm();
+		echo dm().'<br/>';
 
+		echo 'MySQL server at '.$this->host.' running '.$this->server_version.'<br/>';
 		echo 'PHP '.phpversion().'<br/>';
-		echo 'MySQL '.$this->server_version.'<br/>';
 		echo date('r');
 
 		echo '</div>';

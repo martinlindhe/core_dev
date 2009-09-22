@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//XXX DEPRECATE drop this and use a blog with category "News" instead
+
 require_once('atom_comments.php');		//for news comment support
 require_once('atom_categories.php');	//for news categories support
 require_once('atom_rating.php');			//for news rating support
