@@ -14,7 +14,7 @@
 
 <script type="text/javascript">
 
-YAHOO.widget.Chart.SWFURL = "<?=$config['core']['web_root']?>js/yui/charts/assets/charts.swf";
+YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.0r4/build/charts/assets/charts.swf";
 
 //--- data
 
