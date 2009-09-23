@@ -171,7 +171,7 @@ class Wiki
 			echo '<div class="wiki">';
 			echo '<div class="wiki_body">'.$this->formatText().'</div>';
 			echo '</div>';
-			return true;
+			return;
 		}
 
 		//Show files tab? also hide files tab if wiki isn't yet created

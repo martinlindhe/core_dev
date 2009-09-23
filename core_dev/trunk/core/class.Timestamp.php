@@ -11,15 +11,17 @@ require_once('functions_time.php'); //for shortTimePeriod()
 
 class Timestamp
 {
-	private $ts;
+	private $ts = 0;
 
 	/**
-	 * Initialize object to current time if none is provided
+	 * Initialize object to specified time
+	 *
+	 * @param $t unix timestamp or strtotime() understandable string
 	 */
-	function __construct($t = false)
+	function __construct($t = 'now')
 	{
-		if (!$t) $this->set(time());
-		else $this->set($t);
+		if (!$t) return;
+		$this->set($t);
 	}
 
 	function getUnix()
