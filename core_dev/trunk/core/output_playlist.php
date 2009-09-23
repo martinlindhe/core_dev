@@ -68,20 +68,19 @@ class output_playlist extends core_list
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 
-			$vid_url = new http($row['video']);
-			$img_url = new http($row['image']);
-
 			$res .= '<track>';
-			$title = formatTime($row['pubdate']).' '.$row['title'];
+			$title = (!empty($row['pubdate']) ? formatTime($row['pubdate']).' ' : '').$row['title'];
 			//if ($row['desc']) $title .= ' - '.$row['desc'];
 			$res .= '<title><![CDATA['.trim($title).']]></title>';
 
+			$vid_url = new http($row['video']);
 			$res .= '<location>'.$vid_url->render().'</location>';
 
 			if (!empty($row['duration']))
 				$res .= '<duration>'.($row['duration']*1000).'</duration>'; //in milliseconds
 
 			if (!empty($row['image'])) {
+				$img_url = new http($row['image']);
 				$res .= '<image>'.$img_url->render().'</image>';
 			}
 
@@ -133,9 +132,9 @@ class output_playlist extends core_list
 		foreach ($this->getEntries() as $row) {
 			$res .=
 			'<tr><td>'.
-			'<h2>'.formatTime($row['pubdate']).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>'.
+			'<h2>'.(!empty($row['pubdate']) ? formatTime($row['pubdate']) : '').' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>'.
 			(!empty($row['image']) ? '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>' : '').
-			'<p>'.$row['desc'].'</p>'.
+			(!empty($row['desc']) ? '<p>'.$row['desc'].'</p>' : '').
 			(!empty($row['video']) ? '<a href="'.$row['video'].'">Play video</a>' : '').
 			'</td></tr>';
 		}

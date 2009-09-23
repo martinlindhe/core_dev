@@ -119,19 +119,20 @@ class input_feed
 		case 'MEDIA:CONTENT':
 			switch ($this->attrs['TYPE']) {
 			case 'video/x-flv':
-				$this->video_url  = $this->attrs['URL'];
-				$this->video_type = $this->attrs['TYPE'];
-				if (!empty($this->attrs['DURATION']))
-					$this->duration = $this->attrs['DURATION'];
-				break;
-
-			case 'video/x-ms-asf':
-				if (!$this->video_url) { //XXX prefer flv over asf
+				if (substr($this->attrs['URL'],0,4) != 'rtmp' || !$this->video_url) { //XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
 					$this->video_url  = $this->attrs['URL'];
 					$this->video_type = $this->attrs['TYPE'];
 					if (!empty($this->attrs['DURATION']))
 						$this->duration = $this->attrs['DURATION'];
 				}
+				break;
+
+			case 'video/x-ms-asf':
+				if ($this->video_url && substr($this->attrs['URL'], -4) == '.asx') break; //skip .asx files if other was found
+				$this->video_url  = $this->attrs['URL'];
+				$this->video_type = $this->attrs['TYPE'];
+				if (!empty($this->attrs['DURATION']))
+					$this->duration = $this->attrs['DURATION'];
 				break;
 
 			case 'image/jpeg':

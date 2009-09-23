@@ -14,14 +14,14 @@ require_once('network.php');
 
 class http
 {
-	var     $debug = false;
+	private $debug = false;
 	private $scheme, $host, $port, $path, $param;
 	private $username, $password; ///< for HTTP AUTH
 
 	private $headers, $body;
 	private $cache_time = 300; //5min
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
-	private $schemes    = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe');
+	private $schemes    = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe', 'mms');
 
 	function __construct($url = '')
 	{
@@ -45,6 +45,8 @@ class http
 	function setUserAgent($ua) { $this->user_agent = $ua; }
 
 	function setPath($path) { $this->path = $path; }
+
+	function setDebug($bool) { $this->debug = $bool; }
 
 	/**
 	 * Parses url and initializes the object for this url
@@ -101,7 +103,7 @@ class http
 	{
 		$url = $this->compact();
 		if (!is_url($url)) {
-			echo $url." is not a valid URL".dln();
+			echo "http->get: bad url: ".$url.dln();
 			return false;
 		}
 
