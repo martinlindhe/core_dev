@@ -136,9 +136,9 @@ class ftp
 	 * Get a file from a FTP server
 	 *
 	 * @param $url ftp://usr:pwd@host/file
-	 * @param $local_file write to local file (if set)
+	 * @param $local_file write to local file
 	 */
-	function getFile($remote_file, $local_file = '')
+	function getFile($remote_file, $local_file)
 	{
 		if (!$this->connect()) return false;
 
@@ -148,35 +148,49 @@ class ftp
 
 		curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
 
-		if ($local_file) {
-			$fp = fopen($local_file, 'w');
-			if (!$fp) {
-				echo "ftp->get failed to open local file for writing".dln();
-				return false;
-			}
-			curl_setopt($this->curl, CURLOPT_FILE, $fp);
-			curl_exec($this->curl);
-			fclose($fp);
-
-			if (curl_errno($this->curl)) {
-				echo "File download error: ".curl_error($this->curl).dln();
-				return false;
-			}
-
-			if ($this->debug) echo 'getFile md5: '.md5_file($local_file).dln();
-
-			return true;
-		} else {
-			curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
-			$res = curl_exec($this->curl);
-
-			if (curl_errno($this->curl)) {
-				echo "ftp download error: ".curl_error($this->curl).dln();
-				return false;
-			}
-
-			return $res;
+		$fp = fopen($local_file, 'w');
+		if (!$fp) {
+			echo "ftp->get failed to open local file for writing".dln();
+			return false;
 		}
+		curl_setopt($this->curl, CURLOPT_FILE, $fp);
+		curl_exec($this->curl);
+		fclose($fp);
+
+		if (curl_errno($this->curl)) {
+			echo "ftp download error: ".curl_error($this->curl).dln();
+			return false;
+		}
+
+		if ($this->debug) echo 'getFile md5: '.md5_file($local_file).dln();
+
+		return true;
+	}
+
+	/**
+	 * Returns remote file as a data string
+	 */
+	function getData($remote_file)
+	{
+		if (!$this->connect()) return false;
+
+		$this->setPath($remote_file);
+
+		curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
+
+		curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
+
+		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
+		$res = curl_exec($this->curl);
+
+		if (curl_errno($this->curl)) {
+			echo "ftp download error: ".curl_error($this->curl).dln();
+			return false;
+		}
+
+		if ($this->debug) echo 'getData md5: '.md5($res).dln();
+
+		return $res;
 	}
 
 	/**
