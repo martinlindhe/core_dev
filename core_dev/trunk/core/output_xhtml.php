@@ -501,7 +501,7 @@ function xhtmlGetUrl($script = '')
 	}
 
 	$port = '';
-	if ($_SERVER['SERVER_PORT'] != $default_port) $port = $_SERVER['SERVER_PORT'];
+	if ($_SERVER['SERVER_PORT'] != $default_port) $port = ':'.$_SERVER['SERVER_PORT'];
 
 	if (substr($script, 0, 4) == 'http')
 		return $script;
@@ -513,7 +513,7 @@ function xhtmlGetUrl($script = '')
 	else
 		$path = $_SERVER['PHP_SELF'];
 
-	$extern_url = $scheme.'://'.$_SERVER['SERVER_NAME'].':'.$port.$path;
+	$extern_url = $scheme.'://'.$_SERVER['SERVER_NAME'].$port.$path;
 	return $extern_url;
 }
 
