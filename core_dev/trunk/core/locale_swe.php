@@ -34,7 +34,8 @@ $timeunits_swe = array(
 'month'  =>'månad',
 'months' =>'månader',
 'year'   =>'år',
-'years'  =>'år');
+'years'  =>'år'
+);
 
 $skyconditions_swe = array(
 'clear'         => 'molnfritt',

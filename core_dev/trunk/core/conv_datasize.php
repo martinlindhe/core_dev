@@ -11,9 +11,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class datasize
+class Datasize
 {
-	var $scale = array( ///< unit scale to a bit
+	private $scale = array( ///< unit scale to a bit
 	'bit'  => 1,
 	'kbit' => 1024,       // 2^10
 	'mbit' => 1048576,    // 2^20
@@ -27,6 +27,32 @@ class datasize
 	'pb'   => 9007199254740992,// (2^50)*8
 	);
 
+	private $lookup = array(
+	'bit'      => 'bit',
+	'kilobit'  => 'kbit',
+	'megabit'  => 'mbit',
+	'gigabit'  => 'gbit',
+
+	'byte'     => 'b',
+	'kilobyte' => 'kb',
+	'megabyte' => 'mb',
+	'gigabyte' => 'gb',
+	'terabyte' => 'tb',
+	'petabyte' => 'pb'
+	);
+
+	function setPrecision($n) { $this->precision = $n; }
+
+	function getShortcode($name)
+	{
+		$name = strtolower($name);
+		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
+
+		if (!empty($this->lookup[$name])) return $this->lookup[$name];
+		if (array_search($name, $this->lookup)) return $name;
+		return false;
+	}
+
 	function conv($from, $to, $val)
 	{
 		$from = $this->shortcode($from);
@@ -36,29 +62,6 @@ class datasize
 		return ($val * $this->scale[$from]) / $this->scale[$to];
 	}
 
-	function shortcode($name)
-	{
-		$name = strtolower($name);
-		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
-
-		$lookup = array(
-		'bit'      => 'bit',
-		'kilobit'  => 'kbit',
-		'megabit'  => 'mbit',
-		'gigabit'  => 'gbit',
-
-		'byte'     => 'b',
-		'kilobyte' => 'kb',
-		'megabyte' => 'mb',
-		'gigabyte' => 'gb',
-		'terabyte' => 'tb',
-		'petabyte' => 'pb'
-		);
-
-		if (!empty($lookup[$name])) return $lookup[$name];
-		if (array_search($name, $lookup)) return $name;
-		return false;
-	}
 }
 
 ?>

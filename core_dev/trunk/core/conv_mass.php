@@ -11,12 +11,13 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class mass
+class Mass
 {
-	var $precision = 0; ///< if set, specifies rounding precision
+	private $precision = 0; ///< if set, specifies rounding precision
 
-	var $scale = array( ///< unit scale to Gram
+	private $scale = array( ///< unit scale to Gram
 	'g'  => 1,           //Gram
+	'hg' => 100,         //Hectogram
 	'kg' => 1000,        //Kilogram
 	't'  => 1000000,     //Tonne
 	'oz' => 28.349523125,//Ounce (1/16 lb)
@@ -24,10 +25,34 @@ class mass
 	'st' => 6350.29318   //Stone (14 lb)
 	);
 
+	private $lookup = array(
+	'gram'      => 'g',
+	'hecto'     => 'hg',
+	'hectogram' => 'hg',
+	'kilogram'  => 'kg',
+	'kilo'      => 'kg',
+	'tonne'     => 't',
+	'ounce'     => 'oz',
+	'pound'     => 'lb',
+	'stone'     => 'st'
+	);
+
+	function getShortcode($name)
+	{
+		$name = strtolower($name);
+		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
+
+		if (!empty($this->lookup[$name])) return $this->lookup[$name];
+		if (array_search($name, $this->lookup)) return $name;
+		return false;
+	}
+
+	function setPrecision($n) { $this->precision = $n; }
+
 	function conv($from, $to, $val)
 	{
-		$from = $this->shortcode($from);
-		$to   = $this->shortcode($to);
+		$from = $this->getShortcode($from);
+		$to   = $this->getShortcode($to);
 
 		if (!$from || !$to) return false;
 
@@ -37,25 +62,6 @@ class mass
 		return ($val * $this->scale[$from]) / $this->scale[$to];
 	}
 
-	function shortcode($name)
-	{
-		$name = strtolower($name);
-		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
-
-		$lookup = array(
-		'gram'     => 'g',
-		'kilogram' => 'kg',
-		'kilo'     => 'kg',
-		'tonne'    => 't',
-		'ounce'    => 'oz',
-		'pound'    => 'lb',
-		'stone'    => 'st'
-		);
-
-		if (!empty($lookup[$name])) return $lookup[$name];
-		if (array_search($name, $lookup)) return $name;
-		return false;
-	}
 }
 
 ?>

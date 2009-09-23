@@ -12,9 +12,27 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class temperature
+class Temperature
 {
-	var $precision = 2; ///< if set, specifies rounding precision
+	private $precision = 2; ///< if set, specifies rounding precision
+
+	private $lookup = array(
+	'celcius'   => 'c',
+	'farenheit' => 'f',
+	'rakine'    => 'r',
+	'kelvin'    => 'k',
+	);
+
+	function setPrecision($n) { $this->precision = $n; }
+
+	function getShortcode($name)
+	{
+		$name = strtolower($name);
+
+		if (!empty($this->lookup[$name])) return $this->lookup[$name];
+		if (array_search($name, $this->lookup)) return $name;
+		return false;
+	}
 
 	function conv($from, $to, $val)
 	{
@@ -42,22 +60,6 @@ class temperature
 			return round($res, $this->precision);
 
 		return $res;
-	}
-
-	function shortcode($name)
-	{
-		$name = strtolower($name);
-
-		$lookup = array(
-		'celcius'   => 'c',
-		'farenheit' => 'f',
-		'rakine'    => 'r',
-		'kelvin'    => 'k',
-		);
-
-		if (!empty($lookup[$name])) return $lookup[$name];
-		if (array_search($name, $lookup)) return $name;
-		return false;
 	}
 
 }

@@ -11,9 +11,9 @@
 
 //XXX: add "inc/dec" to increase/Decrease numeric values
 
-class cache
+class Cache
 {
-	var $debug           = false;
+	private $debug       = false;
 	private $handle      = false;
 	private $persistent  = true; ///< use persistent connections?
 	private $expire_time = 60; ///< expiration time, in seconds

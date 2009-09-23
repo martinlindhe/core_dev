@@ -63,14 +63,15 @@ class Wiki
 	function load($name = '')
 	{
 		global $db;
-		if ($name) $this->setName($name);
+		if (!$name) return false;
 
 		$q =
 		'SELECT * FROM tblWiki AS t1'.
-		' WHERE wikiName="'.$db->escape($this->name).'"';
+		' WHERE wikiName="'.$db->escape($name).'"';
 		$data = $db->getOneRow($q);
 		if (!$data) return false;
 
+		$this->name       = $data['wikiName'];
 		$this->id         = $data['wikiId'];
 		$this->text       = $data['msg'];
 		$this->editorId   = $data['createdBy'];	 //XXX rename tblWiki.createdBy to .editorId

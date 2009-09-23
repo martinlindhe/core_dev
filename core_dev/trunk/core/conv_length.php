@@ -16,11 +16,11 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class length
+class Length
 {
-	var $precision = 0; ///< if set, specifies rounding precision
+	private $precision = 0; ///< if set, specifies rounding precision
 
-	var $scale = array( ///< unit scale to Meter
+	private $scale = array( ///< unit scale to Meter
 	'pm'     => 0.000000000001, //Picometer
 	'nm'     => 0.000000001,    //Nanometer
 	'mm'     => 0.001,          //Millimeter
@@ -36,6 +36,35 @@ class length
 	'au'     => 149597871464    //Astronomical Unit
 	);
 
+	private $lookup = array(
+	'picometer'  => 'pm',
+	'nanometer'  => 'nm',
+	'millimeter' => 'mm',
+	'centimeter' => 'cm',
+	'decimeter'  => 'dm',
+	'meter'      => 'm',
+	'kilometer'  => 'km',
+	'inch'       => 'in',
+	'feet'       => 'ft',
+	'yard'       => 'yd',
+	'ukmile'     => 'ukmile',
+	'usmile'     => 'usmile',
+	'mile'       => 'usmile',
+	'astronomical'=>'au',
+	);
+
+	function setPrecision($n) { $this->precision = $n; }
+
+	function getShortcode($name)
+	{
+		$name = strtolower($name);
+		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
+
+		if (!empty($this->lookup[$name])) return $this->lookup[$name];
+		if (array_search($name, $this->lookup)) return $name;
+		return false;
+	}
+
 	function conv($from, $to, $val)
 	{
 		$from = $this->shortcode($from);
@@ -47,33 +76,6 @@ class length
 			return round(($val * $this->scale[$from]) / $this->scale[$to], $this->precision);
 
 		return ($val * $this->scale[$from]) / $this->scale[$to];
-	}
-
-	function shortcode($name)
-	{
-		$name = strtolower($name);
-		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
-
-		$lookup = array(
-		'picometer'  => 'pm',
-		'nanometer'  => 'nm',
-		'millimeter' => 'mm',
-		'centimeter' => 'cm',
-		'decimeter'  => 'dm',
-		'meter'      => 'm',
-		'kilometer'  => 'km',
-		'inch'       => 'in',
-		'feet'       => 'ft',
-		'yard'       => 'yd',
-		'ukmile'     => 'ukmile',
-		'usmile'     => 'usmile',
-		'mile'       => 'usmile',
-		'astronomical'=>'au',
-		);
-
-		if (!empty($lookup[$name])) return $lookup[$name];
-		if (array_search($name, $lookup)) return $name;
-		return false;
 	}
 }
 

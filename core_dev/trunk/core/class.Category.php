@@ -1,6 +1,6 @@
 <?php
 
-//XXX separate sql to a sql_xxx base class
+//XXX separate to one CategoryItem and one CategoryList object
 
 class category
 {
@@ -83,6 +83,15 @@ class category
 		if ($this->owner) $q .= ',ownerId='.$this->owner;
 		if ($this->creator) $q .= ',creatorId='.$this->creator;
 		return $db->insert($q);
+	}
+
+	function getName($id)
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
+		$q = 'SELECT categoryName FROM '.$this->tbl_name.' WHERE categoryId='.$id.' AND categoryType='.$this->type.' ';
+		if ($this->owner) $q .= 'AND ownerId='.$this->owner;
+		return $db->getOneItem($q);
 	}
 
 	/**

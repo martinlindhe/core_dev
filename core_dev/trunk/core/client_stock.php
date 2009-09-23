@@ -13,24 +13,29 @@ require_once('class.Cache.php');
 
 class Stock
 {
-	var $cache_expire = 300; ///< expire time in seconds for local cache
+	private $cache_expire = 300; ///< expire time in seconds for local cache
+	private $cache; ///< Cache object
+
+	function __construct()
+	{
+		$this->cache = new Cache();
+		$this->setCacheTime($this->cache_expire);
+	}
+
+	function setCacheTime($s) { $this->cache->setCacheTime($s); }
 
 	function getNasdaq($code)
 	{
 		$code = strtolower($code);
 
-		$cache = new cache();
-		$cache->setCacheTime($this->cache_expire);
-		//$cache->debug = true;
-
-		$data = $cache->get('stock_nasdaq_'.$code);
+		$data = $this->cache->get('stock_nasdaq//'.$code);
 		if ($data) return unserialize($data);
 
 		$client = new Stock_webservicex();
 
 		$res = $client->getQuote($code);
 
-		$cache->set('stock_nasdaq_'.$code, serialize($res));
+		$this->cache->set('stock_nasdaq//'.$code, serialize($res));
 		return $res;
 	}
 }

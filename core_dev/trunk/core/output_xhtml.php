@@ -43,7 +43,7 @@ function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu
 			if ($cur == $url) echo '<li class="'.$current_class.'">';
 			else echo '<li>';
 
-			if ($url) echo '<a href="'.$url.'">'.$text.'</a>';
+			if ($url) echo '<a href="'.xhtmlGetUrl($url).'">'.$text.'</a>';
 			else echo $text;
 			echo '</li>';
 		}
@@ -477,7 +477,7 @@ function xhtmlOpenSearch($script, $name, $icon = '')
 		echo '<Description>'.$name.'</Description>';
 
 		if ($icon)
-			echo '<Image height="16" width="16" type="image/x-icon">'.$icon.'</Image>';
+			echo '<Image height="16" width="16" type="image/x-icon">'.xhtmlGetUrl($icon).'</Image>';
 
 		echo '<Url type="text/html" template="'.xhtmlGetUrl($script).'{searchTerms}"/>';
 
