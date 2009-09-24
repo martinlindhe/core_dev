@@ -60,14 +60,14 @@ class Wiki
 			$this->allow_files = false;
 	}
 
-	function load($name = '')
+	function load()
 	{
 		global $db;
-		if (!$name) return false;
+		if (!$this->name) return false;
 
 		$q =
 		'SELECT * FROM tblWiki AS t1'.
-		' WHERE wikiName="'.$db->escape($name).'"';
+		' WHERE wikiName="'.$db->escape($this->name).'"';
 		$data = $db->getOneRow($q);
 		if (!$data) return false;
 

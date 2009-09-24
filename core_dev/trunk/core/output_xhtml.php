@@ -507,7 +507,7 @@ function xhtmlGetUrl($script = '')
 		return $script;
 
 	if (strpos($script, '/') !== false)
-		die('xhtmlLocalUrl FIXME handle incomplete paths with / in em');
+		$path = $script;
 	else if (substr($script, 0, 1) == '?')
 		$path = $_SERVER['PHP_SELF'].$script; // append parameters
 	else if ($script)
