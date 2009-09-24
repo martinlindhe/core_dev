@@ -20,9 +20,10 @@ class output_feed
 {
 	private $version     = 'core_dev output_feed 1.0';
 	private $title       = 'Untitled news feed';
-	private $entries = array();
+	private $entries     = array();
+	private $desc;
+	private $link;
 
-	private $desc, $link;
 	private $ttl         = 15;    ///< time to live, in minutes
 	private $sendHeaders = false; ///< shall we send mime type?
 
