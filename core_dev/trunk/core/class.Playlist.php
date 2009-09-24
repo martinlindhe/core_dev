@@ -25,16 +25,35 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('output_list.php');
-
-class output_playlist extends core_list
+class Playlist
 {
 	private $sendHeaders = false; ///< shall we send mime type?
+
+	private $entries = array();
+
+	function getEntries() { return $this->entries; }
+
+	/**
+	 * Adds a array of entries to the feed list
+	 */
+	function addList($list)
+	{
+		foreach ($list as $entry)
+			$this->entries[] = $entry;
+	}
+
+	/**
+	 * Adds a entry to the feed list
+	 */
+	function addEntry($entry)
+	{
+		$this->entries[] = $entry;
+	}
 
 	function enableHeaders() { $this->sendHeaders = true; }
 	function disableHeaders() { $this->sendHeaders = false; }
 
-	function render($format = 'xspf')
+	function render($format = 'xhtml')
 	{
 		switch ($format) {
 		case 'xspf':
@@ -51,10 +70,10 @@ class output_playlist extends core_list
 
 		case 'xhtml':
 		case 'html':
-			return $this->renderHTML();
+			return $this->renderXHTML();
 		}
 
-		echo "output_playlist: unknown format ".$format."\n";
+		echo "Playlist->render: unknown format ".$format."\n";
 		return false;
 	}
 
@@ -125,7 +144,7 @@ class output_playlist extends core_list
 	/**
 	 * Renders the playlist as a HTML table
 	 */
-	function renderHTML()
+	function renderXHTML()
 	{
 		$res = '<table border="1">';
 

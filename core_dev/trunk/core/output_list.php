@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Used by output_feed.php, output_playlist.php
+ * Used by output_feed.php
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */

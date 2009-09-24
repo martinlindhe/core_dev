@@ -6,7 +6,7 @@
  */
 
 require_once('/var/www/core_dev/core/input_feed.php');
-require_once('/var/www/core_dev/core/output_playlist.php');
+require_once('/var/www/core_dev/core/class.Playlist.php');
 require_once('/var/www/core_dev/core/class.Cache.php');
 
 
@@ -17,7 +17,7 @@ $res = $rss->parse($url);
 
 setlocale(LC_TIME, 'sv_SE.UTF8');
 
-$pl = new output_playlist();
+$pl = new Playlist();
 $pl->addList($res);
 echo $pl->output('pls');
 

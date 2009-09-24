@@ -32,7 +32,7 @@ img {
 	border: 1px solid #000;
 }
 .ulli_menu a {
-	color: #000;
+	color: #000 !important;
 	display: block;
 	text-decoration: none;
 	padding: 4px 6px;
