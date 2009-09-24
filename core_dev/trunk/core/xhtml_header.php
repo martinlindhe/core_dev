@@ -124,9 +124,9 @@ class xhtml_header
 		echo '</head>';
 
 		echo '<body class="yui-skin-sam"'; // required for YUI
-		if (count($this->onLoad)) {
+		if (count($this->onload)) {
 			echo ' onload="';
-			foreach ($this->onLoad as $row)
+			foreach ($this->onload as $row)
 				echo $row;
 		}
 		echo '">';
