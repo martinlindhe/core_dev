@@ -75,8 +75,7 @@ class xhtml_header
 		echo '<title>'.$this->title.'</title>';
 		echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 
-		if (!empty($config['core']['web_root']))
-			echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
+		echo '<link rel="stylesheet" type="text/css" href="'.$this->core_dev_root.'css/core.css"/>';
 
 		foreach ($this->css as $css)
 			echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
@@ -85,7 +84,7 @@ class xhtml_header
 			//XXX: clean up feed URI's etc, make it more general
 			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
 			else $extra = '';
-			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$config['core']['web_root'].'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 
 		foreach ($this->search as $search)
@@ -96,27 +95,25 @@ class xhtml_header
 
 		$theme_dir = '';
 		if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
-		else if (!empty($config['core']['web_root'])) $theme_dir = $config['core']['web_root'].'css/themes/';
+		else $theme_dir = $this->core_dev_root.'css/themes/';
 
 		if (!empty($h->session) && $theme_dir)
 			echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';
 
-		if (!empty($config['core']['web_root'])) {
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/coredev.js"></script>';
-			//echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/swfobject.js"></script>';
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
+		//echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/swfobject.js"></script>';
 
-			/*
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ajax.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/fileareas.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/chat_1on1.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/prototype.js"></script>';
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-			echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/ext/cropper.js"></script>';
-			*/
+		/*
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ajax.js"></script>';
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/fileareas.js"></script>';
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/chat_1on1.js"></script>';
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/prototype.js"></script>';
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/cropper.js"></script>';
+		*/
 
-			if (!empty($h->files) && $h->files->allow_rating) //XXX fixme: let files class register this one
-				echo '<script type="text/javascript" src="'.$config['core']['web_root'].'js/rate.js"></script>';
-		}
+		if (!empty($h->files) && $h->files->allow_rating) //XXX fixme: let files class register this one
+			echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/rate.js"></script>';
 
 		foreach ($this->js as $uri)
 			echo '<script type="text/javascript" src="'.$uri.'"></script>';

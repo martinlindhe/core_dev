@@ -511,7 +511,10 @@ function xhtmlGetUrl($script = '')
 	else if (substr($script, 0, 1) == '?')
 		$path = $_SERVER['PHP_SELF'].$script; // append parameters
 	else if ($script)
-		$path = dirname($_SERVER['PHP_SELF']).$script;
+		if (dirname($_SERVER['PHP_SELF']) == '/')
+			$path = '/'.$script;
+		else
+			$path = dirname($_SERVER['PHP_SELF']).'/'.$script;
 	else
 		$path = $_SERVER['PHP_SELF'];
 
