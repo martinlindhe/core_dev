@@ -36,11 +36,13 @@ class sql_id_list
 		$this->owner = $id;
 	}
 
-	function setCategory($id)
+	function setCategoryId($id)
 	{
 		if (!is_numeric($id)) return false;
 		$this->category = $id;
 	}
+
+	function getCategoryId() { return $this->category; }
 
 	function countItems() { return count($this->list); }
 

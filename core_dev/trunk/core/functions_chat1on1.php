@@ -7,8 +7,6 @@
 
 /**
  * Function that prints the html for a pop-up 1on1 chat
- * NOTE: Dont use any other code that uses createXHTMLHeader
- * on the page that uses this function.
  *
  * @param $otherId user ID of the user the logged in user wants to chat with
  */
@@ -26,8 +24,9 @@ function chat_1on1_XHTML($otherId)
 
 	$oldMsgs = array_reverse($db->getArray('SELECT * FROM tblChat WHERE ((userId = '.$userId.' AND authorId = '.$otherId.') OR (userId = '.$otherId.' AND authorId = '.$userId.'))  AND msgRead = 1 ORDER BY msgDate desc LIMIT 10'));
 
-	$body_onload[] = 'chat_onload('.$otherId.', '.$userId.", '".$otherName."', '".$myName."')";
-	createXHTMLHeader();
+	$header = new xhtml_header();
+	$header->addOnLoad('chat_onload('.$otherId.', '.$userId.", '".$otherName."', '".$myName."')" );
+	echo $header->render();
 
 	echo '<div align="center">';
 	echo '<h2>Chat</h2><br/>';

@@ -16,7 +16,7 @@ class db_mysqli extends db_base
 	 */
 	function __destruct()
 	{
-		if ($this->db_handle) $this->db_handle->close();
+		if ($this->connected) $this->db_handle->close();
 	}
 
 	/**
@@ -27,24 +27,21 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		//MySQL defaults
-		if (!$this->host) $this->host = 'localhost';
-		if (!$this->port) $this->port = 3306;
+		if (!$this->host)     $this->host     = 'localhost';
+		if (!$this->port)     $this->port     = 3306;
 		if (!$this->username) $this->username = 'root';
 
 		$this->db_handle = new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
-		if (mysqli_connect_errno()) {
-			$this->db_handle = false;
-			if ($this->debug) die('DB_MySQLi: Database connection error '.mysqli_connect_errno().': '.mysqli_connect_error().'.</bad>');
-			else die('Database not responding');
-		}
+		if ($this->db_handle->connect_error)
+			die('db_mysqli->connect: Error '.$this->db_handle->connect_errno.': '.$this->db_handle->connect_error);
 
 		if (!$this->db_handle->set_charset($this->charset))
 			die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
 
 		$this->connected = true;
-		$this->driver = 'mysqli';
-		$this->dialect = 'mysql';
+		$this->driver    = 'mysqli';
+		$this->dialect   = 'mysql';
 		$this->server_version = $this->db_handle->server_info;
 		$this->client_version = $this->db_handle->client_info;
 
@@ -74,6 +71,12 @@ class db_mysqli extends db_base
 		return $this->db_handle->real_escape_string($q);
 	}
 
+	/**
+	 * Executes a SQL a query, opens db connection if required
+	 *
+	 * @param $q the query to execute
+	 * @return result
+	 */
 	function real_query($q)
 	{
 		if (!$this->connected) $this->connect();

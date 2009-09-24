@@ -2,7 +2,8 @@
 
 $meta_css[] = $config['core']['web_root'].'css/admin.css';
 
-createXHTMLHeader();
+$header = new xhtml_header();
+echo $header->render();
 
 $admin_menu = array(
 	$config['core']['web_root'].'admin/admin.php' => 'Admin::',

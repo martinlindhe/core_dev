@@ -11,24 +11,6 @@ require_once('locale.php');
 require_once('xhtml_header.php');
 
 /**
- * Creates a complete XHTML header, showing rss feeds if available, etc
- * Uses the following global variables, if they are set:
- *
- * $title			- <title> of current page. set the default title with $config['session']['default_title']		FIXME rename
- * $meta_rss[]		- array of rss feeds to expose for current page
- * $meta_js[]		- array of javascript files that needs to be included for current page
- * $meta_css[]		- array of css files that needs to be included for current page
- * $meta_favicon    - uri for favicon (normally /favicon.ico)
- * $body_onload[]	- array of js function(s) to call on load
- */
-function createXHTMLHeader()
-{
-	$header = new xhtml_header();
-	echo $header->render();
-//TODO DEPRECATE this function, use xhtml_header class instead
-}
-
-/**
  * Takes an array of menu entries and creates a <ul><li>-style menu
  */
 function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')

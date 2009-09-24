@@ -15,7 +15,8 @@ $fileId = $_GET['id'];
 
 require_once('find_config.php');
 
-createXHTMLHeader();
+$header = new xhtml_header();
+echo $header->render();
 
 echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.'"/>';
 ?>

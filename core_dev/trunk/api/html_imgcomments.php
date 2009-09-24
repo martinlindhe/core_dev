@@ -8,7 +8,8 @@ if (empty($_GET['i']) || !is_numeric($_GET['i'])) die('bad');
 
 require_once('find_config.php');
 
-createXHTMLHeader();
+$header = new xhtml_header();
+echo $header->render();
 
 echo '<body style="background-color: #D80911;">';
 echo '<center>';
