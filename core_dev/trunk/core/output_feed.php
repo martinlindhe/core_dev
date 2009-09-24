@@ -13,23 +13,42 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-require_once('output_list.php');
 require_once('client_http.php');
 require_once('class.Timestamp.php');
 
-class output_feed extends core_list
+class output_feed
 {
 	private $version     = 'core_dev output_feed 1.0';
 	private $title       = 'Untitled news feed';
+	private $entries = array();
 
 	private $desc, $link;
 	private $ttl         = 15;    ///< time to live, in minutes
 	private $sendHeaders = false; ///< shall we send mime type?
 
+	function getEntries() { return $this->entries; }
+
 	function setTitle($n) { $this->title = $n; }
 	function setLink($n) { $this->link = $n; }
 	function enableHeaders() { $this->sendHeaders = true; }
 	function disableHeaders() { $this->sendHeaders = false; }
+
+	/**
+	 * Adds a array of entries to the feed list
+	 */
+	function addList($list)
+	{
+		foreach ($list as $entry)
+			$this->entries[] = $entry;
+	}
+
+	/**
+	 * Adds a entry to the feed list
+	 */
+	function addEntry($entry)
+	{
+		$this->entries[] = $entry;
+	}
 
 	/**
 	 * Generates XML for feed
