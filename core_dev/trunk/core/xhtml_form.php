@@ -10,7 +10,7 @@
 require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
-//TODO add yui interactive editor as addRichedit()
+//FIXME: include yui resources in a smarter way
 
 class xhtml_form
 {
@@ -26,7 +26,8 @@ class xhtml_form
 	private $listenGet = false;
 
 	private $elems = array();
-	private $yui   = false;    ///< include yui js files?
+	private $yui_dateinterval = false;    ///< include yui files for date interval picker?
+	private $yui_richedit     = false;    ///< include yui files for richedit?
 
 	private $success = '';
 	private $error   = 'Submitted form was rejected!';
@@ -139,6 +140,15 @@ class xhtml_form
 	}
 
 	/**
+	 * Adds a richedit textarea to the form
+	 */
+	function addRichedit($name, $str, $val = '', $width = 0, $height = 0)
+	{
+		$this->yui_richedit = true;
+		$this->elems[] = array('type' => 'RICHEDIT', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
+	}
+
+	/**
 	 * Adds a text string to the form
 	 */
 	function addText($str)
@@ -182,7 +192,7 @@ class xhtml_form
 	 */
 	function addDateInterval($namefrom, $nameto, $str)
 	{
-		$this->yui = true;
+		$this->yui_dateinterval = true;
 		$this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str);
 	}
 
@@ -200,10 +210,14 @@ class xhtml_form
 			die('FATAL: xhtml_form() does not have a defined data handler');
 
 		$res = '';
-		if ($this->yui) {
+		if ($this->yui_dateinterval) {
 			//use http://developer.yahoo.com/yui/articles/hosting/ to generate urls:
 			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js"></script>';
 			$res .= '<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css">';
+		}
+
+		if ($this->yui_richedit) {
+			//die('yui riuchedit');
 		}
 
 		$res .= xhtmlForm($this->name, '', 'post', $this->enctype);
@@ -277,7 +291,7 @@ class xhtml_form
 				$res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
 				//XXX ability att ange div id och input fält namn:
-				$res .= file_get_contents('core_dev/core/js_calendar.js');
+				$res .= file_get_contents('core_dev/js/yui_dateinterval.js');
 				$res .= '</td>';
 				break;
 
