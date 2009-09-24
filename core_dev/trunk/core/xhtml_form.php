@@ -77,7 +77,7 @@ class xhtml_form
 		if ($this->listenGet && !empty($_GET))
 			foreach ($_GET as $key => $val)
 				foreach ($this->elems as $row)
-					if (!empty($row['name']) && empty($_POST[$row['name']]) && $row['name'] == $key)
+					if (!empty($row['name']) && !isset($_POST[$row['name']]) && $row['name'] == $key)
 						$p[ $key ] = $val;
 
 		if (!$p) return false;
@@ -213,7 +213,7 @@ class xhtml_form
 		foreach ($this->elems as $e)
 		{
 			//fills in form with previous entered data
-			if (!empty($e['name']) && !empty($this->formData[$e['name']]))
+			if (!empty($e['name']) && isset($this->formData[$e['name']]))
 				$e['default'] = $this->formData[$e['name']];
 
 			$res .= '<tr>';

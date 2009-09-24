@@ -365,7 +365,7 @@ abstract class db_base
 		$total_time = microtime(true) - $this->time_initial + $sql_time + $this->time_connect;
 		$php_time = $total_time - $sql_time - $this->time_connect;
 
-		echo 'Time spent: '.round($total_time, 2).'s '.
+		echo 'Time spent: <b>'.round($total_time, 2).'s</b> '.
 			' (DB connect: '.round($this->time_connect, 2).'s, '.
 			sizeof($this->queries).' SQL queries: '.round($sql_time, 2).'s, '.
 			'PHP: '.round($php_time, 2).'s)<br/>';
@@ -373,8 +373,8 @@ abstract class db_base
 		//Show memory usage
 		echo dm().'<br/>';
 
-		echo 'MySQL server at '.$this->host.' running '.$this->server_version.'<br/>';
-		echo 'PHP '.phpversion().'<br/>';
+		echo '<b>'.$this->host.'</b> running <i>MySQL '.$this->server_version.'</i><br/>';
+		echo '<b>'.$_SERVER['SERVER_NAME'].'</b> running <i>PHP '.phpversion().'</i><br/>';
 		echo date('r');
 
 		echo '</div>';
