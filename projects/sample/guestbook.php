@@ -10,8 +10,8 @@ if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 
 require('design_head.php');
 
-createMenu($profile_menu, 'blog_menu');
-	
+echo xhtmlMenu($profile_menu, 'blog_menu');
+
 showGuestbook($userId);
 
 require('design_foot.php');

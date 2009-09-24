@@ -5,7 +5,7 @@ $session->requireLoggedIn();
 
 require('design_head.php');
 
-createMenu($profile_menu, 'blog_menu');
+echo xhtmlMenu($profile_menu, 'blog_menu');
 
 $list = getSubscriptions(SUBSCRIPTION_FORUM);
 echo '<h2>Your forum subscriptions</h2>';

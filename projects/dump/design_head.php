@@ -19,12 +19,12 @@ $menu = array(
 	'files.php' => 'File dump',
 	'pastebin.php' => 'Pastebin'
 );
-createMenu($menu);
+echo xhtmlMenu($menu);
 
 if ($session->isAdmin) {
 	$menu = array(
 		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 
 if ($session->id) {
@@ -33,7 +33,7 @@ if ($session->id) {
 } else {
 	$menu = array('?login' => 'Log in');
 }
-createMenu($menu);
+echo xhtmlMenu($menu);
 ?>
 </div>
 

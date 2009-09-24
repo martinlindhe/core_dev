@@ -9,7 +9,7 @@ if (!$itemId && !$session->isAdmin) die;	//invalid request
 
 require('design_head.php');
 
-echo createMenu($forum_menu, 'blog_menu');
+echo xhtmlMenu($forum_menu, 'blog_menu');
 
 createForumCategory($itemId);
 

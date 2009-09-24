@@ -3,7 +3,7 @@
 require_once('config.php');
 require('design_head.php');
 
-echo createMenu($forum_menu, 'blog_menu');
+echo xhtmlMenu($forum_menu, 'blog_menu');
 
 if (isset($_POST['c']) || isset($_GET['c'])) {
 	if (isset($_POST['c'])) $orgcrit = $_POST['c'];

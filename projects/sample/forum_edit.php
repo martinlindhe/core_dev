@@ -8,7 +8,7 @@ $itemId = $_GET['id'];
 
 require('design_head.php');
 
-echo createMenu($forum_menu, 'blog_menu');
+echo xhtmlMenu($forum_menu, 'blog_menu');
 
 forumEdit($itemId);
 

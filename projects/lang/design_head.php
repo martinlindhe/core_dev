@@ -8,14 +8,14 @@ echo $header->render();
 <?php
 
 $menu = array('index.php' => 'Home');
-createMenu($menu);
+echo xhtmlMenu($menu);
 
 if ($session->isAdmin) {
 	$menu = array(
 		'admin_addlang.php' => 'Add language',
 		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 	);
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 
 if ($session->id) {
@@ -27,7 +27,7 @@ if ($session->id) {
 		'acronym.php' => 'Make acronyms',
 		'?logout' => 'Log out'
 	);
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 ?>
 	</div>

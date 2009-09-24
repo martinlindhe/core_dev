@@ -40,12 +40,12 @@ $menu = array(
 	'users.php' => 'Users'
 	//$config['core']['web_root'].'process/' => 'PROCESS SERVER'
 );
-createMenu($menu);
+echo xhtmlMenu($menu);
 
 if ($session->isAdmin) {
 	$menu = array(
 		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin');
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 
 if ($session->id) {
@@ -55,7 +55,7 @@ if ($session->id) {
 } else {
 	$menu = array('login.php' => 'Log in');
 }
-createMenu($menu);
+echo xhtmlMenu($menu);
 ?>
 <br/>
 Quick search:<br/>

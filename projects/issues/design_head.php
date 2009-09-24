@@ -23,7 +23,7 @@ echo $header->render();
 $menu = array(
 	'index.php' => 'Home'
 );
-createMenu($menu);
+echo xhtmlMenu($menu);
 
 if ($h->session->id) {
 	$menu = array(
@@ -31,24 +31,24 @@ if ($h->session->id) {
 		'issues.php?show=open' => 'Issues',	//overview of open issues
 		'z' => 'My tasks'					//overview of my assigned tasks
 	);
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 
 	if ($h->session->isAdmin) {
 		$menu = array(
 			'manage/issue_categories.php' => 'Manage',
 			$config['core']['web_root'].'admin/admin.php' => 'Admin'
 		);
-		createMenu($menu);
+		echo xhtmlMenu($menu);
 	}
 
 	$menu = array(
 		'?logout' => 'Logout'
 	);
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 
 } else {
 	$menu = array('?login' => 'Log in');
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 ?>
 </div>

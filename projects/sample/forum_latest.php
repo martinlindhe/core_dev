@@ -3,7 +3,7 @@
 require('config.php');
 require('design_head.php');
 
-echo createMenu($forum_menu, 'blog_menu');
+echo xhtmlMenu($forum_menu, 'blog_menu');
 
 echo '<div class="forum_overview_group">';
 

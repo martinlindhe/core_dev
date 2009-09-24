@@ -10,7 +10,7 @@ if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
 
 require('design_head.php');
 
-createMenu($profile_menu, 'blog_menu');
+echo xhtmlMenu($profile_menu, 'blog_menu');
 
 if ($userId != $session->id) {
 
@@ -27,7 +27,7 @@ if ($userId != $session->id) {
 	echo '<textarea name="msg" rows="8" cols="40"></textarea><br/>';
 	echo '<input type="submit" class="button" value="Send"/>';
 	echo '</form>';
-		
+
 } else {
 	echo '<h1>My messages</h1>';
 	echo '<br/>';

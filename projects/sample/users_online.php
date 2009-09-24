@@ -3,7 +3,7 @@
 require_once('config.php');
 require('design_head.php');
 
-createMenu($user_menu, 'blog_menu');
+echo xhtmlMenu($user_menu, 'blog_menu');
 
 echo 'Users online (was active in the last '.shortTimePeriod($session->online_timeout).')<br/><br/>';
 

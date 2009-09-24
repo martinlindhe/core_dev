@@ -18,7 +18,7 @@ echo $head->render();
 $menu = array(
 	'index.php' => 'Home'
 );
-createMenu($menu);
+echo xhtmlMenu($menu);
 
 if ($h->session->id) {
 	$menu = array(
@@ -27,7 +27,7 @@ if ($h->session->id) {
 		'http_upload.php' => 'Upload file',
 		'http_download.php' => 'Request a fetch',
 		'?logout' => 'Logout');
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 
 if ($h->session->isAdmin) {
@@ -35,7 +35,7 @@ if ($h->session->isAdmin) {
 		'process_queue.php' => 'FORCE process',
 		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
 	);
-	createMenu($menu);
+	echo xhtmlMenu($menu);
 }
 ?>
 </div>

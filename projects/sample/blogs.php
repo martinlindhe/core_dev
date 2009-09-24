@@ -14,7 +14,7 @@ if ($session->isAdmin) {
 	$menu = array_merge($menu, array('blog_categories.php' => 'Blog categories'));
 }
 
-echo createMenu($menu, 'blog_menu');
+echo xhtmlMenu($menu, 'blog_menu');
 
 echo 'Newest blogs:<br/>';
 $list = getLatestBlogs(5);

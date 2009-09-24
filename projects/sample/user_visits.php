@@ -5,7 +5,7 @@ $session->requireLoggedIn();
 
 require('design_head.php');
 
-createMenu($profile_menu, 'blog_menu');
+echo xhtmlMenu($profile_menu, 'blog_menu');
 
 echo 'These people have visited your page:<br/><br/>';
 
