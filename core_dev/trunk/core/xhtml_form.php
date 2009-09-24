@@ -212,27 +212,13 @@ class xhtml_form
 		$res = '';
 		if ($this->yui_dateinterval) {
 			//use http://developer.yahoo.com/yui/articles/hosting/ to generate urls:
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js"></script>';
 			$res .= '<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css">';
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js"></script>';
 		}
 
 		if ($this->yui_richedit) {
-			//http://developer.yahoo.com/yui/editor/
-//XXXX use url generator!!!
-			// Skin CSS file
-			$res .= '<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/assets/skins/sam/skin.css">';
-
-			// Utility Dependencies
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>';
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>';
-
-			// Needed for Menus, Buttons and Overlays used in the Toolbar
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/container/container_core-min.js"></script>';
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/menu/menu-min.js"></script>';
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js"></script>';
-
-			// Source file for Rich Text Editor
-			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/editor/editor-min.js"></script>';
+			$res .= '<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/assets/skins/sam/skin.css"> ';
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/container/container_core-min.js&2.8.0r4/build/menu/menu-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/button/button-min.js&2.8.0r4/build/editor/editor-min.js"></script> ';
 		}
 
 		$res .= xhtmlForm($this->name, '', 'post', $this->enctype);
@@ -311,9 +297,12 @@ class xhtml_form
 				break;
 
 			case 'RICHEDIT':
+				//http://developer.yahoo.com/yui/editor/
 				$res .= '<td>'.$e['str'].'</td>';
 				$res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
 
+				//XXX: how to disable "insert image" button?
+				//XXX: how to change title from "Text Editing Tools" ?
 				$res .=
 				'<script type="text/javascript">'.
 				//'var myEditor = new YAHOO.widget.Editor("'.$e['name'].'", {'.
