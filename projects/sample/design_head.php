@@ -12,7 +12,9 @@ if (!empty($_POST['qu'])) {
 //fetch a random user:
 if (isset($_GET['rand'])) Users::randomUserPage();
 
-createXHTMLHeader();
+$header = new xhtml_header();
+echo $header->render();
+
 ?>
 <div id="header">
 	<div id="header-logo">

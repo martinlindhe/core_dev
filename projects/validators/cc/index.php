@@ -5,7 +5,8 @@
 
 require_once('config.php');
 
-createXHTMLHeader();
+$header = new xhtml_header();
+echo $header->render();
 
 $cc = '1234 1234 1234 1234';	//FIXME: add a fake "valid" number
 

@@ -1,6 +1,8 @@
 <?php
 
-createXHTMLHeader();
+$header = new xhtml_header();
+echo $header->render();
+
 ?>
 <div id="header">
 	<div id="header-logo">

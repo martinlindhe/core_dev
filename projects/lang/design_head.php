@@ -1,6 +1,7 @@
 <?php
 
-createXHTMLHeader()
+$header = new xhtml_header();
+echo $header->render();
 ?>
 <div id="menu_holder">
 	<div id="leftmenu">

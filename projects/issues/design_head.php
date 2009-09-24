@@ -1,7 +1,9 @@
 <?php
 
-$meta_css[] = $config['app']['web_root'].'css/site.css';
-createXHTMLHeader();
+$header = new xhtml_header();
+$header->addCss('css/site.css');
+echo $header->render();
+
 ?>
 <div id="top">
 	<div id="top-logo"></div>
