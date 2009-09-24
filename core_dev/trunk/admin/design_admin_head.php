@@ -42,10 +42,10 @@ $super_admin_tools_menu = array(
 	$config['core']['web_root'].'admin/admin_ip_blocks.php' => 'IP Blocks'
 );
 
-echo createMenu($admin_menu, 'admin_menu');
+echo xhtmlMenu($admin_menu, 'admin_menu');
 if ($h->session->isSuperAdmin) {
-	echo createMenu($super_admin_menu, 'admin_menu');
-	echo createMenu($super_admin_tools_menu, 'admin_menu');
+	echo xhtmlMenu($super_admin_menu, 'admin_menu');
+	echo xhtmlMenu($super_admin_tools_menu, 'admin_menu');
 }
 
 echo '<a href="'.$config['app']['web_root'].$h->session->start_page.'"> &laquo;&laquo; BACK TO SITE</a><br/><br/>';

@@ -181,7 +181,7 @@ function showNewsArticle($_id = 0)
 			);
 	}
 
-	$res .= createMenu($menu, 'blog_menu');
+	$res .= xhtmlMenu($menu, 'blog_menu');
 
 	if ($current_tab == 'NewsEdit' && $h->session->isAdmin) {
 

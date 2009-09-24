@@ -192,7 +192,7 @@ class Wiki
 		}
 
 		echo '<div class="wiki">';
-		createMenu($wiki_menu, 'wiki_menu');
+		echo xhtmlMenu($wiki_menu, 'wiki_menu');
 		echo '<div class="wiki_body">';
 
 		//Display the wiki toolbar for admins

@@ -131,7 +131,7 @@ class Blog
 		}
 		$menu = array_merge($menu, array($_SERVER['PHP_SELF'].'?BlogComment:'.$blog->getId() => 'Comments ('.getCommentsCount(COMMENT_BLOG, $blog->getId()).')'));
 
-		createMenu($menu, 'blog_menu');
+		echo xhtmlMenu($menu, 'blog_menu');
 
 		echo '<div class="blog_body">';
 

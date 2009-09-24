@@ -13,8 +13,8 @@ require_once('xhtml_header.php');
 /**
  * Takes an array of menu entries and creates a <ul><li>-style menu
  */
-function createMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')
-{//XXX rename to xhtmlMenu() or xhtmlUlliMenu()
+function xhtmlMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')
+{
 	$cur = basename($_SERVER['SCRIPT_NAME']);
 
 	echo '<ul class="'.$class.'">';
