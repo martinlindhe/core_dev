@@ -17,19 +17,18 @@ function xhtmlMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_
 {
 	$cur = basename($_SERVER['SCRIPT_NAME']);
 
-	echo '<ul class="'.$class.'">';
-		foreach($menu_arr as $url => $text) {
+	$res = '<ul class="'.$class.'">';
+	foreach($menu_arr as $url => $text) {
+		//FIXME: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
+		if ($cur == $url) $res .= '<li class="'.$current_class.'">';
+		else $res .= '<li>';
 
-			//if ($cur == $url || isset($_GET[str_replace('?','',$url)])) echo '<li class="'.$current_class.'">';
-			//FIXME: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
-			if ($cur == $url) echo '<li class="'.$current_class.'">';
-			else echo '<li>';
-
-			if ($url) echo '<a href="'.xhtmlGetUrl($url).'">'.$text.'</a>';
-			else echo $text;
-			echo '</li>';
-		}
-	echo '</ul>';
+		if ($url) $res .= '<a href="'.xhtmlGetUrl($url).'">'.$text.'</a>';
+		else $res .= $text;
+		$res .= '</li>';
+	}
+	$res .= '</ul>';
+	return $res;
 }
 
 /**
