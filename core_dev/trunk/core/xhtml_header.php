@@ -122,14 +122,14 @@ class xhtml_header
 			echo '<script type="text/javascript" src="'.$uri.'"></script>';
 
 		echo '</head>';
-		if (count($this->onload)) {
-			echo '<body class="yui-skin-sam" onload="';
-			foreach ($this->onload as $row)
+
+		echo '<body class="yui-skin-sam"'; // required for YUI
+		if (count($this->onLoad)) {
+			echo ' onload="';
+			foreach ($this->onLoad as $row)
 				echo $row;
-			echo '">';
-		} else {
-			echo '<body class="yui-skin-sam">';
 		}
+		echo '">';
 
 		if (function_exists('getProjectPath')) {
 			echo '<script type="text/javascript">';

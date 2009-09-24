@@ -269,7 +269,7 @@ function xhtmlPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
 function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 {
 	if (!is_numeric($_width) || !is_numeric($_height)) return false;
-	return '<textarea name="'.$_name.'"'.
+	return '<textarea name="'.$_name.'" id="'.$_name.'"'.
 		($_width ? ' cols="'.$_width.'"' : '').
 		($_height ? ' rows="'.$_height.'"' : '').
 		'>'.$_value.'</textarea>';

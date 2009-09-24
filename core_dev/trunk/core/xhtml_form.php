@@ -142,7 +142,7 @@ class xhtml_form
 	/**
 	 * Adds a richedit textarea to the form
 	 */
-	function addRichedit($name, $str, $val = '', $width = 0, $height = 0)
+	function addRichedit($name, $str, $val = '', $width = 500, $height = 200)
 	{
 		$this->yui_richedit = true;
 		$this->elems[] = array('type' => 'RICHEDIT', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
@@ -217,7 +217,22 @@ class xhtml_form
 		}
 
 		if ($this->yui_richedit) {
-			//die('yui riuchedit');
+			//http://developer.yahoo.com/yui/editor/
+//XXXX use url generator!!!
+			// Skin CSS file
+			$res .= '<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/assets/skins/sam/skin.css">';
+
+			// Utility Dependencies
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>';
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>';
+
+			// Needed for Menus, Buttons and Overlays used in the Toolbar
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/container/container_core-min.js"></script>';
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/menu/menu-min.js"></script>';
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js"></script>';
+
+			// Source file for Rich Text Editor
+			$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/editor/editor-min.js"></script>';
 		}
 
 		$res .= xhtmlForm($this->name, '', 'post', $this->enctype);
@@ -293,6 +308,24 @@ class xhtml_form
 				//XXX ability att ange div id och input fält namn:
 				$res .= file_get_contents('core_dev/js/yui_dateinterval.js');
 				$res .= '</td>';
+				break;
+
+			case 'RICHEDIT':
+				$res .= '<td>'.$e['str'].'</td>';
+				$res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
+
+				$res .=
+				'<script type="text/javascript">'.
+				//'var myEditor = new YAHOO.widget.Editor("'.$e['name'].'", {'.
+				'var myEditor = new YAHOO.widget.SimpleEditor("'.$e['name'].'", {'.
+				'width: "'.$e['width'].'px",'.
+				'height: "'.$e['height'].'px",'.
+				'dompath: true,'. //Turns on the bar at the bottom
+				'animate: true,'. //Animates the opening, closing and moving of Editor windows
+				'handleSubmit: true,'. //editor will attach itself to the textareas parent form's submit handler
+				'});'.
+				'myEditor.render();'.
+				'</script>';
 				break;
 
 			case 'CAPTCHA':
