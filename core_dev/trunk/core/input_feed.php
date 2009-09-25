@@ -4,434 +4,84 @@
  *
  * Simple feed (RSS, ATOM) and playlist (ASX, M3U) reader
  *
- * RSS: http://en.wikipedia.org/wiki/Rss
- * ATOM: http://en.wikipedia.org/wiki/Atom_(standard)
- * ASX: http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
- *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//TODO: use input_xml for parsing
+require_once('client_http.php');
 
-//TODO: extend callback to allow mapping of special fields to standard ones, such as "<svtplay:xmllink svtplay:type="titles">http://xml.svtplay.se/v1/titles/102897</svtplay:xmllink>" to "guid"
+require_once('input_rss.php');
+require_once('input_atom.php');
 
-require_once('client_http.php'); //for is_url()
+require_once('input_asx.php'); //XXX: FIXME use in io_playlist instead
+require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
+
+//XXX TODO add input_xspf.php support
 
 class input_feed
 {
-	private $inside_item = false;
-	private $current_tag = '';
+	private $sort = true; ///< sort output array
+	private $http;
 
-	private $link, $title, $desc, $pubDate, $guid;
-	private $attrs;
-	private $video_url, $video_type, $duration;
-	private $image_url, $image_type;
-	private $entries;
-	private $callback = '';
-	private $guid2 = ''; //XXX remove this hack
-
-	private $sort = true;	///< sort output array?
-
-	function setSort($n) { $this->sort = $n; }
-
-	function RSSstartElement($parser, $name, $attrs = '')
+	function __construct()
 	{
-		$this->current_tag = $name;
-		$this->attrs = $attrs;
-
-		if ($this->current_tag == 'ITEM') {
-			$this->inside_item = true;
-		}
+		$this->http = new http();
 	}
 
-	function RSSendElement($parser, $tagName, $attrs = '')
-	{
-		if ($tagName == 'ITEM') {
-			$row['link']     = trim($this->link);
-			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
-			$row['desc']     = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
-			if ($row['title'] == $row['desc']) $row['desc'] = '';
-			$row['pubdate']  = strtotime(trim($this->pubDate));
-			$row['guid']     = trim($this->guid);
-			$row['guid2']    = trim($this->guid2); //XXX remove hack!
-			$row['duration'] = trim($this->duration);
-			if ($this->video_url)  $row['video'] = $this->video_url;
-			if ($this->video_type) $row['video_type'] = $this->video_type;
-			if ($this->image_url)  $row['image'] = $this->image_url;
-			if ($this->video_type) $row['image_type'] = $this->image_type;
+	/**
+	 * @param $s cache time in seconds; max 2592000 (30 days)
+	 */
+	function setCacheTime($s) { $this->http->setCacheTime($s); }
 
-			if ($this->callback) call_user_func($this->callback, $row);
-			$this->entries[] = $row;
+	function setSort($bool) { $this->sort = $bool; }
 
-			$this->attrs = '';
-			$this->inside_item = false;
-
-			$this->link = '';
-			$this->title = '';
-			$this->desc = '';
-			$this->pubDate = '';
-			$this->guid = '';
-			$this->guid2 = ''; //XXX rmeove hack!
-			$this->video_url  = '';
-			$this->video_type = '';
-			$this->duration   = 0;
-			$this->image_url  = '';
-			$this->image_type = '';
-		}
-	}
-
-	function RSScharacterData($parser, $data)
-	{
-		if (!$this->inside_item) return;
-		switch ($this->current_tag) {
-		case 'LINK':
-			$this->link .= $data;
-			break;
-
-		case 'TITLE':
-			$this->title .= $data;
-			break;
-
-		case 'DESCRIPTION':
-			$this->desc .= $data;
-			break;
-
-		case 'PUBDATE':
-			$this->pubDate .= $data;
-			break;
-
-		case 'GUID':
-			$this->guid .= $data;
-			break;
-
-		case 'SVTPLAY:XMLLINK':
-			//XXX hack! fix callback mechanism to handle this
-			$this->guid2 .= $data;
-			break;
-
-		case 'MEDIA:THUMBNAIL':
-			if (!$this->image_url) { //XXX prefer full image over thumbnails
-				$this->image_url  = $this->attrs['URL'];
-				$this->image_type = 'image/jpeg';//$this->attrs['TYPE'];
-			}
-			break;
-
-		case 'MEDIA:CONTENT':
-			switch ($this->attrs['TYPE']) {
-			case 'video/x-flv':
-				if (substr($this->attrs['URL'],0,4) != 'rtmp' || !$this->video_url) { //XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
-					$this->video_url  = $this->attrs['URL'];
-					$this->video_type = $this->attrs['TYPE'];
-					if (!empty($this->attrs['DURATION']))
-						$this->duration = $this->attrs['DURATION'];
-				}
-				break;
-
-			case 'video/x-ms-asf':
-				if ($this->video_url && substr($this->attrs['URL'], -4) == '.asx') break; //skip .asx files if other was found
-				$this->video_url  = $this->attrs['URL'];
-				$this->video_type = $this->attrs['TYPE'];
-				if (!empty($this->attrs['DURATION']))
-					$this->duration = $this->attrs['DURATION'];
-				break;
-
-			case 'image/jpeg':
-				$this->image_url  = $this->attrs['URL'];
-				$this->image_type = $this->attrs['TYPE'];
-				break;
-
-			case 'text/html':
-				//<media:content type="text/html" medium="document" url="http://svt.se/2.22620/1.1652031/krigsfartyg_soker_efter_arctic_sea">
-				break;
-
-			default:
-				echo "unknown MEDIA:CONTENT: ".$this->attrs['TYPE']."\n";
-				print_r($this->attrs);
-				break;
-			}
-		}
-
-	}
-
-
-	function parseRSS($data, $callback = '')
-	{
-		if (is_url($data)) {
-			$u = new http($data);
-			$data = $u->fetch();
-		}
-
-		$this->entries = array();
-
-		$parser = xml_parser_create();
-		xml_set_object($parser, $this);
-		xml_set_element_handler($parser, 'RSSstartElement', 'RSSendElement');
-		xml_set_character_data_handler($parser, 'RSScharacterData');
-
-		if (function_exists($callback)) $this->callback = $callback;
-
-		if (!xml_parse($parser, $data, true)) {
-			echo "parseRSS XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
-		}
-		xml_parser_free($parser);
-
-		if ($this->sort) uasort($this->entries, 'feed_sort_desc');
-		return $this->entries;
-	}
-
-	function ATOMstartElement($parser, $name, $attrs = '')
-	{
-		$this->current_tag = $name;
-		$this->attrs = $attrs;
-
-		if ($this->current_tag == 'ENTRY') {
-			$this->inside_item = true;
-		}
-	}
-
-	function ATOMendElement($parser, $tagName, $attrs = '')
-	{
-		if ($tagName == 'LINK' && $this->inside_item) {
-			switch ($this->attrs['REL']) {
-			case 'alternate':
-				$this->link = $this->attrs['HREF'];
-				break;
-			case 'enclosure':
-				switch ($this->attrs['TYPE']) {
-				case 'video/x-flv':
-					$this->video_url  = $this->attrs['HREF'];
-					$this->video_type = $this->attrs['TYPE'];
-					$this->duration   = $this->attrs['LENGTH'];
-					break;
-
-				case 'image/jpeg':
-					$this->image_url  = $this->attrs['HREF'];
-					$this->image_type = $this->attrs['TYPE'];
-					break;
-
-				default:
-					echo "unknown enclosure mimetype: ".$this->attrs['TYPE']."\n";
-					die;
-					break;
-				}
-				break;
-			case 'replies':
-				//FIXME: handle
-				break;
-			case 'edit': //XXX ???
-			case 'self': //XXX ???
-				break;
-			default:
-				echo "unknown link type: ".$this->attrs['REL']."\n";
-				die;
-			}
-		}
-		if ($tagName == 'ENTRY') {
-			$row['link']     = trim($this->link);
-			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
-			$row['desc']     = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
-			if ($row['title'] == $row['desc']) $row['desc'] = '';
-			$row['pubdate']  = strtotime(trim($this->pubDate));
-			$row['guid']     = trim($this->guid);
-			//$row['guid2']    = trim($this->guid2); //XXX remove hack!
-			$row['duration'] = trim($this->duration);
-			if ($this->video_url)  $row['video'] = $this->video_url;
-			if ($this->video_type) $row['video_type'] = $this->video_type;
-			if ($this->image_url)  $row['image'] = $this->image_url;
-			if ($this->video_type) $row['image_type'] = $this->image_type;
-
-			if ($this->callback) call_user_func($this->callback, $row);
-			$this->entries[] = $row;
-
-			$this->attrs = '';
-			$this->inside_item = false;
-
-			$this->link = '';
-			$this->title = '';
-			$this->desc = '';
-			$this->pubDate = '';
-			$this->guid = '';
-			//$this->guid2 = ''; //XXX rmeove hack!
-			$this->video_url  = '';
-			$this->video_type = '';
-			$this->duration   = 0;
-			$this->image_url  = '';
-			$this->image_type = '';
-		}
-	}
-
-	function ATOMcharacterData($parser, $data)
-	{
-		if (!$this->inside_item) return;
-		switch ($this->current_tag) {
-		case 'TITLE':
-			$this->title .= $data;
-			break;
-
-		case 'SUMMARY':
-			$this->desc .= $data;
-			break;
-
-		case 'UPDATED':
-			$this->pubDate .= $data;
-			break;
-
-		case 'ID':
-			$this->guid .= $data;
-			break;
-		}
-	}
-
-	function parseATOM($data, $callback = '')
-	{
-		if (is_url($data)) {
-			$u = new http($data);
-			$data = $u->fetch();
-		}
-
-		$this->entries = array();
-
-		$parser = xml_parser_create();
-		xml_set_object($parser, $this);
-		xml_set_element_handler($parser, 'ATOMstartElement', 'ATOMendElement');
-		xml_set_character_data_handler($parser, 'ATOMcharacterData');
-
-		if (function_exists($callback)) $this->callback = $callback;
-
-		if (!xml_parse($parser, $data, true)) {
-			echo "parseATOM XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
-		}
-		xml_parser_free($parser);
-
-		if ($this->sort) uasort($this->entries, 'feed_sort_desc');
-		return $this->entries;
-	}
-
-	function ASXstartElement($parser, $name, $attrs = '')
-	{
-		$this->current_tag = $name;
-		$this->attrs = $attrs;
-
-		if ($this->current_tag == 'ENTRY') {
-			$this->inside_item = true;
-		}
-	}
-
-	function ASXendElement($parser, $tagName, $attrs = '')
-	{
-		if ($tagName == 'ENTRY') {
-			$row['link']     = trim($this->link);
-			$row['title']    = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
-
-			if ($this->callback) call_user_func($this->callback, $row);
-			$this->entries[] = $row;
-
-			$this->attrs = '';
-			$this->inside_item = false;
-
-			$this->link = '';
-			$this->title = '';
-		}
-	}
-
-	function ASXcharacterData($parser, $data)
-	{
-		if (!$this->inside_item) return;
-		switch ($this->current_tag) {
-		case 'REF':
-			$this->link .= $this->attrs['HREF'];
-			break;
-
-		case 'TITLE':
-			$this->title .= $data;
-			break;
-
-		case 'AUTHOR'://XXX save
-			break;
-
-		case 'COPYRIGHT': //XXX save
-			break;
-		}
-	}
-
-	function parse($data, $callback = '')
-	{
-		if (strpos($data, '<rss ') !== false) {
-			return $this->parseRSS($data, $callback);
-		} else if (strpos($data, '<feed ') !== false) {
-			return $this->parseATOM($data, $callback);
-		} else if (strpos($data, '<asx ') !== false) {
-			return $this->parseASX($data, $callback);
-		} else if (strpos($data, '#EXTM3U') !== false) {
-			return $this->parseM3U($data, $callback);
-		}
-
-		echo "ERROR: unhandled feed: ".substr($data, 0, 200)." ...\n";
-		die;
-	}
-
-	function fetch($url, $callback = '')
+	function getList($url, $callback = '')
 	{
 		if (!is_url($url)) return false;
 
-		$u = new http($url);
-		$data = $u->get();
+		$data = $this->http->get($url);
 
-		return $this->parse($data, $callback);
+		$entries = $this->parse($data, $callback);
+		if (!$entries) return false;
+
+		if ($this->sort) uasort($entries, array($this, 'sortListDesc'));
+
+		return $entries;
 	}
 
-	function parseASX($data, $callback = '')
+	/**
+	 * Parses input $data if autodetected
+	 */
+	private function parse($data, $callback = '')
 	{
-		$this->entries = array();
-
-		$parser = xml_parser_create();
-		xml_set_object($parser, $this);
-		xml_set_element_handler($parser, 'ASXstartElement', 'ASXendElement');
-		xml_set_character_data_handler($parser, 'ASXcharacterData');
-
-		if (function_exists($callback)) $this->callback = $callback;
-
-		if (!xml_parse($parser, $data, true)) {
-			echo "parseASX XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
-		}
-		xml_parser_free($parser);
-
-		if ($this->sort) uasort($this->entries, 'feed_sort_desc');
-		return $this->entries;
-	}
-
-	function parseM3U($data, $callback = '')
-	{
-		$this->entries = array();
-
-		//if (function_exists($callback)) $this->callback = $callback;
-
-		$rows = explode("\n", $data);
-		foreach ($rows as $row) {
-			$p = explode(':', $row, 2);
-			switch ($p[0]) {
-			case '#EXTM3U': case '': break;
-			case '#EXTINF':
-				$x = explode(',', $p[1], 2);
-				$ent['length'] = ($x[0] != '-1' ? $x[0] : '');
-				$ent['title']  = $x[1];
-				break;
-
-			default:
-				$ent['link'] = $row;
-				$this->entries[] = $ent;
-				unset($ent);
-				break;
-			}
+		if (strpos($data, '<rss ') !== false) {
+			$rss = new input_rss($data, $callback);
+			return $rss->getEntries();
+		} else if (strpos($data, '<feed ') !== false) {
+			$atom = new input_atom($data, $callback);
+			return $atom->getEntries();
+		} else if (strpos($data, '<asx ') !== false) {
+			$asx = new input_asx($data, $callback);
+			return $asx->getEntries();
+		} else if (strpos($data, '#EXTM3U') !== false) {
+			$m3u = new input_m3u($data, $callback);
+			return $m3u->getEntries();
 		}
 
-		return $this->entries;
+		echo "input_feed->parse error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
+		return false;
 	}
-}
 
-function feed_sort_desc($a, $b)
-{
-    return ($a['pubdate'] > $b['pubdate']) ? -1 : 1;
+	/**
+	 * List sort filter
+	 * @return Internal list, sorted descending by published date
+	 */
+	private function sortListDesc($a, $b)
+	{
+		if (empty($a['pubdate']) || empty($b['pubdate'])) return -1;
+
+		return ($a['pubdate'] > $b['pubdate']) ? -1 : 1;
+	}
+
 }
 
 ?>

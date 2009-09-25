@@ -9,6 +9,8 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+require_once('core.php'); //dln()
+
 require_once('class.Cache.php');
 require_once('network.php');
 
@@ -26,11 +28,24 @@ class http
 	function __construct($url = '')
 	{
 		if (!function_exists('curl_init')) {
-			echo "ERROR: php5-curl missing\n";
+			echo "ERROR: php5-curl missing".dln();
 			return false;
 		}
 
 		if ($url) $this->parse_url($url);
+	}
+
+	/**
+	 * Returns a string url of current client location
+	 */
+	function getUrl()
+	{
+		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
+
+		if (!empty($this->param))
+			$res .= '?'.http_build_query($this->param);
+
+		return $res;
 	}
 
 	function getBody() { return $this->body; }
@@ -69,6 +84,8 @@ class http
 
 		if (!empty($parsed['query']))
 			parse_str($parsed['query'], $this->param);
+
+		return true;
 	}
 
 	/**
@@ -99,12 +116,13 @@ class http
 	 * Fetches the data of the web resource
 	 * uses HTTP AUTH if username is set
 	 */
-	function get($head_only = false, $post_params = array())
+	function get($url = '', $head_only = false, $post_params = array())
 	{
-		$url = $this->compact();
-		if (!is_url($url)) {
+		if ($url && !$this->parse_url($url)) {
 			echo "http->get: bad url: ".$url.dln();
 			return false;
+		} else {
+			$url = $this->getUrl();
 		}
 
 		$ch = curl_init($url);
@@ -113,8 +131,7 @@ class http
 			return false;
 		}
 
-		$u = parse_url($url);
-		if ($u['scheme'] == 'https') {
+		if ($this->scheme == 'https') {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		}
@@ -126,7 +143,7 @@ class http
 
 		if (!$this->username && empty($post_params)) {
 			$cache = new cache();
-			if ($this->debug) $cache->debug = true;
+			if ($this->debug) $cache->setDebug();
 			$key_head = 'url_head//'.htmlspecialchars($url);
 			$key_body = 'url//'.htmlspecialchars($url);
 
@@ -206,19 +223,6 @@ class http
 
 		if (!empty($this->param))
 			$res .= '?'.htmlspecialchars(http_build_query($this->param));
-
-		return $res;
-	}
-
-	/**
-	 * Outputs URL in a compact format (& => &)
-	 */
-	function compact()
-	{
-		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
-
-		if (!empty($this->param))
-			$res .= '?'.http_build_query($this->param);
 
 		return $res;
 	}

@@ -25,8 +25,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//XXX rename to io_playlist.php
 //XXX ability to fetch xspf from web
+
+require_once('object_PlaylistItem.php');
 
 class Playlist
 {
