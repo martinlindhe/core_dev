@@ -18,17 +18,21 @@
 //FIXME ubuntu: for sftp support, curl needs to be recompiled with sftp support (ubuntu 9.04)
 //      https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
+//FIXME finish up rewrite to work like this: queue up a series of commands to perform, and in ftp->exec() perform these, either when object is destructed or called explicit. also clear internal curl queue after execution. currently untested with getFile & getData
+
+
 //TODO implement functions when needed, such as mkdir(), rmdir(), delete()
 
 class ftp
 {
 	private $scheme, $host;
-	private $port = 21, $path = '/';
+	private $port     = 21;
+	private $path     = '/';
 	private $username = 'anonymous';
 	private $password = 'anon@ftp.com';
-
-	private $curl  = false; ///< curl handle
-	private $debug = false;
+	private $curl     = false; ///< curl handle
+	private $debug    = false;
+	private $executed = false; ///< has the series of curl commands been executed?
 
 	function __construct($address = '')
 	{
@@ -43,6 +47,74 @@ class ftp
 	function __destruct()
 	{
 		$this->close();
+	}
+
+
+	/**
+	 * Connects to the server
+	 */
+	function connect()
+	{
+		if ($this->curl) return true;
+
+		$this->curl = curl_init();
+
+		if ($this->debug)
+			curl_setopt($this->curl, CURLOPT_VERBOSE, true);
+
+		switch ($this->scheme) {
+		case 'ftp':  break;
+		case 'sftp': break;
+
+		case 'ftpes':
+			$this->scheme = 'ftp';
+			curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
+			curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($this->curl, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
+			curl_setopt($this->curl, CURLOPT_FTP_SSL, CURLFTPSSL_ALL);
+			break;
+
+		default:
+			die('ftp class: unhandled scheme '.$this->scheme.dln());
+		}
+
+		return true;
+	}
+
+	/**
+	 * Closes connection to the ftp server
+	 */
+	function close()
+	{
+		if (!$this->curl) return;
+		$this->exec();
+
+		if ($this->debug) {
+			print_r(curl_getinfo($this->curl));
+			echo "cURL error number:" .curl_errno($this->curl).dln();
+			echo "cURL error:" . curl_error($this->curl).dln();
+			print_r(curl_version());
+		}
+
+		curl_close($this->curl);
+		$this->curl = false;
+	}
+
+	/**
+	 * Executes the serie of curl commands. FIXME getXX functions dont play with this...
+	 */
+	function exec()
+	{
+		if ($this->executed) return true;
+
+		curl_exec($this->curl);
+
+        if (curl_errno($this->curl)) {
+        	echo "ftp exec error: ".curl_error($this->curl).dln();
+			return false;
+        }
+        $this->executed = true;
+        return true;
 	}
 
 	/**
@@ -81,55 +153,6 @@ class ftp
 			$this->path = $remote_path;
 		else
 			$this->path = '/'.$remote_path;
-	}
-
-	/**
-	 * Connects to the server
-	 */
-	function connect()
-	{
-		if ($this->curl) return true;
-
-		$this->curl = curl_init();
-
-		if ($this->debug)
-			curl_setopt($this->curl, CURLOPT_VERBOSE, true);
-
-		switch ($this->scheme) {
-		case 'ftp':  break;
-		case 'sftp': break;
-
-		case 'ftpes':
-			$this->scheme = 'ftp';
-			curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($this->curl, CURLOPT_FTPSSLAUTH, CURLFTPAUTH_TLS);
-			curl_setopt($this->curl, CURLOPT_FTP_SSL, CURLFTPSSL_ALL);
-			break;
-
-		default:
-			die('ftp class: unhandled scheme '.$this->scheme.dln());
-		}
-
-		return true;
-	}
-
-	/**
-	 * Closes connection to the ftp server
-	 */
-	function close()
-	{
-		if (!$this->curl) return;
-
-		if ($this->debug) {
-			print_r(curl_getinfo($this->curl));
-			echo "cURL error number:" .curl_errno($this->curl).dln();
-			echo "cURL error:" . curl_error($this->curl).dln();
-			print_r(curl_version());
-		}
-
-		curl_close($this->curl);
-		$this->curl = false;
 	}
 
 	/**
@@ -231,13 +254,7 @@ class ftp
 		curl_setopt($this->curl, CURLOPT_UPLOAD, 1);
 		curl_setopt($this->curl, CURLOPT_INFILE, $fp);
 		curl_setopt($this->curl, CURLOPT_INFILESIZE, filesize($local_file));
-		curl_exec($this->curl);
-		fclose($fp);
-
-        if (curl_errno($this->curl)) {
-        	echo "ftp upload error: ".curl_error($this->curl).dln();
-			return false;
-        }
+		//fclose($fp);
 
 		return true;
 	}
@@ -247,9 +264,11 @@ class ftp
 	 */
 	function rename($remote_src, $remote_dst)
 	{
+//FIXME: when called alone, this appears to work but remote directory listing or file content get echoed to screen ?????
+
 		if (!$this->connect()) return false;
 
-		$this->setPath($remote_src);
+		//XXX useless?:
 		curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
 		if ($this->scheme == 'sftp') {
@@ -264,12 +283,6 @@ class ftp
 		}
 
 		curl_setopt($this->curl, CURLOPT_POSTQUOTE, $buf);
-		curl_exec($this->curl);
-
-        if (curl_errno($this->curl)) {
-        	echo "ftp rename error: ".curl_error($this->curl).dln();
-			return false;
-        }
 		return true;
 	}
 
