@@ -61,7 +61,7 @@ The link will expire in __EXPIRETIME__";
 			Users::getName($_id),
 			client_ip(),
 			$code,
-			$config['app']['full_url']."activate.php?id=".$_id."&code=".$code,
+			xhtmlGetUrl("activate.php?id=".$_id."&code=".$code),
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);
 		$msg = preg_replace($pattern, $replacement, $this->mail_activate_msg);
@@ -130,7 +130,7 @@ The link will expire in __EXPIRETIME__";
 		$replacement = array(
 			Users::getName($_id),
 			client_ip(),
-			$config['app']['full_url']."reset_password.php?id=".$_id."&code=".$code,
+			xhtmlGetUrl("reset_password.php?id=".$_id."&code=".$code),
 			shortTimePeriod($config['activate']['expire_time_email'])
 		);
 		$msg = preg_replace($pattern, $replacement, $this->mail_password_msg);

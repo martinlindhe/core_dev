@@ -1202,7 +1202,7 @@ function shareForumItem($itemId)
 			}
 
 			$mail .= $h->session->username." har skickat dig den här länken till dig från communityt\n";
-			$mail .= "på vår sajt, ".$config['app']['full_url']."/.\n\n";
+			$mail .= "på vår sajt, ".xhtmlGetUrl('/').".\n\n";
 
 			if ($item['authorId']) {
 				$mail .= $item['itemSubject'].' av '.$item['authorName'].', '.formatTime($item['timeCreated']).":\n";
@@ -1211,7 +1211,7 @@ function shareForumItem($itemId)
 			}
 
 			$mail .= "För att läsa inlägget i sin helhet, klicka på länken nedan:\n";
-			$mail .= $config['app']['full_url']."/forum.php?id=".$itemId."#".$itemId."\n\n";
+			$mail .= xhtmlGetUrl('forum.php?id='.$itemId.'#'.$itemId)."\n\n";
 
 			if (!empty($_POST['fshare_comment'])) {
 				$mail .= "\n";
