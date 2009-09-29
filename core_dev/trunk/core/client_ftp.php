@@ -6,22 +6,17 @@
  *
  * URL schemes:
  * ftp:// - Classic FTP
+ * sftp:// - FTP over SSH (requires curl compiled --with-libssh2)
  * ftpes:// - FTP over Explicit SSL/TLS
  * ftps:// - FTP over Implicit SSL/TLS (XXX NOT SUPPORTED) - vsftp 2.0.7 support this, try it out
- * sftp:// - FTP over SSH (requires curl compiled --with-libssh2)
  *
  * http://en.wikipedia.org/wiki/FTPS
  *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//FIXME ubuntu: for sftp support, curl needs to be recompiled with sftp support (ubuntu 9.04)
-//      https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
-
-//FIXME finish up rewrite to work like this: queue up a series of commands to perform, and in ftp->exec() perform these, either when object is destructed or called explicit. also clear internal curl queue after execution. currently untested with getFile & getData
-
-
-//TODO implement functions when needed, such as mkdir(), rmdir(), delete()
+//FIXME: for sftp support, curl needs to be compiled with sftp support
+//ubuntu bug: https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
 class ftp
 {
@@ -32,7 +27,6 @@ class ftp
 	private $password = 'anon@ftp.com';
 	private $curl     = false; ///< curl handle
 	private $debug    = false;
-	private $executed = false; ///< has the series of curl commands been executed?
 
 	function __construct($address = '')
 	{
@@ -98,23 +92,6 @@ class ftp
 
 		curl_close($this->curl);
 		$this->curl = false;
-	}
-
-	/**
-	 * Executes the serie of curl commands. FIXME getXX functions dont play with this...
-	 */
-	function exec()
-	{
-		if ($this->executed) return true;
-
-		curl_exec($this->curl);
-
-        if (curl_errno($this->curl)) {
-        	echo "ftp exec error: ".curl_error($this->curl).dln();
-			return false;
-        }
-        $this->executed = true;
-        return true;
 	}
 
 	/**
@@ -221,13 +198,14 @@ class ftp
 	 *
 	 * @param $remote_path remote path to store data in, including filename
 	 * @param $data content to store
+	 * @param $temp_file (optional) use temporary filename on remote server during upload
 	 */
-	function putData($remote_path, $data)
+	function putData($remote_path, $data, $tmp_name = '')
 	{
 		$tmp_file = tempnam('/tmp', 'cdFtp_');
 		file_put_contents($tmp_file, $data);
 
-		return $this->putFile($remote_path, $tmp_file);
+		return $this->putFile($remote_path, $tmp_file, $tmp_name);
 	}
 
 	/**
@@ -235,8 +213,9 @@ class ftp
 	 *
 	 * @param $remote_path destination path
 	 * @param $local_file path to local file
+	 * @param $temp_file (optional) use temporary filename on remote server during upload
 	 */
-	function putFile($remote_file, $local_file)
+	function putFile($remote_file, $local_file, $temp_file = '')
 	{
 		if (!$this->connect()) return false;
 
@@ -247,42 +226,41 @@ class ftp
 
 		if ($this->debug) echo 'putFile md5: '.md5_file($local_file).dln();
 
-		$this->setPath($remote_file);
+		if ($temp_file)
+			$this->setPath($temp_file);
+		else
+			$this->setPath($remote_file);
+
 		curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
 		$fp = fopen($local_file, 'r');
 		curl_setopt($this->curl, CURLOPT_UPLOAD, 1);
 		curl_setopt($this->curl, CURLOPT_INFILE, $fp);
 		curl_setopt($this->curl, CURLOPT_INFILESIZE, filesize($local_file));
-		//fclose($fp);
 
-		return true;
-	}
+		if ($temp_file) {
+			if ($this->scheme == 'sftp') {
+				$buf = array(
+				"rename ".$temp_file." ".$remote_file
+				);
+			} else {
+				$buf = array(
+				"RNFR ".$temp_file,
+				"RNTO ".$remote_file
+				);
+			}
 
-	/**
-	 * Renames a file or directory on the server
-	 */
-	function rename($remote_src, $remote_dst)
-	{
-//FIXME: when called alone, this appears to work but remote directory listing or file content get echoed to screen ?????
-
-		if (!$this->connect()) return false;
-
-		//XXX useless?:
-		curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
-
-		if ($this->scheme == 'sftp') {
-			$buf = array(
-			"rename ".$remote_src." ".$remote_dst
-			);
-		} else {
-			$buf = array(
-			"RNFR ".$remote_src,
-			"RNTO ".$remote_dst
-			);
+			curl_setopt($this->curl, CURLOPT_POSTQUOTE, $buf);
 		}
 
-		curl_setopt($this->curl, CURLOPT_POSTQUOTE, $buf);
+		curl_exec($this->curl);
+		fclose($fp);
+
+        if (curl_errno($this->curl)) {
+        	echo "ftp exec error: ".curl_error($this->curl).dln();
+			return false;
+        }
+
 		return true;
 	}
 
