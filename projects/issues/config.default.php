@@ -17,7 +17,6 @@ require_once('functions_news.php');
 require_once('functions_todo.php');
 
 $config['app']['web_root'] = '/issues/';
-$config['app']['full_url'] = 'http://projects.x/issues/';
 
 $config['default_title'] = 'GIR - Issue Tracker';
 

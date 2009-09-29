@@ -8,7 +8,6 @@ $config['core']['web_root'] = '/core_dev/';
 $config['core']['full_url'] = 'http://process1.x'.$config['core']['web_root'];
 
 $config['app']['web_root'] = '/';
-$config['app']['full_url'] = 'http://process1.x'.$config['app']['web_root'];
 $config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
 
 $config['language'] = 'se';
