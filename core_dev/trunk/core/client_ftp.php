@@ -81,7 +81,6 @@ class ftp
 	function close()
 	{
 		if (!$this->curl) return;
-		$this->exec();
 
 		if ($this->debug) {
 			print_r(curl_getinfo($this->curl));
