@@ -270,9 +270,11 @@ class ftp
 	/**
 	 * Returns remote directory listing
 	 */
-	function getDir()
+	function getDir($remote_path = '')
 	{
 		if (!$this->connect()) return false;
+
+		if ($remote_path) $this->setPath($remote_path);
 
 		curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
@@ -291,19 +293,19 @@ class ftp
 		//-r--r--r--    1 1137     1100       439571 Oct  3 16:28 CHECKSUMS.md5
 
 		$list = explode("\n", trim($raw));
-		$pattern = "/[dwrx\-]{10}/";
 
 		$res = array();
 
 		foreach($list as $file)
 		{
 			$file = preg_split("/ /", $file, 20, PREG_SPLIT_NO_EMPTY);
+			if ($file[8] == '.' || $file[8] == '..') continue;
 
 			$row = array();
-			$row['modtime']  = strtotime($file[5].' '.$file[6].' '.$file[7]);
-			$row['filename'] = $this->getPath().$file[8];
-			$row['size']     = $file[4];
-			$row['mode']     = $file[0];
+			$row['mtime'] = strtotime($file[5].' '.$file[6].' '.$file[7]);
+			$row['name']  = $file[8];
+			$row['size']  = $file[4];
+			$row['mode']  = $file[0];
 
 			if ($row['mode']{0} == 'd') {
 				$row['is_file'] = false;
