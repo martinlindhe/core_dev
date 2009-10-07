@@ -18,6 +18,8 @@
 //FIXME: for sftp support, curl needs to be compiled with sftp support
 //ubuntu bug: https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
+//XXX: see curl_multi_exec() for performing multiple operations
+
 class ftp
 {
 	private $scheme, $host;
@@ -45,7 +47,7 @@ class ftp
 
 
 	/**
-	 * Connects to the server
+	 * Connects to the ftp server
 	 */
 	function connect()
 	{
@@ -130,6 +132,8 @@ class ftp
 		else
 			$this->path = '/'.$remote_path;
 	}
+
+	function getPath() { return $this->path; }
 
 	/**
 	 * Get a file from a FTP server
@@ -261,6 +265,58 @@ class ftp
         }
 
 		return true;
+	}
+
+	/**
+	 * Returns remote directory listing
+	 */
+	function getDir()
+	{
+		if (!$this->connect()) return false;
+
+		curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
+
+		curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
+
+		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+		$raw = curl_exec($this->curl);
+
+		if (curl_errno($this->curl)) {
+			echo "ftp download error: ".curl_error($this->curl).dln();
+			return false;
+		}
+
+		//  mode        ?   ?        ?          size    mtime      filename
+		//drwxrwxr-x    2 1137     1100         2048 Apr  4  2009 slackware
+		//-r--r--r--    1 1137     1100       439571 Oct  3 16:28 CHECKSUMS.md5
+
+		$list = explode("\n", trim($raw));
+		$pattern = "/[dwrx\-]{10}/";
+
+		$res = array();
+
+		foreach($list as $file)
+		{
+			$file = preg_split("/ /", $file, 20, PREG_SPLIT_NO_EMPTY);
+
+			$row = array();
+			$row['modtime']  = strtotime($file[5].' '.$file[6].' '.$file[7]);
+			$row['filename'] = $this->getPath().$file[8];
+			$row['size']     = $file[4];
+			$row['mode']     = $file[0];
+
+			if ($row['mode']{0} == 'd') {
+				$row['is_file'] = false;
+				$row['is_dir']  = true;
+			} else {
+				$row['is_file'] = true;
+				$row['is_dir']  = false;
+			}
+
+			$res[] = $row;
+		}
+
+		return $res;
 	}
 
 }
