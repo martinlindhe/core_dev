@@ -525,4 +525,28 @@ function jsArray($name, $list) {
 
 	return $res;
 }
+
+/**
+ * Generates XML tags from an array of values
+ *
+ * @param $params array with params (Name=>Value) for each tag
+ */
+function toXmlTags($tagname, $params)
+{
+	if (!is_array($params)) die('toXmlTags need array with params!');
+
+	$res = '';
+	foreach ($params as $p) {
+
+		$res .= '<'.$tagname;
+		foreach ($p as $param_name => $param_val) {
+			$res .= ' '.$param_name.'="'.$param_val.'"';
+		}
+
+		$res .= '/>'."\n";
+	}
+
+	return $res;
+}
+
 ?>

@@ -40,6 +40,14 @@ class Timestamp
 	}
 
 	/**
+	 * Returns time in MySQL "datetime" format
+	 */
+	function getSqlDateTime()
+	{
+		return date('Y-m-d H:i:s', $this->ts);
+	}
+
+	/**
 	 * Formats timestamp according to RFC 882
 	 * Example: Fri, 19 Dec 2008 16:50:19 +0100
 	 *
