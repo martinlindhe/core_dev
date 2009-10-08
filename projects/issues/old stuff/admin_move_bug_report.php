@@ -1,13 +1,13 @@
-<?
+<?php
 	include_once("functions/include_all.php");
 	if (!$_SESSION["superUser"]) { header("Location: index.php"); die; }
 
 	if (isset($_GET["id"])) {
 		$bugId = $_GET["id"];
-		
-		
+
+
 		if (isset($_POST["desc"])) {
-			
+
 			$pr = moveBugReport($db, $_SESSION["userId"], $bugId, $_POST["creator"], $_POST["desc"], $_POST["details"], $_POST["timestamp"], $_POST["itemCategory"], $_POST["listId"]);
 
 			include("design_head.php");
@@ -16,7 +16,7 @@
 			include("design_foot.php");
 			die;
 		}
-		
+
 	} else {
 		header("Location: admin_bug_reports.php"); die;
 	}
@@ -36,7 +36,7 @@
 	echo "<input name=\"creator\" type=\"hidden\" value=\"".$item["bugCreator"]."\">";
 	echo "Description: <input size=40 type=\"text\" name=\"desc\"><br>";
 	echo "<textarea name=\"details\" cols=60 rows=8>".$item["bugDesc"]."</textarea><br>";
-	
+
 	echo "Category: ";
 	echo "<select name=\"itemCategory\">";
 		echo "<option>";
@@ -54,7 +54,7 @@
 	echo "</select><br>";
 	echo "<input type=\"submit\" value=\"Move bug\"><br>";
 	echo "</form>";
-	
+
 	echo "<a href=\"admin_bug_reports.php\">&raquo; Back to Bug Reports</a><br>";
 	echo "<a href=\"admin.php\">&raquo; Back to Administration screen</a><br>";
 

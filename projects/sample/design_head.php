@@ -18,11 +18,11 @@ echo $header->render();
 ?>
 <div id="header">
 	<div id="header-logo">
-		<img src="<?=$config['app']['web_root']?>gfx/logo.png" alt="Sample Site"/>
+		<img src="<?php echo $config['app']['web_root']?>gfx/logo.png" alt="Sample Site"/>
 	</div>
 	<div id="header-items">
-		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:About">About</a>
-		<a href="<?=$config['app']['web_root']?>wiki.php?Wiki:Help">Help</a>
+		<a href="<?php echo $config['app']['web_root']?>wiki.php?Wiki:About">About</a>
+		<a href="<?php echo $config['app']['web_root']?>wiki.php?Wiki:Help">Help</a>
 	</div>
 </div>
 <div id="leftmenu">

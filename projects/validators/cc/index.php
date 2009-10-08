@@ -26,7 +26,7 @@ if (!empty($_POST['cc'])) {
 Enter a credit card number:
 
 <form name="ccvalidate" method="post" action="">
-	<input name="cc" type="text" size="22" value="<?=$cc?>"/>
+	<input name="cc" type="text" size="22" value="<?php echo $cc?>"/>
 	<br/>
 	<input type="submit" class="button" value="Validate"/>
 </form>

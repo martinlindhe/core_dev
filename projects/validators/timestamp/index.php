@@ -1,9 +1,9 @@
 <?php
 /**
  * Convert timestamps to different formats
- *
- * \todo Validate that NTP conversion is correct
  */
+
+//TODO Validate that NTP conversion is correct
 
 require_once('config.php');
 
@@ -21,6 +21,6 @@ if (!empty($_POST['ts'])) {
 ?>
 
 <form method="post" action="">
-Timestamp: <input type="text" name="ts" size="15" value="<?=$ts->getUnix()?>"/>
+Timestamp: <input type="text" name="ts" size="15" value="<?php echo $ts->getUnix()?>"/>
 <input type="submit" class="button" value="Convert"/>
 </form>

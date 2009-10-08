@@ -22,8 +22,8 @@ Enter an acronym and choose the language you want.
 
 <form method="post" action="">
 	Acronym: <input type="text" name="acro"/><br/>
-	Language: <?=xhtmlSelectCategory(CATEGORY_LANGUAGE,0,'lang')?><br/>
-	Ammount: <?=xhtmlSelectNumeric('ammount',1,50)?><br/>
+	Language: <?php echo xhtmlSelectCategory(CATEGORY_LANGUAGE,0,'lang')?><br/>
+	Ammount: <?php echo xhtmlSelectNumeric('ammount',1,50)?><br/>
 	<input type="submit" class="button" value="Generate"/>
 </form>
 <?php

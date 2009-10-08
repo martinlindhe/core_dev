@@ -1,4 +1,4 @@
-<?
+<?php
 	include_once("functions/include_all.php");
 	if (!$_SESSION["superUser"]) { header("Location: index.php"); die; }
 
@@ -12,7 +12,7 @@
 	if (isset($_GET["id"])) {
 		/* Show a specific item */
 		$itemId = $_GET["id"];
-		
+
 		$item = getTodoItem($db, $itemId);
 		if (isset($_POST["changestatus"])) {
 			/* Change item status */
@@ -26,7 +26,7 @@
 			} else {
 				$comment="Status changed from ".$todo_item_status[$item["itemStatus"] ]." to ".$todo_item_status[ $_POST["changestatus"]]." by ".$_SESSION["userName"].".";
 			}
-			$item["itemStatus"] = $_POST["changestatus"]; //update changes			
+			$item["itemStatus"] = $_POST["changestatus"]; //update changes
 			addTodoItemComment($db, 0, $itemId, $comment);
 
 		} else if (isset($_POST["assignto"])) {
@@ -34,20 +34,20 @@
 			assignTodoItem($db, $itemId, $_POST["assignto"]);
 			$item["itemStatus"] = TODO_ITEM_ASSIGNED; //update changes
 			$item["assignedTo"] = $_POST["assignto"]; //update changes
-			
+
 			$comment=$_SESSION["userName"]." assigned the task to ".getUserName($db, $_POST["assignto"]).".";
 			addTodoItemComment($db, 0, $itemId, $comment);
-			
+
 		} else if (isset($_GET["unassign"])) {
 			/* Unassign item */
 			if ($item["assignedTo"] == $_SESSION["userId"]) {
 				unassignTodoItem($db, $itemId);
-				
+
 				$comment=$_SESSION["userName"]." unassigned himself from the task.";
 				addTodoItemComment($db, 0, $itemId, $comment);
 				$item["assignedTo"] = 0;
 			}
-			
+
 		} else if (isset($_POST["addcomment"])) {
 			/* Add a comment */
 			addTodoItemComment($db, $_SESSION["userId"], $itemId, $_POST["addcomment"]);
@@ -90,7 +90,7 @@
 			if (!$item["assignedTo"]) {
 				if ($item["itemStatus"] != TODO_ITEM_CLOSED) {
 					echo "Nobody, assign to ";
-					
+
 					echo "<select name=\"assignto\">";
 					$adminlist=getAdministrators($db);
 					for ($i=0; $i<count($adminlist); $i++) {
@@ -121,7 +121,7 @@
 		echo "</form>";
 		echo "</table>";
 		echo "<br>";
-		
+
 		echo "<b class=\"topic\">Development log</b><br><br>";
 		$list = getTodoItemComments($db, $itemId);
 		for ($i=0; $i<count($list); $i++) {
@@ -150,12 +150,12 @@
 	} else if (isset($_GET["list"])) {
 		/* Show a item category */
 		$listId = $_GET["list"];
-		
+
 		if (isset($_GET["showclosed"])) {
 			/* Show only CLOSED items in this category */
 			echo "<b class=\"topic\">Administration screen - TODO list for '".$todo_list[$listId]."' category</b><br>";
 			echo "<b>OBSERVE - ONLY CLOSED ITEMS IN THIS LIST.</b><br><br>";
-			
+
 			$list = getClosedTodoItems($db, $listId);
 			for ($i=0; $i<count($list); $i++) {
 				printf("PR%04d: ", $list[$i]["itemId"] );
@@ -165,7 +165,7 @@
 
 			echo $lookup_pr;
 			echo "<br>";
-			
+
 			echo "<a href=\"admin_todo_lists.php?list=".$listId."\">&raquo; Back to TODO lists ".$todo_list[$listId]." index</a><br>";
 			echo "<a href=\"admin_todo_lists.php\">&raquo; Back to TODO lists index</a><br>";
 			echo "<a href=\"admin.php\">&raquo; Back to Administration screen</a><br>";
@@ -177,7 +177,7 @@
 			}
 
 			echo "<b class=\"topic\">Administration screen - TODO list for '".$todo_list[$listId]."' category</b><br><br>";
-		
+
 			$list = getTodoItems($db, $listId);
 			for ($i=0; $i<count($list); $i++) {
 				printf("PR%04d: ", $list[$i]["itemId"] );
@@ -188,7 +188,7 @@
 			if ($closeditems) {
 				echo "<a href=\"".$_SERVER["PHP_SELF"]."?list=".$listId."&showclosed=1\">&raquo; List closed items for this category</a><br>";
 			}
-		
+
 			echo "<form method=\"post\" action=\"".$_SERVER["PHP_SELF"]."?list=".$listId."\">";
 			echo "<b class=\"topic\">Add a item to the list</b><br><br>";
 			echo "Description: <input type=\"text\" name=\"desc\" size=45><br>";
@@ -200,28 +200,28 @@
 					echo "<option value=\"".$i."\">".$todo_item_category[$i];
 				}
 				echo "</select><br>";
-		
+
 			echo "<input type=\"submit\" value=\"Add item\">";
 			echo "</form>";
-		
+
 			echo $lookup_pr;
 			echo "<br>";
 
 			echo "<a href=\"admin_todo_lists.php\">&raquo; Back to TODO lists index</a><br>";
 			echo "<a href=\"admin.php\">&raquo; Back to Administration screen</a><br>";
 		}
-		
+
 	} else {
 		/* Show all categories */
 		echo "<b class=\"topic\">Administration screen - TODO lists</b><br>";
 		echo "Each category below contains it's own PR's, so one can easily<br>";
 		echo "focus on a particular part of the project.<br><br>";
-	
+
 		for ($i=0; $i<count($todo_list); $i++) {
 			echo "<a href=\"admin_todo_lists.php?list=".$i."\">".$todo_list[$i]."</a>";
 			echo " (".getTodoCategoryItemsCount($db, $i)." items)<br>";
 		}
-		
+
 		echo "<br>";
 		echo $lookup_pr;
 		echo "<br>";

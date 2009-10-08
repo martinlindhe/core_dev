@@ -44,13 +44,13 @@ echo '<select name="day">';
 for ($i = 1; $i <= 31; $i++) echo '<option value="'.($i<10?'0':'').$i.'"'.($i==$_day?' selected="selected"':'').'>'.($i<10?'0'.$i:$i).'</option>';
 echo '</select>';
 ?>
-<input name="ctrl" type="text" size="4" value="<?=$ctrl?>"/>
-<?=$generated?>
+<input name="ctrl" type="text" size="4" value="<?php echo $ctrl?>"/>
+<?php echo $generated?>
 <br/>
 
-<input type="radio" name="gender" id="gender2" value="<?=SSN_GENDER_FEMALE?>"<?if($_gender==SSN_GENDER_FEMALE || !$_gender) echo' checked="checked"';?>/>
+<input type="radio" name="gender" id="gender2" value="<?php echo SSN_GENDER_FEMALE?>"<?php if($_gender==SSN_GENDER_FEMALE || !$_gender) echo' checked="checked"';?>/>
 <label for="gender2">Kvinna</label>
-<input type="radio" name="gender" id="gender1" value="<?=SSN_GENDER_MALE?>"<?if($_gender==SSN_GENDER_MALE) echo' checked="checked"';?>/>
+<input type="radio" name="gender" id="gender1" value="<?php echo SSN_GENDER_MALE?>"<?php if($_gender==SSN_GENDER_MALE) echo' checked="checked"';?>/>
 <label for="gender1">Man</label>
 <br/>
 <input type="submit" class="button" value="Generera checksumma"/>
@@ -64,7 +64,7 @@ $ssn = (!empty($_POST['persnr'])) ? $_POST['persnr'] : '19630321-4032';	//random
 <br/><br/>
 Mata in ett personnummer för att verifiera om det är korrekt:
 <form method="post" action="">
-Personnummer: <input type="text" name="persnr" value="<?=$ssn?>" size="13"/>
+Personnummer: <input type="text" name="persnr" value="<?php echo $ssn?>" size="13"/>
 <?php
 
 $chkgender = (!empty($_POST['chkgender'])) ? $_POST['chkgender'] : 0;
@@ -80,11 +80,11 @@ if (!empty($_POST['persnr'])) {
 ?>
 	<br/>
 	Personnummret tillhör en
-	<input type="radio" name="chkgender" id="chkgender2" value="<?=SSN_GENDER_FEMALE?>"<?if($chkgender==SSN_GENDER_FEMALE) echo' checked="checked"';?>/>
+	<input type="radio" name="chkgender" id="chkgender2" value="<?php echo SSN_GENDER_FEMALE?>"<?php if($chkgender==SSN_GENDER_FEMALE) echo' checked="checked"';?>/>
 	<label for="chkgender2">Kvinna</label>
-	<input type="radio" name="chkgender" id="chkgender1" value="<?=SSN_GENDER_MALE?>"<?if($chkgender==SSN_GENDER_MALE) echo' checked="checked"';?>/>
+	<input type="radio" name="chkgender" id="chkgender1" value="<?php echo SSN_GENDER_MALE?>"<?php if($chkgender==SSN_GENDER_MALE) echo' checked="checked"';?>/>
 	<label for="chkgender1">Man</label>
-	<input type="radio" name="chkgender" id="chkgender0" value="<?=SSN_GENDER_UNKNOWN?>"<?if($chkgender==SSN_GENDER_UNKNOWN) echo' checked="checked"';?>/>
+	<input type="radio" name="chkgender" id="chkgender0" value="<?php echo SSN_GENDER_UNKNOWN?>"<?php if($chkgender==SSN_GENDER_UNKNOWN) echo' checked="checked"';?>/>
 	<label for="chkgender0">Vet ej</label><br/>
 	<input type="submit" class="button" value="Kontrollera"/>
 </form>

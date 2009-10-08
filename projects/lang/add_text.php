@@ -23,8 +23,8 @@ Here you can add longer chunks of text, and choose a language.<br/>
 Each unique words, and their relations with other words within the sentences will be recorded.<br/>
 Only useful for natural written language.<br/>
 
-<form method="post" action="<?=$_SERVER['PHP_SELF']?>">
-	Language: <?=xhtmlSelectCategory(CATEGORY_LANGUAGE, 0, 'lang', !empty($_POST['lang']) ? $_POST['lang'] : '')?><br/>
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>">
+	Language: <?php echo xhtmlSelectCategory(CATEGORY_LANGUAGE, 0, 'lang', !empty($_POST['lang']) ? $_POST['lang'] : '')?><br/>
 	Text:<br/>
 	<textarea name="text" cols="70" rows="20"></textarea><br/>
 	<input type="submit" class="button" value="Add"/>

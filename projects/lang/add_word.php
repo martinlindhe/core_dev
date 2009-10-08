@@ -20,7 +20,7 @@ require('design_head.php');
 <form method="post" action="">
 	Word: <input type="text" name="word"/><br/>
 	Pronunciation: <input type="text" name="pron"/><br/>
-	Language: <?=xhtmlSelectCategory(CATEGORY_LANGUAGE, 0, 'lang')?>
+	Language: <?php echo xhtmlSelectCategory(CATEGORY_LANGUAGE, 0, 'lang')?>
 	<input type="submit" class="button" value="Add"/>
 </form>
 

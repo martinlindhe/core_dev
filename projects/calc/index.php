@@ -21,11 +21,11 @@ if (!empty($_GET['expr'])) {
 ?>
 
 <form method="get" name="calc" action="">
-	<input type="text" name="expr" value="<?=$expr?>"/>
+	<input type="text" name="expr" value="<?php echo $expr?>"/>
 	<input type="submit" value="Calc"/>
 </form>
 
-<?
+<?php
 if (!empty($result)) {
 	echo '<pre>';
 	echo 'Decimal: '.$result['dec']."\n";
