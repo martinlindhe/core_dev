@@ -78,7 +78,7 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 
 	while (count($ret) < $precision && ($item = array_shift($stack)) !== null) {
 		if ($item[0] > 0) {
-			if (!$arr) $ret[] = "{$item[0]} {$item[1]}";
+			if (!$arr) $ret[] = $item[0].' '.t($item[1]);
 			else $ret[ $item[1] ] = $item[0];
 		}
 	}
