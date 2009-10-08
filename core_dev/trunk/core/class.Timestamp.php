@@ -45,7 +45,7 @@ class Timestamp
 	function setFromNTP($ts)
 	{
 		if (!is_numeric($ts)) return false;
-		$this->timestamp = $ts - 2208988800;
+		$this->ts = $ts - 2208988800;
 	}
 
 	function getUnix()
