@@ -24,6 +24,30 @@ class Timestamp
 		$this->set($t);
 	}
 
+	/**
+	 * Sets internal timestamp to Unix time
+	 *
+	 * @param $ts Unix timestamp (numeric) or string
+	 */
+	function set($ts)
+	{
+		if (is_string($ts)) $ts = strtotime($ts);
+		if (!is_numeric($ts) || !$ts) return false;
+		$this->ts = $ts;
+	}
+
+	/**
+	 * Converts a NTP timestamp to Unix timestamp
+	 *
+	 * @param $ts NTP timestamp
+	 * @return timestamp in UNIX format
+	 */
+	function setFromNTP($ts)
+	{
+		if (!is_numeric($ts)) return false;
+		$this->timestamp = $ts - 2208988800;
+	}
+
 	function getUnix()
 	{
 		return $this->ts;
@@ -84,29 +108,6 @@ class Timestamp
 			return shortTimePeriod(time() - $this->ts).' ago';
 
 		return shortTimePeriod($this->ts - time()).' in the future';
-	}
-
-	/**
-	 * Sets internal timestamp to Unix time
-	 *
-	 * @param $ts Unix timestamp (numeric) or string
-	 */
-	function set($ts)
-	{
-		if (!is_numeric($ts)) $ts = strtotime($ts);
-		$this->ts = $ts;
-	}
-
-	/**
-	 * Converts a NTP timestamp to Unix timestamp
-	 *
-	 * @param $ts NTP timestamp
-	 * @return timestamp in UNIX format
-	 */
-	function setFromNTP($ts)
-	{
-		if (!is_numeric($ts)) return false;
-		$this->timestamp = $ts - 2208988800;
 	}
 
 	function render()
