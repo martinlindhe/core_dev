@@ -1,4 +1,4 @@
-<?
+<?php
 require('/var/www/core_dev/trunk/core/core.php');
 require('/var/www/core_dev/trunk/core/client_pop3.php');
 

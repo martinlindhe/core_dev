@@ -1,4 +1,4 @@
-<?
+<?php
 require('/var/www/core_dev/core/core.php');
 require('/var/www/core_dev/core/input_pop3.php');
 

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once('sql_helpers.php');
 
 require('config.php'); //for $db

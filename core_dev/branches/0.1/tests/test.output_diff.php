@@ -1,4 +1,4 @@
-<?
+<?php
 require_once('/var/www/core_dev/core/output_diff.php');
 
 $x1 = "din mamma heter kallops\nDin med!\n";

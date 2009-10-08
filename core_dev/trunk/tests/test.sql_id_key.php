@@ -1,4 +1,4 @@
-<?
+<?php
 require_once('class.sw_url.php');
 
 require('config.php'); //for $db
