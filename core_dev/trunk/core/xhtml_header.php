@@ -123,12 +123,10 @@ class xhtml_header
 		}
 		echo '">';
 
-		if (function_exists('getProjectPath')) {
-			echo '<script type="text/javascript">';
-			//XXX rename _ext_core to _core_api since its url to coredev api
-			echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
-			echo '</script>';
-		}
+		echo '<script type="text/javascript">';
+		//XXX rename _ext_core to _core_api since its url to coredev api
+		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
+		echo '</script>';
 
 		if ($this->reload_time) {
 			echo '<script type="text/javascript">';

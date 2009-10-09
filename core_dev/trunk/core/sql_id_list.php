@@ -44,6 +44,15 @@ class sql_id_list
 
 	function getCategoryId() { return $this->category; }
 
+	function getCategoryName()
+	{
+		global $h;
+		$this->cat = new Category(category::GENERIC);
+		$this->cat->setCreator($h->session->id);
+		$this->cat->setOwner($h->session->id);
+		return $this->cat->getName($this->category);
+	}
+
 	function countItems() { return count($this->list); }
 
 	function getChildKey()

@@ -97,7 +97,6 @@ class db_mysqli extends db_base
 
 		if (!$result) {
 			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		parent::measure_query($q);
@@ -123,7 +122,6 @@ class db_mysqli extends db_base
 			$ret_id = $this->db_handle->insert_id;
 		} else {
 			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		parent::measure_query($q);
@@ -149,7 +147,6 @@ class db_mysqli extends db_base
 			$affected_rows = $this->db_handle->affected_rows;
 		} else {
 			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-			//else die; //if debug is turned off (production) and a query fail, just die silently
 		}
 
 		parent::measure_query($q);

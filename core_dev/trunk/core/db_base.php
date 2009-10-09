@@ -45,6 +45,8 @@ abstract class db_base
 
 	function setDebug($bool = true) { $this->debug = $bool; }
 
+	function getErrorCount() { return count($this->query_error); }
+
 	/****************************************************/
 	/* PUBLIC INTERFACE EXPOSED BY ALL DB MODULES       */
 	/****************************************************/
@@ -191,12 +193,13 @@ abstract class db_base
 
 		$this->time_initial = microtime(true);
 
-		if (!empty($conf['host'])) $this->host = $conf['host'];
-		if (!empty($conf['port'])) $this->port = $conf['port'];
+		if (!empty($conf['host']))     $this->host     = $conf['host'];
+		if (!empty($conf['port']))     $this->port     = $conf['port'];
 		if (!empty($conf['username'])) $this->username = $conf['username'];
 		if (!empty($conf['password'])) $this->password = $conf['password'];
 		if (!empty($conf['database'])) $this->database = $conf['database'];
-		if (!empty($conf['charset'])) $this->charset = $conf['charset'];
+		if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
+		if (!empty($conf['debug']))    $this->debug    = $conf['debug'];
 	}
 
 	/**

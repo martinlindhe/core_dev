@@ -142,6 +142,13 @@ class session_default extends session_base
 	 */
 	function redirect($path)
 	{
+		global $db;
+
+		if ($db->getErrorCount()) {
+			echo "session->redirect aborted due to error".dln();
+			return;
+		}
+
 		if (headers_sent()) {
 			die(
 			'<script type="text/javascript">'.
