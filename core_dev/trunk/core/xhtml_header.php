@@ -60,7 +60,7 @@ class xhtml_header
 	 */
 	function render()
 	{
-		global $config, $h;
+		global $h;
 
 		if ($this->mimetype)
 			header('Content-type: '.$this->mimetype);
@@ -89,9 +89,8 @@ class xhtml_header
 		if ($this->favicon)
 			echo '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
 
-		$theme_dir = '';
-		if (!empty($config['my_themes'])) $theme_dir = $config['my_themes'];
-		else $theme_dir = $this->core_dev_root.'css/themes/';
+		//XXX: make theme path configurable
+		$theme_dir = $this->core_dev_root.'css/themes/';
 
 		if (!empty($h->session) && $theme_dir)
 			echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';

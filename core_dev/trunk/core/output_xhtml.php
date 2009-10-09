@@ -18,7 +18,7 @@ function xhtmlMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_
 	$cur = basename($_SERVER['SCRIPT_NAME']);
 
 	$res = '<ul class="'.$class.'">';
-	foreach($menu_arr as $url => $text) {
+	foreach ($menu_arr as $url => $text) {
 		//FIXME: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
 		if ($cur == $url) $res .= '<li class="'.$current_class.'">';
 		else $res .= '<li>';
@@ -32,7 +32,7 @@ function xhtmlMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_
 }
 
 /**
- * Helper to generate "pagers", splitting up listings of content on several pages
+ * Generates "pagers", splitting up listings of content on several pages
  *
  * Reads the 'p' get parameter for current page
  * Example: $pager = makePager(102, 25);		will create a pager for total of 102 items with 25 items per page
@@ -41,8 +41,6 @@ function xhtmlMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_
  */
 function makePager($_total_cnt, $_items_per_page = 0, $_add_value = '')
 {
-	global $config;
-
 	if (!$_items_per_page) $_items_per_page = $_total_cnt;
 
 	$pager['page'] = 1;
@@ -110,9 +108,10 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 	if (!is_numeric($_min) || !is_numeric($_max) || !is_numeric($_skip)) return;
 
 	$out = '<select name="'.strip_tags($_name).'">';
-	for ($i = $_min; $i <= $_max; $i += $_skip) {
+
+	for ($i = $_min; $i <= $_max; $i += $_skip)
 		$out .= '<option value="'.$i.'">'.$i.'</option>';
-	}
+
 	$out .= '</select>';
 
 	return $out;
@@ -125,16 +124,17 @@ function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
 {
 	$out = '<select name="'.strip_tags($_name).'"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
 	$out .= '<option value="">---</option>';
-	foreach ($_arr as $id => $title) {
+
+	foreach ($_arr as $id => $title)
 		$out .= '<option value="'.$id.'"'.($_default == $id ? ' selected':'').'>'.$title.'</option>';
-	}
+
 	$out .= '</select>';
 
 	return $out;
 }
 
 /**
- * Helper to create a hidden input field
+ * Creates a hidden input field
  */
 function xhtmlHidden($_name, $_val = 1)
 {
@@ -143,7 +143,7 @@ function xhtmlHidden($_name, $_val = 1)
 }
 
 /**
- * Helper to create a checkbox
+ * Creates a checkbox
  */
 function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $onclick = '')
 {
@@ -156,7 +156,7 @@ function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $oncl
 }
 
 /**
- * Helper to create a bunch of checkboxes out of an array
+ * Creates a bunch of checkboxes out of an array
  *
  * @param $arr id=>name array
  * @param $prefix (optional) add prefix to checkbox id
@@ -173,21 +173,20 @@ function xhtmlCheckboxArray($arr, $prefix = '')
 }
 
 /**
- * Helper to create a bunch of radio buttons out of an array
+ * Creates a bunch of radio buttons out of an array
  */
 function xhtmlRadioArray($_name, $_arr, $_default = '')
 {
 	$out = '';
 	foreach ($_arr as $id => $title) {
-		$out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.
-			($_default == $id ? ' checked' : '').'/>';
+		$out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked' : '').'/>';
 		$out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
 	}
 	return $out;
 }
 
 /**
- * Helper to create a input field
+ * Creates a input field
  */
 function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled = false)
 {
@@ -201,7 +200,7 @@ function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled =
 }
 
 /**
- * Helper to create a file upload field
+ * Creates a file upload field
  */
 function xhtmlFile($_name)
 {
@@ -209,17 +208,15 @@ function xhtmlFile($_name)
 }
 
 /**
- * Helper to generate image tags
+ * Creates image tags
  */
 function xhtmlImage($_src, $_alt = '')
 {
-	return '<img src="'.$_src.'"'.
-		($_alt ? ' alt="'.$_alt.'" title="'.$_alt.'"' : '').
-		'/>';
+	return '<img src="'.$_src.'"'.($_alt ? ' alt="'.$_alt.'" title="'.$_alt.'"' : '').'/>';
 }
 
 /**
- * Helper to create a <form> open tag
+ * Creates a <form> open tag
  */
 function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '')
 {
@@ -235,7 +232,7 @@ function xhtmlFormClose()
 }
 
 /**
- * Helper to create a password input field
+ * Creates a password input field
  */
 function xhtmlPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
 {
@@ -247,6 +244,9 @@ function xhtmlPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
 		'/>';
 }
 
+/**
+ * Creates a xhtml textarea
+ */
 function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 {
 	if (!is_numeric($_width) || !is_numeric($_height)) return false;
@@ -257,7 +257,7 @@ function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 }
 
 /**
- * Helper to create a submit button
+ * Creates a submit button
  */
 function xhtmlSubmit($_title = 'Submit', $class = 'button', $style = '')
 {
@@ -265,7 +265,7 @@ function xhtmlSubmit($_title = 'Submit', $class = 'button', $style = '')
 }
 
 /**
- * Helper to create a submit button
+ * Creates a submit button
  */
 function xhtmlButton($_title, $onclick = '')
 {
@@ -292,9 +292,8 @@ function xhtmlMap($shapes, $name)
 	return $res;
 }
 
-
 /**
- * Helper to create a table out of a named array and/or callback function
+ * Creates a table out of a named array and/or callback function
  *
  * @param $arr is a normal $list array
  * @param $heads is array('User' => 'userId', 'Last active' => 'timeLastActive')
@@ -344,11 +343,11 @@ function xhtmlTable($arr, $heads = '', $callback = '')
 }
 
 /**
- * Helper to generate select-dropdown menus out of specified category
+ * Creates select-dropdown menus out of specified category
  */
 function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
 {
-	global $h, $config;
+	global $h;
 	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
 	$out = '<select name="'.strip_tags($selectName).'">';
@@ -410,12 +409,10 @@ function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $sele
 }
 
 /**
- * Helper to display one of core_dev's default action buttons
+ * Displays one of core_dev's default action buttons
  */
 function coreButton($name, $link = '', $title = '')
 {
-	global $config;
-
 	switch ($name) {
 		case 'Edit':   $img = 'icon_edit.png'; break;
 		case 'Create': $img = 'icon_create.png'; break;
@@ -437,7 +434,6 @@ function coreButton($name, $link = '', $title = '')
 	if ($link) $out .= '</a>';
 	return $out;
 }
-
 
 /**
  * Implements a OpenSearch compatible search engine
@@ -504,7 +500,7 @@ function xhtmlGetUrl($script = '')
 }
 
 /**
- * Helper to generate Javascript style arrays
+ * Generates Javascript style arrays
  */
 function jsArray($name, $list) {
 
@@ -512,11 +508,13 @@ function jsArray($name, $list) {
 	'<script type="text/javascript">'.
 	$name.' = ['."\n";
 
-	foreach ($list as $l) {
+	foreach ($list as $l)
+	{
 		$res .= '{ ';
-		foreach ($l as $key=>$val) {
+
+		foreach ($l as $key => $val)
 			$res .= $key.': '.(is_numeric($val) ? $val : '"'.$val.'"').', ';
-		}
+
 		$res .= '},'."\n";
 	}
 	$res .=
@@ -536,12 +534,12 @@ function toXmlTags($tagname, $params)
 	if (!is_array($params)) die('toXmlTags need array with params!');
 
 	$res = '';
-	foreach ($params as $p) {
-
+	foreach ($params as $p)
+	{
 		$res .= '<'.$tagname;
-		foreach ($p as $param_name => $param_val) {
+
+		foreach ($p as $param_name => $param_val)
 			$res .= ' '.$param_name.'="'.$param_val.'"';
-		}
 
 		$res .= '/>'."\n";
 	}
