@@ -151,6 +151,19 @@ function loadPlugins()
 }
 
 /**
+ * Returns web root to core_dev from current project.
+ * Every project using core_dev must place a symlink named "core_dev" to core_dev
+ * base directory in the same directory as project config.php resides
+ *
+ * @example ln -s /devel/web/core_dev/trunk/ core_dev
+ */
+function coredev_webroot()
+{
+	return $_SERVER['REQUEST_URI'].'core_dev/';
+}
+
+
+/**
  * Executes $c and returns the time it took
  *
  * @param $c command to execute
