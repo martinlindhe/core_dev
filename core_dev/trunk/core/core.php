@@ -157,10 +157,13 @@ function loadPlugins()
  * base directory in the same directory as project config.php resides
  *
  * @example ln -s /devel/web/core_dev/trunk/ core_dev
+ *
+ * @return for example "/sample/core_dev/"
  */
 function coredev_webroot()
 {
-	return $_SERVER['REQUEST_URI'].'core_dev/';
+	$path = dirname($_SERVER['REQUEST_URI']).'/core_dev/';
+	return $path;
 }
 
 /**
