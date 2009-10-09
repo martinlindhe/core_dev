@@ -1,44 +1,28 @@
 <?php
+/**
+ * $Id$
+ */
 
-//XXX separate to one CategoryItem and one CategoryList object
+require_once('constants.php');
 
-class category
+class CategoryItem
 {
-	//tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
-	const USERFILE =  1; ///< normal, public userfile
-	const WIKIFILE =  4; ///< category for wiki file attachments, to allow better organization if needed
-	const TODOLIST =  5; ///< todo list categories
+	private $tbl_name;     ///< table name
+	private $name;
+	private $type;         ///< type as defined in constants.php
+	private $owner;
+	private $creator;      ///< if set, stores creatorId when categories are created
 
-	const BLOG     = 10; ///< normal, personal blog category
-	const CONTACT  = 11; ///< friend relation category, like "Old friends", "Family"
-	const USERDATA = 12; ///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId
-	const POLL     = 13; ///< used for multi-choice polls. tblCategories.ownerId = tblPolls.pollId
-	const LANGUAGE = 14; ///< represents a language, for multi-language features
-	const NEWS     = 20; ///< news categories
+	private $permissions = PERM_USER;  ///< permission flags as defined in constants.php
 
-	const GENERIC  = 30; ///< application specific categories
+	function setTableName($name) { $this->tbl_name = $name; }
 
+	function setName($name) { $this->name = $name; }
 
-	//tblCategory.permissions:
-	const PERM_PUBLIC  = 0x01; ///< public category
-	const PERM_PRIVATE = 0x02; ///< owner and owner's friends can see the content
-	const PERM_HIDDEN  = 0x04; ///< only owner can see the content
-
-	const PERM_USER    = 0x40; ///< category is created by user
-	const PERM_GLOBAL  = 0x80; ///< category is globally available to all users
-
-
-	private $type;            ///< category type
-	private $owner;           ///< owner id, the meaning depends on category type
-	private $permissions = 0; ///<
-	private $creator;         ///< if set, stores creatorId when categories are created
-	private $tbl_name;        ///< table name
-
-	function __construct($type)
+	function setType($id)
 	{
-		if (!is_numeric($type)) return false;
-		$this->type = $type;
-		$this->tbl_name = 'tblCategories';
+		if (!is_numeric($id)) return false;
+		$this->type = $id;
 	}
 
 	function setOwner($id)
@@ -59,6 +43,63 @@ class category
 		$this->permissions = $flags;
 	}
 
+	function getName($id)
+	{
+		global $db;
+		if (!is_numeric($id)) return false;
+
+		$q = 'SELECT categoryName FROM '.$this->tbl_name.' WHERE categoryId='.$id.' AND categoryType='.$this->type.' ';
+		if ($this->owner) $q .= 'AND ownerId='.$this->owner;
+		return $db->getOneItem($q);
+	}
+
+	/**
+	 * Saves the item to database
+	 *
+	 * @return item id
+	 */
+	function store()
+	{
+		global $db;
+
+		$q = 'SELECT categoryId FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' AND categoryName="'.$db->escape($this->name).'"';
+		if ($this->owner) $q .= ' AND ownerId='.$this->owner;
+		if ($this->creator) $q .= ' AND creatorId='.$this->creator;
+		$id = $db->getOneItem($q);
+		if ($id) return $id;
+
+		$q = 'INSERT INTO '.$this->tbl_name.' SET categoryType='.$this->type.',categoryName="'.$db->escape($this->name).'"';
+		$q .= ',timeCreated=NOW(),permissions='.$this->permissions;
+		if ($this->owner) $q .= ',ownerId='.$this->owner;
+		if ($this->creator) $q .= ',creatorId='.$this->creator;
+		return $db->insert($q);
+	}
+}
+
+
+class CategoryList
+{
+	private $type;         ///< category type
+	private $owner;        ///< owner id, the meaning depends on category type
+	private $creator;
+	private $tbl_name;     ///< table name
+
+	function __construct($type)
+	{
+		global $h;
+		if (!is_numeric($type)) return false;
+
+		$this->type     = $type;
+		$this->tbl_name = 'tblCategories';
+		$this->creator  = $h->session->id;
+	}
+
+	function setOwner($id)
+	{
+		if (!is_numeric($id)) return false;
+		$this->owner = $id;
+	}
+
 	/**
 	 * Creates a new category, if it exists return id
 	 *
@@ -67,31 +108,17 @@ class category
 	 */
 	function add($name)
 	{
-		global $db;
+		global $h;
 
-		$name = $db->escape(trim($name));
-		if (!$name) return false;
+		if (!trim($name)) return false;
 
-		$q = 'SELECT categoryId FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' AND categoryName="'.$name.'"';
-		if ($this->owner) $q .= ' AND ownerId='.$this->owner;
-		if ($this->creator) $q .= ' AND creatorId='.$this->creator;
-		$id = $db->getOneItem($q);
-		if ($id) return $id;
-
-		$q = 'INSERT INTO '.$this->tbl_name.' SET categoryType='.$this->type.',categoryName="'.$name.'"';
-		$q .= ',timeCreated=NOW(),permissions='.$this->permissions;
-		if ($this->owner) $q .= ',ownerId='.$this->owner;
-		if ($this->creator) $q .= ',creatorId='.$this->creator;
-		return $db->insert($q);
-	}
-
-	function getName($id)
-	{
-		global $db;
-		if (!is_numeric($id)) return false;
-		$q = 'SELECT categoryName FROM '.$this->tbl_name.' WHERE categoryId='.$id.' AND categoryType='.$this->type.' ';
-		if ($this->owner) $q .= 'AND ownerId='.$this->owner;
-		return $db->getOneItem($q);
+		$item = new CategoryItem();
+		$item->setTableName($this->tbl_name);
+		$item->setType($this->type);
+		$item->setOwner($this->owner);
+		$item->setCreator($this->creator);
+		$item->setName($name);
+		return $item->store();
 	}
 
 	/**
@@ -108,6 +135,15 @@ class category
 		return $db->getMappedArray($q);
 	}
 
+	function renderList()
+	{
+		$res = '';
+
+		foreach ($this->getList() as $cat_id => $cat_name)
+			$res .= ', <a href="?cat='.$cat_id.'">'.$cat_name.'</a>';
+
+		return substr($res, 2);
+	}
 
 }
 

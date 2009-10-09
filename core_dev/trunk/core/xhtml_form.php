@@ -69,6 +69,8 @@ class xhtml_form
 	 */
 	function handle()
 	{
+		global $h;
+
 		$p = array();
 
 		if (!empty($_POST))
@@ -87,7 +89,9 @@ class xhtml_form
 		foreach ($this->elems as $id => $e) {
 			if (!empty($e['name']) && !empty($p['new_'.$e['name']])) {
 				//add category
-				$id = $this->elems[ $id ]['obj']->add($p['new_'.$e['name']]);
+				$cat = new CategoryList($this->elems[$id]['cat_type']);
+				$cat->setOwner($h->session->id);
+				$id = $cat->add($p['new_'.$e['name']]);
 
 				//modify post form category id, unset new_catname
 				$p[ $e['name'] ] = $id;
@@ -179,12 +183,12 @@ class xhtml_form
 	}
 
 	/**
-	 * Adds a category object to the form
-	 * @param $obj category object
+	 * Adds a category to the form
+	 * @param $cat_type category type
 	 */
-	function addCategory($name, $str, $obj, $default = 0)
+	function addCategory($name, $str, $cat_type, $default = 0)
 	{
-		$this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $str, 'obj' => $obj, 'default' => $default);
+		$this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $str, 'cat_type' => $cat_type, 'default' => $default);
 	}
 
 	/**
@@ -206,6 +210,8 @@ class xhtml_form
 	 */
 	function render()
 	{
+		global $h;
+
 		if (!$this->objectinstance && !function_exists($this->handler))
 			die('FATAL: xhtml_form() does not have a defined data handler');
 
@@ -270,11 +276,13 @@ class xhtml_form
 				break;
 
 			case 'CATEGORY':
-				$list = $e['obj']->getList();
+
+				$cat = new CategoryList($e['cat_type']);
+				$cat->setOwner($h->session->id);
 
 				$res .= '<td>'.$e['str'].'</td>';
 				$res .= '<td>';
-				$res .= xhtmlSelectArray($e['name'], $list, $e['default']).' ';
+				$res .= xhtmlSelectArray($e['name'], $cat->getList(), $e['default']).' ';
 				//add new category widget
 				$res .= '<a href="#" onClick="toggle_element(\'cd_new_'.$e['name'].'\');toggle_enabled_element(\'new_'.$e['name'].'\');">'.coreButton('Add').'</a>';
 				$res .= '<span id="cd_new_'.$e['name'].'" style="display:none;">';
