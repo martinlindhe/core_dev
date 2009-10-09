@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('functions_time.php'); //for shortTimePeriod()
+require_once('functions_time.php');
 
 class Timestamp
 {

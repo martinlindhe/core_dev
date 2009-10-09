@@ -13,6 +13,7 @@ require_once('locale.php');	//for translations
 require_once('output_xhtml.php');	//for XHTML output helper functions
 require_once('functions_general.php');	//FIXME: anything in there worth keeping?
 require_once('functions_textformat.php');	//for decodeDataSize()
+require_once('class.Timestamp.php');
 require_once('network.php');
 
 /**
@@ -162,23 +163,6 @@ function coredev_webroot()
 	return $_SERVER['REQUEST_URI'].'core_dev/';
 }
 
-
-/**
- * Executes $c and returns the time it took
- *
- * @param $c command to execute
- * @param $retval return value of command executed
- */
-function exectime($c, &$retval = 0)
-{
-	//XXX: Use 2>&1 in $c to redirect stderr to $output buffer
-	$output = array();
-	$exec_start = microtime(true);
-	exec($c, $output, &$retval);
-
-	return microtime(true) - $exec_start;
-}
-
 /**
  * Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
  * run from the / path it will return nothing, else the directory name of the directory script are run from
@@ -207,47 +191,6 @@ function getProjectPath($_amp = 1)
 		}
 	}
 	return '';
-}
-
-/**
- * Returns the current time in the same format as the MySQL "NOW()" command
- * @return time in MySQL datetime format
- */
-function now()
-{
-	return strftime('%Y-%m-%d %H:%M:%S');
-}
-
-/**
- * Returns given UNIX timestamp in MySQL datetime format
- * @param $timestamp is a UNIX timestamp
- * @return given UNIX timestamp in MySQL datetime format
- */
-function sql_datetime($timestamp)
-{
-	return date('Y-m-d H:i:s', $timestamp);
-}
-
-/**
- * Returns MySQL datetime in UNIX timestamp format
- * @param $datetime is a MySQL datetime
- * @return given MySQL datetime in UNIX timestamp format
- */
-function datetime_to_timestamp($datetime)
-{
-	return strtotime($datetime);
-}
-
-/**
- * Compares two MySQL datetime timestamps
- * @param $d1 is a MySQL datetime
- * @param $d2 is a MySQL datetime
- * @return true if $d1 is older date than $d2
- */
-function datetime_less($d1, $d2)
-{
-	if (strtotime($d1) < strtotime($d2)) return true;
-	return false;
 }
 
 /**
@@ -297,43 +240,6 @@ function numbers_only($s)
 		if (!in_array($c, $ok)) return false;
 	}
 	return true;
-}
-
-/**
- * Default time format display
- *
- * @param $ts unix timestamp or SQL DATETIME format
- */
-function formatTime($ts = 0)
-{
-	if (!$ts) $ts = time();
-
-	if (function_exists('formatTimeOverride'))
-		return formatTimeOverride($ts);
-
-	if (!is_numeric($ts)) $ts = strtotime($ts);
-
-	$datestamp = mktime (0,0,0,date('m',$ts), date('d',$ts), date('Y',$ts));
-	$yesterday = mktime (0,0,0,date('m') ,date('d')-1,  date('Y'));
-	$tomorrow  = mktime (0,0,0,date('m') ,date('d')+1,  date('Y'));
-
-	$timediff = time() - $ts;
-
-	if (date('Y-m-d', $ts) == date('Y-m-d')) {
-		//Today 18:13
-		$res = date('H:i',$ts);
-	} else if ($datestamp == $yesterday) {
-		//Yesterday 18:13
-		$res = t('Yesterday').' '.date('H:i',$ts);
-	} else if ($datestamp == $tomorrow) {
-		//Tomorrow 18:13
-		$res = t('Tomorrow').' '.date('H:i',$ts);
-	} else {
-		//2007-04-14 15:22
-		$res = date('Y-m-d H:i', $ts);
-	}
-
-	return $res;
 }
 
 /**
