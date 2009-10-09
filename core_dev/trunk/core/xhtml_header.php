@@ -18,7 +18,7 @@ class xhtml_header
 
 	private $reload_time   = 0;          ///< time after page load to reload the page, in seconds
 	private $mimetype      = 'text/html';
-	private $core_dev_root = 'core_dev/'; ///< web path to core_dev for ajax api calls
+	private $core_dev_root = '';         ///< web path to core_dev for ajax api calls
 
 	function __construct()
 	{
@@ -28,12 +28,8 @@ class xhtml_header
 		$this->search = array();
 		$this->onload = array();
 
-		//XXX DEPRECATE remove this backward compatiblity hack when all
-		//  use of $config['core']['web_root'] has been removed
-		//  use setWebRootCoreDev() if needed instead
-		global $config;
-		if (!empty($config['core']['web_root']))
-			$this->core_dev_root = $config['core']['web_root'];
+		if (!$this->core_dev_root) //XXXX hmm? eller läs från global handler ?
+			$this->core_dev_root = coredev_webroot();
 	}
 
 	function getWebRootCoreDev() { return $this->core_dev_root; }

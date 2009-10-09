@@ -18,7 +18,7 @@ require_once('find_config.php');
 $header = new xhtml_header();
 echo $header->render();
 
-echo '<img id="popup_img" src="'.$config['core']['web_root'].'api/file.php?id='.$fileId.'"/>';
+echo '<img id="popup_img" src="'.coredev_webroot().'api/file.php?id='.$fileId.'"/>';
 ?>
 <script type="text/javascript">
 if (image_loaded('popup_img')) resize_wnd_to_img('popup_img');

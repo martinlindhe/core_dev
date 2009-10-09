@@ -29,9 +29,6 @@ define('USERDATA_TYPE_BIRTHDATE',			13);//UNIQUE: Date of birth
 define('USERDATA_TYPE_GENDER',				14);//UNIQUE: radiobutton list-selector for gender
 define('USERDATA_TYPE_VIDEOPRES',			15);//UNIQUE: videopresentation (FIXME: IMPLEMENT!!!)
 
-//userdata module settings:
-$config['userdata']['maxsize_text'] = 4000;	//max length of userdata-textfield
-
 /**
  * Creates a new userfield, and gives it a free priority level
  */
@@ -206,8 +203,6 @@ function getUserdataFieldType($_id)
  */
 function getUserdataInput($row, $fill = false)
 {
-	global $config;
-
 	$fieldId = $row['fieldId'];
 	if (isset($row['value'])) {
 		$value = stripslashes($row['value']);	//doesnt nessecary exist
@@ -229,7 +224,7 @@ function getUserdataInput($row, $fill = false)
 			$result = '<td>'.stripslashes($row['fieldName']).':</td><td>';
 			$result .= xhtmlInput('userdata_'.$fieldId, $value, 20, 50);
 			if ($row['fieldType'] == USERDATA_TYPE_EMAIL) {
-				$result .= ' '.xhtmlImage($config['core']['web_root'].'gfx/icon_mail.png', t('E-mail')).'<br/>';
+				$result .= ' '.xhtmlImage(coredev_webroot().'gfx/icon_mail.png', t('E-mail')).'<br/>';
 				//$result .= '<div id="email_valid_'.$fieldId.'">dskksks</div>';	//XXX show email input status (invalid, taken)
 
 			}
@@ -399,8 +394,6 @@ function getUserdataInput($row, $fill = false)
  */
 function getUserdataSearch($row)
 {
-	global $config;
-
 	switch ($row['fieldType']) {
 		case USERDATA_TYPE_IMAGE:
 			$result  = '<td colspan="2"><input name="userdata_'.$row['fieldId'].'" id="userdata_'.$row['fieldId'].'" type="checkbox" value="1" class="checkbox"/>';
@@ -798,7 +791,7 @@ function findUserByEmail($email)
  */
 function editUserdataSettings($_userid = '')
 {
-	global $h, $config;
+	global $h;
 	if (empty($_userid)) $_userid = $h->session->id;
 
 	$list = readAllUserdata($_userid);

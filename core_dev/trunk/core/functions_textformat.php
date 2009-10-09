@@ -22,7 +22,7 @@ function getThumbUrl($_id, $width = 0, $height = 0, $fullUrl = false)
 	$str = '';
 	if ($fullUrl) $str .= $config['app']['full_url'];
 
-	$str .= $config['core']['web_root'].'api/file.php?id='.$_id.'&amp;w='.$width.'&amp;h='.$height;
+	$str .= coredev_webroot().'api/file.php?id='.$_id.'&amp;w='.$width.'&amp;h='.$height;
 	return $str;
 }
 
@@ -44,10 +44,9 @@ function makeThumbLink($_id, $_title = '', $w = 50, $h = 50)
 
 function makeImageLink($_id, $_title = '')
 {
-	global $config;
 	if (!is_numeric($_id)) return false;
 
-	return '<img id="img_'.$_id.'" src="'.$config['core']['web_root'].'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
+	return '<img id="img_'.$_id.'" src="'.coredev_webroot().'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
 }
 
 /**
@@ -113,8 +112,6 @@ function formatNumber($number)
 
 function formatUserInputText($text, $convert_html = true)
 {
-	global $config;
-
 	$text = trim($text);
 
 	//convert html tags to &lt; and &gt; etc:

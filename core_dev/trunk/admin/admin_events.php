@@ -52,7 +52,7 @@ foreach ($list as $row)
 	else echo 'Unregistered';
 	echo '</b> at '.$row['timeCreated'];
 
-	echo ' from <a href="'.$config['core']['web_root'].'admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
+	echo ' from <a href="'.coredev_webroot().'admin/admin_ip.php?ip='.GeoIP_to_IPv4($row['userIP']).'">'.GeoIP_to_IPv4($row['userIP']).'</a>';
 	echo '</i></div><br/>';
 }
 

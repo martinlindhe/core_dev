@@ -199,7 +199,7 @@ function showNewsArticle($_id = 0)
 		$res .= xhtmlTextarea('news_body', $item['body'], 60, 16).'<br/>';
 		$res .= '<input name="news_rss" id="rss_check" type="checkbox" class="checkbox" value="1"'.($item['rss_enabled']?' checked="checked"':'').'/>';
 		$res .= ' <label for="rss_check">';
-		$res .= '<img src="'.$config['core']['web_root'].'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
+		$res .= '<img src="'.coredev_webroot().'gfx/icon_rss.png" width="16" height="16" alt="RSS enabled" title="RSS enabled"/> ';
 		$res .= t('Include this news in the RSS feed').'</label><br/><br/>';
 		$res .= t('Category').': '.xhtmlSelectCategory(CATEGORY_NEWS, 0, 'news_cat', $item['categoryId']).'<br/><br/>';
 		$res .= t('Time for publication').': ';
@@ -255,7 +255,7 @@ function showNewsArticle($_id = 0)
  */
 function showNews($limit = 0)
 {
-	global $h, $db, $config;
+	global $h, $db;
 
 	//Displays one news article - returns if successful
 	$res = showNewsArticle();
@@ -270,8 +270,8 @@ function showNews($limit = 0)
 		$res .= showNewsOverview($row);
 	}
 	if ($h->session->isAdmin) {
-		$res .= '<a href="'.$config['core']['web_root'].'admin/admin_news_add.php">'.t('Add news').'</a><br/>';
-		$res .= '<a href="'.$config['core']['web_root'].'admin/admin_news.php">'.t('Manage news').'</a><br/>';
+		$res .= '<a href="'.coredev_webroot().'admin/admin_news_add.php">'.t('Add news').'</a><br/>';
+		$res .= '<a href="'.coredev_webroot().'admin/admin_news.php">'.t('Manage news').'</a><br/>';
 	}
 	return $res;
 }

@@ -60,7 +60,7 @@ function makePager($_total_cnt, $_items_per_page = 0, $_add_value = '')
 
 	if ($pager['page'] > 1) {
 		$pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
-		$pager['head'] .= '<img src="'.$config['core']['web_root'].'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
+		$pager['head'] .= '<img src="'.coredev_webroot().'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
 	}
 	if ($pager['tot_pages'] <= 10) {
 		for ($i=1; $i <= $pager['tot_pages']; $i++) {
@@ -95,7 +95,7 @@ function makePager($_total_cnt, $_items_per_page = 0, $_add_value = '')
 
 	if ($pager['page'] < $pager['tot_pages']) {
 		$pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
-		$pager['head'] .= '<img src="'.$config['core']['web_root'].'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
+		$pager['head'] .= '<img src="'.coredev_webroot().'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
 	}
 
 	$pager['head'] .= '<br/>';
@@ -433,7 +433,7 @@ function coreButton($name, $link = '', $title = '')
 	if ($link) $out .= '<a href="'.$link.'">';
 	if (!$title) $title = t($name);
 	//FIXME: make path configurable, so user can override core_dev icon set
-	$out .= '<img src="'.$config['core']['web_root'].'gfx/'.$img.'" alt="'.$title.'" title="'.$title.'"/>';
+	$out .= '<img src="'.coredev_webroot().'gfx/'.$img.'" alt="'.$title.'" title="'.$title.'"/>';
 	if ($link) $out .= '</a>';
 	return $out;
 }

@@ -222,7 +222,7 @@ function markMessageDeleted($_id)
  */
 function showMessages($_group = 0)
 {
-	global $h, $db, $config;
+	global $h, $db;
 	if (!is_numeric($_group)) return false;
 
 	if (!empty($_GET['read']) && is_numeric($_GET['read'])) {
@@ -291,7 +291,7 @@ function showMessages($_group = 0)
 		echo '<td width="100">'.Users::link($row['otherId'], $row['otherName']).'</td>';
 		echo '<td width="140">'.$row['timeCreated'].'</td>';
 		//(!$row['timeRead']?t('UNREAD'):t('READ')).'<br/>';
-		echo '<td><a href="?g='.$_group.'&amp;delete='.$row['msgId'].'"><img src="'.$config['core']['web_root'].'gfx/icon_delete.png" alt="'.t('Delete').'" border="0"/></a></td>';
+		echo '<td><a href="?g='.$_group.'&amp;delete='.$row['msgId'].'"><img src="'.coredev_webroot().'gfx/icon_delete.png" alt="'.t('Delete').'" border="0"/></a></td>';
 		echo '</tr>';
 	}
 	echo '</table>';

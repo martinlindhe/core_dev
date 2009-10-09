@@ -37,7 +37,7 @@ function addRevision($fieldType, $fieldId, $fieldText, $timestamp, $creatorId, $
  */
 function showRevisions($articleType, $articleId, $articleName)
 {
-	global $db, $config;
+	global $db;
 
 	if (!is_numeric($articleType) || !is_numeric($articleId)) return false;
 
@@ -63,12 +63,12 @@ function showRevisions($articleType, $articleId, $articleName)
 		echo formatTime($row['timeCreated']).': ';
 		switch ($row['categoryId']) {
 			case REV_CAT_LOCKED:
-				echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
+				echo '<img src="'.coredev_webroot().'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
 				echo ' Locked by '.Users::getName($row['createdBy']).'<br/>';
 				break;
 
 			case REV_CAT_UNLOCKED:
-				echo '<img src="'.$config['core']['web_root'].'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
+				echo '<img src="'.coredev_webroot().'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
 				echo ' Unlocked by '.Users::getName($row['createdBy']).'<br/>';
 				break;
 

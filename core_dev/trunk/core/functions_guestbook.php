@@ -247,7 +247,7 @@ function markGuestbookRead()
  */
 function showGuestbook($userId)
 {
-	global $h, $config;
+	global $h;
 	if ($h->session->isAdmin || $h->session->id == $userId) {
 		if (!empty($_GET['remove'])) {
 			removeGuestbookEntry($_GET['remove']);
@@ -298,7 +298,7 @@ function showGuestbook($userId)
 
 		if ($h->session->id == $userId) {
 			if (!$row['timeRead']) {
-				echo '<img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('Unread').'">';
+				echo '<img src="'.coredev_webroot().'gfx/icon_mail.png" alt="'.t('Unread').'">';
 			}
 		}
 		echo stripslashes($row['body']).'<br/>';

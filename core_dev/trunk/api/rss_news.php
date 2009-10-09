@@ -40,7 +40,7 @@ echo '<image>';
 	echo '<title>image title</title>';
 	echo '<link>'.$server_url.'</link>';
 	echo '<description>Click the url</description>';
-	echo '<url>http://localhost/'.$config['core']['web_root'].'gfx/icon_warning_big.png</url>';
+	echo '<url>http://localhost/'.coredev_webroot().'gfx/icon_warning_big.png</url>';
 	echo '<width>82</width>';
 	echo '<height>45</height>';
 echo '</image>';

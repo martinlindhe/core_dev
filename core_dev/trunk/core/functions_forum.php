@@ -310,7 +310,6 @@ function getForumStructure()
 
 function displayRootForumContent()
 {
-	global $config;
 	$list = getForumItems();
 
 	if (!count($list)) return;
@@ -491,18 +490,18 @@ function displayForumContentFlat($itemId)
 		echo '<td align="center">';	//icon
 
 		if ($row['locked']) {
-			echo '<img src="'.$config['core']['web_root'].'gfx/icon_locked.png" alt="Locked" title="Locked"/><br/>';
+			echo '<img src="'.coredev_webroot()].'gfx/icon_locked.png" alt="Locked" title="Locked"/><br/>';
 		}
 		if ($row['sticky'] == 1) {
-			echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_sticky.png" alt="Sticky" title="Sticky"/>';
+			echo '<img src="'.coredev_webroot().'gfx/icon_forum_sticky.png" alt="Sticky" title="Sticky"/>';
 		}
 
 		if ($row['sticky'] == 2) {
-			echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_announcement.png" alt="Announcement" title="Announcement"/>';
+			echo '<img src="'.coredev_webroot().'gfx/icon_forum_announcement.png" alt="Announcement" title="Announcement"/>';
 		} else if ($data['parentId'] == 0) {
 			echo coreButton('Folder');
 		} else {
-			echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_topic.png" alt="Message" title="Message"/>';
+			echo '<img src="'.coredev_webroot().'gfx/icon_forum_topic.png" alt="Message" title="Message"/>';
 		}
 		echo '</td>';
 
@@ -530,7 +529,7 @@ function displayForumContentFlat($itemId)
 				echo '<a href="forum.php?id='.$lastpost['itemId'].'#post'.$lastpost['itemId'].'">'.$subject.'</a><br/>';
 			} else {
 				//This is a post (a reply to a topic)
-				echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
+				echo '<a href="forum.php?id='.$row['itemId'].'#post'.$lastpost['itemId'].'"><img src="'.coredev_webroot().'gfx/icon_forum_post.png" alt="Post"/></a> ';
 			}
 			echo t('by').' '.Users::link($lastpost['userId'], $lastpost['userName']).'<br/>';
 			echo formatTime($lastpost['timeCreated']);
@@ -588,7 +587,7 @@ function showForumPost($item, $islocked = false)
 
 	echo '<div class="forum_post_details">';
 	echo '<a href="forum.php?id='.$item['parentId'].'#post'.$item['itemId'].'">';
-	echo '<img src="'.$config['core']['web_root'].'gfx/icon_forum_post.png" alt="Post"/></a> ';
+	echo '<img src="'.coredev_webroot().'gfx/icon_forum_post.png" alt="Post"/></a> ';
 	echo t('by').' '.Users::link($item['authorId'], $item['authorName']).' '.formatTime($item['timeCreated']);
 	echo '</div><br/>';
 
@@ -1188,7 +1187,7 @@ function reportForumPost($itemId)
 //	myspace:	http://www.myspace.com/Modules/PostTo/Pages
 function shareForumItem($itemId)
 {
-	global $h, $config;
+	global $h;
 	if (!$h->session->id || !is_numeric($itemId)) return false;
 
 	if (!empty($_POST['fshare_mail'])) {

@@ -133,7 +133,7 @@ class Wiki
 
 	function render()
 	{
-		global $h, $db, $config;
+		global $h, $db;
 
 		$current_tab = $this->first_tab;
 
@@ -236,11 +236,11 @@ class Wiki
 			if ($h->session->isAdmin) {
 				if ($this->lockerId) {
 					echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$this->name, '&amp;wikilock=0').'\'"/>';
-					echo xhtmlImage($config['core']['web_root'].'gfx/icon_locked.png', 'This wiki is currently locked');
+					echo xhtmlImage(coredev_webroot().'gfx/icon_locked.png', 'This wiki is currently locked');
 					echo '<b>Locked by '.Users::getName($this->lockerId).' at '.formatTime($this->timeLocked).'</b><br/>';
 				} else if ($this->text) {
 					echo '<input type="button" class="button" value="'.t('Lock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$this->name, '&amp;wikilock=1').'\'"/>';
-					echo xhtmlImage($config['core']['web_root'].'gfx/icon_unlocked.png', 'This article is open for edit by anyone');
+					echo xhtmlImage(coredev_webroot().'gfx/icon_unlocked.png', 'This article is open for edit by anyone');
 				}
 			}
 

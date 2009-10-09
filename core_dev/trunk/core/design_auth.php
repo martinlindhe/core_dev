@@ -19,7 +19,7 @@ require_once('output_xhtml.php');
  */
 function showLoginForm()
 {
-	global $h, $config;
+	global $h;
 
 	if (!$h->auth) return false;
 
@@ -64,13 +64,13 @@ function showLoginForm()
 	echo '<tr>'.
 			'<td>'.t('Username').':</td>'.
 			'<td>'.xhtmlInput('login_usr').' '.
-				xhtmlImage($config['core']['web_root'].'gfx/icon_user.png', t('Username')).
+				xhtmlImage(coredev_webroot().'gfx/icon_user.png', t('Username')).
 			'</td>'.
 		'</tr>';
 	echo '<tr>'.
 			'<td>'.t('Password').':</td>'.
 			'<td>'.xhtmlPassword('login_pwd').' '.
-				xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Password')).
+				xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Password')).
 			'</td>'.
 		'</tr>';
 	echo '</table>';
@@ -109,17 +109,17 @@ function showLoginForm()
 				echo '<tr>'.
 						'<td>'.t('Username').':</td>'.
 						'<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
-							xhtmlImage($config['core']['web_root'].'gfx/icon_user.png', t('Username')).
+							xhtmlImage(coredev_webroot().'gfx/icon_user.png', t('Username')).
 						'</td>'.
 					'</tr>';
 				echo '<tr><td>'.t('Password').':</td>'.
 						'<td>'.xhtmlPassword('register_pwd').' '.
-							xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Password')).
+							xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Password')).
 						'</td>'.
 					'</tr>';
 				echo '<tr><td>'.t('Again').':</td>'.
 						'<td>'.xhtmlPassword('register_pwd2').' '.
-							xhtmlImage($config['core']['web_root'].'gfx/icon_keys.png', t('Repeat password')).
+							xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Repeat password')).
 						'</td>'.
 					'</tr>';
 				if ($h->user->userdata) {
@@ -151,7 +151,7 @@ function showLoginForm()
 			echo 'You will recieve an e-mail with a link to follow,<br/>';
 			echo 'where you can set a new password.<br/><br/>';
 			echo '<table cellpadding="2">';
-			echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td>'.xhtmlInput('forgot_pwd', '', 26).' <img src="'.$config['core']['web_root'].'gfx/icon_mail.png" alt="'.t('E-mail').'"/></td></tr>';
+			echo '<tr><td>'.getUserdataFieldName($forgot_pwd).':</td><td>'.xhtmlInput('forgot_pwd', '', 26).' <img src="'.coredev_webroot().'gfx/icon_mail.png" alt="'.t('E-mail').'"/></td></tr>';
 			echo '</table><br/>';
 
 			echo xhtmlButton('Log in', "hide_element('login_forgot_pwd_layer'); show_element('login_form_layer')");
@@ -174,7 +174,7 @@ function showLoginForm()
  */
 function showRegisterForm($preId = 0, $act_code = 0)
 {
-	global $h, $config;
+	global $h;
 	if (!is_numeric($preId) || !is_numeric($act_code)) return false;
 
 	if ($h->auth->mail_error) {
@@ -198,11 +198,11 @@ function showRegisterForm($preId = 0, $act_code = 0)
 	echo '<tr>'.
 			'<td>'.t('Username').':</td>'.
 			'<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
-				'<img src="'.$config['core']['web_root'].'gfx/icon_user.png" alt="'.t('Username').'"/>'.
+				'<img src="'.coredev_webroot().'gfx/icon_user.png" alt="'.t('Username').'"/>'.
 			'</td>'.
 			'</tr>';
-	echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
-	echo '<tr><td>'.t('Repeat password').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.$config['core']['web_root'].'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
+	echo '<tr><td>'.t('Password').':</td><td>'.xhtmlPassword('register_pwd').' <img src="'.coredev_webroot().'gfx/icon_keys.png" alt="'.t('Password').'"/></td></tr>';
+	echo '<tr><td>'.t('Repeat password').':</td><td>'.xhtmlPassword('register_pwd2').' <img src="'.coredev_webroot().'gfx/icon_keys.png" alt="'.t('Repeat password').'"/></td></tr>';
 	if ($h->user->userdata) {
 		showRequiredUserdataFields();
 	}

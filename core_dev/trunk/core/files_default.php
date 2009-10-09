@@ -491,7 +491,7 @@ class files_default
 		if ($this->default_video) {
 			if ($FileData['type'] != $this->default_video) {
 
-				$uri = $config['app']['full_url'].$config['core']['web_root'].'api/file.php?id='.$fileId;
+				$uri = $config['app']['full_url'].coredev_webroot().'api/file.php?id='.$fileId;
 
 				$client = new SoapClient($config['process']['soap_server']);
 				try {
@@ -1007,7 +1007,7 @@ class files_default
 			echo 'Attached files:<br/>';
 			foreach ($list as $row) {
 				$show_text = $row['fileName'].' ('.formatDataSize($row['fileSize']).')';
-				echo '<a href="'.$config['core']['web_root'].'api/file_pt.php?id='.$row['fileId'].'" target="_blank">';
+				echo '<a href="'.coredev_webroot().'api/file_pt.php?id='.$row['fileId'].'" target="_blank">';
 				if (in_array($row['fileMime'], $this->image_mime_types)) {
 					echo makeThumbLink($row['fileId'], $show_text).'</a> ';
 				} else {
