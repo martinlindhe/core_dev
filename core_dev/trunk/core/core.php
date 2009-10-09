@@ -162,8 +162,10 @@ function loadPlugins()
  */
 function coredev_webroot()
 {
-	$path = dirname($_SERVER['REQUEST_URI']).'/core_dev/';
-	return $path;
+	if (substr($_SERVER['REQUEST_URI'], -1) == '/') $path = $_SERVER['REQUEST_URI'];
+	else $path = dirname($_SERVER['REQUEST_URI']).'/';
+
+	return $path.'core_dev/';
 }
 
 /**
