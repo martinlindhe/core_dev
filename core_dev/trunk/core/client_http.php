@@ -74,6 +74,7 @@ class http
 			echo "unhandled url scheme ".$parsed['scheme'].dln();
 			return false;
 		}
+		if (empty($parsed['path'])) $parsed['path'] = '/';
 
 		$this->scheme = $parsed['scheme'];
 		$this->host = $parsed['host'];

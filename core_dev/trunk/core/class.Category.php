@@ -129,7 +129,7 @@ class CategoryList
 
 		if (!trim($name)) return false;
 
-		$item = new CategoryItem();
+		$item = new CategoryItem($this->type);
 		$item->setTableName($this->tbl_name);
 		$item->setType($this->type);
 		$item->setOwner($this->owner);
