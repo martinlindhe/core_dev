@@ -69,7 +69,7 @@ class Cache
 			die('FIXME USE $cache->setCacheTime() instead!');
 		}
 
-		$ret = $this->handle->set($key, $val, false, $this->expire_time);
+		$ret = @$this->handle->set($key, $val, false, $this->expire_time);
 
 		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)\n";
 		return $ret;
