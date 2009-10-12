@@ -73,21 +73,29 @@ img {
 
 /* used to mark something important, like a error message */
 .critical {
-	color: #000;
-	padding: 5px;
-	padding-left: 32px;
-	line-height: 20px;
-	background: #FB9B9B url('../gfx/icon_error.png') no-repeat;
+	background: url('../gfx/icon_error.png') no-repeat;
 	background-position: 8px 50%;
 	border: 1px dashed;
 }
 
 .okay {
+	background: url('../gfx/icon_good.png') no-repeat;
+	background-position: 8px 50%;
+	border: 1px dashed;
+}
+
+.bad, .critical {
 	color: #000;
 	padding: 5px;
 	padding-left: 32px;
 	line-height: 20px;
-	background: #B1F9AA url('../gfx/icon_good.png') no-repeat;
-	background-position: 8px 50%;
-	border: 1px dashed;
+	background-color: #FB9B9B;
+}
+
+.good, .okay {
+	color: #000;
+	padding: 5px;
+	padding-left: 32px;
+	line-height: 20px;
+	background-color: #B1F9AA;
 }
