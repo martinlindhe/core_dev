@@ -73,6 +73,8 @@ class Timestamp
 
 	/**
 	 * Returns time in MySQL "datetime" format
+	 *
+	 * @example 2009-04-13 23:17:01
 	 */
 	function getSqlDateTime()
 	{
@@ -81,8 +83,8 @@ class Timestamp
 
 	/**
 	 * Formats timestamp according to RFC 882
-	 * Example: Fri, 19 Dec 2008 16:50:19 +0100
 	 *
+	 * @example Fri, 19 Dec 2008 16:50:19 +0100
 	 * @return RFC 882 formatted timestamp
 	 */
 	function getRFC882()
@@ -92,8 +94,8 @@ class Timestamp
 
 	/**
 	 * Formats timestamp according to RFC 3339
-	 * Example: 2008-12-19T16:50:19+01:00
 	 *
+	 * @example 2008-12-19T16:50:19+01:00
 	 * @return RFC 3339 formatted timestamp
 	 */
 	function getRFC3339()
@@ -108,7 +110,9 @@ class Timestamp
 	}
 
 	/**
-	 * Presents the time in relative form, such as "2 weeks ago" or "yesterday at 9:40"
+	 * Presents the time in relative form
+	 *
+	 * @example "2 weeks ago", "yesterday at 9:40"
 	 */
 	function getRelative()
 	{

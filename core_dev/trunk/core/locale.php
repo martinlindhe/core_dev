@@ -18,10 +18,18 @@ function t($s)
 	if (empty($config['language'])) return $s;
 
 	switch ($config['language']) {
-	case 'eng': case 'en': return $s;        //English (System default)
-	case 'swe': case 'se': return t_swe($s); //Swedish
+	case 'eng': case 'en': return $s;      //English (System default)
+	case 'swe': case 'se': $t = t_swe($s); break; //Swedish
 	default: die('Unhandled language: '.$config['language']);
 	}
+
+	if (!$t) {
+		dp('Untranslated string: '.$s);
+		return '__('.$s.')__';
+	}
+
+	return $t;
+
 }
 
 ?>

@@ -119,6 +119,8 @@ function t_swe($s)
 	case 'Date': return 'Datum';
 	case 'Home': return 'Hem';
 	case 'Help': return 'Hjälp';
+	case 'Location': return 'Plats';
+	case 'Current': return 'Aktuell';
 
 	//Times
 	case 'Yesterday': return 'Igår';
@@ -444,6 +446,6 @@ function t_swe($s)
 	if (!empty($timeunits_swe[strtolower($s)])) return $timeunits_swe[strtolower($s)];
 	if (!empty($skyconditions_swe[strtolower($s)])) return $skyconditions_swe[strtolower($s)];
 
-	return '__('.$s.')__';
+	return false;
 }
 ?>
