@@ -80,7 +80,8 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 }
 
 /**
- * Validates a Swedish ORG SSN
+ * Validates a Swedish ORG SSN.
+ * Organization numbers dont need to be valid dates. Example: 556455-4656 (Unicorn Communications AB)
  *
  * @param $_yr year
  * @param $_mn month

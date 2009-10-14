@@ -7,6 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+require_once('core.php');
 require_once('output_xhtml.php');
 
 //XXX: remove usage of getProjectPath
