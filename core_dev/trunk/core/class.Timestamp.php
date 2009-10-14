@@ -64,6 +64,14 @@ class Timestamp
 	}
 
 	/**
+	 * Returns time in MySQL "date" format
+	 */
+	function getSqlDate()
+	{
+		return date('Y-m-d', $this->ts);
+	}
+
+	/**
 	 * Returns time in MySQL "datetime" format
 	 */
 	function getSqlDateTime()

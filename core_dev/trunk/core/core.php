@@ -27,6 +27,7 @@ function d($v)
 	if (is_string($v)) {
 		if (php_sapi_name() == 'cli') echo $v;
 		else echo htmlentities($v);
+		echo dln();
 	}
 	else {
 		if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
@@ -43,7 +44,7 @@ function d($v)
  */
 function dln()
 {
-	return php_sapi_name() == 'cli' ? "\n" : "<br/>";
+	return php_sapi_name() == 'cli' ? "\n" : '<br/>';
 }
 
 /**
