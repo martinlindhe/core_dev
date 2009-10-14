@@ -5,7 +5,8 @@
 
 require_once('config.php');
 
-$months = array('Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec');
+$head = new xhtml_header();
+echo $head->render();
 
 $_year = $_month = $_day = $_gender = 0;
 
@@ -37,7 +38,7 @@ for ($i = date('Y')-100; $i <= date('Y'); $i++) {
 echo '</select>';
 
 echo '<select name="month">';
-for ($i = 1; $i <= 12; $i++) echo '<option value="'.($i<10?'0':'').$i.'"'.($i==$_month?' selected="selected"':'').'>'.($i<10?'0'.$i:$i).' ('.$months[$i-1].')</option>';
+for ($i = 1; $i <= 12; $i++) echo '<option value="'.($i<10?'0':'').$i.'"'.($i==$_month?' selected="selected"':'').'>'.($i<10?'0'.$i:$i).' ('.$month_swe_short[$i].')</option>';
 echo '</select>';
 
 echo '<select name="day">';
