@@ -42,9 +42,14 @@ function d($v)
 /**
  * Returns appropriate line feed character
  */
-function dln()
+function ln()
 {
 	return php_sapi_name() == 'cli' ? "\n" : '<br/>';
+}
+
+function dln() //TODO DEPRECATE this function
+{
+	return ln();
 }
 
 /**
