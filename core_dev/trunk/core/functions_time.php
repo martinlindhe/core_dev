@@ -165,12 +165,23 @@ function now()
 /**
  * Returns given UNIX timestamp in MySQL datetime format
  *
- * @param $timestamp is a UNIX timestamp
+ * @param $ts is a UNIX timestamp
  * @return given UNIX timestamp in MySQL datetime format
  */
-function sql_datetime($timestamp)
+function sql_datetime($ts)
 {
-	return date('Y-m-d H:i:s', $timestamp);
+	return date('Y-m-d H:i:s', $ts);
+}
+
+/**
+ * Returns given UNIX timestamp in MySQL date format
+ *
+ * @param $ts is a UNIX timestamp
+ * @return given UNIX timestamp in MySQL date format
+ */
+function sql_date($ts)
+{
+	return date('Y-m-d', $ts);
 }
 
 /**
