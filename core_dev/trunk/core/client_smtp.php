@@ -55,7 +55,13 @@ class smtp
 
 	function __destruct()
 	{
-		if ($this->handle) $this->_QUIT();
+		$this->close();
+	}
+
+	function close()
+	{
+		if ($this->handle)
+			$this->_QUIT();
 	}
 
 	function login($timeout = 30)

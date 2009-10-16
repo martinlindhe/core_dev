@@ -41,6 +41,11 @@ class Sendmail
 		$this->from_adr = $username;
 	}
 
+	function close()
+	{
+		$this->smtp->close();
+	}
+
 	function setFrom($s, $n = '')
 	{
 		$this->from_adr = $s;
