@@ -52,6 +52,9 @@ class http
 
 	function getHeaders() { return $this->headers; }
 
+	function setUsername($username) { $this->username = $username; }
+	function setPassword($password) { $this->password = $password; }
+
 	/**
 	 * @param $s cache time in seconds; max 2592000 (30 days)
 	 */

@@ -51,7 +51,7 @@ class input_feed
 	/**
 	 * Parses input $data if autodetected
 	 */
-	private function parse($data, $callback = '')
+	function parse($data, $callback = '')
 	{
 		if (strpos($data, '<rss ') !== false) {
 			$rss = new input_rss($data, $callback);

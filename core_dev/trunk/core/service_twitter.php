@@ -13,7 +13,7 @@
 require_once('input_feed.php');
 require_once('client_http.php');
 
-class twitter
+class Twitter
 {
 	private $username, $password;
 
@@ -23,12 +23,15 @@ class twitter
 		$this->password = $password;
 	}
 
+	function setUsername($username) { $this->username = $username; }
+	function setPassword($password) { $this->password = $password; }
+
 	function command($url_part, $params = array())
 	{
 		$h = new http('http://twitter.com/'.$url_part);
 
-		$h->username = $this->username;
-		$h->password = $this->password;
+		$h->setUsername($this->username);
+		$h->setPassword($this->password);
 
 		return $h->post($params);
 	}
@@ -39,6 +42,7 @@ class twitter
 		$c = 'statuses/user_timeline.rss?screen_name='.$user; //&count=30
 
 		$data = $this->command($c);
+
 		$feed = new input_feed();
 
 		return $feed->parse($data);
