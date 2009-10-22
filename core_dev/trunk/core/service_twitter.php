@@ -26,9 +26,9 @@ class Twitter
 	function setUsername($username) { $this->username = $username; }
 	function setPassword($password) { $this->password = $password; }
 
-	function command($url_part, $params = array())
+	function command($url, $params = array())
 	{
-		$h = new http('http://twitter.com/'.$url_part);
+		$h = new http($url);
 
 		$h->setUsername($this->username);
 		$h->setPassword($this->password);
@@ -39,7 +39,7 @@ class Twitter
 	function getTimeline($user = '')
 	{
 		if (!$user) $user = $this->username;
-		$c = 'statuses/user_timeline.rss?screen_name='.$user; //&count=30
+		$c = 'http://twitter.com/statuses/user_timeline.atom?screen_name='.$user; //&count=30
 
 		$data = $this->command($c);
 
@@ -50,7 +50,7 @@ class Twitter
 
 	function getFriendsTimeline()
 	{
-		$c = 'statuses/friends_timeline.rss'; //&count=30
+		$c = 'http://twitter.com/statuses/friends_timeline.atom'; //&count=30
 
 		$data = $this->command($c);
 		$feed = new input_feed();
@@ -58,12 +58,17 @@ class Twitter
 		return $feed->parse($data);
 	}
 
+	function getSearchResult($s)
+	{
+		$c = 'http://search.twitter.com/search.atom';
+	}
+
 	/**
 	 * Posts a message to your twitter feed
 	 */
 	function post($msg)
 	{
-		$c = 'statuses/update.xml';
+		$c = 'http://twitter.com/statuses/update.xml';
 		$arr['status'] = $msg;
 		$data = $this->command($c, $arr, true);
 
@@ -72,7 +77,7 @@ class Twitter
 
 	function test()
 	{
-		$c = 'help/test.xml';
+		$c = 'http://twitter.com/help/test.xml';
 		$data = $this->command($c);
 
 		if ($data != '<ok>true</ok>') return false;

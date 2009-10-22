@@ -64,7 +64,7 @@ class input_atom
 				case 'video/x-flv':
 					$this->video_url  = $this->attrs['HREF'];
 					$this->video_type = $this->attrs['TYPE'];
-					if (!empty($this->attrs['LENGTH'])) $this->duration   = $this->attrs['LENGTH'];
+					if (!empty($this->attrs['LENGTH'])) $this->duration = $this->attrs['LENGTH'];
 					break;
 
 				case 'image/jpeg':
@@ -73,11 +73,22 @@ class input_atom
 					break;
 
 				default:
-					echo "unknown enclosure mimetype: ".$this->attrs['TYPE']."\n";
-					die;
-					break;
+					die("input_atom->endElement() unknown enclosure mimetype: ".$this->attrs['TYPE']."\n");
 				}
 				break;
+
+			case 'image':
+				switch ($this->attrs['TYPE']) {
+				case 'image/png':
+					$this->image_url  = $this->attrs['HREF'];
+					$this->image_type = $this->attrs['TYPE'];
+					break;
+
+				default:
+					die("input_atom->endElement() unknown image mimetype: ".$this->attrs['TYPE']."\n");
+				}
+				break;
+
 			case 'replies':
 				//FIXME: handle
 				break;
@@ -85,8 +96,7 @@ class input_atom
 			case 'self': //XXX ???
 				break;
 			default:
-				echo "unknown link type: ".$this->attrs['REL']."\n";
-				die;
+				die("input_atom->endElement() unknown link type: ".$this->attrs['REL']."\n");
 			}
 		}
 		if ($tagName == 'ENTRY') {
