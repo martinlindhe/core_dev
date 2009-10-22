@@ -1,7 +1,9 @@
 <?php
 
-require_once('/var/www/core_dev/core/core.php');
-require_once('/var/www/core_dev/core/input_sip.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('core.php');
+require_once('input_sip.php');
 
 function sipAuthCallback($username, $realm, $uri, $nonce, $response)
 {

@@ -1,6 +1,9 @@
 <?php
-require('/var/www/core_dev/trunk/core/core.php');
-require('/var/www/core_dev/trunk/core/client_pop3.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require('core.php');
+require('client_pop3.php');
 
 //$config['debug'] = true;
 

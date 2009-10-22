@@ -5,9 +5,11 @@
  * XSPF playlists are known to be compatible with: VLC, Totem
  */
 
-require_once('/var/www/core_dev/trunk/core/input_feed.php');
-require_once('/var/www/core_dev/trunk/core/io_playlist.php');
-require_once('/var/www/core_dev/trunk/core/class.Cache.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('input_feed.php');
+require_once('io_playlist.php');
+require_once('class.Cache.php');
 
 
 $url = 'https://styggve.dyndns.org:61001/webtv/playrapport.php?format=xspf';

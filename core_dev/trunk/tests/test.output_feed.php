@@ -1,5 +1,8 @@
 <?php
-require('/var/www/core_dev/core/output_feed.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require('output_feed.php');
 
 $list[] = array(
 	'pubdate' => 127652734,

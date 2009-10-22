@@ -1,6 +1,8 @@
 <?php
 
-require('/var/www/core_dev/core/conv_length.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require('conv_length.php');
 
 $l = new length();
 

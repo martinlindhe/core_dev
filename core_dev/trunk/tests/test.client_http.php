@@ -1,6 +1,9 @@
 <?php
-require_once('/var/www/core_dev/core/core.php');
-require_once('/var/www/core_dev/core/client_http.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('core.php');
+require_once('client_http.php');
 
 $url = 'https://styggve.dyndns.org:61001/xspf/';
 $u = new http($url);

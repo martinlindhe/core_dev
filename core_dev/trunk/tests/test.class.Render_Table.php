@@ -1,6 +1,8 @@
 <?php
 
-require_once('../core/class.Render_Table.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('class.Render_Table.php');
 
 $xls = new Render_Table_XLS();
 $xls->heading(array('heading 1', 'heading 2', 'heading 3', 'heading 4'));

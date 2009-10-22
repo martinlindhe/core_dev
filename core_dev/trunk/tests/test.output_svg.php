@@ -1,5 +1,8 @@
 <?php
-require_once('/var/www/core_dev/core/output_svg.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('output_svg.php');
 
 
 $polys[0]['coords'] = array(10, 10, 20, 20, 30, 30, 40, 40);	//4 points

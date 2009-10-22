@@ -1,6 +1,9 @@
 <?php
-require_once('/var/www/core_dev/core/core.php');
-require_once('/var/www/core_dev/core/service_googlemaps.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('core.php');
+require_once('service_googlemaps.php');
 
 $config['google_maps']['api_key'] = 'ABQIAAAAZb_xLTALhJppDDNbAvv61RTTk3jw-XtFtPS4v2-kipB51_4ySRQsE9iSridKaiJXVTQ5msdyWyuhRw';
 

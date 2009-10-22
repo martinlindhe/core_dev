@@ -1,8 +1,10 @@
 <?php
 
-require_once('/var/www/core_dev/trunk/core/core.php');
-require_once('/var/www/core_dev/trunk/core/client_captcha.php');
-require_once('/var/www/core_dev/trunk/core/output_xhtml.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('core.php');
+require_once('client_captcha.php');
+require_once('output_xhtml.php');
 
 $captcha = new captcha();
 $captcha->setPrivKey('6LfqDQQAAAAAAKOMPfoJYcpqfZBlWQZf1BYiq7qt');

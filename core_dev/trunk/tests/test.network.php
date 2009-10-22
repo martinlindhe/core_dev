@@ -1,5 +1,8 @@
 <?php
-require_once('/var/www/core_dev/core/network.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('network.php');
 
 $x = IPv4_to_GeoIP('192.168.0.1');
 $valid = array(

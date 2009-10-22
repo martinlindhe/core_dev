@@ -1,6 +1,8 @@
 <?php
 
-require('/var/www/core_dev/core/input_feed.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require('input_feed.php');
 
 /**
  * Example in how to make a rss fetcher that only notifies on new content in the feed

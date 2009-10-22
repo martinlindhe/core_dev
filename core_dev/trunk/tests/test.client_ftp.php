@@ -1,6 +1,9 @@
 <?php
-require_once('/var/www/core_dev/trunk/core/core.php');
-require_once('/var/www/core_dev/trunk/core/client_ftp.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('core.php');
+require_once('client_ftp.php');
 
 //normal anon ftp:
 $url = 'ftp://ftp.sunet.se/pub/os/Linux/distributions/slackware/slackware-10.2/';

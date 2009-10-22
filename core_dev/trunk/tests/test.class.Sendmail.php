@@ -1,6 +1,9 @@
 <?php
-require('/var/www/core_dev/core/core.php');
-require('/var/www/core_dev/core/class.Sendmail.php');
+
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require('core.php');
+require('class.Sendmail.php');
 
 $config['debug'] = true;
 

@@ -3,7 +3,9 @@
  * Test script for validate_ssn.php
  */
 
-require_once('../core/validate_ssn.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('validate_ssn.php');
 
 $male_ssn = '740524-5593'; //valid male ssn (randomized)
 $female_ssn = '770911-8884'; //valid female ssn (randomized)

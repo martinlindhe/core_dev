@@ -1,6 +1,8 @@
 <?php
 
-require_once('/var/www/core_dev/core/conv_mass.php');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
+
+require_once('conv_mass.php');
 
 $m = new mass();
 $m->precision = 2;
