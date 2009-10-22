@@ -20,7 +20,9 @@ class xml_input
     var $keys;
     var $path;
 	var $index, $idxval, $value;
-	var $cache_time = 0;
+	private $cache_time = 0;
+
+	function setCacheTime($s) { $this->cache_time = $s; }
 
 	/**
 	 * @param $index if set, name of field to read index from

@@ -10,7 +10,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('input_feed.php');
+require_once('io_feed.php');
 require_once('client_http.php');
 
 class Twitter
@@ -26,7 +26,10 @@ class Twitter
 	function setUsername($username) { $this->username = $username; }
 	function setPassword($password) { $this->password = $password; }
 
-	function command($url, $params = array())
+	/**
+	 * Executes a Twitter API function
+	 */
+	function exec($url, $params = array())
 	{
 		$h = new http($url);
 
@@ -41,9 +44,9 @@ class Twitter
 		if (!$user) $user = $this->username;
 		$c = 'http://twitter.com/statuses/user_timeline.atom?screen_name='.$user; //&count=30
 
-		$data = $this->command($c);
+		$data = $this->exec($c);
 
-		$feed = new input_feed();
+		$feed = new NewsFeed();
 
 		return $feed->parse($data);
 	}
@@ -52,8 +55,8 @@ class Twitter
 	{
 		$c = 'http://twitter.com/statuses/friends_timeline.atom'; //&count=30
 
-		$data = $this->command($c);
-		$feed = new input_feed();
+		$data = $this->exec($c);
+		$feed = new NewsFeed();
 
 		return $feed->parse($data);
 	}
@@ -61,9 +64,9 @@ class Twitter
 	function getSearchResult($s)
 	{
 		$c = 'http://search.twitter.com/search.atom?q='.urlencode($s);
-		$data = $this->command($c);
+		$data = $this->exec($c);
 
-		$feed = new input_feed();
+		$feed = new NewsFeed();
 
 		return $feed->parse($data);
 	}
@@ -75,7 +78,7 @@ class Twitter
 	{
 		$c = 'http://twitter.com/statuses/update.xml';
 		$arr['status'] = $msg;
-		$data = $this->command($c, $arr, true);
+		$data = $this->exec($c, $arr, true);
 
 		return true;
 	}
@@ -83,7 +86,7 @@ class Twitter
 	function test()
 	{
 		$c = 'http://twitter.com/help/test.xml';
-		$data = $this->command($c);
+		$data = $this->exec($c);
 
 		if ($data != '<ok>true</ok>') return false;
 		return true;

@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//TODO: parse into NewsItem objects as in input_rss (service_twitter will be affected)
+
 class input_atom
 {
 	private $inside_item = false;
@@ -20,7 +22,18 @@ class input_atom
 
 	private $entries = array();
 
-	function __construct($data, $callback = '')
+	function __construct()
+	{
+	}
+
+	function setCallback($cb)
+	{
+		if (function_exists($cb)) $this->callback = $cb;
+	}
+
+	function getItems() { return $this->entries; }
+
+	function parse($data)
 	{
 		if (is_url($data)) {
 			$u = new http($data);
@@ -32,15 +45,11 @@ class input_atom
 		xml_set_element_handler($parser, 'startElement', 'endElement');
 		xml_set_character_data_handler($parser, 'characterData');
 
-		if (function_exists($callback)) $this->callback = $callback;
-
 		if (!xml_parse($parser, $data, true)) {
 			echo "parseATOM XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
 		}
 		xml_parser_free($parser);
 	}
-
-	function getEntries() { return $this->entries; }
 
 	function startElement($parser, $name, $attrs = '')
 	{
@@ -106,7 +115,6 @@ class input_atom
 			if ($row['title'] == $row['desc']) $row['desc'] = '';
 			$row['pubdate']  = strtotime(trim($this->pubDate));
 			$row['guid']     = trim($this->guid);
-			//$row['guid2']    = trim($this->guid2); //XXX remove hack!
 			$row['duration'] = trim($this->duration);
 			if ($this->video_url)  $row['video'] = $this->video_url;
 			if ($this->video_type) $row['video_type'] = $this->video_type;

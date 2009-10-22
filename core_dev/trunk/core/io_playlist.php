@@ -25,33 +25,89 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//STATUS: ok
+
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
-require_once('object_PlaylistItem.php');
+class MediaItem
+{
+	var $mime; ///< mimetype of media
+	var $url;  ///< location of media
+	var $thumbnail; ///< location of thumbnail/cover art
+
+	var $title;
+
+	var $duration;  ///< for video clip
+	var $time_published;
+	var $desc; ///< description of media item
+}
 
 class Playlist
 {
 	private $sendHeaders = false; ///< shall we send mime type?
 
-	private $entries = array();
+	private $entries = array(); ///< MediaItem objects
 
-	function getEntries() { return $this->entries; }
+	function getItems() { return $this->entries; }
 
 	/**
-	 * Adds a array of entries to the feed list
+	 * Adds a array of items to the feed list
+	 *
+	 * @param $list list of MediaItem objects
 	 */
 	function addList($list)
 	{
-		foreach ($list as $entry)
-			$this->entries[] = $entry;
+		foreach ($list as $e)
+			$this->addItem($e);
 	}
 
 	/**
-	 * Adds a entry to the feed list
+	 * Adds a item to the feed list
 	 */
-	function addEntry($entry)
+	function addItem($e)
 	{
-		$this->entries[] = $entry;
+		if (get_class($e) == 'MediaItem') {
+			$this->entries[] = $e;
+		} else if (get_class($e) == 'NewsItem') {
+			//convert a NewsItem into a MediaItem
+			$item = new MediaItem();
+
+			$item->title          = $e->title;
+			$item->desc           = $e->desc;
+			$item->thumbnail      = $e->image_url;
+
+			$item->mime           = $e->video_mime;
+			$item->url            = $e->video_url;
+			$item->duration       = $e->duration;
+			$item->time_published = $e->time_published;
+
+			$this->entries[] = $item;
+
+		} else {
+			d('Playlist->addItem bad data: ');
+			d($e);
+		}
+	}
+
+	/**
+	 * Sorts the list
+	 */
+	function sort($callback = '')
+	{
+		if (!$callback) $callback = array($this, 'sortListDesc');
+
+		uasort($this->entries, $callback);
+	}
+
+	/**
+	 * List sort filter
+	 * @return Internal list, sorted descending by published date
+	 */
+	private function sortListDesc($a, $b)
+	{
+		if (!$a->time_published || !$b->time_published) return -1;
+
+		return ($a->time_published > $b->time_published) ? -1 : 1;
 	}
 
 	function enableHeaders() { $this->sendHeaders = true; }
@@ -87,25 +143,23 @@ class Playlist
 		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
 		$res .= '<trackList>'."\n";
 
-		foreach ($this->getEntries() as $row) {
+		foreach ($this->getItems() as $item) {
+
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 
 			$res .= '<track>';
-			$title = (!empty($row['pubdate']) ? formatTime($row['pubdate']).' ' : '').$row['title'];
-			//if ($row['desc']) $title .= ' - '.$row['desc'];
+			$title = ($item->time_published ? formatTime($item->time_published).' ' : '').$item->title;
+			//if ($item->desc) $title .= ' - '.$item->desc;
 			$res .= '<title><![CDATA['.trim($title).']]></title>';
 
-			$vid_url = new http($row['video']);
-			$res .= '<location>'.$vid_url->render().'</location>';
+			$res .= '<location>'.$item->url.'</location>';
 
-			if (!empty($row['duration']))
-				$res .= '<duration>'.($row['duration']*1000).'</duration>'; //in milliseconds
+			if ($item->duration)
+				$res .= '<duration>'.($item->duration*1000).'</duration>'; //in milliseconds
 
-			if (!empty($row['image'])) {
-				$img_url = new http($row['image']);
-				$res .= '<image>'.$img_url->render().'</image>';
-			}
+			if ($item->thumbnail)
+				$res .= '<image>'.$item->thumbnail.'</image>';
 
 			$res .= '</track>'."\n";
 		}
@@ -119,9 +173,9 @@ class Playlist
 	function renderM3U()
 	{
 		$res = "#EXTM3U\n";
-		foreach ($this->getEntries() as $row) {
-			$res .= "#EXTINF:".(!empty($row['duration']) ? round($row['duration'], 0) : '-1').",".$row['title']."\n";
-			$res .= $row['video']."\n";
+		foreach ($this->getItems() as $item) {
+			$res .= "#EXTINF:".($item->duration ? round($item->duration, 0) : '-1').",".$item->title."\n";
+			$res .= $item->url."\n";
 		}
 
 		return $res;
@@ -135,11 +189,13 @@ class Playlist
 		"\n";
 
 		$i = 0;
-		foreach ($this->getEntries() as $row) {
+		foreach ($this->getItems() as $item) {
 			$i++;
-			$res .= "File".$i."=".$row['video']."\n";
-			$res .= "Title".$i."=".$row['title']."\n";
-			$res .= "Length".$i."=".(!empty($row['duration']) ? $row['duration'] : '-1')."\n\n";
+			$res .=
+			"File".  $i."=".$item->url."\n".
+			"Title". $i."=".$item->title."\n".
+			"Length".$i."=".($item->duration ? $item->duration : '-1')."\n".
+			"\n";
 		}
 		$res .= "Version=2\n";
 		return $res;
@@ -152,13 +208,16 @@ class Playlist
 	{
 		$res = '<table border="1">';
 
-		foreach ($this->getEntries() as $row) {
+		foreach ($this->getItems() as $item) {
+			//d($item);
+
 			$res .=
 			'<tr><td>'.
-			'<h2>'.(!empty($row['pubdate']) ? formatTime($row['pubdate']) : '').' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').$row['title'].(!empty($row['link']) ? '</a>' : '').'</h2>'.
-			(!empty($row['image']) ? '<img src="'.$row['image'].'" width="320" style="float: left; padding: 10px;"/>' : '').
-			(!empty($row['desc']) ? '<p>'.$row['desc'].'</p>' : '').
-			(!empty($row['video']) ? '<a href="'.$row['video'].'">Play video</a>' : '').
+			'<h2>'. formatTime($item->time_published).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').
+			$item->title.(!empty($row['link']) ? '</a>' : '').'</h2>'.
+			($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
+			($item->desc ? '<p>'.$item->desc.'</p>' : '').
+			($item->url ? '<a href="'.$item->url.'">Play video</a>' : '').
 			'</td></tr>';
 		}
 

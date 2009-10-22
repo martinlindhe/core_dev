@@ -13,6 +13,8 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//STATUS: rewriting
+
 require_once('class.Timestamp.php');
 
 require_once('client_http.php');
@@ -24,11 +26,32 @@ require_once('input_asx.php'); //XXX: FIXME use in io_playlist instead
 require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
 
 
+class NewsItem
+{
+	var $title;
+	var $desc;
+	var $time_published;
+	var $author;
+
+	var $url;
+	var $guid;
+
+	var $image_mime;
+	var $image_url;
+
+	var $video_mime;
+	var $video_url;
+	var $duration; ///< video duration
+}
+
 //TODO: rewrite/merge output_feed class with NewsFeed class
 class NewsFeed
 {
-	private $sort = true; ///< sort output array
 	private $http;
+
+	private $entries = array(); ///< NewsItem objects
+
+	private $callback_parse; ///< function to call to filter each entry while it is being parsed
 
 	function __construct()
 	{
@@ -40,43 +63,55 @@ class NewsFeed
 	 */
 	function setCacheTime($s) { $this->http->setCacheTime($s); }
 
-	function setSort($bool) { $this->sort = $bool; }
+	function setParseCallback($cb) { $this->callback_parse = $cb; }
 
-	function getList($url, $callback = '')
+	function getList() { return $this->entries; }
+
+	/**
+	 * Loads the feed with parsed objects from a url or raw data
+	 */
+	function load($data)
 	{
-		if (!is_url($url)) return false;
+		if (is_url($data))
+			$data = $this->http->get($data);
 
-		$data = $this->http->get($url);
-
-		$entries = $this->parse($data, $callback);
-		if (!$entries) return false;
-
-		if ($this->sort) uasort($entries, array($this, 'sortListDesc'));
-
-		return $entries;
+		$this->entries = $this->parse($data);
+		if (!$this->entries) return false;
+		return true;
 	}
 
 	/**
 	 * Parses input $data if autodetected
 	 */
-	function parse($data, $callback = '')
+	function parse($data)
 	{
 		if (strpos($data, '<rss ') !== false) {
-			$rss = new input_rss($data, $callback);
-			return $rss->getEntries();
+			$feed = new input_rss();
 		} else if (strpos($data, '<feed ') !== false) {
-			$atom = new input_atom($data, $callback);
-			return $atom->getEntries();
+			$feed = new input_atom();
 		} else if (strpos($data, '<asx ') !== false) {
-			$asx = new input_asx($data, $callback);
-			return $asx->getEntries();
+			$feed = new input_asx();
 		} else if (strpos($data, '#EXTM3U') !== false) {
-			$m3u = new input_m3u($data, $callback);
-			return $m3u->getEntries();
+			$feed = new input_m3u();
+		} else {
+			echo "input_feed->parse error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
+			return false;
 		}
 
-		echo "input_feed->parse error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
-		return false;
+		$feed->setCallback($this->callback_parse);
+		$feed->parse($data);
+
+		return $feed->getItems();
+	}
+
+	/**
+	 * Sorts the list
+	 */
+	function sort($callback = '')
+	{
+		if (!$callback) $callback = array($this, 'sortListDesc');
+
+		uasort($this->entries, $callback);
 	}
 
 	/**
@@ -85,9 +120,9 @@ class NewsFeed
 	 */
 	private function sortListDesc($a, $b)
 	{
-		if (empty($a['pubdate']) || empty($b['pubdate'])) return -1;
+		if (!$a->time_published || !$b->time_published) return -1;
 
-		return ($a['pubdate'] > $b['pubdate']) ? -1 : 1;
+		return ($a->time_published > $b->time_published) ? -1 : 1;
 	}
 
 }
@@ -104,7 +139,7 @@ class output_feed
 	private $ttl         = 15;    ///< time to live, in minutes
 	private $sendHeaders = false; ///< shall we send mime type?
 
-	function getEntries() { return $this->entries; }
+	function getItems() { return $this->entries; }
 
 	function setTitle($n) { $this->title = $n; }
 	function setLink($n) { $this->link = $n; }
@@ -116,16 +151,36 @@ class output_feed
 	 */
 	function addList($list)
 	{
-		foreach ($list as $entry)
-			$this->entries[] = $entry;
+		foreach ($list as $e)
+			$this->addItem($e);
 	}
 
 	/**
 	 * Adds a entry to the feed list
 	 */
-	function addEntry($entry)
+	function addItem($e)
 	{
-		$this->entries[] = $entry;
+		if (get_class($e) == 'NewsItem') {
+			$this->entries[] = $e;
+		} else if (get_class($e) == 'MediaItem') {
+			//convert a MediaItem into a NewsItem
+			$item = new NewsItem();
+
+			$item->title          = $e->title;
+			$item->desc           = $e->desc;
+			$item->image_url      = $e->thumbnail;
+
+			$item->video_mime     = $e->mime;
+			$item->video_url      = $e->url;
+			$item->duration       = $e->duration;
+			$item->time_published = $e->time_published;
+
+			$this->entries[] = $item;
+
+		} else {
+			d('output_feed->addItem bad data: ');
+			d($e);
+		}
 	}
 
 	/**
@@ -164,19 +219,19 @@ class output_feed
 			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->getEntries() as $entry) {
-			$ts->set($entry['pubdate']);
+		foreach ($this->getItems() as $item) {
+			$ts->set($item->time_published);
 			$res .=
 			'<entry>'.
-				'<id>'.(!empty($entry['guid']) ? $entry['guid'] : htmlspecialchars($entry['link']) ).'</id>'.
-				'<title><![CDATA['.$entry['title'].']]></title>'.
-				'<link rel="alternate" href="'.$entry['link'].'"/>'.
-				'<summary><![CDATA['.(!empty($entry['desc']) ? $entry['desc'] : ' ').']]></summary>'.
+				'<id>'.($item->guid ? $item->guid : htmlspecialchars($item->url) ).'</id>'.
+				'<title><![CDATA['.$item->title.']]></title>'.
+				'<link rel="alternate" href="'.$item->url.'"/>'.
+				'<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
 				'<updated>'.$ts->getRFC3339().'</updated>'.
-				'<author><name>'.(!empty($entry['author̈́']) ? $entry['author'] : $this->title).'</name></author>'.
+				'<author><name>'.$item->author.'</name></author>'.
 				//XXX no way to embed video duration, <link length="x"> is length of the resource, in bytes.
-				(!empty($entry['video']) ? '<link rel="enclosure" type="'.$entry['video_type'].'" href="'.$entry['video'].'"/>' : '').
-				(!empty($entry['image']) ? '<link rel="enclosure" type="'.$entry['image_type'].'" href="'.$entry['image'].'"/>' : '').
+				($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.$item->video_url.'"/>' : '').
+				($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.$item->image_url.'"/>' : '').
 			'</entry>'."\n";
 		}
 		$res .=
@@ -205,18 +260,18 @@ class output_feed
 				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($u->render()).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->getEntries() as $entry) {
+		foreach ($this->getItems() as $item) {
 
-			$ts->set($entry['pubdate']);
+			$ts->set($item->time_published);
 			$res .=
 			'<item>'.
-				'<title><![CDATA['.trim($entry['title']).']]></title>'.
-				'<link>'.trim(htmlspecialchars($entry['link'])).'</link>'.
-				'<description><![CDATA['.trim($entry['desc']).']]></description>'.
+				'<title><![CDATA['.$item->title.']]></title>'.
+				'<link>'.htmlspecialchars($item->url).'</link>'.
+				'<description><![CDATA['.$item->desc.']]></description>'.
 				'<pubDate>'.$ts->getRFC882().'</pubDate>'.
-				(!empty($entry['guid']) ? '<guid>'.$entry['guid'].'</guid>' : '').
-				(!empty($entry['video']) ? '<media:content medium="video" type="'.$entry['video_type'].'" url="'.$entry['video'].'"'.(!empty($entry['duration']) ? ' duration="'.$entry['duration'].'"' : '').'/>' : '').
-				(!empty($entry['image']) ? '<media:content medium="image" type="'.$entry['image_type'].'" url="'.$entry['image'].'"/>' : '').
+				($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
+				($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.$item->video_url.'"'.($item->duration ? ' duration="'.$item->duration.'"' : '').'/>' : '').
+				($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.$item->image_url.'"/>' : '').
 			'</item>'."\n";
 		}
 
