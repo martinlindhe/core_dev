@@ -60,7 +60,12 @@ class Twitter
 
 	function getSearchResult($s)
 	{
-		$c = 'http://search.twitter.com/search.atom';
+		$c = 'http://search.twitter.com/search.atom?q='.urlencode($s);
+		$data = $this->command($c);
+
+		$feed = new input_feed();
+
+		return $feed->parse($data);
 	}
 
 	/**

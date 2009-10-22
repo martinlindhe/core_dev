@@ -1,15 +1,23 @@
 <?php
 
-require_once('/var/www/core_dev/core/service_twitter.php');
+require_once('/var/www/core_dev/trunk/core/service_twitter.php');
 
-$t = new twitter();
+$t = new Twitter();
 
 //if (!$t->test()) echo 'FAIL 1';
 
-$x = $t->getTimeline('twitter'); print_r($x);
+//$x = $t->getTimeline('twitter'); print_r($x);
 
-//need auth:
-//$x = $t->getFriendsTimeline(); print_r($x);
-//$t->post('testar lite');
+
+$x = $t->getSearchResult('#crap'); print_r($x);
+
+
+//needs auth:
+/*
+$t->setUsername('xxx');
+$t->setPassword('xxx');
+$x = $t->getFriendsTimeline(); print_r($x);
+$t->post('testar lite');
+*/
 
 ?>
