@@ -55,6 +55,7 @@ select {
 	background-color: #DDD;
 	padding: 10px;
 	border-radius: 15px 15px 15px 15px; /*css3*/
+	-moz-border-radius: 15px 15px 15px 15px;
 }
 /* style of header for file gadget */
 .file_gadget_header {
@@ -64,8 +65,12 @@ select {
 
 	border: 1px solid #aaa;
 	padding: 10px;
+
 	border-radius-topleft:15px; /*css3*/
 	border-radius-topright:15px; /*css3*/
+
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-topright:15px;
 }
 
 /* holds all file entries */
@@ -173,6 +178,7 @@ overflow: auto;
 	background-color: #DDD;
 	padding: 10px;
 	border-radius:15px 15px 15px 15px;  /*css3*/
+	-moz-border-radius:15px 15px 15px 15px;
 }
 
 
@@ -316,8 +322,10 @@ overflow: auto;
 .news {
 }
 .news_top {
-	border-radius-topleft:15px; /*css3*/
-	border-radius-bottomright:15px; /*css3*/
+	border-radius-topleft:15px;
+	border-radius-bottomright:15px;
+	-moz-border-radius-topleft:15px;
+	-moz-border-radius-bottomright:15px;
 	background-color: #fff;
 	border: 1px #888 solid;
 	padding: 10px;
@@ -332,7 +340,8 @@ overflow: auto;
 	background-position: 100% 50%;
 }
 .news_head { /* news article heading */
-	border-radius-topleft:15px; /*css3*/
+	border-radius-topleft:15px;
+	-moz-border-radius-topleft:15px;
 	font-size: 16px;
 	font-weight: bold;
 	padding: 10px;
@@ -341,7 +350,8 @@ overflow: auto;
 	background-color: #eee;
 }
 .news_body { /* news article body */
-	border-radius-bottomright:15px; /*css3*/
+	border-radius-bottomright:15px;
+	-moz-border-radius-bottomright:15px;
 	font-size: 12px;
 	padding: 10px;
 	border: 1px #888 solid;
@@ -460,6 +470,7 @@ overflow: auto;
 	background-color: #4EC04E;
 	padding: 10px;
 	border-radius:8px;/*css3*/
+	-moz-border-radius:8px;
 }
 .forum_overview_group a:link,.forum_overview_group a:visited {
 	font-weight: bold;
@@ -499,6 +510,7 @@ overflow: auto;
 	border: 1px solid #fff;
 	background-color: #B6D4D4;
 	border-radius:8px;/*css3*/
+	-moz-border-radius:8px;
 	margin: 0;
 	padding: 6px;
 }
@@ -542,6 +554,7 @@ overflow: auto;
 	font-weight: bold;
 	padding: 0 5px 0 5px;
 	border-radius: 5px 5px 0px 0px; /*css3*/
+	-moz-border-radius: 5px 5px 0px 0px;
 	color: #FFF;
 	background-color: #004A80;
 	display: inline;
@@ -564,6 +577,7 @@ overflow: auto;
 	font-weight: bold;
 	padding: 0 5px 0 5px;
 	border-radius: 5px 5px 0px 0px; /*css3*/
+	-moz-border-radius: 5px 5px 0px 0px;
 	color: #FFF;
 	background-color: #9B3333;
 	display: inline;
