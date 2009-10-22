@@ -25,7 +25,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//XXX ability to fetch xspf from web
+//XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
 require_once('object_PlaylistItem.php');
 
