@@ -54,10 +54,7 @@ select {
 	border: 1px solid #aaa;
 	background-color: #DDD;
 	padding: 10px;
-	-moz-border-radius-bottomleft:15px;
-	-moz-border-radius-bottomright:15px;
-	-moz-border-radius-topleft:15px;
-	-moz-border-radius-topright:15px;
+	border-radius: 15px 15px 15px 15px; /*css3*/
 }
 /* style of header for file gadget */
 .file_gadget_header {
@@ -67,8 +64,8 @@ select {
 
 	border: 1px solid #aaa;
 	padding: 10px;
-	-moz-border-radius-topleft:15px;
-	-moz-border-radius-topright:15px;
+	border-radius-topleft:15px; /*css3*/
+	border-radius-topright:15px; /*css3*/
 }
 
 /* holds all file entries */
@@ -175,10 +172,7 @@ overflow: auto;
 	color: #000;
 	background-color: #DDD;
 	padding: 10px;
-	-moz-border-radius-bottomleft:15px;
-	-moz-border-radius-bottomright:15px;
-	-moz-border-radius-topleft:15px;
-	-moz-border-radius-topright:15px;
+	border-radius:15px 15px 15px 15px;  /*css3*/
 }
 
 
@@ -322,8 +316,8 @@ overflow: auto;
 .news {
 }
 .news_top {
-	-moz-border-radius-topleft:15px;
-	-moz-border-radius-bottomright:15px;
+	border-radius-topleft:15px; /*css3*/
+	border-radius-bottomright:15px; /*css3*/
 	background-color: #fff;
 	border: 1px #888 solid;
 	padding: 10px;
@@ -338,7 +332,7 @@ overflow: auto;
 	background-position: 100% 50%;
 }
 .news_head { /* news article heading */
-	-moz-border-radius-topleft:15px;
+	border-radius-topleft:15px; /*css3*/
 	font-size: 16px;
 	font-weight: bold;
 	padding: 10px;
@@ -347,7 +341,7 @@ overflow: auto;
 	background-color: #eee;
 }
 .news_body { /* news article body */
-	-moz-border-radius-bottomright:15px;
+	border-radius-bottomright:15px; /*css3*/
 	font-size: 12px;
 	padding: 10px;
 	border: 1px #888 solid;
@@ -465,7 +459,7 @@ overflow: auto;
 	color: #fff;
 	background-color: #4EC04E;
 	padding: 10px;
-	-moz-border-radius:8px;
+	border-radius:8px;/*css3*/
 }
 .forum_overview_group a:link,.forum_overview_group a:visited {
 	font-weight: bold;
@@ -504,7 +498,7 @@ overflow: auto;
 .forum_post_table {
 	border: 1px solid #fff;
 	background-color: #B6D4D4;
-	-moz-border-radius:8px;
+	border-radius:8px;/*css3*/
 	margin: 0;
 	padding: 6px;
 }
@@ -547,7 +541,7 @@ overflow: auto;
 .bb_quote_head {
 	font-weight: bold;
 	padding: 0 5px 0 5px;
-	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0px 0px; /*css3*/
 	color: #FFF;
 	background-color: #004A80;
 	display: inline;
@@ -569,7 +563,7 @@ overflow: auto;
 .bb_code_head {
 	font-weight: bold;
 	padding: 0 5px 0 5px;
-	-moz-border-radius: 5px 5px 0 0;
+	border-radius: 5px 5px 0px 0px; /*css3*/
 	color: #FFF;
 	background-color: #9B3333;
 	display: inline;
