@@ -27,8 +27,11 @@
 
 //STATUS: ok
 
-//XXX TODO ability to load playlist from XSPF, M3U, PLS files
+//XXX TODO ability to load playlist from XSPF, M3U, PLS, ASX files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
+
+require_once('input_asx.php'); //XXX: FIXME use in io_playlist
+require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
 
 require_once('xhtml_header.php');
 

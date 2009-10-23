@@ -26,7 +26,7 @@ function d($v)
 {
 	if (is_string($v)) {
 		if (php_sapi_name() == 'cli') echo $v;
-		else echo htmlentities($v);
+		else echo '<pre>'.htmlentities($v).'</pre>';
 		echo dln();
 	}
 	else {

@@ -22,10 +22,6 @@ require_once('client_http.php');
 require_once('input_rss.php');
 require_once('input_atom.php');
 
-require_once('input_asx.php'); //XXX: FIXME use in io_playlist instead
-require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
-
-
 class NewsItem
 {
 	var $title;
