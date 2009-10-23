@@ -60,8 +60,9 @@ class diff
 			$f1 = tempnam('', 'diff');
 			$f2 = tempnam('', 'diff');
 
-			file_put_contents($f1, $this->r1);
-			file_put_contents($f2, $this->r2);
+			//XXX ugly hack to avoid "\ No newline at end of file" from diff command. since we dont know the line ending mode, this will probably break sometime :-(
+			file_put_contents($f1, $this->r1."\n");
+			file_put_contents($f2, $this->r2."\n");
 
 			$this->diffFiles($f1, $f2);
 
