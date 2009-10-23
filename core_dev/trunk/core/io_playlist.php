@@ -231,6 +231,7 @@ class Playlist
 			($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
 			($item->desc ? '<p>'.$item->desc.'</p>' : '').
 			($item->url && $item->desc ? '<a href="'.$item->url.'">Play video</a>' : '').
+			($item->duration ? ' (duration: '.formatDuration($item->duration).')' : '').
 			'</td></tr>';
 		}
 

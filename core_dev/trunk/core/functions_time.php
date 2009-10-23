@@ -91,44 +91,44 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 /**
  * Converts a timespan into human-readable text
  *
- * @param $seconds number of seconds to present
+ * @param $secs number of seconds to present
  * @return returns a sting like: 4h10m3s
  */
-function shortTimePeriod($seconds)
+function shortTimePeriod($secs)
 {
-	if (is_float($seconds)) $seconds = ceil($seconds);
+	if (is_float($secs)) $secs = ceil($secs);
 	$retval = '';
 
 	//years
-	$a = date('Y', $seconds) - 1970;
+	$a = date('Y', $secs) - 1970;
 	if ($a==1) $retval = $a.' year, ';
 	else if ($a>0) $retval = $a.' years, ';
-	$seconds -= (((($a*60)*60)*24)*30)*365;
+	$secs -= (((($a*60)*60)*24)*30)*365;
 
 	//months
-	$a = date('n',$seconds)-1;
+	$a = date('n',$secs)-1;
 	if ($a==1) $retval .= $a.' month, ';
 	else if($a>0) $retval .= $a.' months, ';
-	$seconds -= ((($a*60)*60)*24)*30;
+	$secs -= ((($a*60)*60)*24)*30;
 
 	//days
-	$a = date('j',$seconds)-1;
+	$a = date('j',$secs)-1;
 	if ($a==1) $retval .= $a.' day, ';
 	else if ($a>0) $retval .= $a.' days, ';
-	$seconds -= (($a*60)*60)*24;
+	$secs -= (($a*60)*60)*24;
 
 	//hours
-	$a = date('H',$seconds)-1;
+	$a = date('H',$secs)-1;
 	if ($a>0) $retval .= $a.'h';
-	$seconds -= ($a*60)*60;
+	$secs -= ($a*60)*60;
 
 	//minutes
-	$a = date('i',$seconds)-0; //XXX ugly hack, translate from 09 to 9 quickly ;)
+	$a = date('i',$secs)-0;
 	if ($a>0) $retval .= $a.'m';
-	$seconds -= $a*60;
+	$secs -= $a*60;
 
 	//seconds
-	$a = date('s',$seconds)-0;
+	$a = date('s',$secs)-0;
 	if ($a>0) $retval .= $a.'s';
 
 	if (substr($retval, -2) == ', ') $retval = substr($retval, 0, -2);

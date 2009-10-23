@@ -25,18 +25,39 @@ require_once('network.php');
 function d($v)
 {
 	if (is_string($v)) {
-		if (php_sapi_name() == 'cli') echo $v;
-		else echo '<pre>'.htmlentities($v).'</pre>';
-		echo dln();
-	}
-	else {
-		if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
-		else {
-			if (php_sapi_name() != 'cli') echo '<pre>';
-			print_r($v);
-			if (php_sapi_name() != 'cli') echo '</pre>';
+		//XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
+
+		if (php_sapi_name() == 'cli') {
+			echo $v;
+		} else {
+			$out = htmlentities($v);
+			if ($out != htmlentities($v))
+				echo '<pre>'.$out.'</pre>';
+			else
+				echo $out;
 		}
+		echo dln();
+		return;
 	}
+
+	//xdebug's var_dump is awesome
+	if (extension_loaded('xdebug')) {
+		var_dump($v);
+		return;
+	}
+
+	if (php_sapi_name() != 'cli') echo '<pre>';
+	print_r($v);
+	if (php_sapi_name() != 'cli') echo '</pre>';
+}
+
+/**
+ * Displays string as intended to be read. > is rendered in the browser and terminal
+ */
+function ds($s)
+{
+	if (php_sapi_name() == 'cli') return $s;
+	else return htmlentities($s);
 }
 
 /**
@@ -141,6 +162,24 @@ function dh($m)
 		echo str_repeat(' ', (15-strlen($bytes))*3 );
 		echo "$bytes\n";
 	}
+}
+
+/**
+ * Returns the literal name of a variable
+ *
+ * @param $var variable
+ */
+function var_name(&$var, $scope = false)
+{
+	$scope = $scope ? $scope : $GLOBALS;
+
+	$old = $var;
+	$var = '__random__'.rand().'temp';
+
+	$key = array_search($var, $scope);
+	$var = $old;
+
+	return $key;
 }
 
 /**

@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: use this class in many more places
+//TODO: drop this and wrap php 5 class XMLReader: http://www.ibm.com/developerworks/library/x-pullparsingphp.html
 
 require_once('client_http.php');
 
@@ -19,16 +19,26 @@ class xml_input
     var $stack;
     var $keys;
     var $path;
-	var $index, $idxval, $value;
+
+	private $index, $idxval, $value; ///<
 	private $cache_time = 0;
 
 	function setCacheTime($s) { $this->cache_time = $s; }
 
 	/**
+	 * Used to parse structure by
+	 *
 	 * @param $index if set, name of field to read index from
 	 * @param $value if set, name of field to read value from
 	 */
-    function parse($data, $index = '', $value = '')
+	function setParseIndex($index, $value)
+	{
+		$this->index  = $index;
+		$this->idxval = '';
+		$this->value  = $value;
+	}
+
+    function parse($data)
     {
 		if (is_url($data)) {
 			$u = new http($data);
@@ -42,9 +52,6 @@ class xml_input
 		$this->stack = array();
 		$this->keys = '';
 		$this->path = '';
-		$this->index = $index;
-		$this->idxval = '';
-		$this->value = $value;
 
 		$parser = xml_parser_create('UTF-8');
 		xml_set_object($parser, $this);
@@ -77,8 +84,15 @@ class xml_input
 			$i++;
 		}
 
-		if (!empty($attr))
+		if (!empty($attr)) {
+			//d($this->data);
+
+			echo "pre [".$keys."] = ";
+			d($attr);
+			echo dln();
+
 			$this->data[$keys][] = $attr;
+		}
 
 /*
 array_key_exists
