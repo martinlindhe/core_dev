@@ -110,7 +110,7 @@ class Playlist
 	 */
 	private function sortListDesc($a, $b)
 	{
-		if (!$a->time_published || !$b->time_published) return -1;
+		if (!$a->time_published) return 1;
 
 		return ($a->time_published > $b->time_published) ? -1 : 1;
 	}

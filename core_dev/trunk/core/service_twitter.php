@@ -10,7 +10,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('io_feed.php');
+require_once('io_newsfeed.php');
 require_once('client_http.php');
 
 class Twitter

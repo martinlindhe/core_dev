@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-require_once('io_feed.php'); //for NewsItem object
+require_once('io_newsfeed.php'); //for NewsItem object
 
 class input_rss
 {
