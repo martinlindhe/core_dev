@@ -27,28 +27,33 @@
 
 //STATUS: ok
 
+//XXX TODO ability to load playlist from XSPF, M3U, PLS files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
-class MediaItem
+require_once('xhtml_header.php');
+
+class MediaItem //XXX rename to PlaylistItem ?
 {
-	var $mime; ///< mimetype of media
-	var $url;  ///< location of media
-	var $thumbnail; ///< location of thumbnail/cover art
-
 	var $title;
+	var $url;       ///< location of media
+	var $mime;      ///< mimetype of media
+	var $duration;  ///< duration of media
 
-	var $duration;  ///< for video clip
+	var $thumbnail; ///< location of thumbnail/cover art
 	var $time_published;
-	var $desc; ///< description of media item
+	var $desc;      ///< description
 }
 
 class Playlist
 {
-	private $sendHeaders = false; ///< shall we send mime type?
+	private $sendHeaders = false;               ///< shall we send mime type?
 
-	private $entries = array(); ///< MediaItem objects
+	private $entries     = array();             ///< MediaItem objects
+	private $title       = 'Untitled playlist'; ///< name of playlist
 
 	function getItems() { return $this->entries; }
+
+	function setTitle($t) { $this->title = $t; }
 
 	/**
 	 * Adds a array of items to the feed list
@@ -206,18 +211,23 @@ class Playlist
 	 */
 	function renderXHTML()
 	{
-		$res = '<table border="1">';
+		$header = new xhtml_header();
+		$header->setTitle($this->title);
+		$res = $header->render();
 
-		foreach ($this->getItems() as $item) {
-			//d($item);
+		$res .= '<table border="1">';
+
+		foreach ($this->getItems() as $item)
+		{
+			$title = $item->time_published ? formatTime($item->time_published).' ' : '';
+			$title .= ($item->url ? '<a href="'.$item->url.'">' : '').$item->title.($item->url ? '</a>' : '');
 
 			$res .=
 			'<tr><td>'.
-			'<h2>'. formatTime($item->time_published).' '.(!empty($row['link']) ? '<a href="'.$row['link'].'">' : '').
-			$item->title.(!empty($row['link']) ? '</a>' : '').'</h2>'.
+			'<h2>'.$title.'</h2>'.
 			($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
 			($item->desc ? '<p>'.$item->desc.'</p>' : '').
-			($item->url ? '<a href="'.$item->url.'">Play video</a>' : '').
+			($item->url && $item->desc ? '<a href="'.$item->url.'">Play video</a>' : '').
 			'</td></tr>';
 		}
 
