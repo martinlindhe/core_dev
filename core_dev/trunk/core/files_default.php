@@ -21,25 +21,25 @@ require_once('atom_categories.php');	//for file categories support
 require_once('atom_subscriptions.php');	//for userfile area subscriptions
 require_once('functions_image.php');
 
-define('FILETYPE_WIKI',					1);		// The file is a wiki attachment
-define('FILETYPE_BLOG',					2);		// The file is a blog attachment
-define('FILETYPE_NEWS',					3);		// The file is a news attachment
-define('FILETYPE_FILEAREA_UPLOAD',		4);		// File is uploaded to a file area
-define('FILETYPE_USERFILE',				5);		// File is uploaded to the user's own file area
-define('FILETYPE_USERDATA',				6);		// File is uploaded to a userdata field
-define('FILETYPE_FORUM',				7);		// File is attached to a forum post
-define('FILETYPE_PROCESS',				8);		// File uploaded to be processed
+define('FILETYPE_WIKI',                1); // The file is a wiki attachment
+define('FILETYPE_BLOG',                2); // The file is a blog attachment
+define('FILETYPE_NEWS',                3); // The file is a news attachment
+define('FILETYPE_FILEAREA_UPLOAD',     4); // File is uploaded to a file area
+define('FILETYPE_USERFILE',            5); // File is uploaded to the user's own file area
+define('FILETYPE_USERDATA',            6); // File is uploaded to a userdata field
+define('FILETYPE_FORUM',               7); // File is attached to a forum post
+define('FILETYPE_PROCESS',             8); // File uploaded to be processed
 
-define('FILETYPE_VIDEOBLOG',			10);	// video clip representing a user submitted blog
-define('FILETYPE_VIDEOPRES',			11);	// video clip representing a presentation of the user
-define('FILETYPE_VIDEOMESSAGE',			12);	// video clip respresenting a private message
-define('FILETYPE_VIDEOCHATREQUEST',		13);	// video clip representing a live videochat request
-define('FILETYPE_VIDEOABORTED',			14);	// video clip aborted during recording
+define('FILETYPE_VIDEOBLOG',          10); // video clip representing a user submitted blog
+define('FILETYPE_VIDEOPRES',          11); // video clip representing a presentation of the user
+define('FILETYPE_VIDEOMESSAGE',       12); // video clip respresenting a private message
+define('FILETYPE_VIDEOCHATREQUEST',   13); // video clip representing a live videochat request
+define('FILETYPE_VIDEOABORTED',       14); // video clip aborted during recording
 
-define('FILETYPE_GENERIC',				20); // generic file type, for application specific file type
+define('FILETYPE_GENERIC',            20); // generic file type, for application specific file type
 
-define('FILETYPE_CLONE_CONVERTED',		30);	//converted from orginal file format (image/video/audio/document)
-define('FILETYPE_CLONE_VIDEOTHUMB10',	31);	//video thumbnail of video 10% into the clip
+define('FILETYPE_CLONE_CONVERTED',    30); //converted from orginal file format (image/video/audio/document)
+define('FILETYPE_CLONE_VIDEOTHUMB10', 31); //video thumbnail of video 10% into the clip
 
 define('MEDIATYPE_IMAGE',		1);
 define('MEDIATYPE_VIDEO',		2);
@@ -58,26 +58,26 @@ class files_default
 	); ///<FIXME remove
 
 	public $audio_mime_types	= array(
-		'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
-		'audio/x-ms-wma',								//.wma file. FF2 & IE7 sends this
-		'application/x-ogg'							//.ogg file		- FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
+		'audio/x-mpeg',	'audio/mpeg', //.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
+		'audio/x-ms-wma',             //.wma file. FF2 & IE7 sends this
+		'application/x-ogg'           //.ogg file - FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
 	); ///<FIXME remove
 
 	public $video_mime_types = array(
-		'video/mpeg',			//.mpg file
-		'video/avi',			//.avi file
-		'video/x-msvideo',	//.avi file
-		'video/x-ms-wmv',	//Microsoft .wmv file
-		'video/3gpp',			//.3gp video file
-		'video/x-flv',		//Flash video
-		'video/mp4',			//MPEG-4 video
-		'application/ogg'	//Ogg video
+		'video/mpeg',      //.mpg file
+		'video/avi',       //.avi file
+		'video/x-msvideo', //.avi file
+		'video/x-ms-wmv',  //Microsoft .wmv file
+		'video/3gpp',      //.3gp video file
+		'video/x-flv',     //Flash video
+		'video/mp4',       //MPEG-4 video
+		'application/ogg'  //Ogg video
 	); ///<FIXME remove
 
 	public $document_mime_types = array(
-		'text/plain',					//normal text file
-		'application/msword',	//Microsoft .doc file
-		'application/pdf'			//Adobe .pdf file
+		'text/plain',         //normal text file
+		'application/msword', //Microsoft .doc file
+		'application/pdf'     //Adobe .pdf file
 	); ///<FIXME remove
 
 	public $media_types = array(
