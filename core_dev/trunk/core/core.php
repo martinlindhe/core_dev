@@ -15,6 +15,7 @@ require_once('functions_general.php');	//FIXME: anything in there worth keeping?
 require_once('functions_textformat.php');	//for decodeDataSize()
 require_once('class.Timestamp.php');
 require_once('network.php');
+require_once('files.php');
 
 /**
  * Debug function. Prints out variable $v
@@ -312,19 +313,6 @@ function round_decimals($val, $precision = 0)
 	}
 
 	return implode('.', $ex);
-}
-
-/**
- * Returns the file extension for given filename
- *
- * @return file extension, example ".jpg"
- */
-function file_suffix($filename)
-{
-	$pos = strrpos($filename, '.');
-	if ($pos === false) return '';
-
-	return substr($filename, $pos);
 }
 
 ?>

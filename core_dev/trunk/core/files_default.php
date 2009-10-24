@@ -13,6 +13,9 @@
 //TODO: rename tblFiles.timeUploaded to tblFiles.timeCreated
 //FIXME: use bmp mimetype "image/x-ms-bmp" and verify it is recognized in all browsers
 
+//TODO: move image manipulation functions to a separate class
+
+require_once('files.php');
 require_once('atom_comments.php');		//for image comments support
 require_once('atom_categories.php');	//for file categories support
 require_once('atom_subscriptions.php');	//for userfile area subscriptions
@@ -1057,25 +1060,6 @@ class files_default
 
 		$q = 'SELECT categoryId FROM tblFiles WHERE fileId='.$_id;
 		return $db->getOneItem($q);
-	}
-
-	/**
-	 * Calculates estimated download times for common internet connection speeds
-	 *
-	 * @param $size file size in bytes
-	 * @return array of estimated download times
-	 */
-	function estimateTime($size)
-	{
-		if (!is_numeric($size)) return false;
-
-		$arr = array();
-		$arr[56] = ceil($size / ((56*1024)/8));		//56k modem
-		$arr[512] = ceil($size / ((512*1024)/8));	//0.5mbit
-		$arr[1024] = ceil($size / ((1024*1024)/8));	//1mbit
-		$arr[8196] = ceil($size / ((8196*1024)/8));	//8mbit
-
-		return $arr;
 	}
 
 	/**
