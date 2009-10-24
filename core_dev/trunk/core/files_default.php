@@ -186,24 +186,17 @@ class files_default
 	}
 
 	/**
-	 * Performs mimetype lookup using GNU file utility
+	 * Returns mimetype of file
 	 *
 	 * @param $filename fileId or name of file to check
 	 */
 	function lookupMimeType($filename)
 	{
-		if (is_numeric($filename)) $filename = $this->findUploadPath($filename);
-		if (!file_exists($filename)) return false;
+		if (is_numeric($filename))
+			$filename = $this->findUploadPath($filename);
 
-		$c = 'file -bi '.escapeshellarg($filename);
-		$result = exec($c);
-
-		//XXX: use mediaprobe to distinguish between wmv/wma files.
-		//FIXME: enhance mediaprobe to handle all media detection and stop use "file"
-		if ($result == 'video/x-ms-wmv') {
-			$c = 'mediaprobe '.escapeshellarg($filename);
-			return exec($c);
-		}
+		//TODO: add a lookup cache
+		$result = file_get_mime($filename);
 
 		return $result;
 	}
@@ -216,16 +209,19 @@ class files_default
 	 */
 	function lookupMediaType($filename)
 	{
-		if (is_numeric($filename)) $filename = $this->findUploadPath($filename);
-		if (!file_exists($filename)) return false;
+		if (is_numeric($filename))
+			$filename = $this->findUploadPath($filename);
+
+		if (!file_exists($filename))
+			return false;
 
 		$mime = $this->lookupMimeType($filename);
 
-		foreach ($this->media_types as $type_id => $row) {
-			foreach ($row as $subtype) {
-				if ($subtype[0] == $mime) return $type_id;
-			}
-		}
+		foreach ($this->media_types as $type_id => $row)
+			foreach ($row as $subtype)
+				if ($subtype[0] == $mime)
+					return $type_id;
+
 		return 0;
 	}
 
