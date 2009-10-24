@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//TODO: drop this and wrap php 5 class XMLReader: http://www.ibm.com/developerworks/library/x-pullparsingphp.html
+//TODO: drop this and wrap php 5 class XMLReader?: http://www.ibm.com/developerworks/library/x-pullparsingphp.html
 
 require_once('client_http.php');
 
@@ -86,11 +86,11 @@ class xml_input
 
 		if (!empty($attr)) {
 			//d($this->data);
-
+/*
 			echo "pre [".$keys."] = ";
 			d($attr);
 			echo dln();
-
+*/
 			$this->data[$keys][] = $attr;
 		}
 

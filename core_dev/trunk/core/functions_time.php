@@ -94,7 +94,7 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
  * @param $secs number of seconds to present
  * @return returns a sting like: 4h10m3s
  */
-function shortTimePeriod($secs)
+function shortTimePeriod($secs) //XXX rename to something with duration. also see formatDuration()
 {
 	if (is_float($secs)) $secs = ceil($secs);
 	$retval = '';
