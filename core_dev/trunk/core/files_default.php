@@ -15,7 +15,7 @@
 
 //TODO: move image manipulation functions to a separate class
 
-require_once('files.php');
+require_once('input_metainfo.php');
 require_once('atom_comments.php');		//for image comments support
 require_once('atom_categories.php');	//for file categories support
 require_once('atom_subscriptions.php');	//for userfile area subscriptions
@@ -672,25 +672,6 @@ class files_default
 		return true;
 	}
 
-	/**
-	 * These headers allows the browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
-	 */
-	function setCachedHeaders()
-	{
-		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
-		header('Cache-Control: Public');
-		header('Pragma: Public');
-	}
-
-	/**
-	 * Force browser to not cache content
-	 */
-	function setNoCacheHeaders()
-	{
-		header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
-		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-	}
-
 	function imageResize($_id, $_pct)
 	{
 		global $db, $h;
@@ -708,7 +689,7 @@ class files_default
 		$filename = $this->findUploadPath($_id);
 
 		resizeImage($filename, $filename, $_pct);
-		$this->setNoCacheHeaders();
+		http_cached_headers(false);
 		$this->sendImage($_id);
 
 		$this->clearThumbs($_id);
@@ -722,7 +703,7 @@ class files_default
 
 		$filename = $this->findUploadPath($_id);
 		cropImage($filename, $filename, $x1, $y1, $x2, $y2);
-		$this->setNoCacheHeaders();
+		http_cached_headers(false);
 		$this->sendImage($_id);
 
 		$this->clearThumbs($_id);
@@ -752,7 +733,7 @@ class files_default
 		$filename = $this->findUploadPath($_id);
 
 		rotateImage($filename, $filename, $_angle);
-		$this->setNoCacheHeaders();
+		http_cached_headers(false);
 		$this->sendImage($_id);
 
 		$this->clearThumbs($_id);
@@ -789,7 +770,7 @@ class files_default
 			//Generate resized image if needed
 			$this->sendImage($_id);
 		} else {
-			$this->setCachedHeaders();
+			http_cached_headers();
 
 			/* This sends files without extension etc as plain text if you didnt specify to download them */
 			if ((!$force_mime && !isset($_GET['dl'])) || $data['fileMime'] == 'application/octet-stream') {
@@ -862,9 +843,9 @@ class files_default
 		}
 
 		if ($h && filemtime($out_filename) < $h->session->started) {
-			$this->setCachedHeaders();
+			http_cached_headers(true);
 		} else {
-			$this->setNoCacheHeaders();
+			http_cached_headers(false);
 		}
 		header('Content-Type: '.$mime_type);
 		header('Content-Length: '.filesize($out_filename));
