@@ -5,6 +5,8 @@
 
 //STATUS: ok
 
+require_once('functions_textformat.php');
+
 class Duration
 {
 	private $duration; ///< internal representation of a duration, in seconds
@@ -22,11 +24,20 @@ class Duration
 		$this->duration = decodeDuration($s);
 	}
 
-	function get() { return $this->duration; }
+	function get()
+	{
+		return $this->duration;
+	}
 
-	function asSeconds() { return $this->get(); }
+	function asSeconds()
+	{
+		return $this->get();
+	}
 
-	function asMilliseconds() { return $this->duration * 1000; }
+	function asMilliseconds()
+	{
+		return $this->duration * 1000;
+	}
 
 	/**
 	 * @return "4:37:11" h:m:s...

@@ -112,7 +112,7 @@ class Playlist
 	}
 
 	/**
-	 * Loads input data from RSS or Atom feeds into NewsItem entries
+	 * Loads input data from ASX playlists into MediaItem entries
 	 */
 	function load($data)
 	{
@@ -120,19 +120,16 @@ class Playlist
 			$u = new http($data);
 			$data = $u->get();
 		}
-die('playlist:load not tested');
 
 		if (strpos($data, '<asx ') !== false) {
-			$feed = new input_asx();
+			$asx = new input_asx();
+			$pl = $asx->parse($data);
 		} else {
 			echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
 			return false;
 		}
 
-		$feed->setCallback($this->callback_parse);
-		$feed->parse($data);
-
-		$this->entries = $feed->getItems();
+		$this->entries = $pl->getItems();
 	}
 
 	/**

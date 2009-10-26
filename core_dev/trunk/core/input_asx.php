@@ -7,9 +7,7 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: working, need cleanup
-//TODO: rewrite to use XMLReader class
-//TODO: use NewsItem objects internally
+//STATUS: ok, needs more testing
 
 require_once('client_http.php');
 
@@ -38,75 +36,71 @@ class input_asx
 			$this->callback = $cb;
 	}
 
+	/**
+	 * Returns an ASX playlist parsed into a Playlist object
+	 */
 	function parse($data)
 	{
 		if (is_url($data)) {
 			$u = new http($data);
+			$u->setCacheTime(60 * 60); //1h
 			$data = $u->get();
-			d($data);
 		}
 
-		$parser = xml_parser_create();
-		xml_set_object($parser, $this);
-		xml_set_element_handler($parser, 'startElement', 'endElement');
-		xml_set_character_data_handler($parser, 'characterData');
+		$reader = new XMLReader();
+		$reader->xml($data);
 
-		if (!xml_parse($parser, $data, true)) {
-			echo "parseASX XML error: ".xml_error_string(xml_get_error_code($parser))." at line ".xml_get_current_line_number($parser)."\n";
+		$item = new MediaItem();
+
+		while ($reader->read())
+		{
+			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'asx') {
+				$this->entries[] = $item;
+				$item = new MediaItem();
+			}
+
+			if ($reader->nodeType != XMLReader::ELEMENT)
+				continue;
+
+			switch ($reader->name) {
+			case 'asx':
+				//d('version: '.$reader->getAttribute('version')); //XXX should be "3.0"
+				break;
+
+			case 'entry':
+				while ($reader->read()) {
+					if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'entry')
+						break;
+
+					if ($reader->nodeType != XMLReader::ELEMENT)
+						continue;
+
+					switch ($reader->name) {
+					case 'author': break; //<author>svt.se</author>
+					case 'copyright': break; //<copyright>Sveriges Television AB 2009</copyright>
+					case 'starttime': break; //<starttime value="00:00:00.00"/>
+
+					case 'ref': //<ref href="mms://wm0.c90901.cdn.qbrick.com/90901/kluster/20091026/aekonomi920.wmv"/>
+						$item->url = $reader->getAttribute('href');
+						break;
+
+					case 'duration': //<duration value="00:03:39.00"/>
+						$item->Duration->set( $reader->getAttribute('value') );
+						break;
+
+					default:
+						echo "bad entry " .$reader->name.ln();
+					}
+				}
+				break;
+			default:
+				echo "unknown ".$reader->name.ln();
+				break;
+			}
 		}
-		xml_parser_free($parser);
+
+		$reader->close();
 	}
-
-	function startElement($parser, $name, $attrs = '')
-	{
-		$this->current_tag = $name;
-		$this->attrs = $attrs;
-
-		if ($this->current_tag == 'ENTRY') {
-			$this->inside_item = true;
-		}
-	}
-
-	function endElement($parser, $tagName, $attrs = '')
-	{
-		if ($tagName == 'ENTRY') {
-			$item = new NewsItem();
-
-			$item->url   = trim($this->link);
-			$item->title = html_entity_decode(trim($this->title), ENT_QUOTES, 'UTF-8');
-
-			if ($this->callback) call_user_func($this->callback, $item);
-			$this->entries[] = $item;
-
-
-			$this->attrs = '';
-			$this->inside_item = false;
-
-			$this->link = '';
-			$this->title = '';
-		}
-	}
-
-	function characterData($parser, $data)
-	{
-		if (!$this->inside_item) return;
-		switch ($this->current_tag) {
-		case 'REF':
-			$this->link .= $this->attrs['HREF'];
-			break;
-
-		case 'TITLE':
-			$this->title .= $data;
-			break;
-
-		case 'AUTHOR'://XXX save
-			break;
-
-		case 'COPYRIGHT': //XXX save
-			break;
-		}
-	}
-
 }
 
 ?>

@@ -143,7 +143,8 @@ class input_rss
 		case 'MEDIA:CONTENT':
 			switch ($this->attrs['TYPE']) {
 			case 'video/x-flv':
-				if (substr($this->attrs['URL'],0,4) != 'rtmp' || !$this->video_url) { //XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
+				//XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
+				if (substr($this->attrs['URL'],0,4) != 'rtmp' || !$this->video_url) {
 					$this->video_url  = $this->attrs['URL'];
 					$this->video_type = $this->attrs['TYPE'];
 					if (!empty($this->attrs['DURATION']))
@@ -152,25 +153,17 @@ class input_rss
 				break;
 
 			case 'video/x-ms-asf':
-			//XXX need testcase, svt mixar http://.asx länkar i rss feeds
-	/*			if (substr($this->attrs['URL'], -4) == '.asx') {
-					if ($this->video_url) break; //skip .asx files if other was found
+				if (substr($this->attrs['URL'], -4) == '.asx') {
+					//d('Parsing ASX playlist '.$this->attrs['URL']);
 
 					$asx = new input_asx();
-					$tmp = $asx->parse($this->attrs['URL']);
-					if (!$tmp) {
-						echo "asx FAIL of ".$this->attrs['URL'].ln();
-						break;
-					} else {
-						echo "asx WIN of ".$this->attrs['URL'].ln();
-					}
-
-					//d($asx);
-					$this->video_url = $tmp[0]->url;
+					$asx->parse($this->attrs['URL']);
+					$list = $asx->getItems();
+					$this->video_url = $list[0]->url;
 				} else {
-					$this->video_url  = $this->attrs['URL'];
+					$this->video_url = $this->attrs['URL'];
 				}
-*/
+
 				$this->video_type = $this->attrs['TYPE'];
 				if (!empty($this->attrs['DURATION']))
 					$this->duration = $this->attrs['DURATION'];

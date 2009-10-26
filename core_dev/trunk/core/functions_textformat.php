@@ -60,12 +60,18 @@ function decodeDuration($s)
 	if (is_numeric($s)) return $s;
 
 	$a = explode(':', $s);
+	if (count($a) == 3) {
+		//handle "00:03:39.00"
+		return ($a[0] * 3600) + ($a[1] * 60) + $a[2];
+	}
+
 	if (count($a) == 2) {
 		//Assumes string "4:29" means 4 minutes and 29 seconds
 		return ($a[0] * 60) + $a[1];
 	}
+
 	//die('decodeDuration( '.$s.' ) FAIL');
-	return false;
+	return $s;
 }
 
 /**
