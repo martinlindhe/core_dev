@@ -133,7 +133,7 @@ class output_feed
 	private $link;
 
 	private $ttl         = 15;    ///< time to live, in minutes
-	private $sendHeaders = false; ///< shall we send mime type?
+	private $sendHeaders = true;  ///< shall we send mime type?
 
 	function getItems() { return $this->entries; }
 
@@ -189,6 +189,7 @@ class output_feed
 			if ($this->sendHeaders) header('Content-type: application/atom+xml');
 			return $this->renderATOM();
 
+		case 'rss':
 		case 'rss2':
 			if ($this->sendHeaders) header('Content-type: application/rss+xml');
 			return $this->renderRSS2();

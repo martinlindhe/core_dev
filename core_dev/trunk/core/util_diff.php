@@ -9,15 +9,13 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//XXX cache diff output?
-
-//XXX filename is retarded
+//XXX drop the render method detection, its not finished & was a stupid idea
 
 class diff
 {
-	private $r1, $r2; ///< data revisions
+	private $r1, $r2;        ///< data revisions
 	private $diff = array();
-	private $mimeType; ///< detected mimetype of input data
+	private $mimeType;       ///< detected mimetype of input data
 
 	/**
 	 * @param $r1 file location or data

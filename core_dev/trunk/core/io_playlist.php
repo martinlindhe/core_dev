@@ -32,6 +32,7 @@
 
 require_once('input_asx.php'); //XXX: FIXME use in io_playlist
 require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
+require_once('io_newsfeed.php');
 
 require_once('xhtml_header.php');
 
@@ -49,7 +50,7 @@ class MediaItem //XXX rename to PlaylistItem ?
 
 class Playlist
 {
-	private $sendHeaders = false;               ///< shall we send mime type?
+	private $sendHeaders = true;               ///< shall we send mime type?
 
 	private $entries     = array();             ///< MediaItem objects
 	private $title       = 'Untitled playlist'; ///< name of playlist
@@ -83,7 +84,6 @@ class Playlist
 			$item->title          = $e->title;
 			$item->desc           = $e->desc;
 			$item->thumbnail      = $e->image_url;
-
 			$item->mime           = $e->video_mime;
 			$item->url            = $e->video_url;
 			$item->duration       = $e->duration;
@@ -139,6 +139,17 @@ class Playlist
 		case 'xhtml':
 		case 'html':
 			return $this->renderXHTML();
+
+		case 'atom':
+			$feed = new output_feed();
+			$feed->addList($this->entries);
+			return $feed->render('atom');
+
+		case 'rss2':
+		case 'rss':
+			$feed = new output_feed();
+			$feed->addList($this->entries);
+			return $feed->render('rss');
 		}
 
 		echo "Playlist->render: unknown format ".$format."\n";
