@@ -75,10 +75,11 @@ class input_rss
 			$item->desc  = html_entity_decode(trim($this->desc),  ENT_QUOTES, 'UTF-8');
 			if ($item->title == $item->desc) $item->desc = ''; //XXX move this somewhere else
 
-			$item->time_published = strtotime(trim($this->pubDate));
+			$item->Timestamp->set($this->pubDate);
+			$item->Duration->set($this->duration);
+
 			$item->guid = trim($this->guid);
 
-			$item->duration   = trim($this->duration);
 			$item->video_url  = $this->video_url;
 			$item->video_mime = $this->video_type;
 			$item->image_url  = $this->image_url;

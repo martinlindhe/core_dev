@@ -7,21 +7,23 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//STATUS: good
+
 require_once('functions_time.php');
 
 class Timestamp
 {
-	private $ts = 0;
+	private $ts = 0; ///< internal representation of time, as a Unix timestamp
 
 	/**
 	 * Initialize object to specified time
 	 *
 	 * @param $t unix timestamp or strtotime() understandable string
 	 */
-	function __construct($t = 'now')
+	function __construct($t = 0)
 	{
-		if (!$t) return;
-		$this->set($t);
+		if ($t)
+			$this->set($t);
 	}
 
 	/**
@@ -48,10 +50,10 @@ class Timestamp
 		$this->ts = $ts - 2208988800;
 	}
 
-	function getUnix()
-	{
-		return $this->ts;
-	}
+	/**
+	 * @return a numeric Unix timestamp
+	 */
+	function get() { return $this->ts; }
 
 	/**
 	 * Convert Unix timestamp to NTP timestamp

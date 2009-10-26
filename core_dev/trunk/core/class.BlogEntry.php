@@ -22,7 +22,7 @@ class BlogEntry
 	private $countRatings, $countReads;
 
 	function isDeleted() { return $this->deletedBy ? true : false; }
-	function isUpdated() { return $this->timeUpdated->getUnix() ? true : false; }
+	function isUpdated() { return $this->timeUpdated->get() ? true : false; }
 
 	function setId($id)
 	{

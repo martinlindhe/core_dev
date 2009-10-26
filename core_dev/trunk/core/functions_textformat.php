@@ -64,8 +64,8 @@ function decodeDuration($s)
 		//Assumes string "4:29" means 4 minutes and 29 seconds
 		return ($a[0] * 60) + $a[1];
 	}
-
-	die('decodeDuration( '.$s.' ) FAIL');
+	//die('decodeDuration( '.$s.' ) FAIL');
+	return false;
 }
 
 /**

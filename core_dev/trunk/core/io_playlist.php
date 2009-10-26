@@ -30,6 +30,9 @@
 //XXX TODO ability to load playlist from XSPF, M3U, PLS, ASX files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
+require_once('class.Duration.php');
+require_once('class.Timestamp.php');
+
 require_once('input_asx.php'); //XXX: FIXME use in io_playlist
 require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
 require_once('io_newsfeed.php');
@@ -39,19 +42,24 @@ require_once('xhtml_header.php');
 class MediaItem //XXX rename to PlaylistItem ?
 {
 	var $title;
-	var $url;       ///< location of media
-	var $mime;      ///< mimetype of media
-	var $duration;  ///< duration of media
+	var $url;                ///< location of media
+	var $mime;               ///< mimetype of media
+	var $thumbnail;          ///< location of thumbnail/cover art
+	var $desc;               ///< description
 
-	var $thumbnail; ///< location of thumbnail/cover art
-	var $time_published;
-	var $desc;      ///< description
+	var $Duration;           ///< duration of media
+	var $Timestamp;
+
+	function __construct()
+	{
+		$this->Duration  = new Duration();
+		$this->Timestamp = new Timestamp();
+	}
 }
 
 class Playlist
 {
-	private $sendHeaders = true;               ///< shall we send mime type?
-
+	private $sendHeaders = true;                ///< shall we send mime type?
 	private $entries     = array();             ///< MediaItem objects
 	private $title       = 'Untitled playlist'; ///< name of playlist
 
@@ -75,9 +83,12 @@ class Playlist
 	 */
 	function addItem($e)
 	{
-		if (get_class($e) == 'MediaItem') {
+		switch (get_class($e)) {
+		case 'MediaItem':
 			$this->entries[] = $e;
-		} else if (get_class($e) == 'NewsItem') {
+			break;
+
+		case 'NewsItem':
 			//convert a NewsItem into a MediaItem
 			$item = new MediaItem();
 
@@ -86,14 +97,16 @@ class Playlist
 			$item->thumbnail      = $e->image_url;
 			$item->mime           = $e->video_mime;
 			$item->url            = $e->video_url;
-			$item->duration       = $e->duration;
-			$item->time_published = $e->time_published;
+			$item->Duration->set ( $e->Duration->get() );
+			$item->Timestamp->set( $e->Timestamp->get() );
 
 			$this->entries[] = $item;
+			break;
 
-		} else {
+		default:
 			d('Playlist->addItem bad data: ');
 			d($e);
+			break;
 		}
 	}
 
@@ -113,12 +126,12 @@ class Playlist
 	 */
 	private function sortListDesc($a, $b)
 	{
-		if (!$a->time_published) return 1;
+		if (!$a->Timestamp->get()) return 1;
 
-		return ($a->time_published > $b->time_published) ? -1 : 1;
+		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
 	}
 
-	function enableHeaders() { $this->sendHeaders = true; }
+	function enableHeaders()  { $this->sendHeaders = true; }
 	function disableHeaders() { $this->sendHeaders = false; }
 
 	function render($format = 'xhtml')
@@ -162,8 +175,8 @@ class Playlist
 		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
 		$res .= '<trackList>'."\n";
 
-		foreach ($this->getItems() as $item) {
-
+		foreach ($this->getItems() as $item)
+		{
 			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
 			//XXX: create categories from $row['category']
 
@@ -175,7 +188,7 @@ class Playlist
 			$res .= '<location>'.$item->url.'</location>';
 
 			if ($item->duration)
-				$res .= '<duration>'.($item->duration*1000).'</duration>'; //in milliseconds
+				$res .= '<duration>'.$item->duration->getAsMilliseconds().'</duration>';
 
 			if ($item->thumbnail)
 				$res .= '<image>'.$item->thumbnail.'</image>';
@@ -192,9 +205,11 @@ class Playlist
 	function renderM3U()
 	{
 		$res = "#EXTM3U\n";
-		foreach ($this->getItems() as $item) {
-			$res .= "#EXTINF:".($item->duration ? round($item->duration, 0) : '-1').",".$item->title."\n";
-			$res .= $item->url."\n";
+		foreach ($this->getItems() as $item)
+		{
+			$res .=
+			"#EXTINF:".($item->duration ? round($item->duration->getAsSeconds(), 0) : '-1').",".$item->title."\n".
+			$item->url."\n";
 		}
 
 		return $res;
@@ -208,12 +223,13 @@ class Playlist
 		"\n";
 
 		$i = 0;
-		foreach ($this->getItems() as $item) {
+		foreach ($this->getItems() as $item)
+		{
 			$i++;
 			$res .=
 			"File".  $i."=".$item->url."\n".
 			"Title". $i."=".$item->title."\n".
-			"Length".$i."=".($item->duration ? $item->duration : '-1')."\n".
+			"Length".$i."=".($item->duration ? $item->duration->getAsSeconds() : '-1')."\n".
 			"\n";
 		}
 		$res .= "Version=2\n";
@@ -233,7 +249,7 @@ class Playlist
 
 		foreach ($this->getItems() as $item)
 		{
-			$title = $item->time_published ? formatTime($item->time_published).' ' : '';
+			$title = $item->Timestamp->get() ? $item->Timestamp->render().' ' : '';
 			$title .= ($item->url ? '<a href="'.$item->url.'">' : '').$item->title.($item->url ? '</a>' : '');
 
 			$res .=
@@ -242,7 +258,7 @@ class Playlist
 			($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
 			($item->desc ? '<p>'.$item->desc.'</p>' : '').
 			($item->url && $item->desc ? '<a href="'.$item->url.'">Play video</a>' : '').
-			($item->duration ? ' (duration: '.formatDuration($item->duration).')' : '').
+			($item->Duration->get() ? ' (duration: '.$item->Duration->render().')' : '').
 			'</td></tr>';
 		}
 

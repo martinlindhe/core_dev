@@ -13,8 +13,9 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: rewriting
+//STATUS: rewriting, need to rewrite/merge output_feed class with NewsFeed class
 
+require_once('class.Duration.php');
 require_once('class.Timestamp.php');
 
 require_once('client_http.php');
@@ -26,28 +27,28 @@ class NewsItem
 {
 	var $title;
 	var $desc;
-	var $time_published;
 	var $author;
-
 	var $url;
 	var $guid;
-
 	var $image_mime;
 	var $image_url;
-
 	var $video_mime;
 	var $video_url;
-	var $duration; ///< video duration
+	var $Duration;       ///< video duration
+	var $Timestamp;
+
+	function __construct()
+	{
+		$this->Duration  = new Duration();
+		$this->Timestamp = new Timestamp();
+	}
 }
 
-//TODO: rewrite/merge output_feed class with NewsFeed class
 class NewsFeed
 {
 	private $http;
-
 	private $entries = array(); ///< NewsItem objects
-
-	private $callback_parse; ///< function to call to filter each entry while it is being parsed
+	private $callback_parse;    ///< function to call to filter each entry while it is being parsed
 
 	function __construct()
 	{
@@ -116,9 +117,9 @@ class NewsFeed
 	 */
 	private function sortListDesc($a, $b)
 	{
-		if (!$a->time_published) return 1;
+		if (!$a->Timestamp->get()) return 1;
 
-		return ($a->time_published > $b->time_published) ? -1 : 1;
+		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
 	}
 
 }
@@ -131,7 +132,6 @@ class output_feed
 	private $entries     = array();
 	private $desc;
 	private $link;
-
 	private $ttl         = 15;    ///< time to live, in minutes
 	private $sendHeaders = true;  ///< shall we send mime type?
 
@@ -156,26 +156,30 @@ class output_feed
 	 */
 	function addItem($e)
 	{
-		if (get_class($e) == 'NewsItem') {
+		switch (get_class($e)) {
+		case 'NewsItem':
 			$this->entries[] = $e;
-		} else if (get_class($e) == 'MediaItem') {
+			break;
+
+		case 'MediaItem':
 			//convert a MediaItem into a NewsItem
 			$item = new NewsItem();
 
 			$item->title          = $e->title;
 			$item->desc           = $e->desc;
 			$item->image_url      = $e->thumbnail;
-
 			$item->video_mime     = $e->mime;
 			$item->video_url      = $e->url;
-			$item->duration       = $e->duration;
-			$item->time_published = $e->time_published;
+			$item->setDuration     ( $e->getDuration() );
+			$item->setTimePublished( $e->getTimePublished() );
 
 			$this->entries[] = $item;
+			break;
 
-		} else {
+		default:
 			d('output_feed->addItem bad data: ');
 			d($e);
+			break;
 		}
 	}
 
