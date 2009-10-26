@@ -121,6 +121,7 @@ function t_swe($s)
 	case 'Help': return 'Hjälp';
 	case 'Location': return 'Plats';
 	case 'Current': return 'Aktuell';
+	case 'Duration': return 'Längd';
 
 	//Times
 	case 'Yesterday': return 'Igår';

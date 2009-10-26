@@ -1,9 +1,9 @@
 <?php
 /**
- *
+ * A duration property
  */
 
-//STATUS: experimenting
+//STATUS: ok
 
 class Duration
 {

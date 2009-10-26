@@ -7,6 +7,9 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//STATUS: working, need cleanup
+//TODO: rewrite to use XMLReader class
+
 class input_asx
 {
 	private $inside_item = false;

@@ -7,7 +7,9 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//STATUS: working, need cleanup
 //TODO: parse into NewsItem objects as in input_rss (service_twitter will be affected)
+//TODO: rewrite to use XMLReader class
 
 class input_atom
 {
