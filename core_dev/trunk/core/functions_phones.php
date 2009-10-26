@@ -465,6 +465,7 @@ $area_code[46][70] = 'Cellphone';	//from 1996
 $area_code[46][72] = 'Cellphone';	//from 2008.10.28 according to pts.se
 $area_code[46][73] = 'Cellphone';	//from 2002
 $area_code[46][74] = 'Pager';
+$area_code[46][75] = 'Cellphone';   //from 2009
 $area_code[46][76] = 'Cellphone';	//from 2007 (0769 is still unallocated at 2008.10.30)
 $area_code[46][8] = 'Stockholm';
 $area_code[46][90] = 'Umeå';
