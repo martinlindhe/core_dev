@@ -59,12 +59,13 @@ class MediaItem //XXX rename to PlaylistItem ?
 
 class Playlist
 {
-	private $sendHeaders = true;                ///< shall we send mime type?
+	private $headers = true;                ///< shall we send mime type?
 	private $entries     = array();             ///< MediaItem objects
 	private $title       = 'Untitled playlist'; ///< name of playlist
 
 	function getItems() { return $this->entries; }
 
+	function sendHeaders($bool = true) { $this->headers = $bool; }
 	function setTitle($t) { $this->title = $t; }
 
 	/**
@@ -111,6 +112,30 @@ class Playlist
 	}
 
 	/**
+	 * Loads input data from RSS or Atom feeds into NewsItem entries
+	 */
+	function load($data)
+	{
+		if (is_url($data)) {
+			$u = new http($data);
+			$data = $u->get();
+		}
+die('playlist:load not tested');
+
+		if (strpos($data, '<asx ') !== false) {
+			$feed = new input_asx();
+		} else {
+			echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
+			return false;
+		}
+
+		$feed->setCallback($this->callback_parse);
+		$feed->parse($data);
+
+		$this->entries = $feed->getItems();
+	}
+
+	/**
 	 * Sorts the list
 	 */
 	function sort($callback = '')
@@ -131,36 +156,42 @@ class Playlist
 		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
 	}
 
-	function enableHeaders()  { $this->sendHeaders = true; }
-	function disableHeaders() { $this->sendHeaders = false; }
-
 	function render($format = 'xhtml')
 	{
 		switch ($format) {
 		case 'xspf':
-			if ($this->sendHeaders) header('Content-type: application/xspf+xml');
+			if ($this->headers) header('Content-type: application/xspf+xml');
 			return $this->renderXSPF();
 
 		case 'm3u':
-			if ($this->sendHeaders) header('Content-type: audio/x-mpegurl');
+			if ($this->headers) header('Content-type: audio/x-mpegurl');
 			return $this->renderM3U();
 
 		case 'pls':
-			if ($this->sendHeaders) header('Content-type: audio/x-scpls');
+			if ($this->headers) header('Content-type: audio/x-scpls');
 			return $this->renderPLS();
 
 		case 'xhtml':
 		case 'html':
-			return $this->renderXHTML();
+			$res = '';
+			if ($this->headers) {
+				$header = new xhtml_header();
+				$header->setTitle($this->title);
+				$res = $header->render();
+			}
+
+			return $res . $this->renderXHTML();
 
 		case 'atom':
 			$feed = new output_feed();
+			$feed->sendHeaders($this->headers);
 			$feed->addList($this->entries);
 			return $feed->render('atom');
 
 		case 'rss2':
 		case 'rss':
 			$feed = new output_feed();
+			$feed->sendHeaders($this->headers);
 			$feed->addList($this->entries);
 			return $feed->render('rss');
 		}
@@ -208,7 +239,7 @@ class Playlist
 		foreach ($this->getItems() as $item)
 		{
 			$res .=
-			"#EXTINF:".($item->duration ? round($item->duration->getAsSeconds(), 0) : '-1').",".$item->title."\n".
+			"#EXTINF:".($item->duration ? round($item->duration->getAsSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
 			$item->url."\n";
 		}
 
@@ -228,8 +259,8 @@ class Playlist
 			$i++;
 			$res .=
 			"File".  $i."=".$item->url."\n".
-			"Title". $i."=".$item->title."\n".
-			"Length".$i."=".($item->duration ? $item->duration->getAsSeconds() : '-1')."\n".
+			"Title". $i."=".($item->title ? $item->title : 'Untitled track')."\n".
+			"Length".$i."=".($item->Duration->get() ? $item->Duration->getAsSeconds() : '-1')."\n".
 			"\n";
 		}
 		$res .= "Version=2\n";
@@ -241,11 +272,7 @@ class Playlist
 	 */
 	function renderXHTML()
 	{
-		$header = new xhtml_header();
-		$header->setTitle($this->title);
-		$res = $header->render();
-
-		$res .= '<table border="1">';
+		$res = '<table border="1">';
 
 		foreach ($this->getItems() as $item)
 		{

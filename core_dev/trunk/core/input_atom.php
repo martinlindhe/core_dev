@@ -11,6 +11,8 @@
 //TODO: parse into NewsItem objects as in input_rss (service_twitter will be affected)
 //TODO: rewrite to use XMLReader class
 
+require_once('client_http.php');
+
 class input_atom
 {
 	private $inside_item = false;
@@ -39,7 +41,7 @@ class input_atom
 	{
 		if (is_url($data)) {
 			$u = new http($data);
-			$data = $u->fetch();
+			$data = $u->get();
 		}
 
 		$parser = xml_parser_create();

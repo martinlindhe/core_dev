@@ -65,40 +65,28 @@ class NewsFeed
 	function getList() { return $this->entries; }
 
 	/**
-	 * Loads the feed with parsed objects from a url or raw data
+	 * Loads input data from RSS or Atom feeds into NewsItem entries
 	 */
 	function load($data)
 	{
-		if (is_url($data))
-			$data = $this->http->get($data);
+		if (is_url($data)) {
+			$u = new http($data);
+			$data = $u->get();
+		}
 
-		$this->entries = $this->parse($data);
-		if (!$this->entries) return false;
-		return true;
-	}
-
-	/**
-	 * Parses input $data if autodetected
-	 */
-	function parse($data)
-	{
 		if (strpos($data, '<rss ') !== false) {
 			$feed = new input_rss();
 		} else if (strpos($data, '<feed ') !== false) {
 			$feed = new input_atom();
-		} else if (strpos($data, '<asx ') !== false) {
-			$feed = new input_asx();
-		} else if (strpos($data, '#EXTM3U') !== false) {
-			$feed = new input_m3u();
 		} else {
-			echo "input_feed->parse error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
+			echo "NewsFeed->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
 			return false;
 		}
 
 		$feed->setCallback($this->callback_parse);
 		$feed->parse($data);
 
-		return $feed->getItems();
+		$this->entries = $feed->getItems();
 	}
 
 	/**
@@ -127,20 +115,19 @@ class NewsFeed
 
 class output_feed
 {
-	private $version     = 'core_dev output_feed 1.0';
-	private $title       = 'Untitled news feed';
-	private $entries     = array();
+	private $version   = 'core_dev output_feed 1.0';
+	private $title     = 'Untitled news feed';
+	private $entries   = array();
 	private $desc;
 	private $link;
-	private $ttl         = 15;    ///< time to live, in minutes
-	private $sendHeaders = true;  ///< shall we send mime type?
+	private $ttl       = 15;    ///< time to live, in minutes
+	private $headers   = true;  ///< shall we send mime type?
 
 	function getItems() { return $this->entries; }
 
 	function setTitle($n) { $this->title = $n; }
 	function setLink($n) { $this->link = $n; }
-	function enableHeaders() { $this->sendHeaders = true; }
-	function disableHeaders() { $this->sendHeaders = false; }
+	function sendHeaders($bool = true) { $this->headers = $bool; }
 
 	/**
 	 * Adds a array of entries to the feed list
@@ -170,8 +157,8 @@ class output_feed
 			$item->image_url      = $e->thumbnail;
 			$item->video_mime     = $e->mime;
 			$item->video_url      = $e->url;
-			$item->setDuration     ( $e->getDuration() );
-			$item->setTimePublished( $e->getTimePublished() );
+			$item->Duration->set ( $e->Duration->get() );
+			$item->Timestamp->set( $e->Timestamp->get() );
 
 			$this->entries[] = $item;
 			break;
@@ -190,12 +177,12 @@ class output_feed
 	{
 		switch ($format) {
 		case 'atom':
-			if ($this->sendHeaders) header('Content-type: application/atom+xml');
+			if ($this->headers) header('Content-type: application/atom+xml');
 			return $this->renderATOM();
 
 		case 'rss':
 		case 'rss2':
-			if ($this->sendHeaders) header('Content-type: application/rss+xml');
+			if ($this->headers) header('Content-type: application/rss+xml');
 			return $this->renderRSS2();
 		}
 		return false;
@@ -209,8 +196,6 @@ class output_feed
 		$u = new http($this->link);
 		$u->setPath($_SERVER['REQUEST_URI']);
 
-		$ts = new Timestamp();
-
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
@@ -220,15 +205,15 @@ class output_feed
 			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->getItems() as $item) {
-			$ts->set($item->time_published);
+		foreach ($this->getItems() as $item)
+		{
 			$res .=
 			'<entry>'.
 				'<id>'.($item->guid ? $item->guid : htmlspecialchars($item->url) ).'</id>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
 				'<link rel="alternate" href="'.$item->url.'"/>'.
 				'<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
-				'<updated>'.$ts->getRFC3339().'</updated>'.
+				'<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
 				'<author><name>'.$item->author.'</name></author>'.
 				//XXX no way to embed video duration, <link length="x"> is length of the resource, in bytes.
 				($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.$item->video_url.'"/>' : '').
@@ -248,8 +233,6 @@ class output_feed
 		$u = new http($this->link);
 		$u->setPath(!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 
-		$ts = new Timestamp();
-
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">'.
@@ -261,15 +244,14 @@ class output_feed
 				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($u->render()).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->getItems() as $item) {
-
-			$ts->set($item->time_published);
+		foreach ($this->getItems() as $item)
+		{
 			$res .=
 			'<item>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
 				'<link>'.htmlspecialchars($item->url).'</link>'.
 				'<description><![CDATA['.$item->desc.']]></description>'.
-				'<pubDate>'.$ts->getRFC882().'</pubDate>'.
+				'<pubDate>'.$this->Timestamp->getRFC882().'</pubDate>'.
 				($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
 				($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.$item->video_url.'"'.($item->duration ? ' duration="'.$item->duration.'"' : '').'/>' : '').
 				($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.$item->image_url.'"/>' : '').

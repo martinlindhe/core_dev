@@ -12,6 +12,7 @@
 //STATUS: working, need cleanup
 //TODO: rewrite to use XMLReader class
 
+require_once('client_http.php');
 require_once('io_newsfeed.php'); //for NewsItem object
 
 class input_rss
@@ -45,7 +46,7 @@ class input_rss
 	{
 		if (is_url($data)) {
 			$u = new http($data);
-			$data = $u->fetch();
+			$data = $u->get();
 		}
 
 		$parser = xml_parser_create();
@@ -151,8 +152,25 @@ class input_rss
 				break;
 
 			case 'video/x-ms-asf':
-				if ($this->video_url && substr($this->attrs['URL'], -4) == '.asx') break; //skip .asx files if other was found
-				$this->video_url  = $this->attrs['URL'];
+			//XXX need testcase, svt mixar http://.asx länkar i rss feeds
+	/*			if (substr($this->attrs['URL'], -4) == '.asx') {
+					if ($this->video_url) break; //skip .asx files if other was found
+
+					$asx = new input_asx();
+					$tmp = $asx->parse($this->attrs['URL']);
+					if (!$tmp) {
+						echo "asx FAIL of ".$this->attrs['URL'].ln();
+						break;
+					} else {
+						echo "asx WIN of ".$this->attrs['URL'].ln();
+					}
+
+					//d($asx);
+					$this->video_url = $tmp[0]->url;
+				} else {
+					$this->video_url  = $this->attrs['URL'];
+				}
+*/
 				$this->video_type = $this->attrs['TYPE'];
 				if (!empty($this->attrs['DURATION']))
 					$this->duration = $this->attrs['DURATION'];
