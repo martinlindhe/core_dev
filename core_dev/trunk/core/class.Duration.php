@@ -1,15 +1,17 @@
 <?php
 /**
- * A duration property
+ * $Id$
+ *
+ * Duration property
+ *
+ * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//STATUS: ok
-
-require_once('functions_textformat.php');
+//STATUS: good
 
 class Duration
 {
-	private $duration; ///< internal representation of a duration, in seconds
+	private $duration; ///< seconds with decimal precision
 
 	/**
 	 * @param $n initialize object to a duration, in seconds
@@ -19,9 +21,36 @@ class Duration
 		$this->duration = $n;
 	}
 
+	/**
+	 * Decodes a textual representation for a duration
+	 *
+	 * @param $s input string
+	 */
 	function set($s)
 	{
-		$this->duration = decodeDuration($s);
+		if (!$s) return;
+
+		if (is_numeric($s)) {
+			$this->duration = $s;
+			return;
+		}
+
+		$a = explode(':', $s);
+		if (count($a) == 3) {
+			//handle "00:03:39.00"
+			$this->duration = ($a[0] * 3600) + ($a[1] * 60) + $a[2];
+			return;
+		}
+
+		if (count($a) == 2) {
+			//handle "04:29"
+			$this->duration = ($a[0] * 60) + $a[1];
+			return;
+		}
+
+		dtrace();
+		die('Duration->set( '.$s.' ) FAIL');
+		//$this->duration = $s;
 	}
 
 	function get()
@@ -29,22 +58,52 @@ class Duration
 		return $this->duration;
 	}
 
-	function asSeconds()
+	function inSeconds()
 	{
-		return $this->get();
+		return round($this->duration, 0);
 	}
 
-	function asMilliseconds()
+	function inMilliseconds()
 	{
-		return $this->duration * 1000;
+		return round($this->duration * 1000, 0);
 	}
 
 	/**
-	 * @return "4:37:11" h:m:s...
+	 * Formats a duration into "MM:SS" or "HH:MM:SS"
+	 *
+	 * @return "04:37:11" h:m:s...
 	 */
 	function render()
 	{
-		return formatDuration( $this->duration );
+		if (is_float($this->duration))
+			$secs = ceil($this->duration);
+		else
+			$secs = $this->duration;
+
+		$retval = '';
+
+		//hours
+		$a = date('H', $secs) - 1;
+		if ($a > 0)
+			$retval .= $a.':';
+		$secs -= ($a * 60) * 60;
+
+		//minutes
+		$a = date('i', $secs) - 0;
+		$retval .= $a.':';
+		$secs -= $a * 60;
+
+		//seconds
+		$a = date('s', $secs);
+		$retval .= $a;
+
+		if (substr($retval, -2) == ', ')
+			$retval = substr($retval, 0, -2);
+
+		if ($retval == '')
+			$retval = '00:00';
+
+		return $retval;
 	}
 }
 

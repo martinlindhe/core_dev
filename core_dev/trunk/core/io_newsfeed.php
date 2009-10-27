@@ -201,7 +201,7 @@ class output_feed
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
 			'<id>'.htmlspecialchars($this->link).'</id>'.
 			'<title><![CDATA['.$this->title.']]></title>'.
-			'<updated>'.$ts->getRFC3339().'</updated>'.
+			//'<updated>'.$this->Timestamp->getRFC3339().'</updated>'.
 			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
@@ -251,9 +251,9 @@ class output_feed
 				'<title><![CDATA['.$item->title.']]></title>'.
 				'<link>'.htmlspecialchars($item->url).'</link>'.
 				'<description><![CDATA['.$item->desc.']]></description>'.
-				'<pubDate>'.$this->Timestamp->getRFC882().'</pubDate>'.
+				'<pubDate>'.$item->Timestamp->getRFC882().'</pubDate>'.
 				($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
-				($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.$item->video_url.'"'.($item->duration ? ' duration="'.$item->duration.'"' : '').'/>' : '').
+				($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.$item->video_url.'"'.($item->Duration->get() ? ' duration="'.$item->Duration->inSeconds().'"' : '').'/>' : '').
 				($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.$item->image_url.'"/>' : '').
 			'</item>'."\n";
 		}

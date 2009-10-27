@@ -49,60 +49,6 @@ function makeImageLink($_id, $_title = '')
 	return '<img id="img_'.$_id.'" src="'.coredev_webroot().'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
 }
 
-/**
- * Converts a textual representation for a duration into seconds
- *
- * @param $s input string
- * @return seconds
- */
-function decodeDuration($s)
-{
-	if (is_numeric($s)) return $s;
-
-	$a = explode(':', $s);
-	if (count($a) == 3) {
-		//handle "00:03:39.00"
-		return ($a[0] * 3600) + ($a[1] * 60) + $a[2];
-	}
-
-	if (count($a) == 2) {
-		//Assumes string "4:29" means 4 minutes and 29 seconds
-		return ($a[0] * 60) + $a[1];
-	}
-
-	//die('decodeDuration( '.$s.' ) FAIL');
-	return $s;
-}
-
-/**
- * Formats a duration into "MM:SS" or "HH:MM:SS"
- *
- * @param $secs seconds
- */
-function formatDuration($secs)
-{
-	if (is_float($secs)) $secs = ceil($secs);
-	$retval = '';
-
-	//hours
-	$a = date('H',$secs)-1;
-	if ($a>0) $retval .= $a.'h';
-	$secs -= ($a*60)*60;
-
-	//minutes
-	$a = date('i',$secs)-0;
-	$retval .= $a.':';
-	$secs -= $a*60;
-
-	//seconds
-	$a = date('s',$secs);
-	$retval .= $a;
-
-	if (substr($retval, -2) == ', ') $retval = substr($retval, 0, -2);
-	if ($retval == '') $retval = '0s';
-
-	return $retval;
-}
 
 /**
  * Takes text input such as "128M" and returns bytes

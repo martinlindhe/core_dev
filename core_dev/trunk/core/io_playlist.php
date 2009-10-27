@@ -183,6 +183,7 @@ class Playlist
 			$feed = new output_feed();
 			$feed->sendHeaders($this->headers);
 			$feed->addList($this->entries);
+			$feed->setTitle($this->title);
 			return $feed->render('atom');
 
 		case 'rss2':
@@ -190,6 +191,7 @@ class Playlist
 			$feed = new output_feed();
 			$feed->sendHeaders($this->headers);
 			$feed->addList($this->entries);
+			$feed->setTitle($this->title);
 			return $feed->render('rss');
 		}
 
