@@ -9,6 +9,16 @@
 
 //STATUS: ok, needs more testing
 
+/* FIXME test: only tried it with 1-entry files:
+<asx version="3.0">
+  <entry>
+    <ref href="mms://wm0.c90901.cdn.qbrick.com/90901/kluster/20091021/PG-1133804-003A-BOOMSHAKALACK2-02.wmv"/>
+    <author>svt.se</author>
+    <copyright>Sveriges Television AB 2009</copyright>
+  </entry>
+</asx>
+*/
+
 require_once('client_http.php');
 
 class input_asx
@@ -45,6 +55,12 @@ class input_asx
 			$u = new http($data);
 			$u->setCacheTime(60 * 60); //1h
 			$data = $u->get();
+
+			//FIXME check http client return code for 404
+			if (substr($data, 0, 5) != '<asx ') {
+				dp('input_asx->parse FAIL: cant parse ASX feed from '.$u->getUrl() );
+				return false;
+			}
 		}
 
 		$reader = new XMLReader();
@@ -100,6 +116,7 @@ class input_asx
 		}
 
 		$reader->close();
+		return true;
 	}
 }
 

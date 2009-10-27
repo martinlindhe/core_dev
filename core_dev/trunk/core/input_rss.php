@@ -159,7 +159,8 @@ class input_rss
 					$asx = new input_asx();
 					$asx->parse($this->attrs['URL']);
 					$list = $asx->getItems();
-					$this->video_url = $list[0]->url;
+					if ($list)
+						$this->video_url = $list[0]->url;
 				} else {
 					$this->video_url = $this->attrs['URL'];
 				}
