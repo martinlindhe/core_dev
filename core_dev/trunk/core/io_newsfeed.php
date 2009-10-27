@@ -220,8 +220,8 @@ class output_feed
 				'<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
 				'<author><name>'.$item->author.'</name></author>'.
 				//XXX no way to embed video duration, <link length="x"> is length of the resource, in bytes.
-				($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.$item->video_url.'"/>' : '').
-				($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.$item->image_url.'"/>' : '').
+				($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').
+				($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.htmlspecialchars($item->image_url).'"/>' : '').
 			'</entry>'."\n";
 		}
 		$res .=
@@ -258,8 +258,8 @@ class output_feed
 				'<description><![CDATA['.$item->desc.']]></description>'.
 				'<pubDate>'.$item->Timestamp->getRFC882().'</pubDate>'.
 				($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
-				($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.$item->video_url.'"'.($item->Duration->get() ? ' duration="'.$item->Duration->inSeconds().'"' : '').'/>' : '').
-				($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.$item->image_url.'"/>' : '').
+				($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.htmlspecialchars($item->video_url).'"'.($item->Duration->get() ? ' duration="'.$item->Duration->inSeconds().'"' : '').'/>' : '').
+				($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.htmlspecialchars($item->image_url).'"/>' : '').
 			'</item>'."\n";
 		}
 

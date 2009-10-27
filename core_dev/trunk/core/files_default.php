@@ -71,6 +71,7 @@ class files_default
 		'video/3gpp',      //.3gp video file
 		'video/x-flv',     //Flash video
 		'video/mp4',       //MPEG-4 video
+		'video/quicktime', //Apple Quicktime .mov file
 		'application/ogg'  //Ogg video
 	); ///<FIXME remove
 

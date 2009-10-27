@@ -35,6 +35,8 @@ function file_get_mime_by_suffix($name)
 	case '.jpg': return 'image/jpeg';
 	case '.png': return 'image/png';
 	case '.gif': return 'image/gif';
+
+	case '.mov': return 'video/quicktime';
 	default:
 		dp('file_get_mime_by_suffix unhandled ext: '.$ext);
 		return 'application/octet-stream'; //unknown type

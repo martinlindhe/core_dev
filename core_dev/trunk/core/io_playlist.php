@@ -86,6 +86,10 @@ class Playlist
 	{
 		switch (get_class($e)) {
 		case 'MediaItem':
+			//fetch mimetype by media extension
+			if (!$e->mime && $e->url)
+				$e->mime = file_get_mime_by_suffix($e->url);
+
 			$this->entries[] = $e;
 			break;
 
