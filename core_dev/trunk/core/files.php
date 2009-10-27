@@ -58,4 +58,25 @@ function dir_get_tree($outerDir)
 	return $res;
 }
 
+/**
+ * Returns array with files filtered on extension
+ * @param $filter_ext extension including dot, example: ".avi"
+ */
+function dir_get_by_extension($path, $filter_ext)
+{
+	$e = scandir($path);
+
+	$out = array();
+	foreach ($e as $name)
+	{
+		if ($name == '.' || $name == '..')
+			continue;
+
+		if (file_suffix($name) == $filter_ext)
+			$out[] = $name;
+	}
+
+	return $out;
+}
+
 ?>
