@@ -466,7 +466,7 @@ function xhtmlOpenSearch($script, $name, $icon = '')
  *
  * @param $script (optional) if unset, returns currently executing script including GET parameters
  */
-function xhtmlGetUrl($script = '')
+function xhtmlGetUrl($script = '') //TODO: make a "Url" property class instead and use with client_http and others
 {
 	$default_port = 0;
 	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {

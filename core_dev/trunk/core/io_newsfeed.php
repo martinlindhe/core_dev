@@ -154,6 +154,7 @@ class output_feed
 			$item->title          = $e->title;
 			$item->desc           = $e->desc;
 			$item->image_url      = $e->thumbnail;
+			$item->image_mime     = file_get_mime_by_suffix($e->thumbnail);
 			$item->video_mime     = $e->mime;
 			$item->video_url      = $e->url;
 			$item->Duration->set ( $e->Duration->get() );
@@ -175,8 +176,8 @@ class output_feed
 	function render($format = 'rss2')
 	{
 		if (!$this->url)
-			$this->url = xhtmlGetUrl();
-$this->headers = false;
+			$this->url = xhtmlGetUrl(); // initialize url to currently executing script
+
 		switch ($format) {
 		case 'atom':
 			if ($this->headers) header('Content-type: application/atom+xml');
@@ -198,10 +199,10 @@ $this->headers = false;
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
-			'<id>'.htmlspecialchars($this->link).'</id>'.
+			'<id>'.htmlspecialchars($this->url).'</id>'.
 			'<title><![CDATA['.$this->title.']]></title>'.
 			//'<updated>'.$this->Timestamp->getRFC3339().'</updated>'.
-			'<link rel="self" href="'.htmlspecialchars($this->link).'"/>'.
+			'<link rel="self" href="'.htmlspecialchars($this->url).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->getItems() as $item)

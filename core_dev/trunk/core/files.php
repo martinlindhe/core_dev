@@ -21,6 +21,27 @@ function file_suffix($filename)
 }
 
 /**
+ * Returns a mimetype based on the file extension
+ *
+ * @param $name a filename or full URL
+ */
+function file_get_mime_by_suffix($name)
+{
+	if (!$name) return;
+
+	$ext = file_suffix($name);
+	switch ($ext)
+	{
+	case '.jpg': return 'image/jpeg';
+	case '.png': return 'image/png';
+	case '.gif': return 'image/gif';
+	default:
+		dp('file_get_mime_by_suffix unhandled ext: '.$ext);
+		return 'application/octet-stream'; //unknown type
+	}
+}
+
+/**
  * Calculates estimated download times for common internet connection speeds
  *
  * @param $size file size in bytes
