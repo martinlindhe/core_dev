@@ -464,7 +464,7 @@ function xhtmlOpenSearch($script, $name, $icon = '')
 /**
  * Creates a full url to the currently executed script, only usable in browser sessions
  *
- * @param $script (optional) if unset, returns currently executing script
+ * @param $script (optional) if unset, returns currently executing script including GET parameters
  */
 function xhtmlGetUrl($script = '')
 {
@@ -492,8 +492,11 @@ function xhtmlGetUrl($script = '')
 			$path = '/'.$script;
 		else
 			$path = dirname($_SERVER['PHP_SELF']).'/'.$script;
-	else
+	else {
 		$path = $_SERVER['PHP_SELF'];
+		if (!empty($_SERVER['QUERY_STRING']))
+			$path .= '?'.$_SERVER['QUERY_STRING'];
+	}
 
 	$extern_url = $scheme.'://'.$_SERVER['SERVER_NAME'].$port.$path;
 	return $extern_url;

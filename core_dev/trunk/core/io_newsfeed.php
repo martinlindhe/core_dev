@@ -19,7 +19,6 @@ require_once('class.Duration.php');
 require_once('class.Timestamp.php');
 
 require_once('client_http.php');
-
 require_once('input_rss.php');
 require_once('input_atom.php');
 
@@ -119,14 +118,14 @@ class output_feed
 	private $title     = 'Untitled news feed';
 	private $entries   = array();
 	private $desc;
-	private $link;
+	private $url       = '';    ///< full url to this feed, uses executing location if none is specified
 	private $ttl       = 15;    ///< time to live, in minutes
 	private $headers   = true;  ///< shall we send mime type?
 
 	function getItems() { return $this->entries; }
 
 	function setTitle($n) { $this->title = $n; }
-	function setLink($n) { $this->link = $n; }
+	function setUrl($n) { $this->url = $n; }
 	function sendHeaders($bool = true) { $this->headers = $bool; }
 
 	/**
@@ -175,6 +174,9 @@ class output_feed
 	 */
 	function render($format = 'rss2')
 	{
+		if (!$this->url)
+			$this->url = xhtmlGetUrl();
+$this->headers = false;
 		switch ($format) {
 		case 'atom':
 			if ($this->headers) header('Content-type: application/atom+xml');
@@ -193,20 +195,21 @@ class output_feed
 	 */
 	function renderATOM()
 	{
-		$u = new http($this->link);
-		$u->setPath($_SERVER['REQUEST_URI']);
-
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<feed xmlns="http://www.w3.org/2005/Atom">'.
 			'<id>'.htmlspecialchars($this->link).'</id>'.
 			'<title><![CDATA['.$this->title.']]></title>'.
 			//'<updated>'.$this->Timestamp->getRFC3339().'</updated>'.
-			'<link rel="self" href="'.htmlspecialchars($u->render()).'"/>'.
+			'<link rel="self" href="'.htmlspecialchars($this->link).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->getItems() as $item)
 		{
+			//link directly to video if no webpage url was found
+			if (!$item->url && $item->video_url)
+				$item->url = $item->video_url;
+
 			$res .=
 			'<entry>'.
 				'<id>'.($item->guid ? $item->guid : htmlspecialchars($item->url) ).'</id>'.
@@ -230,22 +233,23 @@ class output_feed
 	 */
 	function renderRSS2()
 	{
-		$u = new http($this->link);
-		$u->setPath(!empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
-
 		$res =
 		'<?xml version="1.0" encoding="UTF-8"?>'.
 		'<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">'.
 			'<channel>'.
 				'<title><![CDATA['.$this->title.']]></title>'.
-				'<link>'.htmlspecialchars($this->link).'</link>'.
+				'<link>'.htmlspecialchars($this->url).'</link>'.
 				'<description><![CDATA['.$this->desc.']]></description>'.
 				($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
-				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($u->render()).'"/>'.
+				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($this->url).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
 		foreach ($this->getItems() as $item)
 		{
+			//link directly to video if no webpage url was found
+			if (!$item->url && $item->video_url)
+				$item->url = $item->video_url;
+
 			$res .=
 			'<item>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
