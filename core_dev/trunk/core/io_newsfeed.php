@@ -215,7 +215,7 @@ class output_feed
 			'<entry>'.
 				'<id>'.($item->guid ? $item->guid : htmlspecialchars($item->url) ).'</id>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
-				'<link rel="alternate" href="'.$item->url.'"/>'.
+				'<link rel="alternate" href="'.htmlspecialchars($item->url).'"/>'.
 				'<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
 				'<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
 				'<author><name>'.$item->author.'</name></author>'.
