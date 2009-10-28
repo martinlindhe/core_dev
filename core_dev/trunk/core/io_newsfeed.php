@@ -118,7 +118,7 @@ class output_feed
 	private $title     = 'Untitled news feed';
 	private $entries   = array();
 	private $desc;
-	private $url       = '';    ///< full url to this feed, uses executing location if none is specified
+	private $url       = '';    ///< full url to this feed
 	private $ttl       = 15;    ///< time to live, in minutes
 	private $headers   = true;  ///< shall we send mime type?
 
@@ -175,8 +175,9 @@ class output_feed
 	 */
 	function render($format = 'rss2')
 	{
+		//use executing location if no feed url is specified
 		if (!$this->url)
-			$this->url = xhtmlGetUrl(); // initialize url to currently executing script
+			$this->url = xhtmlGetUrl();
 
 		switch ($format) {
 		case 'atom':
