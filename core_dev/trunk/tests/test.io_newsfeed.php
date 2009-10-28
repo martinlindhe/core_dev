@@ -15,7 +15,7 @@ $url = 'https://styggve.dyndns.org:61001/webtv/playrapport.php?format=rss';
 
 
 $feed = new NewsFeed();
-$res = $feed->parse( $url );
-d($res);
+$feed->load($url);
+d($feed->getList() );
 
 ?>

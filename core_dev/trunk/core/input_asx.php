@@ -23,12 +23,6 @@ require_once('client_http.php');
 
 class input_asx
 {
-	private $inside_item = false;
-	private $current_tag = '';
-
-	private $link, $title;
-	private $callback = '';
-
 	private $entries = array();
 
 	function __construct()
@@ -39,12 +33,6 @@ class input_asx
 	 * @return array of objects
 	 */
 	function getItems() { return $this->entries; }
-
-	function setCallback($cb)
-	{
-		if (function_exists($cb))
-			$this->callback = $cb;
-	}
 
 	/**
 	 * Returns an ASX playlist parsed into a Playlist object
