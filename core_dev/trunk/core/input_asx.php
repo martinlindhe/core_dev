@@ -2,6 +2,8 @@
 /**
  * $Id$
  *
+ * Parses an ASX playlist into MediaItem objects
+ *
  * http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
  *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
@@ -23,20 +25,13 @@ require_once('client_http.php');
 
 class input_asx
 {
-	private $entries = array();
-
-	function __construct()
-	{
-	}
+	private $entries = array(); ///< MediaItem objects
 
 	/**
-	 * @return array of objects
+	 * @return array of MediaItem objects
 	 */
 	function getItems() { return $this->entries; }
 
-	/**
-	 * Returns an ASX playlist parsed into a Playlist object
-	 */
 	function parse($data)
 	{
 		if (is_url($data)) {
@@ -46,7 +41,7 @@ class input_asx
 
 			//FIXME check http client return code for 404
 			if (substr($data, 0, 5) != '<asx ') {
-				dp('input_asx->parse FAIL: cant parse ASX feed from '.$u->getUrl() );
+				dp('input_asx->parse FAIL: cant parse playlist from '.$u->getUrl() );
 				return false;
 			}
 		}
@@ -68,7 +63,8 @@ class input_asx
 
 			switch ($reader->name) {
 			case 'asx':
-				//d('version: '.$reader->getAttribute('version')); //XXX should be "3.0"
+				if ($reader->getAttribute('version') != '3.0')
+					die('XXX FIXME unsupported ASX version '.$reader->getAttribute('version') );
 				break;
 
 			case 'entry':

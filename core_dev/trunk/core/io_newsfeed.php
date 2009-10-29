@@ -45,21 +45,7 @@ class NewsItem
 
 class NewsFeed
 {
-	private $http;
 	private $entries = array(); ///< NewsItem objects
-	private $callback_parse;    ///< function to call to filter each entry while it is being parsed
-
-	function __construct()
-	{
-		$this->http = new http();
-	}
-
-	/**
-	 * @param $s cache time in seconds; max 2592000 (30 days)
-	 */
-	function setCacheTime($s) { $this->http->setCacheTime($s); }
-
-	function setParseCallback($cb) { $this->callback_parse = $cb; }
 
 	function getList() { return $this->entries; }
 
@@ -82,7 +68,6 @@ class NewsFeed
 			return false;
 		}
 
-		$feed->setCallback($this->callback_parse);
 		$feed->parse($data);
 
 		$this->entries = $feed->getItems();
