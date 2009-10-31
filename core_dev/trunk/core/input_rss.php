@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Parses an RSS feed into NewsItem objects
+ * Parses an RSS 2.0 feed into NewsItem objects
  *
  * http://www.rssboard.org/rss-specification
  *
@@ -34,7 +34,7 @@ class input_rss
 			$data = $u->get();
 
 			//FIXME check http client return code for 404
-			if (substr($data, 0, 5) != '<rss ') {
+			if (strpos($data, '<rss ') === false) {
 				dp('input_rss->parse FAIL: cant parse feed from '.$u->getUrl() );
 				return false;
 			}
@@ -59,7 +59,7 @@ class input_rss
 				break;
 
 			default:
-				echo "bad top entry ".$this->reader->name.ln();
+				echo 'bad top entry '.$this->reader->name.ln();
 				break;
 			}
 		}
@@ -94,7 +94,7 @@ class input_rss
 				break;
 
 			default:
-				//echo "bad channel entry " .$this->reader->name.ln();
+				//echo 'unknown channel entry ' .$this->reader->name.ln();
 				break;
 			}
 		}
@@ -198,13 +198,13 @@ class input_rss
 					break;
 
 				default:
-					echo "unknown MEDIA:CONTENT: ".$this->reader->getAttribute('type')."\n";
+					echo 'input_rss->parseItem() unknown MEDIA:CONTENT: '.$this->reader->getAttribute('type')."\n";
 					break;
 				}
 				break;
 
 			default:
-				//echo "unknown item entry " .$this->reader->name.ln();
+				//echo 'unknown item entry ' .$this->reader->name.ln();
 				break;
 			}
 		}
