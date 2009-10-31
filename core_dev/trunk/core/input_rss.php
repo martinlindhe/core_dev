@@ -121,14 +121,19 @@ class input_rss
 				$item->title = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
 				break;
 
-			case 'link':
-				$this->reader->read();
-				$item->url = $this->reader->value;
-				break;
-
 			case 'description':
 				$this->reader->read();
 				$item->desc = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
+				break;
+
+			case 'author':
+				$this->reader->read();
+				$item->author = $this->reader->value;
+				break;
+
+			case 'link':
+				$this->reader->read();
+				$item->url = $this->reader->value;
 				break;
 
 			case 'pubdate':
@@ -142,9 +147,9 @@ class input_rss
 				break;
 
 			case 'media:thumbnail':
-				if (!$this->image_url) { //XXX prefer full image over thumbnails
-					$this->image_url  = $this->reader->getAttribute('url');
-					$this->image_type = 'image/jpeg';//$this->reader->getAttribute('type')
+				if (!$item->image_url) { //XXX prefer full image over thumbnails
+					$item->image_url  = $this->reader->getAttribute('url');
+					$item->image_type = 'image/jpeg';//$this->reader->getAttribute('type')
 				}
 				break;
 
@@ -152,7 +157,7 @@ class input_rss
 				switch ($this->reader->getAttribute('type')) {
 				case 'video/x-flv':
 					//XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
-					if (substr($this->attrs['URL'],0,4) != 'rtmp' || !$this->video_url) {
+					if (substr($this->reader->getAttribute('url'),0,4) != 'rtmp' || !$this->video_url) {
 						$item->video_url  = $this->reader->getAttribute('url');
 						$item->video_type = $this->reader->getAttribute('type');
 
@@ -199,7 +204,7 @@ class input_rss
 				break;
 
 			default:
-				echo "bad item entry " .$this->reader->name.ln();
+				//echo "unknown item entry " .$this->reader->name.ln();
 				break;
 			}
 		}
