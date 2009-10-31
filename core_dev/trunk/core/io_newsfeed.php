@@ -13,12 +13,13 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: rewriting, need to rewrite/merge output_feed class with NewsFeed class
+//STATUS: ok, need more testing
 
 require_once('class.Duration.php');
 require_once('class.Timestamp.php');
 
 require_once('client_http.php');
+
 require_once('input_rss.php');
 require_once('input_atom.php');
 
@@ -45,67 +46,13 @@ class NewsItem
 
 class NewsFeed
 {
-	private $entries = array(); ///< NewsItem objects
-
-	function getList() { return $this->entries; }
-
-	/**
-	 * Loads input data from RSS or Atom feeds into NewsItem entries
-	 */
-	function load($data)
-	{
-		if (is_url($data)) {
-			$u = new http($data);
-			$data = $u->get();
-		}
-
-		if (strpos($data, '<rss ') !== false) {
-			$feed = new input_rss();
-		} else if (strpos($data, '<feed ') !== false) {
-			$feed = new input_atom();
-		} else {
-			echo "NewsFeed->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
-			return false;
-		}
-
-		$feed->parse($data);
-
-		$this->entries = $feed->getItems();
-	}
-
-	/**
-	 * Sorts the list
-	 */
-	function sort($callback = '')
-	{
-		if (!$callback) $callback = array($this, 'sortListDesc');
-
-		uasort($this->entries, $callback);
-	}
-
-	/**
-	 * List sort filter
-	 * @return Internal list, sorted descending by published date
-	 */
-	private function sortListDesc($a, $b)
-	{
-		if (!$a->Timestamp->get()) return 1;
-
-		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
-	}
-
-}
-
-
-class output_feed
-{
-	private $version   = 'core_dev output_feed 1.0';
+	private $version   = 'core_dev NewsFeed 1.0';
 	private $title     = 'Untitled news feed';
-	private $entries   = array();
+	private $entries   = array(); ///< NewsItem objects
 	private $desc;
-	private $url       = '';    ///< full url to this feed
-	private $ttl       = 15;    ///< time to live, in minutes
-	private $headers   = true;  ///< shall we send mime type?
+	private $url       = '';      ///< full url to this feed
+	private $ttl       = 15;      ///< time to live, in minutes
+	private $headers   = true;    ///< shall we send mime type?
 
 	function getItems() { return $this->entries; }
 
@@ -115,8 +62,10 @@ class output_feed
 
 	/**
 	 * Adds a array of entries to the feed list
+	 *
+	 * @param $list list of NewsItem objects
 	 */
-	function addList($list)
+	function addItems($list)
 	{
 		foreach ($list as $e)
 			$this->addItem($e);
@@ -149,14 +98,59 @@ class output_feed
 			break;
 
 		default:
-			d('output_feed->addItem bad data: ');
+			d('NewsFeed->addItem bad data: ');
 			d($e);
 			break;
 		}
 	}
 
 	/**
-	 * Generates XML for feed
+	 * Loads input data from RSS or Atom feeds into NewsItem entries
+	 */
+	function load($data)
+	{
+		if (is_url($data)) {
+			$u = new http($data);
+			$data = $u->get();
+		}
+
+		if (strpos($data, '<rss ') !== false) {
+			$feed = new input_rss();
+		} else if (strpos($data, '<feed ') !== false) {
+			$feed = new input_atom();
+		} else {
+			echo 'NewsFeed->load error: unhandled feed: '.substr($data, 0, 100).' ...'.dln();
+			return false;
+		}
+
+		$feed->parse($data);
+
+		$this->entries = $feed->getItems();
+	}
+
+	/**
+	 * Sorts the list
+	 */
+	function sort($callback = '')
+	{
+		if (!$callback) $callback = array($this, 'sortListDesc');
+
+		uasort($this->entries, $callback);
+	}
+
+	/**
+	 * List sort filter
+	 * @return Internal list, sorted descending by published date
+	 */
+	private function sortListDesc($a, $b)
+	{
+		if (!$a->Timestamp->get()) return 1;
+
+		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
+	}
+
+	/**
+	 * Render feed as Atom or RSS
 	 */
 	function render($format = 'rss2')
 	{
@@ -191,7 +185,7 @@ class output_feed
 			'<link rel="self" href="'.htmlspecialchars($this->url).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->getItems() as $item)
+		foreach ($this->entries as $item)
 		{
 			//link directly to video if no webpage url was found
 			if (!$item->url && $item->video_url)
@@ -231,7 +225,7 @@ class output_feed
 				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($this->url).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->getItems() as $item)
+		foreach ($this->entries as $item)
 		{
 			//link directly to video if no webpage url was found
 			if (!$item->url && $item->video_url)
@@ -255,6 +249,8 @@ class output_feed
 
 		return $res;
 	}
+
 }
+
 
 ?>

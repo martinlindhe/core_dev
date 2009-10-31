@@ -73,7 +73,7 @@ class Playlist
 	 *
 	 * @param $list list of MediaItem objects
 	 */
-	function addList($list)
+	function addItems($list)
 	{
 		foreach ($list as $e)
 			$this->addItem($e);
@@ -180,7 +180,7 @@ class Playlist
 			return $res . $this->renderXHTML();
 
 		case 'atom':
-			$feed = new output_feed();
+			$feed = new NewsFeed();
 			$feed->sendHeaders($this->headers);
 			$feed->addList($this->entries);
 			$feed->setTitle($this->title);
@@ -188,7 +188,7 @@ class Playlist
 
 		case 'rss2':
 		case 'rss':
-			$feed = new output_feed();
+			$feed = new NewsFeed();
 			$feed->sendHeaders($this->headers);
 			$feed->addList($this->entries);
 			$feed->setTitle($this->title);

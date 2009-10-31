@@ -10,7 +10,6 @@
  */
 
 //STATUS: ok
-//TODO: store overview "feed" info into a playlist object directly
 
 require_once('client_http.php');
 require_once('io_newsfeed.php'); //for NewsItem object
@@ -157,7 +156,7 @@ class input_rss
 				switch ($this->reader->getAttribute('type')) {
 				case 'video/x-flv':
 					//XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
-					if (substr($this->reader->getAttribute('url'),0,4) != 'rtmp' || !$this->video_url) {
+					if (substr($this->reader->getAttribute('url'),0,4) != 'rtmp' || !$item->video_url) {
 						$item->video_url  = $this->reader->getAttribute('url');
 						$item->video_type = $this->reader->getAttribute('type');
 

@@ -19,8 +19,37 @@ $url = 'https://styggve.dyndns.org:61001/webtv/apple.php?format=atom';
 $feed = new NewsFeed();
 $feed->load($url);
 
-$list = $feed->getList();
+$list = $feed->getItems();
 
 d($list);
+
+/*
+$list[] = array(
+	'pubdate' => 127652734,
+	'link' => 'http://example.com/news/1',
+	'title' => 'Latest news',
+	'desc' => 'A short summary'
+);
+
+$list[] = array(
+	'pubdate' => 127652224,
+	'link' => 'http://example.com/news/2',
+	'title' => 'Some older news',
+	'desc' => 'A short summary'
+);
+
+$list[] = array(
+	'pubdate' => 127651734,
+	'link' => 'http://example.com/news/3',
+	'title' => 'Very old stuff',
+	'desc' => 'A short summary'
+);
+
+$feed = new NewsFeed();
+
+$feed->addList($list);
+$feed->output('rss2');
+*/
+
 
 ?>
