@@ -117,12 +117,12 @@ class input_rss
 			switch (strtolower($this->reader->name)) {
 			case 'title':
 				$this->reader->read();
-				$item->title = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
+				$item->title = trim( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
 				break;
 
 			case 'description':
 				$this->reader->read();
-				$item->desc = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
+				$item->desc = trim( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
 				break;
 
 			case 'author':

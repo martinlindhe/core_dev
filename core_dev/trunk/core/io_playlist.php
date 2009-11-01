@@ -182,7 +182,7 @@ class Playlist
 		case 'atom':
 			$feed = new NewsFeed();
 			$feed->sendHeaders($this->headers);
-			$feed->addList($this->entries);
+			$feed->addItems($this->entries);
 			$feed->setTitle($this->title);
 			return $feed->render('atom');
 
@@ -190,7 +190,7 @@ class Playlist
 		case 'rss':
 			$feed = new NewsFeed();
 			$feed->sendHeaders($this->headers);
-			$feed->addList($this->entries);
+			$feed->addItems($this->entries);
 			$feed->setTitle($this->title);
 			return $feed->render('rss');
 		}
@@ -276,7 +276,8 @@ class Playlist
 		foreach ($this->getItems() as $item)
 		{
 			$title = $item->Timestamp->get() ? $item->Timestamp->render().' ' : '';
-			$title .= ($item->url ? '<a href="'.$item->url.'">' : '').$item->title.($item->url ? '</a>' : '');
+
+			$title .= ($item->url ? '<a href="'.$item->url.'">' : '') . ($item->title ? $item->title : 'Untitled entry'). ($item->url ? '</a>' : '');
 
 			$res .=
 			'<tr><td>'.
