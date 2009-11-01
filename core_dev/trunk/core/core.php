@@ -315,4 +315,20 @@ function round_decimals($val, $precision = 0)
 	return implode('.', $ex);
 }
 
+/**
+ * Returns line ending used in the input text
+ *
+ * @return "\n" (unix), "\r\n" (windows) or "\r" (mac)
+ */
+function str_get_ending($s)
+{
+	if (strpos($s, "\r\n") !== false)
+		return "\r\n";
+
+	if (strpos($s, "\r") !== false)
+		return "\r";
+
+	return "\n";
+}
+
 ?>

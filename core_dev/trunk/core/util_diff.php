@@ -58,9 +58,9 @@ class diff
 			$f1 = tempnam('', 'diff');
 			$f2 = tempnam('', 'diff');
 
-			//XXX ugly hack to avoid "\ No newline at end of file" from diff command. since we dont know the line ending mode, this will probably break sometime :-(
-			file_put_contents($f1, $this->r1."\n");
-			file_put_contents($f2, $this->r2."\n");
+			//avoids "\ No newline at end of file" from diff command
+			file_put_contents($f1, $this->r1 . str_get_ending($this->r1) );
+			file_put_contents($f2, $this->r2 . str_get_ending($this->r2) );
 
 			$this->diffFiles($f1, $f2);
 
@@ -73,35 +73,17 @@ class diff
 
 	function render()
 	{
+		//TODO: visualize diffs in images using imagemagick commands
+
 		$xml_dialect = (strpos($this->r1, '<?xml ') !== false)  ? true : false;
-
-		//rss1: <rdf:RDF xmlns="http://purl.org/rss/1.0/">
-		if ($xml_dialect && strpos($this->r1, 'http://purl.org/rss/1.0/') !== false) {
-			echo '<h1>XXX render RSS 1.0</h1>';
-		}
-
-		//<rss version="2.0">
-		if ($xml_dialect && strpos($this->r1, '<rss ') !== false) {
-			echo '<h1>XXX render RSS 2.0</h1>';
-		}
-
-		//<feed xmlns="http://www.w3.org/2005/Atom" ...>
-		if ($xml_dialect && strpos($this->r1, 'http://www.w3.org/2005/Atom') !== false) {
-			echo '<h1>XXX render ATOM</h1>';
-		}
 
 		if ($xml_dialect) {
 			$this->mimeType = 'text/xml';
 			return $this->renderXml();
 		}
 
-		//XXX detect images
-
-		//text:
-		if (strpos($this->r1, "\n") !== false) {
-			$this->mimeType = 'text/plain';
-			return $this->renderText();
-		}
+		$this->mimeType = 'text/plain';
+		return $this->renderText();
 	}
 
 	function renderXml()
