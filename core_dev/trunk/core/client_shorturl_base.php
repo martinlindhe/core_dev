@@ -1,4 +1,7 @@
 <?php
+/**
+ * $Id$
+ */
 
 require_once('client_http.php');
 
@@ -11,7 +14,7 @@ class shorturl_base
 
 	function getUrl($url)
 	{
-		$u = new http($url);
+		$u = new HttpClient($url);
 		$u->setCacheTime($this->cache_time);
 
 		return $u->get();

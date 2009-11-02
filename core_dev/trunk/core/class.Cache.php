@@ -49,6 +49,8 @@ class Cache
 	 */
 	function setCacheTime($s) { $this->expire_time = $s; }
 
+	function setDebug($bool = true) { $this->debug = $bool; }
+
 	function get($key)
 	{
 		if (!$this->handle) return false;

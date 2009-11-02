@@ -35,9 +35,9 @@ class input_asx
 	function parse($data)
 	{
 		if (is_url($data)) {
-			$u = new http($data);
+			$u = new HttpClient($data);
 			$u->setCacheTime(60 * 60); //1h
-			$data = $u->get();
+			$data = $u->getBody();
 
 			//FIXME check http client return code for 404
 			if (substr($data, 0, 5) != '<asx ') {

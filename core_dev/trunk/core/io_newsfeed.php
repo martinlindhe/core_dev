@@ -110,8 +110,8 @@ class NewsFeed
 	function load($data)
 	{
 		if (is_url($data)) {
-			$u = new http($data);
-			$data = $u->get();
+			$u = new HttpClient($data);
+			$data = $u->getBody();
 		}
 
 		if (strpos($data, '<rss ') !== false) {

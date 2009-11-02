@@ -16,6 +16,8 @@ $url = 'https://styggve.dyndns.org:61001/webtv/apple.php?format=atom';
 //$url = 'http://media.svt.se/download/mcc/vision/kluster/20090814/1131902-RAPPORT1200-PLAY-NY5.asx';
 
 
+
+
 $feed = new NewsFeed();
 $feed->load($url);
 

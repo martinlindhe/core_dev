@@ -31,7 +31,7 @@ class Twitter
 	 */
 	private function exec($url, $params = array())
 	{
-		$h = new http($url);
+		$h = new HttpClient($url);
 
 		$h->setUsername($this->username);
 		$h->setPassword($this->password);

@@ -5,11 +5,18 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 require_once('core.php');
 require_once('client_http.php');
 
-$url = 'https://styggve.dyndns.org:61001/xspf/';
-$u = new http($url);
+$u = new HttpClient('http://www.google.cn/');
+//$u->setDebug();
+$u->setCacheTime(0);
+$body = $u->getBody();
+d($body);
+die;
 
 echo 'mime type: '.http_content_type( $u->head() ). "\n";
 die;
+
+
+
 
 
 echo 'in : '.$url."\n";

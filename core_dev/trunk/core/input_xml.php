@@ -41,9 +41,9 @@ class xml_input
     function parse($data)
     {
 		if (is_url($data)) {
-			$u = new http($data);
+			$u = new HttpClient($data);
 			$u->setCacheTime($this->cache_time);
-			$data = $u->get();
+			$data = $u->getBody();
 		}
 
 		$this->name = '';

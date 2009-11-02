@@ -41,7 +41,7 @@ class FileImage
 		//store file temporarely to disk
 		$tmp_file = tempnam('', 'image');
 
-		$http = new http();
+		$http = new HttpClient();
 
 		$http->getFile($url, $tmp_file);
 		if ($http->getError()) {

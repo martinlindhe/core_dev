@@ -9,58 +9,56 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: need rewrite, separate "URL Location" into a Location object class
+//STATUS: ok, need testing
+//TODO: expose info from curl_getinfo
 
-require_once('core.php'); //dln()
-
-require_once('class.Cache.php');
+require_once('core.php');
 require_once('network.php');
 
-class http
+require_once('prop_Location.php');
+require_once('class.Cache.php');
+
+class HttpClient
 {
+	public  $url;              ///< Location property
 	private $debug = false;
-	private $scheme, $host, $port, $path, $param;
-	private $username, $password; ///< for HTTP AUTH
 
 	private $headers, $body;
 
-	private $error_code; ///< return code from http request, such as 404
+	private $error_code;       ///< return code from http request, such as 404
 
-	private $cache_time = 300; //5min
+	private $cache_time = 300; ///< 5 min
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
-	private $schemes    = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe', 'mms');
 
 	function __construct($url = '')
 	{
 		if (!function_exists('curl_init')) {
-			echo "ERROR: php5-curl missing".dln();
+			echo "HttpClient->ERROR: php5-curl missing".dln();
 			return false;
 		}
 
-		if ($url) $this->parse_url($url);
+		$this->url = new Location($url);
+	}
+
+	function getBody()
+	{
+		$this->get(false);
+		return $this->body;
+	}
+
+	function getHeaders()
+	{
+		$this->get(true);
+		return $this->headers;
 	}
 
 	/**
-	 * Returns a string url of current client location
+	 * Returns HTTP status code for the last request
 	 */
-	function getUrl()
+	function getStatus()
 	{
-		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
-
-		if (!empty($this->param))
-			$res .= '?'.http_build_query($this->param);
-
-		return $res;
+		return $this->status_code;
 	}
-
-	function getBody() { return $this->body; }
-
-	function getHeaders() { return $this->headers; }
-
-	function getError() { return $this->error_code; }
-
-	function setUsername($username) { $this->username = $username; }
-	function setPassword($password) { $this->password = $password; }
 
 	/**
 	 * @param $s cache time in seconds; max 2592000 (30 days)
@@ -69,54 +67,9 @@ class http
 
 	function setUserAgent($ua) { $this->user_agent = $ua; }
 
-	function setPath($path) { $this->path = $path; }
+	function setLocation($s) { $this->url->set($s); }
 
-	function setDebug($bool) { $this->debug = $bool; }
-
-	/**
-	 * Parses url and initializes the object for this url
-	 */
-	function parse_url($url)
-	{
-		$parsed = parse_url($url);
-
-		if (!in_array($parsed['scheme'], $this->schemes)) {
-			echo "unhandled url scheme ".$parsed['scheme'].dln();
-			return false;
-		}
-		if (empty($parsed['path'])) $parsed['path'] = '/';
-
-		$this->scheme = $parsed['scheme'];
-		$this->host = $parsed['host'];
-		$this->path = $parsed['path'];
-
-		if (!empty($parsed['port']))
-			$this->port = $parsed['port'];
-
-		if (!empty($parsed['query']))
-			parse_str($parsed['query'], $this->param);
-
-		return true;
-	}
-
-	/**
-	 * Adds/sets a parameter to the url
-	 */
-	function setParam($name, $val = false)
-	{
-		unset($this->param[$name]);
-		$this->param[$name] = $val;
-	}
-
-	/**
-	 * Removes a parameter from the url
-	 */
-	function removeParam($name)
-	{
-		foreach ($this->param as $n=>$val)
-			if ($name == $n)
-				unset($this->param[$n]);
-	}
+	function setDebug($bool = true) { $this->debug = $bool; }
 
 	function post($post_params)
 	{
@@ -127,45 +80,40 @@ class http
 	 * Fetches the data of the web resource
 	 * uses HTTP AUTH if username is set
 	 */
-	function get($url = '', $head_only = false, $post_params = array())
+	private function get($head_only = false, $post_params = array())
 	{
-		if ($url && !$this->parse_url($url)) {
-			echo "http->get: bad url: ".$url.dln();
-			return false;
-		} else {
-			$url = $this->getUrl();
-		}
-
-		$ch = curl_init($url);
+		$ch = curl_init( $this->url->get() );
 		if (!$ch) {
 			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".dln();
 			return false;
 		}
 
-		if ($this->scheme == 'https') {
+		if ($this->url->getScheme() == 'https') {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		}
 
-		if ($this->username) {
+		if ($this->url->getUsername()) {
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-			curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
+			curl_setopt($ch, CURLOPT_USERPWD, $this->url->getUsername().':'.$this->url->getPassword());
 		}
 
-		if (!$this->username && empty($post_params)) {
-			$cache = new cache();
+		if (!$this->url->getUsername() && empty($post_params)) {
+			$cache = new Cache();
 			if ($this->debug) $cache->setDebug();
-			$key_head = 'url_head//'.htmlspecialchars($url);
-			$key_body = 'url//'.htmlspecialchars($url);
+			$key_head = 'url_head//'.htmlspecialchars( $this->url->get() );
+			$key_full = 'url//'.     htmlspecialchars( $this->url->get() );
 
 			if ($head_only) {
-				$headers = $cache->get($key_head);
-				if ($headers)
-					return unserialize($headers);
+				$this->headers = unserialize( $cache->get($key_head) );
+				if ($this->headers)
+					return true;
 			} else {
-				$body = $cache->get($key_body);
-				if ($body)
-					return $body;
+				$full = $cache->get($key_full);
+				if ($full) {
+					$this->parseResponse($full);
+					return true;
+				}
 			}
 		}
 
@@ -195,8 +143,9 @@ class http
 		$res = curl_exec($ch);
 
 		if (curl_errno($ch)) {
-			if ($this->debug) echo "http->get() returned error ".curl_errno($ch).dln();
-			$this->error_code = curl_errno($ch);
+			//if ($this->debug)
+			echo "http->get() returned HTTP status ".curl_errno($ch).dln();
+			$this->status_code = curl_errno($ch);
 		}
 
 		curl_close($ch);
@@ -206,20 +155,13 @@ class http
 			echo '<pre>'.htmlspecialchars(substr($res,0,2000)).'</pre>';
 		}
 
-		if (!$head_only) {
-			$pos  = strpos($res, "\r\n\r\n");
-			$head = substr($res, 0, $pos);
-			$this->body    = substr($res, $pos + strlen("\r\n\r\n"));
-			$this->headers = explode("\r\n", $head);
-		} else {
-			$this->body = '';
-			$this->headers = explode("\r\n", $res);
-		}
+		$this->parseResponse($res);
 
-		if (!$this->username && empty($post_params)) {
+		if (!$this->url->getUsername() && empty($post_params)) {
 			$cache->setCacheTime($this->cache_time);
 			$cache->set($key_head, serialize($this->headers));
-			if (!$head_only) $cache->set($key_body, $this->body);
+			if (!$head_only)
+				$cache->set($key_full, $res);
 		}
 
 		if ($head_only)
@@ -228,22 +170,20 @@ class http
 		return $this->body;
 	}
 
-	function head()
-	{
-		return $this->get(true);
-	}
-
 	/**
-	 * Outputs URL in a safe format (& => &amp;)
+	 * Parse HTTP response data into object variables
 	 */
-	function render()
+	private function parseResponse($res)
 	{
-		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
-
-		if (!empty($this->param))
-			$res .= '?'.htmlspecialchars(http_build_query($this->param));
-
-		return $res;
+		$pos = strpos($res, "\r\n\r\n");
+		if ($pos !== false) {
+			$head = substr($res, 0, $pos);
+			$this->body    = substr($res, $pos + strlen("\r\n\r\n"));
+			$this->headers = explode("\r\n", $head);
+		} else {
+			$this->body = '';
+			$this->headers = explode("\r\n", $res);
+		}
 	}
 
 }
@@ -255,9 +195,9 @@ class http
  */
 function http_get($url, $cache_time = 60)
 {
-	$h = new http($url);
+	$h = new HttpClient($url);
 	$h->setCacheTime($cache_time);
-	return $h->get();
+	return $h->getBody();
 }
 
 /**
@@ -265,10 +205,10 @@ function http_get($url, $cache_time = 60)
  */
 function http_post($url, $data)
 {
-	$x = new http($url);
+	$x = new HttpClient($url);
 	$x->post($data);
 
-	$res['body'] = $x->getBody();
+	$res['body']   = $x->getBody();
 	$res['header'] = $x->getHeaders();
 
 	return $res;
@@ -283,7 +223,7 @@ function http_post($url, $data)
  */
 function http_head($url, $cache_time = 60)
 {
-	$h = new http($url);
+	$h = new HttpClient($url);
 	$h->setCacheTime($cache_time);
 	return $h->head();
 }
@@ -295,7 +235,7 @@ function http_head($url, $cache_time = 60)
  * @return HTTP status code, or false if none was found
   */
 function http_status($p)
-{
+{//XXX update to use the new HttpClient->getStatus() to return HTTP status code
 	if (!is_array($p)) $p = http_head($p);
 
 	foreach ($p as $h) {
