@@ -29,7 +29,7 @@ class Twitter
 	/**
 	 * Executes a Twitter API function
 	 */
-	function exec($url, $params = array())
+	private function exec($url, $params = array())
 	{
 		$h = new http($url);
 
@@ -48,7 +48,8 @@ class Twitter
 
 		$feed = new NewsFeed();
 
-		return $feed->parse($data);
+		$feed->load($data);
+		return $feed->getItems();
 	}
 
 	function getFriendsTimeline()
@@ -58,7 +59,8 @@ class Twitter
 		$data = $this->exec($c);
 		$feed = new NewsFeed();
 
-		return $feed->parse($data);
+		$feed->load($data);
+		return $feed->getItems();
 	}
 
 	function getSearchResult($s)
@@ -68,7 +70,8 @@ class Twitter
 
 		$feed = new NewsFeed();
 
-		return $feed->parse($data);
+		$feed->load($data);
+		return $feed->getItems();
 	}
 
 	/**

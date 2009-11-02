@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//XXX drop the render method detection, its not finished & was a stupid idea
+//STATUS: ok, needs testing
 
 class diff
 {
