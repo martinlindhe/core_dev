@@ -14,6 +14,7 @@
  */
 
 //STATUS: ok, need more testing
+//TODO use Location instead of $url param too
 
 require_once('prop_Duration.php');
 require_once('prop_Location.php');
@@ -99,14 +100,14 @@ class NewsFeed
 			//convert a MediaItem into a NewsItem
 			$item = new NewsItem();
 
-			$item->title          = $e->title;
-			$item->desc           = $e->desc;
-			$item->image_url      = $e->thumbnail;
-			$item->image_mime     = file_get_mime_by_suffix($e->thumbnail);
-			$item->video_mime     = $e->mime;
-			$item->video_url      = $e->Location->get();
-			$item->Duration ->set( $e->Duration->get() );
-			$item->Timestamp->set( $e->Timestamp->get() );
+			$item->title        = $e->title;
+			$item->desc         = $e->desc;
+			$item->image_url    = $e->thumbnail;
+			$item->image_mime   = file_get_mime_by_suffix($e->thumbnail);
+
+			$item->Location ->set($e->Location->get() );
+			$item->Duration ->set($e->Duration->get() );
+			$item->Timestamp->set($e->Timestamp->get() );
 
 			$this->entries[] = $item;
 			break;
@@ -202,14 +203,14 @@ class NewsFeed
 		foreach ($this->entries as $item)
 		{
 			//link directly to video if no webpage url was found
-			if (!$item->url && $item->video_url)
-				$item->url = $item->video_url;
+			if (!$item->Location->get() && $item->video_url)
+				$item->Location->set( $item->video_url );
 
 			$res .=
 			'<entry>'.
-				'<id>'.($item->guid ? $item->guid : htmlspecialchars($item->url) ).'</id>'.
+				'<id>'.($item->guid ? $item->guid : $item->Location->get(true) ).'</id>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
-				'<link rel="alternate" href="'.htmlspecialchars($item->url).'"/>'.
+				'<link rel="alternate" href="'.$item->Location->get(true).'"/>'.
 				'<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
 				'<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
 				'<author><name>'.$item->author.'</name></author>'.
@@ -242,13 +243,13 @@ class NewsFeed
 		foreach ($this->entries as $item)
 		{
 			//link directly to video if no webpage url was found
-			if (!$item->url && $item->video_url)
-				$item->url = $item->video_url;
+			if (!$item->Location->get() && $item->video_url)
+				$item->Location->set( $item->video_url );
 
 			$res .=
 			'<item>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
-				'<link>'.htmlspecialchars($item->url).'</link>'.
+				'<link>'.$item->Location->get(true).'</link>'.
 				'<description><![CDATA['.$item->desc.']]></description>'.
 				'<pubDate>'.$item->Timestamp->getRFC882().'</pubDate>'.
 				($item->guid ? '<guid>'.$item->guid.'</guid>' : '').

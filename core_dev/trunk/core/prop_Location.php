@@ -21,8 +21,6 @@ class Location
 	private $param  = array();
 	private $username, $password; ///< for HTTP AUTH
 
-	private $schemes    = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe', 'mms');
-
 	function setUsername($username) { $this->username = $username; }
 	function setPassword($password) { $this->password = $password; }
 	function setPath($path) { $this->path = $path; }
@@ -72,7 +70,9 @@ class Location
 
 		$parsed = parse_url($url);
 
-		if (!in_array($parsed['scheme'], $this->schemes)) {
+		$schemes = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe', 'mms');
+
+		if (!in_array($parsed['scheme'], $schemes)) {
 			echo "unhandled url scheme ".$parsed['scheme'].dln();
 			return false;
 		}
