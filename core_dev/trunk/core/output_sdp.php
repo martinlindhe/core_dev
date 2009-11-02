@@ -8,7 +8,7 @@
  */
 
 require_once('input_sdp.php');
-require_once('class.Timestamp.php');	//Timestamp::getNTP()
+require_once('prop_Timestamp.php');	//Timestamp::getNTP()
 
 
 //SDP media stream types

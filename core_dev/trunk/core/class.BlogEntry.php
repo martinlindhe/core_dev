@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.Timestamp.php');
+require_once('prop_Timestamp.php');
 
 class BlogEntry
 {

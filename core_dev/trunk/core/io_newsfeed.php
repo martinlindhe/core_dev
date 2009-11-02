@@ -15,8 +15,8 @@
 
 //STATUS: ok, need more testing
 
-require_once('class.Duration.php');
-require_once('class.Timestamp.php');
+require_once('prop_Duration.php');
+require_once('prop_Timestamp.php');
 
 require_once('client_http.php');
 

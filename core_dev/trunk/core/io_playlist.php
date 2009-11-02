@@ -30,8 +30,8 @@
 //XXX TODO ability to load playlist from XSPF, M3U, PLS, ASX files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
-require_once('class.Duration.php');
-require_once('class.Timestamp.php');
+require_once('prop_Duration.php');
+require_once('prop_Timestamp.php');
 
 require_once('input_asx.php'); //XXX: FIXME use in io_playlist
 require_once('input_m3u.php'); //XXX: FIXME use in io_playlist

@@ -13,7 +13,7 @@ require_once('locale.php');	//for translations
 require_once('output_xhtml.php');	//for XHTML output helper functions
 require_once('functions_general.php');	//FIXME: anything in there worth keeping?
 require_once('functions_textformat.php');	//for decodeDataSize()
-require_once('class.Timestamp.php');
+require_once('prop_Timestamp.php');
 require_once('network.php');
 require_once('files.php');
 
