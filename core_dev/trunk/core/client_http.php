@@ -28,7 +28,7 @@ class HttpClient
 	private $error_code;       ///< return code from http request, such as 404
 
 	private $cache_time = 300; ///< 5 min
-	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
+	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
 
 	function __construct($url = '')
 	{
@@ -142,11 +142,9 @@ class HttpClient
 
 		$res = curl_exec($ch);
 
-		if (curl_errno($ch)) {
-			//if ($this->debug)
-			echo "http->get() returned HTTP status ".curl_errno($ch).dln();
-			$this->status_code = curl_errno($ch);
-		}
+		$this->status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+		if ($this->debug) echo "http->get() returned HTTP status ".$this->status_code.dln();
 
 		curl_close($ch);
 
