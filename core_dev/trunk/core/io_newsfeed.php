@@ -16,6 +16,7 @@
 //STATUS: ok, need more testing
 
 require_once('prop_Duration.php');
+require_once('prop_Location.php');
 require_once('prop_Timestamp.php');
 
 require_once('client_http.php');
@@ -28,20 +29,33 @@ class NewsItem
 	var $title;
 	var $desc;
 	var $author;
-	var $url;
+
 	var $guid;
 	var $image_mime;
 	var $image_url;
 	var $video_mime;
 	var $video_url;
+
 	var $Duration;       ///< video duration
+	var $Location;       ///< location of news article
 	var $Timestamp;
 
 	function __construct()
 	{
 		$this->Duration  = new Duration();
+		$this->Location  = new Location();
 		$this->Timestamp = new Timestamp();
 	}
+
+	/**
+	 * __set() is run when writing data to inaccessible properties.
+	 */
+	public function __set($name, $value)
+	{
+		if (!isset($this->$name))
+			throw new Exception ($name." property does not exist");
+	}
+
 }
 
 class NewsFeed
@@ -90,8 +104,8 @@ class NewsFeed
 			$item->image_url      = $e->thumbnail;
 			$item->image_mime     = file_get_mime_by_suffix($e->thumbnail);
 			$item->video_mime     = $e->mime;
-			$item->video_url      = $e->url;
-			$item->Duration->set ( $e->Duration->get() );
+			$item->video_url      = $e->Location->get();
+			$item->Duration ->set( $e->Duration->get() );
 			$item->Timestamp->set( $e->Timestamp->get() );
 
 			$this->entries[] = $item;

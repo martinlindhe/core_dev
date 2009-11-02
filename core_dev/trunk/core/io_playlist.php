@@ -27,14 +27,15 @@
 
 //STATUS: ok
 
-//XXX TODO ability to load playlist from XSPF, M3U, PLS, ASX files
+//XXX TODO ability to load playlist from PLS files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
 require_once('prop_Duration.php');
+require_once('prop_Location.php');
 require_once('prop_Timestamp.php');
 
-require_once('input_asx.php'); //XXX: FIXME use in io_playlist
-require_once('input_m3u.php'); //XXX: FIXME use in io_playlist
+require_once('input_asx.php');
+require_once('input_m3u.php'); //XXX: TODO support input m3u playlists
 require_once('io_newsfeed.php');
 
 require_once('xhtml_header.php');
@@ -42,26 +43,36 @@ require_once('xhtml_header.php');
 class MediaItem //XXX rename to PlaylistItem ?
 {
 	var $title;
-	var $url;                ///< location of media
 	var $mime;               ///< mimetype of media
 	var $thumbnail;          ///< location of thumbnail/cover art
 	var $desc;               ///< description
 
 	var $Duration;           ///< duration of media
+	var $Location;           ///< location of media
 	var $Timestamp;
 
 	function __construct()
 	{
 		$this->Duration  = new Duration();
+		$this->Location  = new Location();
 		$this->Timestamp = new Timestamp();
+	}
+
+	/**
+	 * __set() is run when writing data to inaccessible properties.
+	 */
+	public function __set($name, $value)
+	{
+		if (!isset($this->$name))
+			throw new Exception ($name." property does not exist");
 	}
 }
 
 class Playlist
 {
 	private $headers = true;                ///< shall we send mime type?
-	private $entries     = array();             ///< MediaItem objects
-	private $title       = 'Untitled playlist'; ///< name of playlist
+	private $entries = array();             ///< MediaItem objects
+	private $title   = 'Untitled playlist'; ///< name of playlist
 
 	function getItems() { return $this->entries; }
 
@@ -97,9 +108,9 @@ class Playlist
 			$item->desc           = $e->desc;
 			$item->thumbnail      = $e->image_url;
 			$item->mime           = $e->video_mime;
-			$item->url            = $e->video_url;
-			$item->Duration->set ( $e->Duration->get() );
-			$item->Timestamp->set( $e->Timestamp->get() );
+			$item->Duration->set  ( $e->Duration->get() );
+			$item->Location->set  ( $e->video_url );
+			$item->Timestamp->set ( $e->Timestamp->get() );
 
 			$this->entries[] = $item;
 			break;
@@ -277,7 +288,10 @@ class Playlist
 		{
 			$title = $item->Timestamp->get() ? $item->Timestamp->render().' ' : '';
 
-			$title .= ($item->url ? '<a href="'.$item->url.'">' : '') . ($item->title ? $item->title : 'Untitled entry'). ($item->url ? '</a>' : '');
+			$title .=
+				($item->Location->get() ? '<a href="'.$item->Location->get().'">' : '').
+				($item->title ? $item->title : 'Untitled entry').
+				($item->Location->get() ? '</a>' : '');
 
 			$res .=
 			'<tr><td>'.

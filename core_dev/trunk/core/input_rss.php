@@ -132,7 +132,7 @@ class input_rss
 
 			case 'link':
 				$this->reader->read();
-				$item->url = $this->reader->value;
+				$item->Location->set( $this->reader->value );
 				break;
 
 			case 'pubdate':
@@ -148,7 +148,7 @@ class input_rss
 			case 'media:thumbnail':
 				if (!$item->image_url) { //XXX prefer full image over thumbnails
 					$item->image_url  = $this->reader->getAttribute('url');
-					$item->image_type = 'image/jpeg';//$this->reader->getAttribute('type')
+					$item->image_mime = file_get_mime_by_suffix($item->image_url);//$this->reader->getAttribute('type')
 				}
 				break;
 
@@ -158,7 +158,7 @@ class input_rss
 					//XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
 					if (substr($this->reader->getAttribute('url'),0,4) != 'rtmp' || !$item->video_url) {
 						$item->video_url  = $this->reader->getAttribute('url');
-						$item->video_type = $this->reader->getAttribute('type');
+						$item->video_mime = $this->reader->getAttribute('type');
 
 						$item->Duration->set($this->reader->getAttribute('duration'));
 					}
@@ -172,24 +172,24 @@ class input_rss
 						$asx->parse(  $this->reader->getAttribute('url') );
 						$list = $asx->getItems();
 						if ($list)
-							$item->video_url = $list[0]->url;
+							$item->video_url = $list[0]->Location->get();
 					} else {
 						$item->video_url = $this->reader->getAttribute('url');
 					}
 
-					$this->video_type = $this->reader->getAttribute('type');
+					$this->video_mime = $this->reader->getAttribute('type');
 					$item->Duration->set($this->reader->getAttribute('duration'));
 					break;
 
 				case 'video/quicktime':
 					$this->video_url  = $this->reader->getAttribute('url');
-					$this->video_type = $this->reader->getAttribute('type');
+					$this->video_mime = $this->reader->getAttribute('type');
 					$item->Duration->set($this->reader->getAttribute('duration'));
 					break;
 
 				case 'image/jpeg':
 					$this->image_url  = $this->reader->getAttribute('url');
-					$this->image_type = $this->reader->getAttribute('type');
+					$this->image_mime = $this->reader->getAttribute('type');
 					break;
 
 				case 'text/html':

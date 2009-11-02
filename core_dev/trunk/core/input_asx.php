@@ -22,6 +22,7 @@
 */
 
 require_once('client_http.php');
+require_once('io_playlist.php'); //for MediaItem object
 
 class input_asx
 {
@@ -81,7 +82,7 @@ class input_asx
 					case 'starttime': break; //<starttime value="00:00:00.00"/>
 
 					case 'ref': //<ref href="mms://wm0.c90901.cdn.qbrick.com/90901/kluster/20091026/aekonomi920.wmv"/>
-						$item->url = $reader->getAttribute('href');
+						$item->Location->set( $reader->getAttribute('href') );
 						break;
 
 					case 'duration': //<duration value="00:03:39.00"/>
