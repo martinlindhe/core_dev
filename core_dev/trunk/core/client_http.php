@@ -9,6 +9,8 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//STATUS: need rewrite, separate "URL Location" into a Location object class
+
 require_once('core.php'); //dln()
 
 require_once('class.Cache.php');
@@ -21,6 +23,9 @@ class http
 	private $username, $password; ///< for HTTP AUTH
 
 	private $headers, $body;
+
+	private $error_code; ///< return code from http request, such as 404
+
 	private $cache_time = 300; //5min
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.0.13) Gecko/2009080315 Ubuntu/9.04 (jaunty) Firefox/3.0.13';
 	private $schemes    = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe', 'mms');
@@ -51,6 +56,8 @@ class http
 	function getBody() { return $this->body; }
 
 	function getHeaders() { return $this->headers; }
+
+	function getError() { return $this->error_code; }
 
 	function setUsername($username) { $this->username = $username; }
 	function setPassword($password) { $this->password = $password; }
@@ -170,7 +177,7 @@ class http
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		if (!empty($post_params)) {
-			if ($this->debug) echo "HTTP POST ".$this->render()." ... ";
+			if ($this->debug) echo "http->post() ".$this->render()." ... ";
 
 			if (is_array($post_params)) {
 				$var = htmlspecialchars(http_build_query($post_params));
@@ -182,10 +189,18 @@ class http
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
 		} else {
-			if ($this->debug) echo "HTTP GET ".$this->render()." ...";
+			if ($this->debug) echo "http->get() ".$this->render()." ... ";
 		}
+
 		$res = curl_exec($ch);
+
+		if (curl_errno($ch)) {
+			if ($this->debug) echo "http->get() returned error ".curl_errno($ch).dln();
+			$this->error_code = curl_errno($ch);
+		}
+
 		curl_close($ch);
+
 		if ($this->debug) {
 			echo "Got ".strlen($res)." bytes, showing first 2000:".dln();
 			echo '<pre>'.htmlspecialchars(substr($res,0,2000)).'</pre>';
