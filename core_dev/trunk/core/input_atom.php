@@ -79,8 +79,7 @@ class input_atom
 			if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'entry') {
 				if ($item->title == $item->desc) $item->desc = '';
 				$this->entries[] = $item;
-				$item = new NewsItem();
-				break;
+				return;
 			}
 
 			if ($this->reader->nodeType != XMLReader::ELEMENT)
@@ -110,7 +109,7 @@ class input_atom
 			case 'link':
 				switch ($this->reader->getAttribute('rel')) {
 				case 'alternate':
-					$item->url = $this->reader->getAttribute('href');
+					$item->Location->set( $this->reader->getAttribute('href') );
 					break;
 				case 'enclosure':
 					switch ($this->reader->getAttribute('type')) {

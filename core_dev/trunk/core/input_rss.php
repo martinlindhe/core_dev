@@ -107,8 +107,7 @@ class input_rss
 			if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'item') {
 				if ($item->title == $item->desc) $item->desc = '';
 				$this->entries[] = $item;
-				$item = new NewsItem();
-				break;
+				return;
 			}
 
 			if ($this->reader->nodeType != XMLReader::ELEMENT)
@@ -177,19 +176,19 @@ class input_rss
 						$item->video_url = $this->reader->getAttribute('url');
 					}
 
-					$this->video_mime = $this->reader->getAttribute('type');
+					$item->video_mime = $this->reader->getAttribute('type');
 					$item->Duration->set($this->reader->getAttribute('duration'));
 					break;
 
 				case 'video/quicktime':
-					$this->video_url  = $this->reader->getAttribute('url');
-					$this->video_mime = $this->reader->getAttribute('type');
+					$item->video_url  = $this->reader->getAttribute('url');
+					$item->video_mime = $this->reader->getAttribute('type');
 					$item->Duration->set($this->reader->getAttribute('duration'));
 					break;
 
 				case 'image/jpeg':
-					$this->image_url  = $this->reader->getAttribute('url');
-					$this->image_mime = $this->reader->getAttribute('type');
+					$item->image_url  = $this->reader->getAttribute('url');
+					$item->image_mime = $this->reader->getAttribute('type');
 					break;
 
 				case 'text/html':
