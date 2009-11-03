@@ -4,17 +4,14 @@
  *
  * Simple newsfeed (RSS, Atom) reader/writer with support for RSS 2.0 and Atom 1.0
  *
- * Atom 1.0: http://www.atomenabled.org/developers/syndication
- * RSS 2.0:  http://www.rssboard.org/rss-specification
- * RSS 2.0 media rss: http://video.search.yahoo.com/mrss
- *
- * Output verified with http://feedvalidator.org/
+ * Output mostly comply with http://feedvalidator.org/
  *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
 //STATUS: ok, need more testing
 //TODO use Location instead of $url param too
+//XXX atom output: no way to embed video duration, <link length="x"> is size of the resource, in bytes.
 
 require_once('prop_Duration.php');
 require_once('prop_Location.php');
@@ -188,6 +185,7 @@ class NewsFeed
 
 	/**
 	 * Renders the feed in Atom 1.0 format
+	 * http://www.atomenabled.org/developers/syndication
 	 */
 	function renderATOM()
 	{
@@ -214,7 +212,6 @@ class NewsFeed
 				'<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
 				'<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
 				'<author><name>'.$item->author.'</name></author>'.
-				//XXX no way to embed video duration, <link length="x"> is length of the resource, in bytes.
 				($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').
 				($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.htmlspecialchars($item->image_url).'"/>' : '').
 			'</entry>'."\n";
@@ -225,7 +222,10 @@ class NewsFeed
 	}
 
 	/**
-	 * Renders the feed in RSS 2.0 format
+	 * Renders the feed in RSS 2.0 format with Media RSS tags for media content
+	 *
+	 * http://www.rssboard.org/rss-specification
+	 * <media> extension: http://video.search.yahoo.com/mrss
 	 */
 	function renderRSS2()
 	{

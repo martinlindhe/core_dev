@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: ok, need testing
+//STATUS: ok
 
 require_once('client_http.php');
 

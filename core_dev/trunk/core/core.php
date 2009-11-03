@@ -31,8 +31,8 @@ function d($v)
 		if (php_sapi_name() == 'cli') {
 			echo $v;
 		} else {
-			$out = htmlentities($v);
-			if ($out != htmlentities($v))
+			$out = htmlentities($v, ENT_QUOTES, 'UTF-8');
+			if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
 				echo '<pre>'.$out.'</pre>';
 			else
 				echo $out;
