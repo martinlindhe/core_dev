@@ -228,7 +228,7 @@ class Playlist
 
 			$res .= '<location>'.$item->Location.'</location>';
 
-			if ($item->duration)
+			if ($item->Duration)
 				$res .= '<duration>'.$item->Duration->inMilliseconds().'</duration>';
 
 			if ($item->thumbnail)
