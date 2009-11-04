@@ -27,6 +27,14 @@ class Timestamp
 	}
 
 	/**
+	 * Convert object representation to a string
+	 */
+	function __asString()
+	{
+		return $this->get();
+	}
+
+	/**
 	 * Sets internal timestamp to Unix time
 	 *
 	 * @param $ts Unix timestamp (numeric) or string

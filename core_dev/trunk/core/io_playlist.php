@@ -222,14 +222,14 @@ class Playlist
 			//XXX: create categories from $row['category']
 
 			$res .= '<track>';
-			$title = ($item->time_published ? formatTime($item->time_published).' ' : '').$item->title;
+			$title = ($item->Timestamp ? $item->Timestamp->render().' ' : '').$item->title;
 			//if ($item->desc) $title .= ' - '.$item->desc;
 			$res .= '<title><![CDATA['.trim($title).']]></title>';
 
-			$res .= '<location>'.$item->url.'</location>';
+			$res .= '<location>'.$item->Location.'</location>';
 
 			if ($item->duration)
-				$res .= '<duration>'.$item->duration->getAsMilliseconds().'</duration>';
+				$res .= '<duration>'.$item->Duration->inMilliseconds().'</duration>';
 
 			if ($item->thumbnail)
 				$res .= '<image>'.$item->thumbnail.'</image>';
@@ -249,7 +249,7 @@ class Playlist
 		foreach ($this->getItems() as $item)
 		{
 			$res .=
-			"#EXTINF:".($item->duration ? round($item->duration->getAsSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
+			"#EXTINF:".($item->Duration ? round($item->Duration->inSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
 			$item->url."\n";
 		}
 
@@ -268,9 +268,9 @@ class Playlist
 		{
 			$i++;
 			$res .=
-			"File".  $i."=".$item->url."\n".
+			"File".  $i."=".$item->Location."\n".
 			"Title". $i."=".($item->title ? $item->title : 'Untitled track')."\n".
-			"Length".$i."=".($item->Duration->get() ? $item->Duration->getAsSeconds() : '-1')."\n".
+			"Length".$i."=".($item->Duration ? $item->Duration->inSeconds() : '-1')."\n".
 			"\n";
 		}
 		$res .= "Version=2\n";
@@ -286,19 +286,19 @@ class Playlist
 
 		foreach ($this->getItems() as $item)
 		{
-			$title = $item->Timestamp->get() ? $item->Timestamp->render().' ' : '';
+			$title = $item->Timestamp ? $item->Timestamp->render().' ' : '';
 
 			$title .=
-				($item->Location->get() ? '<a href="'.$item->Location->get().'">' : '').
+				($item->Location ? '<a href="'.$item->Location.'">' : '').
 				($item->title ? $item->title : 'Untitled entry').
-				($item->Location->get() ? '</a>' : '');
+				($item->Location ? '</a>' : '');
 
 			$res .=
 			'<tr><td>'.
 			'<h2>'.$title.'</h2>'.
 			($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
 			($item->desc ? '<p>'.$item->desc.'</p>' : '').
-			($item->Duration->get() ? t('Duration').': '.$item->Duration->render().'<br/>' : '').
+			($item->Duration ? t('Duration').': '.$item->Duration->render().'<br/>' : '').
 			'</td></tr>';
 		}
 

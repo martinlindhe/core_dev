@@ -34,6 +34,14 @@ class Location
 		$this->init($url);
 	}
 
+	/**
+	 * Convert object representation to a string
+	 */
+	function __asString()
+	{
+		return $this->get();
+	}
+
 	private function init($url = '')
 	{
 		if (!is_url($url))

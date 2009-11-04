@@ -22,6 +22,14 @@ class Duration
 	}
 
 	/**
+	 * Convert object representation to a string
+	 */
+	function __asString()
+	{
+		return $this->get();
+	}
+
+	/**
 	 * Decodes a textual representation for a duration
 	 *
 	 * @param $s input string
