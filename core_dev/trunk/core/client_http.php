@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: ok, need testing
+//STATUS: ok
 //TODO: expose info from curl_getinfo
 
 require_once('core.php');
@@ -18,15 +18,11 @@ require_once('network.php');
 require_once('prop_Location.php');
 require_once('class.Cache.php');
 
-class HttpClient
+class HttpClient extends CoreDevBase
 {
 	public  $url;              ///< Location property
-	private $debug = false;
-
 	private $headers, $body;
-
 	private $error_code;       ///< return code from http request, such as 404
-
 	private $cache_time = 300; ///< 5 min
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
 
@@ -68,8 +64,6 @@ class HttpClient
 	function setUserAgent($ua) { $this->user_agent = $ua; }
 
 	function setLocation($s) { $this->url->set($s); }
-
-	function setDebug($bool = true) { $this->debug = $bool; }
 
 	function post($post_params)
 	{
@@ -137,7 +131,7 @@ class HttpClient
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
 		} else {
-			if ($this->debug) echo "http->get() ".$this->render()." ... ";
+			if ($this->debug) echo "http->get() ".$this->url->get()." ... ".dln();
 		}
 
 		$res = curl_exec($ch);

@@ -9,14 +9,14 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//XXX: add "inc/dec" to increase/Decrease numeric values
+//STATUS: good
+//TODO: add "inc/dec" to increase/Decrease numeric values
 
-class Cache
+class Cache extends CoreDevBase
 {
-	private $debug       = false;
 	private $handle      = false;
-	private $persistent  = true; ///< use persistent connections?
-	private $expire_time = 60; ///< expiration time, in seconds
+	private $persistent  = true;  ///< use persistent connections?
+	private $expire_time = 60;    ///< expiration time, in seconds
 
 	/**
 	 * @param $server_pool array of "host[:port]" addresses to memcache servers
@@ -24,7 +24,7 @@ class Cache
 	function __construct($server_pool = false)
 	{
 		if (!class_exists('Memcache')) {
-			echo "cache FAIL: php5-memcache not found\n";
+			echo "cache FAIL: php5-memcache not found".dln();
 			return false;
 		}
 
@@ -49,31 +49,24 @@ class Cache
 	 */
 	function setCacheTime($s) { $this->expire_time = $s; }
 
-	function setDebug($bool = true) { $this->debug = $bool; }
-
 	function get($key)
 	{
 		if (!$this->handle) return false;
 
 		$val = $this->handle->get($key);
 
-		if ($this->debug) echo "CACHE READ ".$key." = ".substr($val, 0, 200)."...\n";
+		if ($this->debug) echo "CACHE READ ".$key.dln();
 		return $val;
 	}
 
-	function set($key, $val, $expire = 'REMOVEME') //XXX remove expire parameter
+	function set($key, $val)
 	{
 		if (!$this->handle) return false;
 
-		if (is_numeric($expire)) {
-			require_once('core.php');
-			dtrace();
-			die('FIXME USE $cache->setCacheTime() instead!');
-		}
-
+		//XXX HACK force quiet bogus warnings from memcache in 2009
 		$ret = @$this->handle->set($key, $val, false, $this->expire_time);
 
-		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)\n";
+		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)".dln();
 		return $ret;
 	}
 }

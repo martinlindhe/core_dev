@@ -9,7 +9,7 @@
 
 //STATUS: good
 
-class Duration
+class Duration extends CoreDevBase
 {
 	private $duration; ///< seconds with decimal precision
 
@@ -24,9 +24,10 @@ class Duration
 	/**
 	 * Convert object representation to a string
 	 */
+	//XXX cp. '' evaluerar true eller javetinte nåt är fel
 	function __toString()
 	{
-		return $this->get();
+		return $this->get().'';
 	}
 
 	/**

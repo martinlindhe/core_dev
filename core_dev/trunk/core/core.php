@@ -18,6 +18,25 @@ require_once('network.php');
 require_once('files.php');
 
 /**
+ * core_dev base class, all objects should extend this class
+ */
+class CoreDevBase
+{
+	protected $debug = false;
+
+	function setDebug($bool = true) { $this->debug = $bool; }
+
+	/**
+	 * __set() is run when writing data to inaccessible properties.
+	 */
+	public function __set($name, $value)
+	{
+		if (!isset($this->$name))
+			throw new Exception ($name." property does not exist");
+	}
+}
+
+/**
  * Debug function. Prints out variable $v
  *
  * @param $v variable of any type to display

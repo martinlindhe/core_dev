@@ -9,41 +9,40 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: ok
+
 //TODO Make a test script to verify each of the database classes returns data as expected
 //TODO: only mysqli driver uses $this->connected, fix the rest!
 
 //TODO: use register_shutdown_function('myfunc') to add profiler at end of script if debug=true
 //TODO: move out the profiling stuff from here
 
-abstract class db_base
+abstract class db_base extends CoreDevBase
 {
 	//db settings
-	protected $host	= '';               ///< Hostname or numeric IP address of the db server
-	protected $port	= 0;                ///< Port number
-	protected $username = '';           ///< Username to use to connect to the database
-	protected $password = '';           ///< Password to use to connect to the database
-	protected $database = '';           ///< Name of the database to connect to
-	protected $charset = 'utf8';        ///< Default charset to use. utf8 should be used always
-	protected $connected = false;       ///< Are we connected to the db?
+	protected $host	     = '';      ///< Hostname or numeric IP address of the db server
+	protected $port	     = 0;       ///< Port number
+	protected $username  = '';      ///< Username to use to connect to the database
+	protected $password  = '';      ///< Password to use to connect to the database
+	protected $database  = '';      ///< Name of the database to connect to
+	protected $charset   = 'utf8';  ///< Default charset to use. utf8 should be used always
+	protected $connected = false;   ///< Are we connected to the db?
 
 	//db variables
-	public $db_handle = false;          ///< Internal db handle
-	public $driver = '';                ///< holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
-	public $dialect = '';               ///< tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
-	public $server_version = '';        ///< used for version checking
-	public $client_version = '';        ///< used for version checking
+	public $db_handle      = false; ///< Internal db handle
+	public $driver         = '';    ///< holds the full name of the db driver, example: DB_MySQLi, DB_MySQL
+	public $dialect        = '';    ///< tells what dialect of sql is currently allowed by the db driver, possible values: mysql, pgsql
+	public $server_version = '';    ///< used for version checking
+	public $client_version = '';    ///< used for version checking
 
 	//profiling variables
-	protected $debug = false;           ///< Debugging enabled?
-	public $time_initial = 0;           ///< profiler: microtime for db instance
-	public $time_measure = 0;           ///< profiler: time when profiling started
-	public $time_connect = 0;           ///< profiler: time it took to connect to db
-	public $time_spent = array();       ///< Used internally for the SQL profiler
-	public $queries_cnt = 0;            ///< Used internally for the SQL profiler
-	public $queries = array();          ///< Used internally for the SQL profiler
-	public $query_error = array();      ///< Used internally for the SQL profiler
-
-	function setDebug($bool = true) { $this->debug = $bool; }
+	public $time_initial = 0;       ///< profiler: microtime for db instance
+	public $time_measure = 0;       ///< profiler: time when profiling started
+	public $time_connect = 0;       ///< profiler: time it took to connect to db
+	public $time_spent   = array(); ///< Used internally for the SQL profiler
+	public $queries_cnt  = 0;       ///< Used internally for the SQL profiler
+	public $queries      = array(); ///< Used internally for the SQL profiler
+	public $query_error  = array(); ///< Used internally for the SQL profiler
 
 	function getErrorCount() { return count($this->query_error); }
 

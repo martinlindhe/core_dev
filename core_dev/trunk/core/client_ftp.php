@@ -15,12 +15,13 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//FIXME: for sftp support, curl needs to be compiled with sftp support
-//ubuntu bug: https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
+//STATUS: ok
+
+//FIXME: for sftp support, curl needs to be compiled with sftp support; ubuntu bug: https://bugs.launchpad.net/ubuntu/+source/curl/+bug/311029
 
 //XXX: see curl_multi_exec() for performing multiple operations
 
-class ftp
+class ftp extends CoreDevBase
 {
 	private $scheme, $host;
 	private $port     = 21;
@@ -28,7 +29,6 @@ class ftp
 	private $username = 'anonymous';
 	private $password = 'anon@ftp.com';
 	private $curl     = false; ///< curl handle
-	private $debug    = false;
 
 	function __construct($address = '')
 	{
@@ -102,8 +102,6 @@ class ftp
 	{
 		return $this->scheme.'://'.urlencode($this->username).':'.urlencode($this->password).'@'.$this->host.':'.$this->port.$this->path;
 	}
-
-	function setDebug($bool = true) { $this->debug = $bool; }
 
 	/**
 	 * @param $address "ftp://user:pwd@host:port/"

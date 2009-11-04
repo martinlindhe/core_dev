@@ -18,9 +18,9 @@ require_once('input_mime.php');
 
 //XXX rename to client_pop3.php
 
-class pop3
+class pop3 extends CoreDevBase
 {
-	var $handle = false, $debug = false;
+	var $handle = false;
 
 	var $server, $port;
 	var $username, $password;
@@ -31,9 +31,9 @@ class pop3
 	function __construct($server = '', $username = '', $password = '', $port = 110)
 	{
 		global $config;
-		if (!empty($config['debug'])) $this->debug = true;
-		$this->server = $server;
-		$this->port = $port;
+
+		$this->server   = $server;
+		$this->port     = $port;
 		$this->username = $username;
 		$this->password = $password;
 	}

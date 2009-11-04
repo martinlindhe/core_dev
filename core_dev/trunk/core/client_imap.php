@@ -16,9 +16,9 @@
 
 require_once('input_mime.php');
 
-class imap
+class imap extends CoreDevBase
 {
-	var $handle = false, $debug = false;
+	var $handle = false;
 
 	var $server, $port;
 	var $username, $password;

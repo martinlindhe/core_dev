@@ -14,11 +14,10 @@
 require_once('client_http.php');
 require_once('io_newsfeed.php'); //for NewsItem object
 
-class input_rss
+class input_rss extends CoreDevBase
 {
 	private $entries = array();
-
-	private $reader; ///< XMLReader object
+	private $reader;            ///< XMLReader object
 
 	/**
 	 * @return array of NewsItem objects

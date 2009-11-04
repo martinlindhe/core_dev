@@ -13,11 +13,10 @@
 
 require_once('client_http.php');
 
-class input_atom
+class input_atom extends CoreDevBase
 {
 	private $entries = array();
-
-	private $reader; ///< XMLReader object
+	private $reader;            ///< XMLReader object
 
 	/**
 	 * @return array of NewsItem objects
@@ -126,7 +125,7 @@ class input_atom
 						break;
 
 					default:
-						die('input_atom->parseLink() unknown enclosure mime: '.$this->reader->getAttribute('type') );
+						die('input_atom->parseEntry() unknown enclosure mime: '.$this->reader->getAttribute('type') );
 					}
 					break;
 
@@ -138,7 +137,7 @@ class input_atom
 						break;
 
 					default:
-						die('input_atom->parseLink() unknown image mime: '.$this->reader->getAttribute('type') );
+						die('input_atom->parseEntry() unknown image mime: '.$this->reader->getAttribute('type') );
 					}
 					break;
 
@@ -149,7 +148,7 @@ class input_atom
 				case 'self': //XXX ???
 					break;
 				default:
-					die('input_atom->parseLink() unknown link type: '.$this->reader->getAttribute('rel') );
+					die('input_atom->parseEntry() unknown link type: '.$this->reader->getAttribute('rel') );
 				}
 				break;
 
@@ -158,11 +157,6 @@ class input_atom
 				break;
 			}
 		}
-	}
-
-	private function parseLink()
-	{
-
 	}
 
 }

@@ -11,27 +11,27 @@
 
 require_once('functions_time.php');
 
-class Timestamp
+class Timestamp extends CoreDevBase
 {
-	private $ts = 0; ///< internal representation of time, as a Unix timestamp
+	private $ts; ///< internal representation of time, as a Unix timestamp
 
 	/**
 	 * Initialize object to specified time
 	 *
 	 * @param $t unix timestamp or strtotime() understandable string
 	 */
-	function __construct($t = 0)
+	function __construct($ts = 0)
 	{
-		if ($t)
-			$this->set($t);
+		$this->set($ts);
 	}
 
 	/**
 	 * Convert object representation to a string
 	 */
+	//XXX cp. '' evaluerar true eller javetinte nåt är fel
 	function __toString()
 	{
-		return $this->get();
+		return $this->get().'';
 	}
 
 	/**
@@ -42,7 +42,8 @@ class Timestamp
 	function set($ts)
 	{
 		if (is_string($ts)) $ts = strtotime($ts);
-		if (!is_numeric($ts) || !$ts) return false;
+		if (!is_numeric($ts)) return false;
+
 		$this->ts = $ts;
 	}
 
@@ -61,7 +62,11 @@ class Timestamp
 	/**
 	 * @return a numeric Unix timestamp
 	 */
-	function get() { return $this->ts; }
+	function get()
+	{
+		if (!$this->ts) return false;
+		return $this->ts;
+	}
 
 	/**
 	 * Convert Unix timestamp to NTP timestamp

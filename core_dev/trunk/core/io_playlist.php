@@ -40,7 +40,7 @@ require_once('io_newsfeed.php');
 
 require_once('xhtml_header.php');
 
-class MediaItem //XXX rename to PlaylistItem ?
+class MediaItem extends CoreDevBase //XXX rename to PlaylistItem ?
 {
 	var $title;
 	var $mime;               ///< mimetype of media
@@ -57,18 +57,9 @@ class MediaItem //XXX rename to PlaylistItem ?
 		$this->Location  = new Location();
 		$this->Timestamp = new Timestamp();
 	}
-
-	/**
-	 * __set() is run when writing data to inaccessible properties.
-	 */
-	public function __set($name, $value)
-	{
-		if (!isset($this->$name))
-			throw new Exception ($name." property does not exist");
-	}
 }
 
-class Playlist
+class Playlist extends CoreDevBase
 {
 	private $headers = true;                ///< shall we send mime type?
 	private $entries = array();             ///< MediaItem objects

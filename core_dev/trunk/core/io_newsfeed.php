@@ -22,7 +22,7 @@ require_once('client_http.php');
 require_once('input_rss.php');
 require_once('input_atom.php');
 
-class NewsItem
+class NewsItem extends CoreDevBase
 {
 	var $title;
 	var $desc;
@@ -44,19 +44,9 @@ class NewsItem
 		$this->Location  = new Location();
 		$this->Timestamp = new Timestamp();
 	}
-
-	/**
-	 * __set() is run when writing data to inaccessible properties.
-	 */
-	public function __set($name, $value)
-	{
-		if (!isset($this->$name))
-			throw new Exception ($name." property does not exist");
-	}
-
 }
 
-class NewsFeed
+class NewsFeed extends CoreDevBase
 {
 	private $version   = 'core_dev NewsFeed 1.0';
 	private $title     = 'Untitled news feed';
@@ -70,6 +60,7 @@ class NewsFeed
 
 	function setTitle($n) { $this->title = $n; }
 	function setUrl($n) { $this->url = $n; }
+
 	function sendHeaders($bool = true) { $this->headers = $bool; }
 
 	/**
@@ -122,8 +113,9 @@ class NewsFeed
 	function load($data)
 	{
 		if (is_url($data)) {
-			$u = new HttpClient($data);
-			$data = $u->getBody();
+			$http = new HttpClient($data);
+			if ($this->debug) $http->setDebug();
+			$data = $http->getBody();
 		}
 
 		if (strpos($data, '<rss ') !== false) {
@@ -135,6 +127,7 @@ class NewsFeed
 			return false;
 		}
 
+		if ($this->debug) $feed->setDebug();
 		$feed->parse($data);
 
 		$this->entries = $feed->getItems();
