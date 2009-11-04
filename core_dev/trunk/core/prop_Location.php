@@ -37,7 +37,7 @@ class Location
 	/**
 	 * Convert object representation to a string
 	 */
-	function __asString()
+	function __toString()
 	{
 		return $this->get();
 	}
