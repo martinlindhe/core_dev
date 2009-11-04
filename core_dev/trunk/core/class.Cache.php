@@ -55,7 +55,7 @@ class Cache extends CoreDevBase
 
 		$val = $this->handle->get($key);
 
-		if ($this->debug) echo "CACHE READ ".$key.dln();
+		if ($this->debug && $val) echo "CACHE READ ".$key.dln();
 		return $val;
 	}
 

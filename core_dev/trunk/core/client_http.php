@@ -22,7 +22,7 @@ class HttpClient extends CoreDevBase
 {
 	public  $url;              ///< Location property
 	private $headers, $body;
-	private $error_code;       ///< return code from http request, such as 404
+	private $status_code;      ///< return code from http request, such as 404
 	private $cache_time = 300; ///< 5 min
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
 

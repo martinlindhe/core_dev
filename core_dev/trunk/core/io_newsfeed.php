@@ -57,6 +57,7 @@ class NewsFeed extends CoreDevBase
 	private $headers   = true;    ///< shall we send mime type?
 
 	function getItems() { return $this->entries; }
+	function getTitle() { return $this->title; }
 
 	function setTitle($n) { $this->title = $n; }
 	function setUrl($n) { $this->url = $n; }
@@ -129,6 +130,7 @@ class NewsFeed extends CoreDevBase
 
 		if ($this->debug) $feed->setDebug();
 		$feed->parse($data);
+		$this->title = $feed->getTitle();
 
 		$this->entries = $feed->getItems();
 	}

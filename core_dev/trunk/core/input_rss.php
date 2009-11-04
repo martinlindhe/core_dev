@@ -18,25 +18,29 @@ class input_rss extends CoreDevBase
 {
 	private $entries = array();
 	private $reader;            ///< XMLReader object
+	private $title;             ///< title of the feed
 
 	/**
 	 * @return array of NewsItem objects
 	 */
 	function getItems() { return $this->entries; }
+	function getTitle() { return $this->title; }
 
 	function parse($data)
 	{
 		if (is_url($data)) {
-			$u = new HttpClient($data);
-			$u->setCacheTime(60 * 60); //1h
+			$http = new HttpClient($data);
+			if ($this->debug) $http->setDebug();
+			$http->setCacheTime(60 * 60); //1h
 			$data = $u->getBody();
 
 			//FIXME check http client return code for 404
 			if (strpos($data, '<rss ') === false) {
-				dp('input_rss->parse FAIL: cant parse feed from '.$u->getUrl() );
+				dp('input_rss->parse FAIL: cant parse feed from '.$http->getUrl() );
 				return false;
 			}
 		}
+		if ($this->debug) echo "Parsing RSS: ".htmlentities($data).ln();
 
 		$this->reader = new XMLReader();
 		$this->reader->xml($data);
@@ -76,7 +80,11 @@ class input_rss extends CoreDevBase
 				continue;
 
 			switch (strtolower($this->reader->name)) {
-			case 'title': break;
+			case 'title':
+				$this->reader->read();
+				$this->title = $this->reader->value;
+				break;
+
 			case 'link': break;
 			case 'description': break;
 			case 'language': break;
