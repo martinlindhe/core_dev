@@ -40,7 +40,7 @@ class input_rss extends CoreDevBase
 				return false;
 			}
 		}
-		if ($this->debug) echo "Parsing RSS: ".htmlentities($data).ln();
+		if ($this->debug) echo 'Parsing RSS: '.$data.ln();
 
 		$this->reader = new XMLReader();
 		$this->reader->xml($data);
@@ -175,6 +175,7 @@ class input_rss extends CoreDevBase
 						//d('Parsing ASX playlist '.$this->attrs['URL']);
 
 						$asx = new input_asx();
+						if ($this->debug) $asx->setDebug();
 						$asx->parse(  $this->reader->getAttribute('url') );
 						$list = $asx->getItems();
 						if ($list)
