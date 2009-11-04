@@ -139,6 +139,14 @@ class Timestamp extends CoreDevBase
 
 	function render()
 	{
+		//XXX maybe call locale-specific functions to handle rendering
+
+		$months = array(
+		1=>'January',    2=>'February', 3=>'March',     4=>'April',
+		5=>'May',        6=>'June',     7=>'July',      8=>'August',
+		9=>'September', 10=>'October', 11=>'November', 12=>'December'
+		);
+
 		$datestamp = mktime(0,0,0,date('m', $this->ts), date('d', $this->ts), date('Y', $this->ts));
 		$yesterday = mktime(0,0,0,date('m'), date('d')-1, date('Y'));
 		$tomorrow  = mktime(0,0,0,date('m'), date('d')+1, date('Y'));
@@ -157,6 +165,12 @@ class Timestamp extends CoreDevBase
 			//Tomorrow 18:13
 			return t('Tomorrow').' '.date('H:i', $this->ts);
 		}
+
+		$year  = date('Y', $this->ts);
+		$month = date('n', $this->ts);
+		$day   = date('j', $this->ts);
+		if ($year == date('Y'))
+			return $day.':e '.t($months[ $month ]); //.' '.date('H:i', $this->ts);
 
 		//2007-04-14 15:22
 		return date('Y-m-d H:i', $this->ts);

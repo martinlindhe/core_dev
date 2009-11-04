@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-$month_swe = array(
+$month_swe = array( //XXXX deprecate use of this array
 '', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December');
 
@@ -127,6 +127,20 @@ function t_swe($s)
 	case 'Yesterday': return 'Igår';
 	case 'Tomorrow': return 'I morgon';
 	case 'Today': return 'Idag';
+
+	case 'January': return 'Januari';
+	case 'February': return 'Februari';
+	case 'March': return 'Mars';
+	case 'April': return 'April';
+	case 'May': return 'Maj';
+	case 'June': return 'Juni';
+	case 'July': return 'Juli';
+	case 'August': return 'Augusti';
+	case 'September': return 'September';
+	case 'October': return 'Oktober';
+	case 'November': return 'November';
+	case 'December': return 'December';
+
 
 	//Search
 	case 'Show usernames beginning with': return 'Visa användarnamn som börjar med';
