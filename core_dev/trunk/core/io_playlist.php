@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Generates a XSPF, PLS or M3U playlist
+ * Renders a playlist in XSPF, PLS or M3U format
  *
  * References
  * ----------
@@ -155,6 +155,7 @@ class Playlist
 
 	/**
 	 * List sort filter
+	 *
 	 * @return Internal list, sorted descending by published date
 	 */
 	private function sortListDesc($a, $b)
@@ -210,7 +211,7 @@ class Playlist
 		return false;
 	}
 
-	function renderXSPF()
+	private function renderXSPF()
 	{
 		$res  = '<?xml version="1.0" encoding="UTF-8"?>';
 		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
@@ -218,9 +219,6 @@ class Playlist
 
 		foreach ($this->getItems() as $item)
 		{
-			//XXX: xspf spec dont have a way to add a timestamp for each entry (??)
-			//XXX: create categories from $row['category']
-
 			$res .= '<track>';
 			$title = ($item->Timestamp ? $item->Timestamp->render().' ' : '').$item->title;
 			//if ($item->desc) $title .= ' - '.$item->desc;
@@ -243,20 +241,20 @@ class Playlist
 		return $res;
 	}
 
-	function renderM3U()
+	private function renderM3U()
 	{
 		$res = "#EXTM3U\n";
 		foreach ($this->getItems() as $item)
 		{
 			$res .=
 			"#EXTINF:".($item->Duration ? round($item->Duration->inSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
-			$item->url."\n";
+			$item->Location."\n";
 		}
 
 		return $res;
 	}
 
-	function renderPLS()
+	private function renderPLS()
 	{
 		$res =
 		"[playlist]\n".
@@ -280,7 +278,7 @@ class Playlist
 	/**
 	 * Renders the playlist as a HTML table
 	 */
-	function renderXHTML()
+	private function renderXHTML()
 	{
 		$res = '<table border="1">';
 
