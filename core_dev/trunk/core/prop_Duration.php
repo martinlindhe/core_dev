@@ -9,6 +9,8 @@
 
 //STATUS: good
 
+require_once('core.php');
+
 class Duration extends CoreDevBase
 {
 	private $duration; ///< seconds with decimal precision
@@ -89,30 +91,32 @@ class Duration extends CoreDevBase
 		else
 			$secs = $this->duration;
 
+    	$hrs  = floor($secs / 3600); $secs %= 3600;
+    	$mins = floor($secs / 60);   $secs %= 60;
+
 		$retval = '';
 
 		//hours
-		$a = date('H', $secs) - 1;
-		if ($a > 0)
-			$retval .= $a.':';
-		$secs -= ($a * 60) * 60;
+		if ($hrs)
+			$retval .= $hrs.':';
 
 		//minutes
-		$a = date('i', $secs) - 0;
-		$retval .= $a.':';
-		$secs -= $a * 60;
+		if ($mins < 10 && $hrs)
+			$retval .= '0'.$mins.':';	//dont append '0' if no hour is set
+		else
+			$retval .= $mins.':';
 
 		//seconds
-		$a = date('s', $secs);
-		$retval .= $a;
-
-		if (substr($retval, -2) == ', ')
-			$retval = substr($retval, 0, -2);
+		if ($secs < 10)
+			$retval .= '0'.$secs;
+		else
+			$retval .= $secs;
 
 		if ($retval == '')
 			$retval = '00:00';
 
 		return $retval;
+
 	}
 }
 
