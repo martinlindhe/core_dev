@@ -91,8 +91,8 @@ class Duration extends CoreDevBase
 		else
 			$secs = $this->duration;
 
-    	$hrs  = floor($secs / 3600); $secs %= 3600;
-    	$mins = floor($secs / 60);   $secs %= 60;
+		$hrs  = floor($secs / 3600); $secs %= 3600;
+		$mins = floor($secs / 60);   $secs %= 60;
 
 		$retval = '';
 
@@ -116,7 +116,6 @@ class Duration extends CoreDevBase
 			$retval = '00:00';
 
 		return $retval;
-
 	}
 }
 
