@@ -15,9 +15,9 @@ require_once('network.php');
 class Location extends CoreDevBase
 {
 	private $scheme = 'http';
-	private $host   = 'www.google.com';
-	private $port   = 80;
-	private $path   = '/';
+	private $host;
+	private $port;
+	private $path;
 	private $param  = array();
 	private $username, $password; ///< for HTTP AUTH
 
@@ -70,20 +70,31 @@ class Location extends CoreDevBase
 	}
 
 	/**
+	 * @return default port for protocol $scheme
+	 */
+	function getDefaultPort($scheme)
+	{
+		$schemes = array('http'=>80, 'https'=>443, 'rtsp'=>554, 'rtmp'=>1935, 'rtmpe'=>1935, 'mms'=>1755);
+
+		if (empty($schemes[$scheme]))
+			return false;
+
+		return $schemes[$scheme];
+	}
+
+	/**
 	 * Parses url and initializes the object for this url
 	 */
 	function set($url)
 	{
-		if (!$url) return false;
+		if (!$url)
+			return false;
 
 		$parsed = parse_url($url);
 
-		$schemes = array('http', 'https', 'rtsp', 'rtmp', 'rtmpe', 'mms');
-
-		if (!in_array($parsed['scheme'], $schemes)) {
-			echo "unhandled url scheme ".$parsed['scheme'].dln();
+		if (!$parsed['scheme'])
 			return false;
-		}
+
 		if (empty($parsed['path'])) $parsed['path'] = '/';
 
 		$this->scheme = $parsed['scheme'];
@@ -96,6 +107,12 @@ class Location extends CoreDevBase
 		if (!empty($parsed['query']))
 			parse_str($parsed['query'], $this->param);
 
+		return true;
+	}
+
+	function setScheme($scheme)
+	{
+		$this->scheme = $scheme;
 		return true;
 	}
 

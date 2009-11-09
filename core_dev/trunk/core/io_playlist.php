@@ -27,6 +27,7 @@
 
 //STATUS: ok
 
+//XXX deprecate pl->render($format) parameter, use ->setFormat() instead
 //XXX TODO ability to load playlist from PLS files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
@@ -64,11 +65,13 @@ class Playlist extends CoreDevBase
 	private $headers = true;                ///< shall we send mime type?
 	private $entries = array();             ///< MediaItem objects
 	private $title   = 'Untitled playlist'; ///< name of playlist
+	private $format  = 'xhtml';             ///< playlist output format
 
 	function getItems() { return $this->entries; }
 
 	function sendHeaders($bool = true) { $this->headers = $bool; }
 	function setTitle($t) { $this->title = $t; }
+	function setFormat($format) { $this->format = $format; }
 
 	/**
 	 * Adds a array of items to the feed list
@@ -156,9 +159,14 @@ class Playlist extends CoreDevBase
 		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
 	}
 
-	function render($format = 'xhtml')
+	function render($format = '')
 	{
-		switch ($format) {
+		if ($format) {
+			//echo "pl->render(FORMAT) is deprecated!! use ->setFormat()\n";
+			$this->format = $format;
+		}
+
+		switch ($this->format) {
 		case 'xspf':
 			if ($this->headers) header('Content-type: application/xspf+xml');
 			return $this->renderXSPF();
@@ -198,7 +206,7 @@ class Playlist extends CoreDevBase
 			return $feed->render('rss');
 		}
 
-		echo "Playlist->render: unknown format ".$format."\n";
+		echo "Playlist->render: unknown format ".$this->format."\n";
 		return false;
 	}
 
