@@ -24,7 +24,7 @@ class Cache extends CoreDevBase
 	function __construct($server_pool = false)
 	{
 		if (!class_exists('Memcache')) {
-			echo "cache FAIL: php5-memcache not found".dln();
+			dp("Cache FAIL: php5-memcache not found");
 			return false;
 		}
 
