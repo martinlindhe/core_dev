@@ -11,7 +11,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class Datasize
+class ConvertDatasize
 {
 	private $scale = array( ///< unit scale to a bit
 	'bit'  => 1,
@@ -38,7 +38,7 @@ class Datasize
 	'megabyte' => 'mb',
 	'gigabyte' => 'gb',
 	'terabyte' => 'tb',
-	'petabyte' => 'pb'
+	'petabyte' => 'pb',
 	);
 
 	function setPrecision($n) { $this->precision = $n; }
@@ -55,8 +55,8 @@ class Datasize
 
 	function conv($from, $to, $val)
 	{
-		$from = $this->shortcode($from);
-		$to   = $this->shortcode($to);
+		$from = $this->getShortcode($from);
+		$to   = $this->getShortcode($to);
 		if (!$from || !$to) return false;
 
 		return ($val * $this->scale[$from]) / $this->scale[$to];

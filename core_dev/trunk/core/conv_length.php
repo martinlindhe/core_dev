@@ -16,7 +16,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class Length
+class ConvertLength
 {
 	private $precision = 0; ///< if set, specifies rounding precision
 
@@ -67,8 +67,8 @@ class Length
 
 	function conv($from, $to, $val)
 	{
-		$from = $this->shortcode($from);
-		$to   = $this->shortcode($to);
+		$from = $this->getShortcode($from);
+		$to   = $this->getShortcode($to);
 
 		if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
 

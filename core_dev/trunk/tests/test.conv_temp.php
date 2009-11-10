@@ -4,8 +4,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('conv_temperature.php');
 
-$t = new temp();
-$t->precision = 2;
+$t = new ConvertTemperature();
+$t->setPrecision(2);
 
 if ($t->conv('C', 'F', 300) != 572)       echo "FAIL 1\n";
 if ($t->conv('C', 'K', 300) != 573.15)    echo "FAIL 2\n";

@@ -12,7 +12,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class Temperature
+class ConvertTemperature
 {
 	private $precision = 2; ///< if set, specifies rounding precision
 
@@ -36,8 +36,8 @@ class Temperature
 
 	function conv($from, $to, $val)
 	{
-		$from = $this->shortcode($from);
-		$to   = $this->shortcode($to);
+		$from = $this->getShortcode($from);
+		$to   = $this->getShortcode($to);
 
 		//convert to celcius for internal representation
 		switch (strtolower($from)) {

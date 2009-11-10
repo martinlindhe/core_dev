@@ -7,24 +7,30 @@
  * References
  * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Time
+ * http://en.wikipedia.org/wiki/Leap_year
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
 class ConvertDuration
 {
-	private $scale = array( ///< unit scale to a bit
-	'second' => 1,
-	'minute' => 60,
-	'hour'   => 3600,
-	'day'    => 86400,
+	private $scale = array( ///< unit scale to a second
+	'sec'  => 1,
+	'min'  => 60,
+	'hr'   => 3600,
+	'dy'   => 86400,
+	'week' => 604800,
+	'mo'   => 2592000,  //30 days
+	'yr'   => 31556952, //365.2425 days (gregorian year)
 	);
 
 	private $lookup = array(
-	'sec'   => 'second',
-	'min'   => 'minute',
-	'hr'    => 'hour',
-	'dy'    => 'day',
+	'second' => 'sec',
+	'minute' => 'min',
+	'hour'   => 'hr',
+	'day'    => 'dy',
+	'month'  => 'mo',
+	'year'   => 'yr',
 	);
 
 	function setPrecision($n) { $this->precision = $n; }

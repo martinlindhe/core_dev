@@ -17,7 +17,7 @@ require_once('class.Cache.php');
 
 require_once('service_currency_webservicex.php');
 
-class Currency
+class ConvertCurrency
 {
 	private $precision    = 0;   ///< if set specifies how many decimals to return (rounded)
 	private $cache_expire = 300; ///< expire time in seconds for local cache (in seconds)
@@ -198,17 +198,17 @@ class Currency
 	 */
 	function getRate($from, $to)
 	{
-		$from = strtolower_utf8($from);
-		$to   = strtolower_utf8($to);
+		$from = strtolower($from);
+		$to   = strtolower($to);
 		if (!$this->getCurrencyName($from) || !$this->getCurrencyName($to)) return false;
 
 		$key = 'currency/'.$from.'/'.$to;
-		$cache = new cache();
+		$cache = new Cache();
+		$cache->setCacheTime($this->cache_expire);
 		$rate = $cache->get($key);
 		if ($rate) return $rate;
 
 		$rate = webservicex_currency_conversion_rate($from, $to);
-		$cache->setCacheTime($this->cache_expire);
 		$cache->set($key, $rate);
 		return $rate;
 	}

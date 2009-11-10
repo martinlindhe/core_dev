@@ -11,7 +11,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class Mass
+class ConvertMass
 {
 	private $precision = 0; ///< if set, specifies rounding precision
 
