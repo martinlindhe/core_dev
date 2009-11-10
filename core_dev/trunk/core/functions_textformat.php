@@ -350,7 +350,7 @@ function replaceLinks_callback($matches)
  */
 function replaceEMails($text)
 {
-	$regexp = "/([\w\.]+)(@)([\w\.]+)/i";
+	$regexp = "/ ([\w\.]+)(@)([\w]+)(.)([\w]+)/i";
 	$replacement = '<a href="mailto:\0" class="bb_url">\0</a>';
 	$text = preg_replace($regexp, $replacement, $text);
 
