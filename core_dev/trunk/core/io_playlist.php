@@ -32,7 +32,7 @@
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
 require_once('prop_Duration.php');
-require_once('prop_Location.php');
+require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
 
 require_once('input_asx.php');
@@ -49,14 +49,14 @@ class MediaItem extends CoreDevBase //XXX rename to PlaylistItem ?
 	var $desc;               ///< description
 
 	var $Duration;           ///< duration of media
-	var $Location;           ///< location of media
 	var $Timestamp;
+	var $Url;                ///< location of media
 
 	function __construct()
 	{
 		$this->Duration  = new Duration();
-		$this->Location  = new Location();
 		$this->Timestamp = new Timestamp();
+		$this->Url       = new Url();
 	}
 }
 
@@ -103,8 +103,8 @@ class Playlist extends CoreDevBase
 			$item->thumbnail      = $e->image_url;
 			$item->mime           = $e->video_mime;
 			$item->Duration->set  ( $e->Duration->get() );
-			$item->Location->set  ( $e->video_url );
 			$item->Timestamp->set ( $e->Timestamp->get() );
+			$item->Url->set       ( $e->video_url );
 
 			$this->entries[] = $item;
 			break;
@@ -223,7 +223,7 @@ class Playlist extends CoreDevBase
 			//if ($item->desc) $title .= ' - '.$item->desc;
 			$res .= '<title><![CDATA['.trim($title).']]></title>';
 
-			$res .= '<location>'.$item->Location.'</location>';
+			$res .= '<location>'.$item->Url.'</location>';
 
 			if ($item->Duration)
 				$res .= '<duration>'.$item->Duration->inMilliseconds().'</duration>';
@@ -247,7 +247,7 @@ class Playlist extends CoreDevBase
 		{
 			$res .=
 			"#EXTINF:".($item->Duration ? round($item->Duration->inSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
-			$item->Location."\n";
+			$item->Url."\n";
 		}
 
 		return $res;
@@ -265,7 +265,7 @@ class Playlist extends CoreDevBase
 		{
 			$i++;
 			$res .=
-			"File".  $i."=".$item->Location."\n".
+			"File".  $i."=".$item->Url."\n".
 			"Title". $i."=".($item->title ? $item->title : 'Untitled track')."\n".
 			"Length".$i."=".($item->Duration ? $item->Duration->inSeconds() : '-1')."\n".
 			"\n";
@@ -286,9 +286,9 @@ class Playlist extends CoreDevBase
 			$title = $item->Timestamp ? $item->Timestamp->render().' ' : '';
 
 			$title .=
-				($item->Location ? '<a href="'.$item->Location.'">' : '').
+				($item->Url ? '<a href="'.$item->Url.'">' : '').
 				($item->title ? $item->title : 'Untitled entry').
-				($item->Location ? '</a>' : '');
+				($item->Url ? '</a>' : '');
 
 			$res .=
 			'<tr><td>'.

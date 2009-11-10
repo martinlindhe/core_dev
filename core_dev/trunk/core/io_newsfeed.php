@@ -10,11 +10,11 @@
  */
 
 //STATUS: ok, need more testing
-//TODO use Location instead of $url param too
+//TODO use Url instead of $url param too
 //XXX atom output: no way to embed video duration, <link length="x"> is size of the resource, in bytes.
 
 require_once('prop_Duration.php');
-require_once('prop_Location.php');
+require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
 
 require_once('client_http.php');
@@ -34,15 +34,15 @@ class NewsItem extends CoreDevBase
 	var $video_mime;
 	var $video_url;
 
-	var $Duration;       ///< video duration
-	var $Location;       ///< location of news article
+	var $Duration;  ///< video duration
 	var $Timestamp;
+	var $Url;       ///< location of news article
 
 	function __construct()
 	{
 		$this->Duration  = new Duration();
-		$this->Location  = new Location();
 		$this->Timestamp = new Timestamp();
+		$this->Url       = new Url();
 	}
 }
 
@@ -94,7 +94,7 @@ class NewsFeed extends CoreDevBase
 			$item->image_url    = $e->thumbnail;
 			$item->image_mime   = file_get_mime_by_suffix($e->thumbnail);
 
-			$item->Location ->set($e->Location->get() );
+			$item->Url      ->set($e->Url->get() );
 			$item->Duration ->set($e->Duration->get() );
 			$item->Timestamp->set($e->Timestamp->get() );
 
@@ -196,14 +196,14 @@ class NewsFeed extends CoreDevBase
 		foreach ($this->entries as $item)
 		{
 			//link directly to video if no webpage url was found
-			if (!$item->Location->get() && $item->video_url)
-				$item->Location->set( $item->video_url );
+			if (!$item->Url->get() && $item->video_url)
+				$item->Url->set( $item->video_url );
 
 			$res .=
 			'<entry>'.
-				'<id>'.($item->guid ? $item->guid : $item->Location->get(true) ).'</id>'.
+				'<id>'.($item->guid ? $item->guid : $item->Url->get(true) ).'</id>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
-				'<link rel="alternate" href="'.$item->Location->get(true).'"/>'.
+				'<link rel="alternate" href="'.$item->Url->get(true).'"/>'.
 				'<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
 				'<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
 				'<author><name>'.$item->author.'</name></author>'.
@@ -238,13 +238,13 @@ class NewsFeed extends CoreDevBase
 		foreach ($this->entries as $item)
 		{
 			//link directly to video if no webpage url was found
-			if (!$item->Location->get() && $item->video_url)
-				$item->Location->set( $item->video_url );
+			if (!$item->Url->get() && $item->video_url)
+				$item->Url->set( $item->video_url );
 
 			$res .=
 			'<item>'.
 				'<title><![CDATA['.$item->title.']]></title>'.
-				'<link>'.$item->Location->get(true).'</link>'.
+				'<link>'.$item->Url->get(true).'</link>'.
 				'<description><![CDATA['.$item->desc.']]></description>'.
 				'<pubDate>'.$item->Timestamp->getRFC882().'</pubDate>'.
 				($item->guid ? '<guid>'.$item->guid.'</guid>' : '').

@@ -15,12 +15,12 @@
 require_once('core.php');
 require_once('network.php');
 
-require_once('prop_Location.php');
+require_once('prop_Url.php');
 require_once('class.Cache.php');
 
 class HttpClient extends CoreDevBase
 {
-	public  $url;              ///< Location property
+	public  $Url;              ///< Url property
 	private $headers, $body;
 	private $status_code;      ///< return code from http request, such as 404
 	private $cache_time = 0;   ///< in seconds
@@ -33,7 +33,7 @@ class HttpClient extends CoreDevBase
 			return false;
 		}
 
-		$this->url = new Location($url);
+		$this->Url = new Url($url);
 	}
 
 	function getBody()
@@ -63,7 +63,9 @@ class HttpClient extends CoreDevBase
 
 	function setUserAgent($ua) { $this->user_agent = $ua; }
 
-	function setLocation($s) { $this->url->set($s); }
+	function setUrl($s) { $this->Url->set($s); }
+
+	function setLocation($s) { $this->setUrl($s); } //XXX deprecate setLocation
 
 	function post($post_params)
 	{
@@ -76,28 +78,28 @@ class HttpClient extends CoreDevBase
 	 */
 	private function get($head_only = false, $post_params = array())
 	{
-		$ch = curl_init( $this->url->get() );
+		$ch = curl_init( $this->Url->get() );
 		if (!$ch) {
 			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".dln();
 			return false;
 		}
 
-		if ($this->url->getScheme() == 'https') {
+		if ($this->Url->getScheme() == 'https') {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		}
 
-		if ($this->url->getUsername()) {
+		if ($this->Url->getUsername()) {
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-			curl_setopt($ch, CURLOPT_USERPWD, $this->url->getUsername().':'.$this->url->getPassword());
+			curl_setopt($ch, CURLOPT_USERPWD, $this->Url->getUsername().':'.$this->Url->getPassword());
 		}
 
-		if (!$this->url->getUsername() && empty($post_params)) {
+		if (!$this->Url->getUsername() && empty($post_params)) {
 			$cache = new Cache();
 			$cache->setCacheTime($this->cache_time);
 			if ($this->debug) $cache->setDebug();
-			$key_head = 'url_head//'.htmlspecialchars( $this->url->get() );
-			$key_full = 'url//'.     htmlspecialchars( $this->url->get() );
+			$key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
+			$key_full = 'url//'.     htmlspecialchars( $this->Url->get() );
 
 			if ($head_only) {
 				$this->headers = unserialize( $cache->get($key_head) );
@@ -132,7 +134,7 @@ class HttpClient extends CoreDevBase
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
 		} else {
-			if ($this->debug) echo "http->get() ".$this->url->get()." ... ".dln();
+			if ($this->debug) echo "http->get() ".$this->Url->get()." ... ".dln();
 		}
 
 		$res = curl_exec($ch);
@@ -150,7 +152,7 @@ class HttpClient extends CoreDevBase
 
 		$this->parseResponse($res);
 
-		if (!$this->url->getUsername() && empty($post_params)) {
+		if (!$this->Url->getUsername() && empty($post_params)) {
 			$cache->set($key_head, serialize($this->headers));
 			if (!$head_only)
 				$cache->set($key_full, $res);

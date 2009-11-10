@@ -138,7 +138,7 @@ class input_rss extends CoreDevBase
 
 			case 'link':
 				$this->reader->read();
-				$item->Location->set( $this->reader->value );
+				$item->Url->set( $this->reader->value );
 				break;
 
 			case 'pubdate':
@@ -179,7 +179,7 @@ class input_rss extends CoreDevBase
 						$asx->parse(  $this->reader->getAttribute('url') );
 						$list = $asx->getItems();
 						if ($list)
-							$item->video_url = $list[0]->Location->get();
+							$item->video_url = $list[0]->Url->get();
 					} else {
 						$item->video_url = $this->reader->getAttribute('url');
 					}

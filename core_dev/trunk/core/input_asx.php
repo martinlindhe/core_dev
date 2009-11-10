@@ -83,7 +83,7 @@ class input_asx extends CoreDevBase
 					case 'starttime': break; //<starttime value="00:00:00.00"/>
 
 					case 'ref': //<ref href="mms://wm0.c90901.cdn.qbrick.com/90901/kluster/20091026/aekonomi920.wmv"/>
-						$item->Location->set( $reader->getAttribute('href') );
+						$item->Url->set( $reader->getAttribute('href') );
 						break;
 
 					case 'duration': //<duration value="00:03:39.00"/>
