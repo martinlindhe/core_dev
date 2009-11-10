@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-//FIXME cleanup API and take userId as parameter, no tblUsers assumtions & usage
+//STATUS: DEPRECATED! use class.Comments instead!
 
 define('COMMENT_NEWS',				1);
 define('COMMENT_BLOG',				2);		//anonymous or registered users comments on a blog
