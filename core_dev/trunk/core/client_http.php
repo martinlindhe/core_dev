@@ -94,6 +94,7 @@ class HttpClient extends CoreDevBase
 
 		if (!$this->url->getUsername() && empty($post_params)) {
 			$cache = new Cache();
+			$cache->setCacheTime($this->cache_time);
 			if ($this->debug) $cache->setDebug();
 			$key_head = 'url_head//'.htmlspecialchars( $this->url->get() );
 			$key_full = 'url//'.     htmlspecialchars( $this->url->get() );
@@ -150,7 +151,6 @@ class HttpClient extends CoreDevBase
 		$this->parseResponse($res);
 
 		if (!$this->url->getUsername() && empty($post_params)) {
-			$cache->setCacheTime($this->cache_time);
 			$cache->set($key_head, serialize($this->headers));
 			if (!$head_only)
 				$cache->set($key_full, $res);
