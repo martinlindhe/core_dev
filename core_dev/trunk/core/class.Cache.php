@@ -51,7 +51,7 @@ class Cache extends CoreDevBase
 
 	function get($key)
 	{
-		if (!$this->handle) return false;
+		if (!$this->handle || !$this->expire_time) return false;
 
 		$val = $this->handle->get($key);
 
@@ -61,7 +61,7 @@ class Cache extends CoreDevBase
 
 	function set($key, $val)
 	{
-		if (!$this->handle) return false;
+		if (!$this->handle || !$this->expire_time) return false;
 
 		//XXX HACK force quiet bogus warnings from memcache in 2009
 		$ret = @$this->handle->set($key, $val, false, $this->expire_time);
