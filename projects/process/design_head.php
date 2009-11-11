@@ -9,7 +9,6 @@ echo $head->render();
 		process site
 	</div>
 	<div id="header-items">
-		<a href="<?php echo $config['app']['web_root']?>wiki.php?Wiki:HelpProcess">Help</a>
 	</div>
 </div>
 <div id="leftmenu">
