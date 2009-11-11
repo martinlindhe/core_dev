@@ -130,19 +130,21 @@ class CommentList extends CoreDevBase
 	//Comment types only meant for the admin's eyes
 	const MODERATION = 30; ///< owner = tblModeration.queueId
 	const USER       = 31; ///< owner = tblUsers.userId, admin comments for a user
+
+	//XXX: use id >= 50 for project-specific types
 */
 
 	private $owner;
-	private $type;                ///< Comment::type
-	private $showDeleted = false; ///< shall deleted comments be included?
-	private $showPrivate = false; ///< shall private comments be included?
-	private $allowAnon   = false; ///< do we allow anonymous comments?
-	private $use_captcha = true;  ///< shall we use captchas for anonymous comments?
-	private $limit       = 0;     ///< number of items per page
+	private $type;
+	private $showDeleted = false;   ///< shall deleted comments be included?
+	private $showPrivate = false;   ///< shall private comments be included?
+	private $allowAnon   = false;   ///< do we allow anonymous comments?
+	private $use_captcha = true;    ///< shall we use captchas for anonymous comments?
+	private $limit       = 0;       ///< number of items per page
+	private $private_comments = true;
 
-	private $Captcha;             ///< Captcha object
-
-	private $items; ///< CommentItem objects
+	private $Captcha;               ///< Captcha object
+	private $items       = array(); ///< CommentItem objects
 
 	function __construct($type)
 	{
@@ -163,6 +165,8 @@ class CommentList extends CoreDevBase
 
 	function setAnonAccess($bool) { $this->allowAnon = $bool; }
 	function disableCaptcha() { $this->use_captcha = false; }
+
+	function disablePrivate() { $this->private_comments = false; }
 
 	function showDeleted() { $this->showDeleted = true; }
 	function showPrivate() { $this->showPrivate = true; }
@@ -224,7 +228,10 @@ class CommentList extends CoreDevBase
 			$comment->setOwner($this->owner);
 			$comment->setCreator($h->session->id);
 			$comment->setText($p['comment_'.$this->type]);
-			$comment->setPrivate( $p['comment_priv_'.$this->type]);
+
+			if ($this->private_comments)
+				$comment->setPrivate( $p['comment_priv_'.$this->type]);
+
 			$id = $comment->store();
 
 			if (!$id) $caller->setError( $comment->getError() );
@@ -258,7 +265,10 @@ class CommentList extends CoreDevBase
 		if ($h->session->id || $this->allowAnon) {
 			$form = new xhtml_form('addcomment');
 			$form->addTextarea('comment_'.$this->type, 'Write a comment', '', 30, 6);
-			$form->addCheckbox('comment_priv_'.$this->type, 'Private comment?');
+
+			if ($this->private_comments)
+				$form->addCheckbox('comment_priv_'.$this->type, 'Private comment?');
+
 			if ($this->use_captcha && !$h->session->id)
 				$form->addCaptcha($this->Captcha);
 
