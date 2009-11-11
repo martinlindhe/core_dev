@@ -18,8 +18,6 @@ if (!empty($_POST['url'])) {
 	die;
 }
 
-wiki('ProcessQueueDownload');
-
 $url = 'http://localhost/sample.3gp';
 echo 'Enter resource URL:<br/>';
 echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';

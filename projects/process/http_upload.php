@@ -19,8 +19,6 @@ if (!empty($_FILES['file2'])) {
 	}
 }
 
-wiki('ProcessAddOrder');
-
 echo 'Max allowed upload size is '.ini_get('upload_max_filesize').'<br/><br/>';
 echo 'Max allowed POST size is '.ini_get('post_max_size').'<br/><br/>';
 

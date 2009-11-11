@@ -34,8 +34,6 @@ if ($added) {
 	die;
 }
 
-wiki('ProcessFile');
-
 if ($event['orderType'] == PROCESS_FETCH) {
 	echo '<h1>convert unfetched media</h1>';
 

@@ -15,7 +15,6 @@ $config['language'] = 'se';
 set_include_path(get_include_path() . PATH_SEPARATOR . $config['core']['fs_root'].'core/');
 require_once('core.php');
 require_once('handler.php');
-require_once('functions_wiki.php');
 require_once('functions_process.php');
 
 
@@ -47,6 +46,4 @@ $h->files('default', $config['files']);
 
 $h->handleEvents();
 
-$config['wiki']['allow_html'] = true;
-$config['wiki']['allow_files'] = true;
 ?>
