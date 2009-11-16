@@ -219,7 +219,7 @@ function http_head($url, $cache_time = 60)
 {
 	$h = new HttpClient($url);
 	$h->setCacheTime($cache_time);
-	return $h->head();
+	return $h->getHeaders();
 }
 
 /**
