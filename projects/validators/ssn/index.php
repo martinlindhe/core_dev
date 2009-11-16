@@ -3,6 +3,9 @@
  * Sample program to expose validate_ssn.php features
  */
 
+//FIXME: checkdate dont work with 4-digit years
+//TODO: ability to verify swedish organization number
+
 require_once('config.php');
 
 $head = new xhtml_header();
