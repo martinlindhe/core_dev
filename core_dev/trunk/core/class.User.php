@@ -1,7 +1,11 @@
 <?php
 /**
- * A User object
+ * $Id$
+ *
+ * User object
  */
+
+//STATUS: not finished
 
 class User
 {

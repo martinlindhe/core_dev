@@ -16,7 +16,7 @@ require_once('functions_textformat.php');	//for decodeDataSize()
 require_once('prop_Timestamp.php');
 require_once('network.php');
 require_once('files.php');
-require_once('classs.CoreBase.php'); //for CoreBase class
+require_once('class.CoreBase.php'); //for CoreBase class
 
 /**
  * Debug function. Prints out variable $v

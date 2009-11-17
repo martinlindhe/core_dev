@@ -1,6 +1,8 @@
 <?php
 /**
  * $Id$
+ *
+ * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
 /**

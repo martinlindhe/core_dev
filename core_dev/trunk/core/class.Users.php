@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: user class needs to be rethought from scratch
+
 require_once('atom_visits.php');		//for logVisit()
 require_once('functions_messages.php');	//for sendMessage()
 

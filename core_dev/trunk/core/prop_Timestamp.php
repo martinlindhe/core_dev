@@ -9,6 +9,7 @@
 
 //STATUS: good
 
+require_once('class.CoreBase.php');
 require_once('functions_time.php');
 
 class Timestamp extends CoreBase
