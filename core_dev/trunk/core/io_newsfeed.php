@@ -130,7 +130,7 @@ class NewsFeed extends CoreList
 	{
 		if (!$callback) $callback = array($this, 'sortListDesc');
 
-		uasort($this->entries, $callback);
+		uasort($this->items, $callback);
 	}
 
 	/**
