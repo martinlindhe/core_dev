@@ -10,9 +10,11 @@
  */
 
 //STATUS: ok, need more testing
-//TODO use Url instead of $url param too
+
+//TODO use Url instead of NewsFeed->url param too
 //XXX atom output: no way to embed video duration, <link length="x"> is size of the resource, in bytes.
 
+require_once('class.CoreList.php');
 require_once('prop_Duration.php');
 require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
@@ -46,17 +48,15 @@ class NewsItem extends CoreBase
 	}
 }
 
-class NewsFeed extends CoreBase
+class NewsFeed extends CoreList
 {
 	private $version   = 'core_dev NewsFeed 1.0';
 	private $title     = 'Untitled news feed';
-	private $entries   = array(); ///< NewsItem objects
 	private $desc;
 	private $url       = '';      ///< full url to this feed
 	private $ttl       = 15;      ///< time to live, in minutes
 	private $headers   = true;    ///< shall we send mime type?
 
-	function getItems() { return $this->entries; }
 	function getTitle() { return $this->title; }
 
 	function setTitle($n) { $this->title = $n; }
@@ -65,47 +65,35 @@ class NewsFeed extends CoreBase
 	function sendHeaders($bool = true) { $this->headers = $bool; }
 
 	/**
-	 * Adds a array of entries to the feed list
-	 *
-	 * @param $list list of NewsItem objects
-	 */
-	function addItems($list)
-	{
-		foreach ($list as $e)
-			$this->addItem($e);
-	}
-
-	/**
 	 * Adds a entry to the feed list
 	 */
-	function addItem($e)
+	function addItem($i)
 	{
-		switch (get_class($e)) {
+		switch (get_class($i)) {
 		case 'NewsItem':
-			$this->entries[] = $e;
 			break;
 
 		case 'MediaItem':
 			//convert a MediaItem into a NewsItem
 			$item = new NewsItem();
 
-			$item->title        = $e->title;
-			$item->desc         = $e->desc;
-			$item->image_url    = $e->thumbnail;
-			$item->image_mime   = file_get_mime_by_suffix($e->thumbnail);
+			$item->title        = $i->title;
+			$item->desc         = $i->desc;
+			$item->image_url    = $i->thumbnail;
+			$item->image_mime   = file_get_mime_by_suffix($i->thumbnail);
 
-			$item->Url      ->set($e->Url->get() );
-			$item->Duration ->set($e->Duration->get() );
-			$item->Timestamp->set($e->Timestamp->get() );
+			$item->Url      ->set($i->Url->get() );
+			$item->Duration ->set($i->Duration->get() );
+			$item->Timestamp->set($i->Timestamp->get() );
 
-			$this->entries[] = $item;
+			$this->items[] = $item;
 			break;
 
 		default:
-			d('NewsFeed->addItem bad data: ');
-			d($e);
-			break;
+			d('NewsFeed->addItem cant handle '.get_class($i) );
+			return false;
 		}
+		parent::addItem($i);
 	}
 
 	/**
@@ -132,7 +120,7 @@ class NewsFeed extends CoreBase
 		$feed->parse($data);
 		$this->title = $feed->getTitle();
 
-		$this->entries = $feed->getItems();
+		$this->addItems( $feed->getItems() );
 	}
 
 	/**

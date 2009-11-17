@@ -31,6 +31,7 @@
 //XXX TODO ability to load playlist from PLS files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
+require_once('class.CoreList.php');
 require_once('prop_Duration.php');
 require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
@@ -60,60 +61,45 @@ class MediaItem extends CoreBase //XXX rename to PlaylistItem ?
 	}
 }
 
-class Playlist extends CoreBase
+class Playlist extends CoreList
 {
 	private $headers = true;                ///< shall we send mime type?
-	private $entries = array();             ///< MediaItem objects
 	private $title   = 'Untitled playlist'; ///< name of playlist
 	private $format  = 'xhtml';             ///< playlist output format
-
-	function getItems() { return $this->entries; }
 
 	function sendHeaders($bool = true) { $this->headers = $bool; }
 	function setTitle($t) { $this->title = $t; }
 	function setFormat($format) { $this->format = $format; }
 
 	/**
-	 * Adds a array of items to the feed list
-	 *
-	 * @param $list list of MediaItem objects
-	 */
-	function addItems($list)
-	{
-		foreach ($list as $e)
-			$this->addItem($e);
-	}
-
-	/**
 	 * Adds a item to the feed list
 	 */
-	function addItem($e)
+	function addItem($i)
 	{
-		switch (get_class($e)) {
+		switch (get_class($i)) {
 		case 'MediaItem':
-			$this->entries[] = $e;
 			break;
 
 		case 'NewsItem':
 			//convert a NewsItem into a MediaItem
 			$item = new MediaItem();
 
-			$item->title          = $e->title;
-			$item->desc           = $e->desc;
-			$item->thumbnail      = $e->image_url;
-			$item->mime           = $e->video_mime;
-			$item->Duration->set  ( $e->Duration->get() );
-			$item->Timestamp->set ( $e->Timestamp->get() );
-			$item->Url->set       ( $e->video_url );
+			$item->title          = $i->title;
+			$item->desc           = $i->desc;
+			$item->thumbnail      = $i->image_url;
+			$item->mime           = $i->video_mime;
+			$item->Duration->set  ( $i->Duration->get() );
+			$item->Timestamp->set ( $i->Timestamp->get() );
+			$item->Url->set       ( $i->video_url );
 
-			$this->entries[] = $item;
+			$this->items[] = $item;
 			break;
 
 		default:
-			d('Playlist->addItem bad data: ');
-			d($e);
-			break;
+			d('Playlist->addItem cant handle '.get_class($i) );
+			return false;
 		}
+		parent::addItem($i);
 	}
 
 	/**
@@ -134,7 +120,7 @@ class Playlist extends CoreBase
 			return false;
 		}
 
-		$this->entries = $pl->getItems();
+		$this->addItems( $pl->getItems() );
 	}
 
 	/**

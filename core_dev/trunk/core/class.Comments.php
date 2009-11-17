@@ -7,6 +7,7 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+require_once('class.CoreList.php');
 require_once('class.User.php');
 require_once('client_captcha.php');
 require_once('prop_Timestamp.php');
@@ -111,7 +112,7 @@ class CommentItem extends CoreBase
 	}
 }
 
-class CommentList extends CoreBase
+class CommentList extends CoreList
 {
 	const NEWS       =  1;
 	//XXX: only enable types when they are used. some should be depreacated
@@ -144,7 +145,6 @@ class CommentList extends CoreBase
 	private $private_comments = true;
 
 	private $Captcha;               ///< Captcha object
-	private $items       = array(); ///< CommentItem objects
 
 	function __construct($type)
 	{
@@ -201,11 +201,6 @@ class CommentList extends CoreBase
 
 			$this->addItem($comment);
 		}
-	}
-
-	function addItem($i)
-	{
-		$this->items[] = $i;
 	}
 
 	/**
