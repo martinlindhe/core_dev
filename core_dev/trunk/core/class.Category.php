@@ -3,15 +3,18 @@
  * $Id$
  */
 
-//STATUS: satisfied
+//STATUS: need work
+
+//XXX rewrite list->init() function to initialize this->items with CategoryItem objects
+//XXX2: extend CoreList
 
 //TODO: some general methods for ui category management (edit, remove)
 
+require_once('class.CoreList.php');
 require_once('constants.php');
 
-class CategoryItem
+class CategoryItem extends CoreBase
 {
-	private $tbl_name;     ///< table name
 	private $name;
 	private $id;
 	private $type;         ///< type as defined in constants.php
@@ -26,10 +29,7 @@ class CategoryItem
 		if (!is_numeric($type)) return false;
 
 		$this->type     = $type;
-		$this->tbl_name = 'tblCategories';
 	}
-
-	function setTableName($name) { $this->tbl_name = $name; }
 
 	function setName($name) { $this->name = $name; }
 	function setId($id) { $this->id = $id; }
@@ -64,7 +64,7 @@ class CategoryItem
 	{
 		global $db;
 
-		$q = 'SELECT categoryName FROM '.$this->tbl_name.' WHERE categoryId='.$this->id.' AND categoryType='.$this->type.' ';
+		$q = 'SELECT categoryName FROM tblCategories WHERE categoryId='.$this->id.' AND categoryType='.$this->type.' ';
 		if ($this->owner) $q .= 'AND ownerId='.$this->owner;
 		return $db->getOneItem($q);
 	}
@@ -78,13 +78,13 @@ class CategoryItem
 	{
 		global $db;
 
-		$q = 'SELECT categoryId FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' AND categoryName="'.$db->escape($this->name).'"';
+		$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$this->type.' AND categoryName="'.$db->escape($this->name).'"';
 		if ($this->owner) $q .= ' AND ownerId='.$this->owner;
 		if ($this->creator) $q .= ' AND creatorId='.$this->creator;
 		$this->id = $db->getOneItem($q);
 		if ($this->id) return $this->id;
 
-		$q = 'INSERT INTO '.$this->tbl_name.' SET categoryType='.$this->type.',categoryName="'.$db->escape($this->name).'"';
+		$q = 'INSERT INTO tblCategories SET categoryType='.$this->type.',categoryName="'.$db->escape($this->name).'"';
 		$q .= ',timeCreated=NOW(),permissions='.$this->permissions;
 		if ($this->owner) $q .= ',ownerId='.$this->owner;
 		if ($this->creator) $q .= ',creatorId='.$this->creator;
@@ -94,12 +94,11 @@ class CategoryItem
 }
 
 
-class CategoryList
+class CategoryList extends CoreBase
 {
 	private $type;         ///< category type
 	private $owner;        ///< owner id, the meaning depends on category type
 	private $creator;
-	private $tbl_name;     ///< table name
 
 	function __construct($type)
 	{
@@ -107,7 +106,6 @@ class CategoryList
 		if (!is_numeric($type)) return false;
 
 		$this->type     = $type;
-		$this->tbl_name = 'tblCategories';
 		$this->creator  = $h->session->id;
 	}
 
@@ -141,11 +139,11 @@ class CategoryList
 	/**
 	 * Returns a list of id->name pairs for the list
 	 */
-	function getList()
+	private function init() //XXX rewrite function to initialize this->items with CategoryItem objects
 	{
 		global $db;
 
-		$q  = 'SELECT categoryId,categoryName FROM '.$this->tbl_name.' WHERE categoryType='.$this->type.' ';
+		$q  = 'SELECT categoryId,categoryName FROM tblCategories WHERE categoryType='.$this->type.' ';
 		if ($this->owner) $q .= 'AND ownerId='.$this->owner.' ';
 		$q .= 'ORDER BY categoryName ASC';
 
@@ -156,7 +154,7 @@ class CategoryList
 	{
 		$res = '';
 
-		foreach ($this->getList() as $cat_id => $cat_name)
+		foreach ($this->init() as $cat_id => $cat_name)
 			$res .= ', <a href="?cat='.$cat_id.'">'.$cat_name.'</a>';
 
 		return '<a href="?cat=0">'.t('Overview').'</a>, '.substr($res, 2);
