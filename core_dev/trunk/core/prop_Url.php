@@ -12,7 +12,7 @@
 
 require_once('network.php');
 
-class Url extends CoreDevBase
+class Url extends CoreBase
 {
 	private $scheme = 'http';
 	private $host;

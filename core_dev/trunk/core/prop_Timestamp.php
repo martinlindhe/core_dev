@@ -11,7 +11,7 @@
 
 require_once('functions_time.php');
 
-class Timestamp extends CoreDevBase
+class Timestamp extends CoreBase
 {
 	private $ts; ///< internal representation of time, as a Unix timestamp
 

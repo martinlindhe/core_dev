@@ -41,7 +41,7 @@ require_once('io_newsfeed.php');
 
 require_once('xhtml_header.php');
 
-class MediaItem extends CoreDevBase //XXX rename to PlaylistItem ?
+class MediaItem extends CoreBase //XXX rename to PlaylistItem ?
 {
 	var $title;
 	var $mime;               ///< mimetype of media
@@ -60,7 +60,7 @@ class MediaItem extends CoreDevBase //XXX rename to PlaylistItem ?
 	}
 }
 
-class Playlist extends CoreDevBase
+class Playlist extends CoreBase
 {
 	private $headers = true;                ///< shall we send mime type?
 	private $entries = array();             ///< MediaItem objects

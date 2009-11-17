@@ -21,7 +21,7 @@
 
 //XXX: see curl_multi_exec() for performing multiple operations
 
-class ftp extends CoreDevBase
+class ftp extends CoreBase
 {
 	private $scheme, $host;
 	private $port     = 21;

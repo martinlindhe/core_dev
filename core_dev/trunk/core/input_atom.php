@@ -13,7 +13,7 @@
 
 require_once('client_http.php');
 
-class input_atom extends CoreDevBase
+class input_atom extends CoreBase
 {
 	private $entries = array();
 	private $reader;            ///< XMLReader object

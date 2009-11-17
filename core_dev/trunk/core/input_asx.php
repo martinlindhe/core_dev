@@ -24,7 +24,7 @@
 require_once('client_http.php');
 require_once('io_playlist.php'); //for MediaItem object
 
-class input_asx extends CoreDevBase
+class input_asx extends CoreBase
 {
 	private $entries = array(); ///< MediaItem objects
 

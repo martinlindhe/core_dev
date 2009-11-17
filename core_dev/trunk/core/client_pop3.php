@@ -18,7 +18,7 @@ require_once('input_mime.php');
 
 //XXX rename to client_pop3.php
 
-class pop3 extends CoreDevBase
+class pop3 extends CoreBase
 {
 	var $handle = false;
 

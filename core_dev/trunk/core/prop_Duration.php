@@ -11,7 +11,7 @@
 
 require_once('core.php');
 
-class Duration extends CoreDevBase
+class Duration extends CoreBase
 {
 	private $duration; ///< seconds with decimal precision
 

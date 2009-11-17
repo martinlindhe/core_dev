@@ -16,7 +16,7 @@ require_once('xhtml_form.php');
 
 //FIXME: implement and use oo-pager for CommentList
 
-class CommentItem extends CoreDevBase
+class CommentItem extends CoreBase
 {
 	var $type, $id, $owner;
 	var $text;
@@ -111,7 +111,7 @@ class CommentItem extends CoreDevBase
 	}
 }
 
-class CommentList extends CoreDevBase
+class CommentList extends CoreBase
 {
 	const NEWS       =  1;
 	//XXX: only enable types when they are used. some should be depreacated

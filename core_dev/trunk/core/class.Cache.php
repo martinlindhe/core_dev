@@ -12,7 +12,7 @@
 //STATUS: good
 //TODO: add "inc/dec" to increase/Decrease numeric values
 
-class Cache extends CoreDevBase
+class Cache extends CoreBase
 {
 	private $handle      = false;
 	private $persistent  = true;  ///< use persistent connections?

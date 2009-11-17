@@ -22,7 +22,7 @@ require_once('client_http.php');
 require_once('input_rss.php');
 require_once('input_atom.php');
 
-class NewsItem extends CoreDevBase
+class NewsItem extends CoreBase
 {
 	var $title;
 	var $desc;
@@ -46,7 +46,7 @@ class NewsItem extends CoreDevBase
 	}
 }
 
-class NewsFeed extends CoreDevBase
+class NewsFeed extends CoreBase
 {
 	private $version   = 'core_dev NewsFeed 1.0';
 	private $title     = 'Untitled news feed';

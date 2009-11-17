@@ -17,7 +17,7 @@
 //TODO: use register_shutdown_function('myfunc') to add profiler at end of script if debug=true
 //TODO: move out the profiling stuff from here
 
-abstract class db_base extends CoreDevBase
+abstract class db_base extends CoreBase
 {
 	//db settings
 	protected $host	     = '';      ///< Hostname or numeric IP address of the db server

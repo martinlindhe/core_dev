@@ -18,7 +18,7 @@ require_once('network.php');
 require_once('prop_Url.php');
 require_once('class.Cache.php');
 
-class HttpClient extends CoreDevBase
+class HttpClient extends CoreBase
 {
 	public  $Url;              ///< Url property
 	private $headers, $body;

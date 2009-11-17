@@ -2,11 +2,21 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('class.Comment.php');
+require_once('class.Comments.php');
 
 require_once('/var/www/fmf/sitewatch/config.php');
 
-$c = new Comment(Comment::BLOG);
+
+$c = new CommentList(Comment::WIKI);
+$c->setOwner($wiki->getId());
+$c->setLimit(5);
+$c->setAnonAccess(true);
+//$c->disableCaptcha();
+echo $c->render();
+
+
+/*
+$c = new CommentItem(Comment::BLOG);
 $c->setOwner(0);
 
 
@@ -15,7 +25,7 @@ $c->setId(1);
 echo $c->render();
 
 //$c->newComment('hej hej!');
-
+*/
 
 
 ?>

@@ -16,29 +16,7 @@ require_once('functions_textformat.php');	//for decodeDataSize()
 require_once('prop_Timestamp.php');
 require_once('network.php');
 require_once('files.php');
-
-/**
- * core_dev base class, all objects should extend this class
- */
-class CoreDevBase
-{
-	protected $debug = false;
-	protected $error = '';    ///< error string
-
-	function setDebug($bool = true) { $this->debug = $bool; }
-
-	function setError($s) { $this->error = $s; }
-	function getError() { return $this->error; }
-
-	/**
-	 * __set() is run when writing data to inaccessible properties.
-	 */
-	public function __set($name, $value)
-	{
-		if (!isset($this->$name))
-			throw new Exception ($name." property does not exist");
-	}
-}
+require_once('classs.CoreBase.php'); //for CoreBase class
 
 /**
  * Debug function. Prints out variable $v
