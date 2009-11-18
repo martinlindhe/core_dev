@@ -91,8 +91,6 @@ class Playlist extends CoreList
 			$item->Duration->set  ( $i->Duration->get() );
 			$item->Timestamp->set ( $i->Timestamp->get() );
 			$item->Url->set       ( $i->video_url );
-
-			$this->items[] = $item;
 			break;
 
 		default:
@@ -179,7 +177,7 @@ class Playlist extends CoreList
 		case 'atom':
 			$feed = new NewsFeed();
 			$feed->sendHeaders($this->headers);
-			$feed->addItems($this->entries);
+			$feed->addItems( $this->getItems() );
 			$feed->setTitle($this->title);
 			return $feed->render('atom');
 
@@ -187,7 +185,7 @@ class Playlist extends CoreList
 		case 'rss':
 			$feed = new NewsFeed();
 			$feed->sendHeaders($this->headers);
-			$feed->addItems($this->entries);
+			$feed->addItems( $this->getItems() );
 			$feed->setTitle($this->title);
 			return $feed->render('rss');
 		}

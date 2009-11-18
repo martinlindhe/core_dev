@@ -85,8 +85,6 @@ class NewsFeed extends CoreList
 			$item->Url      ->set($i->Url->get() );
 			$item->Duration ->set($i->Duration->get() );
 			$item->Timestamp->set($i->Timestamp->get() );
-
-			$this->items[] = $item;
 			break;
 
 		default:
@@ -181,7 +179,7 @@ class NewsFeed extends CoreList
 			'<link rel="self" href="'.htmlspecialchars($this->url).'"/>'.
 			'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->entries as $item)
+		foreach ($this->getItems() as $item)
 		{
 			//link directly to video if no webpage url was found
 			if (!$item->Url->get() && $item->video_url)
@@ -223,7 +221,7 @@ class NewsFeed extends CoreList
 				'<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($this->url).'"/>'.
 				'<generator>'.$this->version.'</generator>'."\n";
 
-		foreach ($this->entries as $item)
+		foreach ($this->getItems() as $item)
 		{
 			//link directly to video if no webpage url was found
 			if (!$item->Url->get() && $item->video_url)
