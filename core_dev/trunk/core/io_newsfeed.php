@@ -71,9 +71,11 @@ class NewsFeed extends CoreList
 	{
 		switch (get_class($i)) {
 		case 'NewsItem':
+			$item = $i;
 			break;
 
 		case 'MediaItem':
+	//	d($i);
 			//convert a MediaItem into a NewsItem
 			$item = new NewsItem();
 
@@ -91,7 +93,7 @@ class NewsFeed extends CoreList
 			d('NewsFeed->addItem cant handle '.get_class($i) );
 			return false;
 		}
-		parent::addItem($i);
+		parent::addItem($item);
 	}
 
 	/**

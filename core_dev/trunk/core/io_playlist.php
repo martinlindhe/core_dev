@@ -78,6 +78,7 @@ class Playlist extends CoreList
 	{
 		switch (get_class($i)) {
 		case 'MediaItem':
+			$item = $i;
 			break;
 
 		case 'NewsItem':
@@ -97,7 +98,7 @@ class Playlist extends CoreList
 			d('Playlist->addItem cant handle '.get_class($i) );
 			return false;
 		}
-		parent::addItem($i);
+		parent::addItem($item);
 	}
 
 	/**
