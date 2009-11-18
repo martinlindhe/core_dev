@@ -15,7 +15,7 @@ function file_get_mime($filename)
 
 	//XXX: use mediaprobe to distinguish between wmv/wma files.
 	//FIXME: enhance mediaprobe to handle all media detection and stop use "file"
-	if ($res == 'video/x-ms-wmv') {
+	if ($res == 'video/x-ms-wmv' || $res == 'video/x-ms-asf') {
 		$c = 'mediaprobe '.escapeshellarg($filename);
 		$res = exec($c);
 	}
