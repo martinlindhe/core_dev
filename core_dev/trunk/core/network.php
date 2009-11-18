@@ -141,4 +141,17 @@ function is_url($url)
 	return false;
 }
 
+/**
+ * @return default port for protocol $scheme
+ */
+function scheme_default_port($scheme)
+{
+	$schemes = array('http'=>80, 'https'=>443, 'rtsp'=>554, 'rtmp'=>1935, 'rtmpe'=>1935, 'mms'=>1755);
+
+	if (empty($schemes[$scheme]))
+		return false;
+
+	return $schemes[$scheme];
+}
+
 ?>

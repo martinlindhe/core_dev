@@ -7,10 +7,10 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//STATUS: ok, need testing
-//TODO: dont render port 80 for http scheme etc, hide default ports
+//STATUS: good
 
-require_once('network.php');
+require_once('class.CoreBase.php');
+require_once('network.php'); //for is_url(), scheme_default_port()
 
 class Url extends CoreBase
 {
@@ -51,13 +51,16 @@ class Url extends CoreBase
 	}
 
 	/**
-	 * Returns a string url of current client location
-	 *
-	 * @param $safe Outputs URL in a safe format (& => &amp;)
+	 * @param $safe outputs URL in a safe format (& => &amp;)
+	 * @return the url as a string
 	 */
 	function get($safe = false)
 	{
-		$res = $this->scheme.'://'.$this->host.($this->port ? ':'.$this->port : '').$this->path;
+		$port = '';
+		if ($this->port && scheme_default_port($this->scheme) != $this->port)
+			$port = ':'.$this->port;
+
+		$res = $this->scheme.'://'.$this->host.$port.$this->path;
 
 		if (!empty($this->param)) {
 			if ($safe)
@@ -70,16 +73,15 @@ class Url extends CoreBase
 	}
 
 	/**
-	 * @return default port for protocol $scheme
+	 * @param $text string to substitute location with
+	 * @return the url as a html tag
 	 */
-	function getDefaultPort($scheme)
+	function asHtml($text = '')
 	{
-		$schemes = array('http'=>80, 'https'=>443, 'rtsp'=>554, 'rtmp'=>1935, 'rtmpe'=>1935, 'mms'=>1755);
+		if (!$text)
+			$text = $this->get();
 
-		if (empty($schemes[$scheme]))
-			return false;
-
-		return $schemes[$scheme];
+		return '<a href="'.$this->get().'">'.$text.'</a>';
 	}
 
 	/**
