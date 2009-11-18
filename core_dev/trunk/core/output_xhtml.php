@@ -123,7 +123,8 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
 {
 	$out = '<select name="'.strip_tags($_name).'"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
-	$out .= '<option value="">---</option>';
+
+	$out .= '<option value="0">---</option>';	//default to "0" instead of an empty string for "no option selected"
 
 	foreach ($_arr as $id => $title)
 		$out .= '<option value="'.$id.'"'.($_default == $id ? ' selected':'').'>'.$title.'</option>';
