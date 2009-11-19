@@ -259,7 +259,7 @@ class CommentList extends CoreList
 
 		if ($h->session->id || $this->allowAnon) {
 			$form = new xhtml_form('addcomment');
-			$form->addTextarea('comment_'.$this->type, 'Write a comment', '', 30, 6);
+			$form->addTextarea('comment_'.$this->type, t('Write a comment'), '', 30, 6);
 
 			if ($this->private_comments)
 				$form->addCheckbox('comment_priv_'.$this->type, 'Private comment?');
