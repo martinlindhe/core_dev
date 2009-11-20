@@ -11,9 +11,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('class.CoreConverter.php');
 
-class ConvertDatasize extends CoreBase
+class ConvertDatasize extends CoreConverter
 {
 	private $scale = array( ///< unit scale to a bit
 	'bit'  => 1,
@@ -42,8 +42,6 @@ class ConvertDatasize extends CoreBase
 	'terabyte' => 'tb',
 	'petabyte' => 'pb',
 	);
-
-	function setPrecision($n) { $this->precision = $n; }
 
 	function getShortcode($name)
 	{

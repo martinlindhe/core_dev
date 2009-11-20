@@ -16,12 +16,10 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('class.CoreConverter.php');
 
-class ConvertLength extends CoreBase
+class ConvertLength extends CoreConverter
 {
-	private $precision = 0; ///< if set, specifies rounding precision
-
 	private $scale = array( ///< unit scale to Meter
 	'pm'     => 0.000000000001, //Picometer
 	'nm'     => 0.000000001,    //Nanometer
@@ -54,8 +52,6 @@ class ConvertLength extends CoreBase
 	'mile'       => 'usmile',
 	'astronomical'=>'au',
 	);
-
-	function setPrecision($n) { $this->precision = $n; }
 
 	function getShortcode($name)
 	{

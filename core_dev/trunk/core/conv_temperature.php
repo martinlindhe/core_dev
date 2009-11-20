@@ -12,20 +12,16 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('class.CoreConverter.php');
 
-class ConvertTemperature extends CoreBase
+class ConvertTemperature extends CoreConverter
 {
-	private $precision = 2; ///< if set, specifies rounding precision
-
 	private $lookup = array(
 	'celcius'   => 'c',
 	'farenheit' => 'f',
 	'rakine'    => 'r',
 	'kelvin'    => 'k',
 	);
-
-	function setPrecision($n) { $this->precision = $n; }
 
 	function getShortcode($name)
 	{

@@ -12,9 +12,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('class.CoreConverter.php');
 
-class ConvertDuration extends CoreBase
+class ConvertDuration extends CoreConverter
 {
 	private $scale = array( ///< unit scale to a second
 	'sec'  => 1,
@@ -34,8 +34,6 @@ class ConvertDuration extends CoreBase
 	'month'  => 'mo',
 	'year'   => 'yr',
 	);
-
-	function setPrecision($n) { $this->precision = $n; }
 
 	function getShortcode($name)
 	{

@@ -11,12 +11,10 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('class.CoreConverter.php');
 
-class ConvertMass extends CoreBase
+class ConvertMass extends CoreConverter
 {
-	private $precision = 0; ///< if set, specifies rounding precision
-
 	private $scale = array( ///< unit scale to Gram
 	'g'  => 1,           //Gram
 	'hg' => 100,         //Hectogram
@@ -48,8 +46,6 @@ class ConvertMass extends CoreBase
 		if (array_search($name, $this->lookup)) return $name;
 		return false;
 	}
-
-	function setPrecision($n) { $this->precision = $n; }
 
 	function conv($from, $to, $val)
 	{
