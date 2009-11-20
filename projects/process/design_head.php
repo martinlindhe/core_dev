@@ -1,5 +1,6 @@
 <?php
 $head = new xhtml_header();
+$head->setTitle('process');
 $head->addCss('css/site.css');
 echo $head->render();
 
