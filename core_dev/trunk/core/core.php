@@ -30,13 +30,13 @@ function d($v)
 		//XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
 
 		if (php_sapi_name() == 'cli') {
-			echo $v;
+			var_dump($v);
 		} else {
 			$out = htmlentities($v, ENT_QUOTES, 'UTF-8');
 			if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
 				echo '<pre>'.$out.'</pre>';
 			else
-				echo $out;
+				var_dump($out);
 		}
 		echo dln();
 		return;

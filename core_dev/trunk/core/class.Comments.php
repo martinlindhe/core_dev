@@ -7,24 +7,24 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//STATUS: mostly ok, needs more testing
+//FIXME: implement and use oo-pager for CommentList
+
+require_once('constants.php');
 require_once('class.CoreList.php');
 require_once('class.User.php');
 require_once('client_captcha.php');
 require_once('prop_Timestamp.php');
 require_once('xhtml_form.php');
 
-//STATUS: mostly ok, needs more testing
-
-//FIXME: implement and use oo-pager for CommentList
-
 class CommentItem extends CoreBase
 {
 	var $type, $id, $owner;
 	var $text;
-	var $isPrivate = false; ///< boolean
+	var $isPrivate = false;         ///< boolean
 	var $TimeCreated, $TimeDeleted; ///< Timestamp objects
-	var $deletedBy; ///< userId
-	var $creator, $creatorIP;
+	var $deleted_by;                ///< userId
+	var $creator, $creator_ip;
 
 	private $add_interval = 30; ///< max time in seconds to look for duplicate comment adds
 
@@ -69,7 +69,7 @@ class CommentItem extends CoreBase
 		global $db;
 
 		if ($this->id) {
-			//XXX update
+			die('XXX UPDATE COMMENT '.$this->id);
 			return $this->id;
 		}
 
@@ -114,35 +114,14 @@ class CommentItem extends CoreBase
 
 class CommentList extends CoreList
 {
-	const NEWS       =  1;
-	//XXX: only enable types when they are used. some should be depreacated
-/*
-	const BLOG       =  2; ///< anonymous or registered users comments on a blog
-	const FILE       =  3; ///< anonymous or registered users comments on a image
-	const TODOLIST   =  4; ///< todolist item comments
-	const GENERIC    =  5; ///< generic comment type
-	const PASTEBIN   =  6; ///< "pastebin" text. anonymous submissions are allowed
-	const SCRIBBLE   =  7; ///< scribble board
-	const CUSTOMER   =  8; ///< customer comments
-	const FILEDESC   =  9; ///< this is a file description, only one per file can exist
-	const ADMIN_IP   = 10; ///< a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
-	const WIKI       = 11; ///< a comment to a wiki article
-
-	//Comment types only meant for the admin's eyes
-	const MODERATION = 30; ///< owner = tblModeration.queueId
-	const USER       = 31; ///< owner = tblUsers.userId, admin comments for a user
-
-	//XXX: use id >= 50 for project-specific types
-*/
-
 	private $owner;
 	private $type;
-	private $showDeleted = false;   ///< shall deleted comments be included?
-	private $showPrivate = false;   ///< shall private comments be included?
-	private $allowAnon   = false;   ///< do we allow anonymous comments?
-	private $use_captcha = true;    ///< shall we use captchas for anonymous comments?
-	private $limit       = 0;       ///< number of items per page
-	private $private_comments = true;
+	private $show_deleted = false;   ///< shall deleted comments be included?
+	private $show_private = false;   ///< shall private comments be included?
+	private $anon_access  = false;   ///< do we allow anonymous comments?
+	private $use_captcha  = true;    ///< shall we use captchas for anonymous comments?
+	private $limit        = 0;       ///< number of items per page
+	private $private_comments = true;///< shall users be able to mark their comments as private (for admins eyes only)?
 
 	private $Captcha;               ///< Captcha object
 
@@ -163,13 +142,13 @@ class CommentList extends CoreList
 		$this->owner = $id;
 	}
 
-	function setAnonAccess($bool) { $this->allowAnon = $bool; }
+	function setAnonAccess($bool = true) { $this->anon_access = $bool; }
 	function disableCaptcha() { $this->use_captcha = false; }
 
 	function disablePrivate() { $this->private_comments = false; }
 
-	function showDeleted() { $this->showDeleted = true; }
-	function showPrivate() { $this->showPrivate = true; }
+	function showDeleted() { $this->show_deleted = true; }
+	function showPrivate() { $this->show_private = true; }
 
 	/**
 	 * Initializes the object from database
@@ -182,8 +161,8 @@ class CommentList extends CoreList
 		$q  = 'SELECT * FROM tblComments WHERE';
 		if ($this->owner) $q .= ' ownerId='.$this->owner.' AND';
 		if ($this->type) $q .= ' commentType='.$this->type.' AND';
-		if (!$this->showPrivate) $q .= ' commentPrivate=0 AND';
-		if (!$this->showDeleted) $q .= ' deletedBy=0';
+		if (!$this->show_private) $q .= ' commentPrivate=0 AND';
+		if (!$this->show_deleted) $q .= ' deletedBy=0';
 		$q .= ' ORDER BY timeCreated DESC';
 
 		$list = $db->getArray($q);
@@ -195,9 +174,9 @@ class CommentList extends CoreList
 			$comment->isPrivate   = $row['commentPrivate'];
 			$comment->TimeCreated = new Timestamp($row['timeCreated']);
 			$comment->TimeDeleted = new Timestamp($row['timeDeleted']);
-			$comment->deletedBy   = $row['deletedBy'];
+			$comment->deleted_by  = $row['deletedBy'];
 			$comment->creator     = $row['userId']; ///< XXX currently "tblComments.userId", should be renamed to creatorId
-			$comment->creatorIP   = $row['userIP']; ///< XXX currently "tblComments.userIP", should be renamed to creatorIP
+			$comment->creator_ip  = $row['userIP']; ///< XXX currently "tblComments.userIP", should be renamed to creatorIP
 
 			$this->addItem($comment);
 		}
@@ -215,8 +194,8 @@ class CommentList extends CoreList
 		}
 
 		if ($h->session->id || //logged in
-			(!$h->session->id && $this->allowAnon && !$this->use_captcha) || //anon + captcha disabled
-			(!$h->session->id && $this->allowAnon && $this->captcha->verify()) //anon + captcha accepted
+			(!$h->session->id && $this->anon_access && !$this->use_captcha) || //anon + captcha disabled
+			(!$h->session->id && $this->anon_access && $this->Captcha->verify()) //anon + captcha accepted
 			) {
 
 			$comment = new CommentItem($this->type);
@@ -235,8 +214,8 @@ class CommentList extends CoreList
 			return $id;
 		}
 
-		if (!$h->session->id && $this->allowAnon && !$this->captcha->verify()) {
-			$caller->setError('Incorrect captcha');
+		if (!$h->session->id && $this->anon_access && !$this->Captcha->verify()) {
+			$caller->setError( $this->Captcha->getError() );
 			return false;
 		}
 
@@ -257,7 +236,7 @@ class CommentList extends CoreList
 			}
 		}
 
-		if ($h->session->id || $this->allowAnon) {
+		if ($h->session->id || $this->anon_access) {
 			$form = new xhtml_form('addcomment');
 			$form->addTextarea('comment_'.$this->type, t('Write a comment'), '', 30, 6);
 
@@ -307,7 +286,7 @@ class CommentList extends CoreList
 		}
 		$res .= '</div>'; //id="comments_only"
 
-		if ($h->session->id || $this->allowAnon) {
+		if ($h->session->id || $this->anon_access) {
 			//add comment form
 			$res .= $form->render();
 		}

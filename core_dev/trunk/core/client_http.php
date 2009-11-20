@@ -67,9 +67,9 @@ class HttpClient extends CoreBase
 
 	function setLocation($s) { $this->setUrl($s); } //XXX deprecate setLocation
 
-	function post($post_params)
+	function post($params)
 	{
-		return $this->get(false, $post_params);
+		return $this->get(false, $params);
 	}
 
 	/**

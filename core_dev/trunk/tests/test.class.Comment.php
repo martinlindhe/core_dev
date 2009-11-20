@@ -7,7 +7,7 @@ require_once('class.Comments.php');
 require_once('/var/www/fmf/sitewatch/config.php');
 
 
-$c = new CommentList(Comment::WIKI);
+$c = new CommentList(WIKI);
 $c->setOwner($wiki->getId());
 $c->setLimit(5);
 $c->setAnonAccess(true);
@@ -16,7 +16,7 @@ echo $c->render();
 
 
 /*
-$c = new CommentItem(Comment::BLOG);
+$c = new CommentItem(BLOG);
 $c->setOwner(0);
 
 

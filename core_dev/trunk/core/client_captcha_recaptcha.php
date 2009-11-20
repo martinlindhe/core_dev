@@ -11,21 +11,30 @@
  * at the following location:
  * http://recaptcha.net/api/getkey
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//TODO: recaptchaVerify() returns a 2nd line of fail reason, which could be displayed to the user
+//STATUS: good
 
-class captcha_recaptcha
+require_once('class.CoreBase.php');
+require_once('client_http.php');
+
+class CaptchaRecaptcha extends CoreBase
 {
-
 	private $api_url        = 'http://api.recaptcha.net';
 	private $api_url_ssl    = 'https://api-secure.recaptcha.net';
 	private $api_url_verify = 'http://api-verify.recaptcha.net/verify';
 
 	private $pub_key, $priv_key;
 
+	/*
+	* @param $k public recaptcha key
+	*/
 	function setPubKey($k) { $this->pub_key = $k; }
+
+	/*
+	* @param $k private recaptcha key
+	*/
 	function setPrivKey($k) { $this->priv_key = $k; }
 
 	/**
@@ -36,32 +45,49 @@ class captcha_recaptcha
 	 */
 	function verify()
 	{
-		if (!isset($_POST['recaptcha_challenge_field']) || !isset($_POST['recaptcha_response_field'])) return false;
-		if (!$this->pub_key || !$this->priv_key) die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
+		if (empty($_POST['recaptcha_challenge_field']) || empty($_POST['recaptcha_response_field']))
+		{
+			$this->setError('No captcha answer given.');
+			return false;
+		}
+
+		if (!$this->pub_key || !$this->priv_key)
+			die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
 
 		$params = array (
 			'privatekey' => $this->priv_key,
-			'remoteip' => client_ip(),
-			'challenge' => $_POST['recaptcha_challenge_field'],
-			'response' => $_POST['recaptcha_response_field']
+			'remoteip'   => client_ip(),
+			'challenge'  => $_POST['recaptcha_challenge_field'],
+			'response'   => $_POST['recaptcha_response_field']
 		);
 
-		$res = http_post($this->api_url_verify, $params);
-		$answers = explode("\n", $res['body']);
+		$http = new HttpClient($this->api_url_verify);
+		$res = $http->post($params);
+
+		$answers = explode("\n", $res);
+
 		if (trim($answers[0]) == 'true') return true;
+
+		switch ($answers[1]) {
+		case 'incorrect-captcha-sol': $e = 'Incorrect captcha solution'; break;
+		default: $e = 'untranslated error: '.$answers[1];
+		}
+		$this->setError($e);
+
 		return false;
 	}
 
 	/**
 	 * Embeds a recaptcha on your website
 	 *
-	 * @param $pub_key public recaptcha key
 	 * @param $ssl use SSL to connect to recaptcha.net
 	 * @return HTML code to display recaptcha
 	 */
 	function render($ssl = true)
 	{
-		if (!$this->pub_key || !$this->priv_key) die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
+		if (!$this->pub_key || !$this->priv_key)
+			die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
+
 		$server = ($ssl ? $this->api_url_ssl : $this->api_url);
 
 		return
