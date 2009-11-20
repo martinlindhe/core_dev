@@ -16,7 +16,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class ConvertLength
+require_once('class.CoreBase.php');
+
+class ConvertLength extends CoreBase
 {
 	private $precision = 0; ///< if set, specifies rounding precision
 

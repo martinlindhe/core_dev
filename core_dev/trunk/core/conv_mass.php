@@ -11,7 +11,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class ConvertMass
+require_once('class.CoreBase.php');
+
+class ConvertMass extends CoreBase
 {
 	private $precision = 0; ///< if set, specifies rounding precision
 

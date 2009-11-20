@@ -12,12 +12,12 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('core.php');
+require_once('class.CoreBase.php');
 require_once('class.Cache.php');
 
 require_once('service_currency_webservicex.php');
 
-class ConvertCurrency
+class ConvertCurrency extends CoreBase
 {
 	private $precision    = 0;   ///< if set specifies how many decimals to return (rounded)
 	private $cache_expire = 300; ///< expire time in seconds for local cache (in seconds)

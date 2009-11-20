@@ -12,7 +12,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class ConvertDuration
+require_once('class.CoreBase.php');
+
+class ConvertDuration extends CoreBase
 {
 	private $scale = array( ///< unit scale to a second
 	'sec'  => 1,

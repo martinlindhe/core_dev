@@ -11,7 +11,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class ConvertDatasize
+require_once('class.CoreBase.php');
+
+class ConvertDatasize extends CoreBase
 {
 	private $scale = array( ///< unit scale to a bit
 	'bit'  => 1,

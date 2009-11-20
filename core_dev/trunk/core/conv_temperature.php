@@ -12,7 +12,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-class ConvertTemperature
+require_once('class.CoreBase.php');
+
+class ConvertTemperature extends CoreBase
 {
 	private $precision = 2; ///< if set, specifies rounding precision
 
