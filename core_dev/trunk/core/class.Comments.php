@@ -260,26 +260,27 @@ class CommentList extends CoreList
 		$res .= '<div id="comments_holder">';
 		$res .= '<div id="comments_only">';
 
-		foreach ($this->items as $item) {
-
-			$user = new User($item->creator);
+		foreach ($this->items as $comment)
+		{
+			$user = new User($comment->creator);
+			$user->setIP($comment->creator_ip);
 
 			$res .= '<div class="comment_details">';
-			$res .= $user->link();
-			$res .= ', <font size="1">'.$item->TimeCreated->render().'</font>';
-			$res .= ($item->isPrivate ? 'Comment is private (only visible to owner and admins)' : '');
+			$res .= $user->htmlSummary();
+			$res .= ', <font size="1">'.$comment->TimeCreated->render().'</font>';
+			$res .= ($comment->isPrivate ? 'Comment is private (only visible to owner and admins)' : '');
 			$res .= '</div>';
 
-			$res .= '<div class="comment_text">'.formatUserInputText($item->text);
+			$res .= '<div class="comment_text">'.formatUserInputText($comment->text);
 
 			if ($h->session->id && (
 				$h->session->isAdmin ||
 				//allow users to delete their own comments
-				$h->session->id == $item->creator
+				$h->session->id == $comment->creator
 				)
 			) {
 				$res .= ' | ';
-				$res .= coreButton('Delete', URLadd('cmt_delete', $item->id) );
+				$res .= coreButton('Delete', URLadd('cmt_delete', $comment->id) );
 
 			}
 			$res .= '</div>';

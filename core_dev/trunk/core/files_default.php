@@ -10,6 +10,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: drop this code when rewrite is finished in class.Files.php, drop files module from session handler
+
 //TODO: rename tblFiles.timeUploaded to tblFiles.timeCreated
 //FIXME: use bmp mimetype "image/x-ms-bmp" and verify it is recognized in all browsers
 

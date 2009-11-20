@@ -6,6 +6,7 @@
  */
 
 //TODO: Handle IPv6 addresses (transparently)
+//TODO: is_ipv4() and is_ipv6() regexp matchers
 
 /**
  * Converts a IPv4 address to GeoIP format
