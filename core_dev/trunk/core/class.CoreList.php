@@ -17,6 +17,19 @@ class CoreList extends CoreBase
 
 	function getItems() { return $this->items; }
 
+	function getKeyVals()
+	{
+		$res = array();
+		foreach ($this->items as $item) {
+			if (get_parent_class($item) != 'CoreItem') { 		//XXX only works for CoreItem type
+				echo 'CoreList->getKeyVals: cant handle object type '.get_class($item).ln();
+				continue;
+			}
+			$res[ $item->getId() ] = $item->getTitle();
+		}
+		return $res;
+	}
+
 	function addItem($i)
 	{
 		$this->items[] = $i;

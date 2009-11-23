@@ -10,17 +10,15 @@
 //STATUS: mostly ok, needs more testing
 //FIXME: implement and use oo-pager for CommentList
 
-require_once('constants.php');
+require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
 require_once('class.User.php');
 require_once('client_captcha.php');
 require_once('prop_Timestamp.php');
 require_once('xhtml_form.php');
 
-class CommentItem extends CoreBase
+class CommentItem extends CoreItem
 {
-	var $type, $id, $owner;
-	var $text;
 	var $isPrivate = false;         ///< boolean
 	var $TimeCreated, $TimeDeleted; ///< Timestamp objects
 	var $deleted_by;                ///< userId
@@ -33,31 +31,12 @@ class CommentItem extends CoreBase
 		$this->setType($type);
 	}
 
-	function setType($type)
-	{
-		if (!is_numeric($type)) return false;
-		$this->type = $type;
-	}
-
-	function setOwner($id)
-	{
-		if (!is_numeric($id)) return false;
-		$this->owner = $id;
-	}
-
 	function setCreator($id)
 	{
 		if (!is_numeric($id)) return false;
 		$this->creator = $id;
 	}
 
-	function setId($id)
-	{
-		if (!is_numeric($id)) return false;
-		$this->id = $id;
-	}
-
-	function setText($txt) { $this->text = $txt; }
 	function setPrivate($bool) { $this->isPrivate = $bool; }
 
 	/**
@@ -81,7 +60,7 @@ class CommentItem extends CoreBase
 		' AND ownerId='.$this->owner.
 		($this->creator ? ' AND userId='.$this->creator : '').
 		' AND userIP='.$ip_num.
-		' AND commentText="'.$db->escape($this->text).'"'.
+		' AND commentText="'.$db->escape($this->title).'"'.
 		' AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$this->add_interval.' SECOND)';
 
 		if ($db->getOneItem($q)) {
@@ -93,7 +72,7 @@ class CommentItem extends CoreBase
 		'INSERT INTO tblComments SET commentType='.$this->type.
 		',ownerId='.$this->owner.',userId='.$this->creator.
 		',userIP='.$ip_num.',timeCreated=NOW()'.
-		',commentText="'.$db->escape($this->text).'"';
+		',commentText="'.$db->escape($this->title).'"';
 		if ($this->isPrivate) $q .= ',commentPrivate=1';
 
 		$this->id = $db->insert($q);
@@ -170,7 +149,7 @@ class CommentList extends CoreList
 			$comment = new CommentItem($this->type);
 			$comment->id          = $row['commentId'];
 			$comment->owner       = $row['ownerId'];
-			$comment->text        = $row['commentText'];
+			$comment->title       = $row['commentText'];
 			$comment->isPrivate   = $row['commentPrivate'];
 			$comment->TimeCreated = new Timestamp($row['timeCreated']);
 			$comment->TimeDeleted = new Timestamp($row['timeDeleted']);
@@ -201,7 +180,7 @@ class CommentList extends CoreList
 			$comment = new CommentItem($this->type);
 			$comment->setOwner($this->owner);
 			$comment->setCreator($h->session->id);
-			$comment->setText($p['comment_'.$this->type]);
+			$comment->setTitle($p['comment_'.$this->type]);
 
 			if ($this->private_comments)
 				$comment->setPrivate( $p['comment_priv_'.$this->type]);

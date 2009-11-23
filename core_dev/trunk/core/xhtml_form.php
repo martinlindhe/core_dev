@@ -295,7 +295,7 @@ class xhtml_form
 
 				$res .= '<td>'.$e['str'].'</td>';
 				$res .= '<td>';
-				$res .= xhtmlSelectArray($e['name'], $cat->getList(), $e['default']).' ';
+				$res .= xhtmlSelectArray($e['name'], $cat->getKeyVals(), $e['default']).' ';
 				//add new category widget
 				$res .= '<a href="#" onClick="toggle_element(\'cd_new_'.$e['name'].'\');toggle_enabled_element(\'new_'.$e['name'].'\');">'.coreButton('Add').'</a>';
 				$res .= '<span id="cd_new_'.$e['name'].'" style="display:none;">';

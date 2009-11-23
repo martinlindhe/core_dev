@@ -7,9 +7,10 @@
 
 //STATUS: wip. drop files_default.php when done
 
+require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
 
-class FileItem
+class FileItem extends CoreItem
 {
 }
 
