@@ -404,10 +404,12 @@ function parseArticle($title, $text, $timestamp = '')
 }
 
 //http://www.regexlib.com/REDetails.aspx?regexp_id=295:
-define('REGEXP_VALID_EMAIL', '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/');
-function ValidEmail($email)
+function ValidEmail($email) ///XXX rename to is_email()
 {
-	if (preg_match(REGEXP_VALID_EMAIL, $email)) return true;
+	$match = '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/';
+	if (preg_match($match, $email))
+		return true;
+
 	return false;
 }
 

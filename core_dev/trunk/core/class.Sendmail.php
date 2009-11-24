@@ -11,19 +11,16 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-/**
- * TODO: use regexp to catch invalid mail address input
- * TODO: figure out the proper "multipart" content-type to set on
- *    attachments/embedded files. the current approach works for Thunderbird,
- *    but message with attachment is shown without attachments before they
- *    are fully loaded (no gem next to mail)
- */
+//TODO: figure out the proper "multipart" content-type to set on attachments/embedded files.
+//      the current approach works for Thunderbird, but message with attachment is shown without
+//      attachments before they are fully loaded (no gem next to mail)
 
+require_once('class.CoreBase.php');
 require_once('client_smtp.php');
+require_once('functions_textformat.php'); //for ValidEmail()
 
-class Sendmail
+class Sendmail extends CoreBase
 {
-	var     $debug = false;
 	private $smtp;
 
 	private $from_adr, $from_name;
@@ -48,23 +45,37 @@ class Sendmail
 
 	function setFrom($s, $n = '')
 	{
-		$this->from_adr = $s;
+		if (!ValidEmail($s)) return false;
+		$this->from_adr  = $s;
 		$this->from_name = $n;
 	}
 
 	function setReplyTo($s, $n = '')
 	{
-		$this->rply_adr = $s;
+		if (!ValidEmail($s)) return false;
+		$this->rply_adr  = $s;
 		$this->rply_name = $n;
 	}
 
 	function setSubject($s) { $this->subject = $s; }
 
-	function setHTML($bool = true) { $this->html = $bool; }
+	function setHtml($bool = true) { $this->html = $bool; }
 
-	function addRecipient($s) { $this->to_adr[] = $s; }
-	function addCc($s) { $this->cc_adr[] = $s; }
-	function addBcc($s) { $this->bcc_adr[] = $s; }
+	function addRecipient($s)
+	{
+		if (!ValidEmail($s)) return false;
+		$this->to_adr[] = $s;
+	}
+	function addCc($s)
+	{
+		if (!ValidEmail($s)) return false;
+		$this->cc_adr[] = $s;
+	}
+	function addBcc($s)
+	{
+		if (!ValidEmail($s)) return false;
+		$this->bcc_adr[] = $s;
+	}
 
 	function attach($file)
 	{
@@ -87,10 +98,14 @@ class Sendmail
 	 */
 	function send($msg)
 	{
-		if ($this->debug) $this->smtp->debug = true;
+		if ($this->debug)
+			$this->smtp->debug = true;
 
-		if (!$this->smtp->login()) return false;
-		if (!$this->smtp->_MAIL_FROM($this->from_adr)) return false;
+		if (!$this->smtp->login())
+			return false;
+
+		if (!$this->smtp->_MAIL_FROM($this->from_adr))
+			return false;
 
 		$header =
 			"Date: ".date('r')."\r\n".
@@ -99,9 +114,8 @@ class Sendmail
 			"User-Agent: core_dev\r\n".	//XXX version string
 			"MIME-Version: 1.0\r\n";
 
-		if ($this->rply_adr) {
+		if ($this->rply_adr)
 			$header .= "Reply-To: ".(mb_encode_mimeheader($this->rply_name, 'UTF-8') ? mb_encode_mimeheader($this->rply_name, 'UTF-8')." <".$this->rply_adr.">" : $this->rply_adr)."\r\n";
-		}
 
 		foreach ($this->to_adr as $to) {
 			if (!$this->smtp->_RCPT_TO($to)) continue;
@@ -135,7 +149,8 @@ class Sendmail
 			$msg."\r\n";
 
 		$attachment_data = '';
-		foreach ($this->attachments as $a) {
+		foreach ($this->attachments as $a)
+		{
 			$data = file_get_contents($a[0]);
 			$attachment_data .=
 				"\r\n".
