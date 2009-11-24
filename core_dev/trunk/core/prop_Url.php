@@ -68,7 +68,7 @@ class Url extends CoreProperty
 	 */
 	function set($url)
 	{
-		if (!is_url($url))
+		if (!$url)
 			return false;
 
 		$parsed = parse_url($url);

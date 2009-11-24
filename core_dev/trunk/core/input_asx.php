@@ -21,17 +21,18 @@
 </asx>
 */
 
+require_once('class.CoreBase.php');
 require_once('client_http.php');
 require_once('io_playlist.php'); //for MediaItem object
 
 class input_asx extends CoreBase
 {
-	private $entries = array(); ///< MediaItem objects
+	private $items = array(); ///< MediaItem objects
 
 	/**
 	 * @return array of MediaItem objects
 	 */
-	function getItems() { return $this->entries; }
+	function getItems() { return $this->items; }
 
 	function parse($data)
 	{
@@ -56,7 +57,7 @@ class input_asx extends CoreBase
 		while ($reader->read())
 		{
 			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'asx') {
-				$this->entries[] = $item;
+				$this->items[] = $item;
 				$item = new MediaItem();
 			}
 

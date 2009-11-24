@@ -11,17 +11,18 @@
 
 //STATUS: ok
 
+require_once('class.CoreBase.php');
 require_once('client_http.php');
 
 class input_atom extends CoreBase
 {
-	private $entries = array();
+	private $items = array();
 	private $reader;            ///< XMLReader object
 
 	/**
 	 * @return array of NewsItem objects
 	 */
-	function getItems() { return $this->entries; }
+	function getItems() { return $this->items; }
 
 	function parse($data)
 	{
@@ -77,7 +78,7 @@ class input_atom extends CoreBase
 		while ($this->reader->read()) {
 			if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'entry') {
 				if ($item->title == $item->desc) $item->desc = '';
-				$this->entries[] = $item;
+				$this->items[] = $item;
 				return;
 			}
 

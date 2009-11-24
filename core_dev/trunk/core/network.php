@@ -128,7 +128,7 @@ function client_ip()
 }
 
 /**
- * Checks if input string is a valid http or https URL
+ * Checks if input string is a valid URL
  *
  * @param $url string
  * @return true if input is a url
@@ -136,7 +136,7 @@ function client_ip()
 function is_url($url)
 {
 	if (strpos($url, ' ')) return false; //FIXME: the regexp allows spaces in domain name
-	$pattern = "(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)";
+	$pattern = "((https?|rtmpe?|mms|rtsp)://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)";
 
 	if (preg_match($pattern, $url))
 		return true;

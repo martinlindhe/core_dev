@@ -119,7 +119,6 @@ class NewsFeed extends CoreList
 		if ($this->debug) $feed->setDebug();
 		$feed->parse($data);
 		$this->title = $feed->getTitle();
-
 		$this->addItems( $feed->getItems() );
 	}
 

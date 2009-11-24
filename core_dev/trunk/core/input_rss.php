@@ -11,19 +11,21 @@
 
 //STATUS: ok
 
+require_once('class.CoreBase.php');
 require_once('client_http.php');
 require_once('io_newsfeed.php'); //for NewsItem object
 
 class input_rss extends CoreBase
 {
-	private $entries = array();
+	private $items = array();   ///< list of NewsItem objects
 	private $reader;            ///< XMLReader object
 	private $title;             ///< title of the feed
 
 	/**
 	 * @return array of NewsItem objects
 	 */
-	function getItems() { return $this->entries; }
+	function getItems() { return $this->items; }
+
 	function getTitle() { return $this->title; }
 
 	function parse($data)
@@ -113,7 +115,7 @@ class input_rss extends CoreBase
 		while ($this->reader->read()) {
 			if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'item') {
 				if ($item->title == $item->desc) $item->desc = '';
-				$this->entries[] = $item;
+				$this->items[] = $item;
 				return;
 			}
 
@@ -171,20 +173,20 @@ class input_rss extends CoreBase
 					break;
 
 				case 'video/x-ms-asf':
-					if (file_suffix($this->reader->getAttribute('url')) == '.asx') {
-						//d('Parsing ASX playlist '.$this->attrs['URL']);
-
+					if (file_suffix($this->reader->getAttribute('url')) == '.asx')
+					{
 						$asx = new input_asx();
 						if ($this->debug) $asx->setDebug();
-						$asx->parse(  $this->reader->getAttribute('url') );
+						$asx->parse( $this->reader->getAttribute('url') );
 						$list = $asx->getItems();
+
 						if ($list)
 							$item->video_url = $list[0]->Url->get();
 					} else {
 						$item->video_url = $this->reader->getAttribute('url');
 					}
 
-					$item->video_mime = $this->reader->getAttribute('type');
+					$item->video_mime  = $this->reader->getAttribute('type');
 					$item->Duration->set($this->reader->getAttribute('duration'));
 					break;
 

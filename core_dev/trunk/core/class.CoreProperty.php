@@ -10,9 +10,9 @@
 class CoreProperty
 {
 	/**
-	 * Initialize object to specified time
+	 * Initialize object to specified value
 	 *
-	 * @param $s unix timestamp or strtotime() understandable string
+	 * @param $s string or numeric value
 	 */
 	function __construct($s = '')
 	{
@@ -22,11 +22,11 @@ class CoreProperty
 	/**
 	 * Convert object representation to a string
 	 */
-	//XXX cp. '' evaluerar true eller javetinte nåt är fel
 	function __toString()
 	{
-		return $this->get().'';
+		return $this->get().'';   	//XXX cp. '' evaluerar true eller javetinte nåt är fel
 	}
 
 }
+
 ?>
