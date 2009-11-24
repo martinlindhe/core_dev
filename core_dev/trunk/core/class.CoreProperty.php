@@ -7,7 +7,9 @@
 
 //STATUS: wip
 
-class CoreProperty
+require_once('class.CoreBase.php');
+
+class CoreProperty extends CoreBase
 {
 	/**
 	 * Initialize object to specified value
