@@ -9,30 +9,22 @@
 
 //STATUS: good
 
-require_once('class.CoreBase.php');
+require_once('class.CoreProperty.php');
 require_once('functions_time.php');
 
-class Timestamp extends CoreBase
+class Timestamp extends CoreProperty
 {
-	private $ts; ///< internal representation of time, as a Unix timestamp
+	private $value; ///< internal representation of time, as a Unix timestamp
 
 	/**
-	 * Initialize object to specified time
-	 *
-	 * @param $t unix timestamp or strtotime() understandable string
+	 * @return a numeric Unix timestamp
 	 */
-	function __construct($ts = 0)
+	function get()
 	{
-		$this->set($ts);
-	}
+		if (!$this->value)
+			return false;
 
-	/**
-	 * Convert object representation to a string
-	 */
-	//XXX cp. '' evaluerar true eller javetinte nåt är fel
-	function __toString()
-	{
-		return $this->get().'';
+		return $this->value;
 	}
 
 	/**
@@ -42,10 +34,13 @@ class Timestamp extends CoreBase
 	 */
 	function set($ts)
 	{
-		if (is_string($ts)) $ts = strtotime($ts);
-		if (!is_numeric($ts)) return false;
+		if (is_string($ts))
+			$ts = strtotime($ts);
 
-		$this->ts = $ts;
+		if (!is_numeric($ts))
+			return false;
+
+		$this->value = $ts;
 	}
 
 	/**
@@ -57,16 +52,7 @@ class Timestamp extends CoreBase
 	function setFromNTP($ts)
 	{
 		if (!is_numeric($ts)) return false;
-		$this->ts = $ts - 2208988800;
-	}
-
-	/**
-	 * @return a numeric Unix timestamp
-	 */
-	function get()
-	{
-		if (!$this->ts) return false;
-		return $this->ts;
+		$this->value = $ts - 2208988800;
 	}
 
 	/**
@@ -76,7 +62,7 @@ class Timestamp extends CoreBase
 	 */
 	function getNTP()
 	{
-		return 2208988800 + $this->ts;
+		return 2208988800 + $this->value;
 	}
 
 	/**
@@ -84,7 +70,7 @@ class Timestamp extends CoreBase
 	 */
 	function getSqlDate()
 	{
-		return date('Y-m-d', $this->ts);
+		return date('Y-m-d', $this->value);
 	}
 
 	/**
@@ -94,18 +80,18 @@ class Timestamp extends CoreBase
 	 */
 	function getSqlDateTime()
 	{
-		return date('Y-m-d H:i:s', $this->ts);
+		return date('Y-m-d H:i:s', $this->value);
 	}
 
 	/**
-	 * Formats timestamp according to RFC 882
+	 * Formats timestamp according to RFC 882 (actually RFC 2882 which supersedes RFC 882)
 	 *
 	 * @example Fri, 19 Dec 2008 16:50:19 +0100
 	 * @return RFC 882 formatted timestamp
 	 */
 	function getRFC882()
 	{
-		return date('r', $this->ts);	//XXX actually RFC 2882 (supersedes RFC 882)
+		return date('r', $this->value);
 	}
 
 	/**
@@ -116,12 +102,12 @@ class Timestamp extends CoreBase
 	 */
 	function getRFC3339()
 	{
-		$date = date('Y-m-d\TH:i:s', $this->ts);
+		$date = date('Y-m-d\TH:i:s', $this->value);
 
 		$matches = array();
-		if (preg_match('/^([\-+])(\d{2})(\d{2})$/', date('O', $this->ts), $matches)) {
+		if (preg_match('/^([\-+])(\d{2})(\d{2})$/', date('O', $this->value), $matches))
 			return $date.$matches[1].$matches[2].':'.$matches[3];
-		}
+
 		return $date.'Z';
 	}
 
@@ -132,10 +118,10 @@ class Timestamp extends CoreBase
 	 */
 	function getRelative()
 	{
-		if (time() >= $this->ts)
-			return shortTimePeriod(time() - $this->ts).' ago';
+		if (time() >= $this->value)
+			return shortTimePeriod(time() - $this->value).' ago';
 
-		return shortTimePeriod($this->ts - time()).' in the future';
+		return shortTimePeriod($this->value - time()).' in the future';
 	}
 
 	function render()
@@ -148,32 +134,32 @@ class Timestamp extends CoreBase
 		9=>'September', 10=>'October', 11=>'November', 12=>'December'
 		);
 
-		$datestamp = mktime(0,0,0,date('m', $this->ts), date('d', $this->ts), date('Y', $this->ts));
+		$datestamp = mktime(0,0,0,date('m', $this->value), date('d', $this->value), date('Y', $this->value));
 		$yesterday = mktime(0,0,0,date('m'), date('d')-1, date('Y'));
 		$tomorrow  = mktime(0,0,0,date('m'), date('d')+1, date('Y'));
 
-		$timediff = time() - $this->ts;
+		$timediff = time() - $this->value;
 
-		if (date('Y-m-d', $this->ts) == date('Y-m-d')) {
+		if (date('Y-m-d', $this->value) == date('Y-m-d')) {
 			//Today 18:13
-			return t('Today').' '.date('H:i', $this->ts);
+			return t('Today').' '.date('H:i', $this->value);
 		}
 		if ($datestamp == $yesterday) {
 			//Yesterday 18:13
-			return t('Yesterday').' '.date('H:i', $this->ts);
+			return t('Yesterday').' '.date('H:i', $this->value);
 		}
 		if ($datestamp == $tomorrow) {
 			//Tomorrow 18:13
-			return t('Tomorrow').' '.date('H:i', $this->ts);
+			return t('Tomorrow').' '.date('H:i', $this->value);
 		}
 
-		$year  = date('Y', $this->ts);
-		$month = date('n', $this->ts);
-		$day   = date('j', $this->ts);
+		$year  = date('Y', $this->value);
+		$month = date('n', $this->value);
+		$day   = date('j', $this->value);
 		if ($year == date('Y'))
 			return $day.':e '.t($months[ $month ]); //.' '.date('H:i', $this->ts);
 
 		//2007-04-14 15:22
-		return date('Y-m-d H:i', $this->ts);
+		return date('Y-m-d H:i', $this->value);
 	}
 }

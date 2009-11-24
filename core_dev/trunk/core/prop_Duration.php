@@ -10,27 +10,13 @@
 //STATUS: good
 
 require_once('core.php');
+require_once('class.CoreProperty.php');
 
-class Duration extends CoreBase
+class Duration extends CoreProperty
 {
-	private $duration; ///< seconds with decimal precision
+	private $value; ///< seconds with decimal precision
 
-	/**
-	 * @param $n initialize object to a duration, in seconds
-	 */
-	function __construct($n = 0)
-	{
-		$this->duration = $n;
-	}
-
-	/**
-	 * Convert object representation to a string
-	 */
-	//XXX cp. '' evaluerar true eller javetinte nåt är fel
-	function __toString()
-	{
-		return $this->get().'';
-	}
+	function get() { return $this->value; }
 
 	/**
 	 * Decodes a textual representation for a duration
@@ -42,20 +28,20 @@ class Duration extends CoreBase
 		if (!$s) return;
 
 		if (is_numeric($s)) {
-			$this->duration = $s;
+			$this->value = $s;
 			return;
 		}
 
 		$a = explode(':', $s);
 		if (count($a) == 3) {
 			//handle "00:03:39.00"
-			$this->duration = ($a[0] * 3600) + ($a[1] * 60) + $a[2];
+			$this->value = ($a[0] * 3600) + ($a[1] * 60) + $a[2];
 			return;
 		}
 
 		if (count($a) == 2) {
 			//handle "04:29"
-			$this->duration = ($a[0] * 60) + $a[1];
+			$this->value = ($a[0] * 60) + $a[1];
 			return;
 		}
 
@@ -64,19 +50,14 @@ class Duration extends CoreBase
 		//$this->duration = $s;
 	}
 
-	function get()
-	{
-		return $this->duration;
-	}
-
 	function inSeconds()
 	{
-		return round($this->duration, 0);
+		return round($this->value, 0);
 	}
 
 	function inMilliseconds()
 	{
-		return round($this->duration * 1000, 0);
+		return round($this->value * 1000, 0);
 	}
 
 	/**
@@ -86,10 +67,10 @@ class Duration extends CoreBase
 	 */
 	function render()
 	{
-		if (is_float($this->duration))
-			$secs = ceil($this->duration);
+		if (is_float($this->value))
+			$secs = ceil($this->value);
 		else
-			$secs = $this->duration;
+			$secs = $this->value;
 
 		$hrs  = floor($secs / 3600); $secs %= 3600;
 		$mins = floor($secs / 60);   $secs %= 60;

@@ -9,10 +9,10 @@
 
 //STATUS: good
 
-require_once('class.CoreBase.php');
+require_once('class.CoreProperty.php');
 require_once('network.php'); //for is_url(), scheme_default_port()
 
-class Url extends CoreBase
+class Url extends CoreProperty
 {
 	private $scheme = 'http';
 	private $host;
@@ -28,27 +28,6 @@ class Url extends CoreBase
 	function getScheme()   { return $this->scheme; }
 	function getUsername() { return $this->username; }
 	function getPassword() { return $this->password; }
-
-	function __construct($url = '')
-	{
-		$this->init($url);
-	}
-
-	/**
-	 * Convert object representation to a string
-	 */
-	function __toString()
-	{
-		return $this->get();
-	}
-
-	private function init($url = '')
-	{
-		if (!is_url($url))
-			return false;
-
-		$this->set($url);
-	}
 
 	/**
 	 * @param $safe outputs URL in a safe format (& => &amp;)
@@ -89,7 +68,7 @@ class Url extends CoreBase
 	 */
 	function set($url)
 	{
-		if (!$url)
+		if (!is_url($url))
 			return false;
 
 		$parsed = parse_url($url);
