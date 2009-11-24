@@ -141,8 +141,13 @@ class Users
 	{
 		global $db, $h;
 
+		if (empty($h->session))
+			$limit = 60 * 30; //30min
+		else
+			$limit = $h->session->online_timeout;
+
 		$q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
-		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
+		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$limit.' SECOND)';
 		return $db->getOneItem($q);
 	}
 
@@ -153,8 +158,13 @@ class Users
 	{
 		global $db, $h;
 
+		if (empty($h->session))
+			$limit = 60 * 30; //30min
+		else
+			$limit = $h->session->online_timeout;
+
 		$q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
-		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$h->session->online_timeout.' SECOND)';
+		$q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$limit.' SECOND)';
 		$q .= ' ORDER BY timeLastActive DESC';
 		if (!empty($_limit)) $q .= $_limit;
 		return $db->getArray($q);
