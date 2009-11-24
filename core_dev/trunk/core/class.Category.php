@@ -3,9 +3,9 @@
  * $Id$
  */
 
-//STATUS: wip
+//STATUS: ok, need testing
 
-//TODO: some general methods for ui category management (edit, remove) - not here!
+//TODO: for CategoryViewer add some ui category management (edit, remove)
 
 require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
@@ -13,8 +13,8 @@ require_once('prop_Timestamp.php');
 
 class CategoryItem extends CoreItem
 {
-	private $creator;      ///< if set, stores creatorId when categories are created
-	var $TimeCreated;  ///< Timestamp object
+	private $creator;     ///< if set, stores creatorId when categories are created
+	public  $TimeCreated; ///< Timestamp object
 
 	private $permissions = PERM_USER;  ///< permission flags as defined in constants.php
 
@@ -105,9 +105,9 @@ class CategoryList extends CoreList
 	}
 
 	/**
-	 * Returns a list of id->name pairs for the list
+	 * Initializes the list from database
 	 */
-	private function init()
+	function init()
 	{
 		global $db;
 
@@ -128,12 +128,24 @@ class CategoryList extends CoreList
 		}
 	}
 
+}
+
+class CategoryViewer extends CoreBase
+{
+	var $Cat; //CategoryList object
+
+	function __construct($type, $owner)
+	{
+		$this->Cat = new CategoryList($type);
+		$this->Cat->setOwner($owner);
+	}
+
 	function renderList()
 	{
 		$res = '';
-		$this->init();
+		$this->Cat->init();
 
-		foreach ($this->getKeyVals() as $id => $name)
+		foreach ($this->Cat->getKeyVals() as $id => $name)
 			$res .= ', <a href="?cat='.$id.'">'.$name.'</a>';
 
 		return '<a href="?cat=0">'.t('Overview').'</a>, '.substr($res, 2);

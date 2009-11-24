@@ -89,9 +89,10 @@ class xhtml_form
 		foreach ($this->elems as $id => $e) {
 			if (!empty($e['name']) && !empty($p['new_'.$e['name']])) {
 				//add category
-				$cat = new CategoryList($this->elems[$id]['cat_type']);
+				$cat = new CategoryItem($this->elems[$id]['cat_type']);
 				$cat->setOwner($h->session->id);
-				$id = $cat->add($p['new_'.$e['name']]);
+				$cat->setTitle($p['new_'.$e['name']]);
+				$id = $cat->store();
 
 				//modify post form category id, unset new_catname
 				$p[ $e['name'] ] = $id;
