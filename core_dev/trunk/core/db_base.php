@@ -17,6 +17,8 @@
 //TODO: use register_shutdown_function('myfunc') to add profiler at end of script if debug=true
 //TODO: move out the profiling stuff from here
 
+require_once('class.CoreBase.php');
+
 abstract class db_base extends CoreBase
 {
 	//db settings

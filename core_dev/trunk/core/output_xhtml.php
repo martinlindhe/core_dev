@@ -529,6 +529,21 @@ function jsArray($name, $list) {
 }
 
 /**
+ * @param $ms reload time in milliseconds (1/1000th second)
+ */
+function jsReload($ms)
+{
+	if (!is_numeric($ms)) return false;
+
+	$res =
+	'<script type="text/javascript">'.
+	'setTimeout("location.reload();", '.$ms.');'.
+	'</script>';
+
+	return $res;
+}
+
+/**
  * Generates XML tags from an array of values
  *
  * @param $params array with params (Name=>Value) for each tag

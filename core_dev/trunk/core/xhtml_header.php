@@ -129,12 +129,8 @@ class xhtml_header
 		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
 		echo '</script>';
 
-		if ($this->reload_time) {
-			echo '<script type="text/javascript">';
-			echo 'setTimeout("location.reload();", '.($this->reload_time*1000).');';
-			echo '</script>';
-		}
-
+		if ($this->reload_time)
+			echo jsReload($this->reload_time * 1000);
 	}
 
 }

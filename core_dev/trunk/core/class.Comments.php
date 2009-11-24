@@ -100,7 +100,7 @@ class CommentList extends CoreList
 	private $anon_access  = false;   ///< do we allow anonymous comments?
 	private $use_captcha  = true;    ///< shall we use captchas for anonymous comments?
 	private $limit        = 0;       ///< number of items per page
-	private $private_comments = true;///< shall users be able to mark their comments as private (for admins eyes only)?
+	private $private_comments = false;///< shall users be able to mark their comments as private (for admins eyes only)?
 
 	private $Captcha;               ///< Captcha object
 
@@ -122,9 +122,9 @@ class CommentList extends CoreList
 	}
 
 	function setAnonAccess($bool = true) { $this->anon_access = $bool; }
-	function disableCaptcha() { $this->use_captcha = false; }
+	function setPrivate($bool = true) { $this->private_comments = $bool; }
 
-	function disablePrivate() { $this->private_comments = false; }
+	function disableCaptcha() { $this->use_captcha = false; }
 
 	function showDeleted() { $this->show_deleted = true; }
 	function showPrivate() { $this->show_private = true; }
@@ -250,7 +250,7 @@ class CommentList extends CoreList
 			$res .= ($comment->isPrivate ? 'Comment is private (only visible to owner and admins)' : '');
 			$res .= '</div>';
 
-			$res .= '<div class="comment_text">'.formatUserInputText($comment->text);
+			$res .= '<div class="comment_text">'.formatUserInputText($comment->title);
 
 			if ($h->session->id && (
 				$h->session->isAdmin ||
