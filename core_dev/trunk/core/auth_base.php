@@ -108,7 +108,7 @@ The link will expire in __EXPIRETIME__";
 
 		$email = trim($email);
 		if (strpos($email, '@')) {
-			if (!ValidEmail($email)) return false;
+			if (!is_email($email)) return false;
 			$_id = findUserByEmail($email);
 		} else {
 			//find user by alias

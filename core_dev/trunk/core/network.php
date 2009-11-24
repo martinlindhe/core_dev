@@ -138,7 +138,24 @@ function is_url($url)
 	if (strpos($url, ' ')) return false; //FIXME: the regexp allows spaces in domain name
 	$pattern = "(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)";
 
-	if (preg_match($pattern, $url)) return true;
+	if (preg_match($pattern, $url))
+		return true;
+
+	return false;
+}
+
+/**
+ * Checks if input string is a valid email address
+ *
+ * @param $adr string
+ * @return true if input is a email address
+ */
+function is_email($adr)
+{
+	$pattern = '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/';
+	if (preg_match($pattern, $adr))
+		return true;
+
 	return false;
 }
 

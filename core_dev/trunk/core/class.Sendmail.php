@@ -17,7 +17,7 @@
 
 require_once('class.CoreBase.php');
 require_once('client_smtp.php');
-require_once('functions_textformat.php'); //for ValidEmail()
+require_once('network.php'); //for is_email()
 
 class Sendmail extends CoreBase
 {
@@ -45,14 +45,14 @@ class Sendmail extends CoreBase
 
 	function setFrom($s, $n = '')
 	{
-		if (!ValidEmail($s)) return false;
+		if (!is_email($s)) return false;
 		$this->from_adr  = $s;
 		$this->from_name = $n;
 	}
 
 	function setReplyTo($s, $n = '')
 	{
-		if (!ValidEmail($s)) return false;
+		if (!is_email($s)) return false;
 		$this->rply_adr  = $s;
 		$this->rply_name = $n;
 	}
@@ -63,17 +63,17 @@ class Sendmail extends CoreBase
 
 	function addRecipient($s)
 	{
-		if (!ValidEmail($s)) return false;
+		if (!is_email($s)) return false;
 		$this->to_adr[] = $s;
 	}
 	function addCc($s)
 	{
-		if (!ValidEmail($s)) return false;
+		if (!is_email($s)) return false;
 		$this->cc_adr[] = $s;
 	}
 	function addBcc($s)
 	{
-		if (!ValidEmail($s)) return false;
+		if (!is_email($s)) return false;
 		$this->bcc_adr[] = $s;
 	}
 

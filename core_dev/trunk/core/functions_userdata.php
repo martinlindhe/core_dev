@@ -6,7 +6,7 @@
  */
 
 require_once('atom_categories.php');	//for multi-choise userdata types
-require_once('functions_textformat.php');	//for ValidEmail()
+require_once('network.php');	//for is_email()
 require_once('validate_ssn.php');	//to validate swedish ssn's
 require_once('class.ZipLocation.php');	//for location datatyper
 require_once('output_xhtml.php');
@@ -478,7 +478,7 @@ function verifyRequiredUserdataFields()
 		switch ($row['fieldType']) {
 			case USERDATA_TYPE_EMAIL:
 				if (empty($_POST['userdata_'.$row['fieldId']])) return t('No email entered!');
-				if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered is not valid!');
+				if (!is_email($_POST['userdata_'.$row['fieldId']])) return t('The email entered is not valid!');
 				if (findUserByEmail($_POST['userdata_'.$row['fieldId']])) return t('The email entered already taken!');
 				break;
 
@@ -771,7 +771,7 @@ function findUserByEmail($email)
 {
 	global $db;
 	$email = trim($email);
-	if (!ValidEmail($email)) return false;
+	if (!is_email($email)) return false;
 
 	$email_field = getUserdataFieldIdByType(USERDATA_TYPE_EMAIL);
 
@@ -815,7 +815,7 @@ function editUserdataSettings($_userid = '')
 
 				case USERDATA_TYPE_EMAIL:
 					if (empty($_POST['userdata_'.$row['fieldId']])) break;
-					if (!ValidEmail($_POST['userdata_'.$row['fieldId']])) {
+					if (!is_email($_POST['userdata_'.$row['fieldId']])) {
 						echo '<div class="critical">'.t('The email entered is not valid!').'</div>';
 					} else {
 						$chk = findUserByEmail($_POST['userdata_'.$row['fieldId']]);

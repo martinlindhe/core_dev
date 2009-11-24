@@ -403,16 +403,6 @@ function parseArticle($title, $text, $timestamp = '')
 	return $art;
 }
 
-//http://www.regexlib.com/REDetails.aspx?regexp_id=295:
-function ValidEmail($email) ///XXX rename to is_email()
-{
-	$match = '/^([a-zA-Z0-9])+([a-zA-Z0-9._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9._-]+)+$/';
-	if (preg_match($match, $email))
-		return true;
-
-	return false;
-}
-
 /**
  * Trims and removes excess spaces, tabs, linefeeds from a string
  */

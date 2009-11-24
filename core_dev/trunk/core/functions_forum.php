@@ -1191,7 +1191,7 @@ function shareForumItem($itemId)
 	if (!$h->session->id || !is_numeric($itemId)) return false;
 
 	if (!empty($_POST['fshare_mail'])) {
-		if (ValidEmail($_POST['fshare_mail'])) {
+		if (is_email($_POST['fshare_mail'])) {
 			$item = getForumItem($itemId);
 
 			if (!empty($_POST['fshare_name'])) {
