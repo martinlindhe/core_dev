@@ -29,21 +29,13 @@ class xhtml_header
 		$this->search = array();
 		$this->onload = array();
 
-		if (!$this->core_dev_root) //XXXX hmm? eller läs från global handler ?
-			$this->core_dev_root = coredev_webroot();
+		$this->core_dev_root = coredev_webroot();
 	}
-
-	function getWebRootCoreDev() { return $this->core_dev_root; }
 
 	function setTitle($t) { $this->title = $t; }
 	function setFavicon($uri) { $this->favicon = $uri; }
 	function setReloadTime($secs) { $this->reload_time = $secs; }
 	function setMimeType($type) { $this->mimetype = $mime; }
-
-	/**
-	 * Sets the web root to core_dev (preferrably a symlink to appropriate branch/trunk)
-	 */
-	function setWebRootCoreDev($path) { $this->core_dev_root = $path; }
 
 	function addFeed($uri) { $this->feeds[] = $uri; }
 	function addJs($uri) { $this->js[] = $uri; }
