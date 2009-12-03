@@ -139,10 +139,6 @@ class HttpClient extends CoreBase
 
 		$res = curl_exec($ch);
 
-		$this->status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-		if ($this->debug) echo "http->get() returned HTTP status ".$this->status_code.dln();
-
 		curl_close($ch);
 
 		if ($this->debug) {
@@ -165,18 +161,35 @@ class HttpClient extends CoreBase
 	}
 
 	/**
-	 * Parse HTTP response data into object variables
+	 * Parse HTTP response data into object variables and sets status code
 	 */
+
 	private function parseResponse($res)
 	{
 		$pos = strpos($res, "\r\n\r\n");
 		if ($pos !== false) {
 			$head = substr($res, 0, $pos);
-			$this->body    = substr($res, $pos + strlen("\r\n\r\n"));
-			$this->headers = explode("\r\n", $head);
+			$this->body = substr($res, $pos + strlen("\r\n\r\n"));
+			$headers = explode("\r\n", $head);
 		} else {
 			$this->body = '';
-			$this->headers = explode("\r\n", $res);
+			$headers = explode("\r\n", $res);
+		}
+
+		$status = array_shift($headers);
+		if ($this->debug) echo "http->get() returned HTTP status ".$status.ln();
+
+		switch (substr($status, 0, 9)) {
+		case 'HTTP/1.0 ':
+		case 'HTTP/1.1 ':
+			$this->status_code = intval(substr($status, 9));
+			break;
+		}
+
+		$this->headers = array();
+		foreach ($headers as $h) {
+			$col = explode(': ', $h, 2);
+			$this->headers[ strtolower($col[0]) ] = $col[1];
 		}
 	}
 
