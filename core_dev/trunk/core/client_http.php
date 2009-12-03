@@ -2,15 +2,14 @@
 /**
  * $Id$
  *
- * Utility class for HTTP GET/POST requests with cache and url manipulation
+ * Http Client class to GET/POST data using the http protocol
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: ok
-//TODO: expose info from curl_getinfo
+//STATUS: good
 
 require_once('core.php');
 require_once('network.php');
@@ -193,145 +192,6 @@ class HttpClient extends CoreBase
 		}
 	}
 
-}
-
-/**
- * HTTP/HTTPS GET function, using curl
- *
- * @param $head if true, return HTTP HEADer, else the BODY
- */
-function http_get($url, $cache_time = 60)
-{
-	$h = new HttpClient($url);
-	$h->setCacheTime($cache_time);
-	return $h->getBody();
-}
-
-/**
- * Performs a HTTP POST request to the given url
- */
-function http_post($url, $data)
-{
-	$x = new HttpClient($url);
-	$x->post($data);
-
-	$res['body']   = $x->getBody();
-	$res['header'] = $x->getHeaders();
-
-	return $res;
-}
-
-/**
- * Fetches header for given URL and returns it in a parsed array
- *
- * @param $url URL to request HTTP headers for
- * @oaram $cache_time seconds to cache result, 0 to disable
- * @return array of parsed headers or false on error
- */
-function http_head($url, $cache_time = 60)
-{
-	$h = new HttpClient($url);
-	$h->setCacheTime($cache_time);
-	return $h->getHeaders();
-}
-
-/**
- * Fetch HTTP status code of given URL
- *
- * @param $p is a URL or an array from http_head()
- * @return HTTP status code, or false if none was found
-  */
-function http_status($p)
-{//XXX update to use the new HttpClient->getStatus() to return HTTP status code
-	if (!is_array($p)) $p = http_head($p);
-
-	foreach ($p as $h) {
-		switch (substr($h, 0, 9)) {
-		case 'HTTP/1.0 ':
-		case 'HTTP/1.1 ':
-			return intval(substr($h, 9));
-		}
-	}
-	return false;
-}
-
-/**
- * Returns the Last-Modified field from given URL
- *
- * @param $p is a URL or an array from http_head()
- * @return a unix timestamp, or false if none was found
- */
-function http_last_modified($p)
-{
-	if (!is_array($p)) $p = http_head($p);
-
-	foreach ($p as $h) {
-		$col = explode(': ', $h);
-		switch (strtolower($col[0])) {
-		case 'last-modified':
-			return strtotime($col[1]);
-		}
-	}
-	return false;
-}
-
-/**
- * Returns the Content-Length field from given URL
- *
- * @param $p is a URL or an array from http_head()
- * @return content length
- */
-function http_content_length($p)
-{
-	if (!is_array($p)) $p = http_head($p);
-
-	foreach ($p as $h) {
-		$col = explode(': ', $h);
-		switch (strtolower($col[0])) {
-		case 'content-length':
-			return intval($col[1]);
-		}
-	}
-	return 0;
-}
-
-/**
- * Returns the Content-Type field from given URL
- *
- * @param $p is a URL or an array from http_head()
- * @return content length
- */
-function http_content_type($p)
-{
-	if (!is_array($p)) $p = http_head($p);
-
-	foreach ($p as $h) {
-		$col = explode(': ', $h);
-		switch (strtolower($col[0])) {
-		case 'content-type':
-			//text/xml;charset=UTF-8
-			$param = explode(';', $col[1]);
-			return $param[0];
-		}
-	}
-	return false;
-}
-
-/**
- * @enable enable or disable cache headers?
- */
-function http_cached_headers($enable = true)
-{
-	if ($enable) {
-		//Tell browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
-		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
-		header('Cache-Control: Public');
-		header('Pragma: Public');
-	} else {
-		//Force browser to not cache content
-		header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
-		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	}
 }
 
 ?>

@@ -367,7 +367,10 @@ function processQueue()
 
 			$fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
 
-			if (http_status($job['orderParams']) != 200) {
+			$h = new HttpClient($job['orderParams']);
+			$h->getHeaders();
+
+			if ($h->getStatus() != 200) {
 				//retry in 20 seconds if file is not yet ready
 				retryQueueEntry($job['entryId'], 20);
 				break;

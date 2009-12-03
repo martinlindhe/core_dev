@@ -1080,4 +1080,22 @@ class files_default
 		return $db->getArray($q);
 	}
 }
+
+
+/**
+ * @enable enable or disable cache headers?
+ */
+function http_cached_headers($enable = true)  //XXX DEPRECATE, only used by files_default which will be deprecated
+{
+	if ($enable) {
+		//Tell browser to cache the output for 30 days. Works with MSIE6 and Firefox 1.5
+		header('Expires: ' . date("D, j M Y H:i:s", time() + (86400 * 30)) . ' UTC');
+		header('Cache-Control: Public');
+		header('Pragma: Public');
+	} else {
+		//Force browser to not cache content
+		header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+	}
+}
 ?>
