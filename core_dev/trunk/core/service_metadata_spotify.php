@@ -13,21 +13,20 @@ require_once('class.CoreBase.php');
 
 //XXX BUG: getArtistId returnerar ett artist_id men sen om man använder det id't för att hämta "album" data så får man 400-error
 
-//XXX: memcache the parsed results too, for quick artist id lookup at least
-//TODO: a is_spotify_url() function
+//XXX: memcache the parsed results too, for quicker artist id lookup at least
 //XXX: The rate limit is currently 10 request per second per ip. This may change.
 
 class SpotifyMetadata extends CoreBase
 {
 	/**
-	 * Returns one SpotifyId for exact matched artist name
-	 * @param $artist artist name
+	 * @param $name artist name
+	 * @return spotify:artist:uri or false
 	 */
-	function getArtistId($artist)
+	function getArtistId($name)
 	{
-		if (!$artist) return false;
+		if (!$name) return false;
 
-		$url = 'http://ws.spotify.com/search/1/artist?q='.urlencode($artist);
+		$url = 'http://ws.spotify.com/search/1/artist?q='.urlencode($name);
 
 		$u = new HttpClient($url);
 		$u->setCacheTime(60*60*48); //48 hours
@@ -41,11 +40,11 @@ class SpotifyMetadata extends CoreBase
 		$arr = $this->parseArtists($data);
 
 		foreach ($arr as $a) {
-			if ($a['artist'] == $artist) {
+			if ($a['artist'] == $name) {
 				//d("exact match");
 				return $a['id'];
 			}
-			if (soundex($a['artist']) == soundex($artist)) {
+			if (soundex($a['artist']) == soundex($name)) {
 				//d("fuzzy match");
 				return $a['id'];
 			}
@@ -57,15 +56,17 @@ class SpotifyMetadata extends CoreBase
 	/**
 	 * @param $artist name or spotify uri
 	 * @param $album name
+	 * @return spotify:album:uri or false
 	 */
 	function getAlbumId($artist, $album)
 	{
-		//XXX TODO: detect if $artist is a spotify id
+		if (!is_spotify_uri($artist))
+			$artist = $this->getArtistId($artist);
 
-		$id = $this->getArtistId($artist);
-		//echo $artist.": ".$id.ln();
+		if (!$artist)
+			return false;
 
-		$disco = $this->getArtistAlbums($id);
+		$disco = $this->getArtistAlbums($artist);
 
 		foreach ($disco as $a) {
 			if ($a['album'] == $album) {
@@ -238,6 +239,20 @@ class SpotifyMetadata extends CoreBase
 		return $disco;
 	}
 
+}
+
+/**
+ * Validates a Spotify uri
+ */
+function is_spotify_uri($uri)
+{
+	if (strpos($uri, ' ')) return false;
+	$pattern = "((spotify):(album|artist|track):([a-zA-Z0-9]){22})";
+
+	if (preg_match($pattern, $uri))
+		return true;
+
+	return false;
 }
 
 ?>
