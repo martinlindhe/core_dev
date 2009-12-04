@@ -698,14 +698,15 @@ function ValidMobilNr($_mobil)	//XXX cleanup, rename etc
 	$_mobil = str_replace('-', '', $_mobil);
 	$_mobil = str_replace(' ', '', $_mobil);
 
+	if (substr($_mobil, 0, 2) == '46')
+		$_mobil = '0'.substr($_mobil, 2);
+
 	$prefix = substr($_mobil, 0, 3);
 	$number = substr($_mobil, 3);
 
-	$fake_numbers = array('1234567', '0000000', '1111111', '2222222');
-	if (in_array($number, $fake_numbers)) return false;
-
 	switch ($prefix) {
 		case '070':
+		case '072':
 		case '073':
 		case '075':
 		case '076':
