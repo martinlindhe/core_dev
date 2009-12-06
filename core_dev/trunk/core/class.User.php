@@ -5,7 +5,7 @@
  * User object
  */
 
-//STATUS: not finished
+//STATUS: not finished. will replace class.Users.php
 
 require_once('class.CoreBase.php');
 
@@ -75,6 +75,36 @@ class User extends CoreBase
 		return $res;
 	}
 
+}
+
+///STATUS: not finished
+class UserList extends CoreBase
+{
+	function __construct()
+	{
+		global $db;
+
+		/*
+		$q = 'SELECT * FROM tblUsers';
+		$list = $db->getArray($q);
+		foreach ($list as $row) {
+			$item = new User($row['userId']);
+			//$item->setName(...
+			$this->addItem($item);
+		}
+		*/
+	}
+
+	/**
+	 * Returns total number of users (excluding deleted ones)
+	 */
+	function getCount()
+	{
+		global $db;
+		$q = 'SELECT COUNT(*) FROM tblUsers';
+		$q .= ' WHERE timeDeleted IS NULL';
+		return $db->getOneItem($q);
+	}
 }
 
 ?>

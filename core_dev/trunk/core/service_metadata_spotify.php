@@ -7,7 +7,9 @@
  *
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
+
 require_once('class.CoreBase.php');
+require_once('client_http.php');
 
 //STATUS: incomplete wip
 
@@ -28,12 +30,17 @@ class SpotifyMetadata extends CoreBase
 
 		$url = 'http://ws.spotify.com/search/1/artist?q='.urlencode($name);
 
-		$u = new HttpClient($url);
-		$u->setCacheTime(60*60*48); //48 hours
+		$http = new HttpClient($url);
+		$http->setCacheTime(60*60*12); //12 hours
 
-		$data = $u->getBody();
-		if ($u->getStatus() != 200) {
+		$data = $http->getBody();
+
+		//TODO: use expire time for cached response
+		$expires = strtotime($http->getHeader('Expires')) - time();
+
+		if ($http->getStatus() != 200) {
 			d('SpotifyMetadata server error: '.$u->getStatus() );
+			d( $http->getHeaders() );
 			return false;
 		}
 
@@ -92,11 +99,12 @@ class SpotifyMetadata extends CoreBase
 		$url = 'http://ws.spotify.com/lookup/1/?uri='.$artist_id.'&extras=albumdetail';
 
 		$u = new HttpClient($url);
-		$u->setCacheTime(60*60*48); //48 hours
+//		$u->setCacheTime(60*60*48); //48 hours
 
 		$data = $u->getBody();
 		if ($u->getStatus() != 200) {
 			d('SpotifyMetadata server error: '.$u->getStatus() );
+			d( $http->getHeaders() );
 			return false;
 		}
 
@@ -110,8 +118,6 @@ class SpotifyMetadata extends CoreBase
 		$reader = new XMLReader();
 		if ($this->debug) echo 'Parsing Artists: '.$data.ln();
 		$reader->xml($data);
-
-		$item = new MediaItem();
 
 		while ($reader->read())
 		{
@@ -176,8 +182,6 @@ class SpotifyMetadata extends CoreBase
 		$reader = new XMLReader();
 		if ($this->debug) echo 'Parsing disco: '.$data.ln();
 		$reader->xml($data);
-
-		$item = new MediaItem();
 
 		while ($reader->read())
 		{
