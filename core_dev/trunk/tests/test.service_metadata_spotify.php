@@ -17,4 +17,24 @@ if (is_spotify_uri('xxx')) echo "FAIL 9\n";
 if (is_spotify_uri('::')) echo "FAIL 10\n";
 
 
+//1. input: release namn & typ
+//$name = 'Guns_N_Roses-Chinese_Democracy-RETAIL-2008-ESC';
+$name = 'Mohammed Ali - 2009 - Processen';
+
+//2. XXX rensa uipp input-namn, utifrån input typ
+$artist = 'Mohammed Ali';
+$album = 'Processen';
+
+
+$spot = new SpotifyMetadata();
+
+$id = $spot->getAlbumId($artist, $album);
+d($id);
+
+//5. XXX lookup album information, cache for 7 days
+//http://ws.spotify.com/lookup/1/?uri=spotify:album:6G9fHYDCoyEErUkHrFYfs4&extras=trackdetail
+
+
+
+
 ?>
