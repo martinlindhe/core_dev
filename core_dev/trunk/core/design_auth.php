@@ -11,6 +11,7 @@
 //TODO: update resetPassword()
 
 require_once('output_xhtml.php');
+require_once('class.User.php');
 
 /**
  * Shows a login form with tabs for Register & Forgot password functions
@@ -29,7 +30,9 @@ function showLoginForm()
 
 	$allow_superadmin_reg = false;
 
-	if (!Users::cnt()) {
+	$users = new Users();
+
+	if (!$users->cnt()) {
 		$allow_superadmin_reg = true;
 		$tab = 'register';
 	}

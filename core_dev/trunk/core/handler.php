@@ -231,7 +231,8 @@ class handler
 		if (!$this->session->id) return;
 
 		//Update last active timestamp
-		Users::activeTime($this->session->id);
+		$users = new Users();
+		$users->activeTime($this->session->id);
 		$this->session->lastActive = time();
 	}
 

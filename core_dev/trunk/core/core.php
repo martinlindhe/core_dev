@@ -33,8 +33,11 @@ function d($v)
 			var_dump($v);
 		} else {
 			$out = htmlentities($v, ENT_QUOTES, 'UTF-8');
+			$out = str_replace("\n", "<br/>", $out);
+
 			if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
 				echo '<pre>'.$out.'</pre>';
+
 			else
 				var_dump($out);
 		}

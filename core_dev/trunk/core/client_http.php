@@ -47,6 +47,16 @@ class HttpClient extends CoreBase
 		return $this->headers;
 	}
 
+	function getHeader($name)
+	{
+		$name = strtolower($name);
+
+		if (isset($this->headers[ $name ]))
+			return $this->headers[$name];
+
+		return false;
+	}
+
 	/**
 	 * Returns HTTP status code for the last request
 	 */
