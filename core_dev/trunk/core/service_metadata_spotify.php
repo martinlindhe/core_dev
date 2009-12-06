@@ -176,7 +176,49 @@ class SpotifyMetadata extends CoreBase
 
 	private function parseAlbumDetails($data)
 	{
+		$tracks = array();
 
+		$reader = new XMLReader();
+		if ($this->debug) echo 'Parsing tracks: '.$data.ln();
+		$reader->xml($data);
+
+		while ($reader->read())
+		{
+			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'album')
+				break;
+
+			if ($reader->nodeType != XMLReader::ELEMENT)
+				continue;
+
+			switch ($reader->name) {
+			case 'album':
+				if ($reader->getAttribute('xmlns') != 'http://www.spotify.com/ns/music/1')
+					die('XXX FIXME unsupported Spotify namespace version '.$reader->getAttribute('xmlns') );
+				break;
+
+			case 'artist':
+				$this->parseArtist($reader); //XXX store?
+				break;
+
+			case 'tracks': break;
+			case 'track':
+				$tracks[] = $this->parseTrack($reader);
+				break;
+
+			case 'name': break;//Album name, XXX store?
+			case 'released': break;//Release year, XXX store?
+			case 'availability': break;
+			case 'territories': break;
+
+			default:
+				//TODO LATER: spotify xml exposes opensearch xml tags, see if that can be used
+				echo "parseAlbumDetails unknown ".$reader->name.ln();
+				break;
+			}
+		}
+
+		$reader->close();
+		return $tracks;
 	}
 
 	private function parseArtistAlbums($data)
@@ -270,6 +312,49 @@ class SpotifyMetadata extends CoreBase
 				$reader->read();
 				$popularity = $reader->value;
 				break;
+			default: echo "bad entry " .$reader->name.ln();
+			}
+		}
+	}
+
+	private function parseTrack($reader)
+	{
+		$id     = $reader->getAttribute('href');
+		$name   = '';
+		$track  = '';
+		$length = '';
+		while ($reader->read()) {
+			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'track') {
+				//XXX cache write aritst name + spotify id combo
+				return array('title'=>$name, 'id'=>$id, 'track'=>$track, 'length'=>$length);
+			}
+
+			if ($reader->nodeType != XMLReader::ELEMENT)
+				continue;
+
+			switch ($reader->name) {
+			case 'name':
+				$reader->read();
+				$name = $reader->value;
+				break;
+
+			case 'track-number':
+				$reader->read();
+				$track = $reader->value;
+				break;
+
+			case 'length':
+				$reader->read();
+				$length = $reader->value;
+				break;
+
+			case 'artist':
+				$this->parseArtist($reader); //XXX store
+				break;
+
+			case 'popularity': $reader->read(); break; //XXX use
+			case 'disc-number': $reader->read(); break; //XXX use
+
 			default: echo "bad entry " .$reader->name.ln();
 			}
 		}
