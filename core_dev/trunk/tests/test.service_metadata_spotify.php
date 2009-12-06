@@ -27,14 +27,16 @@ $album = 'Processen';
 
 
 $spot = new SpotifyMetadata();
-
-$id = $spot->getAlbumId($artist, $album);
-d($id);
+$artist_id = $spot->getArtistId($artist);
+echo $artist." = ".$artist_id.ln();
+$album_id = $spot->getAlbumId($artist_id, $album);
+echo $album." = ".$album_id.ln();
 
 //5. XXX lookup album information, cache for 7 days
 //http://ws.spotify.com/lookup/1/?uri=spotify:album:6G9fHYDCoyEErUkHrFYfs4&extras=trackdetail
 
 
-
+$x = $spot->getAlbumDetails($album_id);
+d($x);
 
 ?>

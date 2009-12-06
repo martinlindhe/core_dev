@@ -13,7 +13,7 @@ require_once('client_http.php');
 
 //STATUS: incomplete wip
 
-//XXX BUG: getArtistId returnerar ett artist_id men sen om man använder det id't för att hämta "album" data så får man 400-error
+//TODO: objektklasser för "artist", "record", "track"
 
 //XXX: memcache the parsed results too, for quicker artist id lookup at least
 //XXX: The rate limit is currently 10 request per second per ip. This may change.
@@ -31,7 +31,7 @@ class SpotifyMetadata extends CoreBase
 		$url = 'http://ws.spotify.com/search/1/artist?q='.urlencode($name);
 
 		$http = new HttpClient($url);
-		$http->setCacheTime(60*60*12); //12 hours
+		$http->setCacheTime(60*60*24); //24 hours
 
 		$data = $http->getBody();
 
@@ -39,7 +39,7 @@ class SpotifyMetadata extends CoreBase
 		$expires = strtotime($http->getHeader('Expires')) - time();
 
 		if ($http->getStatus() != 200) {
-			d('SpotifyMetadata server error: '.$u->getStatus() );
+			d('SpotifyMetadata->getArtistId server error: '.$http->getStatus() );
 			d( $http->getHeaders() );
 			return false;
 		}
@@ -96,19 +96,46 @@ class SpotifyMetadata extends CoreBase
 	 */
 	function getArtistAlbums($artist_id)
 	{
+		if (!is_spotify_uri($artist_id))
+			return false;
+
 		$url = 'http://ws.spotify.com/lookup/1/?uri='.$artist_id.'&extras=albumdetail';
 
-		$u = new HttpClient($url);
-//		$u->setCacheTime(60*60*48); //48 hours
+		$http = new HttpClient($url);
+//		$http->setCacheTime(60*60*24); //24 hours
 
-		$data = $u->getBody();
-		if ($u->getStatus() != 200) {
-			d('SpotifyMetadata server error: '.$u->getStatus() );
+		$data = $http->getBody();
+		if ($http->getStatus() != 200) {
+			d('SpotifyMetadata->getArtistAlbums server error: '.$http->getStatus() );
 			d( $http->getHeaders() );
 			return false;
 		}
 
 		return $this->parseArtistAlbums($data);
+	}
+
+
+	/**
+	 * @param $album_id spotify uri
+	 */
+	function getAlbumDetails($album_id)
+	{
+		if (!is_spotify_uri($album_id))
+			return false;
+
+		$url = 'http://ws.spotify.com/lookup/1/?uri='.$album_id.'&extras=trackdetail';
+
+		$http = new HttpClient($url);
+//		$http->setCacheTime(60*60*24); //24 hours
+
+		$data = $http->getBody();
+		if ($http->getStatus() != 200) {
+			d('SpotifyMetadata->getAlbumDetails server error: '.$http->getStatus() );
+			d( $http->getHeaders() );
+			return false;
+		}
+
+		return $this->parseAlbumDetails($data);
 	}
 
 	private function parseArtists($data)
@@ -147,32 +174,9 @@ class SpotifyMetadata extends CoreBase
 		return $artists;
 	}
 
-	private function parseArtist($reader)
+	private function parseAlbumDetails($data)
 	{
-		$id         = $reader->getAttribute('href');
-		$name       = '';
-		$popularity = '';
-		while ($reader->read()) {
-			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'artist') {
-				//XXX cache write aritst name + spotify id combo
-				return array('artist'=>$name, 'id'=>$id, 'popularity'=>$popularity);
-			}
 
-			if ($reader->nodeType != XMLReader::ELEMENT)
-				continue;
-
-			switch ($reader->name) {
-			case 'name':
-				$reader->read();
-				$name = $reader->value;
-				break;
-			case 'popularity':
-				$reader->read();
-				$popularity = $reader->value;
-				break;
-			default: echo "bad entry " .$reader->name.ln();
-			}
-		}
 	}
 
 	private function parseArtistAlbums($data)
@@ -241,6 +245,34 @@ class SpotifyMetadata extends CoreBase
 
 		$reader->close();
 		return $disco;
+	}
+
+	private function parseArtist($reader)
+	{
+		$id         = $reader->getAttribute('href');
+		$name       = '';
+		$popularity = '';
+		while ($reader->read()) {
+			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'artist') {
+				//XXX cache write aritst name + spotify id combo
+				return array('artist'=>$name, 'id'=>$id, 'popularity'=>$popularity);
+			}
+
+			if ($reader->nodeType != XMLReader::ELEMENT)
+				continue;
+
+			switch ($reader->name) {
+			case 'name':
+				$reader->read();
+				$name = $reader->value;
+				break;
+			case 'popularity':
+				$reader->read();
+				$popularity = $reader->value;
+				break;
+			default: echo "bad entry " .$reader->name.ln();
+			}
+		}
 	}
 
 }
