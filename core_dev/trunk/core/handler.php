@@ -174,7 +174,8 @@ class handler
 				$this->session->start($data['userId'], $data['userName'], $data['userMode']);
 
 				//Update last login time
-				Users::loginTime($this->session->id);
+				$users = new Users();
+				$users->loginTime($this->session->id);
 
 				//FIXME: move the sql somehwere else
 				$this->db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->session->id.', IP='.$this->auth->ip.', userAgent="'.$this->db->escape($_SERVER['HTTP_USER_AGENT']).'"');

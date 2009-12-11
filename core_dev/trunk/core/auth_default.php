@@ -96,7 +96,9 @@ class auth_default extends auth_base
 	 */
 	function logout($userId)
 	{
-		Users::logoutTime($userId);
+		$users = new Users();
+		$users->logoutTime($userId);
+
 		addEvent(EVENT_USER_LOGOUT, 0, $userId);
 	}
 
@@ -107,10 +109,11 @@ class auth_default extends auth_base
 	 */
 	function validLogin($username, $password)
 	{
-		$id = Users::getId($username);
+		$users = new Users();
+		$id = $users->getId($username);
 		$enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
 
-		return Users::validLogin($username, $enc_password);
+		return $users->validLogin($username, $enc_password);
 	}
 
 }

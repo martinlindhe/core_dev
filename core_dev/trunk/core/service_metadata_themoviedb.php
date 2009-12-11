@@ -14,4 +14,7 @@ require_once('client_http.php');
 class TheMovieDbMetadata extends CoreBase
 {
 
+	function search($name)
+	{
+	}
 }
