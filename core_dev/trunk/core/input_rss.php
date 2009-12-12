@@ -190,6 +190,24 @@ class input_rss extends CoreBase
 					$item->Duration->set($this->reader->getAttribute('duration'));
 					break;
 
+				case 'video/mp4':
+					//XXX rtsp protocol
+					if (!$item->video_url) {
+						$item->video_url  = $this->reader->getAttribute('url');
+						$item->video_mime = $this->reader->getAttribute('type');
+						$item->Duration->set($this->reader->getAttribute('duration'));
+					}
+					break;
+
+				case 'video/3gpp':
+					//XXX rtsp protocol
+					if (!$item->video_url) {
+						$item->video_url  = $this->reader->getAttribute('url');
+						$item->video_mime = $this->reader->getAttribute('type');
+						$item->Duration->set($this->reader->getAttribute('duration'));
+					}
+					break;
+
 				case 'video/quicktime':
 					$item->video_url  = $this->reader->getAttribute('url');
 					$item->video_mime = $this->reader->getAttribute('type');
