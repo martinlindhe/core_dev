@@ -364,6 +364,8 @@ class SpotifyMetadata extends CoreBase
 
 /**
  * Validates a Spotify uri
+ * @param $uri string
+ * @return true if $uri is a spotify uri
  */
 function is_spotify_uri($uri)
 {
