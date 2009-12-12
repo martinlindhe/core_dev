@@ -4,6 +4,13 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('service_metadata_themoviedb.php');
 
-$api_key = '0c6598d3603824df9e50078942806320';
+
+$title = 'Avatar';
+
+$movie = new TheMovieDbMetadata();
+$movie->setApiKey('0c6598d3603824df9e50078942806320');
+
+$x = $movie->search($title);
 
 ?>
+

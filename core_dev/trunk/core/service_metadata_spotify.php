@@ -11,7 +11,7 @@
 require_once('class.CoreBase.php');
 require_once('client_http.php');
 
-//STATUS: incomplete wip
+//STATUS: wip
 
 //TODO: objektklasser för "artist", "record", "track"
 
