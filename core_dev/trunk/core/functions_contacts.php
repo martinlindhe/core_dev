@@ -7,7 +7,9 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-//TODO: rename to atom_contacts.php
+//STATUS: working but oo-rewrite is planned
+
+//TODO: greater flexiblity, ability to create "favorites" lists
 
 define('CONTACT_FRIEND',	1);
 define('CONTACT_BLOCKED',	2);
