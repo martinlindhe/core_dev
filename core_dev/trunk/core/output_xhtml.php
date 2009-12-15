@@ -489,11 +489,12 @@ function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url 
 		$path = $script;
 	else if (substr($script, 0, 1) == '?')
 		$path = $_SERVER['PHP_SELF'].$script; // append parameters
-	else if ($script)
+	else if ($script) {
 		if (dirname($_SERVER['PHP_SELF']) == '/')
 			$path = '/'.$script;
 		else
 			$path = dirname($_SERVER['PHP_SELF']).'/'.$script;
+	}
 	else {
 		$path = $_SERVER['PHP_SELF'];
 		if (!empty($_SERVER['QUERY_STRING']))

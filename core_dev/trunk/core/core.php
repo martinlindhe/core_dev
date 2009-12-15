@@ -85,6 +85,9 @@ function dp($str)
 {
 	global $config;
 
+	if (is_array($str))
+		$str = serialize($str);
+
 	error_log($str);
 	if (!empty($config['debug'])) {
 		error_log(date('[r] ').$str."\n", 3, '/tmp/core_dev.log');
