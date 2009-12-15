@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(E_ALL | E_STRICT);
 $time_start = microtime(true);
 $config['debug'] = true;
 
