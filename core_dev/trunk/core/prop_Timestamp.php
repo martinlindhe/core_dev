@@ -116,7 +116,7 @@ class Timestamp extends CoreProperty
 	 *
 	 * @example "2 weeks ago", "yesterday at 9:40"
 	 */
-	function getRelative()
+	function getRelative() //XXX DEPRECATE, reimplement using prop_Duration (?)
 	{
 		if (time() >= $this->value)
 			return shortTimePeriod(time() - $this->value).' ago';
@@ -124,6 +124,18 @@ class Timestamp extends CoreProperty
 		return shortTimePeriod($this->value - time()).' in the future';
 	}
 
+	/**
+	 * @return the diff between two timestamps, in seconds
+	 */
+/* //XXX no code uses this
+	function getDiff($ts)
+	{
+		if (!is_object($ts))
+			$ts = new Timestamp($ts);
+
+		return $this->get() - $ts->get();
+	}
+*/
 	function render()
 	{
 		//XXX maybe call locale-specific functions to handle rendering

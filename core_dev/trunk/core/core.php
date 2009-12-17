@@ -319,6 +319,9 @@ function round_decimals($val, $precision = 0)
 		$ex[1] = str_pad(@$ex[1], $precision, '0');
 	}
 
+	if (!$precision)
+		return $ex[0];
+
 	return implode('.', $ex);
 }
 
