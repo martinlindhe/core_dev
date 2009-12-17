@@ -58,7 +58,13 @@ function getActivationExpireTime($_type)
 		case ACTIVATE_SMS:			return $config['activate']['expire_time_sms'];
 		case ACTIVATE_CHANGE_PWD:	return $config['activate']['expire_time_change_pwd'];
 		case ACTIVATE_ACCOUNT:		return $config['activate']['expire_time_account'];
-		default: die('UNKNOWN TYPE '.$_type);
+		default:
+			if (!empty($config['activate']['expire_time_application_specific'])) {
+				return $config['activate']['expire_time_application_specific'];
+			}
+			else {
+				die('UNKNOWN TYPE '.$_type);
+			}
 	}
 }
 
@@ -140,6 +146,23 @@ function getActivationCode($_type, $_id)
 	if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
 	$q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND userId='.$_id;
+	$q .= ' LIMIT 1';
+	return $db->getOneItem($q);
+}
+
+/**
+ * Get activation code by entry id
+ *
+ * @param $_type type
+ * @param $_id entryId
+ * @return activation code
+ */
+function getActivationCodeByEntryId($_type, $_id)
+{
+	global $db, $config;
+	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+
+	$q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND entryId='.$_id;
 	$q .= ' LIMIT 1';
 	return $db->getOneItem($q);
 }
