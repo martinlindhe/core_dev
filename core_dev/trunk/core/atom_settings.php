@@ -84,6 +84,25 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
 	return $defaultValue;
 }
 
+/**
+ * Loads the owner of a name-value pair
+ * This assumes a setting has unique value for each user (such as a custom activation code)
+ *
+ * @return userid owning the particular setting, or false
+ */
+function loadSettingOwner($_type, $categoryId, $settingName, $settingValue)
+{
+	global $db;
+	if (!is_numeric($_type) || !is_numeric($categoryId)) return false;
+
+	$q = 'SELECT ownerId FROM tblSettings';
+	$q .= ' WHERE settingType='.$_type;
+	$q .= ' AND categoryId='.$categoryId;
+	$q .= ' AND settingName="'.$db->escape($settingName).'"';
+	$q .= ' AND settingValue="'.$db->escape($settingValue).'"';
+	return $db->getOneItem($q);
+}
+
 function loadSettingById($_type, $categoryId, $ownerId, $settingId, $all = false)
 {
 	global $db;
