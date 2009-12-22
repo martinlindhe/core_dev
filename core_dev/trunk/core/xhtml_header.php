@@ -15,7 +15,12 @@ require_once('output_xhtml.php');
 class xhtml_header
 {
 	private $title, $favicon;
-	private $js, $css, $feeds, $search, $onload;
+	private $js            = array();
+	private $css           = array();
+	private $feeds         = array();
+	private $search        = array();
+	private $onload        = array();
+	private $keywords      = array();
 
 	private $reload_time   = 0;          ///< time after page load to reload the page, in seconds
 	private $mimetype      = 'text/html';
@@ -23,12 +28,6 @@ class xhtml_header
 
 	function __construct()
 	{
-		$this->js     = array();
-		$this->css    = array();
-		$this->feeds  = array();
-		$this->search = array();
-		$this->onload = array();
-
 		$this->core_dev_root = coredev_webroot();
 	}
 
@@ -49,6 +48,18 @@ class xhtml_header
 	}
 
 	/**
+	 * Adds META keywords tags
+	 */
+	function addKeyword($w)
+	{
+		if (is_array($w))
+			foreach ($w as $t)
+				$this->keywords[] = $t;
+		else
+			$this->keywords[] = $w;
+	}
+
+	/**
 	 * Creates a complete XHTML header, showing rss feeds if available, etc
 	 */
 	function render()
@@ -63,6 +74,9 @@ class xhtml_header
 		echo '<head>';
 		echo '<title>'.$this->title.'</title>';
 		echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+
+		if ($this->keywords)
+			echo '<meta name="keywords" content="'.implode(',',$this->keywords).'"/>';
 
 		echo '<link rel="stylesheet" type="text/css" href="'.$this->core_dev_root.'css/core.css"/>';
 

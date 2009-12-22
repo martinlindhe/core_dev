@@ -23,6 +23,7 @@ class xhtml_header
 	var $js     = array();
 	var $css    = array();
 	var $onLoad = array();
+	var $keywords = array();
 
 	/**
 	 * <title> of current page
@@ -81,6 +82,18 @@ class xhtml_header
 	}
 
 	/**
+	 * Adds META keywords tags
+	 */
+	function addKeyword($w)
+	{
+		if (is_array($w))
+			foreach ($w as $t)
+				$this->keywords[] = $t;
+		else
+			$this->keywords[] = $w;
+	}
+
+	/**
 	 * Adds Javascript to reload the page after a period of time
 	 * @param $secs seconds until reload
 	 */
@@ -110,6 +123,9 @@ class xhtml_header
 		echo '<head>';
 		echo '<title>'.$this->title.'</title>';
 		echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+
+		if ($this->keywords)
+			echo '<meta name="keywords" content="'.implode(',',$this->keywords).'"/>';
 
 		if (!empty($config['core']['web_root'])) {
 			echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
