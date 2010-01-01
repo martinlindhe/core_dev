@@ -31,7 +31,8 @@ class db_mysqli extends db_base
 		if (!$this->port)     $this->port     = 3306;
 		if (!$this->username) $this->username = 'root';
 
-		$this->db_handle = new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
+		//silence warning from failed connection and display our error instead
+		$this->db_handle = @new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
 		if ($this->db_handle->connect_error)
 			die('db_mysqli->connect: Error '.$this->db_handle->connect_errno.': '.$this->db_handle->connect_error);

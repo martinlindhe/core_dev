@@ -16,5 +16,8 @@ $hit = $movie->search($title);
 $details = $movie->getInfo( $hit['id'] );
 
 d( $details );
+
+
+
 ?>
 

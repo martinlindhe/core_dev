@@ -15,6 +15,7 @@
 
 require_once('class.CoreBase.php');
 require_once('client_http.php');
+require_once('service_metadata_imdb.php');
 
 class TheMovieDbMetadata extends CoreBase
 {
@@ -50,7 +51,7 @@ class TheMovieDbMetadata extends CoreBase
 			return false;
 		}
 
-		$hits = $this->parseSearchResult($data);
+		$hits = $this->parseResult($data);
 
 		if (!$hits)
 			return false;
@@ -93,11 +94,11 @@ class TheMovieDbMetadata extends CoreBase
 			return false;
 		}
 
-		$res = $this->parseSearchResult($data);
+		$res = $this->parseResult($data);
 		return $res[0];
 	}
 
-	private function parseSearchResult($data)
+	private function parseResult($data)
 	{
 		$movies = array();
 
@@ -140,10 +141,11 @@ class TheMovieDbMetadata extends CoreBase
 		$released = '';
 		$score    = ''; //0.0 to 1.0 match score
 		$images   = array();
+		$categories = array();
 		while ($reader->read()) {
 			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'movie') {
 				//XXX cache write title + id combo
-				return array('title'=>$name, 'id'=>$id, 'imdb'=>$imdb, 'score'=>$score, 'summary'=>$summary, 'released'=>$released, 'images'=>$images);
+				return array('title'=>$name, 'id'=>$id, 'imdb'=>$imdb, 'score'=>$score, 'summary'=>$summary, 'released'=>$released, 'images'=>$images, 'categories'=>$categories);
 			}
 
 			if ($reader->nodeType != XMLReader::ELEMENT)
@@ -183,11 +185,10 @@ class TheMovieDbMetadata extends CoreBase
 			case 'images': break;
 
 			case 'image':
-/*
 				//TODO: rewrite logic to select 1 of each image type
 				if ($reader->getAttribute('type') == 'poster' && $reader->getAttribute('size') != 'mid') break;
 				if ($reader->getAttribute('type') == 'backdrop' && $reader->getAttribute('size') != 'poster') break;
-*/
+
 				$images[] = array(
 				'type'=> $reader->getAttribute('type'),
 				'url' => $reader->getAttribute('url'),
@@ -209,26 +210,25 @@ class TheMovieDbMetadata extends CoreBase
 
 			case 'countries': break;
 
+			case 'categories': break;
+			case 'category':
+				$categories[] = array(
+				'type'=> $reader->getAttribute('type'), //type="genre".. is there other types or is this just useless?
+				'url' => $reader->getAttribute('url'),
+				'name'=> $reader->getAttribute('name') );
+				break;
+
 			//XXX parse studios properly
 			case 'studios': break;
 			case 'studio': break;
 
-/*
-      <categories>
-        <category type="genre" url="http://themoviedb.org/encyclopedia/category/878" name="Science Fiction"/>
-      </categories>
-*/
-			//XXX parse categories properly
-			case 'categories': break;
-			case 'category': break;
-
 			//XXX parse cast properly
 			case 'cast': break;
 			case 'person': break;
-
 
 			default: echo "parseMovie bad entry " .$reader->name.ln();
 			}
 		}
 	}
 }
+

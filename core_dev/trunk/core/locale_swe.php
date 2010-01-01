@@ -123,6 +123,7 @@ function t_swe($s)
 	case 'Current': return 'Aktuell';
 	case 'Duration': return 'Längd';
 	case 'Unknown': return 'Okänt';
+	case 'Changes': return 'Ändringar';
 	case 'Male': return 'Man';
 	case 'Female': return 'Kvinna';
 
