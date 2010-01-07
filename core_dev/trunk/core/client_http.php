@@ -76,6 +76,9 @@ class HttpClient extends CoreBase
 
 	function setUrl($s) { $this->Url->set($s); }
 
+	function setUsername($s) { $this->Url->setUsername($s); }
+	function setPassword($s) { $this->Url->setPassword($s); }
+
 	function post($params)
 	{
 		return $this->get(false, $params);

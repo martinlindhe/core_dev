@@ -4,6 +4,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('output_svg.php');
 
+die('XXX: cant really autotest');
+
 
 $polys[0]['coords'] = array(10, 10, 20, 20, 30, 30, 40, 40);	//4 points
 $polys[0]['color'] = 0xffff00;

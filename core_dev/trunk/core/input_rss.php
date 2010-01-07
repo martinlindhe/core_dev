@@ -6,10 +6,10 @@
  *
  * http://www.rssboard.org/rss-specification
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: ok
+//STATUS: good
 
 require_once('class.CoreBase.php');
 require_once('client_http.php');

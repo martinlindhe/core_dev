@@ -7,7 +7,7 @@
  * Documentation:
  * http://apiwiki.twitter.com/Twitter-API-Documentation
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('io_newsfeed.php');
@@ -31,12 +31,12 @@ class Twitter
 	 */
 	private function exec($url, $params = array())
 	{
-		$h = new HttpClient($url);
+		$http = new HttpClient($url);
 
-		$h->setUsername($this->username);
-		$h->setPassword($this->password);
+		$http->setUsername($this->username);
+		$http->setPassword($this->password);
 
-		return $h->post($params);
+		return $http->post($params);
 	}
 
 	function getTimeline($user = '')

@@ -4,17 +4,19 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('service_metadata_spotify.php');
 
-if (!is_spotify_uri('spotify:album:5fMriFQESKP2AWddR4jypS')) echo "FAIL 1\n";
+if (!is_spotify_uri('spotify:album:5fMriFQESKP2AWddR4jypS'))  echo "FAIL 1\n";
 if (!is_spotify_uri('spotify:artist:4YrKBkKSVeqDamzBPWVnSJ')) echo "FAIL 2\n";
-if (!is_spotify_uri('spotify:track:3zBhJBEbDD4a4SO1EaEiBP')) echo "FAIL 3\n";
+if (!is_spotify_uri('spotify:track:3zBhJBEbDD4a4SO1EaEiBP'))  echo "FAIL 3\n";
 
-if (is_spotify_uri('spotify:album:')) echo "FAIL 4\n";
-if (is_spotify_uri('spotify:album:sö')) echo "FAIL 5\n";
-if (is_spotify_uri('spotify::sö')) echo "FAIL 6\n";
-if (is_spotify_uri('spotify:xx:sö')) echo "FAIL 7\n";
-if (is_spotify_uri('xxx:xxx:xxxx')) echo "FAIL 8\n";
-if (is_spotify_uri('xxx')) echo "FAIL 9\n";
-if (is_spotify_uri('::')) echo "FAIL 10\n";
+if (is_spotify_uri('spotify:album:'))                         echo "FAIL 4\n";
+if (is_spotify_uri('spotify:album:so'))                       echo "FAIL 5\n";
+if (is_spotify_uri('spotify::so'))                            echo "FAIL 6\n";
+if (is_spotify_uri('spotify:xx:so'))                          echo "FAIL 7\n";
+if (is_spotify_uri('xxx:xxx:xxxx'))                           echo "FAIL 8\n";
+if (is_spotify_uri('xxx'))                                    echo "FAIL 9\n";
+if (is_spotify_uri('::'))                                     echo "FAIL 10\n";
+
+die("XXX: cant autotest the rest easily\n");
 
 
 //1. input: release namn & typ

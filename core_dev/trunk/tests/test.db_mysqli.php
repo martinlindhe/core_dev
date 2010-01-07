@@ -4,6 +4,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('db_mysqli.php');
 
+die('XXX: need better db testing code');
+
 $config['debug'] = true;
 
 $db = new db_mysqli(array('host'=>'localhost', 'username'=>'root', 'password'=>''));

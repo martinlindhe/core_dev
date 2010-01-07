@@ -8,6 +8,28 @@
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=48
  */
 
+//STATUS: wip, need standard api hiding multiple weather services (like with tinyurl services)
+
+//STATUS: broken & need custom xml parser:
+
+/*
+<?xml version="1.0" encoding="utf-16"?>
+<CurrentWeather>
+  <Location>Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M</Location>
+  <Time>Jan 07, 2010 - 10:50 AM EST / 2010.01.07 1550 UTC</Time>
+  <Wind> from the NW (320 degrees) at 9 MPH (8 KT):0</Wind>
+  <Visibility> 5 mile(s):0</Visibility>
+  <SkyConditions> mostly cloudy</SkyConditions>
+  <Temperature> 14 F (-10 C)</Temperature>
+  <Wind>Windchill: 1 F (-17 C):1</Wind>
+  <DewPoint> 12 F (-11 C)</DewPoint>
+  <RelativeHumidity> 92%</RelativeHumidity>
+  <Pressure> 29.94 in. Hg (1014 hPa)</Pressure>
+  <Status>Success</Status>
+</CurrentWeather>
+*/
+
+
 require_once('conv_temperature.php');
 require_once('input_xml.php');
 
@@ -64,6 +86,7 @@ class weather_webservicex
 			}
 
 			$x = new xml_input();
+die('XXX FIXME: xml_input() dont parse weather dataproperly! replace with custom parser');
 			$p = $x->parse($xml);
 			if (!$p) return false;
 

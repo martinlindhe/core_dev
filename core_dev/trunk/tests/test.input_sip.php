@@ -5,6 +5,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 require_once('core.php');
 require_once('input_sip.php');
 
+die('XXX: cant really test this...');
+
 function sipAuthCallback($username, $realm, $uri, $nonce, $response)
 {
 	$a1 = $username.':'.$realm.':'."test";	//XXX fetch password from somewhere

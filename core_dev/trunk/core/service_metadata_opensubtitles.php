@@ -24,6 +24,9 @@ class OpenSubtitlesMetadata extends CoreBase
  */
 function OpenSubtitlesHash($file)
 {
+	if (!file_exists($file))
+		return false;
+
 	$handle = fopen($file, "rb");
 	$fsize = filesize($file);
 

@@ -6,7 +6,9 @@ require_once('client_stock.php');
 
 $quote = new Stock();
 $x = $quote->getNasdaq('AAPL'); //Apple
-
-print_r($x);
+if ($x['Name'] != 'Apple Inc.') {
+	echo "FAIL 1\n";
+	print_r($x);
+}
 
 ?>

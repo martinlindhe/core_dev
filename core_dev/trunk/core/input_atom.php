@@ -6,10 +6,10 @@
  *
  * http://en.wikipedia.org/wiki/Atom_(standard)
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: ok
+//STATUS: good
 
 require_once('class.CoreBase.php');
 require_once('client_http.php');
@@ -18,11 +18,14 @@ class input_atom extends CoreBase
 {
 	private $items = array();
 	private $reader;            ///< XMLReader object
+	private $title;             ///< title of the feed
 
 	/**
 	 * @return array of NewsItem objects
 	 */
 	function getItems() { return $this->items; }
+
+	function getTitle() { return $this->title; }
 
 	function parse($data)
 	{
@@ -57,12 +60,18 @@ class input_atom extends CoreBase
 				break;
 
 			case 'id': break;
-			case 'title': break;
+			case 'title':
+				$this->reader->read();
+				$this->title = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
+				break;
+
 			case 'link': break;
 			case 'generator': break;
+			case 'updated': break;
 
 			default:
-				echo 'bad top entry '.$this->reader->name.ln();
+				//XXX: may include openSearch:itemsPerPage (twitter does for example)
+				//echo 'bad top entry '.$this->reader->name.ln();
 				break;
 			}
 		}
@@ -109,7 +118,7 @@ class input_atom extends CoreBase
 			case 'link':
 				switch ($this->reader->getAttribute('rel')) {
 				case 'alternate':
-					$item->Location->set( $this->reader->getAttribute('href') );
+					$item->Url->set( $this->reader->getAttribute('href') );
 					break;
 				case 'enclosure':
 					switch ($this->reader->getAttribute('type')) {

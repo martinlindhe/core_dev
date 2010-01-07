@@ -6,12 +6,15 @@
  *
  * Tested with gnu diff 2.8.1
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: ok, needs testing
 
-class diff
+require_once('class.CoreBase.php');
+require_once('core.php'); //for str_get_ending()
+
+class Diff extends CoreBase
 {
 	private $r1, $r2;        ///< data revisions
 	private $diff = array();

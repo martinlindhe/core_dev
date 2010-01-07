@@ -7,7 +7,7 @@ require_once('util_diff.php');
 $x1 = "din mamma heter kallops\nDin med!\n";
 $x2 = "min mamma heter kallops\nDin med!\n";
 
-$diff = new diff();
+$diff = new Diff($x1, $x2);
 
-echo $diff->strings($x1, $x2);
+d( $diff->getDiff() );
 ?>
