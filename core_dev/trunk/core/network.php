@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
 //TODO: Handle IPv6 addresses (transparently)
@@ -87,7 +87,7 @@ function allowedIP($whitelist)
 
 	$ip = IPv4_to_GeoIP(client_ip());
 
-	return matchIP($ip, $whitelist);
+	return match_ip($ip, $whitelist);
 }
 
 /**
@@ -98,7 +98,7 @@ function allowedIP($whitelist)
  * @param $matches array of IPv4 addresses
  * @return true if $ip address is found in the $matches list
  */
-function matchIP($ip, $matches)
+function match_ip($ip, $matches)
 {
 	if (!is_numeric($ip)) $ip = IPv4_to_GeoIP($ip);
 
