@@ -81,7 +81,7 @@ function reserved_ip($ip)
  * @param $whitelist array of IPv4 addresses
  * @return true if client IP address is in the $allowed list
  */
-function allowedIP($whitelist)
+function allowed_ip($whitelist)
 {
 	if (php_sapi_name() == 'cli') return true;
 
