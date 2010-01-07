@@ -15,7 +15,7 @@ if ($x != 3232235521) echo "FAIL 1\n";
 if (GeoIP_to_IPv4($x) != '192.168.0.1') echo "FAIL 2\n";
 if (!match_ip('240.212.11.42', $valid)) echo "FAIL 3\n";
 if (match_ip('241.212.11.42', $valid)) echo "FAIL 4\n";
-if (!reservedIP('192.168.0.100')) echo "FAIL 5\n";
-if (!reservedIP('10.20.30.40')) echo "FAIL 6\n";
+if (!reserved_ip('192.168.0.100')) echo "FAIL 5\n";
+if (!reserved_ip('10.20.30.40')) echo "FAIL 6\n";
 
 ?>

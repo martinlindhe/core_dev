@@ -51,7 +51,7 @@ function GeoIP_to_IPv4($geoip)
  * @param $ip IPv4 address in GeoIP or human readable format
  * @return true if specified IPv4 address is reserved
  */
-function reservedIP($ip)
+function reserved_ip($ip)
 {
 	if (!is_numeric($ip)) $ip = IPv4_to_GeoIP($ip);
 
