@@ -5,6 +5,9 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 require_once('db_mysqli.php');
 require_once('class.Blog.php');
 
+die("FIXME: rewrite test to work on fake db");
+
+
 $db = new db_mysqli(array('host'=>'localhost', 'username'=>'root', 'password'=>'', 'database'=>'dbIssues'));
 
 

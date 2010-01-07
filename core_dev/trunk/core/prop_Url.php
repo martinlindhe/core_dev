@@ -4,7 +4,7 @@
  *
  * Location object, contains a URI resource
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: good

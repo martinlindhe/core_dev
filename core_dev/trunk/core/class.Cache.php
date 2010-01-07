@@ -12,6 +12,8 @@
 //STATUS: good
 //TODO: add "inc/dec" to increase/Decrease numeric values
 
+require_once('class.CoreBase.php');
+
 class Cache extends CoreBase
 {
 	private $handle      = false;

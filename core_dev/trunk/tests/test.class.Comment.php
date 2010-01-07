@@ -4,6 +4,9 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('class.Comments.php');
 
+die("FIXME: rewrite test to work on fake db");
+
+
 require_once('/var/www/fmf/sitewatch/config.php');
 
 

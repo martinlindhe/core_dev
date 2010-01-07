@@ -5,8 +5,11 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-//TODO: Handle IPv6 addresses (transparently)
+//STATUS: good
+
+//TODO: rename IPv4_to_GeoIP() and GeoIP_to_IPv4()
 //TODO: is_ipv4() and is_ipv6() regexp matchers
+//TODO: IPv6 support
 
 /**
  * Converts a IPv4 address to GeoIP format
@@ -49,7 +52,7 @@ function GeoIP_to_IPv4($geoip)
  * Data taken from http://en.wikipedia.org/wiki/Ipv4 (Reserved address blocks)
  *
  * @param $ip IPv4 address in GeoIP or human readable format
- * @return true if specified IPv4 address is reserved
+ * @return true if specified IPv4 address is in a reserved block
  */
 function reserved_ip($ip)
 {
@@ -91,8 +94,7 @@ function allowed_ip($whitelist)
 }
 
 /**
- * If the IPv4 address in $ip is found to match a rule in $matches
- * then the function returns true
+ * Checks a IPv4 address against a whitelist
  *
  * @param $ip IPv4 address in GeoIP or human readable format
  * @param $matches array of IPv4 addresses
@@ -107,7 +109,7 @@ function match_ip($ip, $matches)
 		if (count($a) == 2) {
 			$lo = IPv4_to_GeoIP($a[0]);
 			if ($ip >= $lo) {
-				$hi = $lo+bindec('1'.str_repeat('0', 32-$a[1])) - 1;	//XXX this should be possible to do easier!
+				$hi = $lo+bindec('1'.str_repeat('0', 32-$a[1])) - 1;
 				//echo "lo: ".GeoIP_to_IPv4($lo)."   (".$lo.")\n";
 				//echo "hi: ".GeoIP_to_IPv4($hi)."   (".$hi.")\n";
 				if ($ip <= $hi) return true;

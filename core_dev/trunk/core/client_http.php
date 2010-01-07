@@ -6,7 +6,7 @@
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
 //STATUS: good
@@ -65,6 +65,8 @@ class HttpClient extends CoreBase
 		return $this->status_code;
 	}
 
+	function getUrl() { return $this->Url->get(); }
+
 	/**
 	 * @param $s cache time in seconds; max 2592000 (30 days)
 	 */
@@ -73,8 +75,6 @@ class HttpClient extends CoreBase
 	function setUserAgent($ua) { $this->user_agent = $ua; }
 
 	function setUrl($s) { $this->Url->set($s); }
-
-	function setLocation($s) { $this->setUrl($s); } //XXX deprecate setLocation
 
 	function post($params)
 	{

@@ -2,6 +2,9 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
+die('XXX: sendmail is working so test is disabled /martin');
+
+
 require('core.php');
 require('class.Sendmail.php');
 
