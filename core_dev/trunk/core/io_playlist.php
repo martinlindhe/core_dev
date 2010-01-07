@@ -22,7 +22,7 @@
  * SMPlayer 0.67: dont support xspf playlists: https://sourceforge.net/tracker/index.php?func=detail&aid=1920553&group_id=185512&atid=913576
  * XBMC dont support xspf playlists: http://xbmc.org/trac/ticket/4763
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: ok
@@ -113,13 +113,13 @@ class Playlist extends CoreList
 
 		if (strpos($data, '<asx ') !== false) {
 			$asx = new input_asx();
-			$pl = $asx->parse($data);
-		} else {
-			echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
-			return false;
+			$asx->parse($data);
+			$this->addItems( $asx->getItems() );
+			return true;
 		}
 
-		$this->addItems( $pl->getItems() );
+		echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
+		return false;
 	}
 
 	/**
