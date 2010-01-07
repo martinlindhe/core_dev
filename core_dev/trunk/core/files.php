@@ -83,9 +83,12 @@ function dir_get_tree($outerDir)
 
 /**
  * Returns array with files filtered on extension
+ *
+ * @param $path path to directory to look in
  * @param $filter_ext extension including dot, example: ".avi"
+ * @param $prefix require prefix in filenames
  */
-function dir_get_by_extension($path, $filter_ext)
+function dir_get_by_extension($path, $filter_ext, $prefix = '')
 {
 	$e = scandir($path);
 
@@ -93,6 +96,9 @@ function dir_get_by_extension($path, $filter_ext)
 	foreach ($e as $name)
 	{
 		if ($name == '.' || $name == '..')
+			continue;
+
+		if ($prefix && strpos($name, $prefix) !== 0)
 			continue;
 
 		if (file_suffix($name) == $filter_ext)
