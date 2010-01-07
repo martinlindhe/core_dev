@@ -9,9 +9,9 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('client_shorturl_base.php');
+require_once('client_shorturl.php');
 
-class shorturl_unu extends shorturl_base
+class Shorturl_unu extends ShorturlBase
 {
 	function __construct()
 	{
