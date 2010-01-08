@@ -8,8 +8,10 @@
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
  * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
+
+//STATUS: good
 
 //TODO: figure out the proper "multipart" content-type to set on attachments/embedded files.
 //      the current approach works for Thunderbird, but message with attachment is shown without
@@ -66,11 +68,21 @@ class Sendmail extends CoreBase
 		if (!is_email($s)) return false;
 		$this->to_adr[] = $s;
 	}
+
+	function addRecipients($a)
+	{
+		if (!is_array($a)) return false;
+
+		foreach ($a as $s)
+			$this->addRecipient($s);
+	}
+
 	function addCc($s)
 	{
 		if (!is_email($s)) return false;
 		$this->cc_adr[] = $s;
 	}
+
 	function addBcc($s)
 	{
 		if (!is_email($s)) return false;
