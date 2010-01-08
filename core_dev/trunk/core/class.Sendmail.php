@@ -69,9 +69,17 @@ class Sendmail extends CoreBase
 		$this->to_adr[] = $s;
 	}
 
+	/**
+	 * Adds a list of recipients
+	 * @param $a is a array or comma-separated string of mail addresses
+	 */
 	function addRecipients($a)
 	{
-		if (!is_array($a)) return false;
+		if (!is_array($a)) {
+			//translate comma-separated string to array
+			$a = str_replace(' ', '', $a);
+			$a = explode(',', $a);
+		}
 
 		foreach ($a as $s)
 			$this->addRecipient($s);

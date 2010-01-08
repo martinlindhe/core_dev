@@ -17,6 +17,8 @@ $mail->setFrom('test@unicorn.se', 'TEST');
 $mail->setReplyTo('noreply@unicorn.se');
 
 $arr = array('martin@unicorn.se', 'ml@unicorn.se');
+$arr = 'martin@unicorn.se, ml@unicorn.se';
+
 $mail->addRecipients($arr);
 
 $mail->setSubject('message åäö subject');
