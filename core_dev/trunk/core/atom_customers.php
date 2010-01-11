@@ -49,4 +49,14 @@ function getCustomers()
 	global $db;
 	return $db->getArray('SELECT * FROM tblCustomers');
 }
+
+
+/**
+ * Returns all customers as id->key array
+ */
+function getCustomersMap()
+{
+	global $db;
+	return $db->getMappedArray('SELECT customerId,customerName FROM tblCustomers');
+}
 ?>
