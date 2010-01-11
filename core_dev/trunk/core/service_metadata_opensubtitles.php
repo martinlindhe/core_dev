@@ -9,7 +9,8 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//STATUS: rewrite hash calculation, write class
+//STATUS: early wip
+//TODO: rewrite hash calculation, write class
 
 require_once('class.CoreBase.php');
 require_once('client_http.php');

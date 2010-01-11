@@ -5,7 +5,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 require_once('service_metadata_opensubtitles.php');
 
 
-$x = OpenSubtitlesHash('/media/downloads/dump/Cast.Away.2000.720p.BluRay.DTS.x264-ESiR/Cast.Away.2000.720p.BluRay.DTS.x264-ESiR.mkv');
+$x = OpenSubtitlesHash('/media/tvserier/tvserier/Heroes/Heroes.S04E10.720p.HDTV.X264-DIMENSION.mkv');
 
 echo $x.ln();
 ?>

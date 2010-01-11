@@ -17,6 +17,8 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//STATUS: need rewrite: make the moderation queue an object
+
 $config['moderation']['enabled'] = true;
 
 define('MODERATION_FILE',						10);	//itemId tblFiles.fileId, a user reported a file

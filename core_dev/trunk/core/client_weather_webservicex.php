@@ -15,7 +15,7 @@
 require_once('conv_temperature.php');
 require_once('input_xml.php');
 
-class weather_webservicex extends CoreBase
+class Weather_webservicex extends CoreBase
 {
 	private $client;
 
