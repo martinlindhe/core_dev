@@ -6,34 +6,16 @@
  * Use client_weather.php for a general API
  *
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=48
+ *
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-//STATUS: wip, need standard api hiding multiple weather services (like with tinyurl services)
-
-//STATUS: broken & need custom xml parser:
-
-/*
-<?xml version="1.0" encoding="utf-16"?>
-<CurrentWeather>
-  <Location>Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M</Location>
-  <Time>Jan 07, 2010 - 10:50 AM EST / 2010.01.07 1550 UTC</Time>
-  <Wind> from the NW (320 degrees) at 9 MPH (8 KT):0</Wind>
-  <Visibility> 5 mile(s):0</Visibility>
-  <SkyConditions> mostly cloudy</SkyConditions>
-  <Temperature> 14 F (-10 C)</Temperature>
-  <Wind>Windchill: 1 F (-17 C):1</Wind>
-  <DewPoint> 12 F (-11 C)</DewPoint>
-  <RelativeHumidity> 92%</RelativeHumidity>
-  <Pressure> 29.94 in. Hg (1014 hPa)</Pressure>
-  <Status>Success</Status>
-</CurrentWeather>
-*/
-
+//STATUS: ok, need testing
 
 require_once('conv_temperature.php');
 require_once('input_xml.php');
 
-class weather_webservicex
+class weather_webservicex extends CoreBase
 {
 	private $client;
 
@@ -56,8 +38,8 @@ class weather_webservicex
 				return false;
 			}
 
-			//XXX parse it properly
-			d($xml);
+//XXX parse it properly
+d($xml);
 			return $xml;
 
 		} catch (Exception $e) {
@@ -78,43 +60,96 @@ class weather_webservicex
 
 		try {
 			$val = $this->client->GetWeather($params);
-			$xml = $val->GetWeatherResult;
+			$data = $val->GetWeatherResult;
 
-			if ($xml == 'Data Not Found') {
+			if ($data == 'Data Not Found') {
 				echo "webservicex_weather::getWeather() not found on city=".$city.", country=".$country.dln();
 				return false;
 			}
 
-			$x = new xml_input();
-die('XXX FIXME: xml_input() dont parse weather dataproperly! replace with custom parser');
-			$p = $x->parse($xml);
-			if (!$p) return false;
+
+			$reader = new XMLReader();
+			if ($this->debug) echo 'Parsing ASX: '.$data.ln();
+
+			//XXX ugly hack: data is returned marked as utf-16 but is utf-8 (???)
+			$data = str_replace('utf-16', 'utf-8', $data);
+
+			$reader->xml($data);
 
 			$celcius = false;
-			if (!empty($p['CurrentWeather|Temperature'])) {
-				list($farenheit) = explode(' ', $p['CurrentWeather|Temperature']);
-				$temp = new temperature();
-				$celcius = round($temp->conv('F','C', $farenheit), 1);
+
+			while ($reader->read())
+			{
+				if ($reader->nodeType != XMLReader::ELEMENT)
+					continue;
+
+				switch ($reader->name) {
+				case 'CurrentWeather':
+					while ($reader->read()) {
+						if ($reader->nodeType != XMLReader::ELEMENT)
+							continue;
+
+						switch ($reader->name) {
+						case 'CurrentWeather': break;
+						case 'Temperature': //<Temperature> 14 F (-10 C)</Temperature>
+							$reader->read();
+							list($farenheit) = explode(' ', trim($reader->value), 2);
+							$temp = new ConvertTemperature();
+							$celcius = round($temp->conv('F','C', $farenheit), 1);
+							break;
+
+						case 'Location': //<Location>Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M</Location>
+							$reader->read();
+							list($location, $rest) = explode('(', $reader->value);
+							list($code, $coords) = explode(')', $rest); //XXX: convert from "59-21N 017-57E 14M"
+							//echo 'CODE: '.$code."\n";   //ESNQ, ESSB, ESNN.... what is this?
+							break;
+
+						case 'Time': //<Time>Jan 07, 2010 - 10:50 AM EST / 2010.01.07 1550 UTC</Time>
+							$reader->read();
+							list($time1, $time2) = explode(' / ', $reader->value);
+							//echo "t1: ".$time1."<br>"; echo "t2: ".$time2."<br>";
+							$time = strtotime($time1); //FIXME strtotime() dont handle either format
+							break;
+
+						case 'Wind': //<Wind> from the NW (320 degrees) at 9 MPH (8 KT):0</Wind>
+							$reader->read();
+							$wind = $reader->value; //XXX: parse string
+							break;
+
+						case 'Visibility': //<Visibility> 5 mile(s):0</Visibility>
+							$reader->read();
+							$visibility = $reader->value; //XXX: parse string
+							break;
+
+						case 'SkyConditions': //<SkyConditions> mostly cloudy</SkyConditions>
+							$reader->read();
+							$skycond = trim($reader->value);
+							break;
+
+						case 'DewPoint': break; //<DewPoint> 12 F (-11 C)</DewPoint>
+						case 'RelativeHumidity': break; //<RelativeHumidity> 92%</RelativeHumidity>
+						case 'Pressure': break; //<Pressure> 29.94 in. Hg (1014 hPa)</Pressure>
+						case 'Status': break; //<Status>Success</Status>
+
+						default:
+							echo "bad entry " .$reader->name.ln();
+						}
+					}
+					break;
+				default:
+					echo "unknown ".$reader->name.ln();
+					break;
+				}
 			}
-
-			//parse "Sundsvall-Harnosand Flygplats, Sweden (ESNN) 62-32N 017-27E 10M"
-			list($location, $rest) = explode('(', $p['CurrentWeather|Location']);
-			list($code, $coords) = explode(')', $rest);
-			//echo 'CODE: '.$code."\n";   //ESNQ, ESSB, ESNN.... what is this?
-
-			//parse "Jul 28, 2009 - 02:20 PM EDT / 2009.07.28 1820 UTC"
-			list($time1, $time2) = explode(' / ', $p['CurrentWeather|Time']);
-
-			//echo "t1: ".$time1."<br>"; echo "t2: ".$time2."<br>";
-			$time = strtotime($time1); //FIXME strtotime() dont handle either format
 
 			$res = array(
 			'Location'     => trim($location),
-			'Coordinates'  => trim($coords), //XXX: convert from "59-21N 017-57E 14M"
+			'Coordinates'  => trim($coords),
 			'Time'         => $time,
-			'Wind'         =>@$p['CurrentWeather|Wind'],         //XXX: "from the SSE (150 degrees) at 5 MPH (4 KT):0"
-			'Visibility'   =>@$p['CurrentWeather|Visibility'],   //XXX: "greater than 7 mile(s):0"
-			'SkyConditions'=>@$p['CurrentWeather|SkyConditions'],//see $skyconditions_swe (can be empty)
+			'Wind'         => $wind,
+			'Visibility'   => $visibility,
+			'SkyConditions'=> $skycond,
 			'Temperature'  => $celcius
 			);
 
@@ -130,7 +165,5 @@ die('XXX FIXME: xml_input() dont parse weather dataproperly! replace with custom
 
 	}
 }
-
-
 
 ?>

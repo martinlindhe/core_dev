@@ -4,13 +4,13 @@
  *
  * Client library to query web services about weather reports
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('class.Cache.php');
 require_once('client_weather_webservicex.php');
 
-class weather
+class Weather extends CoreBase
 {
 	private $cache;
 
