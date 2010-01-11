@@ -59,4 +59,16 @@ function getCustomersMap()
 	global $db;
 	return $db->getMappedArray('SELECT customerId,customerName FROM tblCustomers');
 }
+
+/**
+ * Returns all customers
+ */
+function getCustomersByOwner($ownerId)
+{
+	global $db;
+	if (!is_numeric($ownerId)) return false;
+
+	return $db->getArray('SELECT * FROM tblCustomers WHERE ownerId='.$ownerId);
+}
+
 ?>
