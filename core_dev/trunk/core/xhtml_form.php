@@ -74,7 +74,10 @@ class xhtml_form
 		$p = array();
 
 		if (!empty($_POST))
-			$p = $_POST;
+			foreach ($_POST as $key => $val)
+				foreach ($this->elems as $row)
+					if (!empty($row['name']) && $row['name'] == $key)
+						$p[ $key ] = $val;
 
 		//catch named GET parameters if no POST parameters are found
 		if ($this->listenGet && !empty($_GET))
