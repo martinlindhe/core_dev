@@ -4,8 +4,10 @@
  *
  * Views blogs (BlogEntry objects), by category or user
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
+
+//STATUS: wip
 
 //TODO: use Comments class
 //TODO richedit editor

@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: deprecate, use class.Blog !
+
 require_once('atom_moderation.php');		//for automatic moderation of new blogs, and for "report blog" feature
 require_once('atom_comments.php');			//for comment support for blogs
 require_once('atom_rating.php');			//for rating support for blogs

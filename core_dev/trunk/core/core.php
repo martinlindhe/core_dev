@@ -4,7 +4,7 @@
  *
  * Functions assumed to always be available
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
 //FIXME: get rid of getProjectPath()
