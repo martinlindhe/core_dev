@@ -100,8 +100,9 @@ d($xml);
 
 						case 'Location': //<Location>Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M</Location>
 							$reader->read();
-							list($location, $rest) = explode('(', $reader->value);
+							list($location, $rest) = explode('(', trim($reader->value));
 							list($code, $coords) = explode(')', $rest); //XXX: convert from "59-21N 017-57E 14M"
+							$coords = trim($coords);
 							//echo 'CODE: '.$code."\n";   //ESNQ, ESSB, ESNN.... what is this?
 							break;
 
@@ -144,8 +145,8 @@ d($xml);
 			}
 
 			$res = array(
-			'Location'     => trim($location),
-			'Coordinates'  => trim($coords),
+			'Location'     => $location,
+			'Coordinates'  => $coords,
 			'Time'         => $time,
 			'Wind'         => $wind,
 			'Visibility'   => $visibility,

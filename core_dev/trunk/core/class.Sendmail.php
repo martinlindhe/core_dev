@@ -2,6 +2,8 @@
 /**
  * $Id$
  *
+ * Util class to send email messages
+ *
  * MIME attachments:                 http://tools.ietf.org/html/rfc2231
  * MIME message bodies:              http://tools.ietf.org/html/rfc2045
  * MIME media types & multipart:     http://tools.ietf.org/html/rfc2046
@@ -12,6 +14,7 @@
  */
 
 //STATUS: good
+//TODO: rename -> util_Sendmail.php
 
 //TODO: figure out the proper "multipart" content-type to set on attachments/embedded files.
 //      the current approach works for Thunderbird, but message with attachment is shown without
@@ -24,17 +27,20 @@ require_once('network.php'); //for is_email()
 class Sendmail extends CoreBase
 {
 	private $smtp;
+	private $version     = 'core_dev Sendmail 0.1';
 
 	private $from_adr, $from_name;
 	private $rply_adr, $rply_name;
 	private $subject;
-	private $to_adr = array(), $cc_adr = array(), $bcc_adr = array();
-	private $html = false;
+	private $to_adr      = array();
+	private $cc_adr      = array();
+	private $bcc_adr     = array();
+	private $html        = false;
 	private $attachments = array();
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
-		mb_internal_encoding('UTF-8');	//XXX: required for uf8-encoded text to work
+		mb_internal_encoding('UTF-8');	//XXX: php5.2 required for uf8-encoded text to work
 
 		$this->smtp = new smtp($server, $username, $password, $port);
 		$this->from_adr = $username;
@@ -131,7 +137,7 @@ class Sendmail extends CoreBase
 			"Date: ".date('r')."\r\n".
 			"From: ".(mb_encode_mimeheader($this->from_name, 'UTF-8') ? mb_encode_mimeheader($this->from_name, 'UTF-8')." <".$this->from_adr.">" : $this->from_adr)."\r\n".
 			"Subject: ".mb_encode_mimeheader($this->subject, 'UTF-8')."\r\n".
-			"User-Agent: core_dev\r\n".	//XXX version string
+			"User-Agent: ".$this->version."\r\n".
 			"MIME-Version: 1.0\r\n";
 
 		if ($this->rply_adr)

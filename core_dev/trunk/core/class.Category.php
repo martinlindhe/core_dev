@@ -1,9 +1,13 @@
 <?php
 /**
  * $Id$
+ *
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: ok, need testing
+
+//TODO: rename to prop_Category.php
 
 //TODO: for CategoryViewer add some ui category management (edit, remove)
 

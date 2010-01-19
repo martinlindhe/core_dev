@@ -35,7 +35,7 @@ class db_mysqli extends db_base
 		$this->db_handle = @new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
 		if ($this->db_handle->connect_error)
-			die('db_mysqli->connect: Error '.$this->db_handle->connect_errno.': '.$this->db_handle->connect_error);
+			die('<div class="critical">db_mysqli->connect: '.$this->db_handle->connect_error.'</div>');
 
 		if (!$this->db_handle->set_charset($this->charset))
 			die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
