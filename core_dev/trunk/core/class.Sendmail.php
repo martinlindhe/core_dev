@@ -27,7 +27,7 @@ require_once('network.php'); //for is_email()
 class Sendmail extends CoreBase
 {
 	private $smtp;
-	private $version     = 'core_dev Sendmail 0.1';
+	private $version     = 'core_dev 0.2-dev Sendmail'; //XXX read core_dev version
 
 	private $from_adr, $from_name;
 	private $rply_adr, $rply_name;
@@ -40,7 +40,7 @@ class Sendmail extends CoreBase
 
 	function __construct($server = '', $username = '', $password = '', $port = 25)
 	{
-		mb_internal_encoding('UTF-8');	//XXX: php5.2 required for uf8-encoded text to work
+		mb_internal_encoding('UTF-8');	//XXX: required for utf8-encoded text (php 5.2)
 
 		$this->smtp = new smtp($server, $username, $password, $port);
 		$this->from_adr = $username;
@@ -108,13 +108,14 @@ class Sendmail extends CoreBase
 		return $this->embed($file, '');
 	}
 
-	//<img src="cid:pic_name">
 	function embed($file, $cid)
 	{
 		if (!file_exists($file)) {
 			echo "Error: File ".$file." not found".dln();
 			return false;
 		}
+
+		//<img src="cid:pic_name">
 		$this->attachments[] = array($file, $cid);
 		return true;
 	}
