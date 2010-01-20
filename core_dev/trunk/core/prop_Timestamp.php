@@ -116,7 +116,7 @@ class Timestamp extends CoreProperty
 	 *
 	 * @example "2 weeks ago", "yesterday at 9:40"
 	 */
-	function getRelative() //XXX DEPRECATE, reimplement using prop_Duration (?)
+	function getRelative()
 	{
 		$dur = new Duration();
 		$dur->set( time() - $this->value );
