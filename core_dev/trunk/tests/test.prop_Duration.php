@@ -13,4 +13,7 @@ if ($dur->render() != '18:53:19') echo "FAIL 2\n";
 $dur = new Duration(5278156);
 if ($dur->render() != '1466:09:16') echo "FAIL 3\n";
 
+$dur = new Duration(60);
+if ($dur->renderRelative() != '1 minute') echo "FAIL 4\n";
+
 ?>

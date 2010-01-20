@@ -4,13 +4,13 @@
  *
  * Present a UNIX timestamp in different ways
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: good
 
 require_once('class.CoreProperty.php');
-require_once('functions_time.php');
+require_once('prop_Duration.php');
 
 class Timestamp extends CoreProperty
 {
@@ -118,24 +118,11 @@ class Timestamp extends CoreProperty
 	 */
 	function getRelative() //XXX DEPRECATE, reimplement using prop_Duration (?)
 	{
-		if (time() >= $this->value)
-			return shortTimePeriod(time() - $this->value).' ago';
-
-		return shortTimePeriod($this->value - time()).' in the future';
+		$dur = new Duration();
+		$dur->set( time() - $this->value );
+		return $dur->renderRelative();
 	}
 
-	/**
-	 * @return the diff between two timestamps, in seconds
-	 */
-/* //XXX no code uses this
-	function getDiff($ts)
-	{
-		if (!is_object($ts))
-			$ts = new Timestamp($ts);
-
-		return $this->get() - $ts->get();
-	}
-*/
 	function render()
 	{
 		//XXX maybe call locale-specific functions to handle rendering

@@ -4,7 +4,7 @@
  *
  * Duration property
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: good
@@ -21,7 +21,7 @@ class Duration extends CoreProperty
 	/**
 	 * Decodes a textual representation for a duration
 	 *
-	 * @param $s input string
+	 * @param $s input duration (numeric=seconds, hh:mm:ss=decode to seconds)
 	 */
 	function set($s)
 	{
@@ -98,6 +98,61 @@ class Duration extends CoreProperty
 
 		return $retval;
 	}
+
+	/**
+	 * Converts a duration into human-readable text
+	 *
+	 * @return "2 days, 4 hours and 30 seconds"
+	 */
+	function renderRelative()
+	{
+		if (is_float($this->value))
+			$secs = ceil($this->value);
+		else
+			$secs = $this->value;
+
+		$ret = '';
+
+		//years
+		$a = date('Y', $secs) - 1970;
+		if ($a==1) $ret = $a.' year, ';
+		else if ($a>0) $ret = $a.' years, ';
+		$secs -= (((($a*60)*60)*24)*30)*365;
+
+		//months
+		$a = date('n',$secs)-1;
+		if ($a==1) $ret .= $a.' month, ';
+		else if($a>0) $ret .= $a.' months, ';
+		$secs -= ((($a*60)*60)*24)*30;
+
+		//days
+		$a = date('j',$secs)-1;
+		if ($a==1) $ret .= $a.' day, ';
+		else if ($a>0) $ret .= $a.' days, ';
+		$secs -= (($a*60)*60)*24;
+
+		//hours
+		$a = date('H',$secs)-1;
+		if ($a==1) $ret .= $a.' hour, ';
+		else if ($a>0) $ret .= $a.' hours, ';
+		$secs -= ($a*60)*60;
+
+		//minutes
+		$a = date('i',$secs)-0;
+		if ($a==1) $ret .= $a.' minute, ';
+		else if ($a>0) $ret .= $a.' minutes, ';
+		$secs -= $a*60;
+
+		//seconds
+		$a = date('s',$secs)-0;
+		if ($a>0) $ret .= $a.' seconds';
+
+		if (substr($ret, -2) == ', ') $ret = substr($ret, 0, -2);
+		if ($ret == '') $ret = '0s';
+
+		return $ret;
+	}
+
 }
 
 ?>
