@@ -27,10 +27,10 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 	$cols = 0;
 	$i = 0;
 	while (!feof($fp)) {
-		$buffer = fgets($fp, 4096);
+		$buf = fgets($fp, 4096);
 		if ($i >= $start_line) {
-			if (!$buffer) break;
-			$row = csvParseRow($buffer, $delimiter);
+			if (!$buf) break;
+			$row = csvParseRow($buf, $delimiter);
 			if (!$cols) $cols = count($row);
 			if ($cols != count($row)) {
 				echo "FATAL: CSV format error in $filename at line ".($i+1).": ".count($row)." columns found, $cols expected\n";

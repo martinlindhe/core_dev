@@ -1,6 +1,6 @@
 <?php
 
-//XXX DEPRECATE use Blog class instead
+//STATUS: DEPRECATE use Blog class instead
 
 /**
  * Displays one user's blogs overview

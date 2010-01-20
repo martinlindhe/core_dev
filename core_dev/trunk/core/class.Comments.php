@@ -7,8 +7,8 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//STATUS: mostly ok, needs more testing
-//FIXME: implement and use oo-pager for CommentList
+//STATUS: mostly ok, but REFACTOR INTO MVC pattern
+//TODO: implement and use oo-pager for CommentList
 
 require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
