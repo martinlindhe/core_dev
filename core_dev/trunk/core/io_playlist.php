@@ -118,7 +118,7 @@ class Playlist extends CoreList
 			return true;
 		}
 
-		echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".dln();
+		echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".ln();
 		return false;
 	}
 

@@ -89,7 +89,7 @@ class xml_input
 /*
 			echo "pre [".$keys."] = ";
 			d($attr);
-			echo dln();
+			echo ln();
 */
 			$this->data[$keys][] = $attr;
 		}

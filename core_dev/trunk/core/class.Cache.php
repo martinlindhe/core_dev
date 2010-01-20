@@ -6,7 +6,7 @@
  *
  * Requirements: memcached php5-memcache
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 //STATUS: good
@@ -57,7 +57,7 @@ class Cache extends CoreBase
 
 		$val = $this->handle->get($key);
 
-		if ($this->debug && $val) echo "CACHE READ ".$key.dln();
+		if ($this->debug && $val) echo "CACHE READ ".$key.ln();
 		return $val;
 	}
 
@@ -68,7 +68,7 @@ class Cache extends CoreBase
 		//XXX HACK force quiet bogus warnings from memcache in 2009
 		$ret = @$this->handle->set($key, $val, false, $this->expire_time);
 
-		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)".dln();
+		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)".ln();
 		return $ret;
 	}
 }

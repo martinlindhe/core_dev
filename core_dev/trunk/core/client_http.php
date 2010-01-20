@@ -28,7 +28,7 @@ class HttpClient extends CoreBase
 	function __construct($url = '')
 	{
 		if (!function_exists('curl_init')) {
-			echo "HttpClient->ERROR: php5-curl missing".dln();
+			echo "HttpClient->ERROR: php5-curl missing".ln();
 			return false;
 		}
 
@@ -92,7 +92,7 @@ class HttpClient extends CoreBase
 	{
 		$ch = curl_init( $this->Url->get() );
 		if (!$ch) {
-			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".dln();
+			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".ln();
 			return false;
 		}
 
@@ -141,12 +141,12 @@ class HttpClient extends CoreBase
 			} else {
 				$var = $post_params;
 			}
-			if ($this->debug) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.dln();
+			if ($this->debug) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
 
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
 		} else {
-			if ($this->debug) echo "http->get() ".$this->Url->get()." ... ".dln();
+			if ($this->debug) echo "http->get() ".$this->Url->get()." ... ".ln();
 		}
 
 		$res = curl_exec($ch);
@@ -154,7 +154,7 @@ class HttpClient extends CoreBase
 		curl_close($ch);
 
 		if ($this->debug) {
-			echo "Got ".strlen($res)." bytes, showing first 2000:".dln();
+			echo "Got ".strlen($res)." bytes, showing first 2000:".ln();
 			echo '<pre>'.htmlspecialchars(substr($res,0,2000)).'</pre>';
 		}
 

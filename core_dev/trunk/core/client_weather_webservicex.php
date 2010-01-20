@@ -34,7 +34,7 @@ class Weather_webservicex extends CoreBase
 			$val = $this->client->GetCitiesByCountry($params);
 			$xml = $val->GetCitiesByCountryResult;
 			if ($xml == 'Data Not Found') {
-				echo "webservicex_weather::getCitiesByCountry() not found on country=".$country.dln();
+				echo "webservicex_weather::getCitiesByCountry() not found on country=".$country.ln();
 				return false;
 			}
 
@@ -63,7 +63,7 @@ d($xml);
 			$data = $val->GetWeatherResult;
 
 			if ($data == 'Data Not Found') {
-				echo "webservicex_weather::getWeather() not found on city=".$city.", country=".$country.dln();
+				echo "webservicex_weather::getWeather() not found on city=".$city.", country=".$country.ln();
 				return false;
 			}
 

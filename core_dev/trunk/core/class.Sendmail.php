@@ -111,7 +111,7 @@ class Sendmail extends CoreBase
 	function embed($file, $cid)
 	{
 		if (!file_exists($file)) {
-			echo "Error: File ".$file." not found".dln();
+			echo "Error: File ".$file." not found".ln();
 			return false;
 		}
 

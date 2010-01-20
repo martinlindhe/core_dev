@@ -45,7 +45,7 @@ class FileImage
 
 		$http->getFile($url, $tmp_file);
 		if ($http->getError()) {
-			echo 'FileImage->load() failed '.$http->getError().' for '.$url.dln();
+			echo 'FileImage->load() failed '.$http->getError().' for '.$url.ln();
 			return false;
 		}
 

@@ -41,7 +41,7 @@ function d($v)
 			else
 				var_dump($out);
 		}
-		echo dln();
+		echo ln();
 		return;
 	}
 
@@ -105,7 +105,7 @@ function dm()
 		"Memory usage: ".
 		formatDataSize(memory_get_peak_usage(false)).
 		" (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
-		formatDataSize($limit).")".dln();
+		formatDataSize($limit).")".ln();
 }
 
 /**
@@ -120,18 +120,18 @@ function dtrace()
 	{
 		echo $l['line'].': '.$l['function'].'(';
 
-		//echo count($l['args']).' args'.dln();
+		//echo count($l['args']).' args'.ln();
 		$i = 0;
 		foreach ($l['args'] as $arg) {
 			$i++;
 			echo $arg;
 			if ($i < count($l['args'])) echo ', ';
 		}
-		echo ') from '.$l['file'].dln();
+		echo ') from '.$l['file'].ln();
 
-		if (!empty($l['class'])) echo 'XXX class '.$l['class'].dln();
-		if (!empty($l['object'])) echo 'XXX object '.d($l['object']).dln();
-		if (!empty($l['type'])) echo 'XXX type '.$l['type'].dln();
+		if (!empty($l['class'])) echo 'XXX class '.$l['class'].ln();
+		if (!empty($l['object'])) echo 'XXX object '.d($l['object']).ln();
+		if (!empty($l['type'])) echo 'XXX type '.$l['type'].ln();
 	}
 
 	if (php_sapi_name() != 'cli') echo '</pre>';

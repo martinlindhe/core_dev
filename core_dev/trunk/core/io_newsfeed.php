@@ -112,7 +112,7 @@ class NewsFeed extends CoreList
 		} else if (strpos($data, '<feed ') !== false) {
 			$feed = new input_atom();
 		} else {
-			echo 'NewsFeed->load error: unhandled feed: '.substr($data, 0, 100).' ...'.dln();
+			echo 'NewsFeed->load error: unhandled feed: '.substr($data, 0, 100).' ...'.ln();
 			return false;
 		}
 

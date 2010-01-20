@@ -33,7 +33,7 @@ class ftp extends CoreBase
 	function __construct($address = '')
 	{
 		if (!function_exists('curl_init')) {
-			echo "ERROR: php5-curl missing".dln();
+			echo "ERROR: php5-curl missing".ln();
 			return false;
 		}
 
@@ -71,7 +71,7 @@ class ftp extends CoreBase
 			break;
 
 		default:
-			die('ftp class: unhandled scheme '.$this->scheme.dln());
+			die('ftp class: unhandled scheme '.$this->scheme.ln());
 		}
 
 		return true;
@@ -86,8 +86,8 @@ class ftp extends CoreBase
 
 		if ($this->debug) {
 			print_r(curl_getinfo($this->curl));
-			echo "cURL error number:" .curl_errno($this->curl).dln();
-			echo "cURL error:" . curl_error($this->curl).dln();
+			echo "cURL error number:" .curl_errno($this->curl).ln();
+			echo "cURL error:" . curl_error($this->curl).ln();
 			print_r(curl_version());
 		}
 
@@ -151,7 +151,7 @@ class ftp extends CoreBase
 
 		$fp = fopen($local_file, 'w');
 		if (!$fp) {
-			echo "ftp->get failed to open local file for writing".dln();
+			echo "ftp->get failed to open local file for writing".ln();
 			return false;
 		}
 		curl_setopt($this->curl, CURLOPT_FILE, $fp);
@@ -159,11 +159,11 @@ class ftp extends CoreBase
 		fclose($fp);
 
 		if (curl_errno($this->curl)) {
-			echo "ftp download error: ".curl_error($this->curl).dln();
+			echo "ftp download error: ".curl_error($this->curl).ln();
 			return false;
 		}
 
-		if ($this->debug) echo 'getFile md5: '.md5_file($local_file).dln();
+		if ($this->debug) echo 'getFile md5: '.md5_file($local_file).ln();
 
 		return true;
 	}
@@ -185,11 +185,11 @@ class ftp extends CoreBase
 		$res = curl_exec($this->curl);
 
 		if (curl_errno($this->curl)) {
-			echo "ftp download error: ".curl_error($this->curl).dln();
+			echo "ftp download error: ".curl_error($this->curl).ln();
 			return false;
 		}
 
-		if ($this->debug) echo 'getData md5: '.md5($res).dln();
+		if ($this->debug) echo 'getData md5: '.md5($res).ln();
 
 		return $res;
 	}
@@ -221,11 +221,11 @@ class ftp extends CoreBase
 		if (!$this->connect()) return false;
 
 		if (!file_exists($local_file)) {
-			echo "ftp: local file ".$local_file." dont exist!".dln();
+			echo "ftp: local file ".$local_file." dont exist!".ln();
 			return false;
 		}
 
-		if ($this->debug) echo 'putFile md5: '.md5_file($local_file).dln();
+		if ($this->debug) echo 'putFile md5: '.md5_file($local_file).ln();
 
 		if ($temp_file)
 			$this->setPath($temp_file);
@@ -258,7 +258,7 @@ class ftp extends CoreBase
 		fclose($fp);
 
         if (curl_errno($this->curl)) {
-        	echo "ftp exec error: ".curl_error($this->curl).dln();
+        	echo "ftp exec error: ".curl_error($this->curl).ln();
 			return false;
         }
 
@@ -282,7 +282,7 @@ class ftp extends CoreBase
 		$raw = curl_exec($this->curl);
 
 		if (curl_errno($this->curl)) {
-			echo "ftp download error: ".curl_error($this->curl).dln();
+			echo "ftp download error: ".curl_error($this->curl).ln();
 			return false;
 		}
 

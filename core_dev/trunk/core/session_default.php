@@ -145,7 +145,7 @@ class session_default extends session_base
 		global $db;
 
 		if ($db->getErrorCount()) {
-			echo "session->redirect aborted due to error".dln();
+			echo "session->redirect aborted due to error".ln();
 			return;
 		}
 
