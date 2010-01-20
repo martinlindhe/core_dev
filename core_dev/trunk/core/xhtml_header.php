@@ -2,6 +2,7 @@
 /**
  * $Id$
  *
+ * XHTML header controller class
  * Generates a XHTML compilant header
  *
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
@@ -13,12 +14,12 @@ require_once('output_xhtml.php');
 //STATUS: ok
 //XXX: remove usage of getProjectPath
 
-interface CoreHeader
+interface IXMLHeader
 {
 	public function render();
 }
 
-class xhtml_header implements CoreHeader
+class XHTML_Header implements IXMLHeader
 {
 	private $title, $favicon;
 	private $js            = array();
