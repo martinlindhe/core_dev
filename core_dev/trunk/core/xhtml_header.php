@@ -2,17 +2,23 @@
 /**
  * $Id$
  *
- * Class to generate a XHTML compilant header
+ * Generates a XHTML compilant header
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('core.php');
 require_once('output_xhtml.php');
 
+//STATUS: ok
 //XXX: remove usage of getProjectPath
 
-class xhtml_header
+interface CoreHeader
+{
+	public function render();
+}
+
+class xhtml_header implements CoreHeader
 {
 	private $title, $favicon;
 	private $js            = array();
@@ -62,81 +68,86 @@ class xhtml_header
 	/**
 	 * Creates a complete XHTML header, showing rss feeds if available, etc
 	 */
-	function render()
+	public function render()
 	{
 		global $h;
 
 		if ($this->mimetype)
 			header('Content-type: '.$this->mimetype);
 
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
-		echo '<head>';
-		echo '<title>'.$this->title.'</title>';
-		echo '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+		$res =
+		'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
+		"\n".
+		'<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.
+		'<head>'.
+		'<title>'.$this->title.'</title>'.
+		'<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 
 		if ($this->keywords)
-			echo '<meta name="keywords" content="'.implode(',',$this->keywords).'"/>';
+			$res .= '<meta name="keywords" content="'.implode(',',$this->keywords).'"/>';
 
-		echo '<link rel="stylesheet" type="text/css" href="'.$this->core_dev_root.'css/core.css"/>';
+		$res .= '<link rel="stylesheet" type="text/css" href="'.$this->core_dev_root.'css/core.css"/>';
 
 		foreach ($this->css as $css)
-			echo '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
+			$res .= '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
 
 		foreach ($this->feeds as $feed) {
 			//XXX: clean up feed URI's etc, make it more general
 			if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
 			else $extra = '';
-			echo "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
+			$res .= "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
 		}
 
 		foreach ($this->search as $search)
-			echo '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
+			$res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
 
 		if ($this->favicon)
-			echo '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
+			$res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
 
 		//XXX: make theme path configurable
 		$theme_dir = $this->core_dev_root.'css/themes/';
 
 		if (!empty($h->session) && $theme_dir)
-			echo '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';
+			$res .= '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';
 
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
-		//echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/swfobject.js"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
+		//$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/swfobject.js"></script>';
 
 		/*
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ajax.js"></script>';
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/fileareas.js"></script>';
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/chat_1on1.js"></script>';
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/prototype.js"></script>';
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-		echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/cropper.js"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ajax.js"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/fileareas.js"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/chat_1on1.js"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/prototype.js"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
+		$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/cropper.js"></script>';
 		*/
 
 		if (!empty($h->files) && $h->files->allow_rating) //XXX fixme: let files class register this one
-			echo '<script type="text/javascript" src="'.$this->core_dev_root.'js/rate.js"></script>';
+			$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/rate.js"></script>';
 
 		foreach ($this->js as $uri)
-			echo '<script type="text/javascript" src="'.$uri.'"></script>';
+			$res .= '<script type="text/javascript" src="'.$uri.'"></script>';
 
-		echo '</head>';
+		$res .= '</head>';
 
-		echo '<body class="yui-skin-sam"'; // required for YUI
+		$res .= '<body class="yui-skin-sam"'; // required for YUI
 		if (count($this->onload)) {
-			echo ' onload="';
-			foreach ($this->onload as $row)
-				echo $row;
+			$res .= ' onload="';
+			foreach ($this->onload as $onload)
+				$res .= $onload;
 		}
-		echo '">';
+		$res .= '">';
 
-		echo '<script type="text/javascript">';
+		$res .= '<script type="text/javascript">';
 		//XXX rename _ext_core to _core_api since its url to coredev api
-		echo 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
-		echo '</script>';
+		$res .= 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
+		$res .= '</script>';
 
 		if ($this->reload_time)
-			echo jsReload($this->reload_time * 1000);
+			$res .= jsReload($this->reload_time * 1000);
+
+		$res .= "\n";
+		return $res;
 	}
 
 }
