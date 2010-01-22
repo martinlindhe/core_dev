@@ -152,7 +152,6 @@ CREATE TABLE `tblCustomers` (
   `customerPass` varchar(70) default NULL,
   `contactMail` text,
   `contactDetails` text,
-  `ownerId` bigint(20) unsigned NOT NULL
   PRIMARY KEY  (`customerId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
