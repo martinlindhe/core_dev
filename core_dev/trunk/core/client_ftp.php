@@ -55,7 +55,7 @@ class ftp extends CoreBase
 
 		$this->curl = curl_init();
 
-		if ($this->debug)
+		if ($this->getDebug())
 			curl_setopt($this->curl, CURLOPT_VERBOSE, true);
 
 		switch ($this->scheme) {
@@ -84,7 +84,7 @@ class ftp extends CoreBase
 	{
 		if (!$this->curl) return;
 
-		if ($this->debug) {
+		if ($this->getDebug()) {
 			print_r(curl_getinfo($this->curl));
 			echo "cURL error number:" .curl_errno($this->curl).ln();
 			echo "cURL error:" . curl_error($this->curl).ln();
@@ -163,7 +163,7 @@ class ftp extends CoreBase
 			return false;
 		}
 
-		if ($this->debug) echo 'getFile md5: '.md5_file($local_file).ln();
+		if ($this->getDebug()) echo 'getFile md5: '.md5_file($local_file).ln();
 
 		return true;
 	}
@@ -189,7 +189,7 @@ class ftp extends CoreBase
 			return false;
 		}
 
-		if ($this->debug) echo 'getData md5: '.md5($res).ln();
+		if ($this->getDebug()) echo 'getData md5: '.md5($res).ln();
 
 		return $res;
 	}
@@ -225,7 +225,7 @@ class ftp extends CoreBase
 			return false;
 		}
 
-		if ($this->debug) echo 'putFile md5: '.md5_file($local_file).ln();
+		if ($this->getDebug()) echo 'putFile md5: '.md5_file($local_file).ln();
 
 		if ($temp_file)
 			$this->setPath($temp_file);
