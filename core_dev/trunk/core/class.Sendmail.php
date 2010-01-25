@@ -125,7 +125,7 @@ class Sendmail extends CoreBase
 	 */
 	function send($msg)
 	{
-		if ($this->debug)
+		if ($this->getDebug())
 			$this->smtp->debug = true;
 
 		if (!$this->smtp->login())
