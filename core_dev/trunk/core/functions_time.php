@@ -212,8 +212,9 @@ function datetime_less($d1, $d2)
  * Default time format display
  *
  * @param $ts unix timestamp or SQL DATETIME format
+ * @param $relative show time relative to current time
  */
-function formatTime($ts = 0)
+function formatTime($ts = 0, $relative = false)
 {
 	if (!$ts) $ts = time();
 
@@ -228,21 +229,21 @@ function formatTime($ts = 0)
 
 	$timediff = time() - $ts;
 
-	if (date('Y-m-d', $ts) == date('Y-m-d')) {
-		//Today 18:13
-		$res = date('H:i',$ts);
-	} else if ($datestamp == $yesterday) {
-		//Yesterday 18:13
-		$res = t('Yesterday').' '.date('H:i',$ts);
-	} else if ($datestamp == $tomorrow) {
-		//Tomorrow 18:13
-		$res = t('Tomorrow').' '.date('H:i',$ts);
-	} else {
-		//2007-04-14 15:22
-		$res = date('Y-m-d H:i', $ts);
+	if ($relative) {
+		if (date('Y-m-d', $ts) == date('Y-m-d')) {
+			//Today 18:13
+			return date('H:i',$ts);
+		} else if ($datestamp == $yesterday) {
+			//Yesterday 18:13
+			return t('Yesterday').' '.date('H:i',$ts);
+		} else if ($datestamp == $tomorrow) {
+			//Tomorrow 18:13
+			return t('Tomorrow').' '.date('H:i',$ts);
+		}
 	}
 
-	return $res;
+	//2007-04-14 15:22
+	return date('Y-m-d H:i', $ts);
 }
 
 ?>
