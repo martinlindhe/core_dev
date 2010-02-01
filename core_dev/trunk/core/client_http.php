@@ -109,7 +109,7 @@ class HttpClient extends CoreBase
 		if (!$this->Url->getUsername() && empty($post_params)) {
 			$cache = new Cache();
 			$cache->setCacheTime($this->cache_time);
-			if ($this->debug) $cache->setDebug();
+			if ($this->getDebug()) $cache->setDebug();
 			$key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
 			$key_full = 'url//'.     htmlspecialchars( $this->Url->get() );
 
@@ -134,26 +134,26 @@ class HttpClient extends CoreBase
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
 		if (!empty($post_params)) {
-			if ($this->debug) echo "http->post() ".$this->render()." ... ";
+//			if ($this->getDebug()) echo "http->post() ".$this->render()." ... ";
 
 			if (is_array($post_params)) {
 				$var = htmlspecialchars(http_build_query($post_params));
 			} else {
 				$var = $post_params;
 			}
-			if ($this->debug) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
+			if ($this->getDebug()) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
 
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
 		} else {
-			if ($this->debug) echo "http->get() ".$this->Url->get()." ... ".ln();
+			if ($this->getDebug()) echo "http->get() ".$this->Url->get()." ... ".ln();
 		}
 
 		$res = curl_exec($ch);
 
 		curl_close($ch);
 
-		if ($this->debug) {
+		if ($this->getDebug()) {
 			echo "Got ".strlen($res)." bytes, showing first 2000:".ln();
 			echo '<pre>'.htmlspecialchars(substr($res,0,2000)).'</pre>';
 		}
@@ -189,7 +189,7 @@ class HttpClient extends CoreBase
 		}
 
 		$status = array_shift($headers);
-		if ($this->debug) echo "http->get() returned HTTP status ".$status.ln();
+		if ($this->getDebug()) echo "http->get() returned HTTP status ".$status.ln();
 
 		switch (substr($status, 0, 9)) {
 		case 'HTTP/1.0 ':
