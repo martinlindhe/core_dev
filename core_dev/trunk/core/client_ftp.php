@@ -159,7 +159,11 @@ class ftp extends CoreBase
 		fclose($fp);
 
 		if (curl_errno($this->curl)) {
-			echo "ftp download error: ".curl_error($this->curl).ln();
+			$this->setError( curl_error($this->curl) );
+
+			if (!filesize($local_file))
+				unlink($local_file);
+
 			return false;
 		}
 
