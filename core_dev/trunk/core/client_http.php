@@ -24,6 +24,7 @@ class HttpClient extends CoreBase
 	private $status_code;      ///< return code from http request, such as 404
 	private $cache_time = 0;   ///< in seconds
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
+	private $cookies = array(); ///< holds cookies to be sent to the server in the following request
 
 	function __construct($url = '')
 	{
@@ -56,6 +57,39 @@ class HttpClient extends CoreBase
 
 		return false;
 	}
+
+	/**
+	 * Sets a cookie to send with the next HTTP request
+	 */
+	function setCookie($name, $val)
+	{
+		$this->cookies[ $name ] = $val;
+	}
+
+	/**
+	 * Sets/updates an array (name->val) of cookies
+	 */
+	function setCookies($arr)
+	{
+		foreach ($arr as $name => $val)
+			$this->setCookie($name, $val);
+	}
+
+	/**
+	 * Returns the value of a cookie from last server response
+	 */
+	function getCookie($name)
+	{
+		if (!isset($this->cookies[ $name ]))
+			return false;
+
+		return $this->cookies[ $name ];
+	}
+
+	/**
+	 * Returns all cookies from last server response
+	 */
+	function getCookies() { return $this->cookies; }
 
 	/**
 	 * Returns HTTP status code for the last request
@@ -133,8 +167,17 @@ class HttpClient extends CoreBase
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
+		if ($this->getDebug()) {
+			curl_setopt($ch, CURLOPT_VERBOSE, true);
+		}
+
+		if ($this->cookies) {
+			if ($this->getDebug()) echo "http->get() sending cookies: ".encode_cookie_string($this->cookies).ln();
+			curl_setopt($ch, CURLOPT_COOKIE, encode_cookie_string($this->cookies));
+		}
+
 		if (!empty($post_params)) {
-//			if ($this->getDebug()) echo "http->post() ".$this->render()." ... ";
+			if ($this->getDebug()) echo "http->post() ".$this->render()." ... ";
 
 			if (is_array($post_params)) {
 				$var = htmlspecialchars(http_build_query($post_params));
@@ -155,7 +198,7 @@ class HttpClient extends CoreBase
 
 		if ($this->getDebug()) {
 			echo "Got ".strlen($res)." bytes, showing first 2000:".ln();
-			echo '<pre>'.htmlspecialchars(substr($res,0,2000)).'</pre>';
+			d( htmlspecialchars(substr($res,0,2000)) );
 		}
 
 		$this->parseResponse($res);
@@ -203,6 +246,13 @@ class HttpClient extends CoreBase
 			$col = explode(': ', $h, 2);
 			$this->headers[ strtolower($col[0]) ] = $col[1];
 		}
+
+		// store cookies sent from the server in our cookie pool for reuse in subsequent requests
+		$raw_cookies = $this->getHeader('set-cookie');
+
+		if ($raw_cookies)
+			$this->setCookies( decode_cookie_string($raw_cookies) );
+
 	}
 
 }

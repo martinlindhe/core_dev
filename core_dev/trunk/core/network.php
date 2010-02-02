@@ -174,4 +174,37 @@ function scheme_default_port($scheme)
 	return $schemes[$scheme];
 }
 
+/**
+ * Parses a HTTP header "set-cookie" string into array
+ */
+function decode_cookie_string($raw)
+{
+	$out = array();
+
+	$pairs = explode(';', $raw);
+	foreach ($pairs as $key => $val) {
+		$x = explode('=', $val);
+		$out[ $x[0] ] = $x[1];
+	}
+	return $out;
+}
+
+/**
+ * Encodes array from decode_cookie_string() into a HTTP "cookie" header string: "fruit=apple; colour=red"
+ */
+function encode_cookie_string($arr)
+{
+	$res = '';
+	foreach ($arr as $key => $val) {
+		$res .= $key.'='.$val.'; ';
+	}
+
+	//HACK: remove last "; "
+	$res = trim($res);
+	if (substr($res, -1, 1) == ';')
+		$res = substr($res, 0, -1);
+
+	return $res;
+}
+
 ?>
