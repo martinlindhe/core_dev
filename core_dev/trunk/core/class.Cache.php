@@ -57,7 +57,7 @@ class Cache extends CoreBase
 
 		$val = $this->handle->get($key);
 
-		if ($this->debug && $val) echo "CACHE READ ".$key.ln();
+		if ($this->getDebug() && $val) echo "CACHE READ ".$key.ln();
 		return $val;
 	}
 
@@ -68,7 +68,7 @@ class Cache extends CoreBase
 		//XXX HACK force quiet bogus warnings from memcache in 2009
 		$ret = @$this->handle->set($key, $val, false, $this->expire_time);
 
-		if ($this->debug) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)".ln();
+		if ($this->getDebug()) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)".ln();
 		return $ret;
 	}
 }

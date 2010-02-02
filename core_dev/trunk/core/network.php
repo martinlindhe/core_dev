@@ -137,7 +137,7 @@ function client_ip()
  */
 function is_url($url)
 {
-	if (strpos($url, ' ')) return false; //FIXME: the regexp allows spaces in domain name
+	if (strpos($url, ' ')) return false; //HACK: the regexp allows spaces in domain name
 	$pattern = "((https?|rtmpe?|mms|rtsp)://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)";
 
 	if (preg_match($pattern, $url))
