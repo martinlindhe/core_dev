@@ -180,7 +180,7 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = 
 
 	$params = '';
 	if ($autostart) $params = 'autostart=true';
-	$data .= 'fo.addParam("flashvars","file='.$video_url.'&'.$params.'");';
+	$data .= 'fo.addParam("flashvars","file='.$video_url.'&amp;'.$params.'");';
 
 	$data .= 'fo.write("'.$div_id.'");';
 	$data .= '</script>';
@@ -207,7 +207,7 @@ function embedFlashAudio($audio_url, $w = 176, $h = 60, $div_id = '', $img = '/c
 
 	$params = '';
 	if ($autostart) $params = 'autostart=true';
-	$data .= 'fo.addParam("flashvars","file='.$audio_url.'&'.$params.'");';
+	$data .= 'fo.addParam("flashvars","file='.$audio_url.'&amp;'.$params.'");';
 
 	$data .= 'fo.write("'.$div_id.'");';
 	$data .= '</script>';
