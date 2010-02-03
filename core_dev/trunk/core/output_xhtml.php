@@ -280,10 +280,10 @@ function xhtmlButton($_title, $onclick = '')
  *   array('shape' => 'poly',   'href' => 'c.html', 'coords' => array(x1,y1,x2,y2,..,xn,yn))
  * );
  */
-function xhtmlMap($shapes, $name)
+function xhtmlMap($shapes, $name, $id = '')
 {
 	$res =
-	'<map name="'.$name.'">';
+	'<map name="'.$name.'" id="'.(!empty($id)?$id:'xhtmlmap_'.mt_rand(1,9999999)).'">';
 	foreach ($shapes as $s) {
 		$res .= '<area shape="'.$s['shape'].'" coords="'.implode($s['coords'], ',').'" href="'.$s['href'].'"'.(!empty($s['alt']) ? ' alt="'.$s['alt'].'" title="'.$s['alt'].'"' : '').'/>';
 	}
