@@ -275,11 +275,11 @@ YAHOO.util.Event.onDOMReady(function() {
 
         if (interval.length == 2) {
             inDate = interval[0];
-			inTxt.value =  inDate.getFullYear() + "-" + (inDate.getMonth() + 1) + "-" + inDate.getDate() + " 00:00:00";
+			inTxt.value =  inDate.getFullYear() + "-" + (inDate.getMonth() + 1) + "-" + inDate.getDate();
 
             if (interval[0].getTime() != interval[1].getTime()) {
                 outDate = interval[1];
-				outTxt.value = outDate.getFullYear() + "-" + (outDate.getMonth() + 1) + "-" + outDate.getDate() + " 23:59:59";
+				outTxt.value = outDate.getFullYear() + "-" + (outDate.getMonth() + 1) + "-" + outDate.getDate();
             } else {
                 outTxt.value = "";
             }
