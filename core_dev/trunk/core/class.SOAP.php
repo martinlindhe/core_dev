@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//XXXX: SOAP här är helt fel namn den borde heta WSDL_Generator !!!!
+
 class SOAP
 {
 	public $interface_name = 'Undefined';
