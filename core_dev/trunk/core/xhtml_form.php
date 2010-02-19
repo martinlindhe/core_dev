@@ -269,8 +269,7 @@ class xhtml_form
 				break;
 
 			case 'CHECKBOX':
-				$res .= '<td>'.$e['str'].'</td>';
-				$res .= '<td>'.xhtmlCheckbox($e['name'], $e['str'], $e['default']).'</td>';
+				$res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default']).'</td>';
 				break;
 
 			case 'TEXTAREA':
