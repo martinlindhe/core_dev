@@ -10,12 +10,11 @@
 
 class yui_chart
 {
-	private $data_sources = array();
+	private $data_source = '';
+	private $fields = array();
 
-	function addDataSource($name)
-	{
-		$this->data_sources[] = $name;
-	}
+	function setDataSource($name) { $this->data_source = $name; }
+	function addField($name) { $this->fields[] = $name; }
 
 	function render()
 	{
@@ -40,21 +39,27 @@ class yui_chart
 		';
 
 		//--- data
-		for ($i = 0; $i < count($this->data_sources); $i++) {
-			echo 'var myDataSource'.$i.' = new YAHOO.util.DataSource( YAHOO.example.'.$this->data_sources[$i].' );'."\n";
-			echo 'myDataSource'.$i.'.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'."\n";
-			echo 'myDataSource'.$i.'.responseSchema = { fields: [ "hours", "calls" ] };'."\n";
+		echo 'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.'.$this->data_source.' );'."\n";
+		echo 'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'."\n";
+		echo 'myDataSource.responseSchema = { fields: [ ';
+		for ($i=0; $i < count($this->fields); $i++) {
+			echo '"'.$this->fields[$i].'", ';
 		}
+		echo '] };'."\n";
 
 		//--- chart
+
 
 		echo '
 		var seriesDef =
 		[
-			{ displayName: "Calls", yField: "calls" }
-		];
+			{ displayName: "Calls", yField: "calls" },   /* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX inte statiskt */
+			{ displayName: "Killar", yField: "male" },
+			{ displayName: "Tjejer", yField: "female" },
+			{ displayName: "Telefonister", yField: "operators" },
+		];';
 
-		YAHOO.example.getDataTipText = function( item, index, series )
+		echo 'YAHOO.example.getDataTipText = function( item, index, series )
 		{
 			var toolTipText = series.displayName + " starting at " + item.hours;
 			toolTipText += "\n" + item[series.yField];
@@ -84,17 +89,15 @@ class yui_chart
 		xAxisWidget.title = "hours";'
 		;
 
-		for ($i = 0; $i < count($this->data_sources); $i++) {
-			echo 'var mychart = new YAHOO.widget.LineChart( "chart", myDataSource'.$i.', {'."\n";
-			echo 'series: seriesDef,'."\n";
-			echo 'xField: "hours",'."\n";
-			echo 'yAxis: yAxisWidget,'."\n";
-			echo 'xAxis: xAxisWidget,'."\n";
-			echo 'style: styleDef,'."\n";
-			echo 'dataTipFunction: YAHOO.example.getDataTipText,'."\n";
-			echo 'expressInstall: "assets/expressinstall.swf"'."\n";			//only needed for flash player express install
-			echo '});'."\n";
-		}
+		echo 'var mychart = new YAHOO.widget.LineChart( "chart", myDataSource, {'."\n";
+		echo 'series: seriesDef,'."\n";
+		echo 'xField: "'.$this->fields[0].'",'."\n";
+		echo 'yAxis: yAxisWidget,'."\n";
+		echo 'xAxis: xAxisWidget,'."\n";
+		echo 'style: styleDef,'."\n";
+		echo 'dataTipFunction: YAHOO.example.getDataTipText,'."\n";
+		echo 'expressInstall: "assets/expressinstall.swf"'."\n";			//only needed for flash player express install
+		echo '});'."\n";
 
 		echo '</script>';
 

@@ -508,7 +508,8 @@ function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url 
 /**
  * Generates Javascript style arrays
  */
-function jsArray($name, $list) {
+function jsArray($name, $list)
+{
 
 	$res =
 	'<script type="text/javascript">'.
