@@ -26,7 +26,6 @@ myDataSource.responseSchema =
 };
 
 //--- chart
-
 var seriesDef =
 [
 	{ displayName: "Calls", yField: "calls" }
@@ -39,14 +38,35 @@ YAHOO.example.getDataTipText = function( item, index, series )
 	return toolTipText;
 }
 
-var currencyAxis = new YAHOO.widget.NumericAxis();
-currencyAxis.minimum = 0;
+//Style object for chart
+var styleDef =
+{
+	xAxis:
+	{
+		labelRotation:-90
+	},
+	yAxis:
+	{
+		titleRotation:-90
+	}
+}
+
+
+var yAxisWidget = new YAHOO.widget.NumericAxis();
+yAxisWidget.minimum = 0;
+yAxisWidget.title = 'calls';
+
+var xAxisWidget = new YAHOO.widget.CategoryAxis();
+xAxisWidget.minimum = 0;
+xAxisWidget.title = 'hours';
 
 var mychart = new YAHOO.widget.LineChart( "chart", myDataSource,
 {
 	series: seriesDef,
 	xField: "hours",
-	yAxis: currencyAxis,
+	yAxis: yAxisWidget,
+	xAxis: xAxisWidget,
+	style: styleDef,
 	dataTipFunction: YAHOO.example.getDataTipText,
 	//only needed for flash player express install
 	expressInstall: "assets/expressinstall.swf"
