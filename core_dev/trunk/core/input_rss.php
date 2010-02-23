@@ -32,7 +32,7 @@ class input_rss extends CoreBase
 	{
 		if (is_url($data)) {
 			$http = new HttpClient($data);
-			if ($this->debug) $http->setDebug();
+			if ($this->getDebug()) $http->setDebug();
 			$http->setCacheTime(60 * 60); //1h
 			$data = $u->getBody();
 
@@ -42,7 +42,7 @@ class input_rss extends CoreBase
 				return false;
 			}
 		}
-		if ($this->debug) echo 'Parsing RSS: '.$data.ln();
+		if ($this->getDebug()) echo 'Parsing RSS: '.$data.ln();
 
 		$this->reader = new XMLReader();
 		$this->reader->xml($data);
@@ -176,7 +176,7 @@ class input_rss extends CoreBase
 					if (file_suffix($this->reader->getAttribute('url')) == '.asx')
 					{
 						$asx = new input_asx();
-						if ($this->debug) $asx->setDebug();
+						if ($this->getDebug()) $asx->setDebug();
 						$asx->parse( $this->reader->getAttribute('url') );
 						$list = $asx->getItems();
 
@@ -223,8 +223,13 @@ class input_rss extends CoreBase
 					//<media:content type="text/html" medium="document" url="http://svt.se/2.22620/1.1652031/krigsfartyg_soker_efter_arctic_sea">
 					break;
 
+				case 'application/vnd.apple.mpegurl':
+				    //points to a nested m3u playlist, didnt research more
+				    //<media:content duration="91" expression="sample" height="360" lang="sv" type="application/vnd.apple.mpegurl" width="640" medium="video" url="http://www0.c90910.dna.qbrick.com/90910/od/20100221/abc_2010-0221-SL-hts-a-v1/abc_2010-0221-SL-hts-a-v1_vod.m3u8">
+				    break;
+
 				default:
-					echo 'input_rss->parseItem() unknown MEDIA:CONTENT: '.$this->reader->getAttribute('type')."\n";
+					echo 'input_rss->parseItem() unknown MEDIA:CONTENT: '.$this->reader->getAttribute('type').ln();
 					break;
 				}
 				break;

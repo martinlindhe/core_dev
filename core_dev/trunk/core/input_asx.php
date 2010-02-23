@@ -49,7 +49,7 @@ class input_asx extends CoreBase
 		}
 
 		$reader = new XMLReader();
-		if ($this->debug) echo 'Parsing ASX: '.$data.ln();
+		if ($this->getDebug()) echo 'Parsing ASX: '.$data.ln();
 		$reader->xml($data);
 
 		$item = new MediaItem();

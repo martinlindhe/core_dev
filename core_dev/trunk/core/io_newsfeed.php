@@ -103,7 +103,7 @@ class NewsFeed extends CoreList
 	{
 		if (is_url($data)) {
 			$http = new HttpClient($data);
-			if ($this->debug) $http->setDebug();
+			if ($this->getDebug()) $http->setDebug();
 			$data = $http->getBody();
 		}
 
@@ -116,7 +116,7 @@ class NewsFeed extends CoreList
 			return false;
 		}
 
-		if ($this->debug) $feed->setDebug();
+		if ($this->getDebug()) $feed->setDebug();
 		$feed->parse($data);
 		$this->title = $feed->getTitle();
 		$this->addItems( $feed->getItems() );
