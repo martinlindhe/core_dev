@@ -338,13 +338,13 @@ function guessLanguage($text)
 	return $result;
 }
 
-function generateAcronyms($_lang, $_acronym, $_ammount)
+function generateAcronyms($_lang, $_acronym, $_amount)
 {
 	global $db;
-	if (!is_numeric($_lang) || !is_numeric($_ammount)) return false;
+	if (!is_numeric($_lang) || !is_numeric($_amount)) return false;
 
 	$out = array();
-	for ($i = 0; $i < $_ammount; $i++) {
+	for ($i = 0; $i < $_amount; $i++) {
 		$curr = '';
 		for ($j=0; $j<strlen($_acronym); $j++) {
 			$c = substr($_acronym, $j, 1);

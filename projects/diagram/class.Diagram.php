@@ -22,7 +22,7 @@ class Diagram
 	private $vline_min = 1, $vline_max = 10, $vline_step = 1, $vline_text = '';	///< Settings for vertical line of diagram
 	private $hline_min = 1, $hline_max = 20, $hline_step = 0.5, $hline_text = '';	///< Settings for horizontal line of diagram
 
-	private $h_spacing = 40, $v_spacing = 40;	///< ammount of space between border & horizontal line (in pixels)
+	private $h_spacing = 40, $v_spacing = 40;	///< amount of space between border & horizontal line (in pixels)
 
 	function __construct()
 	{
