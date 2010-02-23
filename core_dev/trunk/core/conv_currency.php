@@ -212,7 +212,7 @@ class ConvertCurrency extends CoreConverter
 	}
 
 	/**
-	 * Converts specified ammount of $from currency into $to currency
+	 * Converts specified amount of $from currency into $to currency
 	 * @param $val the value to convert from
 	 * @param $from currency code to convert from
 	 * @param $to currency code to convert to
