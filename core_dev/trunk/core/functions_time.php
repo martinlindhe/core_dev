@@ -89,6 +89,24 @@ function date_diff($t1, $t2, $precision = 6, $arr = false)
 }
 
 /**
+ * @return number of days the date period spans over
+ */
+function num_days($date1, $date2)
+{
+	if (!is_numeric($date1)) $date1 = strtotime($date1);
+	if (!is_numeric($date2)) $date2 = strtotime($date2);
+
+	if ($date1 > $date2)
+		$date_diff = $date1 - $date2;
+	else
+		$date_diff = $date2 - $date1;
+
+	$days = floor($date_diff / (60*60*24)) + 1;
+
+	return $days;
+}
+
+/**
  * Converts a timespan into human-readable text
  *
  * @param $secs number of seconds to present
