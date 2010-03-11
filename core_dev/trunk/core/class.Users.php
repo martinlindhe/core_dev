@@ -123,7 +123,7 @@ class Users
 	/**
 	 * Looks up a username by id
 	 */
-	function getName($_id)
+	static function getName($_id)
 	{
 		global $db, $h;
 
