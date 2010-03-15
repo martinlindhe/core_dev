@@ -13,11 +13,13 @@ class yui_chart
 	private $data_source = '';
 	private $fields = array();
 
-	function setDataSource($name) { $this->data_source = $name; }
+	function setDataSource($arr) { $this->data_source = $arr; }
 	function addField($name, $title) { $this->fields[] = array('name'=>$name, 'title'=>$title); }
 
 	function render()
 	{
+		echo '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-min.js&2.8.0r4/build/dom/dom-min.js&2.8.0r4/build/event/event-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js"></script>';
+
 		echo
 		'<style type="text/css">'.
 		'#chart { width: 500px; height: 350px; }'.
@@ -34,7 +36,9 @@ class yui_chart
 		'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.0r4/build/charts/assets/charts.swf";';
 
 		//--- data
-		echo 'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.'.$this->data_source.' );'."\n";
+		echo jsArray('YAHOO.example.DataSource', $this->data_source);
+		echo 'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.DataSource);'."\n";
+
 		echo 'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'."\n";
 		echo 'myDataSource.responseSchema = { fields: [ ';
 		for ($i=0; $i < count($this->fields); $i++)

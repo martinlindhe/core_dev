@@ -510,10 +510,7 @@ function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url 
  */
 function jsArray($name, $list)
 {
-
-	$res =
-	'<script type="text/javascript">'.
-	$name.' = ['."\n";
+	$res = $name.' = ['."\n";
 
 	foreach ($list as $l)
 	{
@@ -524,9 +521,7 @@ function jsArray($name, $list)
 
 		$res .= '},'."\n";
 	}
-	$res .=
-	'];'.
-	'</script>';
+	$res .= '];';
 
 	return $res;
 }
