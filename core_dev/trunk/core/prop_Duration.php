@@ -100,7 +100,15 @@ class Duration extends CoreProperty
 	}
 
 	/**
-	 * Converts a duration into human-readable text
+	 * Renders a duration with minute-precision
+	 */
+	function renderMinutes($precision = 1)
+	{
+		return round($this->value / 60, $precision);
+	}
+
+	/**
+	 * Renders a duration in human-readable text
 	 *
 	 * @return "2 days, 4 hours and 30 seconds"
 	 */
