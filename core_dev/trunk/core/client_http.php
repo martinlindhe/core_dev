@@ -120,6 +120,7 @@ class HttpClient extends CoreBase
 
 	/**
 	 * Fetches the data of the web resource
+	 * @param $post_params array of key->val pairs of POST parameters to send
 	 * uses HTTP AUTH if username is set
 	 */
 	private function get($head_only = false, $post_params = array())
@@ -140,7 +141,7 @@ class HttpClient extends CoreBase
 			curl_setopt($ch, CURLOPT_USERPWD, $this->Url->getUsername().':'.$this->Url->getPassword());
 		}
 
-		if (!$this->Url->getUsername() && empty($post_params)) {
+		if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time) {
 			$cache = new Cache();
 			$cache->setCacheTime($this->cache_time);
 			if ($this->getDebug()) $cache->setDebug();
@@ -177,7 +178,7 @@ class HttpClient extends CoreBase
 		}
 
 		if (!empty($post_params)) {
-			if ($this->getDebug()) echo "http->post() ".$this->render()." ... ";
+			if ($this->getDebug()) echo "http->post() ".$this->Url->get()." ... ";
 
 			if (is_array($post_params)) {
 				$var = htmlspecialchars(http_build_query($post_params));
@@ -197,13 +198,12 @@ class HttpClient extends CoreBase
 		curl_close($ch);
 
 		if ($this->getDebug()) {
-			echo "Got ".strlen($res)." bytes, showing first 2000:".ln();
-			d( htmlspecialchars(substr($res,0,2000)) );
+			echo "Got ".strlen($res)." bytes".ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
 		}
 
 		$this->parseResponse($res);
 
-		if (!$this->Url->getUsername() && empty($post_params)) {
+		if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time) {
 			$cache->set($key_head, serialize($this->headers));
 			if (!$head_only)
 				$cache->set($key_full, $res);

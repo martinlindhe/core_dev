@@ -39,7 +39,7 @@ function age($sql_time)
 {
 	if (!$sql_time) return false;
 
-	$age = date_diff($sql_time, 'now', 2, true);
+	$age = date_diff2($sql_time, 'now', 2, true);
 	return $age['years'];
 }
 
@@ -51,7 +51,7 @@ function age($sql_time)
  * @param $precision how exact? (year,month,day,hour,minute,second)
  * @param $arr set to true to return result as a array with precision as index, default is text string
  */
-function date_diff($t1, $t2, $precision = 6, $arr = false)
+function date_diff2($t1, $t2, $precision = 6, $arr = false) ///XXX php5.3 has a date_diff() function
 {
 	if (preg_match('/\D/', $t1) && ($t1 = strtotime($t1)) === false) return false;
 	if (preg_match('/\D/', $t2) && ($t2 = strtotime($t2)) === false) return false;
