@@ -46,6 +46,11 @@ class Cache extends CoreBase
 		return true;
 	}
 
+    /**
+     * @return true if cache is active
+     */
+	function isActive() { return ($this->handle && $this->expire_time) ? true : false; }
+
 	/**
 	 * @param $s cache time in seconds; max 2592000 (30 days)
 	 */

@@ -11,6 +11,8 @@
 
 //STATUS: good
 
+//FIXME "301 moved permanently" doesnt properly re-parse the subsequent request, which curl does automatically
+
 require_once('core.php');
 require_once('network.php');
 
@@ -141,9 +143,11 @@ class HttpClient extends CoreBase
 			curl_setopt($ch, CURLOPT_USERPWD, $this->Url->getUsername().':'.$this->Url->getPassword());
 		}
 
-		if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time) {
-			$cache = new Cache();
-			$cache->setCacheTime($this->cache_time);
+        $cache = new Cache();
+        $cache->setCacheTime($this->cache_time);
+
+		if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time && $cache->isActive()) {
+
 			if ($this->getDebug()) $cache->setDebug();
 			$key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
 			$key_full = 'url//'.     htmlspecialchars( $this->Url->get() );
@@ -203,7 +207,7 @@ class HttpClient extends CoreBase
 
 		$this->parseResponse($res);
 
-		if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time) {
+		if (!$this->Url->getUsername() && empty($post_params) && $cache->isActive()) {
 			$cache->set($key_head, serialize($this->headers));
 			if (!$head_only)
 				$cache->set($key_full, $res);
