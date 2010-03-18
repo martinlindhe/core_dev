@@ -200,7 +200,7 @@ abstract class db_base extends CoreBase
 		if (!empty($conf['password'])) $this->password = $conf['password'];
 		if (!empty($conf['database'])) $this->database = $conf['database'];
 		if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
-		if (!empty($conf['debug']))    $this->debug    = $conf['debug'];
+		if (!empty($conf['debug']))    $this->setDebug($conf['debug']);
 	}
 
 	/**
@@ -267,7 +267,7 @@ abstract class db_base extends CoreBase
 	 */
 	function measure_time()
 	{
-		if (!$this->debug) return;
+		if (!$this->getDebug()) return;
 		$this->time_measure = microtime(true);
 	}
 
@@ -284,7 +284,7 @@ abstract class db_base extends CoreBase
 	 */
 	function measure_query($q)
 	{
-		if (!$this->debug) return;
+		if (!$this->getDebug()) return;
 		$this->time_spent[ $this->queries_cnt ] = microtime(true) - $this->time_measure;
 		$this->queries[ $this->queries_cnt ] = $q;
 		$this->queries_cnt++;
@@ -309,7 +309,7 @@ abstract class db_base extends CoreBase
 	function showProfile()
 	{
 		global $config;
-		if (!$this->debug) return;
+		if (!$this->getDebug()) return;
 
 		$rand_id = mt_rand(1,5000000);
 
