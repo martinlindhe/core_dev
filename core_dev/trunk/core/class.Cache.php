@@ -4,7 +4,7 @@
  *
  * Implements a cache using memcached with automatic expire time
  *
- * Requirements: memcached php5-memcache
+ * Requirements: memcached php5-memcache (php 5.2 or older), or php5-memcached (php 5.3 or newer)
  *
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
@@ -25,12 +25,23 @@ class Cache extends CoreBase
 	 */
 	function __construct($server_pool = false)
 	{
-		if (!class_exists('Memcache')) {
+	    //php5-memcache for php 5.2 or older
+        if (PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION < 3 && !class_exists('Memcache')) {
 			dp("Cache FAIL: php5-memcache not found");
 			return false;
 		}
 
-		$this->handle = new Memcache;
+        //php5-memcached for php 5.3 or newer
+        if (PHP_MAJOR_VERSION >= 5 && PHP_MINOR_VERSION >= 3 && !class_exists('Memcached')) {
+			dp("Cache FAIL: php5-memcached not found");
+			return false;
+		}
+
+        if (class_exists('Memcached')) {
+    		$this->handle = new Memcached;
+    	} else {
+            $this->handle = new Memcache;
+    	}
 
 		if (!$server_pool) $server_pool = array('127.0.0.1:11211');
 
