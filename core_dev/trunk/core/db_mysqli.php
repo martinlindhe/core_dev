@@ -304,13 +304,13 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			if ($this->getDebug()) $this->profileError($q, $this->db_handle->error);
 			return '';
 		}
 
 		if ($result->num_rows > 1) {
 			echo "ERROR: DB_MySQLi::getOneItem() returned ".$result->num_rows." rows!\n";
-			if ($this->debug) echo "Query: ".$q."\n";
+			if ($this->getDebug()) echo "Query: ".$q."\n";
 			die;
 		}
 

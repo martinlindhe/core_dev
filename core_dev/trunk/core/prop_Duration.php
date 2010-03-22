@@ -102,7 +102,7 @@ class Duration extends CoreProperty
 	/**
 	 * Renders a duration with minute-precision
 	 */
-	function renderMinutes($precision = 1)
+	function renderMinutes($precision = 1) //XXX fixme rename to inMinutes()
 	{
 		return round($this->value / 60, $precision);
 	}
