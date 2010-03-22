@@ -68,7 +68,7 @@ class yui_chart
 		echo
 		'YAHOO.example.getDataTipText = function( item, index, series )
 		{
-			var toolTipText = series.displayName + " starting at " + item.hours;
+			var toolTipText = series.displayName + " at " + item.'.$this->x_field_name.';
 			toolTipText += "\n" + item[series.yField];
 			return toolTipText;
 		}'."\n";
