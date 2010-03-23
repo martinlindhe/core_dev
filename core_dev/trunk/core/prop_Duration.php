@@ -18,6 +18,21 @@ class Duration extends CoreProperty
 
 	function get() { return $this->value; }
 
+	function inMinutes($precision = 1)
+	{
+		return round($this->value / 60, $precision);
+	}
+
+	function inSeconds($precision = 0)
+	{
+		return round($this->value, $precision);
+	}
+
+	function inMilliseconds($precision = 0)
+	{
+		return round($this->value * 1000, $precision);
+	}
+
 	/**
 	 * Decodes a textual representation for a duration
 	 *
@@ -48,16 +63,6 @@ class Duration extends CoreProperty
 		dtrace();
 		die('Duration->set( '.$s.' ) FAIL');
 		//$this->duration = $s;
-	}
-
-	function inSeconds()
-	{
-		return round($this->value, 0);
-	}
-
-	function inMilliseconds()
-	{
-		return round($this->value * 1000, 0);
 	}
 
 	/**
@@ -97,14 +102,6 @@ class Duration extends CoreProperty
 			$retval = '00:00';
 
 		return $retval;
-	}
-
-	/**
-	 * Renders a duration with minute-precision
-	 */
-	function renderMinutes($precision = 1) //XXX fixme rename to inMinutes()
-	{
-		return round($this->value / 60, $precision);
 	}
 
 	/**
