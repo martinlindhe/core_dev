@@ -5,9 +5,6 @@
 
 //STATUS: WIP
 
-//ersätter js/yui_chart.js - uppdatera SAVAK och skrota yui_charts.js när de e klart
-
-
 class yui_chart
 {
 	private $data_source = '';
