@@ -44,6 +44,18 @@ function getCustomerId($name, $password = '')
 /**
  * Returns all customers
  */
+function getCustomer($customer_id)
+{
+	global $db;
+	if (!is_numeric($customer_id)) return false;
+
+	$q = 'SELECT * FROM tblCustomers WHERE customerId='.$customer_id;
+	return $db->getOneRow($q);
+}
+
+/**
+ * Returns all customers
+ */
 function getCustomers()
 {
 	global $db;
