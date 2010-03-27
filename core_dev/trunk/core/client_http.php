@@ -191,7 +191,7 @@ class HttpClient extends CoreBase
             if ($this->getDebug()) echo "http->post() ".$this->Url->get()." ... ";
 
             if (is_array($post_params)) {
-                $var = htmlspecialchars(http_build_query($post_params));
+                $var = http_build_query($post_params);
             } else {
                 $var = $post_params;
             }
