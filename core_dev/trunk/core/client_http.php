@@ -21,249 +21,249 @@ require_once('class.Cache.php');
 
 class HttpClient extends CoreBase
 {
-	public  $Url;              ///< Url property
-	private $headers, $body;
-	private $status_code;      ///< return code from http request, such as 404
-	private $cache_time = 0;   ///< in seconds
-	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
-	private $referer    = '';  ///< if set, send Referer header
-	private $cookies = array(); ///< holds cookies to be sent to the server in the following request
+    public  $Url;              ///< Url property
+    private $headers, $body;
+    private $status_code;      ///< return code from http request, such as 404
+    private $cache_time = 0;   ///< in seconds
+    private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
+    private $referer    = '';  ///< if set, send Referer header
+    private $cookies = array(); ///< holds cookies to be sent to the server in the following request
 
-	function __construct($url = '')
-	{
-		if (!function_exists('curl_init')) {
-			echo "HttpClient->ERROR: php5-curl missing".ln();
-			return false;
-		}
+    function __construct($url = '')
+    {
+        if (!function_exists('curl_init')) {
+            echo "HttpClient->ERROR: php5-curl missing".ln();
+            return false;
+        }
 
-		$this->Url = new Url($url);
-	}
+        $this->Url = new Url($url);
+    }
 
-	function getBody()
-	{
-		$this->get(false);
-		return $this->body;
-	}
+    function getBody()
+    {
+        $this->get(false);
+        return $this->body;
+    }
 
-	function getHeaders()
-	{
-		$this->get(true);
-		return $this->headers;
-	}
+    function getHeaders()
+    {
+        $this->get(true);
+        return $this->headers;
+    }
 
-	function getHeader($name)
-	{
-		$name = strtolower($name);
+    function getHeader($name)
+    {
+        $name = strtolower($name);
 
-		if (isset($this->headers[ $name ]))
-			return $this->headers[$name];
+        if (isset($this->headers[ $name ]))
+            return $this->headers[$name];
 
-		return false;
-	}
+        return false;
+    }
 
     function setReferer($s) { $this->referer = $s; }
 
-	/**
-	 * Sets a cookie to send with the next HTTP request
-	 */
-	function setCookie($name, $val)
-	{
-		$this->cookies[ $name ] = $val;
-	}
+    /**
+     * Sets a cookie to send with the next HTTP request
+     */
+    function setCookie($name, $val)
+    {
+        $this->cookies[ $name ] = $val;
+    }
 
-	/**
-	 * Sets/updates an array (name->val) of cookies
-	 */
-	function setCookies($arr)
-	{
-		foreach ($arr as $name => $val)
-			$this->setCookie($name, $val);
-	}
+    /**
+     * Sets/updates an array (name->val) of cookies
+     */
+    function setCookies($arr)
+    {
+        foreach ($arr as $name => $val)
+            $this->setCookie($name, $val);
+    }
 
-	/**
-	 * Returns the value of a cookie from last server response
-	 */
-	function getCookie($name)
-	{
-		if (!isset($this->cookies[ $name ]))
-			return false;
+    /**
+     * Returns the value of a cookie from last server response
+     */
+    function getCookie($name)
+    {
+        if (!isset($this->cookies[ $name ]))
+            return false;
 
-		return $this->cookies[ $name ];
-	}
+        return $this->cookies[ $name ];
+    }
 
-	/**
-	 * Returns all cookies from last server response
-	 */
-	function getCookies() { return $this->cookies; }
+    /**
+     * Returns all cookies from last server response
+     */
+    function getCookies() { return $this->cookies; }
 
-	/**
-	 * Returns HTTP status code for the last request
-	 */
-	function getStatus()
-	{
-		return $this->status_code;
-	}
+    /**
+     * Returns HTTP status code for the last request
+     */
+    function getStatus()
+    {
+        return $this->status_code;
+    }
 
-	function getUrl() { return $this->Url->get(); }
+    function getUrl() { return $this->Url->get(); }
 
-	/**
-	 * @param $s cache time in seconds; max 2592000 (30 days)
-	 */
-	function setCacheTime($s) { $this->cache_time = $s; }
+    /**
+     * @param $s cache time in seconds; max 2592000 (30 days)
+     */
+    function setCacheTime($s) { $this->cache_time = $s; }
 
-	function setUserAgent($ua) { $this->user_agent = $ua; }
+    function setUserAgent($ua) { $this->user_agent = $ua; }
 
-	function setUrl($s) { $this->Url->set($s); }
+    function setUrl($s) { $this->Url->set($s); }
 
-	function setUsername($s) { $this->Url->setUsername($s); }
-	function setPassword($s) { $this->Url->setPassword($s); }
+    function setUsername($s) { $this->Url->setUsername($s); }
+    function setPassword($s) { $this->Url->setPassword($s); }
 
-	function post($params)
-	{
-		return $this->get(false, $params);
-	}
+    function post($params)
+    {
+        return $this->get(false, $params);
+    }
 
-	/**
-	 * Fetches the data of the web resource
-	 * @param $post_params array of key->val pairs of POST parameters to send
-	 * uses HTTP AUTH if username is set
-	 */
-	private function get($head_only = false, $post_params = array())
-	{
-		$ch = curl_init( $this->Url->get() );
-		if (!$ch) {
-			echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".ln();
-			return false;
-		}
+    /**
+     * Fetches the data of the web resource
+     * @param $post_params array of key->val pairs of POST parameters to send
+     * uses HTTP AUTH if username is set
+     */
+    private function get($head_only = false, $post_params = array())
+    {
+        $ch = curl_init( $this->Url->get() );
+        if (!$ch) {
+            echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".ln();
+            return false;
+        }
 
-		if ($this->Url->getScheme() == 'https') {
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		}
+        if ($this->Url->getScheme() == 'https') {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
 
         if ($this->referer)
             curl_setopt($ch, CURLOPT_REFERER, $this->referer);
 
-		if ($this->Url->getUsername()) {
-			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-			curl_setopt($ch, CURLOPT_USERPWD, $this->Url->getUsername().':'.$this->Url->getPassword());
-		}
+        if ($this->Url->getUsername()) {
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ch, CURLOPT_USERPWD, $this->Url->getUsername().':'.$this->Url->getPassword());
+        }
 
         $cache = new Cache();
         $cache->setCacheTime($this->cache_time);
 
-		if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time && $cache->isActive()) {
+        if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time && $cache->isActive()) {
 
-			if ($this->getDebug()) $cache->setDebug();
-			$key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
-			$key_full = 'url//'.     htmlspecialchars( $this->Url->get() );
+            if ($this->getDebug()) $cache->setDebug();
+            $key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
+            $key_full = 'url//'.     htmlspecialchars( $this->Url->get() );
 
-			if ($head_only) {
-				$this->headers = unserialize( $cache->get($key_head) );
-				if ($this->headers)
-					return true;
-			} else {
-				$full = $cache->get($key_full);
-				if ($full) {
-					$this->parseResponse($full);
-					return true;
-				}
-			}
-		}
+            if ($head_only) {
+                $this->headers = unserialize( $cache->get($key_head) );
+                if ($this->headers)
+                    return true;
+            } else {
+                $full = $cache->get($key_full);
+                if ($full) {
+                    $this->parseResponse($full);
+                    return true;
+                }
+            }
+        }
 
-		curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch, CURLOPT_NOBODY, $head_only ? 1 : 0);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_NOBODY, $head_only ? 1 : 0);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-		if ($this->getDebug()) {
-			curl_setopt($ch, CURLOPT_VERBOSE, true);
-		}
+        if ($this->getDebug()) {
+            curl_setopt($ch, CURLOPT_VERBOSE, true);
+        }
 
-		if ($this->cookies) {
-			if ($this->getDebug()) echo "http->get() sending cookies: ".encode_cookie_string($this->cookies).ln();
-			curl_setopt($ch, CURLOPT_COOKIE, encode_cookie_string($this->cookies));
-		}
+        if ($this->cookies) {
+            if ($this->getDebug()) echo "http->get() sending cookies: ".encode_cookie_string($this->cookies).ln();
+            curl_setopt($ch, CURLOPT_COOKIE, encode_cookie_string($this->cookies));
+        }
 
-		if (!empty($post_params)) {
-			if ($this->getDebug()) echo "http->post() ".$this->Url->get()." ... ";
+        if (!empty($post_params)) {
+            if ($this->getDebug()) echo "http->post() ".$this->Url->get()." ... ";
 
-			if (is_array($post_params)) {
-				$var = htmlspecialchars(http_build_query($post_params));
-			} else {
-				$var = $post_params;
-			}
-			if ($this->getDebug()) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
+            if (is_array($post_params)) {
+                $var = htmlspecialchars(http_build_query($post_params));
+            } else {
+                $var = $post_params;
+            }
+            if ($this->getDebug()) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
 
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
-		} else {
-			if ($this->getDebug()) echo "http->get() ".$this->Url->get()." ... ".ln();
-		}
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
+        } else {
+            if ($this->getDebug()) echo "http->get() ".$this->Url->get()." ... ".ln();
+        }
 
-		$res = curl_exec($ch);
+        $res = curl_exec($ch);
 
-		curl_close($ch);
+        curl_close($ch);
 
-		if ($this->getDebug()) {
-			echo "Got ".strlen($res)." bytes".ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
-		}
+        if ($this->getDebug()) {
+            echo "Got ".strlen($res)." bytes".ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
+        }
 
-		$this->parseResponse($res);
+        $this->parseResponse($res);
 
-		if (!$this->Url->getUsername() && empty($post_params) && $cache->isActive()) {
-			$cache->set($key_head, serialize($this->headers));
-			if (!$head_only)
-				$cache->set($key_full, $res);
-		}
+        if (!$this->Url->getUsername() && empty($post_params) && $cache->isActive()) {
+            $cache->set($key_head, serialize($this->headers));
+            if (!$head_only)
+                $cache->set($key_full, $res);
+        }
 
-		if ($head_only)
-			return $this->headers;
+        if ($head_only)
+            return $this->headers;
 
-		return $this->body;
-	}
+        return $this->body;
+    }
 
-	/**
-	 * Parse HTTP response data into object variables and sets status code
-	 */
+    /**
+     * Parse HTTP response data into object variables and sets status code
+     */
 
-	private function parseResponse($res)
-	{
-		$pos = strpos($res, "\r\n\r\n");
-		if ($pos !== false) {
-			$head = substr($res, 0, $pos);
-			$this->body = substr($res, $pos + strlen("\r\n\r\n"));
-			$headers = explode("\r\n", $head);
-		} else {
-			$this->body = '';
-			$headers = explode("\r\n", $res);
-		}
+    private function parseResponse($res)
+    {
+        $pos = strpos($res, "\r\n\r\n");
+        if ($pos !== false) {
+            $head = substr($res, 0, $pos);
+            $this->body = substr($res, $pos + strlen("\r\n\r\n"));
+            $headers = explode("\r\n", $head);
+        } else {
+            $this->body = '';
+            $headers = explode("\r\n", $res);
+        }
 
-		$status = array_shift($headers);
-		if ($this->getDebug()) echo "http->get() returned HTTP status ".$status.ln();
+        $status = array_shift($headers);
+        if ($this->getDebug()) echo "http->get() returned HTTP status ".$status.ln();
 
-		switch (substr($status, 0, 9)) {
-		case 'HTTP/1.0 ':
-		case 'HTTP/1.1 ':
-			$this->status_code = intval(substr($status, 9));
-			break;
-		}
+        switch (substr($status, 0, 9)) {
+        case 'HTTP/1.0 ':
+        case 'HTTP/1.1 ':
+            $this->status_code = intval(substr($status, 9));
+            break;
+        }
 
-		$this->headers = array();
-		foreach ($headers as $h) {
-			$col = explode(': ', $h, 2);
-			$this->headers[ strtolower($col[0]) ] = $col[1];
-		}
+        $this->headers = array();
+        foreach ($headers as $h) {
+            $col = explode(': ', $h, 2);
+            $this->headers[ strtolower($col[0]) ] = $col[1];
+        }
 
-		// store cookies sent from the server in our cookie pool for reuse in subsequent requests
-		$raw_cookies = $this->getHeader('set-cookie');
+        // store cookies sent from the server in our cookie pool for reuse in subsequent requests
+        $raw_cookies = $this->getHeader('set-cookie');
 
-		if ($raw_cookies)
-			$this->setCookies( decode_cookie_string($raw_cookies) );
+        if ($raw_cookies)
+            $this->setCookies( decode_cookie_string($raw_cookies) );
 
-	}
+    }
 
 }
 
