@@ -26,6 +26,7 @@ class HttpClient extends CoreBase
 	private $status_code;      ///< return code from http request, such as 404
 	private $cache_time = 0;   ///< in seconds
 	private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
+	private $referer    = '';  ///< if set, send Referer header
 	private $cookies = array(); ///< holds cookies to be sent to the server in the following request
 
 	function __construct($url = '')
@@ -59,6 +60,8 @@ class HttpClient extends CoreBase
 
 		return false;
 	}
+
+    function setReferer($s) { $this->referer = $s; }
 
 	/**
 	 * Sets a cookie to send with the next HTTP request
@@ -137,6 +140,9 @@ class HttpClient extends CoreBase
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 		}
+
+        if ($this->referer)
+            curl_setopt($ch, CURLOPT_REFERER, $this->referer);
 
 		if ($this->Url->getUsername()) {
 			curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
