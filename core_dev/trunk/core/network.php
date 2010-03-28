@@ -175,6 +175,21 @@ function scheme_default_port($scheme)
 }
 
 /**
+ * Decodes a string of raw POST params (key1=val+1&key2=val%202) into an array
+ */
+function decode_raw_http_params($raw)
+{
+    $out = array();
+
+    $pairs = explode('&', $raw);
+    foreach ($pairs as $key => $val) {
+        $x = explode('=', $val);
+        $out[ $x[0] ] = urldecode($x[1]);
+    }
+    return $out;
+}
+
+/**
  * Parses a HTTP header "set-cookie" string into array
  */
 function decode_cookie_string($raw)
