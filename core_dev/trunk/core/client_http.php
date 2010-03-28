@@ -25,7 +25,7 @@ class HttpClient extends CoreBase
     private $headers, $body;
     private $status_code;      ///< return code from http request, such as 404
     private $cache_time = 0;   ///< in seconds
-    private $user_agent = 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.4) Gecko/20091028 Ubuntu/9.10 (karmic) Firefox/3.5.4';
+    private $user_agent = 'core_dev HttpClient 1.0';
     private $referer    = '';  ///< if set, send Referer header
     private $cookies = array(); ///< holds cookies to be sent to the server in the following request
 
