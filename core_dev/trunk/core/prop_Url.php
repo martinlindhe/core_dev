@@ -107,6 +107,14 @@ class Url extends CoreProperty
         $this->param[$name] = $val;
     }
 
+    function getParam($name)
+    {
+        if (isset($this->param[$name]))
+            return $this->param[$name];
+
+        return false;
+    }
+
     /**
      * Removes a parameter from the url
      */
