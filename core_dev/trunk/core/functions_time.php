@@ -188,6 +188,9 @@ function now()
  */
 function sql_datetime($ts)
 {
+	if (!is_numeric($ts))
+		$ts = strtotime($ts);
+
 	return date('Y-m-d H:i:s', $ts);
 }
 
@@ -199,6 +202,9 @@ function sql_datetime($ts)
  */
 function sql_date($ts)
 {
+	if (!is_numeric($ts))
+		$ts = strtotime($ts);
+
 	return date('Y-m-d', $ts);
 }
 
