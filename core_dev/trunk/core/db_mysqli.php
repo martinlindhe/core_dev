@@ -97,7 +97,7 @@ class db_mysqli extends db_base
 		$result = $this->real_query($q);
 
 		if (!$result) {
-			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			if ($this->getDebug()) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 		}
 
 		parent::measure_query($q);
@@ -122,7 +122,7 @@ class db_mysqli extends db_base
 		if ($result) {
 			$ret_id = $this->db_handle->insert_id;
 		} else {
-			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			if ($this->getDebug()) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 		}
 
 		parent::measure_query($q);
@@ -147,7 +147,7 @@ class db_mysqli extends db_base
 		if ($result) {
 			$affected_rows = $this->db_handle->affected_rows;
 		} else {
-			if ($this->debug) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
+			if ($this->getDebug()) $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
 		}
 
 		parent::measure_query($q);
@@ -166,7 +166,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			if ($this->getDebug()) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
@@ -194,7 +194,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			if ($this->getDebug()) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
@@ -221,7 +221,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			if ($this->getDebug()) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
@@ -248,7 +248,7 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			if ($this->getDebug()) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
@@ -275,13 +275,13 @@ class db_mysqli extends db_base
 		parent::measure_time();
 
 		if (!$result = $this->real_query($q)) {
-			if ($this->debug) $this->profileError($q, $this->db_handle->error);
+			if ($this->getDebug()) $this->profileError($q, $this->db_handle->error);
 			return array();
 		}
 
 		if ($result->num_rows > 1) {
 			echo "ERROR: DB_MySQLi::getOneRow() returned ".$result->num_rows." rows!\n";
-			if ($this->debug) echo "Query: ".$q."\n";
+			if ($this->getDebug()) echo "Query: ".$q."\n";
 			die;
 		}
 

@@ -301,6 +301,7 @@ abstract class db_base extends CoreBase
 	{
 		$this->query_error[ $this->queries_cnt ] = $err;
 		$this->measure_query($q);
+		dp('SQL ERROR '.$err);
 	}
 
 	/**
