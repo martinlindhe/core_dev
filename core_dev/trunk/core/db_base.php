@@ -333,7 +333,7 @@ abstract class db_base extends CoreBase
 			$keywords = array(
 			'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ',
 			' FROM ', ' SET ', ' WHERE ', ' LEFT JOIN ', ' GROUP BY ', ' ORDER BY ',
-			' ON ', ' AS ', ' AND ', ' OR ', ' LIMIT ',
+			' ON ', ' AS ', ' AND ', ' OR ', ' LIMIT ', ' BETWEEN ',
 			' IS NULL', ' NOT NULL ', ' DESC', ' ASC',
 			' != ',
 			'NOW()', 'COUNT',
@@ -341,7 +341,7 @@ abstract class db_base extends CoreBase
 			$decorated = array(
 			'<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ',
 			'<br/><b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ', '<br/><b>LEFT JOIN</b> ', '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
-			' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ',
+			' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ', ' <b>BETWEEN</b> ',
 			' <b>IS NULL</b>', ' <b>NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
 			' <b>!=</b> ',
 			'<b>NOW()</b>', '<b>COUNT</b>',
