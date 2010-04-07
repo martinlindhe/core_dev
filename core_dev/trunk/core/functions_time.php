@@ -214,9 +214,18 @@ function sql_date($ts)
  * @param $datetime is a MySQL datetime
  * @return given MySQL datetime in UNIX timestamp format
  */
-function datetime_to_timestamp($datetime)
+function datetime_to_timestamp($datetime) //XXX deprecate! use ts() instead
 {
 	return strtotime($datetime);
+}
+
+/**
+ * Converts input (string or numeric) into a unix timestamp
+ */
+function ts($d)
+{
+	if (is_numeric($d)) return $d;
+	return strtotime($d);
 }
 
 /**
