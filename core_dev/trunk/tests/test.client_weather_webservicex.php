@@ -6,8 +6,13 @@ require_once('client_weather_webservicex.php');
 
 $client = new weather_webservicex();
 
-$weather = $client->getWeather('stockholm', 'sweden');
+//Stockholm / Bromma
+$res = $client->getWeather('Norrkoping', 'Sweden');
+print_r($res);
 
-print_r($weather);
+/*
+$res = $client->getCitiesByCountry('sweden');
+print_r($res);
+*/
 
 ?>

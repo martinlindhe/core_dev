@@ -11,7 +11,7 @@
 
 //STATUS: good
 
-//FIXME "301 moved permanently" doesnt properly re-parse the subsequent request, which curl does automatically
+//FIXME "301 moved permanently" doesnt properly re-parse the subsequent request, which curl does automatically. see $max_redirects
 
 require_once('core.php');
 require_once('network.php');
@@ -28,6 +28,7 @@ class HttpClient extends CoreBase
     private $user_agent = 'core_dev HttpClient 1.0';
     private $referer    = '';  ///< if set, send Referer header
     private $cookies = array(); ///< holds cookies to be sent to the server in the following request
+    private $max_redirects = 99;
 
     function __construct($url = '')
     {
@@ -118,6 +119,11 @@ class HttpClient extends CoreBase
     function setUsername($s) { $this->Url->setUsername($s); }
     function setPassword($s) { $this->Url->setPassword($s); }
 
+    /**
+     * @param $n max number of redirects, set 0 to disable redirects
+     */
+    function setMaxRedirects($n) { $this->max_redirects = $n; }
+
     function post($params)
     {
         return $this->get(false, $params);
@@ -139,6 +145,14 @@ class HttpClient extends CoreBase
         if ($this->Url->getScheme() == 'https') {
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
+
+        if ($this->max_redirects) {
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, $this->max_redirects);
+        } else {
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
         }
 
         if ($this->referer)
