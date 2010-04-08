@@ -16,49 +16,49 @@ require_once('class.CoreConverter.php');
 
 class ConvertTemperature extends CoreConverter
 {
-	private $lookup = array(
-	'celcius'   => 'c',
-	'farenheit' => 'f',
-	'rakine'    => 'r',
-	'kelvin'    => 'k',
-	);
+    private $lookup = array(
+    'celcius'    => 'c',
+    'fahrenheit' => 'f',
+    'rakine'     => 'r',
+    'kelvin'     => 'k',
+    );
 
-	function getShortcode($name)
-	{
-		$name = strtolower($name);
+    function getShortcode($name)
+    {
+        $name = strtolower($name);
 
-		if (!empty($this->lookup[$name])) return $this->lookup[$name];
-		if (array_search($name, $this->lookup)) return $name;
-		return false;
-	}
+        if (!empty($this->lookup[$name])) return $this->lookup[$name];
+        if (array_search($name, $this->lookup)) return $name;
+        return false;
+    }
 
-	function conv($from, $to, $val)
-	{
-		$from = $this->getShortcode($from);
-		$to   = $this->getShortcode($to);
+    function conv($from, $to, $val)
+    {
+        $from = $this->getShortcode($from);
+        $to   = $this->getShortcode($to);
 
-		//convert to celcius for internal representation
-		switch (strtolower($from)) {
-		case 'c': $cel =  $val; break;
-		case 'f': $cel = ($val - 32) * (5/9); break;
-		case 'r': $cel = ($val - 491.67) * (5/9); break;
-		case 'k': $cel =  $val - 273.15; break;
-		default: return false;
-		}
+        //convert to celcius for internal representation
+        switch (strtolower($from)) {
+        case 'c': $cel =  $val; break;
+        case 'f': $cel = ($val - 32) * (5/9); break;
+        case 'r': $cel = ($val - 491.67) * (5/9); break;
+        case 'k': $cel =  $val - 273.15; break;
+        default: return false;
+        }
 
-		switch (strtolower($to)) {
-		case 'c': $res =  $cel; break;
-		case 'f': $res = ($cel * (9/5)) + 32; break;
-		case 'r': $res = ($cel + 273.15) * (9/5); break;
-		case 'k': $res =  $cel + 273.15; break;
-		default: return false;
-		}
+        switch (strtolower($to)) {
+        case 'c': $res =  $cel; break;
+        case 'f': $res = ($cel * (9/5)) + 32; break;
+        case 'r': $res = ($cel + 273.15) * (9/5); break;
+        case 'k': $res =  $cel + 273.15; break;
+        default: return false;
+        }
 
-		if ($this->precision)
-			return round($res, $this->precision);
+        if ($this->precision)
+            return round($res, $this->precision);
 
-		return $res;
-	}
+        return $res;
+    }
 
 }
 
