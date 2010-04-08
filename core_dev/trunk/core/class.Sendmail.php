@@ -82,8 +82,10 @@ class Sendmail extends CoreBase
 	function addRecipients($a)
 	{
 		if (!is_array($a)) {
-			//translate comma-separated string to array
+			$a = str_replace(';', ',', $a);
 			$a = str_replace(' ', '', $a);
+
+			//translate comma-separated string to array
 			$a = explode(',', $a);
 		}
 
