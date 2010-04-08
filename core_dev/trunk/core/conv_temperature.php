@@ -9,7 +9,7 @@
  * http://en.wikipedia.org/wiki/Temperature_conversion_formulas
  * http://en.wikipedia.org/wiki/Conversion_of_units#Temperature
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('class.CoreConverter.php');

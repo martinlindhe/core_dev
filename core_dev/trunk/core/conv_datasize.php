@@ -8,60 +8,118 @@
  * ----------
  * http://en.wikipedia.org/wiki/Units_of_information
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('class.CoreConverter.php');
 
 class ConvertDatasize extends CoreConverter
 {
-	private $scale = array( ///< unit scale to a bit
-	'bit'  => 1,
-	'kbit' => 1024,       // 2^10
-	'mbit' => 1048576,    // 2^20
-	'gbit' => 1073741824, // 2^30
+    private static $scale = array( ///< unit scale to a bit
+    'bit'  => 1,
+    'kbit' => 1024,       // 2^10
+    'mbit' => 1048576,    // 2^20
+    'gbit' => 1073741824, // 2^30
 
-	'b'    => 8,
-	'kb'   => 8192,            // (2^10)*8
-	'mb'   => 8388608,         // (2^20)*8
-	'gb'   => 8589934592,      // (2^30)*8
-	'tb'   => 8796093022208,   // (2^40)*8
-	'pb'   => 9007199254740992,// (2^50)*8
-	);
+    'b'    => 8,
+    'kb'   => 8192,            // (2^10)*8
+    'mb'   => 8388608,         // (2^20)*8
+    'gb'   => 8589934592,      // (2^30)*8
+    'tb'   => 8796093022208,   // (2^40)*8
+    'pb'   => 9007199254740992,// (2^50)*8
+    );
 
-	private $lookup = array(
-	'bit'      => 'bit',
-	'kilobit'  => 'kbit',
-	'megabit'  => 'mbit',
-	'gigabit'  => 'gbit',
+    private static $lookup = array(
+    'bit'      => 'bit',
+    'kilobit'  => 'kbit',
+    'megabit'  => 'mbit',
+    'gigabit'  => 'gbit',
 
-	'byte'     => 'b',
-	'kilobyte' => 'kb',
-	'megabyte' => 'mb',
-	'gigabyte' => 'gb',
-	'terabyte' => 'tb',
-	'petabyte' => 'pb',
-	);
+    'byte'     => 'b',
+    'kilobyte' => 'kb', 'kib' => 'kb', 'k' => 'kb',
+    'megabyte' => 'mb', 'mib' => 'mb', 'm' => 'mb',
+    'gigabyte' => 'gb', 'gib' => 'gb', 'g' => 'gb',
+    'terabyte' => 'tb', 'tib' => 'tb', 't' => 'tb',
+    'petabyte' => 'pb',
+    );
 
-	function getShortcode($name)
-	{
-		$name = strtolower($name);
-		if (substr($name, -1) == 's') $name = substr($name, 0, -1);
+    static function getShortcode($name)
+    {
+        $name = strtolower(trim($name));
+        if (substr($name, -1) == 's')
+            $name = substr($name, 0, -1);
 
-		if (!empty($this->lookup[$name])) return $this->lookup[$name];
-		if (array_search($name, $this->lookup)) return $name;
-		return false;
-	}
+        if (!empty(self::$lookup[$name]))
+            return self::$lookup[$name];
 
-	function conv($from, $to, $val)
-	{
-		$from = $this->getShortcode($from);
-		$to   = $this->getShortcode($to);
-		if (!$from || !$to) return false;
+        if (array_search($name, self::$lookup))
+            return $name;
 
-		return ($val * $this->scale[$from]) / $this->scale[$to];
-	}
+        return false;
+    }
+
+    /**
+     * @param $s literal datasize, such as "128M" or numeric (byte is assumed)
+     * @param $to conversion to unit
+     * @return converted value
+     */
+    static function convLiteral($s, $to = 'byte', $from = 'byte')
+    {
+        $to = self::getShortcode($to);
+        if (!$to)
+            return false;
+
+        if (is_numeric($s))
+            $val = $s;
+        else {
+            $s = str_replace(' ', '', $s);
+
+            //HACK find first non-digit in a easier way
+            for ($i=0; $i<strlen($s); $i++)
+                if (!is_numeric(substr($s, $i, 1)))
+                    break;
+
+            $suff = substr($s, $i);
+            $val  = substr($s, 0, $i);
+
+            $from = self::getShortcode($suff);
+        }
+
+        return self::conv($from, $to, $val);
+    }
+
+    /**
+     * @param $from conversion from unit
+     * @param $to conversion to unit
+     * @param $val value to convert
+     * @return converted value
+     */
+    static function conv($from, $to, $val)
+    {
+        $from = self::getShortcode($from);
+        $to   = self::getShortcode($to);
+        if (!$from || !$to)
+            return false;
+
+        return ($val * self::$scale[$from]) / self::$scale[$to];
+    }
 
 }
+
+
+/**
+ * Returns a string like "2 KiB"
+ */
+/*function formatDataSize($bytes)
+{
+    //$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
+    $units = array('bytes', 'k', 'mb', 'gb', 'tb');
+    foreach ($units as $unit) {
+        if ($bytes < 1024) break;
+        $bytes = round($bytes/1024, 1);
+    }
+    return $bytes.' '.$unit;
+}
+*/
 
 ?>
