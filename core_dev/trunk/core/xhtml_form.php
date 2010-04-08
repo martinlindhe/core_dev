@@ -146,9 +146,9 @@ class xhtml_form
 	/**
 	 * Adds a checkbox field to the form
 	 */
-	function addCheckbox($name, $str, $val = '1')
+	function addCheckbox($name, $str, $val = '1', $checked = false)
 	{
-		$this->elems[] = array('type' => 'CHECKBOX', 'name' => $name, 'str' => $str, 'default' => $val);
+		$this->elems[] = array('type' => 'CHECKBOX', 'name' => $name, 'str' => $str, 'default' => $val, 'checked' => $checked);
 	}
 
 	/**
@@ -269,7 +269,7 @@ class xhtml_form
 				break;
 
 			case 'CHECKBOX':
-				$res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default']).'</td>';
+				$res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default'], $e['checked']).'</td>';
 				break;
 
 			case 'TEXTAREA':
