@@ -33,7 +33,6 @@ class ConvertNumeral extends CoreConverter
     function getShortcode($name)
     {
         $name = strtolower($name);
-        if (substr($name, -1) == 's') $name = substr($name, 0, -1);
 
         if (!empty($this->lookup[$name])) return $this->lookup[$name];
         if (array_search($name, $this->lookup)) return $name;
@@ -45,13 +44,12 @@ class ConvertNumeral extends CoreConverter
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
         if (!$from || !$to) return false;
+        if (!is_numeric($val)) return false; //XXX assumes base 2 to 10
 
         $base_from = $this->scale[$from];
         $base_to   = $this->scale[$to];
 
-        //XXX assumes base 2 to 10
         $res = $val % $base_to;
-
         $multiplier = $base_from;
 
         while (($val = intval($val / $base_to)) > 0)

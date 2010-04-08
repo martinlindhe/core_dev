@@ -16,7 +16,7 @@ class Weather extends CoreBase
 
 	function __construct()
 	{
-		$this->cache = new cache();
+		$this->cache = new Cache();
 		//$this->cache->debug = true;
 		$this->cache->setCacheTime(60*60); //default to 60 minute cache
 	}
@@ -29,10 +29,13 @@ class Weather extends CoreBase
 		$country = strtolower($country);
 
 		$data = $this->cache->get('weather//'.$city.'/'.$country);
-		if ($data) return unserialize($data);
+		if ($data)
+		    return unserialize($data);
 
-		$client = new weather_webservicex();
+		$client = new Weather_webservicex();
 		$res = $client->getWeather($city, $country);
+		if (!$res)
+		    return false;
 
 		$this->cache->set('weather//'.$city.'/'.$country, serialize($res));
 		return $res;
