@@ -93,15 +93,15 @@ function date_diff2($t1, $t2, $precision = 6, $arr = false) ///XXX php5.3 has a 
  */
 function num_days($date1, $date2)
 {
-	if (!is_numeric($date1)) $date1 = strtotime($date1);
-	if (!is_numeric($date2)) $date2 = strtotime($date2);
+	$date1 = ts($date1);
+	$date2 = ts($date2);
 
 	if ($date1 > $date2)
 		$date_diff = $date1 - $date2;
 	else
 		$date_diff = $date2 - $date1;
 
-	$days = floor($date_diff / (60*60*24)) + 1;
+	$days = ceil($date_diff / (3600*24)) + 1;
 
 	return $days;
 }
