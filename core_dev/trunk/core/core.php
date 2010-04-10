@@ -9,14 +9,15 @@
 
 //FIXME: get rid of getProjectPath()
 
-require_once('locale.php');	//for translations
-require_once('output_xhtml.php');	//for XHTML output helper functions
-require_once('functions_general.php');	//FIXME: anything in there worth keeping?
-require_once('functions_textformat.php');	//for decodeDataSize()
+require_once('locale.php'); //for translations
+require_once('output_xhtml.php');   //for XHTML output helper functions
+require_once('functions_general.php');  //FIXME: anything in there worth keeping?
+require_once('functions_textformat.php');   //for decodeDataSize()
 require_once('prop_Timestamp.php');
 require_once('network.php');
 require_once('files.php');
 require_once('class.CoreBase.php'); //for CoreBase class
+require_once('conv_datasize.php');
 
 /**
  * Debug function. Prints out variable $v
@@ -26,34 +27,33 @@ require_once('class.CoreBase.php'); //for CoreBase class
  */
 function d($v)
 {
-	if (is_string($v)) {
-		//XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
+    if (is_string($v)) {
+        //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
 
-		if (php_sapi_name() == 'cli') {
-			var_dump($v);
-		} else {
-			$out = htmlentities($v, ENT_QUOTES, 'UTF-8');
-			$out = str_replace("\n", "<br/>", $out);
+        if (php_sapi_name() == 'cli') {
+            var_dump($v);
+        } else {
+            $out = htmlentities($v, ENT_QUOTES, 'UTF-8');
+            $out = str_replace("\n", "<br/>", $out);
 
-			if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
-				echo '<pre>'.$out.'</pre>';
+            if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
+                echo '<pre>'.$out.'</pre>';
+            else
+                var_dump($out);
+        }
+        echo ln();
+        return;
+    }
 
-			else
-				var_dump($out);
-		}
-		echo ln();
-		return;
-	}
+    //xdebug's var_dump is awesome
+    if (extension_loaded('xdebug')) {
+        var_dump($v);
+        return;
+    }
 
-	//xdebug's var_dump is awesome
-	if (extension_loaded('xdebug')) {
-		var_dump($v);
-		return;
-	}
-
-	if (php_sapi_name() != 'cli') echo '<pre>';
-	print_r($v);
-	if (php_sapi_name() != 'cli') echo '</pre>';
+    if (php_sapi_name() != 'cli') echo '<pre>';
+    print_r($v);
+    if (php_sapi_name() != 'cli') echo '</pre>';
 }
 
 /**
@@ -61,8 +61,8 @@ function d($v)
  */
 function ds($s)
 {
-	if (php_sapi_name() == 'cli') return $s;
-	else return htmlentities($s);
+    if (php_sapi_name() == 'cli') return $s;
+    else return htmlentities($s);
 }
 
 /**
@@ -70,12 +70,7 @@ function ds($s)
  */
 function ln()
 {
-	return php_sapi_name() == 'cli' ? "\n" : '<br/>';
-}
-
-function dln() //TODO DEPRECATE this function
-{
-	return ln();
+    return php_sapi_name() == 'cli' ? PHP_EOL : '<br/>';
 }
 
 /**
@@ -83,15 +78,15 @@ function dln() //TODO DEPRECATE this function
  */
 function dp($str)
 {
-	global $config;
+    global $config;
 
-	if (is_array($str))
-		$str = serialize($str);
+    if (is_array($str))
+        $str = serialize($str);
 
-	error_log($str);
-	if (!empty($config['debug'])) {
-		error_log(date('[r] ').$str."\n", 3, '/tmp/core_dev.log');
-	}
+    error_log($str);
+    if (!empty($config['debug'])) {
+        error_log(date('[r] ').$str.PHP_EOL, 3, '/tmp/core_dev.log');
+    }
 }
 
 /**
@@ -99,13 +94,21 @@ function dp($str)
  */
 function dm()
 {
-	$limit = decodeDataSize(ini_get('memory_limit'));
+    $conv = new ConvertDatasize();
 
-	return
-		"Memory usage: ".
-		formatDataSize(memory_get_peak_usage(false)).
-		" (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
-		formatDataSize($limit).")".ln();
+    $limit   = $conv->convLiteral(ini_get('memory_limit'), 'byte');
+    $current = $conv->convLiteral(memory_get_peak_usage(false), 'byte');
+
+    $res =
+    "Memory usage: ".
+    round($conv->convLiteral($current, 'MiB'), 1)." MiB";
+
+    if ($limit)
+        $res .=
+        " (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
+        $conv->convLiteral($limit, 'MiB')." MiB)".ln();
+
+    return $res;
 }
 
 /**
@@ -113,28 +116,28 @@ function dm()
  */
 function dtrace()
 {
-	$bt = debug_backtrace();
-	if (php_sapi_name() != 'cli') echo '<pre>';
+    $bt = debug_backtrace();
+    if (php_sapi_name() != 'cli') echo '<pre>';
 
-	foreach ($bt as $idx => $l)
-	{
-		echo $l['line'].': '.$l['function'].'(';
+    foreach ($bt as $idx => $l)
+    {
+        echo $l['line'].': '.$l['function'].'(';
 
-		//echo count($l['args']).' args'.ln();
-		$i = 0;
-		foreach ($l['args'] as $arg) {
-			$i++;
-			echo $arg;
-			if ($i < count($l['args'])) echo ', ';
-		}
-		echo ') from '.$l['file'].ln();
+        //echo count($l['args']).' args'.ln();
+        $i = 0;
+        foreach ($l['args'] as $arg) {
+            $i++;
+            echo $arg;
+            if ($i < count($l['args'])) echo ', ';
+        }
+        echo ') from '.$l['file'].ln();
 
-		if (!empty($l['class'])) echo 'XXX class '.$l['class'].ln();
-		if (!empty($l['object'])) echo 'XXX object '.d($l['object']).ln();
-		if (!empty($l['type'])) echo 'XXX type '.$l['type'].ln();
-	}
+        if (!empty($l['class'])) echo 'XXX class '.$l['class'].ln();
+        if (!empty($l['object'])) echo 'XXX object '.d($l['object']).ln();
+        if (!empty($l['type'])) echo 'XXX type '.$l['type'].ln();
+    }
 
-	if (php_sapi_name() != 'cli') echo '</pre>';
+    if (php_sapi_name() != 'cli') echo '</pre>';
 }
 
 /**
@@ -142,34 +145,33 @@ function dtrace()
  */
 function dh($m)
 {
-	echo "[[dumping ".strlen($m)." bytes]]\n";
-	$j = 0;
-	$bytes = '';
-	$hex = '';
+    echo '[[dumping '.strlen($m).' bytes]]'.ln();
+    $j = 0;
+    $bytes = '';
+    $hex = '';
 
-	for ($i=0; $i<strlen($m); $i++) {
-		$x = substr($m, $i, 1);
-		if (ord($x) > 30) {
-			$bytes .= $x;
-		} else {
-			$bytes .= '.';
-		}
-		$hex .= bin2hex($x).' ';
+    for ($i=0; $i<strlen($m); $i++) {
+        $x = substr($m, $i, 1);
+        if (ord($x) > 30)
+            $bytes .= $x;
+        else
+            $bytes .= '.';
+        $hex .= bin2hex($x).' ';
 
-		$j++;
-		if ($j == 15) {
-			$j = 0;
-			echo "$hex $bytes\n";
-			$bytes = '';
-			$hex = '';
-		}
-	}
+        $j++;
+        if ($j == 15) {
+            $j = 0;
+            echo $hex.' '.$bytes.PHP_EOL;
+            $bytes = '';
+            $hex = '';
+        }
+    }
 
-	if ($j) {
-		echo $hex." ";
-		echo str_repeat(' ', (15-strlen($bytes))*3 );
-		echo "$bytes\n";
-	}
+    if ($j) {
+        echo $hex.' ';
+        echo str_repeat(' ', (15-strlen($bytes))*3 );
+        echo $bytes.PHP_EOL;
+    }
 }
 
 /**
@@ -179,15 +181,15 @@ function dh($m)
  */
 function var_name(&$var, $scope = false)
 {
-	$scope = $scope ? $scope : $GLOBALS;
+    $scope = $scope ? $scope : $GLOBALS;
 
-	$old = $var;
-	$var = '__random__'.rand().'temp';
+    $old = $var;
+    $var = '__random__'.rand().'temp';
 
-	$key = array_search($var, $scope);
-	$var = $old;
+    $key = array_search($var, $scope);
+    $var = $old;
 
-	return $key;
+    return $key;
 }
 
 /**
@@ -195,13 +197,13 @@ function var_name(&$var, $scope = false)
  */
 function loadPlugins()
 {
-	global $config;
+    global $config;
 
-	if (empty($config['plugins'])) return;
+    if (empty($config['plugins'])) return;
 
-	foreach ($config['plugins'] as $plugin) {
-		require_once($config['core']['fs_root'].'plugins/'.$plugin.'/plugin.php');
-	}
+    foreach ($config['plugins'] as $plugin) {
+        require_once($config['core']['fs_root'].'plugins/'.$plugin.'/plugin.php');
+    }
 }
 
 /**
@@ -215,18 +217,18 @@ function loadPlugins()
  */
 function coredev_webroot()
 {
-	if (substr($_SERVER['REQUEST_URI'], -1) == '/')
-		$path = $_SERVER['REQUEST_URI'];
-	else {
-		$dir = dirname($_SERVER['REQUEST_URI']);
+    if (substr($_SERVER['REQUEST_URI'], -1) == '/')
+        $path = $_SERVER['REQUEST_URI'];
+    else {
+        $dir = dirname($_SERVER['REQUEST_URI']);
 
-		if (substr($dir, -1) == '/')
-			$path = $dir;
-		else
-			$path = $dir.'/';
-	}
+        if (substr($dir, -1) == '/')
+            $path = $dir;
+        else
+            $path = $dir.'/';
+    }
 
-	return $path.'core_dev/';
+    return $path.'core_dev/';
 }
 
 /**
@@ -235,28 +237,28 @@ function coredev_webroot()
  */
 function getProjectPath($_amp = 1)
 {
-	global $config;
+    global $config;
 
-	if ($_amp == 3) return $config['app']['web_root'];
+    if ($_amp == 3) return $config['app']['web_root'];
 
-	if (!empty($_GET['pr'])) {
-		$proj_name = basename(strip_tags($_GET['pr']));
-	} else {
-		$project_path = dirname($_SERVER['SCRIPT_NAME']);
-		$pos = strrpos($project_path, '/');
-		$proj_name = substr($project_path, $pos+1);
-	}
+    if (!empty($_GET['pr'])) {
+        $proj_name = basename(strip_tags($_GET['pr']));
+    } else {
+        $project_path = dirname($_SERVER['SCRIPT_NAME']);
+        $pos = strrpos($project_path, '/');
+        $proj_name = substr($project_path, $pos+1);
+    }
 
-	if ($proj_name == 'admin') $proj_name = '';
+    if ($proj_name == 'admin') $proj_name = '';
 
-	if ($proj_name) {
-		switch ($_amp) {
-			case 0: return '?pr='.$proj_name;
-			case 1: return '&amp;pr='.$proj_name;
-			case 2: return '&pr='.$proj_name;
-		}
-	}
-	return '';
+    if ($proj_name) {
+        switch ($_amp) {
+            case 0: return '?pr='.$proj_name;
+            case 1: return '&amp;pr='.$proj_name;
+            case 2: return '&pr='.$proj_name;
+        }
+    }
+    return '';
 }
 
 /**
@@ -270,10 +272,10 @@ function getProjectPath($_amp = 1)
  */
 function goLoc($url)
 {
-	echo
-		'<script type="text/javascript">'.
-		'document.location.href="'.$url.'";'.
-		'</script>';
+    echo
+        '<script type="text/javascript">'.
+        'document.location.href="'.$url.'";'.
+        '</script>';
 }
 
 /**
@@ -281,18 +283,17 @@ function goLoc($url)
  */
 function randstr($len)
 {
-	$res = '';
-	for ($i=0; $i<$len; $i++) {
-		$rnd = mt_rand(0, 61);
-		if ($rnd < 10) {
-			$res .= chr($rnd+48);
-		} else if ($rnd < 36) {
-			$res .= chr($rnd+55);
-		} else {
-			$res .= chr($rnd+61);
-		}
-	}
-	return $res;
+    $res = '';
+    for ($i=0; $i<$len; $i++) {
+        $rnd = mt_rand(0, 61);
+        if ($rnd < 10)
+            $res .= chr($rnd+48);
+        else if ($rnd < 36)
+            $res .= chr($rnd+55);
+        else
+            $res .= chr($rnd+61);
+    }
+    return $res;
 }
 
 /**
@@ -300,12 +301,13 @@ function randstr($len)
  */
 function numbers_only($s)
 {
-	$ok = array('0','1','2','3','4','5','6','7','8','9');
-	for ($i=0; $i<strlen($s); $i++) {
-		$c = substr($s, $i, 1);
-		if (!in_array($c, $ok)) return false;
-	}
-	return true;
+    $ok = array('0','1','2','3','4','5','6','7','8','9');
+    for ($i=0; $i<strlen($s); $i++) {
+        $c = substr($s, $i, 1);
+        if (!in_array($c, $ok))
+            return false;
+    }
+    return true;
 }
 
 /**
@@ -313,16 +315,15 @@ function numbers_only($s)
  */
 function round_decimals($val, $precision = 0)
 {
-	$ex = explode('.', round($val, $precision));
+    $ex = explode('.', round($val, $precision));
 
-	if (empty($ex[1]) || strlen($ex[1]) < $precision) {
-		$ex[1] = str_pad(@$ex[1], $precision, '0');
-	}
+    if (empty($ex[1]) || strlen($ex[1]) < $precision)
+        $ex[1] = str_pad(@$ex[1], $precision, '0');
 
-	if (!$precision)
-		return $ex[0];
+    if (!$precision)
+        return $ex[0];
 
-	return implode('.', $ex);
+    return implode('.', $ex);
 }
 
 /**
@@ -332,13 +333,13 @@ function round_decimals($val, $precision = 0)
  */
 function str_get_ending($s)
 {
-	if (strpos($s, "\r\n") !== false)
-		return "\r\n";
+    if (strpos($s, "\r\n") !== false)
+        return "\r\n";
 
-	if (strpos($s, "\r") !== false)
-		return "\r";
+    if (strpos($s, "\r") !== false)
+        return "\r";
 
-	return "\n";
+    return "\n";
 }
 
 ?>
