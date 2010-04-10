@@ -179,12 +179,24 @@ class ConvertCurrency extends CoreConverter
      * Decodes a currency code to English full name
      * @param $code currency code
      */
-    function getCurrencyName($code) //XXX reuse CoreConverter::getUnitname ??
+    function getUnitname($code)
     {
         $code = strtoupper($code);
 
-        if (empty($this->codes[$code])) return false;
+        if (empty($this->codes[$code]))
+            return false;
+
         return $this->codes[$code];
+    }
+
+    function getShortcode($name)
+    {
+        $n = strtoupper($name);
+
+        if (!empty($this->codes[$n]))
+            return $n;
+
+        return array_search($n, $this->codes);
     }
 
     function setCacheTime($s) { $this->cache_expire = $s; }
@@ -196,9 +208,10 @@ class ConvertCurrency extends CoreConverter
      */
     function getRate($from, $to)
     {
-        $from = strtolower($from);
-        $to   = strtolower($to);
-        if (!$this->getCurrencyName($from) || !$this->getCurrencyName($to)) return false;
+        $from = $this->getShortcode(strtolower($from));
+        $to   = $this->getShortcode(strtolower($to));
+        if (!$from || !$to)
+            return false;
 
         $key = 'currency/'.$from.'/'.$to;
         $cache = new Cache();

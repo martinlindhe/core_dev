@@ -15,20 +15,26 @@ abstract class CoreConverter extends CoreBase
 
     function setPrecision($n) { $this->precision = $n; }
 
-    function getUnitname($name)
+    /**
+     * @param $code unit name or shortcode
+     * @return unit name for the short code
+     */
+    function getUnitname($code)
     {
-        $n = $this->getShortcode($name);
+        $n = $this->getShortcode($code);
         if (!$n)
             return false;
 
         return array_search($n, $this->lookup);
     }
 
+    /**
+     * @param $name unit name or shortcode
+     * @return shortcode for the unit name
+     */
     function getShortcode($name)
     {
         $name = strtolower(trim($name));
-        if (substr($name, -1) == 's')
-            $name = substr($name, 0, -1);
 
         if (!empty($this->lookup[$name]))
             return $this->lookup[$name];

@@ -33,7 +33,7 @@ class ConvertLength extends CoreConverter
     'yd'     => 0.9144,         //Yard
     'ukmile' => 1852,           //UK nautical mile
     'usmile' => 1609.344,       //US statute mile
-    'au'     => 149597871464    //Astronomical Unit
+    'au'     => 149597871464,   //Astronomical Unit
     );
 
     protected $lookup = array(
@@ -42,14 +42,14 @@ class ConvertLength extends CoreConverter
     'millimeter'   => 'mm',
     'centimeter'   => 'cm',
     'decimeter'    => 'dm',
-    'meter'        => 'm',
-    'kilometer'    => 'km',
-    'inch'         => 'in',
-    'feet'         => 'ft',
-    'yard'         => 'yd',
+    'meter'        => 'm',      'meters'     => 'm',
+    'kilometer'    => 'km',     'kilometers' => 'km',
+    'inch'         => 'in',     'inches'     => 'in',
+    'feet'         => 'ft',     'feets'      => 'ft',
+    'yard'         => 'yd',     'yards'      => 'yd',
     'ukmile'       => 'ukmile',
     'usmile'       => 'usmile',
-    'mile'         => 'usmile',
+    'mile'         => 'usmile', 'miles'     => 'usmile',
     'astronomical' => 'au',
     );
 

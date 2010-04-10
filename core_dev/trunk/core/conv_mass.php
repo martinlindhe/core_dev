@@ -22,7 +22,7 @@ class ConvertMass extends CoreConverter
     't'  => 1000000,      //Tonne
     'oz' => 28.349523125, //Ounce (1/16 lb)
     'lb' => 453.59237,    //Pound
-    'st' => 6350.29318    //Stone (14 lb)
+    'st' => 6350.29318,   //Stone (14 lb)
     );
 
     protected $lookup = array(
@@ -32,9 +32,9 @@ class ConvertMass extends CoreConverter
     'kilogram'  => 'kg',
     'kilo'      => 'kg',
     'tonne'     => 't',
-    'ounce'     => 'oz',
-    'pound'     => 'lb',
-    'stone'     => 'st'
+    'ounce'     => 'oz',    'ounces' => 'oz',
+    'pound'     => 'lb',    'pounds' => 'lb',
+    'stone'     => 'st',    'stones' => 'st',
     );
 
     function conv($from, $to, $val)
