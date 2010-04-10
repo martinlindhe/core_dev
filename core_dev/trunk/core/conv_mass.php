@@ -53,6 +53,11 @@ class ConvertMass extends CoreConverter
         return $res;
     }
 
+    function convLiteral($s, $to, $from = 'gram')
+    {
+        return parent::convLiteral($s, $to, $from);
+    }
+
 }
 
 ?>

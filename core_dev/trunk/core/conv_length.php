@@ -68,6 +68,11 @@ class ConvertLength extends CoreConverter
 
         return $res;
     }
+
+    function convLiteral($s, $to, $from = 'meter')
+    {
+        return parent::convLiteral($s, $to, $from);
+    }
 }
 
 ?>

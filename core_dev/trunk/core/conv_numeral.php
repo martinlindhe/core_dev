@@ -57,6 +57,11 @@ class ConvertNumeral extends CoreConverter
         return $res;
     }
 
+    function convLiteral($s, $to, $from = 'decimal')
+    {
+        return parent::convLiteral($s, $to, $from);
+    }
+
 }
 
 ?>

@@ -65,55 +65,11 @@ class ConvertDatasize extends CoreConverter
         return $res;
     }
 
-    /**
-     * Converts input string such as "128M" to given output unit
-     *
-     * @param $s literal datasize, such as "128M" or numeric (byte is assumed)
-     * @param $to conversion to unit
-     * @return converted value
-     */
-    function convLiteral($s, $to = 'byte')
+    function convLiteral($s, $to, $from = 'byte')
     {
-        $to = $this->getShortcode($to);
-        if (!$to)
-            return false;
-
-        if (is_numeric($s)) {
-            $val = $s;
-            $from = 'byte';
-        } else {
-            $s = str_replace(' ', '', $s);
-
-            //HACK find first non-digit in a easier way
-            for ($i=0; $i<strlen($s); $i++)
-                if (!is_numeric(substr($s, $i, 1)))
-                    break;
-
-            $suff = substr($s, $i);
-            $val  = substr($s, 0, $i);
-
-            $from = $this->getShortcode($suff);
-        }
-
-        return $this->conv($from, $to, $val);
+        return parent::convLiteral($s, $to, $from);
     }
 
 }
-
-
-/**
- * Returns a string like "2 KiB"
- */
-/*function formatDataSize($bytes)
-{
-    //$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
-    $units = array('bytes', 'k', 'mb', 'gb', 'tb');
-    foreach ($units as $unit) {
-        if ($bytes < 1024) break;
-        $bytes = round($bytes/1024, 1);
-    }
-    return $bytes.' '.$unit;
-}
-*/
 
 ?>

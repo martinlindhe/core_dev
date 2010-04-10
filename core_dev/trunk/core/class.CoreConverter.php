@@ -39,6 +39,39 @@ abstract class CoreConverter extends CoreBase
         return false;
     }
 
+    /**
+     * Converts input string such as "128M" or "100 celcius" to given output unit
+     *
+     * @param $s literal datasize, such as "128M" or numeric
+     * @param $to conversion to unit
+     * @param $from standard unit for the scale (supplied by child class)
+     * @return converted value
+     */
+    function convLiteral($s, $to, $from)
+    {
+        $to = $this->getShortcode($to);
+        if (!$to)
+            return false;
+
+        if (is_numeric($s)) {
+            $val = $s;
+        } else {
+            $s = str_replace(' ', '', $s);
+
+            //HACK find first non-digit in a easier way
+            for ($i=0; $i<strlen($s); $i++)
+                if (!is_numeric(substr($s, $i, 1)))
+                    break;
+
+            $suff = substr($s, $i);
+            $val  = substr($s, 0, $i);
+
+            $from = $this->getShortcode($suff);
+        }
+
+        return $this->conv($from, $to, $val);
+    }
+
 }
 
 ?>

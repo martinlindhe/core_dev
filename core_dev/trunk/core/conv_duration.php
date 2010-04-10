@@ -51,6 +51,10 @@ class ConvertDuration extends CoreConverter
         return $res;
     }
 
+    function convLiteral($s, $to, $from = 'second')
+    {
+        return parent::convLiteral($s, $to, $from);
+    }
 }
 
 ?>

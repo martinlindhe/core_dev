@@ -54,6 +54,11 @@ class ConvertTemperature extends CoreConverter
         return $res;
     }
 
+    function convLiteral($s, $to, $from = 'celcius')
+    {
+        return parent::convLiteral($s, $to, $from);
+    }
+
 }
 
 ?>
