@@ -15,7 +15,7 @@ require_once('class.CoreConverter.php');
 
 class ConvertMass extends CoreConverter
 {
-    private $scale = array( ///< unit scale to Gram
+    protected $scale = array( ///< unit scale to Gram
     'g'  => 1,           //Gram
     'hg' => 100,         //Hectogram
     'kg' => 1000,        //Kilogram
@@ -25,7 +25,7 @@ class ConvertMass extends CoreConverter
     'st' => 6350.29318   //Stone (14 lb)
     );
 
-    private $lookup = array(
+    protected $lookup = array(
     'gram'      => 'g',
     'hecto'     => 'hg',
     'hectogram' => 'hg',
@@ -37,22 +37,13 @@ class ConvertMass extends CoreConverter
     'stone'     => 'st'
     );
 
-    function getShortcode($name)
-    {
-        $name = strtolower($name);
-        if (substr($name, -1) == 's') $name = substr($name, 0, -1);
-
-        if (!empty($this->lookup[$name])) return $this->lookup[$name];
-        if (array_search($name, $this->lookup)) return $name;
-        return false;
-    }
-
     function conv($from, $to, $val)
     {
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
 
-        if (!$from || !$to) return false;
+        if (!$from || !$to)
+            return false;
 
         $res = ($val * $this->scale[$from]) / $this->scale[$to];
 

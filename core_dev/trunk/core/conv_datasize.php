@@ -15,7 +15,7 @@ require_once('class.CoreConverter.php');
 
 class ConvertDatasize extends CoreConverter
 {
-    private static $scale = array( ///< unit scale to a bit
+    protected $scale = array( ///< unit scale to a bit
     'bit'  => 1,
     'kbit' => 1024,       // 2^10
     'mbit' => 1048576,    // 2^20
@@ -29,7 +29,7 @@ class ConvertDatasize extends CoreConverter
     'pb'   => 9007199254740992,// (2^50)*8
     );
 
-    private static $lookup = array(
+    protected $lookup = array(
     'bit'      => 'bit',
     'kilobit'  => 'kbit',
     'megabit'  => 'mbit',
@@ -42,21 +42,6 @@ class ConvertDatasize extends CoreConverter
     'terabyte' => 'tb', 'tib' => 'tb', 't' => 'tb',
     'petabyte' => 'pb',
     );
-
-    static function getShortcode($name)
-    {
-        $name = strtolower(trim($name));
-        if (substr($name, -1) == 's')
-            $name = substr($name, 0, -1);
-
-        if (!empty(self::$lookup[$name]))
-            return self::$lookup[$name];
-
-        if (array_search($name, self::$lookup))
-            return $name;
-
-        return false;
-    }
 
     /**
      * @param $s literal datasize, such as "128M" or numeric (byte is assumed)
@@ -96,12 +81,13 @@ class ConvertDatasize extends CoreConverter
      */
     function conv($from, $to, $val)
     {
-        $from = self::getShortcode($from);
-        $to   = self::getShortcode($to);
+        $from = $this->getShortcode($from);
+        $to   = $this->getShortcode($to);
+
         if (!$from || !$to)
             return false;
 
-        $res = ($val * self::$scale[$from]) / self::$scale[$to];
+        $res = ($val * $this->scale[$from]) / $this->scale[$to];
 
         if ($this->precision)
             return round($res, $this->precision);

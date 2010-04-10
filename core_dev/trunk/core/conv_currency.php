@@ -21,7 +21,7 @@ class ConvertCurrency extends CoreConverter
 {
     private $cache_expire = 300; ///< expire time in seconds for local cache (in seconds)
 
-    private $codes = array(      ///< all supported currencies as of 2009.07.23
+    protected $codes = array(      ///< all supported currencies as of 2009.07.23
     'AFA'=>'Afghanistan Afghani',
     'ALL'=>'Albanian Lek',
     'DZD'=>'Algerian Dinar',
@@ -179,7 +179,7 @@ class ConvertCurrency extends CoreConverter
      * Decodes a currency code to English full name
      * @param $code currency code
      */
-    function getCurrencyName($code)
+    function getCurrencyName($code) //XXX reuse CoreConverter::getUnitname ??
     {
         $code = strtoupper($code);
 
@@ -221,7 +221,9 @@ class ConvertCurrency extends CoreConverter
     function conv($from, $to, $val)
     {
         $rate = $this->getRate($from, $to);
-        if (!$rate) return false;
+
+        if (!$rate)
+            return false;
 
         $res = $val * $rate;
 

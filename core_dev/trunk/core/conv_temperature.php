@@ -16,26 +16,20 @@ require_once('class.CoreConverter.php');
 
 class ConvertTemperature extends CoreConverter
 {
-    private $lookup = array(
+    protected $lookup = array(
     'celcius'    => 'c',
     'fahrenheit' => 'f',
     'rakine'     => 'r',
     'kelvin'     => 'k',
     );
 
-    function getShortcode($name)
-    {
-        $name = strtolower($name);
-
-        if (!empty($this->lookup[$name])) return $this->lookup[$name];
-        if (array_search($name, $this->lookup)) return $name;
-        return false;
-    }
-
     function conv($from, $to, $val)
     {
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
+
+        if (!$from || !$to)
+            return false;
 
         //convert to celcius for internal representation
         switch (strtolower($from)) {

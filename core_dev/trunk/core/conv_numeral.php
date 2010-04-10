@@ -16,35 +16,31 @@ require_once('class.CoreConverter.php');
 
 class ConvertNumeral extends CoreConverter
 {
-    private $scale = array( ///< unit scale to a second
+    protected $scale = array( ///< unit scale to a second
     'bin' => 2,
     'oct' => 8,
     'dec' => 10,
     //'hex' => 16,
     );
 
-    private $lookup = array(
+    protected $lookup = array(
     'binary'      => 'bin',
     'octal'       => 'oct',
     'decimal'     => 'dec',
     //'hexadecimal' => 'hex',
     );
 
-    function getShortcode($name)
-    {
-        $name = strtolower($name);
-
-        if (!empty($this->lookup[$name])) return $this->lookup[$name];
-        if (array_search($name, $this->lookup)) return $name;
-        return false;
-    }
-
     function conv($from, $to, $val)
     {
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
-        if (!$from || !$to) return false;
-        if (!is_numeric($val)) return false; //XXX assumes base 2 to 10
+
+        if (!$from || !$to)
+            return false;
+
+        //XXX assumes base 2 to 10
+        if (!is_numeric($val))
+            return false;
 
         $base_from = $this->scale[$from];
         $base_to   = $this->scale[$to];

@@ -20,7 +20,7 @@ require_once('class.CoreConverter.php');
 
 class ConvertLength extends CoreConverter
 {
-    private $scale = array( ///< unit scale to Meter
+    protected $scale = array( ///< unit scale to Meter
     'pm'     => 0.000000000001, //Picometer
     'nm'     => 0.000000001,    //Nanometer
     'mm'     => 0.001,          //Millimeter
@@ -36,7 +36,7 @@ class ConvertLength extends CoreConverter
     'au'     => 149597871464    //Astronomical Unit
     );
 
-    private $lookup = array(
+    protected $lookup = array(
     'picometer'  => 'pm',
     'nanometer'  => 'nm',
     'millimeter' => 'mm',
@@ -53,22 +53,13 @@ class ConvertLength extends CoreConverter
     'astronomical'=>'au',
     );
 
-    function getShortcode($name)
-    {
-        $name = strtolower($name);
-        if (substr($name, -1) == 's') $name = substr($name, 0, -1);
-
-        if (!empty($this->lookup[$name])) return $this->lookup[$name];
-        if (array_search($name, $this->lookup)) return $name;
-        return false;
-    }
-
     function conv($from, $to, $val)
     {
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
 
-        if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
+        if (!$from || !$to)
+            return false;
 
         $res = ($val * $this->scale[$from]) / $this->scale[$to];
 

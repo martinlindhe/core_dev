@@ -16,7 +16,7 @@ require_once('class.CoreConverter.php');
 
 class ConvertDuration extends CoreConverter
 {
-    private $scale = array( ///< unit scale to a second
+    protected $scale = array( ///< unit scale to a second
     'sec'  => 1,
     'min'  => 60,
     'hr'   => 3600,
@@ -26,7 +26,7 @@ class ConvertDuration extends CoreConverter
     'yr'   => 31556952, //365.2425 days (gregorian year)
     );
 
-    private $lookup = array(
+    protected $lookup = array(
     'second' => 'sec',
     'minute' => 'min',
     'hour'   => 'hr',
@@ -35,21 +35,13 @@ class ConvertDuration extends CoreConverter
     'year'   => 'yr',
     );
 
-    function getShortcode($name)
-    {
-        $name = strtolower($name);
-        if (substr($name, -1) == 's') $name = substr($name, 0, -1);
-
-        if (!empty($this->lookup[$name])) return $this->lookup[$name];
-        if (array_search($name, $this->lookup)) return $name;
-        return false;
-    }
-
     function conv($from, $to, $val)
     {
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
-        if (!$from || !$to) return false;
+
+        if (!$from || !$to)
+            return false;
 
         $res = ($val * $this->scale[$from]) / $this->scale[$to];
 
