@@ -51,7 +51,12 @@ class ConvertDuration extends CoreConverter
         $to   = $this->getShortcode($to);
         if (!$from || !$to) return false;
 
-        return ($val * $this->scale[$from]) / $this->scale[$to];
+        $res = ($val * $this->scale[$from]) / $this->scale[$to];
+
+        if ($this->precision)
+            return round($res, $this->precision);
+
+        return $res;
     }
 
 }

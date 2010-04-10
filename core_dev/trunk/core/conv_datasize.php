@@ -94,14 +94,19 @@ class ConvertDatasize extends CoreConverter
      * @param $val value to convert
      * @return converted value
      */
-    static function conv($from, $to, $val)
+    function conv($from, $to, $val)
     {
         $from = self::getShortcode($from);
         $to   = self::getShortcode($to);
         if (!$from || !$to)
             return false;
 
-        return ($val * self::$scale[$from]) / self::$scale[$to];
+        $res = ($val * self::$scale[$from]) / self::$scale[$to];
+
+        if ($this->precision)
+            return round($res, $this->precision);
+
+        return $res;
     }
 
 }

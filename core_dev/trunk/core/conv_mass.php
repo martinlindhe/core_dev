@@ -54,10 +54,12 @@ class ConvertMass extends CoreConverter
 
         if (!$from || !$to) return false;
 
-        if ($this->precision)
-            return round(($val * $this->scale[$from]) / $this->scale[$to], $this->precision);
+        $res = ($val * $this->scale[$from]) / $this->scale[$to];
 
-        return ($val * $this->scale[$from]) / $this->scale[$to];
+        if ($this->precision)
+            return round($res, $this->precision);
+
+        return $res;
     }
 
 }

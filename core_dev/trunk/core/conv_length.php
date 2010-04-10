@@ -70,10 +70,12 @@ class ConvertLength extends CoreConverter
 
         if (empty($this->scale[$from]) || empty($this->scale[$to])) return false;
 
-        if ($this->precision)
-            return round(($val * $this->scale[$from]) / $this->scale[$to], $this->precision);
+        $res = ($val * $this->scale[$from]) / $this->scale[$to];
 
-        return ($val * $this->scale[$from]) / $this->scale[$to];
+        if ($this->precision)
+            return round($res, $this->precision);
+
+        return $res;
     }
 }
 
