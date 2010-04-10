@@ -44,36 +44,6 @@ class ConvertDatasize extends CoreConverter
     );
 
     /**
-     * @param $s literal datasize, such as "128M" or numeric (byte is assumed)
-     * @param $to conversion to unit
-     * @return converted value
-     */
-    static function convLiteral($s, $to = 'byte', $from = 'byte')
-    {
-        $to = self::getShortcode($to);
-        if (!$to)
-            return false;
-
-        if (is_numeric($s))
-            $val = $s;
-        else {
-            $s = str_replace(' ', '', $s);
-
-            //HACK find first non-digit in a easier way
-            for ($i=0; $i<strlen($s); $i++)
-                if (!is_numeric(substr($s, $i, 1)))
-                    break;
-
-            $suff = substr($s, $i);
-            $val  = substr($s, 0, $i);
-
-            $from = self::getShortcode($suff);
-        }
-
-        return self::conv($from, $to, $val);
-    }
-
-    /**
      * @param $from conversion from unit
      * @param $to conversion to unit
      * @param $val value to convert
@@ -93,6 +63,39 @@ class ConvertDatasize extends CoreConverter
             return round($res, $this->precision);
 
         return $res;
+    }
+
+    /**
+     * Converts input string such as "128M" to given output unit
+     *
+     * @param $s literal datasize, such as "128M" or numeric (byte is assumed)
+     * @param $to conversion to unit
+     * @return converted value
+     */
+    function convLiteral($s, $to = 'byte')
+    {
+        $to = $this->getShortcode($to);
+        if (!$to)
+            return false;
+
+        if (is_numeric($s)) {
+            $val = $s;
+            $from = 'byte';
+        } else {
+            $s = str_replace(' ', '', $s);
+
+            //HACK find first non-digit in a easier way
+            for ($i=0; $i<strlen($s); $i++)
+                if (!is_numeric(substr($s, $i, 1)))
+                    break;
+
+            $suff = substr($s, $i);
+            $val  = substr($s, 0, $i);
+
+            $from = $this->getShortcode($suff);
+        }
+
+        return $this->conv($from, $to, $val);
     }
 
 }

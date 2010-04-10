@@ -37,20 +37,20 @@ class ConvertLength extends CoreConverter
     );
 
     protected $lookup = array(
-    'picometer'  => 'pm',
-    'nanometer'  => 'nm',
-    'millimeter' => 'mm',
-    'centimeter' => 'cm',
-    'decimeter'  => 'dm',
-    'meter'      => 'm',
-    'kilometer'  => 'km',
-    'inch'       => 'in',
-    'feet'       => 'ft',
-    'yard'       => 'yd',
-    'ukmile'     => 'ukmile',
-    'usmile'     => 'usmile',
-    'mile'       => 'usmile',
-    'astronomical'=>'au',
+    'picometer'    => 'pm',
+    'nanometer'    => 'nm',
+    'millimeter'   => 'mm',
+    'centimeter'   => 'cm',
+    'decimeter'    => 'dm',
+    'meter'        => 'm',
+    'kilometer'    => 'km',
+    'inch'         => 'in',
+    'feet'         => 'ft',
+    'yard'         => 'yd',
+    'ukmile'       => 'ukmile',
+    'usmile'       => 'usmile',
+    'mile'         => 'usmile',
+    'astronomical' => 'au',
     );
 
     function conv($from, $to, $val)

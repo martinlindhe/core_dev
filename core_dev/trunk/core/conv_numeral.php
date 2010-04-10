@@ -16,7 +16,7 @@ require_once('class.CoreConverter.php');
 
 class ConvertNumeral extends CoreConverter
 {
-    protected $scale = array( ///< unit scale to a second
+    protected $scale = array( ///< digits in the numeral system
     'bin' => 2,
     'oct' => 8,
     'dec' => 10,
