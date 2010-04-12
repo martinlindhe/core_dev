@@ -53,7 +53,7 @@ abstract class CoreConverter extends CoreBase
      * @param $from standard unit for the scale (supplied by child class)
      * @return converted value
      */
-    function convLiteral($s, $to, $from)
+    function convLiteral($s, $to, $from = '')
     {
         $to = $this->getShortcode($to);
         if (!$to)
