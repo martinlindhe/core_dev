@@ -25,6 +25,7 @@ $test_urls = array(
 'https://some-url.com?query=&name=joe?filter=*.*#some_anchor',
 'http:// invalid url with spaces.com', //should fail
 'http://valid-url.without.space.com',
+'http://127.0.0.1/test',
 );
 
 foreach ($test_urls as $url)
