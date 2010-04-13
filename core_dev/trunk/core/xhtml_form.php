@@ -323,7 +323,6 @@ class xhtml_form
 
 				$dateselect = new yui_dateinterval();
 
-				//XXX ability to set starting day of week:
 				$dateselect->setDivName('cal1Container');
 				$dateselect->setNameFrom($e['namefrom']);
 				$dateselect->setNameTo($e['nameto']);

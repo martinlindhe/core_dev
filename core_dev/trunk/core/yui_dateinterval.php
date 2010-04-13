@@ -21,12 +21,13 @@ class yui_dateinterval
 {
 	private $name_from = 'yui_dateinterval_from';
 	private $name_to   = 'yui_dateinterval_to';
-
 	private $div_name  = 'yui_dateinterval_holder';
+	private $start_weekday = 1; //0=sundays, 1=mondays
 
 	function setNameFrom($s) { $this->name_from = $s; }
 	function setNameTo($s) { $this->name_to = $s; }
 	function setDivName($s) { $this->div_name = $s; }
+	function setStartWeekday($n) { $this->start_weekday = $n; }
 
 	function render()
 	{
@@ -37,6 +38,7 @@ class yui_dateinterval
 				this._iState = 0;
 
 				cfg = cfg || {};
+				cfg.start_weekday = '.$this->start_weekday.';
 				cfg.multi_select = true;
 
 				IntervalCalendar.superclass.constructor.call(this, container, cfg);
