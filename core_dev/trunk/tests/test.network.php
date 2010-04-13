@@ -6,9 +6,9 @@ require_once('network.php');
 
 $x = IPv4_to_GeoIP('192.168.0.1');
 $valid = array(
-	'192.168.0.1',
-	'80.0.0.0/8',
-	'240.0.0.0/8'
+    '192.168.0.1',
+    '80.0.0.0/8',
+    '240.0.0.0/8'
 );
 
 if ($x != 3232235521) echo "FAIL 1\n";
@@ -17,5 +17,19 @@ if (!match_ip('240.212.11.42', $valid)) echo "FAIL 3\n";
 if (match_ip('241.212.11.42', $valid)) echo "FAIL 4\n";
 if (!reserved_ip('192.168.0.100')) echo "FAIL 5\n";
 if (!reserved_ip('10.20.30.40')) echo "FAIL 6\n";
+
+
+$test_urls = array(
+'http://www.google.se/search?hl=sv&source=hp&q=&btnI=Jag+har+tur&meta=&aq=f&aqi=&aql=&oq=&gs_rfai=',
+'ftp://joe:password@ftp.filetransferprotocal.com',
+'https://some-url.com?query=&name=joe?filter=*.*#some_anchor',
+'http:// invalid url with spaces.com', //should fail
+'http://valid-url.without.space.com',
+);
+
+foreach ($test_urls as $url)
+    if (!is_url($url)) echo "URL FAIL ".$url."\n";
+
+
 
 ?>
