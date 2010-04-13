@@ -4,13 +4,15 @@
  *
  * Class to generate XHTML compilant forms
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
-//FIXME: include yui resources in a smarter way
+require_once('yui_dateinterval.php');
+
+//FIXME: include yui richedit in a better way
 
 class xhtml_form
 {
@@ -319,8 +321,14 @@ class xhtml_form
 
 				$res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
-				//XXX ability att ange div id och input fält namn:
-				$res .= file_get_contents('core_dev/js/yui_dateinterval.js');
+				$dateselect = new yui_dateinterval();
+
+				//XXX ability to set starting day of week:
+				$dateselect->setDivName('cal1Container');
+				$dateselect->setNameFrom($e['namefrom']);
+				$dateselect->setNameTo($e['nameto']);
+				$res .= $dateselect->render();
+
 				$res .= '</td>';
 				break;
 

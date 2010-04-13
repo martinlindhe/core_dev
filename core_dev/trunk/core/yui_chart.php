@@ -1,6 +1,10 @@
 <?php
 /**
+ * $Id$
  *
+ * Renders a Yahoo UI chart (flash object)
+ *
+ * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
 //STATUS: WIP
