@@ -12,7 +12,7 @@
 
 //STATUS: wip
 
-//FIXME: textarea is initially shown as huge before the javascript fixes its size, it looks ugly while the page is loading
+//FIXME: textarea is initially shown as huge before the javascript fixes its size, it looks ugly while the page is loading. may be due to not registering on onLoad event!?!?!, see yui_datatable
 //TODO: integrate with image upload
 
 class yui_richedit

@@ -505,12 +505,18 @@ function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url 
     return $extern_url;
 }
 
+/**
+ * @param $list    array(key1=>val1, key2=>val2)
+ * @return ["val1","val2",]   or  [key1:"val1",key2:"val2",]
+ */
 function jsArray1D($list, $with_keys = true)
 {
     $res = '[';
 
-    foreach ($list as $key => $val)
-        $res .= ($with_keys ? $key.': ' : '').(is_numeric($val) ? $val : '"'.$val.'"').',';
+    foreach ($list as $key => $val) {
+        $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
+        $res .= ($with_keys ? $key.':' : '').(is_numeric($val) ? $val : '"'.$val.'"').',';
+    }
 
     $res .= ']';
 
@@ -518,7 +524,7 @@ function jsArray1D($list, $with_keys = true)
 }
 
 /**
- * Generates Javascript style arrays
+ * Generates Javascript arrays
  * @param $list 2d array
  */
 function jsArray2D($list)
@@ -529,8 +535,10 @@ function jsArray2D($list)
     {
         $res .= '{ ';
 
-        foreach ($l as $key => $val)
-            $res .= $key.': '.(is_numeric($val) ? $val : '"'.$val.'"').',';
+        foreach ($l as $key => $val) {
+            $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
+            $res .= $key.':'.(is_numeric($val) ? $val : '"'.$val.'"').',';
+        }
 
         $res .= '},'."\n";
     }
