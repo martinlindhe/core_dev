@@ -31,15 +31,17 @@ class yui_dateinterval
 
 	function getLocaleStrings()
 	{
-		global $month_swe_short, $month_swe, $weekday_swe_1char, $weekday_swe_short, $weekday_swe_medium, $weekday_swe;
+		//global $month_swe_short, $month_swe, $weekday_swe_1char, $weekday_swe_short, $weekday_swe_medium, $weekday_swe;
+
+		$locale = LocaleHandler::getInstance();
 
 		return
-		'cal.cfg.setProperty("MONTHS_SHORT", '.   jsArray1D(array_slice($month_swe_short, 1), false).');'.
-		'cal.cfg.setProperty("MONTHS_LONG", '.    jsArray1D(array_slice($month_swe, 1), false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_1CHAR", '. jsArray1D($weekday_swe_1char, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_SHORT", '. jsArray1D($weekday_swe_short, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_MEDIUM", '.jsArray1D($weekday_swe_medium, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_LONG", '.  jsArray1D($weekday_swe, false).');';
+		'cal.cfg.setProperty("MONTHS_SHORT", '.   jsArray1D($locale->handle->month_short, false).');'.
+		'cal.cfg.setProperty("MONTHS_LONG", '.    jsArray1D($locale->handle->month_long, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_1CHAR", '. jsArray1D($locale->handle->weekday_1char, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_SHORT", '. jsArray1D($locale->handle->weekday_short, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_MEDIUM", '.jsArray1D($locale->handle->weekday_medium, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_LONG", '.  jsArray1D($locale->handle->weekday_long, false).');';
 	}
 
 	function render()

@@ -7,7 +7,35 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-//STATUS: rework
+//STATUS: wip
+
+class Locale_SWE extends CoreLocale
+{
+	var $month_long = array(
+		'Januari', 'Februari', 'Mars',
+		'April', 'Maj', 'Juni',
+		'Juli', 'Augusti', 'September',
+		'Oktober', 'November', 'December');
+
+	var $month_short = array(
+		'Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun',
+		'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec');
+
+	var $weekday_long = array(
+		'Söndag', 'Måndag', 'Tisdag', 'Onsdag',
+		'Torsdag', 'Fredag', 'Lördag');
+
+	var $weekday_medium = array(
+		'Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör');
+
+	var $weekday_short = array(
+		'Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö');
+
+	var $weekday_1char = array(
+		'S', 'M', 'T', 'O', 'T', 'F', 'S');
+}
+
+
 
 $month_swe = array( //XXXX deprecate use of this array
 '', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
@@ -19,6 +47,10 @@ $weekday_swe = array('Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Freda
 $weekday_swe_1char = array('S', 'M', 'T', 'O', 'T', 'F', 'S');
 $weekday_swe_short = array('Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö');
 $weekday_swe_medium = array('Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör');
+
+
+
+
 
 
 $day_suff_swe = array(//den 1:a, 5:e osv...
