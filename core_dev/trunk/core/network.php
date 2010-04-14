@@ -131,18 +131,20 @@ function client_ip()
 
 define('URL_REGEXP',
 "(".
-    "(https?|rtmpe?|ftp|mms|rtsp)".
+    "(https?|ftps?|rtmpe?|mms|rtsp)".
     "://".
-    "([-\w\.]+)+".
-    "(:\d+)?". //optional port number
-    // the rest of the URL is optional, and begins with /
-    "(/".
+    "(?:\w+:\w+@)?". //optional username & password
+    "(\w)+".         //1 or more alphanumeric
+    "([\w\-\.])+".   //1 or more alphanumeric, . or -
+    "(:\d+)?".       //optional port number
+    "(/".            //optional url parameters must begin with /
         "(".
-            "[\w/\.]*". //0 or more alphanumeric, . or _
-            "[\w/]*". //extension, or none
-        "?)".
-    "?)".
-"?)");
+            "[\w/_\-\.]*".  //0 or more alphanumeric, . or _
+            "(\?\S+)?".     //optional extension
+        ")?".
+    ")?".
+")"
+);
 
 /**
  * Checks if input string is a valid URL
@@ -152,10 +154,10 @@ define('URL_REGEXP',
  */
 function is_url($url)
 {
-        if (preg_match(URL_REGEXP, $url))
-            return true;
+    if (preg_match(URL_REGEXP, $url))
+        return true;
 
-        return false;
+    return false;
 }
 
 /**
