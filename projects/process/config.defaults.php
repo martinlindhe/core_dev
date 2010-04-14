@@ -8,7 +8,7 @@ $config['core']['web_root'] = '/core_dev/';
 $config['core']['full_url'] = 'http://process1.x'.$config['core']['web_root'];
 
 $config['app']['web_root'] = '/';
-$config['default_title'] = 'process server project';					//default title for pages if no title is specified for that page
+$config['default_title'] = 'process server project';                    //default title for pages if no title is specified for that page
 
 $config['language'] = 'se';
 
@@ -18,13 +18,13 @@ require_once('handler.php');
 require_once('functions_process.php');
 
 
-$config['db']['username']	= 'ml';
-$config['db']['password']	= 'nutana';
-$config['db']['database']	= 'dbProcess';
-$config['db']['host']	= 'process1.x';
-$config['db']['port']	= 44000;
+$config['db']['username']    = 'ml';
+$config['db']['password']    = 'nutana';
+$config['db']['database']    = 'dbProcess';
+$config['db']['host']    = 'process1.x';
+$config['db']['port']    = 44000;
 
-$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
+$config['session']['timeout'] = (60*60)*24*7;        //keep logged in for 7 days
 $config['session']['name'] = 'coreID';
 $config['session']['allow_themes'] = true;
 

@@ -12,11 +12,11 @@ require_once('prop_Timestamp.php');
 $ts = new Timestamp(1200685768);
 
 if (!empty($_POST['ts'])) {
-	$ts->set($_POST['ts']);
+    $ts->set($_POST['ts']);
 
-	echo 'Unix timestamp (RFC 2822): '.date('r', $ts->get()).'<br/>';
-	echo 'NTP timestamp (RFC 2822): '.date('r', $ts->getNTP() ).'<br/>';
-	echo '<br/>';
+    echo 'Unix timestamp (RFC 2822): '.date('r', $ts->get()).'<br/>';
+    echo 'NTP timestamp (RFC 2822): '.date('r', $ts->getNTP() ).'<br/>';
+    echo '<br/>';
 }
 ?>
 

@@ -24,12 +24,12 @@ require_once('functions_lang.php');
 
 $config['debug'] = true;
 
-$config['database']['username']	= 'root';
-$config['database']['password']	= '';
-$config['database']['database']	= 'dbLang';
+$config['database']['username']    = 'root';
+$config['database']['password']    = '';
+$config['database']['database']    = 'dbLang';
 $db = new DB_MySQLi($config['database']);
 
-$config['session']['timeout'] = (60*60)*24*7;	//7 days
+$config['session']['timeout'] = (60*60)*24*7;    //7 days
 $config['session']['name'] = 'langID';
 $session = new Session($config['session']);
 

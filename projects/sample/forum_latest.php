@@ -12,8 +12,8 @@ echo 'The 5 last posts in the forum:<br/><br/>';
 $list = getLastForumPosts(5);
 
 for ($i=0; $i<count($list); $i++) {
-	echo getForumDepthHTML(FORUM_FOLDER, $list[$i]['itemId']);
-	echo showForumPost($list[$i], '#'.($i+1));
+    echo getForumDepthHTML(FORUM_FOLDER, $list[$i]['itemId']);
+    echo showForumPost($list[$i], '#'.($i+1));
 }
 
 echo '</div>';

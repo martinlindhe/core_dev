@@ -21,14 +21,14 @@ $config['app']['web_root'] = '/issues/';
 $config['default_title'] = 'GIR - Issue Tracker';
 
 $config['db']['driver']     = 'mysqli';
-$config['db']['username']	= 'root';
-$config['db']['password']	= '';
-$config['db']['database']	= 'dbIssues';
+$config['db']['username']    = 'root';
+$config['db']['password']    = '';
+$config['db']['database']    = 'dbIssues';
 
 $config['user']['driver'] = 'default';
 
 $config['session']['driver']  = 'default';
-$config['session']['timeout'] = (60*60)*24*7;		//keep logged in for 7 days
+$config['session']['timeout'] = (60*60)*24*7;        //keep logged in for 7 days
 $config['session']['name']    = 'issueID';
 
 $config['auth']['driver'] = 'default';

@@ -4,33 +4,33 @@ $header = new xhtml_header();
 echo $header->render();
 ?>
 <div id="menu_holder">
-	<div id="leftmenu">
+    <div id="leftmenu">
 <?php
 
 $menu = array('index.php' => 'Home');
 echo xhtmlMenu($menu);
 
 if ($session->isAdmin) {
-	$menu = array(
-		'admin_addlang.php' => 'Add language',
-		$config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
-	);
-	echo xhtmlMenu($menu);
+    $menu = array(
+        'admin_addlang.php' => 'Add language',
+        $config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
+    );
+    echo xhtmlMenu($menu);
 }
 
 if ($session->id) {
-	$menu = array(
-		'add_word.php' => 'Add word',
-		'add_text.php' => 'Add longer text',
-		'show_words.php' => 'Show words',
-		'guess_language.php' => 'Guess language',
-		'acronym.php' => 'Make acronyms',
-		'?logout' => 'Log out'
-	);
-	echo xhtmlMenu($menu);
+    $menu = array(
+        'add_word.php' => 'Add word',
+        'add_text.php' => 'Add longer text',
+        'show_words.php' => 'Show words',
+        'guess_language.php' => 'Guess language',
+        'acronym.php' => 'Make acronyms',
+        '?logout' => 'Log out'
+    );
+    echo xhtmlMenu($menu);
 }
 ?>
-	</div>
+    </div>
 
-	<div id="middle">
+    <div id="middle">
 <!-- head end -->

@@ -9,7 +9,7 @@ echo 'Users online (was active in the last '.shortTimePeriod($session->online_ti
 
 $list = Users::allOnline();
 foreach ($list as $row) {
-	echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastActive'].'<br/>';
+    echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastActive'].'<br/>';
 }
 
 require('design_foot.php');

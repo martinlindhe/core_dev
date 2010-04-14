@@ -9,7 +9,7 @@ echo 'Here is the 50 last users logged in<br/><br/>';
 
 $list = Users::lastLoggedIn(50);
 foreach ($list as $row) {
-	echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
+    echo Users::link($row['userId'], $row['userName']).' at '.$row['timeLastLogin'].'<br/>';
 }
 
 require('design_foot.php');

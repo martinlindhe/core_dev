@@ -3,7 +3,7 @@
 require_once('config.php');
 $session->requireLoggedIn();
 
-if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;	//invalid request
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) die;    //invalid request
 $itemId = $_GET['id'];
 
 require('design_head.php');

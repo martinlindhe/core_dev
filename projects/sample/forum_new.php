@@ -5,7 +5,7 @@ $session->requireLoggedIn();
 
 $itemId = 0;
 if (!empty($_GET['id']) && is_numeric($_GET['id'])) $itemId = $_GET['id'];
-if (!$itemId && !$session->isAdmin) die;	//invalid request
+if (!$itemId && !$session->isAdmin) die;    //invalid request
 
 require('design_head.php');
 

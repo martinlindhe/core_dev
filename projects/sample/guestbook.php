@@ -5,7 +5,7 @@ $session->requireLoggedIn();
 
 $userId = $session->id;
 if (!empty($_GET['id']) && is_numeric($_GET['id'])) {
-	$userId = $_GET['id'];
+    $userId = $_GET['id'];
 }
 
 require('design_head.php');

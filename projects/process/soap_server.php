@@ -2,24 +2,24 @@
 
 ini_set('soap.wsdl_cache_enabled', '0');
 
-$config['no_session'] = true;	//force session "last active" update to be skipped
+$config['no_session'] = true;    //force session "last active" update to be skipped
 require_once('config.php');
 
 class SOAP_ProcessService
 {
-	function fetchAndConvert($username, $password, $uri, $callback, $watermark_uri)
-	{
-		$customerId = getCustomerId($username, $password);
-		if (!$customerId || empty($uri)) return false;
+    function fetchAndConvert($username, $password, $uri, $callback, $watermark_uri)
+    {
+        $customerId = getCustomerId($username, $password);
+        if (!$customerId || empty($uri)) return false;
 
-		$id = addProcessEvent(PROCESS_FETCH, $customerId, $uri);
-		$params['callback'] = $callback;
-		$params['watermark'] = $watermark_uri;
+        $id = addProcessEvent(PROCESS_FETCH, $customerId, $uri);
+        $params['callback'] = $callback;
+        $params['watermark'] = $watermark_uri;
 
-		$endId = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $customerId, $id, $params);
+        $endId = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $customerId, $id, $params);
 
-		return $endId;
-	}
+        return $endId;
+    }
 }
 
 $server = new SoapServer(xhtmlGetUrl('process.wsdl.php')); //, array('trace' => 1));

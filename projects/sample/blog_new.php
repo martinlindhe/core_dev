@@ -4,13 +4,13 @@ require_once('config.php');
 $session->requireLoggedIn();
 
 if (isset($_POST['title']) && isset($_POST['body']) && isset($_POST['catid'])) {
-	$blogId = addBlog($_POST['catid'], $_POST['title'], $_POST['body']);
-	if ($blogId) {
-		header('Location: blog.php?Blog:'.$blogId);
-		die;
-	} else {
-		die('error saving blog');
-	}
+    $blogId = addBlog($_POST['catid'], $_POST['title'], $_POST['body']);
+    if ($blogId) {
+        header('Location: blog.php?Blog:'.$blogId);
+        die;
+    } else {
+        die('error saving blog');
+    }
 }
 
 require('design_head.php');

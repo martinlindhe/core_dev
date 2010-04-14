@@ -8,27 +8,27 @@ require_once('config.php');
 $header = new xhtml_header();
 echo $header->render();
 
-$cc = '1234 1234 1234 1234';	//FIXME: add a fake "valid" number
+$cc = '1234 1234 1234 1234';    //FIXME: add a fake "valid" number
 
 if (!empty($_POST['cc'])) {
-	$cc = $_POST['cc'];
+    $cc = $_POST['cc'];
 
-	echo '<h1>Analysis of credit card '.CCprintNumber($cc).'</h1>';
-	echo 'Type of card: '.$cc_name[ CCgetType($cc) ].'<br/>';
-	if (CCvalidateMod10($cc)) {
-		echo 'Valid cc number<br/>';
-	} else {
-		echo '<b>Invalid cc number!!!</b><br/>';
-	}
+    echo '<h1>Analysis of credit card '.CCprintNumber($cc).'</h1>';
+    echo 'Type of card: '.$cc_name[ CCgetType($cc) ].'<br/>';
+    if (CCvalidateMod10($cc)) {
+        echo 'Valid cc number<br/>';
+    } else {
+        echo '<b>Invalid cc number!!!</b><br/>';
+    }
 }
 ?>
 
 Enter a credit card number:
 
 <form name="ccvalidate" method="post" action="">
-	<input name="cc" type="text" size="22" value="<?php echo $cc?>"/>
-	<br/>
-	<input type="submit" class="button" value="Validate"/>
+    <input name="cc" type="text" size="22" value="<?php echo $cc?>"/>
+    <br/>
+    <input type="submit" class="button" value="Validate"/>
 </form>
 
 </body>
