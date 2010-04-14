@@ -124,6 +124,12 @@ class HttpClient extends CoreBase
      */
     function setMaxRedirects($n) { $this->max_redirects = $n; }
 
+    function saveBody($dst_name)
+    {
+        $data = $this->getBody();
+        file_put_contents($dst_name, $data);
+    }
+
     function post($params)
     {
         return $this->get(false, $params);
