@@ -12,6 +12,7 @@
 
 //STATUS: wip
 
+//FIXME: textarea is initially shown as huge before the javascript fixes its size, it looks ugly while the page is loading
 //TODO: integrate with image upload
 
 class yui_richedit
