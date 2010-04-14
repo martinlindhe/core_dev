@@ -13,14 +13,14 @@ $captcha->setPrivKey('6LfqDQQAAAAAAKOMPfoJYcpqfZBlWQZf1BYiq7qt');
 $captcha->setPubKey( '6LfqDQQAAAAAAMF-GaCBYHRJFetLd_BrjO8-2HBW');
 
 if ($captcha->verify()) {
-	echo "correct! saving ".$_POST['var'];
+    echo "correct! saving ".$_POST['var'];
 } else {
 
-	echo xhtmlForm();
-	echo xhtmlInput('var');
-	echo $captcha->render();
-	echo xhtmlSubmit();
-	echo xhtmlFormClose();
+    echo xhtmlForm();
+    echo xhtmlInput('var');
+    echo $captcha->render();
+    echo xhtmlSubmit();
+    echo xhtmlFormClose();
 }
 
 

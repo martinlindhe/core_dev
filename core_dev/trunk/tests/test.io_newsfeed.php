@@ -19,24 +19,24 @@ die;
 
 /*
 $list[] = array(
-	'pubdate' => 127652734,
-	'link' => 'http://example.com/news/1',
-	'title' => 'Latest news',
-	'desc' => 'A short summary'
+    'pubdate' => 127652734,
+    'link' => 'http://example.com/news/1',
+    'title' => 'Latest news',
+    'desc' => 'A short summary'
 );
 
 $list[] = array(
-	'pubdate' => 127652224,
-	'link' => 'http://example.com/news/2',
-	'title' => 'Some older news',
-	'desc' => 'A short summary'
+    'pubdate' => 127652224,
+    'link' => 'http://example.com/news/2',
+    'title' => 'Some older news',
+    'desc' => 'A short summary'
 );
 
 $list[] = array(
-	'pubdate' => 127651734,
-	'link' => 'http://example.com/news/3',
-	'title' => 'Very old stuff',
-	'desc' => 'A short summary'
+    'pubdate' => 127651734,
+    'link' => 'http://example.com/news/3',
+    'title' => 'Very old stuff',
+    'desc' => 'A short summary'
 );
 
 $feed = new NewsFeed();

@@ -17,6 +17,6 @@ $xls->add(2.14);
 $xls->add(700000000);
 $xls->add(-47.44499998);
 
-$xls->write('aaa');	//FIXME kunna speca output format här eller i render() istället !
+$xls->write('aaa');    //FIXME kunna speca output format här eller i render() istället !
 
 ?>

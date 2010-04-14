@@ -13,12 +13,12 @@ $tests = dir_get_by_extension('.', '.php', 'test.');
 $current = 0;
 foreach ($tests as $test)
 {
-	$current++;
-	echo "Running ".$current."/".count($tests).": ".$test." ...\n";
+    $current++;
+    echo "Running ".$current."/".count($tests).": ".$test." ...\n";
 
-	$c = 'php '.$test;
-	$ret = passthru($c);
-	echo "------------------------------------------\n";
+    $c = 'php '.$test;
+    $ret = passthru($c);
+    echo "------------------------------------------\n";
 }
 
 //XXX: räkna output

@@ -13,12 +13,12 @@ $f = new ftp('ftp://ftp.sunet.se/');
 $dir = $f->getDir('/pub/os/Linux/distributions/slackware/slackware-10.2/');
 
 foreach ($dir as $file) {
-	if ($file['is_file']) {
-		$get = $file['name'];
+    if ($file['is_file']) {
+        $get = $file['name'];
 
-		$data = $f->getData($get);
-		d($data);
-	}
+        $data = $f->getData($get);
+        d($data);
+    }
 }
 
 die;

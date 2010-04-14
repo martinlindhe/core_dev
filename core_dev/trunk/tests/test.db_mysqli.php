@@ -11,7 +11,7 @@ $config['debug'] = true;
 $db = new db_mysqli(array('host'=>'localhost', 'username'=>'root', 'password'=>''));
 
 if (!$db->findDatabase('dbKUK')) {
-	$db->createDatabase('dbKUK');
+    $db->createDatabase('dbKUK');
 }
 $db->selectDatabase('dbKUK');
 
@@ -32,8 +32,8 @@ $layout = array(
 
 
 if (!$db->findTable('tblKEX1')) {
-	if (!$db->createTable('tblKEX1', $layout))
-		$db->status();
+    if (!$db->createTable('tblKEX1', $layout))
+        $db->status();
 }
 
 if (!$db->verifyTable('tblKEX1', $layout)) echo "FAIL1";
