@@ -505,23 +505,36 @@ function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url 
 	return $extern_url;
 }
 
+function jsArray1D($list, $with_keys = true)
+{
+	$res = '[';
+
+	foreach ($list as $key => $val)
+		$res .= ($with_keys ? $key.': ' : '').(is_numeric($val) ? $val : '"'.$val.'"').',';
+
+	$res .= ']';
+
+	return $res;
+}
+
 /**
  * Generates Javascript style arrays
+ * @param $list 2d array
  */
-function jsArray($name, $list)
+function jsArray2D($list)
 {
-	$res = $name.' = ['."\n";
+	$res = '['."\n";
 
 	foreach ($list as $l)
 	{
 		$res .= '{ ';
 
 		foreach ($l as $key => $val)
-			$res .= $key.': '.(is_numeric($val) ? $val : '"'.$val.'"').', ';
+			$res .= $key.': '.(is_numeric($val) ? $val : '"'.$val.'"').',';
 
 		$res .= '},'."\n";
 	}
-	$res .= '];';
+	$res .= ']';
 
 	return $res;
 }

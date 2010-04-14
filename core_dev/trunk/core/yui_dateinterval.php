@@ -29,6 +29,19 @@ class yui_dateinterval
 	function setDivName($s) { $this->div_name = $s; }
 	function setStartWeekday($n) { $this->start_weekday = $n; }
 
+	function getLocaleStrings()
+	{
+		global $month_swe_short, $month_swe, $weekday_swe_1char, $weekday_swe_short, $weekday_swe_medium, $weekday_swe;
+
+		return
+		'cal.cfg.setProperty("MONTHS_SHORT", '.   jsArray1D(array_slice($month_swe_short, 1), false).');'.
+		'cal.cfg.setProperty("MONTHS_LONG", '.    jsArray1D(array_slice($month_swe, 1), false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_1CHAR", '. jsArray1D($weekday_swe_1char, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_SHORT", '. jsArray1D($weekday_swe_short, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_MEDIUM", '.jsArray1D($weekday_swe_medium, false).');'.
+		'cal.cfg.setProperty("WEEKDAYS_LONG", '.  jsArray1D($weekday_swe, false).');';
+	}
+
 	function render()
 	{
 		$res = '
@@ -38,7 +51,6 @@ class yui_dateinterval
 				this._iState = 0;
 
 				cfg = cfg || {};
-				cfg.start_weekday = '.$this->start_weekday.';
 				cfg.multi_select = true;
 
 				IntervalCalendar.superclass.constructor.call(this, container, cfg);
@@ -169,6 +181,10 @@ class yui_dateinterval
 			outTxt.value = "";
 
 			var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_name.'", {pages:2});
+
+			cal.cfg.setProperty("start_weekday", '.$this->start_weekday.');
+
+			'.$this->getLocaleStrings().'
 
 			cal.selectEvent.subscribe(function() {
 				interval = this.getInterval();
