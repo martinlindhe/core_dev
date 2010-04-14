@@ -17,14 +17,14 @@ $deletes = 0;
 $updates = 0;
 
 foreach ($list as $row) {
-	if ($h->files->updateFile($row['fileId'])) {
-		echo ".";
-		$updates++;
-	} else {
-		echo "*";
-		$h->files->deleteFile($row['fileId'], 0, true);
-		$deletes++;
-	}
+    if ($h->files->updateFile($row['fileId'])) {
+        echo ".";
+        $updates++;
+    } else {
+        echo "*";
+        $h->files->deleteFile($row['fileId'], 0, true);
+        $deletes++;
+    }
 }
 
 echo "\n------------------\n";

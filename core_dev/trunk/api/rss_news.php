@@ -37,30 +37,30 @@ echo '<webMaster>'.$webmaster.'</webMaster>';
 echo '<generator>uReply RSS propagator</generator>';
 
 echo '<image>';
-	echo '<title>image title</title>';
-	echo '<link>'.$server_url.'</link>';
-	echo '<description>Click the url</description>';
-	echo '<url>http://localhost/'.coredev_webroot().'gfx/icon_warning_big.png</url>';
-	echo '<width>82</width>';
-	echo '<height>45</height>';
+    echo '<title>image title</title>';
+    echo '<link>'.$server_url.'</link>';
+    echo '<description>Click the url</description>';
+    echo '<url>http://localhost/'.coredev_webroot().'gfx/icon_warning_big.png</url>';
+    echo '<width>82</width>';
+    echo '<height>45</height>';
 echo '</image>';
 
 $path = basename($_GET['pr']);
 if ($db->escape($path) != $_GET['pr']) die;
 
 for ($i=0; $i<count($list); $i++) {
-	if (!$list[$i]['rss_enabled']) continue;
+    if (!$list[$i]['rss_enabled']) continue;
 
-	$item_url = 'http://localhost/'.$path.'/news.php?news='.$list[$i]['newsId'];
+    $item_url = 'http://localhost/'.$path.'/news.php?news='.$list[$i]['newsId'];
 
-	echo '<item>';
-		echo '<title>'.$list[$i]['title'].'</title>';
-		echo '<pubDate>'.$list[$i]['timeToPublish'].'</pubDate>';	//fixme: hur ska publish date formateras?
+    echo '<item>';
+        echo '<title>'.$list[$i]['title'].'</title>';
+        echo '<pubDate>'.$list[$i]['timeToPublish'].'</pubDate>';    //fixme: hur ska publish date formateras?
 
-		echo '<link>'.$item_url.'</link>';
-		echo '<guid>'.$item_url.'</guid>';
-		echo '<description>'.$list[$i]['body'].'</description>';
-	echo '</item>';
+        echo '<link>'.$item_url.'</link>';
+        echo '<guid>'.$item_url.'</guid>';
+        echo '<description>'.$list[$i]['body'].'</description>';
+    echo '</item>';
 }
 
 echo '</channel>';

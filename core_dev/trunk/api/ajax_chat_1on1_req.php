@@ -12,11 +12,11 @@ $h->session->requireLoggedIn();
 $event = getSubscriptions(SUBSCRIPTION_USER_CHATREQ);
 
 if ($event && !isset($_GET['nonewchat'])) {
-	echo $h->session->id.';'.$event[0]['itemId'].';'.Users::getName($event[0]['itemId']);
-	removeSubscription(SUBSCRIPTION_USER_CHATREQ, $event[0]['itemId']);
+    echo $h->session->id.';'.$event[0]['itemId'].';'.Users::getName($event[0]['itemId']);
+    removeSubscription(SUBSCRIPTION_USER_CHATREQ, $event[0]['itemId']);
 }
 else {
-	echo '0;0;0';
+    echo '0;0;0';
 }
 
 ?>

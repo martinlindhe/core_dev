@@ -3,7 +3,7 @@
  * Cleans up old entries in tblActivation
  */
 
-define('MAX_LIFETIME', 30);	//delete entries older than 30 days
+define('MAX_LIFETIME', 30);    //delete entries older than 30 days
 
 require_once('find_config.php');
 
