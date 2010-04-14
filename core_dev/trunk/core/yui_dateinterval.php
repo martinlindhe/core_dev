@@ -29,19 +29,6 @@ class yui_dateinterval
 	function setDivName($s) { $this->div_name = $s; }
 	function setStartWeekday($n) { $this->start_weekday = $n; }
 
-	function getLocaleStrings()
-	{
-		$locale = LocaleHandler::getInstance();
-
-		return
-		'cal.cfg.setProperty("MONTHS_SHORT", '.   jsArray1D($locale->handle->month_short, false).');'.
-		'cal.cfg.setProperty("MONTHS_LONG", '.    jsArray1D($locale->handle->month_long, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_1CHAR", '. jsArray1D($locale->handle->weekday_1char, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_SHORT", '. jsArray1D($locale->handle->weekday_short, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_MEDIUM", '.jsArray1D($locale->handle->weekday_medium, false).');'.
-		'cal.cfg.setProperty("WEEKDAYS_LONG", '.  jsArray1D($locale->handle->weekday_long, false).');';
-	}
-
 	function render()
 	{
 		$res = '
@@ -169,6 +156,8 @@ class yui_dateinterval
 			YAHOO.example.calendar.IntervalCalendar = IntervalCalendar;
 		})();';
 
+		$locale = LocaleHandler::getInstance();
+
 		$res .= '
 		YAHOO.util.Event.onDOMReady(function()
 		{
@@ -182,9 +171,13 @@ class yui_dateinterval
 
 			var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_name.'", {pages:2});
 
-			cal.cfg.setProperty("start_weekday", '.$this->start_weekday.');
-
-			'.$this->getLocaleStrings().'
+			cal.cfg.setProperty("start_weekday", '.  $this->start_weekday.');
+			cal.cfg.setProperty("MONTHS_SHORT", '.   jsArray1D($locale->handle->month_short, false).');
+			cal.cfg.setProperty("MONTHS_LONG", '.    jsArray1D($locale->handle->month_long, false).');
+			cal.cfg.setProperty("WEEKDAYS_1CHAR", '. jsArray1D($locale->handle->weekday_1char, false).');
+			cal.cfg.setProperty("WEEKDAYS_SHORT", '. jsArray1D($locale->handle->weekday_short, false).');
+			cal.cfg.setProperty("WEEKDAYS_MEDIUM", '.jsArray1D($locale->handle->weekday_medium, false).');
+			cal.cfg.setProperty("WEEKDAYS_LONG", '.  jsArray1D($locale->handle->weekday_long, false).');
 
 			cal.selectEvent.subscribe(function() {
 				interval = this.getInterval();
