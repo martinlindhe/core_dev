@@ -9,6 +9,9 @@
 
 //STATUS: WIP
 
+//TODO: include external yui files in a smarter way
+//TODO: use jsArray-functions more
+
 class yui_chart
 {
 	private $data_source = '';
@@ -27,46 +30,47 @@ class yui_chart
 
 	function render()
 	{
-		echo '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-min.js&2.8.0r4/build/dom/dom-min.js&2.8.0r4/build/event/event-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js"></script>';
+		$res = '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-min.js&2.8.0r4/build/dom/dom-min.js&2.8.0r4/build/event/event-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js"></script>';
 
-		echo
+		$res .=
 		'<style type="text/css">'.
 		'#chart { width: 500px; height: 350px; }'.
 		'</style>';
 
-		echo
+		$res .=
 		'<div id="chart">'.
 		'Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. '.
 		'You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.'.
 		'</div>';
 
-		echo
+		$res .=
 		'<script type="text/javascript">'.
 		'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.0r4/build/charts/assets/charts.swf";';
 
 		//--- data
-		echo 'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'."\n";
-		echo 'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.DataSource);'."\n";
+		$res .=
+		'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'."\n".
+		'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.DataSource);'."\n".
+		'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'."\n";
 
-		echo 'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'."\n";
-		echo 'myDataSource.responseSchema = { fields: [ ';
-
-		echo '"'.$this->x_field_name.'",';
+		$res .=
+		'myDataSource.responseSchema = { fields: [ ';
+		$res .= '"'.$this->x_field_name.'",';
 		for ($i=0; $i < count($this->y_fields); $i++)
-			echo '"'.$this->y_fields[$i]['name'].'",';
+			$res .= '"'.$this->y_fields[$i]['name'].'",';
 
-		echo '] };'."\n";
+		$res .= '] };'."\n";
 
 		//--- chart
-		echo 'var seriesDef = [';
-		echo '{ displayName: "'.$this->x_field_title.'", yField: "'.$this->x_field_name.'" }, ';
+		$res .= 'var seriesDef = [';
+		$res .= '{ displayName: "'.$this->x_field_title.'", yField: "'.$this->x_field_name.'" }, ';
 
 		for ($i=0; $i < count($this->y_fields); $i++)
-			echo '{ displayName: "'.$this->y_fields[$i]['title'].'", yField: "'.$this->y_fields[$i]['name'].'" }, ';
+			$res .= '{ displayName: "'.$this->y_fields[$i]['title'].'", yField: "'.$this->y_fields[$i]['name'].'" }, ';
 
-		echo ' ];';
+		$res .= ' ];';
 
-		echo
+		$res .=
 		'YAHOO.example.getDataTipText = function( item, index, series )
 		{
 			var toolTipText = series.displayName + " at " + item.'.$this->x_field_name.';
@@ -75,35 +79,38 @@ class yui_chart
 		}'."\n";
 
 		//Style object for chart
-		echo
+		$res .=
 		'var styleDef ='.
 		'{'.
 			'xAxis: { labelRotation:-90 },'.
 			'yAxis: { titleRotation:-90 }'.
 		'}'."\n";
 
-		echo
+		$res .=
 		'var yAxisWidget = new YAHOO.widget.NumericAxis();'.
 		'yAxisWidget.minimum = 0;'.
 		'yAxisWidget.title = "'.$this->y_title.'";';
 
-		echo
+		$res .=
 		'var xAxisWidget = new YAHOO.widget.CategoryAxis();'.
 		'xAxisWidget.minimum = 0;'.
 		'xAxisWidget.title = "'.$this->x_field_title.'";';
 
-		echo 'var mychart = new YAHOO.widget.LineChart( "chart", myDataSource, {';
-		echo 'series: seriesDef,';
-		echo 'xField: "'.$this->x_field_name.'",';
-		echo 'yAxis: yAxisWidget,';
-		echo 'xAxis: xAxisWidget,';
-		echo 'style: styleDef,';
-		echo 'dataTipFunction: YAHOO.example.getDataTipText,';
+		$res .=
+		'var mychart = new YAHOO.widget.LineChart( "chart", myDataSource, {'.
+		'series: seriesDef,'.
+		'xField: "'.$this->x_field_name.'",'.
+		'yAxis: yAxisWidget,'.
+		'xAxis: xAxisWidget,'.
+		'style: styleDef,'.
+		'dataTipFunction: YAHOO.example.getDataTipText,'.
 		//only needed for flash player express install
-		echo 'expressInstall: "assets/expressinstall.swf"';
-		echo '});'."\n";
+		'expressInstall: "assets/expressinstall.swf"'.
+		'});'."\n";
 
-		echo '</script>';
+		$res .= '</script>';
+
+		return $res;
 	}
 }
 
