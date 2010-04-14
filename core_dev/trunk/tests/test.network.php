@@ -35,7 +35,8 @@ foreach ($valid_urls as $url)
 $invalid_urls = array(
 'http://-invalid.leading-char.com',
 'http:// invalid with spaces.com',
-'http://invalid.url-with a.space.com', //FIXME: this succeeds
+'http://invalid.url-with a.space.com',
+'http://good-domain.com/bad url with space',
 );
 
 foreach ($invalid_urls as $url)
@@ -44,6 +45,7 @@ foreach ($invalid_urls as $url)
 
 $tmp = implode(' glue ', $valid_urls);
 $test_matches = match_urls($tmp);
+
 
 //compare against $valid_urls, should be the same
 $err = array_diff($valid_urls, $test_matches);

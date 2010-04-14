@@ -139,8 +139,7 @@ define('URL_REGEXP',
     "(:\d+)?".       //optional port number
     "(/".            //optional url parameters must begin with /
         "(".
-            "[\w/_\-\.]*".  //0 or more alphanumeric, . or _
-            "(\?\S+)?".     //optional extension
+            "[\w/_\-\?\=\&\;\+\*\#\.]*".  //0 or more alphanumeric and/or _-?=&;+*#.
         ")?".
     ")?".
 ")"
@@ -154,7 +153,9 @@ define('URL_REGEXP',
  */
 function is_url($url)
 {
-    if (preg_match(URL_REGEXP, $url))
+    preg_match(URL_REGEXP, $url, $matches);
+
+    if ($matches && $matches[0] == $url)
         return true;
 
     return false;
