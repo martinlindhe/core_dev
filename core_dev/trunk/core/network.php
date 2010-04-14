@@ -129,6 +129,21 @@ function client_ip()
     return $ip = $_SERVER['REMOTE_ADDR'];
 }
 
+define('URL_REGEXP',
+"(".
+    "(https?|rtmpe?|ftp|mms|rtsp)".
+    "://".
+    "([-\w\.]+)+".
+    "(:\d+)?". //optional port number
+    // the rest of the URL is optional, and begins with /
+    "(/".
+        "(".
+            "[\w/\.]*". //0 or more alphanumeric, . or _
+            "[\w/]*". //extension, or none
+        "?)".
+    "?)".
+"?)");
+
 /**
  * Checks if input string is a valid URL
  *
@@ -137,25 +152,23 @@ function client_ip()
  */
 function is_url($url)
 {
-    $pattern =
-    "(".
-        "(https?|rtmpe?|ftp|mms|rtsp)".
-        "://".
-        "([-\w\.]+)+".
-        "(:\d+)?". //optional port number
-        // the rest of the URL is optional, and begins with /
-        "(/".
-            "(".
-                "[\w/\.]*". //0 or more alphanumeric, . or _
-                "[\w/]*". //extension, or none
-            "?)".
-        "?)".
-    "?)";
+        if (preg_match(URL_REGEXP, $url))
+            return true;
 
-    if (preg_match($pattern, $url))
-        return true;
+        return false;
+}
 
-    return false;
+/**
+ * Extracts all url:s from input string
+ */
+function match_urls($str, $keep_dupes = false)
+{
+    preg_match_all(URL_REGEXP, $str, $matches);
+
+    if ($keep_dupes)
+        return $matches[0];
+
+    return array_merge(array_unique($matches[0]));
 }
 
 /**

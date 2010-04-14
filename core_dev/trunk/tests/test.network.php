@@ -19,18 +19,29 @@ if (!reserved_ip('192.168.0.100')) echo "FAIL 5\n";
 if (!reserved_ip('10.20.30.40')) echo "FAIL 6\n";
 
 
-$test_urls = array(
+$valid_urls = array(
 'http://www.google.se/search?hl=sv&source=hp&q=&btnI=Jag+har+tur&meta=&aq=f&aqi=&aql=&oq=&gs_rfai=',
 'ftp://joe:password@ftp.filetransferprotocal.com',
 'https://some-url.com?query=&name=joe?filter=*.*#some_anchor',
-'http:// invalid url with spaces.com', //should fail
 'http://valid-url.without.space.com',
 'http://127.0.0.1/test',
 );
 
-foreach ($test_urls as $url)
-    if (!is_url($url)) echo "URL FAIL ".$url."\n";
+foreach ($valid_urls as $url)
+    if (!is_url($url)) echo "URL FAIL BUT IS VALID ".$url."\n";
 
+$invalid_urls = array(
+'http:// invalid url with spaces.com',
+);
+
+foreach ($invalid_urls as $url)
+    if (is_url($url)) echo "URL SUCCESS BUT IS INVALID ".$url."\n";
+
+
+$tmp = implode(' kexspex ', $valid_urls);
+
+$test_matches = match_urls($tmp);
+var_dump ($test_matches); //XXX compare against $valid_urls, should be the same
 
 
 ?>
