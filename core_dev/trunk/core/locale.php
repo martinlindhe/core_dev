@@ -47,6 +47,16 @@ class LocaleHandler
 		}
 	}
 
+	/**
+	 * @param $n month number (1-12)
+	 */
+	function getMonthLong($n) { return $this->handle->month_long[$n-1]; }
+
+	/**
+	 * @param $n weekday number (0-6), 0=sunday, 1=monday
+	 */
+	function getWeekdayLong($n) { return $this->handle->weekday_long[$n]; }
+
 }
 
 

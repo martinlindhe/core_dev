@@ -35,24 +35,6 @@ class Locale_SWE extends CoreLocale
 		'S', 'M', 'T', 'O', 'T', 'F', 'S');
 }
 
-
-
-$month_swe = array( //XXXX deprecate use of this array
-'', 'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
-'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December');
-
-$month_swe_short = array('', 'Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec');
-
-$weekday_swe = array('Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag');
-$weekday_swe_1char = array('S', 'M', 'T', 'O', 'T', 'F', 'S');
-$weekday_swe_short = array('Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö');
-$weekday_swe_medium = array('Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör');
-
-
-
-
-
-
 $day_suff_swe = array(//den 1:a, 5:e osv...
 '', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',

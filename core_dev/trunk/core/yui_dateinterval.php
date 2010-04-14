@@ -31,8 +31,6 @@ class yui_dateinterval
 
 	function getLocaleStrings()
 	{
-		//global $month_swe_short, $month_swe, $weekday_swe_1char, $weekday_swe_short, $weekday_swe_medium, $weekday_swe;
-
 		$locale = LocaleHandler::getInstance();
 
 		return
