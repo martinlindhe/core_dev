@@ -9,6 +9,8 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
+//STATUS: WIP
+
 require_once('locale_swe.php');
 require_once('locale_eng.php');
 require_once('locale_ger.php');
@@ -21,6 +23,7 @@ class LocaleHandler
 {
 	static $_instance; ///< singleton class
 	var $handle;
+	private $locale;  ///< 6-letter string representing current locale (ISO 639-2)
 
     private function __construct()
     {
@@ -39,6 +42,8 @@ class LocaleHandler
 	 */
     function set($s)
     {
+		$this->locale = $s;
+
 		switch ($s) {
 		case 'swe': $this->handle = new Locale_SWE(); break;
 		case 'eng': $this->handle = new Locale_ENG(); break;
@@ -46,6 +51,8 @@ class LocaleHandler
 		default: throw new Exception('Unknown locale '.$s);
 		}
 	}
+
+	function get() { return $this->locale; }
 
 	/**
 	 * @param $n month number (1-12)
@@ -66,15 +73,13 @@ class LocaleHandler
  */
 function t($s)
 {
-	global $config;
-	if (empty($config['language'])) return $s;
+	$locale = LocaleHandler::getInstance();
 
-	switch ($config['language']) {
-	case 'ger': case 'de': return $s; //German (Deutsch)   - XXX not translated
-	case 'eng': case 'en': return $s;      //English (System default)
-	case 'swe': case 'sv': $t = t_swe($s); break; //Swedish (Svenska)
-
-	default: die('Unhandled language: '.$config['language']);
+	switch ($locale->get()) {
+	case 'ger': return $s; //German (Deutsch)   - XXX not translated
+	case 'eng': return $s;      //English (System default)
+	case 'swe': $t = t_swe($s); break; //Swedish (Svenska)
+	default: die('Unhandled language: '.$locale->get());
 	}
 
 	if (!$t) {
