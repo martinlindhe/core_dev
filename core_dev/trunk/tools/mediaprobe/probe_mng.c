@@ -21,30 +21,30 @@ const unsigned char mng_sig[8] = {138, 77, 78, 71, 13, 10, 26, 10};
  */
 int probe_mng(FILE *f, int len, int info)
 {
-	fseek(f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
-	uint8_t *buf = malloc(8);
+    uint8_t *buf = malloc(8);
 
-	if (fread(buf, sizeof(char), 8, f) != 8) {
-		free(buf);
-		return E_READERROR;
-	}
+    if (fread(buf, sizeof(char), 8, f) != 8) {
+        free(buf);
+        return E_READERROR;
+    }
 
-	if (len < 10 || memcmp(buf, mng_sig, 8) != 0) {
-		free(buf);
-		return E_PROBEFAIL;
-	}
+    if (len < 10 || memcmp(buf, mng_sig, 8) != 0) {
+        free(buf);
+        return E_PROBEFAIL;
+    }
 
-	free(buf);
+    free(buf);
 
-	if (!info) {
-		//XXX: MNG does not yet have a registered MIME media type, but video/x-mng or image/x-mng can be used.
-		printf("image/x-mng\n");
-	} else {
-		printf("Format: MNG\n");
-		printf("Mediatype: image\n");
-		printf("Mimetype: video/x-mng\n");
-	}
+    if (!info) {
+        //XXX: MNG does not yet have a registered MIME media type, but video/x-mng or image/x-mng can be used.
+        printf("image/x-mng\n");
+    } else {
+        printf("Format: MNG\n");
+        printf("Mediatype: image\n");
+        printf("Mimetype: video/x-mng\n");
+    }
 
-	return E_PROBESUCCESS;
+    return E_PROBESUCCESS;
 }

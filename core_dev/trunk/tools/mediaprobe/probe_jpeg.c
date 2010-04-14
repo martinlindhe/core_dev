@@ -19,18 +19,18 @@
  */
 int probe_jpeg(FILE *f, int len, int info)
 {
-	fseek(f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
-	if (len < 0x10 || read16be(f) != MKTAG2(0xFF, 0xD8))
-		return E_PROBEFAIL;
+    if (len < 0x10 || read16be(f) != MKTAG2(0xFF, 0xD8))
+        return E_PROBEFAIL;
 
-	if (!info) {
-		printf("image/jpeg\n");
-	} else {
-		printf("Format: JPEG\n");
-		printf("Mediatype: image\n");
-		printf("Mimetype: image/jpeg\n");
-	}
+    if (!info) {
+        printf("image/jpeg\n");
+    } else {
+        printf("Format: JPEG\n");
+        printf("Mediatype: image\n");
+        printf("Mimetype: image/jpeg\n");
+    }
 
-	return E_PROBESUCCESS;
+    return E_PROBESUCCESS;
 }

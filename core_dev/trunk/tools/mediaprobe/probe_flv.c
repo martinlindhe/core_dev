@@ -20,19 +20,19 @@
  */
 int probe_flv(FILE *f, int len, int info)
 {
-	fseek(f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
-	if (read8(f) == 'F' && read8(f) == 'L' && read8(f) == 'V')
-	{
-		if (!info) {
-			printf("video/x-flv\n");	//XXX or video/mp4 according to adobe?
-		} else {
-			printf("Format: FLV\n");
-			printf("Mediatype: video\n");
-			printf("Mimetype: video/x-flv\n");
-		}
-		return E_PROBESUCCESS;
-	}
+    if (read8(f) == 'F' && read8(f) == 'L' && read8(f) == 'V')
+    {
+        if (!info) {
+            printf("video/x-flv\n");    //XXX or video/mp4 according to adobe?
+        } else {
+            printf("Format: FLV\n");
+            printf("Mediatype: video\n");
+            printf("Mimetype: video/x-flv\n");
+        }
+        return E_PROBESUCCESS;
+    }
 
-	return E_PROBEFAIL;
+    return E_PROBEFAIL;
 }

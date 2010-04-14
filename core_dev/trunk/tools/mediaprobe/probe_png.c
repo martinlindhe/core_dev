@@ -22,29 +22,29 @@ const unsigned char png_sig[8] = {137, 80, 78, 71, 13, 10, 26, 10};
  */
 int probe_png(FILE *f, int len, int info)
 {
-	fseek(f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_SET);
 
-	uint8_t *buf = malloc(8);
+    uint8_t *buf = malloc(8);
 
-	if (fread(buf, sizeof(char), 8, f) != 8) {
-		free(buf);
-		return E_READERROR;
-	}
+    if (fread(buf, sizeof(char), 8, f) != 8) {
+        free(buf);
+        return E_READERROR;
+    }
 
-	if (len < 10 || memcmp(buf, png_sig, 8) != 0) {
-		free(buf);
-		return E_PROBEFAIL;
-	}
+    if (len < 10 || memcmp(buf, png_sig, 8) != 0) {
+        free(buf);
+        return E_PROBEFAIL;
+    }
 
-	free(buf);
+    free(buf);
 
-	if (!info) {
-		printf("image/png\n");
-	} else {
-		printf("Format: PNG\n");
-		printf("Mediatype: image\n");
-		printf("Mimetype: image/png\n");
-	}
+    if (!info) {
+        printf("image/png\n");
+    } else {
+        printf("Format: PNG\n");
+        printf("Mediatype: image\n");
+        printf("Mimetype: image/png\n");
+    }
 
-	return E_PROBESUCCESS;
+    return E_PROBESUCCESS;
 }

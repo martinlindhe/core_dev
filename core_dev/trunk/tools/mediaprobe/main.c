@@ -37,63 +37,63 @@
 
 int main(int argc, char** argv)
 {
-	FILE *f;
+    FILE *f;
 
-	if (argc < 2){
-		printf("USAGE: %s <filename> [params]\n", argv[0]);
-		printf("\n");
-		printf("Param ---- Usage\n");
-		printf(" -info     Display file info\n");
-		return 1;
-	}
+    if (argc < 2){
+        printf("USAGE: %s <filename> [params]\n", argv[0]);
+        printf("\n");
+        printf("Param ---- Usage\n");
+        printf(" -info     Display file info\n");
+        return 1;
+    }
 
-	f = fopen(argv[1], "rb");
-	if (!f) {
-		perror(argv[1]);
-		return 2;
-	}
+    f = fopen(argv[1], "rb");
+    if (!f) {
+        perror(argv[1]);
+        return 2;
+    }
 
-	fseek(f, 0, SEEK_END);
-	int len = ftell(f);
-	fseek(f, 0, SEEK_SET);
+    fseek(f, 0, SEEK_END);
+    int len = ftell(f);
+    fseek(f, 0, SEEK_SET);
 
-	if (len < 10) {
-		printf("Input file is too small to probe\n");
-		goto fail;
-	}
+    if (len < 10) {
+        printf("Input file is too small to probe\n");
+        goto fail;
+    }
 
-	int info = 0;	///< output detailed info?
-	if (argc >= 3) {
-		if (!strcmp(argv[2], "-info")) info = 1;
-		else {
-			printf("Unknown parameter: %s\n", argv[2]);
-			goto fail;
-		}
-	}
+    int info = 0;    ///< output detailed info?
+    if (argc >= 3) {
+        if (!strcmp(argv[2], "-info")) info = 1;
+        else {
+            printf("Unknown parameter: %s\n", argv[2]);
+            goto fail;
+        }
+    }
 
-	//image format parsers
-	if (probe_bmp (f, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_gif (f, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_jpeg(f, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_mng (f, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_png (f, len, info) == E_PROBESUCCESS) goto finish;
+    //image format parsers
+    if (probe_bmp (f, len, info) == E_PROBESUCCESS) goto finish;
+    if (probe_gif (f, len, info) == E_PROBESUCCESS) goto finish;
+    if (probe_jpeg(f, len, info) == E_PROBESUCCESS) goto finish;
+    if (probe_mng (f, len, info) == E_PROBESUCCESS) goto finish;
+    if (probe_png (f, len, info) == E_PROBESUCCESS) goto finish;
 
-	//container format parsers
-	if (probe_asf (f, len, info) == E_PROBESUCCESS) goto finish;
-	if (probe_flv (f, len, info) == E_PROBESUCCESS) goto finish;
+    //container format parsers
+    if (probe_asf (f, len, info) == E_PROBESUCCESS) goto finish;
+    if (probe_flv (f, len, info) == E_PROBESUCCESS) goto finish;
 
-	//audio format parsers
-	if (probe_mp3 (f, len, info) == E_PROBESUCCESS) goto finish;
+    //audio format parsers
+    if (probe_mp3 (f, len, info) == E_PROBESUCCESS) goto finish;
 
-	//unknown mime format:
-	printf("application/octet-stream\n");
-	//hex_dump(buf, readlen);
+    //unknown mime format:
+    printf("application/octet-stream\n");
+    //hex_dump(buf, readlen);
 
 finish:
-	fclose(f);
-	exit(0);
+    fclose(f);
+    exit(0);
 
 fail:
-	fclose(f);
-	exit(1);
+    fclose(f);
+    exit(1);
 }
