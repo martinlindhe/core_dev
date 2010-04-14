@@ -11,8 +11,8 @@ $h->session->requireAdmin();
 $pr = $_POST['pr'];
 $prData = getTodoItem($pr);
 if ($prData) {
-	header('Location: admin_todo_lists.php?id='.$prData['itemId']);
-	die;
+    header('Location: admin_todo_lists.php?id='.$prData['itemId']);
+    die;
 }
 
 require('design_admin_head.php');

@@ -11,9 +11,9 @@ $h->session->requireAdmin();
 $itemId = $_GET['id'];
 
 if (!empty($_POST['categoryId'])) {
-	moveTodoItem($itemId, $_POST['categoryId']);
-	header('Location: admin_todo_lists.php?id='.$itemId);
-	die;
+    moveTodoItem($itemId, $_POST['categoryId']);
+    header('Location: admin_todo_lists.php?id='.$itemId);
+    die;
 }
 
 require('design_admin_head.php');
@@ -28,9 +28,9 @@ echo $item['itemDesc'].'<br/><br/>';
 echo nl2br($item['itemDetails']).'<br/><br/>';
 echo 'Created: '.getRelativeTimeLong($item['timestamp']).', ';
 if ($item['userName']) {
-	echo 'by '.Users::link($item['itemCreator'], $item['userName']).'<br/>';
+    echo 'by '.Users::link($item['itemCreator'], $item['userName']).'<br/>';
 } else {
-	echo '<b>creator has been deleted.</b><br/>';
+    echo '<b>creator has been deleted.</b><br/>';
 }
 echo $PR.' is currently in category <b>'.getTodoCategoryName($item['categoryId']).'</b><br/><br/>';
 
@@ -42,15 +42,15 @@ echo '<select name="categoryId">';
 $list = getTodoCategories(0);
 foreach ($list as $row) {
 
-	echo '<option>';
-	echo '<option value="'.$row['categoryId'].'">'.$row['categoryName'];
-	$sublist = getTodoCategories($row['categoryId']);
-	foreach ($sublist as $sub) {
-		echo '<option value="'.$sub['categoryId'].'">';
-		echo '&nbsp;&nbsp;&nbsp;';
-		echo $row['categoryName'] . ' - ';
-		echo $sub['categoryName'];
-	}
+    echo '<option>';
+    echo '<option value="'.$row['categoryId'].'">'.$row['categoryName'];
+    $sublist = getTodoCategories($row['categoryId']);
+    foreach ($sublist as $sub) {
+        echo '<option value="'.$sub['categoryId'].'">';
+        echo '&nbsp;&nbsp;&nbsp;';
+        echo $row['categoryName'] . ' - ';
+        echo $sub['categoryName'];
+    }
 }
 
 echo '</select> ';

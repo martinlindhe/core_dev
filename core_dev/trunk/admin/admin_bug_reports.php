@@ -18,20 +18,20 @@ echo 'that their engagement pays off.<br/><br/>';
 
 $list = getBugReports();
 foreach ($list as $row) {
-	echo '<div class="objectCritical">';
-	echo getRelativeTimeLong($row['timestamp']).', by '.Users::link($row['bugCreator'], $row['userName']);
-	echo ' via the '.($row['reportMethod'] ? 'game':'site').'<br/>';
-	echo nl2br($row['bugDesc']).'<br/>';
-	echo '<a href="admin_move_bug_report.php?id='.$row['bugId'].'">&raquo; Move this report into the TODO system</a><br/>';
-	echo '<a href="admin_close_bug_report.php?id='.$row['bugId'].'">&raquo; Close this report</a>';
-	echo '</div>';
-	echo '<br/>';
+    echo '<div class="objectCritical">';
+    echo getRelativeTimeLong($row['timestamp']).', by '.Users::link($row['bugCreator'], $row['userName']);
+    echo ' via the '.($row['reportMethod'] ? 'game':'site').'<br/>';
+    echo nl2br($row['bugDesc']).'<br/>';
+    echo '<a href="admin_move_bug_report.php?id='.$row['bugId'].'">&raquo; Move this report into the TODO system</a><br/>';
+    echo '<a href="admin_close_bug_report.php?id='.$row['bugId'].'">&raquo; Close this report</a>';
+    echo '</div>';
+    echo '<br/>';
 }
 
 $closedbugs = getClosedBugReportsCount();
 echo count($list).' bugs in list (Excluding '.$closedbugs.' CLOSED bugs).<br/><br/>';
 if ($closedbugs) {
-	echo '<a href="admin_closed_bug_reports.php">&raquo; List CLOSED bug reports</a><br/>';
+    echo '<a href="admin_closed_bug_reports.php">&raquo; List CLOSED bug reports</a><br/>';
 }
 echo '<a href="admin_current_work.php">&raquo; Back to current work</a><br/>';
 

@@ -11,19 +11,19 @@ $h->session->requireAdmin();
 $bugId = $_GET['id'];
 
 if (isset($_POST['desc'])) {
-	$pr = moveBugReport($bugId, $_POST['creator'], $_POST['desc'], $_POST['details'], $_POST['timestamp'], $_POST['itemCategory'], $_POST['categoryId']);
+    $pr = moveBugReport($bugId, $_POST['creator'], $_POST['desc'], $_POST['details'], $_POST['timestamp'], $_POST['itemCategory'], $_POST['categoryId']);
 
-	include('design_head.php');
-	echo 'The bug report has been successfully moved into the todo list system!<br/>';
-	echo '<a href="admin_todo_lists.php?id='.$pr.'">&raquo; Click here to go to the PR.</a><br/>';
-	include('design_foot.php');
-	die;
+    include('design_head.php');
+    echo 'The bug report has been successfully moved into the todo list system!<br/>';
+    echo '<a href="admin_todo_lists.php?id='.$pr.'">&raquo; Click here to go to the PR.</a><br/>';
+    include('design_foot.php');
+    die;
 }
 
 $item = getBugReport($bugId);
 if (!$item) {
-	header('Location: admin_bug_reports.php');
-	die;
+    header('Location: admin_bug_reports.php');
+    die;
 }
 
 require('design_admin_head.php');
@@ -41,7 +41,7 @@ echo 'Category: ';
 echo '<select name="itemCategory">';
 echo '<option>';
 for ($i=0; $i<count($todo_item_category); $i++) {
-	echo '<option value="'.$i.'">'.$todo_item_category[$i];
+    echo '<option value="'.$i.'">'.$todo_item_category[$i];
 }
 echo '</select><br/>';
 
@@ -50,15 +50,15 @@ echo 'Add to TODO-list: ';
 echo '<select name="categoryId">';
 $list = getTodoCategories(0);
 foreach ($list as $row) {
-	echo '<option>';
-	echo '<option value="'.$row['categoryId'].'">'.$row['categoryName'];
-	$sublist = getTodoCategories($row['categoryId']);
-	foreach ($sublist as $sub) {
-		echo '<option value="'.$sub['categoryId'].'">';
-		echo '&nbsp;&nbsp;&nbsp;';
-		echo $row['categoryName'] . ' - ';
-		echo $sub['categoryName'];
-	}
+    echo '<option>';
+    echo '<option value="'.$row['categoryId'].'">'.$row['categoryName'];
+    $sublist = getTodoCategories($row['categoryId']);
+    foreach ($sublist as $sub) {
+        echo '<option value="'.$sub['categoryId'].'">';
+        echo '&nbsp;&nbsp;&nbsp;';
+        echo $row['categoryName'] . ' - ';
+        echo $sub['categoryName'];
+    }
 }
 echo '</select><br/>';
 

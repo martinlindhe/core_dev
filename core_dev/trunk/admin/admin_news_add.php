@@ -10,16 +10,16 @@ $h->session->requireAdmin();
 require('design_admin_head.php');
 
 if (!empty($_POST['title']) && !empty($_POST['body']) && !empty($_POST['publish']) ) {
-	$check = addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
+    $check = addNews($_POST['title'], $_POST['body'], $_POST['publish'], $_POST['rss'], $_POST['news_cat']);
 
-	if ($check) {
-		echo 'News article successfully added!';
-	} else {
-		echo 'There were problems adding news article. Most likley you pressed submit more than once.';
-	}
+    if ($check) {
+        echo 'News article successfully added!';
+    } else {
+        echo 'There were problems adding news article. Most likley you pressed submit more than once.';
+    }
 
-	require('design_admin_foot.php');
-	die;
+    require('design_admin_foot.php');
+    die;
 }
 
 echo '<h1>Add news</h1>';
