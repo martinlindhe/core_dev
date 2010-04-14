@@ -11,8 +11,9 @@ require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
 require_once('yui_dateinterval.php');
+require_once('yui_richedit.php');
 
-//FIXME: include yui richedit in a better way
+//TODO: register js includes properly by page renderer singleton class
 
 class xhtml_form
 {
@@ -332,24 +333,14 @@ class xhtml_form
 				break;
 
 			case 'RICHEDIT':
-				//http://developer.yahoo.com/yui/editor/
 				$res .= '<td>'.$e['str'].'</td>';
 				$res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
 
-				//XXX: how to disable "insert image" button?
-				//XXX: how to change title from "Text Editing Tools" ?
-				$res .=
-				'<script type="text/javascript">'.
-				//'var myEditor = new YAHOO.widget.Editor("'.$e['name'].'", {'.
-				'var myEditor = new YAHOO.widget.SimpleEditor("'.$e['name'].'", {'.
-				'width: "'.$e['width'].'px",'.
-				'height: "'.$e['height'].'px",'.
-				'dompath: true,'. //Turns on the bar at the bottom
-				'animate: true,'. //Animates the opening, closing and moving of Editor windows
-				'handleSubmit: true,'. //editor will attach itself to the textareas parent form's submit handler
-				'});'.
-				'myEditor.render();'.
-				'</script>';
+				$richedit = new yui_richedit();
+				$richedit->setWidth($e['width']);
+				$richedit->setHeight($e['height']);
+				$richedit->setInputName($e['name']);
+				$res .= $richedit->render();
 				break;
 
 			case 'CAPTCHA':
