@@ -32,29 +32,29 @@ define('MLP_INVITATION',  'https://pooh.sun.telia.se:9261/Service/Invitation');
  */
 function mlpSLIR($username, $password, $msid)
 {
-	$service_id = $username;	//PG p.6 says "Service name": To be stated on making
-								//positioning queries (serviceid). Same value as Username.
+    $service_id = $username;    //PG p.6 says "Service name": To be stated on making
+                                //positioning queries (serviceid). Same value as Username.
 
-	$out =
-	'<?xml version="1.0" encoding="ISO-8859-1"?>'.
-	'<!DOCTYPE svc_init SYSTEM "MLP_SVC_INIT_300.DTD">'.
-	'<svc_init>'.
-		'<hdr>'.
-			'<client>'.
-				'<id>'.$username.'</id>'.
-				'<pwd>'.$password.'</pwd>'.
-				'<serviceid>'.$service_id.'</serviceid>'.
-			'</client>'.
-		'</hdr>'.
-		'<slir>'.
-			'<msids>'.	//up to 10 msid's can be queried in one request (PG p.12)
-				'<msid>'.$msid.'</msid>'.
-			'</msids>'.
-			//'<prio type="HIGH"/>'.	//"NORMAL" is default (PG p.14)
-		'</slir>'.
-	'</svc_init>';
+    $out =
+    '<?xml version="1.0" encoding="ISO-8859-1"?>'.
+    '<!DOCTYPE svc_init SYSTEM "MLP_SVC_INIT_300.DTD">'.
+    '<svc_init>'.
+        '<hdr>'.
+            '<client>'.
+                '<id>'.$username.'</id>'.
+                '<pwd>'.$password.'</pwd>'.
+                '<serviceid>'.$service_id.'</serviceid>'.
+            '</client>'.
+        '</hdr>'.
+        '<slir>'.
+            '<msids>'.    //up to 10 msid's can be queried in one request (PG p.12)
+                '<msid>'.$msid.'</msid>'.
+            '</msids>'.
+            //'<prio type="HIGH"/>'.    //"NORMAL" is default (PG p.14)
+        '</slir>'.
+    '</svc_init>';
 
-	return $out;
+    return $out;
 }
 
 /**
@@ -62,45 +62,45 @@ function mlpSLIR($username, $password, $msid)
  */
 function parseSLIA($xml)
 {
-	global $slia_arr, $tag_name, $pos_cnt;
+    global $slia_arr, $tag_name, $pos_cnt;
 
-	$msid_pos = array();
-	$pos_cnt = 0;
+    $msid_pos = array();
+    $pos_cnt = 0;
 
-	$parser = xml_parser_create('ISO-8859-1');
-	xml_parse_into_struct($parser, $xml, $vals, $index);
-	xml_parser_free($parser);
+    $parser = xml_parser_create('ISO-8859-1');
+    xml_parse_into_struct($parser, $xml, $vals, $index);
+    xml_parser_free($parser);
 
-	foreach ($index as $key=>$val) {
-		if ($key != "POS") continue;
+    foreach ($index as $key=>$val) {
+        if ($key != "POS") continue;
 
-		// each contiguous pair of array entries are the
-		// lower and upper range for each molecule definition
-		for ($i=0; $i < count($val); $i+=2) {
-			$offset = $val[$i] + 1;
-			$len = $val[$i + 1] - $offset;
-			$msid_pos[] = parseSliaPos(array_slice($vals, $offset, $len));
-		}
-	}
+        // each contiguous pair of array entries are the
+        // lower and upper range for each molecule definition
+        for ($i=0; $i < count($val); $i+=2) {
+            $offset = $val[$i] + 1;
+            $len = $val[$i + 1] - $offset;
+            $msid_pos[] = parseSliaPos(array_slice($vals, $offset, $len));
+        }
+    }
 
-	return $msid_pos;
+    return $msid_pos;
 }
 
 //FIXME gör en ordentlig parser
 function parseSliaPos($values)
 {
-	$res = array();
+    $res = array();
 
-	foreach ($values as $val) {
-		if ($val['type'] != 'complete') continue;
+    foreach ($values as $val) {
+        if ($val['type'] != 'complete') continue;
 
-		switch ($val['tag']) {
-				case 'MSID': $res['msid'] = $val['value']; break;
-				case 'X': $res['x'] = gpsToWGS84($val['value']); break;	//XXX detta funkar bara för CircularArcArea coordinates
-				case 'Y': $res['y'] = gpsToWGS84($val['value']); break;
-		}
-	}
-	return $res;
+        switch ($val['tag']) {
+                case 'MSID': $res['msid'] = $val['value']; break;
+                case 'X': $res['x'] = gpsToWGS84($val['value']); break;    //XXX detta funkar bara för CircularArcArea coordinates
+                case 'Y': $res['y'] = gpsToWGS84($val['value']); break;
+        }
+    }
+    return $res;
 }
 
 ?>

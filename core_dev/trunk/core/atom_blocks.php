@@ -9,9 +9,9 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('BLOCK_IP',		1);		//block by IP address. should be able to transparently support IPv6
-define('BLOCK_ANR',		2);		//block by a-number
-define('BLOCK_USERID',	3);		//block by userid
+define('BLOCK_IP',        1);        //block by IP address. should be able to transparently support IPv6
+define('BLOCK_ANR',        2);        //block by a-number
+define('BLOCK_USERID',    3);        //block by userid
 
 /**
  * Creates a new blocking rule
@@ -21,14 +21,14 @@ define('BLOCK_USERID',	3);		//block by userid
  */
 function addBlock($_type, $rule)
 {
-	global $h, $db;
-	if (!is_numeric($_type) || !trim($rule)) return false;
+    global $h, $db;
+    if (!is_numeric($_type) || !trim($rule)) return false;
 
-	$q = 'SELECT COUNT(*) FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
-	if ($db->getOneItem($q)) return false;
+    $q = 'SELECT COUNT(*) FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
+    if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblBlocks SET type='.$_type.',rule="'.$db->escape($rule).'",timeCreated=NOW()'.($h->session ? ',createdBy='.$h->session->id : '');
-	$db->insert($q);
+    $q = 'INSERT INTO tblBlocks SET type='.$_type.',rule="'.$db->escape($rule).'",timeCreated=NOW()'.($h->session ? ',createdBy='.$h->session->id : '');
+    $db->insert($q);
 }
 
 /**
@@ -39,11 +39,11 @@ function addBlock($_type, $rule)
  */
  function removeBlock($_type, $rule)
 {
-	global $db;
-	if (!is_numeric($_type) || !trim($rule)) return false;
+    global $db;
+    if (!is_numeric($_type) || !trim($rule)) return false;
 
-	$q = 'DELETE FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
-	return $db->delete($q);
+    $q = 'DELETE FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
+    return $db->delete($q);
 }
 
 /**
@@ -54,11 +54,11 @@ function addBlock($_type, $rule)
  */
  function removeBlockId($_type, $ruleId)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($ruleId)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($ruleId)) return false;
 
-	$q = 'DELETE FROM tblBlocks WHERE type='.$_type.' AND ruleId='.$ruleId;
-	return $db->delete($q);
+    $q = 'DELETE FROM tblBlocks WHERE type='.$_type.' AND ruleId='.$ruleId;
+    return $db->delete($q);
 }
 
 /**
@@ -68,14 +68,14 @@ function addBlock($_type, $rule)
  */
 function getBlocks($_type, $_limit = '')
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q = 'SELECT * FROM tblBlocks WHERE type='.$_type;
-	if (!empty($limit)) {
-		$q .= $_limit;
-	}
-	return $db->getArray($q);
+    $q = 'SELECT * FROM tblBlocks WHERE type='.$_type;
+    if (!empty($limit)) {
+        $q .= $_limit;
+    }
+    return $db->getArray($q);
 }
 
 /**
@@ -85,11 +85,11 @@ function getBlocks($_type, $_limit = '')
  */
 function getBlocksCount($_type)
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q = 'SELECT count(ruleId) FROM tblBlocks WHERE type='.$_type;
-	return $db->getOneItem($q);
+    $q = 'SELECT count(ruleId) FROM tblBlocks WHERE type='.$_type;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -100,11 +100,11 @@ function getBlocksCount($_type)
  */
 function isBlocked($_type, $rule)
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q = 'SELECT COUNT(*) FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
-	if ($db->getOneItem($q)) return true;
-	return false;
+    $q = 'SELECT COUNT(*) FROM tblBlocks WHERE type='.$_type.' AND rule="'.$db->escape($rule).'"';
+    if ($db->getOneItem($q)) return true;
+    return false;
 }
 ?>

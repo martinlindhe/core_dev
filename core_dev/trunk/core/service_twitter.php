@@ -15,85 +15,85 @@ require_once('client_http.php');
 
 class Twitter
 {
-	private $username, $password;
+    private $username, $password;
 
-	function __construct($username = '', $password = '')
-	{
-		$this->username = $username;
-		$this->password = $password;
-	}
+    function __construct($username = '', $password = '')
+    {
+        $this->username = $username;
+        $this->password = $password;
+    }
 
-	function setUsername($username) { $this->username = $username; }
-	function setPassword($password) { $this->password = $password; }
+    function setUsername($username) { $this->username = $username; }
+    function setPassword($password) { $this->password = $password; }
 
-	/**
-	 * Executes a Twitter API function
-	 */
-	private function exec($url, $params = array())
-	{
-		$http = new HttpClient($url);
+    /**
+     * Executes a Twitter API function
+     */
+    private function exec($url, $params = array())
+    {
+        $http = new HttpClient($url);
 
-		$http->setUsername($this->username);
-		$http->setPassword($this->password);
+        $http->setUsername($this->username);
+        $http->setPassword($this->password);
 
-		return $http->post($params);
-	}
+        return $http->post($params);
+    }
 
-	function getTimeline($user = '')
-	{
-		if (!$user) $user = $this->username;
-		$c = 'http://twitter.com/statuses/user_timeline.atom?screen_name='.$user; //&count=30
+    function getTimeline($user = '')
+    {
+        if (!$user) $user = $this->username;
+        $c = 'http://twitter.com/statuses/user_timeline.atom?screen_name='.$user; //&count=30
 
-		$data = $this->exec($c);
+        $data = $this->exec($c);
 
-		$feed = new NewsFeed();
+        $feed = new NewsFeed();
 
-		$feed->load($data);
-		return $feed->getItems();
-	}
+        $feed->load($data);
+        return $feed->getItems();
+    }
 
-	function getFriendsTimeline()
-	{
-		$c = 'http://twitter.com/statuses/friends_timeline.atom'; //&count=30
+    function getFriendsTimeline()
+    {
+        $c = 'http://twitter.com/statuses/friends_timeline.atom'; //&count=30
 
-		$data = $this->exec($c);
-		$feed = new NewsFeed();
+        $data = $this->exec($c);
+        $feed = new NewsFeed();
 
-		$feed->load($data);
-		return $feed->getItems();
-	}
+        $feed->load($data);
+        return $feed->getItems();
+    }
 
-	function getSearchResult($s)
-	{
-		$c = 'http://search.twitter.com/search.atom?q='.urlencode($s);
-		$data = $this->exec($c);
+    function getSearchResult($s)
+    {
+        $c = 'http://search.twitter.com/search.atom?q='.urlencode($s);
+        $data = $this->exec($c);
 
-		$feed = new NewsFeed();
+        $feed = new NewsFeed();
 
-		$feed->load($data);
-		return $feed->getItems();
-	}
+        $feed->load($data);
+        return $feed->getItems();
+    }
 
-	/**
-	 * Posts a message to your twitter feed
-	 */
-	function post($msg)
-	{
-		$c = 'http://twitter.com/statuses/update.xml';
-		$arr['status'] = $msg;
-		$data = $this->exec($c, $arr, true);
+    /**
+     * Posts a message to your twitter feed
+     */
+    function post($msg)
+    {
+        $c = 'http://twitter.com/statuses/update.xml';
+        $arr['status'] = $msg;
+        $data = $this->exec($c, $arr, true);
 
-		return true;
-	}
+        return true;
+    }
 
-	function test()
-	{
-		$c = 'http://twitter.com/help/test.xml';
-		$data = $this->exec($c);
+    function test()
+    {
+        $c = 'http://twitter.com/help/test.xml';
+        $data = $this->exec($c);
 
-		if ($data != '<ok>true</ok>') return false;
-		return true;
-	}
+        if ($data != '<ok>true</ok>') return false;
+        return true;
+    }
 }
 
 ?>

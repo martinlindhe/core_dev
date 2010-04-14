@@ -21,13 +21,13 @@ abstract class CoreLocale
 
 class LocaleHandler
 {
-	static $_instance; ///< singleton class
-	var $handle;
-	private $locale;  ///< 6-letter string representing current locale (ISO 639-2)
+    static $_instance; ///< singleton class
+    var $handle;
+    private $locale;  ///< 6-letter string representing current locale (ISO 639-2)
 
     private function __construct()
     {
-	}
+    }
 
     public static function getInstance()
     {
@@ -37,32 +37,32 @@ class LocaleHandler
         return self::$_instance;
     }
 
-	/**
-	 * Set current locale
-	 */
+    /**
+     * Set current locale
+     */
     function set($s)
     {
-		$this->locale = $s;
+        $this->locale = $s;
 
-		switch ($s) {
-		case 'swe': $this->handle = new Locale_SWE(); break;
-		case 'eng': $this->handle = new Locale_ENG(); break;
-		case 'ger': $this->handle = new Locale_GER(); break;
-		default: throw new Exception('Unknown locale '.$s);
-		}
-	}
+        switch ($s) {
+        case 'swe': $this->handle = new Locale_SWE(); break;
+        case 'eng': $this->handle = new Locale_ENG(); break;
+        case 'ger': $this->handle = new Locale_GER(); break;
+        default: throw new Exception('Unknown locale '.$s);
+        }
+    }
 
-	function get() { return $this->locale; }
+    function get() { return $this->locale; }
 
-	/**
-	 * @param $n month number (1-12)
-	 */
-	function getMonthLong($n) { return $this->handle->month_long[$n-1]; }
+    /**
+     * @param $n month number (1-12)
+     */
+    function getMonthLong($n) { return $this->handle->month_long[$n-1]; }
 
-	/**
-	 * @param $n weekday number (0-6), 0=sunday, 1=monday
-	 */
-	function getWeekdayLong($n) { return $this->handle->weekday_long[$n]; }
+    /**
+     * @param $n weekday number (0-6), 0=sunday, 1=monday
+     */
+    function getWeekdayLong($n) { return $this->handle->weekday_long[$n]; }
 
 }
 
@@ -73,21 +73,21 @@ class LocaleHandler
  */
 function t($s)
 {
-	$locale = LocaleHandler::getInstance();
+    $locale = LocaleHandler::getInstance();
 
-	switch ($locale->get()) {
-	case 'ger': return $s; //German (Deutsch)   - XXX not translated
-	case 'eng': return $s;      //English (System default)
-	case 'swe': $t = t_swe($s); break; //Swedish (Svenska)
-	default: die('Unhandled language: '.$locale->get());
-	}
+    switch ($locale->get()) {
+    case 'ger': return $s; //German (Deutsch)   - XXX not translated
+    case 'eng': return $s;      //English (System default)
+    case 'swe': $t = t_swe($s); break; //Swedish (Svenska)
+    default: die('Unhandled language: '.$locale->get());
+    }
 
-	if (!$t) {
-		dp('Untranslated string: '.$s);
-		return '__('.$s.')__';
-	}
+    if (!$t) {
+        dp('Untranslated string: '.$s);
+        return '__('.$s.')__';
+    }
 
-	return $t;
+    return $t;
 
 }
 

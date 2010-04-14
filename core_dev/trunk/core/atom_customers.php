@@ -16,11 +16,11 @@
  */
 function getCustomerName($_id)
 {
-	global $db;
-	if (!is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_id)) return false;
 
-	$q = 'SELECT customerName FROM tblCustomers WHERE customerId='.$_id;
-	return $db->getOneItem($q);
+    $q = 'SELECT customerName FROM tblCustomers WHERE customerId='.$_id;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -32,13 +32,13 @@ function getCustomerName($_id)
  */
 function getCustomerId($name, $password = '')
 {
-	global $db;
+    global $db;
 
-	$q = 'SELECT customerId FROM tblCustomers';
-	$q .= ' WHERE customerName="'.$db->escape($name).'"';
-	if ($password) $q .= ' AND customerPass="'.$db->escape($password).'"';
+    $q = 'SELECT customerId FROM tblCustomers';
+    $q .= ' WHERE customerName="'.$db->escape($name).'"';
+    if ($password) $q .= ' AND customerPass="'.$db->escape($password).'"';
 
-	return $db->getOneItem($q);
+    return $db->getOneItem($q);
 }
 
 /**
@@ -46,11 +46,11 @@ function getCustomerId($name, $password = '')
  */
 function getCustomer($customer_id)
 {
-	global $db;
-	if (!is_numeric($customer_id)) return false;
+    global $db;
+    if (!is_numeric($customer_id)) return false;
 
-	$q = 'SELECT * FROM tblCustomers WHERE customerId='.$customer_id;
-	return $db->getOneRow($q);
+    $q = 'SELECT * FROM tblCustomers WHERE customerId='.$customer_id;
+    return $db->getOneRow($q);
 }
 
 /**
@@ -58,8 +58,8 @@ function getCustomer($customer_id)
  */
 function getCustomers()
 {
-	global $db;
-	return $db->getArray('SELECT * FROM tblCustomers');
+    global $db;
+    return $db->getArray('SELECT * FROM tblCustomers');
 }
 
 
@@ -68,8 +68,8 @@ function getCustomers()
  */
 function getCustomersMap()
 {
-	global $db;
-	return $db->getMappedArray('SELECT customerId,customerName FROM tblCustomers');
+    global $db;
+    return $db->getMappedArray('SELECT customerId,customerName FROM tblCustomers');
 }
 
 /**
@@ -77,10 +77,10 @@ function getCustomersMap()
  */
 function getCustomersByOwner($ownerId)
 {
-	global $db;
-	if (!is_numeric($ownerId)) return false;
+    global $db;
+    if (!is_numeric($ownerId)) return false;
 
-	return $db->getArray('SELECT * FROM tblCustomers WHERE ownerId='.$ownerId);
+    return $db->getArray('SELECT * FROM tblCustomers WHERE ownerId='.$ownerId);
 }
 
 ?>

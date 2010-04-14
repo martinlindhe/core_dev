@@ -35,46 +35,46 @@ require_once('input_csv.php');
  */
 function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
 {
-	global $config;
-	if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height)) return false;
-	if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0) return false;
-	if ($width < 0 || $width > 640 || $height < 0 || $height > 640) return false;
-	if ((is_numeric($zoom) && ($zoom < 0 || $zoom > 19)) || is_string($zoom) && $zoom != 'auto') return false;
-	if (empty($config['google_maps']['api_key'])) die('google maps api_key not set!');
+    global $config;
+    if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height)) return false;
+    if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0) return false;
+    if ($width < 0 || $width > 640 || $height < 0 || $height > 640) return false;
+    if ((is_numeric($zoom) && ($zoom < 0 || $zoom > 19)) || is_string($zoom) && $zoom != 'auto') return false;
+    if (empty($config['google_maps']['api_key'])) die('google maps api_key not set!');
 
-	$url = 'http://maps.google.com/staticmap'.
-		'?center='.$lat.','.$long.
-		($zoom == 'auto' ? '' : '&zoom='.$zoom).
-		'&size='.$width.'x'.$height.
-		'&format='.urlencode($format).
-		'&maptype='.urlencode($maptype).
-		'&key='.$config['google_maps']['api_key'];
+    $url = 'http://maps.google.com/staticmap'.
+        '?center='.$lat.','.$long.
+        ($zoom == 'auto' ? '' : '&zoom='.$zoom).
+        '&size='.$width.'x'.$height.
+        '&format='.urlencode($format).
+        '&maptype='.urlencode($maptype).
+        '&key='.$config['google_maps']['api_key'];
 
-	$cols = array('red', 'green', 'blue', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
+    $cols = array('red', 'green', 'blue', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
 
-	if (!empty($markers)) {
-		$url .= '&markers=';
-		for ($i = 0; $i<count($markers); $i++) {
-			if ($i == 0) $desc = $cols[$i];
-			else $desc = 'mid'.$cols[$i];
-			$url .= $markers[$i]['x'].','.$markers[$i]['y'].','.$desc.($i+1);
-			if ($i < count($markers)-1) $url .= '|';
-		}
-	}
+    if (!empty($markers)) {
+        $url .= '&markers=';
+        for ($i = 0; $i<count($markers); $i++) {
+            if ($i == 0) $desc = $cols[$i];
+            else $desc = 'mid'.$cols[$i];
+            $url .= $markers[$i]['x'].','.$markers[$i]['y'].','.$desc.($i+1);
+            if ($i < count($markers)-1) $url .= '|';
+        }
+    }
 
-	$width = array(6,4,2,2,1,1,1,1,1,1,1,1);
+    $width = array(6,4,2,2,1,1,1,1,1,1,1,1);
 
-	if (!empty($path)) {
-		$alpha = 0xA0;
-		for ($i = 0; $i<count($path)-1; $i++) {
-			$url .= '&path=rgba:0x0000ff'.dechex($alpha).',weight:'.$width[$i].
-				'|'.$path[$i]['x'].','.$path[$i]['y'].
-				'|'.$path[$i+1]['x'].','.$path[$i+1]['y'];
-			if ($alpha > 0x40) $alpha -= 0x20;
-		}
-	}
+    if (!empty($path)) {
+        $alpha = 0xA0;
+        for ($i = 0; $i<count($path)-1; $i++) {
+            $url .= '&path=rgba:0x0000ff'.dechex($alpha).',weight:'.$width[$i].
+                '|'.$path[$i]['x'].','.$path[$i]['y'].
+                '|'.$path[$i+1]['x'].','.$path[$i+1]['y'];
+            if ($alpha > 0x40) $alpha -= 0x20;
+        }
+    }
 
-	return $url;
+    return $url;
 }
 
 /**
@@ -88,20 +88,20 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $
  */
 function googleMapsGeocode($address)
 {
-	global $config;
+    global $config;
 
-	$url = 'http://maps.google.com/maps/geo'.
-		'?q='.urlencode(trim($address)).
-		'&output=csv'.	//XXX "xml" output format returns prettified street address & more info if needed
-		'&key='.$config['google_maps']['api_key'];
+    $url = 'http://maps.google.com/maps/geo'.
+        '?q='.urlencode(trim($address)).
+        '&output=csv'.    //XXX "xml" output format returns prettified street address & more info if needed
+        '&key='.$config['google_maps']['api_key'];
 
-	$res = csvParseRow(file_get_contents($url));
-	if ($res[0] != 200 || $res[1] == 0) return false;
+    $res = csvParseRow(file_get_contents($url));
+    if ($res[0] != 200 || $res[1] == 0) return false;
 
-	$out['x'] = $res[2];
-	$out['y'] = $res[3];
-	$out['accuracy'] = $res[1];	//0 (worst) to 9 (best)
-	return $out;
+    $out['x'] = $res[2];
+    $out['y'] = $res[3];
+    $out['accuracy'] = $res[1];    //0 (worst) to 9 (best)
+    return $out;
 }
 
 /**
@@ -116,19 +116,19 @@ function googleMapsGeocode($address)
  */
 function googleMapsReverseGeocode($lat, $long)
 {
-	global $config;
+    global $config;
 
-	$url = 'http://maps.google.com/maps/geo'.
-		'?ll='.$lat.','.$long.
-		'&output=csv'.	//XXX "xml" output format returns prettified street address & more info if needed
-		'&key='.$config['google_maps']['api_key'];
+    $url = 'http://maps.google.com/maps/geo'.
+        '?ll='.$lat.','.$long.
+        '&output=csv'.    //XXX "xml" output format returns prettified street address & more info if needed
+        '&key='.$config['google_maps']['api_key'];
 
-	$res = csvParseRow(file_get_contents($url));
-	if ($res[0] != 200 || $res[1] == 0) return false;
+    $res = csvParseRow(file_get_contents($url));
+    if ($res[0] != 200 || $res[1] == 0) return false;
 
-	$out['name'] = utf8_encode($res[2]);
-	$out['accuracy'] = $res[1];	//0 (worst) to 9 (best)
-	return $out;
+    $out['name'] = utf8_encode($res[2]);
+    $out['accuracy'] = $res[1];    //0 (worst) to 9 (best)
+    return $out;
 }
 
 ?>

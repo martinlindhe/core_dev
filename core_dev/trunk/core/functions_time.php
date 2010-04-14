@@ -13,19 +13,19 @@
  */
 function ago($sql_time)
 {
-	//XXX deprecate!!! use Timestamp->getRelative() instead
-	if (function_exists('agoOverride')) {
-		return agoOverride($sql_time);
-	}
+    //XXX deprecate!!! use Timestamp->getRelative() instead
+    if (function_exists('agoOverride')) {
+        return agoOverride($sql_time);
+    }
 
-	$old_time = strtotime($sql_time);
-	$curr_time = time();
+    $old_time = strtotime($sql_time);
+    $curr_time = time();
 
-	if ($curr_time >= $old_time) {
-		return shortTimePeriod($curr_time - $old_time).' ago';
-	} else {
-		return shortTimePeriod($old_time - $curr_time).' in the future';
-	}
+    if ($curr_time >= $old_time) {
+        return shortTimePeriod($curr_time - $old_time).' ago';
+    } else {
+        return shortTimePeriod($old_time - $curr_time).' in the future';
+    }
 }
 
 /**
@@ -37,10 +37,10 @@ function ago($sql_time)
  */
 function age($sql_time)
 {
-	if (!$sql_time) return false;
+    if (!$sql_time) return false;
 
-	$age = date_diff2($sql_time, 'now', 2, true);
-	return $age['years'];
+    $age = date_diff2($sql_time, 'now', 2, true);
+    return $age['years'];
 }
 
 /**
@@ -53,39 +53,39 @@ function age($sql_time)
  */
 function date_diff2($t1, $t2, $precision = 6, $arr = false) ///XXX php5.3 has a date_diff() function
 {
-	if (preg_match('/\D/', $t1) && ($t1 = strtotime($t1)) === false) return false;
-	if (preg_match('/\D/', $t2) && ($t2 = strtotime($t2)) === false) return false;
+    if (preg_match('/\D/', $t1) && ($t1 = strtotime($t1)) === false) return false;
+    if (preg_match('/\D/', $t2) && ($t2 = strtotime($t2)) === false) return false;
 
-	if ($t1 > $t2) list($t1, $t2) = array($t2, $t1);
+    if ($t1 > $t2) list($t1, $t2) = array($t2, $t1);
 
-	$diffs = array(
-		'year' => 0, 'month' => 0, 'day' => 0,
-		'hour' => 0, 'minute' => 0, 'second' => 0,
-	);
+    $diffs = array(
+        'year' => 0, 'month' => 0, 'day' => 0,
+        'hour' => 0, 'minute' => 0, 'second' => 0,
+    );
 
-	foreach (array_keys($diffs) as $interval) {
-		while ($t2 >= ($t3 = strtotime("+1 ${interval}", $t1))) {
-			$t1 = $t3;
-			++$diffs[$interval];
-		}
-	}
-	$stack = array();
-	foreach ($diffs as $interval => $num) {
-		$name = $interval . ($num != 1 ? 's' : '');
-		$stack[] = array($num, $name);
-	}
+    foreach (array_keys($diffs) as $interval) {
+        while ($t2 >= ($t3 = strtotime("+1 ${interval}", $t1))) {
+            $t1 = $t3;
+            ++$diffs[$interval];
+        }
+    }
+    $stack = array();
+    foreach ($diffs as $interval => $num) {
+        $name = $interval . ($num != 1 ? 's' : '');
+        $stack[] = array($num, $name);
+    }
 
-	$ret = array();
+    $ret = array();
 
-	while (count($ret) < $precision && ($item = array_shift($stack)) !== null) {
-		if ($item[0] > 0) {
-			if (!$arr) $ret[] = $item[0].' '.t($item[1]);
-			else $ret[ $item[1] ] = $item[0];
-		}
-	}
+    while (count($ret) < $precision && ($item = array_shift($stack)) !== null) {
+        if ($item[0] > 0) {
+            if (!$arr) $ret[] = $item[0].' '.t($item[1]);
+            else $ret[ $item[1] ] = $item[0];
+        }
+    }
 
-	if (!$arr) return implode(', ', $ret);
-	return $ret;
+    if (!$arr) return implode(', ', $ret);
+    return $ret;
 }
 
 /**
@@ -93,17 +93,17 @@ function date_diff2($t1, $t2, $precision = 6, $arr = false) ///XXX php5.3 has a 
  */
 function num_days($date1, $date2)
 {
-	$date1 = ts($date1);
-	$date2 = ts($date2);
+    $date1 = ts($date1);
+    $date2 = ts($date2);
 
-	if ($date1 > $date2)
-		$date_diff = $date1 - $date2;
-	else
-		$date_diff = $date2 - $date1;
+    if ($date1 > $date2)
+        $date_diff = $date1 - $date2;
+    else
+        $date_diff = $date2 - $date1;
 
-	$days = ceil($date_diff / (3600*24)) + 1;
+    $days = ceil($date_diff / (3600*24)) + 1;
 
-	return $days;
+    return $days;
 }
 
 /**
@@ -114,45 +114,45 @@ function num_days($date1, $date2)
  */
 function shortTimePeriod($secs) //XXX rename to something with duration. also see Duration class
 {
-	if (is_float($secs)) $secs = ceil($secs);
-	$retval = '';
+    if (is_float($secs)) $secs = ceil($secs);
+    $retval = '';
 
-	//years
-	$a = date('Y', $secs) - 1970;
-	if ($a==1) $retval = $a.' year, ';
-	else if ($a>0) $retval = $a.' years, ';
-	$secs -= (((($a*60)*60)*24)*30)*365;
+    //years
+    $a = date('Y', $secs) - 1970;
+    if ($a==1) $retval = $a.' year, ';
+    else if ($a>0) $retval = $a.' years, ';
+    $secs -= (((($a*60)*60)*24)*30)*365;
 
-	//months
-	$a = date('n',$secs)-1;
-	if ($a==1) $retval .= $a.' month, ';
-	else if($a>0) $retval .= $a.' months, ';
-	$secs -= ((($a*60)*60)*24)*30;
+    //months
+    $a = date('n',$secs)-1;
+    if ($a==1) $retval .= $a.' month, ';
+    else if($a>0) $retval .= $a.' months, ';
+    $secs -= ((($a*60)*60)*24)*30;
 
-	//days
-	$a = date('j',$secs)-1;
-	if ($a==1) $retval .= $a.' day, ';
-	else if ($a>0) $retval .= $a.' days, ';
-	$secs -= (($a*60)*60)*24;
+    //days
+    $a = date('j',$secs)-1;
+    if ($a==1) $retval .= $a.' day, ';
+    else if ($a>0) $retval .= $a.' days, ';
+    $secs -= (($a*60)*60)*24;
 
-	//hours
-	$a = date('H',$secs)-1;
-	if ($a>0) $retval .= $a.'h';
-	$secs -= ($a*60)*60;
+    //hours
+    $a = date('H',$secs)-1;
+    if ($a>0) $retval .= $a.'h';
+    $secs -= ($a*60)*60;
 
-	//minutes
-	$a = date('i',$secs)-0;
-	if ($a>0) $retval .= $a.'m';
-	$secs -= $a*60;
+    //minutes
+    $a = date('i',$secs)-0;
+    if ($a>0) $retval .= $a.'m';
+    $secs -= $a*60;
 
-	//seconds
-	$a = date('s',$secs)-0;
-	if ($a>0) $retval .= $a.'s';
+    //seconds
+    $a = date('s',$secs)-0;
+    if ($a>0) $retval .= $a.'s';
 
-	if (substr($retval, -2) == ', ') $retval = substr($retval, 0, -2);
-	if ($retval == '') $retval = '0s';
+    if (substr($retval, -2) == ', ') $retval = substr($retval, 0, -2);
+    if ($retval == '') $retval = '0s';
 
-	return $retval;
+    return $retval;
 }
 
 /**
@@ -163,12 +163,12 @@ function shortTimePeriod($secs) //XXX rename to something with duration. also se
  */
 function exectime($c, &$retval = 0)
 {
-	//XXX: Use 2>&1 in $c to redirect stderr to $output buffer
-	$output = array();
-	$exec_start = microtime(true);
-	exec($c, $output, &$retval);
+    //XXX: Use 2>&1 in $c to redirect stderr to $output buffer
+    $output = array();
+    $exec_start = microtime(true);
+    exec($c, $output, &$retval);
 
-	return microtime(true) - $exec_start;
+    return microtime(true) - $exec_start;
 }
 
 /**
@@ -177,7 +177,7 @@ function exectime($c, &$retval = 0)
  */
 function now()
 {
-	return strftime('%Y-%m-%d %H:%M:%S');
+    return strftime('%Y-%m-%d %H:%M:%S');
 }
 
 /**
@@ -188,10 +188,10 @@ function now()
  */
 function sql_datetime($ts)
 {
-	if (!is_numeric($ts))
-		$ts = strtotime($ts);
+    if (!is_numeric($ts))
+        $ts = strtotime($ts);
 
-	return date('Y-m-d H:i:s', $ts);
+    return date('Y-m-d H:i:s', $ts);
 }
 
 /**
@@ -202,10 +202,10 @@ function sql_datetime($ts)
  */
 function sql_date($ts)
 {
-	if (!is_numeric($ts))
-		$ts = strtotime($ts);
+    if (!is_numeric($ts))
+        $ts = strtotime($ts);
 
-	return date('Y-m-d', $ts);
+    return date('Y-m-d', $ts);
 }
 
 /**
@@ -216,7 +216,7 @@ function sql_date($ts)
  */
 function datetime_to_timestamp($datetime) //XXX deprecate! use ts() instead
 {
-	return strtotime($datetime);
+    return strtotime($datetime);
 }
 
 /**
@@ -224,8 +224,8 @@ function datetime_to_timestamp($datetime) //XXX deprecate! use ts() instead
  */
 function ts($d)
 {
-	if (is_numeric($d)) return $d;
-	return strtotime($d);
+    if (is_numeric($d)) return $d;
+    return strtotime($d);
 }
 
 /**
@@ -237,8 +237,8 @@ function ts($d)
  */
 function datetime_less($d1, $d2)
 {
-	if (strtotime($d1) < strtotime($d2)) return true;
-	return false;
+    if (strtotime($d1) < strtotime($d2)) return true;
+    return false;
 }
 
 /**
@@ -249,34 +249,34 @@ function datetime_less($d1, $d2)
  */
 function formatTime($ts = 0, $relative = false)
 {
-	if (!$ts) $ts = time();
+    if (!$ts) $ts = time();
 
-	if (function_exists('formatTimeOverride'))
-		return formatTimeOverride($ts);
+    if (function_exists('formatTimeOverride'))
+        return formatTimeOverride($ts);
 
-	if (!is_numeric($ts)) $ts = strtotime($ts);
+    if (!is_numeric($ts)) $ts = strtotime($ts);
 
-	$datestamp = mktime (0,0,0,date('m',$ts), date('d',$ts), date('Y',$ts));
-	$yesterday = mktime (0,0,0,date('m') ,date('d')-1,  date('Y'));
-	$tomorrow  = mktime (0,0,0,date('m') ,date('d')+1,  date('Y'));
+    $datestamp = mktime (0,0,0,date('m',$ts), date('d',$ts), date('Y',$ts));
+    $yesterday = mktime (0,0,0,date('m') ,date('d')-1,  date('Y'));
+    $tomorrow  = mktime (0,0,0,date('m') ,date('d')+1,  date('Y'));
 
-	$timediff = time() - $ts;
+    $timediff = time() - $ts;
 
-	if ($relative) {
-		if (date('Y-m-d', $ts) == date('Y-m-d')) {
-			//Today 18:13
-			return date('H:i',$ts);
-		} else if ($datestamp == $yesterday) {
-			//Yesterday 18:13
-			return t('Yesterday').' '.date('H:i',$ts);
-		} else if ($datestamp == $tomorrow) {
-			//Tomorrow 18:13
-			return t('Tomorrow').' '.date('H:i',$ts);
-		}
-	}
+    if ($relative) {
+        if (date('Y-m-d', $ts) == date('Y-m-d')) {
+            //Today 18:13
+            return date('H:i',$ts);
+        } else if ($datestamp == $yesterday) {
+            //Yesterday 18:13
+            return t('Yesterday').' '.date('H:i',$ts);
+        } else if ($datestamp == $tomorrow) {
+            //Tomorrow 18:13
+            return t('Tomorrow').' '.date('H:i',$ts);
+        }
+    }
 
-	//2007-04-14 15:22
-	return date('Y-m-d H:i', $ts);
+    //2007-04-14 15:22
+    return date('Y-m-d H:i', $ts);
 }
 
 ?>

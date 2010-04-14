@@ -18,25 +18,25 @@
  */
 function findApproxDivision($approx, $top = 256)
 {
-	$closest = 999999;
-	$m1 = 0;
-	$m2 = 0;
+    $closest = 999999;
+    $m1 = 0;
+    $m2 = 0;
 
-	for ($n1 = 1; $n1 <= $top; $n1++) {
-		for ($n2 = 1; $n2 <= $top; $n2++) {
+    for ($n1 = 1; $n1 <= $top; $n1++) {
+        for ($n2 = 1; $n2 <= $top; $n2++) {
 
-			$t = $n1 / $n2;
-			$diff = ($t > $approx ? $t - $approx : $approx - $t);
+            $t = $n1 / $n2;
+            $diff = ($t > $approx ? $t - $approx : $approx - $t);
 
-			if ($diff < $closest) {
-				$closest = $diff;
-				$m1 = $n1;
-				$m2 = $n2;
-				echo $n1." / ".$n2." = ".$t." (".$diff.")\n";
-			}
-		}
-	}
-	return array($m1, $m2);
+            if ($diff < $closest) {
+                $closest = $diff;
+                $m1 = $n1;
+                $m2 = $n2;
+                echo $n1." / ".$n2." = ".$t." (".$diff.")\n";
+            }
+        }
+    }
+    return array($m1, $m2);
 }
 
 ?>

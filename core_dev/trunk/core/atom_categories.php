@@ -41,20 +41,20 @@ define('CAT_PERM_GLOBAL',   0x80); ///< category is globally available to all us
  */
 function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_flags)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_flags)) return false;
 
-	$_name = $db->escape(trim($_name));
-	if (!$_name) return false;
+    $_name = $db->escape(trim($_name));
+    if (!$_name) return false;
 
-	$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
-	$q .= ' AND creatorId='.$h->session->id;
-	$check = $db->getOneItem($q);
-	if ($check) return false;
+    $q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$_name.'" AND ownerId='.$_owner;
+    $q .= ' AND creatorId='.$h->session->id;
+    $check = $db->getOneItem($q);
+    if ($check) return false;
 
-	$q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner;
-	$q .= ',timeCreated=NOW(),creatorId='.$h->session->id.',permissions='.$_flags;
-	return $db->insert($q);
+    $q = 'INSERT INTO tblCategories SET categoryType='.$_type.',categoryName="'.$_name.'",ownerId='.$_owner;
+    $q .= ',timeCreated=NOW(),creatorId='.$h->session->id.',permissions='.$_flags;
+    return $db->insert($q);
 }
 
 /**
@@ -62,11 +62,11 @@ function addCategory($_type, $_name, $_owner = 0, $_flags = 0)
  */
 function updateCategory($_type, $_id, $name)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblCategories SET categoryName="'.$db->escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
-	$db->update($q);
+    $q = 'UPDATE tblCategories SET categoryName="'.$db->escape($name).'" WHERE categoryType='.$_type.' AND categoryId='.$_id;
+    $db->update($q);
 }
 
 /**
@@ -74,11 +74,11 @@ function updateCategory($_type, $_id, $name)
  */
 function removeCategory($_type, $_id)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'DELETE FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
-	return $db->delete($q);
+    $q = 'DELETE FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+    return $db->delete($q);
 }
 
 /**
@@ -86,11 +86,11 @@ function removeCategory($_type, $_id)
  */
 function getCategory($_type, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
-	return $db->getOneRow($q);
+    $q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+    return $db->getOneRow($q);
 }
 
 /**
@@ -101,11 +101,11 @@ function getCategory($_type, $_id)
  */
 function getCategoryName($_type, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
-	return $db->getOneItem($q);
+    $q  = 'SELECT categoryName FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -116,11 +116,11 @@ function getCategoryName($_type, $_id)
  */
 function getCategoryPermissions($_type, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q  = 'SELECT permissions FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
-	return $db->getOneItem($q);
+    $q  = 'SELECT permissions FROM tblCategories WHERE categoryType='.$_type.' AND categoryId='.$_id;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -132,13 +132,13 @@ function getCategoryPermissions($_type, $_id)
  */
 function getCategoryByName($_type, $_name, $_flags = 0, $_ownerId = 0)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_flags)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_flags)) return false;
 
-	$q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$db->escape($_name).'"';
-	if ($_flags) $q .= ' AND (permissions & '.$_flags.')';
-	if ($_ownerId) $q .= ' AND ownerId = '.$_ownerId;
-	return $db->getOneItem($q);
+    $q = 'SELECT categoryId FROM tblCategories WHERE categoryType='.$_type.' AND categoryName="'.$db->escape($_name).'"';
+    if ($_flags) $q .= ' AND (permissions & '.$_flags.')';
+    if ($_ownerId) $q .= ' AND ownerId = '.$_ownerId;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -148,12 +148,12 @@ function getCategoryByName($_type, $_name, $_flags = 0, $_ownerId = 0)
  * @param $_owner object owning the categories (meaning depends on category type)
  */
 function getCategoriesByOwner($_type, $_owner)
-{	//FIXME merge with getCategories(), add sort order optional parameter
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+{    //FIXME merge with getCategories(), add sort order optional parameter
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND ownerId='.$_owner;
-	return $db->getArray($q);
+    $q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND ownerId='.$_owner;
+    return $db->getArray($q);
 }
 
 /**
@@ -161,14 +161,14 @@ function getCategoriesByOwner($_type, $_owner)
  */
 function getCategories($_type, $_owner = 0)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	$q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
-	if ($_owner) $q .= 'AND ownerId='.$_owner.' ';
-	$q .= 'ORDER BY categoryName ASC';
+    $q  = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' ';
+    if ($_owner) $q .= 'AND ownerId='.$_owner.' ';
+    $q .= 'ORDER BY categoryName ASC';
 
-	return $db->getArray($q);
+    return $db->getArray($q);
 }
 
 /**
@@ -178,11 +178,11 @@ function getCategories($_type, $_owner = 0)
  */
 function getGlobalCategories($_type)
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND (permissions & '.CAT_PERM_GLOBAL.')';
-	return $db->getArray($q);
+    $q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type.' AND (permissions & '.CAT_PERM_GLOBAL.')';
+    return $db->getArray($q);
 }
 
 /**
@@ -192,37 +192,37 @@ function getGlobalCategories($_type)
  */
 function getGlobalAndUserCategories($_type, $_owner = 0)
 {
-	global $h, $db;
-	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+    global $h, $db;
+    if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	switch ($_type) {
-		case CATEGORY_USERFILE:
-			if (!$h->session->id) return false;
-			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$h->session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
-			break;
+    switch ($_type) {
+        case CATEGORY_USERFILE:
+            if (!$h->session->id) return false;
+            $q = 'SELECT * FROM tblCategories WHERE (creatorId='.$h->session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
+            break;
 
-		case CATEGORY_BLOG:
-			if (!$h->session->id) return false;
-			$q = 'SELECT * FROM tblCategories WHERE (creatorId='.$h->session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
-			break;
+        case CATEGORY_BLOG:
+            if (!$h->session->id) return false;
+            $q = 'SELECT * FROM tblCategories WHERE (creatorId='.$h->session->id.' OR permissions & '.CAT_PERM_GLOBAL.') AND categoryType='.$_type.' ORDER BY permissions DESC';
+            break;
 
-		case CATEGORY_NEWS:
-		case CATEGORY_POLL:
-		case CATEGORY_CONTACT:
-		case CATEGORY_USERDATA:
-		case CATEGORY_WIKIFILE:
-		case CATEGORY_LANGUAGE:
-		case CATEGORY_TODOLIST:
-		case CATEGORY_ISSUE:
-			$q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
-			if ($_owner) $q .= ' AND ownerId='.$_owner;
-			break;
+        case CATEGORY_NEWS:
+        case CATEGORY_POLL:
+        case CATEGORY_CONTACT:
+        case CATEGORY_USERDATA:
+        case CATEGORY_WIKIFILE:
+        case CATEGORY_LANGUAGE:
+        case CATEGORY_TODOLIST:
+        case CATEGORY_ISSUE:
+            $q = 'SELECT * FROM tblCategories WHERE categoryType='.$_type;
+            if ($_owner) $q .= ' AND ownerId='.$_owner;
+            break;
 
-		default:
-			die('bleek');
-	}
+        default:
+            die('bleek');
+    }
 
-	return $db->getArray($q);
+    return $db->getArray($q);
 }
 
 /**
@@ -233,88 +233,88 @@ function getGlobalAndUserCategories($_type, $_owner = 0)
  */
 function manageCategoriesDialog($_type)
 {
-	global $h, $config;
-	if (!$h->session->id) return xhtmlSelectCategory($_type);
+    global $h, $config;
+    if (!$h->session->id) return xhtmlSelectCategory($_type);
 
-	if (($h->session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category'])) {
-		//Create new category. Only allow categories inside root level
-		$cat_type = $_type;
-		if (!empty($_POST['new_file_category_type']) && is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];
+    if (($h->session->isAdmin || $_type==CATEGORY_USERFILE) && !empty($_POST['new_file_category'])) {
+        //Create new category. Only allow categories inside root level
+        $cat_type = $_type;
+        if (!empty($_POST['new_file_category_type']) && is_numeric($_POST['new_file_category_type'])) $cat_type = $_POST['new_file_category_type'];
 
-		$flags = $_POST['new_file_category_scope'] + $_POST['new_file_category_perm'];
-		addCategory($cat_type, $_POST['new_file_category'], 0, $flags);
-	}
+        $flags = $_POST['new_file_category_scope'] + $_POST['new_file_category_perm'];
+        addCategory($cat_type, $_POST['new_file_category'], 0, $flags);
+    }
 
-	if (!empty($_GET['cat_del_id']) && is_numeric($_GET['cat_del_id'])) {
-		removeCategory($_type, $_GET['cat_del_id']);
-		echo 'Category removed!';
-		return;
-	}
+    if (!empty($_GET['cat_del_id']) && is_numeric($_GET['cat_del_id'])) {
+        removeCategory($_type, $_GET['cat_del_id']);
+        echo 'Category removed!';
+        return;
+    }
 
-	$edit_id = 0;
-	if (!empty($_GET['cat_edit_id']) && is_numeric($_GET['cat_edit_id'])) $edit_id = $_GET['cat_edit_id'];
+    $edit_id = 0;
+    if (!empty($_GET['cat_edit_id']) && is_numeric($_GET['cat_edit_id'])) $edit_id = $_GET['cat_edit_id'];
 
-	if ($edit_id && !empty($_POST['cat_name'])) {
-		updateCategory($_type, $edit_id, $_POST['cat_name']);
-	} else if ($edit_id) {
-		$data = getCategory($_type, $edit_id);
-		if (!$data) return;
+    if ($edit_id && !empty($_POST['cat_name'])) {
+        updateCategory($_type, $edit_id, $_POST['cat_name']);
+    } else if ($edit_id) {
+        $data = getCategory($_type, $edit_id);
+        if (!$data) return;
 
-		echo '<form method="post" action="">';
-		echo '<h2>Edit category</h2>';
-		echo 'Current name: '.$data['categoryName'].'<br/>';
-		echo 'New name: '.xhtmlInput('cat_name', $data['categoryName']);
-		echo xhtmlButton('Save');
-		echo '</form>';
-		echo '<a href="'.URLadd('cat_del_id', $edit_id).'">Delete category</a>';
-		return;
-	}
+        echo '<form method="post" action="">';
+        echo '<h2>Edit category</h2>';
+        echo 'Current name: '.$data['categoryName'].'<br/>';
+        echo 'New name: '.xhtmlInput('cat_name', $data['categoryName']);
+        echo xhtmlButton('Save');
+        echo '</form>';
+        echo '<a href="'.URLadd('cat_del_id', $edit_id).'">Delete category</a>';
+        return;
+    }
 
-	echo 'Existing categories: '.xhtmlSelectCategory($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
+    echo 'Existing categories: '.xhtmlSelectCategory($_type, 0, '', 0, URLadd('cat_edit_id')).'<br/>';
 
-	echo 'Select one from the dropdown list to edit it.<br/><br/>';
+    echo 'Select one from the dropdown list to edit it.<br/><br/>';
 
-	echo '<form name="new_file_category" method="post" action="">';
-	echo 'Create new category:<br/>';
-	echo xhtmlInput('new_file_category');
-	echo '<input type="hidden" value="'.$_type.'" name="new_file_category_type"/>';
+    echo '<form name="new_file_category" method="post" action="">';
+    echo 'Create new category:<br/>';
+    echo xhtmlInput('new_file_category');
+    echo '<input type="hidden" value="'.$_type.'" name="new_file_category_type"/>';
 
-	if ($_type == CATEGORY_USERFILE) {
-		echo '<br/>';
-		echo '<input type="radio" value="'.CAT_PERM_USER.'" name="new_file_category_scope" id="l_normal" checked="checked"/> ';
-		echo '<label for="l_normal">Personal category</label> ';
+    if ($_type == CATEGORY_USERFILE) {
+        echo '<br/>';
+        echo '<input type="radio" value="'.CAT_PERM_USER.'" name="new_file_category_scope" id="l_normal" checked="checked"/> ';
+        echo '<label for="l_normal">Personal category</label> ';
 
-		echo '<input type="radio" value="'.CAT_PERM_GLOBAL.'" name="new_file_category_scope" id="l_global"/> ';
-		echo '<label for="l_global" class="okay">Super admin: Global category</label><br/><br/>';
+        echo '<input type="radio" value="'.CAT_PERM_GLOBAL.'" name="new_file_category_scope" id="l_global"/> ';
+        echo '<label for="l_global" class="okay">Super admin: Global category</label><br/><br/>';
 
-		echo '<input type="radio" value="'.CAT_PERM_PUBLIC.'" name="new_file_category_perm" id="l_public" checked="checked"/> ';
-		echo '<label for="l_public">Public (visible to all)</label><br/>';
+        echo '<input type="radio" value="'.CAT_PERM_PUBLIC.'" name="new_file_category_perm" id="l_public" checked="checked"/> ';
+        echo '<label for="l_public">Public (visible to all)</label><br/>';
 
-		echo '<input type="radio" value="'.CAT_PERM_PRIVATE.'" name="new_file_category_perm" id="l_private"/> ';
-		echo '<label for="l_private">Make this category private (only for your friends)</label><br/>';
+        echo '<input type="radio" value="'.CAT_PERM_PRIVATE.'" name="new_file_category_perm" id="l_private"/> ';
+        echo '<label for="l_private">Make this category private (only for your friends)</label><br/>';
 
-		echo '<input type="radio" value="'.CAT_PERM_HIDDEN.'" name="new_file_category_perm" id="l_hidden"/> ';
-		echo '<label for="l_hidden">Make this category hidden (only for you)</label><br/>';
-	} else if ($_type == CATEGORY_BLOG) {
-		die('FIXME blog cat is broken');
-		/*
-		echo '<br/>';
-		echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
-		echo '<label for="l_normal">Your personal blog category</label><br/><br/>';
-		echo '<br/>';
-		echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
-		echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
-		*/
-	} else if ($_type == CATEGORY_NEWS) {
-		die('FIXME news cat is broken');
-		/*
-		echo '<br/>';
-		echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
-		echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
-		*/
-	}
+        echo '<input type="radio" value="'.CAT_PERM_HIDDEN.'" name="new_file_category_perm" id="l_hidden"/> ';
+        echo '<label for="l_hidden">Make this category hidden (only for you)</label><br/>';
+    } else if ($_type == CATEGORY_BLOG) {
+        die('FIXME blog cat is broken');
+        /*
+        echo '<br/>';
+        echo '<input type="radio" value="'.CATEGORY_BLOG.'" name="new_file_category_type" id="l_normal" checked="checked"/> ';
+        echo '<label for="l_normal">Your personal blog category</label><br/><br/>';
+        echo '<br/>';
+        echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
+        echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
+        */
+    } else if ($_type == CATEGORY_NEWS) {
+        die('FIXME news cat is broken');
+        /*
+        echo '<br/>';
+        echo '<input type="radio" value="global" name="new_file_category_type" id="l_global"/> ';
+        echo '<label for="l_global" class="okay">Super admin: Make this category globally available</label><br/><br/>';
+        */
+    }
 
-	echo xhtmlSubmit('Create');
-	echo '</form>';
+    echo xhtmlSubmit('Create');
+    echo '</form>';
 }
 ?>

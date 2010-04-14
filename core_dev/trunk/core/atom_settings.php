@@ -15,7 +15,7 @@ define('SETTING_EXTERNALDATA', 4); ///< settings used to store data with externa
 
 //XXX use id's from 50 and up for application specified types
 
-$config['settings']['default_signature'] = 'Signature';	//default name of the userdata field used to contain the forum signature
+$config['settings']['default_signature'] = 'Signature';    //default name of the userdata field used to contain the forum signature
 
 /**
  * Saves a setting associated with $ownerId
@@ -29,31 +29,31 @@ $config['settings']['default_signature'] = 'Signature';	//default name of the us
  */
 function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
-	if ($_type != SETTING_APPDATA && !$ownerId) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
+    if ($_type != SETTING_APPDATA && !$ownerId) return false;
 
-	$settingName = $db->escape($settingName);
-	$settingValue = $db->escape($settingValue);
+    $settingName = $db->escape($settingName);
+    $settingValue = $db->escape($settingValue);
 
-	$q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId;
-	$q .= ' AND categoryId='.$categoryId;
-	$q .= ' AND settingType='.$_type;
-	$q .= ' AND settingName="'.$settingName.'"';
-	if ($db->getOneItem($q)) {
-		$q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId;
-		$q .= ' AND categoryId='.$categoryId;
-		$q .= ' AND settingType='.$_type;
-		$q .= ' AND settingName="'.$settingName.'"';
-		$db->update($q);
-	} else {
-		$q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',';
-		$q .= 'categoryId='.$categoryId.',';
-		$q .= 'settingType='.$_type.',settingName="'.$settingName.'",';
-		$q .= 'settingValue="'.$settingValue.'",timeSaved=NOW()';
-		$db->insert($q);
-	}
-	return true;
+    $q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId;
+    $q .= ' AND categoryId='.$categoryId;
+    $q .= ' AND settingType='.$_type;
+    $q .= ' AND settingName="'.$settingName.'"';
+    if ($db->getOneItem($q)) {
+        $q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId;
+        $q .= ' AND categoryId='.$categoryId;
+        $q .= ' AND settingType='.$_type;
+        $q .= ' AND settingName="'.$settingName.'"';
+        $db->update($q);
+    } else {
+        $q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',';
+        $q .= 'categoryId='.$categoryId.',';
+        $q .= 'settingType='.$_type.',settingName="'.$settingName.'",';
+        $q .= 'settingValue="'.$settingValue.'",timeSaved=NOW()';
+        $db->insert($q);
+    }
+    return true;
 }
 
 /**
@@ -69,19 +69,19 @@ function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
  */
 function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue = '', $all = false)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
 
-	if ($all) $q = 'SELECT * FROM tblSettings';
-	else      $q = 'SELECT settingValue FROM tblSettings';
-	$q .= ' WHERE settingType='.$_type;
-	$q .= ' AND categoryId='.$categoryId;
-	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	$q .= ' AND settingName="'.$db->escape($settingName).'"';
-	$result = $db->getOneRow($q);
-	if ($all) return $result;
-	if ($result) return $result['settingValue'];
-	return $defaultValue;
+    if ($all) $q = 'SELECT * FROM tblSettings';
+    else      $q = 'SELECT settingValue FROM tblSettings';
+    $q .= ' WHERE settingType='.$_type;
+    $q .= ' AND categoryId='.$categoryId;
+    if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+    $q .= ' AND settingName="'.$db->escape($settingName).'"';
+    $result = $db->getOneRow($q);
+    if ($all) return $result;
+    if ($result) return $result['settingValue'];
+    return $defaultValue;
 }
 
 /**
@@ -92,36 +92,36 @@ function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue 
  */
 function loadSettingOwner($_type, $categoryId, $settingName, $settingValue)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId)) return false;
 
-	$q = 'SELECT ownerId FROM tblSettings';
-	$q .= ' WHERE settingType='.$_type;
-	$q .= ' AND categoryId='.$categoryId;
-	$q .= ' AND settingName="'.$db->escape($settingName).'"';
-	$q .= ' AND settingValue="'.$db->escape($settingValue).'"';
-	return $db->getOneItem($q);
+    $q = 'SELECT ownerId FROM tblSettings';
+    $q .= ' WHERE settingType='.$_type;
+    $q .= ' AND categoryId='.$categoryId;
+    $q .= ' AND settingName="'.$db->escape($settingName).'"';
+    $q .= ' AND settingValue="'.$db->escape($settingValue).'"';
+    return $db->getOneItem($q);
 }
 
 function loadSettingById($_type, $categoryId, $ownerId, $settingId, $all = false)
 {
-	global $db;
+    global $db;
 
-	if ($all) $q = 'SELECT * FROM tblSettings';
-	else      $q = 'SELECT settingValue FROM tblSettings';
-	$q .= ' WHERE settingType='.$_type;
-	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
-	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	$q .= ' AND settingId='.$settingId;
+    if ($all) $q = 'SELECT * FROM tblSettings';
+    else      $q = 'SELECT settingValue FROM tblSettings';
+    $q .= ' WHERE settingType='.$_type;
+    if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+    if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+    $q .= ' AND settingId='.$settingId;
 
-	if ($all) return $db->getOneRow($q);
-	return $db->getOneItem($q);
+    if ($all) return $db->getOneRow($q);
+    return $db->getOneItem($q);
 }
 
 function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
 {
-	//echo "readAllSettings() IS DEPRECATED!!";
-	return loadSettings($_type, $categoryId, $ownerId);
+    //echo "readAllSettings() IS DEPRECATED!!";
+    return loadSettings($_type, $categoryId, $ownerId);
 }
 
 /**
@@ -134,15 +134,15 @@ function readAllSettings($_type, $categoryId = 0, $ownerId = 0)
  */
 function loadSettings($_type, $categoryId = 0, $ownerId = 0)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
-	$q = 'SELECT * FROM tblSettings';
-	$q .= ' WHERE settingType='.$_type;
-	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
-	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	$q .= ' ORDER BY settingName ASC';
-	return $db->getArray($q);
+    $q = 'SELECT * FROM tblSettings';
+    $q .= ' WHERE settingType='.$_type;
+    if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+    if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+    $q .= ' ORDER BY settingName ASC';
+    return $db->getArray($q);
 }
 
 /**
@@ -155,12 +155,12 @@ function loadSettings($_type, $categoryId = 0, $ownerId = 0)
  */
 function deleteSettings($_type, $categoryId, $ownerId)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
-	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type;
-	if ($categoryId) $q .= ' AND categoryId='.$categoryId;
-	return $db->delete($q);
+    $q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId.' AND settingType='.$_type;
+    if ($categoryId) $q .= ' AND categoryId='.$categoryId;
+    return $db->delete($q);
 }
 
 /**
@@ -174,26 +174,26 @@ function deleteSettings($_type, $categoryId, $ownerId)
  */
 function deleteSetting($_type, $categoryId, $ownerId, $settingName)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId)) return false;
 
-	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
-	$q .= ' AND categoryId='.$categoryId;
-	$q .= ' AND settingType='.$_type;
-	$q .= ' AND settingName="'.$db->escape($settingName).'" LIMIT 1';
-	return $db->delete($q);
+    $q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
+    $q .= ' AND categoryId='.$categoryId;
+    $q .= ' AND settingType='.$_type;
+    $q .= ' AND settingName="'.$db->escape($settingName).'" LIMIT 1';
+    return $db->delete($q);
 }
 
 function deleteSettingById($_type, $categoryId, $ownerId, $settingId)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !is_numeric($settingId)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !is_numeric($settingId)) return false;
 
-	$q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
-	$q .= ' AND categoryId='.$categoryId;
-	$q .= ' AND settingType='.$_type;
-	$q .= ' AND settingId='.$settingId;
-	return $db->delete($q);
+    $q = 'DELETE FROM tblSettings WHERE ownerId='.$ownerId;
+    $q .= ' AND categoryId='.$categoryId;
+    $q .= ' AND settingType='.$_type;
+    $q .= ' AND settingId='.$settingId;
+    return $db->delete($q);
 }
 
 ?>

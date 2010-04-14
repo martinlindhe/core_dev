@@ -6,23 +6,23 @@
  */
 
 ///< Calendar types
-define('CALENDAR_USER',		1);	///< Personal calendar - XXX implement
-define('CALENDAR_SITE',		2);	///< Site wide calendar - XXX implement
-define('CALENDAR_SERVICE',	3);	///< Service wide calendar. tblCalendar.ownerId = service id
+define('CALENDAR_USER',        1);    ///< Personal calendar - XXX implement
+define('CALENDAR_SITE',        2);    ///< Site wide calendar - XXX implement
+define('CALENDAR_SERVICE',    3);    ///< Service wide calendar. tblCalendar.ownerId = service id
 
 /**
  * XXX
  */
 function addCalendar($_type, $_owner, $begin, $end, $desc)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	$begin = sql_datetime(datetime_to_timestamp($begin));
-	$end = sql_datetime(datetime_to_timestamp($end));
+    $begin = sql_datetime(datetime_to_timestamp($begin));
+    $end = sql_datetime(datetime_to_timestamp($end));
 
-	$q = 'INSERT INTO tblCalendar SET type='.$_type.', ownerId='.$_owner.',creatorId='.$h->session->id.',timeBegin="'.$begin.'",timeEnd="'.$end.'", info="'.$db->escape($desc).'"';
-	$db->insert($q);
+    $q = 'INSERT INTO tblCalendar SET type='.$_type.', ownerId='.$_owner.',creatorId='.$h->session->id.',timeBegin="'.$begin.'",timeEnd="'.$end.'", info="'.$db->escape($desc).'"';
+    $db->insert($q);
 }
 
 /**
@@ -30,14 +30,14 @@ function addCalendar($_type, $_owner, $begin, $end, $desc)
  */
 function updateCalendar($_type, $_id, $begin, $end, $desc)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$begin = sql_datetime(datetime_to_timestamp($begin));
-	$end = sql_datetime(datetime_to_timestamp($end));
+    $begin = sql_datetime(datetime_to_timestamp($begin));
+    $end = sql_datetime(datetime_to_timestamp($end));
 
-	$q = 'UPDATE tblCalendar SET timeBegin="'.$begin.'",timeEnd="'.$end.'", info="'.$db->escape($desc).'" WHERE type='.$_type.' AND entryId='.$_id;
-	$db->update($q);
+    $q = 'UPDATE tblCalendar SET timeBegin="'.$begin.'",timeEnd="'.$end.'", info="'.$db->escape($desc).'" WHERE type='.$_type.' AND entryId='.$_id;
+    $db->update($q);
 }
 
 /**
@@ -45,11 +45,11 @@ function updateCalendar($_type, $_id, $begin, $end, $desc)
  */
 function deleteCalendar($_type, $_id)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'DELETE FROM tblCalendar WHERE type='.$_type.' AND entryId='.$_id;
-	$db->delete($q);
+    $q = 'DELETE FROM tblCalendar WHERE type='.$_type.' AND entryId='.$_id;
+    $db->delete($q);
 }
 
 /**
@@ -57,12 +57,12 @@ function deleteCalendar($_type, $_id)
  */
 function getCalendars($_type, $_owner = 0)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_owner)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
-	$q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
-	if ($_owner) $q .= ' AND ownerId='.$_owner;
-	return $db->getArray($q);
+    $q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
+    if ($_owner) $q .= ' AND ownerId='.$_owner;
+    return $db->getArray($q);
 }
 
 /**
@@ -70,15 +70,15 @@ function getCalendars($_type, $_owner = 0)
  */
 function getActiveCalendars($_type, $_owner, $ts)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($ts)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($ts)) return false;
 
-	$ts = sql_datetime($ts);
+    $ts = sql_datetime($ts);
 
-	$q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
-	if ($_owner) $q .= ' AND ownerId='.$_owner;
-	$q .= ' AND "'.$ts.'" BETWEEN timeBegin AND timeEnd';
-	return $db->getArray($q);
+    $q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
+    if ($_owner) $q .= ' AND ownerId='.$_owner;
+    $q .= ' AND "'.$ts.'" BETWEEN timeBegin AND timeEnd';
+    return $db->getArray($q);
 }
 
 /**
@@ -86,13 +86,13 @@ function getActiveCalendars($_type, $_owner, $ts)
  */
 function getCalendar($_type, $_owner, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_owner) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
-	$q .= ' AND ownerId='.$_owner;
-	$q .= ' AND entryId='.$_id;
-	return $db->getOneRow($q);
+    $q = 'SELECT * FROM tblCalendar WHERE type='.$_type;
+    $q .= ' AND ownerId='.$_owner;
+    $q .= ' AND entryId='.$_id;
+    return $db->getOneRow($q);
 }
 
 ?>

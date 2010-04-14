@@ -13,11 +13,11 @@
  */
 function is_imdb_id($id)
 {
-	if (strpos($id, ' ')) return false;
-	$pattern = "((tt|ch|nm|co)([0-9]){7})";
+    if (strpos($id, ' ')) return false;
+    $pattern = "((tt|ch|nm|co)([0-9]){7})";
 
-	if (preg_match($pattern, $id))
-		return true;
+    if (preg_match($pattern, $id))
+        return true;
 
-	return false;
+    return false;
 }

@@ -13,23 +13,23 @@
  * as of 2008.10.29
  */
 $e164_cc[1] = 'USA, Canada';
-$e164_cc[7] = 'Russia';	//& Kazakhstan
+$e164_cc[7] = 'Russia';    //& Kazakhstan
 $e164_cc[20] = 'Egypt';
 $e164_cc[27] = 'South Africa';
 $e164_cc[30] = 'Greece';
 $e164_cc[31] = 'Netherlands';
 $e164_cc[32] = 'Belgium';
 $e164_cc[33] = 'France';
-$e164_cc[34] = 'Spain';	//& Ceuta and Melilla, Canary Islands
+$e164_cc[34] = 'Spain';    //& Ceuta and Melilla, Canary Islands
 $e164_cc[36] = 'Hungary';
-$e164_cc[39] = 'Italy';	//& Vatican City #2
+$e164_cc[39] = 'Italy';    //& Vatican City #2
 $e164_cc[40] = 'Romania';
 $e164_cc[41] = 'Switzerland';
 $e164_cc[43] = 'Austria';
-$e164_cc[44] = 'United Kingdom';	//& Guernsey, Isle of Man, Jersey
+$e164_cc[44] = 'United Kingdom';    //& Guernsey, Isle of Man, Jersey
 $e164_cc[45] = 'Denmark';
 $e164_cc[46] = 'Sweden';
-$e164_cc[47] = 'Norway';	//& Svalbard and Jan Mayen
+$e164_cc[47] = 'Norway';    //& Svalbard and Jan Mayen
 $e164_cc[48] = 'Poland';
 $e164_cc[49] = 'Germany';
 $e164_cc[51] = 'Peru';
@@ -41,7 +41,7 @@ $e164_cc[56] = 'Chile';
 $e164_cc[57] = 'Colombia';
 $e164_cc[58] = 'Venezuela';
 $e164_cc[60] = 'Malaysia';
-$e164_cc[61] = 'Australia';	//& Christmas Island, Cocos Islands
+$e164_cc[61] = 'Australia';    //& Christmas Island, Cocos Islands
 $e164_cc[62] = 'Indonesia';
 $e164_cc[63] = 'Philippines';
 $e164_cc[64] = 'New Zealand';
@@ -51,14 +51,14 @@ $e164_cc[81] = 'Japan';
 $e164_cc[82] = 'South Korea';
 $e164_cc[84] = 'Vietnam';
 $e164_cc[86] = "People's Republic of China";
-$e164_cc[90] = 'Turkey';	//& Turkish Republic of Northern Cyprus
+$e164_cc[90] = 'Turkey';    //& Turkish Republic of Northern Cyprus
 $e164_cc[91] = 'India';
 $e164_cc[92] = 'Pakistan';
 $e164_cc[93] = 'Afghanistan';
 $e164_cc[94] = 'Sri Lanka';
 $e164_cc[95] = 'Burma';
 $e164_cc[98] = 'Iran';
-$e164_cc[212] = 'Morocco';	//& Western Sahara
+$e164_cc[212] = 'Morocco';    //& Western Sahara
 $e164_cc[213] = 'Algeria';
 $e164_cc[216] = 'Tunisia';
 $e164_cc[218] = 'Libya';
@@ -124,7 +124,7 @@ $e164_cc[354] = 'Iceland';
 $e164_cc[355] = 'Albania';
 $e164_cc[356] = 'Malta';
 $e164_cc[357] = 'Cyprus';
-$e164_cc[358] = 'Finland';	//& Aland Islands
+$e164_cc[358] = 'Finland';    //& Aland Islands
 $e164_cc[359] = 'Bulgaria';
 $e164_cc[370] = 'Lithuania';
 $e164_cc[371] = 'Latvia';
@@ -142,7 +142,7 @@ $e164_cc[382] = 'Montenegro';
 $e164_cc[385] = 'Croatia';
 $e164_cc[386] = 'Slovenia';
 $e164_cc[387] = 'Bosnia and Herzegovina';
-$e164_cc[388] = 'SPECIAL';	//http://en.wikipedia.org/wiki/European_Telephony_Numbering_Space
+$e164_cc[388] = 'SPECIAL';    //http://en.wikipedia.org/wiki/European_Telephony_Numbering_Space
 $e164_cc[389] = 'Republic of Macedonia';
 $e164_cc[420] = 'Czech Republic';
 $e164_cc[421] = 'Slovakia';
@@ -168,7 +168,7 @@ $e164_cc[597] = 'Suriname';
 $e164_cc[598] = 'Uruguay';
 $e164_cc[599] = 'Netherlands Antilles';
 $e164_cc[670] = 'East Timor';
-$e164_cc[672] = 'Norfolk Island';	//& Australian Antarctic Territory
+$e164_cc[672] = 'Norfolk Island';    //& Australian Antarctic Territory
 $e164_cc[673] = 'Brunei Darussalam';
 $e164_cc[674] = 'Nauru';
 $e164_cc[675] = 'Papua New Guinea';
@@ -188,25 +188,25 @@ $e164_cc[689] = 'French Polynesia';
 $e164_cc[690] = 'Tokelau';
 $e164_cc[691] = 'Federated States of Micronesia';
 $e164_cc[692] = 'Marshall Islands';
-$e164_cc[800] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Universal_international_freephone_number
-$e164_cc[808] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Shared_Cost_Service
+$e164_cc[800] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Universal_international_freephone_number
+$e164_cc[808] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Shared_Cost_Service
 $e164_cc[850] = 'North Korea';
 $e164_cc[852] = 'Hong Kong';
 $e164_cc[853] = 'Macau';
 $e164_cc[855] = 'Cambodia';
 $e164_cc[856] = 'Laos';
-$e164_cc[870] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
-$e164_cc[871] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
-$e164_cc[872] = 'Pitcairn Islands';	//& http://en.wikipedia.org/wiki/Inmarsat
-$e164_cc[873] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
-$e164_cc[874] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Inmarsat
-$e164_cc[878] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Universal_Personal_Telecommunications
+$e164_cc[870] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[871] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[872] = 'Pitcairn Islands';    //& http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[873] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[874] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Inmarsat
+$e164_cc[878] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Universal_Personal_Telecommunications
 $e164_cc[880] = 'Bangladesh';
-$e164_cc[881] = 'SPECIAL';	//http://en.wikipedia.org/wiki/Global_Mobile_Satellite_System
-$e164_cc[882] = 'SPECIAL';	//http://en.wikipedia.org/wiki/International_Networks_(country_code)
-$e164_cc[883] = 'SPECIAL';	//"International National Rate Service"
+$e164_cc[881] = 'SPECIAL';    //http://en.wikipedia.org/wiki/Global_Mobile_Satellite_System
+$e164_cc[882] = 'SPECIAL';    //http://en.wikipedia.org/wiki/International_Networks_(country_code)
+$e164_cc[883] = 'SPECIAL';    //"International National Rate Service"
 $e164_cc[886] = 'Republic of China (Taiwan)';
-$e164_cc[888] = 'SPECIAL';	//http://en.wikipedia.org/wiki/OCHA
+$e164_cc[888] = 'SPECIAL';    //http://en.wikipedia.org/wiki/OCHA
 $e164_cc[960] = 'Maldives';
 $e164_cc[961] = 'Lebanon';
 $e164_cc[962] = 'Jordan';
@@ -224,11 +224,11 @@ $e164_cc[974] = 'Qatar';
 $e164_cc[975] = 'Bhutan';
 $e164_cc[976] = 'Mongolia';
 $e164_cc[977] = 'Nepal';
-$e164_cc[979] = 'SPECIAL';	//http://en.wikipedia.org/wiki/International_premium_rate_service
-$e164_cc[991] = 'SPECIAL';	//http://en.wikipedia.org/wiki/ITPCS
+$e164_cc[979] = 'SPECIAL';    //http://en.wikipedia.org/wiki/International_premium_rate_service
+$e164_cc[991] = 'SPECIAL';    //http://en.wikipedia.org/wiki/ITPCS
 $e164_cc[992] = 'Tajikistan';
 $e164_cc[993] = 'Turkmenistan';
-$e164_cc[994] = 'Azerbaijan';	//& Nagorno-Karabakh #2
+$e164_cc[994] = 'Azerbaijan';    //& Nagorno-Karabakh #2
 $e164_cc[995] = 'Georgia';
 $e164_cc[996] = 'Kyrgyzstan';
 $e164_cc[998] = 'Uzbekistan';
@@ -461,12 +461,12 @@ $area_code[46][692] = 'Liden';
 $area_code[46][693] = 'Bräcke-Gällö';
 $area_code[46][695] = 'Stugun';
 $area_code[46][696] = 'Hammarstrand';
-$area_code[46][70] = 'Cellphone';	//from 1996
-$area_code[46][72] = 'Cellphone';	//from 2008.10.28 according to pts.se
-$area_code[46][73] = 'Cellphone';	//from 2002
+$area_code[46][70] = 'Cellphone';    //from 1996
+$area_code[46][72] = 'Cellphone';    //from 2008.10.28 according to pts.se
+$area_code[46][73] = 'Cellphone';    //from 2002
 $area_code[46][74] = 'Pager';
 $area_code[46][75] = 'Cellphone';   //from 2009
-$area_code[46][76] = 'Cellphone';	//from 2007 (0769 is still unallocated at 2008.10.30)
+$area_code[46][76] = 'Cellphone';    //from 2007 (0769 is still unallocated at 2008.10.30)
 $area_code[46][8] = 'Stockholm';
 $area_code[46][90] = 'Umeå';
 $area_code[46][910] = 'Skellefteå';
@@ -519,10 +519,10 @@ $area_code[46][981] = 'Vittangi';
  */
 function E164cc($cc)
 {
-	global $e164_cc;
+    global $e164_cc;
 
-	if (!empty($e164_cc[$cc])) return '+'.$cc.' ('. $e164_cc[$cc].')';
-	return $cc;
+    if (!empty($e164_cc[$cc])) return '+'.$cc.' ('. $e164_cc[$cc].')';
+    return $cc;
 }
 
 /**
@@ -530,28 +530,28 @@ function E164cc($cc)
  */
 function prettyAnr($country, $anr)
 {
-	global $e164_cc, $area_code;
+    global $e164_cc, $area_code;
 
-	if ($country == 'SIP') return 'SIP:'.$anr;
+    if ($country == 'SIP') return 'SIP:'.$anr;
 
-	$parsed_anr = parseAnr($country.$anr);
+    $parsed_anr = parseAnr($country.$anr);
 
-	$out = '+'.$parsed_anr['country'];
-	if ($parsed_anr['area_code']) $out .= '-'.$parsed_anr['area_code'];
-	$out .= '-'.$parsed_anr['anr'];
+    $out = '+'.$parsed_anr['country'];
+    if ($parsed_anr['area_code']) $out .= '-'.$parsed_anr['area_code'];
+    $out .= '-'.$parsed_anr['anr'];
 
-	$suff = '';
+    $suff = '';
 
-	if (!empty($e164_cc[$parsed_anr['country']])) {
-		$suff = ' ('. $e164_cc[$parsed_anr['country']];
-		if ($parsed_anr['area_code']) {
-			$suff .= ', '.$area_code[$parsed_anr['country']][$parsed_anr['area_code']];
-		} else {
-			$suff .= ', UNKNOWN AREA';
-		}
-		$suff .= ')';
-	}
-	return $out.$suff;
+    if (!empty($e164_cc[$parsed_anr['country']])) {
+        $suff = ' ('. $e164_cc[$parsed_anr['country']];
+        if ($parsed_anr['area_code']) {
+            $suff .= ', '.$area_code[$parsed_anr['country']][$parsed_anr['area_code']];
+        } else {
+            $suff .= ', UNKNOWN AREA';
+        }
+        $suff .= ')';
+    }
+    return $out.$suff;
 }
 
 /**
@@ -563,14 +563,14 @@ function prettyAnr($country, $anr)
  */
 function formatMSID($anr)
 {
-	$anr = cleanupAnr($anr);
+    $anr = cleanupAnr($anr);
 
-	if (substr($anr, 0, 1) == '0') {
-		//Swedish numer without country code
-		$anr = '46'.substr($anr, 1);
-	}
-	if (strlen($anr) <= 8) return false;
-	return $anr;
+    if (substr($anr, 0, 1) == '0') {
+        //Swedish numer without country code
+        $anr = '46'.substr($anr, 1);
+    }
+    if (strlen($anr) <= 8) return false;
+    return $anr;
 }
 
 /**
@@ -583,64 +583,64 @@ function formatMSID($anr)
  */
 function parseAnr($anr)
 {
-	global $e164_cc;
+    global $e164_cc;
 
-	$anr = cleanupAnr($anr);
+    $anr = cleanupAnr($anr);
 
-	if (!is_numeric($anr)) {
-		//SIP user address
-		//FIXME users could perform call spoofing if we allow numerical usernames from sip callers
-		$res['country'] = 'SIP';
-		$res['anr'] = $anr;
-		$res['area_code'] = '';
-		return $res;
-	}
+    if (!is_numeric($anr)) {
+        //SIP user address
+        //FIXME users could perform call spoofing if we allow numerical usernames from sip callers
+        $res['country'] = 'SIP';
+        $res['anr'] = $anr;
+        $res['area_code'] = '';
+        return $res;
+    }
 
-	if (substr($anr, 0, 1) == '0') {
-		//Swedish numer without country code
-		$res['country'] = '46';
-		$res['anr'] = substr($anr, 1);
-		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
-		return $res;
-	}
+    if (substr($anr, 0, 1) == '0') {
+        //Swedish numer without country code
+        $res['country'] = '46';
+        $res['anr'] = substr($anr, 1);
+        $res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+        return $res;
+    }
 
-	if (substr($anr, 0, 1) == '1') {
-		//US, Canada
-		//FIXME: identify correct country: http://en.wikipedia.org/wiki/List_of_NANP_area_codes
-		$res['country'] = '1';
-		$res['anr'] = substr($anr, 1);
-		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
-		return $res;
-	}
+    if (substr($anr, 0, 1) == '1') {
+        //US, Canada
+        //FIXME: identify correct country: http://en.wikipedia.org/wiki/List_of_NANP_area_codes
+        $res['country'] = '1';
+        $res['anr'] = substr($anr, 1);
+        $res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+        return $res;
+    }
 
-	if (substr($anr, 0, 1) == '7') {
-		//Russia, Kazakhstan
-		//FIXME: identify correct country: http://en.wikipedia.org/wiki/+7
-		$res['country'] = '7';
-		$res['anr'] = substr($anr, 1);
-		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
-		return $res;
-	}
+    if (substr($anr, 0, 1) == '7') {
+        //Russia, Kazakhstan
+        //FIXME: identify correct country: http://en.wikipedia.org/wiki/+7
+        $res['country'] = '7';
+        $res['anr'] = substr($anr, 1);
+        $res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+        return $res;
+    }
 
-	//2-digit country codes
-	$res['country'] = substr($anr, 0, 2);
-	$res['anr'] = substr($anr, 2);
-	if (!empty($e164_cc[$res['country']])) {
-		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
-		return $res;
-	}
+    //2-digit country codes
+    $res['country'] = substr($anr, 0, 2);
+    $res['anr'] = substr($anr, 2);
+    if (!empty($e164_cc[$res['country']])) {
+        $res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+        return $res;
+    }
 
-	//3-digit country codes
-	$res['country'] = substr($anr, 0, 3);
-	$res['anr'] = substr($anr, 3);
-	if (!empty($e164_cc[$res['country']])) {
-		$res['area_code'] = parseAreaCode($res['country'], $res['anr']);
-		return $res;
-	}
+    //3-digit country codes
+    $res['country'] = substr($anr, 0, 3);
+    $res['anr'] = substr($anr, 3);
+    if (!empty($e164_cc[$res['country']])) {
+        $res['area_code'] = parseAreaCode($res['country'], $res['anr']);
+        return $res;
+    }
 
-	//XXX This should not be able to happen. All existing country codes are handled above
-	echo "Unknown country code: ".$anr."\n";
-	return $res;
+    //XXX This should not be able to happen. All existing country codes are handled above
+    echo "Unknown country code: ".$anr."\n";
+    return $res;
 }
 
 /**
@@ -648,32 +648,32 @@ function parseAnr($anr)
  */
 function parseAreaCode($country, &$anr)
 {
-	global $area_code;
+    global $area_code;
 
-	if (empty($area_code[$country])) return false;
+    if (empty($area_code[$country])) return false;
 
-	//1-digit area codes
-	$tmp = substr($anr, 0, 1);
-	if (!empty($area_code[$country][$tmp])) {
-		$anr = substr($anr, 1);
-		return $tmp;
-	}
+    //1-digit area codes
+    $tmp = substr($anr, 0, 1);
+    if (!empty($area_code[$country][$tmp])) {
+        $anr = substr($anr, 1);
+        return $tmp;
+    }
 
-	//2-digit area codes
-	$tmp = substr($anr, 0, 2);
-	if (!empty($area_code[$country][$tmp])) {
-		$anr = substr($anr, 2);
-		return $tmp;
-	}
+    //2-digit area codes
+    $tmp = substr($anr, 0, 2);
+    if (!empty($area_code[$country][$tmp])) {
+        $anr = substr($anr, 2);
+        return $tmp;
+    }
 
-	//3-digit area codes
-	$tmp = substr($anr, 0, 3);
-	if (!empty($area_code[$country][$tmp])) {
-		$anr = substr($anr, 3);
-		return $tmp;
-	}
-	echo "parseAreaCode() ERROR: invalid area code for ".$country." - ".$anr."!\n";
-	return '';
+    //3-digit area codes
+    $tmp = substr($anr, 0, 3);
+    if (!empty($area_code[$country][$tmp])) {
+        $anr = substr($anr, 3);
+        return $tmp;
+    }
+    echo "parseAreaCode() ERROR: invalid area code for ".$country." - ".$anr."!\n";
+    return '';
 }
 
 /**
@@ -682,38 +682,38 @@ function parseAreaCode($country, &$anr)
  */
 function cleanupAnr($anr)
 {
-	$anr = trim($anr);
-	$anr = str_replace("\t", '', $anr);
-	$anr = str_replace(' ', '', $anr);
-	$anr = str_replace('-', '', $anr);
-	$anr = str_replace('+', '', $anr);
-	return $anr;
+    $anr = trim($anr);
+    $anr = str_replace("\t", '', $anr);
+    $anr = str_replace(' ', '', $anr);
+    $anr = str_replace('-', '', $anr);
+    $anr = str_replace('+', '', $anr);
+    return $anr;
 }
 
 /**
  * Returns true if $_mobil is a valid swedish cellphone number
  */
-function ValidMobilNr($_mobil)	//XXX cleanup, rename etc
+function ValidMobilNr($_mobil)    //XXX cleanup, rename etc
 {
-	$_mobil = str_replace('-', '', $_mobil);
-	$_mobil = str_replace(' ', '', $_mobil);
+    $_mobil = str_replace('-', '', $_mobil);
+    $_mobil = str_replace(' ', '', $_mobil);
 
-	if (substr($_mobil, 0, 2) == '46')
-		$_mobil = '0'.substr($_mobil, 2);
+    if (substr($_mobil, 0, 2) == '46')
+        $_mobil = '0'.substr($_mobil, 2);
 
-	$prefix = substr($_mobil, 0, 3);
-	$number = substr($_mobil, 3);
+    $prefix = substr($_mobil, 0, 3);
+    $number = substr($_mobil, 3);
 
-	switch ($prefix) {
-		case '070':
-		case '072':
-		case '073':
-		case '075':
-		case '076':
-			return true;
-	}
+    switch ($prefix) {
+        case '070':
+        case '072':
+        case '073':
+        case '075':
+        case '076':
+            return true;
+    }
 
-	return false;
+    return false;
 }
 
 ?>

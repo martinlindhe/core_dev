@@ -44,248 +44,248 @@ require_once('xhtml_header.php');
 
 class MediaItem extends CoreBase //XXX rename to PlaylistItem ?
 {
-	var $title;
-	var $mime;               ///< mimetype of media
-	var $thumbnail;          ///< location of thumbnail/cover art
-	var $desc;               ///< description
+    var $title;
+    var $mime;               ///< mimetype of media
+    var $thumbnail;          ///< location of thumbnail/cover art
+    var $desc;               ///< description
 
-	var $Duration;           ///< duration of media
-	var $Timestamp;
-	var $Url;                ///< location of media
+    var $Duration;           ///< duration of media
+    var $Timestamp;
+    var $Url;                ///< location of media
 
-	function __construct()
-	{
-		$this->Duration  = new Duration();
-		$this->Timestamp = new Timestamp();
-		$this->Url       = new Url();
-	}
+    function __construct()
+    {
+        $this->Duration  = new Duration();
+        $this->Timestamp = new Timestamp();
+        $this->Url       = new Url();
+    }
 }
 
 class Playlist extends CoreList
 {
-	private $headers = true;                ///< shall we send mime type?
-	private $title   = 'Untitled playlist'; ///< name of playlist
-	private $format  = 'xhtml';             ///< playlist output format
+    private $headers = true;                ///< shall we send mime type?
+    private $title   = 'Untitled playlist'; ///< name of playlist
+    private $format  = 'xhtml';             ///< playlist output format
 
-	function sendHeaders($bool = true) { $this->headers = $bool; }
-	function setTitle($t) { $this->title = $t; }
-	function setFormat($format) { $this->format = $format; }
+    function sendHeaders($bool = true) { $this->headers = $bool; }
+    function setTitle($t) { $this->title = $t; }
+    function setFormat($format) { $this->format = $format; }
 
-	/**
-	 * Adds a item to the feed list
-	 */
-	function addItem($i)
-	{
-		switch (get_class($i)) {
-		case 'MediaItem':
-			$item = $i;
-			break;
+    /**
+     * Adds a item to the feed list
+     */
+    function addItem($i)
+    {
+        switch (get_class($i)) {
+        case 'MediaItem':
+            $item = $i;
+            break;
 
-		case 'NewsItem':
-			//convert a NewsItem into a MediaItem
-			$item = new MediaItem();
+        case 'NewsItem':
+            //convert a NewsItem into a MediaItem
+            $item = new MediaItem();
 
-			$item->title          = $i->title;
-			$item->desc           = $i->desc;
-			$item->thumbnail      = $i->image_url;
-			$item->mime           = $i->video_mime;
-			$item->Duration->set  ( $i->Duration->get() );
-			$item->Timestamp->set ( $i->Timestamp->get() );
-			$item->Url->set       ( $i->video_url );
-			break;
+            $item->title          = $i->title;
+            $item->desc           = $i->desc;
+            $item->thumbnail      = $i->image_url;
+            $item->mime           = $i->video_mime;
+            $item->Duration->set  ( $i->Duration->get() );
+            $item->Timestamp->set ( $i->Timestamp->get() );
+            $item->Url->set       ( $i->video_url );
+            break;
 
-		default:
-			d('Playlist->addItem cant handle '.get_class($i) );
-			return false;
-		}
-		parent::addItem($item);
-	}
+        default:
+            d('Playlist->addItem cant handle '.get_class($i) );
+            return false;
+        }
+        parent::addItem($item);
+    }
 
-	/**
-	 * Loads input data from ASX playlists into MediaItem entries
-	 */
-	function load($data)
-	{
-		if (is_url($data)) {
-			$u = new HttpClient($data);
-			$data = $u->getBody();
-		}
+    /**
+     * Loads input data from ASX playlists into MediaItem entries
+     */
+    function load($data)
+    {
+        if (is_url($data)) {
+            $u = new HttpClient($data);
+            $data = $u->getBody();
+        }
 
-		if (strpos($data, '<asx ') !== false) {
-			$asx = new input_asx();
-			$asx->parse($data);
-			$this->addItems( $asx->getItems() );
-			return true;
-		}
+        if (strpos($data, '<asx ') !== false) {
+            $asx = new input_asx();
+            $asx->parse($data);
+            $this->addItems( $asx->getItems() );
+            return true;
+        }
 
-		echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".ln();
-		return false;
-	}
+        echo "Playlist->load error: unhandled feed: ".substr($data, 0, 200)." ...".ln();
+        return false;
+    }
 
-	/**
-	 * Sorts the list
-	 */
-	function sort($callback = '')
-	{
-		if (!$callback) $callback = array($this, 'sortListDesc');
+    /**
+     * Sorts the list
+     */
+    function sort($callback = '')
+    {
+        if (!$callback) $callback = array($this, 'sortListDesc');
 
-		uasort($this->items, $callback);
-	}
+        uasort($this->items, $callback);
+    }
 
-	/**
-	 * List sort filter
-	 *
-	 * @return Internal list, sorted descending by published date
-	 */
-	private function sortListDesc($a, $b)
-	{
-		if (!$a->Timestamp->get()) return 1;
+    /**
+     * List sort filter
+     *
+     * @return Internal list, sorted descending by published date
+     */
+    private function sortListDesc($a, $b)
+    {
+        if (!$a->Timestamp->get()) return 1;
 
-		return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
-	}
+        return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
+    }
 
-	function render($format = '')
-	{
-		if ($format) {
-			//echo "pl->render(FORMAT) is deprecated!! use ->setFormat()\n";
-			$this->format = $format;
-		}
+    function render($format = '')
+    {
+        if ($format) {
+            //echo "pl->render(FORMAT) is deprecated!! use ->setFormat()\n";
+            $this->format = $format;
+        }
 
-		switch ($this->format) {
-		case 'xspf':
-			if ($this->headers) header('Content-type: application/xspf+xml');
-			return $this->renderXSPF();
+        switch ($this->format) {
+        case 'xspf':
+            if ($this->headers) header('Content-type: application/xspf+xml');
+            return $this->renderXSPF();
 
-		case 'm3u':
-			if ($this->headers) header('Content-type: audio/x-mpegurl');
-			return $this->renderM3U();
+        case 'm3u':
+            if ($this->headers) header('Content-type: audio/x-mpegurl');
+            return $this->renderM3U();
 
-		case 'pls':
-			if ($this->headers) header('Content-type: audio/x-scpls');
-			return $this->renderPLS();
+        case 'pls':
+            if ($this->headers) header('Content-type: audio/x-scpls');
+            return $this->renderPLS();
 
-		case 'xhtml':
-		case 'html':
-			$res = '';
-			if ($this->headers) {
-				$header = new xhtml_header();
-				$header->setTitle($this->title);
-				$res = $header->render();
-			}
+        case 'xhtml':
+        case 'html':
+            $res = '';
+            if ($this->headers) {
+                $header = new xhtml_header();
+                $header->setTitle($this->title);
+                $res = $header->render();
+            }
 
-			return $res . $this->renderXHTML();
+            return $res . $this->renderXHTML();
 
-		case 'atom':
-			$feed = new NewsFeed();
-			$feed->sendHeaders($this->headers);
-			$feed->addItems( $this->getItems() );
-			$feed->setTitle($this->title);
-			return $feed->render('atom');
+        case 'atom':
+            $feed = new NewsFeed();
+            $feed->sendHeaders($this->headers);
+            $feed->addItems( $this->getItems() );
+            $feed->setTitle($this->title);
+            return $feed->render('atom');
 
-		case 'rss2':
-		case 'rss':
-			$feed = new NewsFeed();
-			$feed->sendHeaders($this->headers);
-			$feed->addItems( $this->getItems() );
-			$feed->setTitle($this->title);
-			return $feed->render('rss');
-		}
+        case 'rss2':
+        case 'rss':
+            $feed = new NewsFeed();
+            $feed->sendHeaders($this->headers);
+            $feed->addItems( $this->getItems() );
+            $feed->setTitle($this->title);
+            return $feed->render('rss');
+        }
 
-		echo "Playlist->render: unknown format ".$this->format."\n";
-		return false;
-	}
+        echo "Playlist->render: unknown format ".$this->format."\n";
+        return false;
+    }
 
-	private function renderXSPF()
-	{
-		$res  = '<?xml version="1.0" encoding="UTF-8"?>';
-		$res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
-		$res .= '<trackList>'."\n";
+    private function renderXSPF()
+    {
+        $res  = '<?xml version="1.0" encoding="UTF-8"?>';
+        $res .= '<playlist version="1" xmlns="http://xspf.org/ns/0/">';
+        $res .= '<trackList>'."\n";
 
-		foreach ($this->getItems() as $item)
-		{
-			$res .= '<track>';
-			$title = ($item->Timestamp ? $item->Timestamp->render().' ' : '').$item->title;
-			//if ($item->desc) $title .= ' - '.$item->desc;
-			$res .= '<title><![CDATA['.trim($title).']]></title>';
+        foreach ($this->getItems() as $item)
+        {
+            $res .= '<track>';
+            $title = ($item->Timestamp ? $item->Timestamp->render().' ' : '').$item->title;
+            //if ($item->desc) $title .= ' - '.$item->desc;
+            $res .= '<title><![CDATA['.trim($title).']]></title>';
 
-			$res .= '<location>'.$item->Url.'</location>';
+            $res .= '<location>'.$item->Url.'</location>';
 
-			if ($item->Duration)
-				$res .= '<duration>'.$item->Duration->inMilliseconds().'</duration>';
+            if ($item->Duration)
+                $res .= '<duration>'.$item->Duration->inMilliseconds().'</duration>';
 
-			if ($item->thumbnail)
-				$res .= '<image>'.$item->thumbnail.'</image>';
+            if ($item->thumbnail)
+                $res .= '<image>'.$item->thumbnail.'</image>';
 
-			$res .= '</track>'."\n";
-		}
+            $res .= '</track>'."\n";
+        }
 
-		$res .= '</trackList>';
-		$res .= '</playlist>';
+        $res .= '</trackList>';
+        $res .= '</playlist>';
 
-		return $res;
-	}
+        return $res;
+    }
 
-	private function renderM3U()
-	{
-		$res = "#EXTM3U\n";
-		foreach ($this->getItems() as $item)
-		{
-			$res .=
-			"#EXTINF:".($item->Duration ? round($item->Duration->inSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
-			$item->Url."\n";
-		}
+    private function renderM3U()
+    {
+        $res = "#EXTM3U\n";
+        foreach ($this->getItems() as $item)
+        {
+            $res .=
+            "#EXTINF:".($item->Duration ? round($item->Duration->inSeconds(), 0) : '-1').",".($item->title ? $item->title : 'Untitled track')."\n".
+            $item->Url."\n";
+        }
 
-		return $res;
-	}
+        return $res;
+    }
 
-	private function renderPLS()
-	{
-		$res =
-		"[playlist]\n".
-		"NumberOfEntries=".count($this->entries)."\n".
-		"\n";
+    private function renderPLS()
+    {
+        $res =
+        "[playlist]\n".
+        "NumberOfEntries=".count($this->entries)."\n".
+        "\n";
 
-		$i = 0;
-		foreach ($this->getItems() as $item)
-		{
-			$i++;
-			$res .=
-			"File".  $i."=".$item->Url."\n".
-			"Title". $i."=".($item->title ? $item->title : 'Untitled track')."\n".
-			"Length".$i."=".($item->Duration ? $item->Duration->inSeconds() : '-1')."\n".
-			"\n";
-		}
-		$res .= "Version=2\n";
-		return $res;
-	}
+        $i = 0;
+        foreach ($this->getItems() as $item)
+        {
+            $i++;
+            $res .=
+            "File".  $i."=".$item->Url."\n".
+            "Title". $i."=".($item->title ? $item->title : 'Untitled track')."\n".
+            "Length".$i."=".($item->Duration ? $item->Duration->inSeconds() : '-1')."\n".
+            "\n";
+        }
+        $res .= "Version=2\n";
+        return $res;
+    }
 
-	/**
-	 * Renders the playlist as a HTML table
-	 */
-	private function renderXHTML()
-	{
-		$res = '<table border="1">';
+    /**
+     * Renders the playlist as a HTML table
+     */
+    private function renderXHTML()
+    {
+        $res = '<table border="1">';
 
-		foreach ($this->getItems() as $item)
-		{
-			$title = $item->Timestamp ? $item->Timestamp->render().' ' : '';
+        foreach ($this->getItems() as $item)
+        {
+            $title = $item->Timestamp ? $item->Timestamp->render().' ' : '';
 
-			$title .=
-				($item->Url ? '<a href="'.$item->Url.'">' : '').
-				($item->title ? $item->title : 'Untitled entry').
-				($item->Url ? '</a>' : '');
+            $title .=
+                ($item->Url ? '<a href="'.$item->Url.'">' : '').
+                ($item->title ? $item->title : 'Untitled entry').
+                ($item->Url ? '</a>' : '');
 
-			$res .=
-			'<tr><td>'.
-			'<h2>'.$title.'</h2>'.
-			($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
-			($item->desc ? '<p>'.$item->desc.'</p>' : '').
-			($item->Duration ? t('Duration').': '.$item->Duration->render().'<br/>' : '').
-			'</td></tr>';
-		}
+            $res .=
+            '<tr><td>'.
+            '<h2>'.$title.'</h2>'.
+            ($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
+            ($item->desc ? '<p>'.$item->desc.'</p>' : '').
+            ($item->Duration ? t('Duration').': '.$item->Duration->render().'<br/>' : '').
+            '</td></tr>';
+        }
 
-		return $res;
-	}
+        return $res;
+    }
 
 }
 

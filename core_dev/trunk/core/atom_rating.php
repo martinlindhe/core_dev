@@ -23,43 +23,43 @@ define('RATE_FILE',  3);
  */
 function rateItem($_type, $_id, $_rating)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id) || !is_numeric($_rating)) return false;
 
-	//Check if user already voted
-	$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$h->session->id;
-	if ($db->getOneItem($q)) return false;
+    //Check if user already voted
+    $q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$h->session->id;
+    if ($db->getOneItem($q)) return false;
 
-	//Save the vote
-	$q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$h->session->id.',timeRated=NOW()';
-	$db->insert($q);
+    //Save the vote
+    $q = 'INSERT INTO tblRatings SET type='.$_type.',itemId='.$_id.',rating='.$_rating.',userId='.$h->session->id.',timeRated=NOW()';
+    $db->insert($q);
 
-	//Count current average of the rating
-	$q = 'SELECT AVG(rating) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
-	$avgrating = $db->getOneItem($q);
+    //Count current average of the rating
+    $q = 'SELECT AVG(rating) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
+    $avgrating = $db->getOneItem($q);
 
-	$q = 'SELECT COUNT(rateId) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
-	$ratingcnt = $db->getOneItem($q);
+    $q = 'SELECT COUNT(rateId) FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id;
+    $ratingcnt = $db->getOneItem($q);
 
-	//Update average
-	switch ($_type) {
-		case RATE_BLOG:
-			$q = 'UPDATE tblBlogs SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE blogId='.$_id;
-			$db->update($q);
-			break;
+    //Update average
+    switch ($_type) {
+        case RATE_BLOG:
+            $q = 'UPDATE tblBlogs SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE blogId='.$_id;
+            $db->update($q);
+            break;
 
-		case RATE_NEWS:
-			$q = 'UPDATE tblNews SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE newsId='.$_id;
-			$db->update($q);
-			break;
+        case RATE_NEWS:
+            $q = 'UPDATE tblNews SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE newsId='.$_id;
+            $db->update($q);
+            break;
 
-		case RATE_FILE:
-			$q = 'UPDATE tblFiles SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE fileId='.$_id;
-			$db->update($q);
-			break;
+        case RATE_FILE:
+            $q = 'UPDATE tblFiles SET rating='.$avgrating.',ratingCnt='.$ratingcnt.' WHERE fileId='.$_id;
+            $db->update($q);
+            break;
 
-		default: die('rateItem unknown type');
-	}
+        default: die('rateItem unknown type');
+    }
 }
 
 /**
@@ -71,12 +71,12 @@ function rateItem($_type, $_id, $_rating)
  */
 function isRated($_type, $_id)
 {
-	global $h, $db;
-	if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->id || !is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$h->session->id;
-	if ($db->getOneItem($q)) return true;
-	return false;
+    $q = 'SELECT rateId FROM tblRatings WHERE type='.$_type.' AND itemId='.$_id.' AND userId='.$h->session->id;
+    if ($db->getOneItem($q)) return true;
+    return false;
 }
 
 /**
@@ -88,27 +88,27 @@ function isRated($_type, $_id)
  */
 function getRating($_type, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	switch ($_type) {
-		case RATE_BLOG:
-			$q = 'SELECT rating,ratingCnt FROM tblBlogs WHERE blogId='.$_id;
-			break;
+    switch ($_type) {
+        case RATE_BLOG:
+            $q = 'SELECT rating,ratingCnt FROM tblBlogs WHERE blogId='.$_id;
+            break;
 
-		case RATE_NEWS:
-			$q = 'SELECT rating,ratingCnt FROM tblNews WHERE newsId='.$_id;
-			break;
+        case RATE_NEWS:
+            $q = 'SELECT rating,ratingCnt FROM tblNews WHERE newsId='.$_id;
+            break;
 
-		case RATE_FILE:
-			$q = 'SELECT rating,ratingCnt FROM tblFiles WHERE fileId='.$_id;
-			break;
+        case RATE_FILE:
+            $q = 'SELECT rating,ratingCnt FROM tblFiles WHERE fileId='.$_id;
+            break;
 
-		default:
-			die('getRating dies');
-	}
+        default:
+            die('getRating dies');
+    }
 
-	return $db->getOneRow($q);
+    return $db->getOneRow($q);
 }
 
 /**
@@ -120,29 +120,29 @@ function getRating($_type, $_id)
  */
 function ratingGadget($_type, $_id)
 {
-	global $h, $db, $config;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $h, $db, $config;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	if (!$h->session->id || isRated($_type, $_id) ||
-		($_type == RATE_FILE && Files::getOwner($_id) == $h->session->id))
-		return showRating($_type, $_id);
+    if (!$h->session->id || isRated($_type, $_id) ||
+        ($_type == RATE_FILE && Files::getOwner($_id) == $h->session->id))
+        return showRating($_type, $_id);
 
-	$result = t('Rate this').':<br/>';
+    $result = t('Rate this').':<br/>';
 
-	$row = getRating($_type, $_id);
-	$curr = $row['rating'];
+    $row = getRating($_type, $_id);
+    $curr = $row['rating'];
 
-	$result .= '<div id="rate_file">';
-	$result .= '<div id="star">';
-	$result .= '<ul id="star'.$_id.'" class="star" onmousedown="star.update(event,this,'.$_type.','.$_id.')" onmousemove="star.cur(event,this)" title="'.t('Rate this').'">';
-	$result .= '<li id="starCur'.$_id.'" class="curr" title="'.$curr.'%" style="width: '.($curr).'px;"></li>';	//80 = 67px.. ?
-	$result .= '</ul>';
-	$result .= '<div id="starUser'.$_id.'" class="user">'.$curr.'%</div>';
-	$result .= '<br style="clear: both;">';
-	$result .= '</div>';
-	$result .= '</div>';
+    $result .= '<div id="rate_file">';
+    $result .= '<div id="star">';
+    $result .= '<ul id="star'.$_id.'" class="star" onmousedown="star.update(event,this,'.$_type.','.$_id.')" onmousemove="star.cur(event,this)" title="'.t('Rate this').'">';
+    $result .= '<li id="starCur'.$_id.'" class="curr" title="'.$curr.'%" style="width: '.($curr).'px;"></li>';    //80 = 67px.. ?
+    $result .= '</ul>';
+    $result .= '<div id="starUser'.$_id.'" class="user">'.$curr.'%</div>';
+    $result .= '<br style="clear: both;">';
+    $result .= '</div>';
+    $result .= '</div>';
 
-	return $result;
+    return $result;
 }
 
 /**
@@ -154,20 +154,20 @@ function ratingGadget($_type, $_id)
  */
 function showRating($_type, $_id)
 {
-	global $config;
+    global $config;
 
-	$row = getRating($_type, $_id);
+    $row = getRating($_type, $_id);
 
-	$result = t('Current rating').'<br/><br/>';
-	//$result .= $row['rating'];
-	//$result .= '<br/><br/>';
-	//FIXME draw cute stars instead
-	if ($row['ratingCnt']) {
-		$result .= $row['rating'].'% '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
-	} else {
-		$result .= t('Not rated yet.');
-	}
+    $result = t('Current rating').'<br/><br/>';
+    //$result .= $row['rating'];
+    //$result .= '<br/><br/>';
+    //FIXME draw cute stars instead
+    if ($row['ratingCnt']) {
+        $result .= $row['rating'].'% '.t('in').' '.$row['ratingCnt'].' '.($row['ratingCnt']==1?t('vote'):t('votes'));
+    } else {
+        $result .= t('Not rated yet.');
+    }
 
-	return $result;
+    return $result;
 }
 ?>

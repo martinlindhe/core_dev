@@ -31,23 +31,23 @@ define('WIKI',       4);  ///< category for wiki file attachments, to allow bett
 /*
  * från comments:
 
-	const NEWS       =  1;
-	//XXX: only enable types when they are used. some should be depreacated
+    const NEWS       =  1;
+    //XXX: only enable types when they are used. some should be depreacated
 /*
-	const BLOG       =  2; ///< anonymous or registered users comments on a blog
-	const FILE       =  3; ///< anonymous or registered users comments on a image
-	const TODOLIST   =  4; ///< todolist item comments
-	const GENERIC    =  5; ///< generic comment type
-	const PASTEBIN   =  6; ///< "pastebin" text. anonymous submissions are allowed
-	const SCRIBBLE   =  7; ///< scribble board
-	const CUSTOMER   =  8; ///< customer comments
-	const FILEDESC   =  9; ///< this is a file description, only one per file can exist
-	const ADMIN_IP   = 10; ///< a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
-	const WIKI       = 11; ///< a comment to a wiki article
+    const BLOG       =  2; ///< anonymous or registered users comments on a blog
+    const FILE       =  3; ///< anonymous or registered users comments on a image
+    const TODOLIST   =  4; ///< todolist item comments
+    const GENERIC    =  5; ///< generic comment type
+    const PASTEBIN   =  6; ///< "pastebin" text. anonymous submissions are allowed
+    const SCRIBBLE   =  7; ///< scribble board
+    const CUSTOMER   =  8; ///< customer comments
+    const FILEDESC   =  9; ///< this is a file description, only one per file can exist
+    const ADMIN_IP   = 10; ///< a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
+    const WIKI       = 11; ///< a comment to a wiki article
 
-	//Comment types only meant for the admin's eyes
-	const MODERATION = 30; ///< owner = tblModeration.queueId
-	const USER       = 31; ///< owner = tblUsers.userId, admin comments for a user
+    //Comment types only meant for the admin's eyes
+    const MODERATION = 30; ///< owner = tblModeration.queueId
+    const USER       = 31; ///< owner = tblUsers.userId, admin comments for a user
 
 */
 

@@ -12,15 +12,15 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
-define('SSN_ERR_INVALID_INPUT',		1);
-define('SSN_ERR_INVALID_DATE',		2);
-define('SSN_ERR_WRONG_CHECKSUM',	3);
-define('SSN_ERR_GENDER_IS_MALE',	4);
-define('SSN_ERR_GENDER_IS_FEMALE',	5);
+define('SSN_ERR_INVALID_INPUT',        1);
+define('SSN_ERR_INVALID_DATE',        2);
+define('SSN_ERR_WRONG_CHECKSUM',    3);
+define('SSN_ERR_GENDER_IS_MALE',    4);
+define('SSN_ERR_GENDER_IS_FEMALE',    5);
 
-define('SSN_GENDER_UNKNOWN',	0);
-define('SSN_GENDER_MALE', 		1);
-define('SSN_GENDER_FEMALE',		2);
+define('SSN_GENDER_UNKNOWN',    0);
+define('SSN_GENDER_MALE',         1);
+define('SSN_GENDER_FEMALE',        2);
 
 $ssn_error[SSN_ERR_INVALID_INPUT] = 'Invalid input';
 $ssn_error[SSN_ERR_INVALID_DATE] = 'Invalid date';
@@ -36,10 +36,10 @@ $ssn_error[SSN_ERR_GENDER_IS_FEMALE] = 'Wrong gender specified, this ssn belongs
  */
 function SsnCleanInput($_ssn)
 {
-	$_ssn = str_replace('-', '', $_ssn);
-	$_ssn = str_replace(' ', '', $_ssn);
+    $_ssn = str_replace('-', '', $_ssn);
+    $_ssn = str_replace(' ', '', $_ssn);
 
-	return $_ssn;
+    return $_ssn;
 }
 
 /**
@@ -50,9 +50,9 @@ function SsnCleanInput($_ssn)
  */
 function SsnError($_errcode)
 {
-	global $ssn_error;
-	if (!is_numeric($_errcode)) return false;
-	return $ssn_error[$_errcode];
+    global $ssn_error;
+    if (!is_numeric($_errcode)) return false;
+    return $ssn_error[$_errcode];
 }
 
 /**
@@ -64,19 +64,19 @@ function SsnError($_errcode)
  */
 function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
 {
-	$_ssn = SsnCleanInput($_ssn);
+    $_ssn = SsnCleanInput($_ssn);
 
-	//year specified in 4 digits
-	if (strlen($_ssn) == 12) $_ssn = substr($_ssn, 2);
+    //year specified in 4 digits
+    if (strlen($_ssn) == 12) $_ssn = substr($_ssn, 2);
 
-	if (strlen($_ssn) != 10) return SSN_ERR_INVALID_INPUT;
+    if (strlen($_ssn) != 10) return SSN_ERR_INVALID_INPUT;
 
-	//validate if the date existed, for example 19810230 is invalid
-	$yr = substr($_ssn, 0, 2);
-	$yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;	//years below curryear is considered to be 2000-20xx, otherwise its 1900-19xx
-	$mn = intval(substr($_ssn, 2, 2));
-	$dy = intval(substr($_ssn, 4, 2));
-	return SsnValidateSwedishNum($yr, $mn, $dy, substr($_ssn, -4), $_gender);
+    //validate if the date existed, for example 19810230 is invalid
+    $yr = substr($_ssn, 0, 2);
+    $yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;    //years below curryear is considered to be 2000-20xx, otherwise its 1900-19xx
+    $mn = intval(substr($_ssn, 2, 2));
+    $dy = intval(substr($_ssn, 4, 2));
+    return SsnValidateSwedishNum($yr, $mn, $dy, substr($_ssn, -4), $_gender);
 }
 
 /**
@@ -91,12 +91,12 @@ function SsnValidateSwedish($_ssn, $_gender = SSN_GENDER_UNKNOWN)
  */
 function SsnValidateSwedishOrgNum($_yr, $_mn, $_dy, $_last4)
 {
-	if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
-	$ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
+    if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
+    $ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
 
-	if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_ERR_WRONG_CHECKSUM;
+    if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_ERR_WRONG_CHECKSUM;
 
-	return true;
+    return true;
 }
 
 /**
@@ -111,26 +111,26 @@ function SsnValidateSwedishOrgNum($_yr, $_mn, $_dy, $_last4)
  */
 function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_UNKNOWN)
 {
-	if (!checkdate($_mn, $_dy, $_yr)) return SSN_ERR_INVALID_DATE;
+    if (!checkdate($_mn, $_dy, $_yr)) return SSN_ERR_INVALID_DATE;
 
-	if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
-	$ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
+    if (strlen($_yr) == 4) $_yr = substr($_yr, -2);
+    $ssn = $_yr . (strlen($_mn)==1?'0'.$_mn:$_mn) . (strlen($_dy)==1?'0'.$_dy:$_dy) . $_last4;
 
-	if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_ERR_WRONG_CHECKSUM;
+    if (substr($_last4, -1) != SsnCalcSumSwedish($ssn)) return SSN_ERR_WRONG_CHECKSUM;
 
-	$ssn_gender = intval(substr($ssn, 8, 1));
+    $ssn_gender = intval(substr($ssn, 8, 1));
 
-	if (($ssn_gender % 2) && $_gender == SSN_GENDER_FEMALE) {
-		//Error: odd (male) ssn found but user thinks its a female ssn
-		return SSN_ERR_GENDER_IS_MALE;
-	}
+    if (($ssn_gender % 2) && $_gender == SSN_GENDER_FEMALE) {
+        //Error: odd (male) ssn found but user thinks its a female ssn
+        return SSN_ERR_GENDER_IS_MALE;
+    }
 
-	if (!($ssn_gender % 2) && $_gender == SSN_GENDER_MALE) {
-		//Error: even (female) ssn found but user thinks its a male ssn
-		return SSN_ERR_GENDER_IS_FEMALE;
-	}
+    if (!($ssn_gender % 2) && $_gender == SSN_GENDER_MALE) {
+        //Error: even (female) ssn found but user thinks its a male ssn
+        return SSN_ERR_GENDER_IS_FEMALE;
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -151,27 +151,27 @@ function SsnValidateSwedishNum($_yr, $_mn, $_dy, $_last4, $_gender = SSN_GENDER_
  */
 function SsnCalcSumSwedish($_ssn)
 {
-	$d2 = 2;
-	$sum = 0;
+    $d2 = 2;
+    $sum = 0;
 
-	for ($i=0; $i<=8; $i++) {
-		$d1 = intval(substr($_ssn, $i, 1));
-		$res = $d1 * $d2;
+    for ($i=0; $i<=8; $i++) {
+        $d1 = intval(substr($_ssn, $i, 1));
+        $res = $d1 * $d2;
 
-		if ($res > 9) {
-			$x1 = intval(substr($res, 0, 1));
-			$x2 = intval(substr($res, 1, 1));
-			$res = $x1 + $x2;
-		}
-		$sum += $res;
-		$d2 = ($d2 == 2) ? 1 : 2; //Switch between 212121-212
-	}
+        if ($res > 9) {
+            $x1 = intval(substr($res, 0, 1));
+            $x2 = intval(substr($res, 1, 1));
+            $res = $x1 + $x2;
+        }
+        $sum += $res;
+        $d2 = ($d2 == 2) ? 1 : 2; //Switch between 212121-212
+    }
 
-	//Substract the ones place digit from 10
-	$sum = 10 - intval(substr($sum, -1, 1));
-	if ($sum == 10) $sum = 0;
+    //Substract the ones place digit from 10
+    $sum = 10 - intval(substr($sum, -1, 1));
+    if ($sum == 10) $sum = 0;
 
-	return $sum;
+    return $sum;
 }
 
 /**
@@ -185,23 +185,23 @@ function SsnCalcSumSwedish($_ssn)
  */
 function SsnRandomizeSwedish($_year, $_month, $_day, $_gender)
 {
-	$ssn = substr($_year, -2).$_month.$_day;
-	if (strlen($ssn) != 6) return false;
+    $ssn = substr($_year, -2).$_month.$_day;
+    if (strlen($ssn) != 6) return false;
 
-	//Randomizes the 2 first of the control digits, between 00 and 99
-	$randNums = substr('0'.mt_rand(0, 99), -2);
+    //Randomizes the 2 first of the control digits, between 00 and 99
+    $randNums = substr('0'.mt_rand(0, 99), -2);
 
-	//An odd number is assigned to men, an even number to women
-	$randGender = mt_rand(0, 9);
-	if ($randGender % 2) { //odd number
-		if ($_gender == 2) $randGender++;		//woman have even numbers,add 1
-		if ($randGender > 9) $randGender = 0;
-	} else {
-		if ($_gender == 1) $randGender++;		//men have odd numbers,add 1
-	}
+    //An odd number is assigned to men, an even number to women
+    $randGender = mt_rand(0, 9);
+    if ($randGender % 2) { //odd number
+        if ($_gender == 2) $randGender++;        //woman have even numbers,add 1
+        if ($randGender > 9) $randGender = 0;
+    } else {
+        if ($_gender == 1) $randGender++;        //men have odd numbers,add 1
+    }
 
-	$sum = SsnCalcSumSwedish($ssn.$randNums.$randGender);
-	return $randNums.$randGender.$sum;
+    $sum = SsnCalcSumSwedish($ssn.$randNums.$randGender);
+    return $randNums.$randGender.$sum;
 }
 
 ?>

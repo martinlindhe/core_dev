@@ -19,216 +19,216 @@ require_once('service_metadata_imdb.php');
 
 class TheMovieDbMetadata extends CoreBase
 {
-	private $api_key;
+    private $api_key;
 
-	function __construct($api_key = '')
-	{
-		$this->setApiKey($api_key);
-	}
+    function __construct($api_key = '')
+    {
+        $this->setApiKey($api_key);
+    }
 
-	function setApiKey($key)
-	{
-		$this->api_key = $key;
-	}
+    function setApiKey($key)
+    {
+        $this->api_key = $key;
+    }
 
-	/**
-	 * Search for a movie
-	 */
-	function search($name)
-	{
-		if (!$name) return false;
+    /**
+     * Search for a movie
+     */
+    function search($name)
+    {
+        if (!$name) return false;
 
-		$url = 'http://api.themoviedb.org/2.1/Movie.search/en/xml/'.$this->api_key.'/'.urlencode($name);
+        $url = 'http://api.themoviedb.org/2.1/Movie.search/en/xml/'.$this->api_key.'/'.urlencode($name);
 
-		$http = new HttpClient($url);
-		$http->setCacheTime(60*60*24); //24 hours
+        $http = new HttpClient($url);
+        $http->setCacheTime(60*60*24); //24 hours
 
-		$data = $http->getBody();
+        $data = $http->getBody();
 
-		if ($http->getStatus() != 200) {
-			d('TheMovieDbMetadata->search server error: '.$http->getStatus() );
-			d( $http->getHeaders() );
-			return false;
-		}
+        if ($http->getStatus() != 200) {
+            d('TheMovieDbMetadata->search server error: '.$http->getStatus() );
+            d( $http->getHeaders() );
+            return false;
+        }
 
-		$hits = $this->parseResult($data);
+        $hits = $this->parseResult($data);
 
-		if (!$hits)
-			return false;
+        if (!$hits)
+            return false;
 
-		//find and return best match
-		$score = 0.0;
-		$idx   = 0;
-		for ($i=0; $i<count($hits); $i++)
-		{
-			if ($hits[$i]['score'] > $score) {
-				if ($this->debug) d('promoting '.$i.' match');
-				$idx = $i;
-				$score = $hits[$i]['score'];
-			}
-		}
+        //find and return best match
+        $score = 0.0;
+        $idx   = 0;
+        for ($i=0; $i<count($hits); $i++)
+        {
+            if ($hits[$i]['score'] > $score) {
+                if ($this->debug) d('promoting '.$i.' match');
+                $idx = $i;
+                $score = $hits[$i]['score'];
+            }
+        }
 
-		return $hits[ $idx ];
-	}
+        return $hits[ $idx ];
+    }
 
-	/**
-	 * Returns details on a movie
-	 *
-	 * @param $tmdb_id TMDB id
-	 */
-	function getInfo($tmdb_id)
-	{
-		if (!is_numeric($tmdb_id))
-			return false;
+    /**
+     * Returns details on a movie
+     *
+     * @param $tmdb_id TMDB id
+     */
+    function getInfo($tmdb_id)
+    {
+        if (!is_numeric($tmdb_id))
+            return false;
 
-		$url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$tmdb_id;
+        $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$tmdb_id;
 
-		$http = new HttpClient($url);
-		$http->setCacheTime(60*60*24); //24 hours
+        $http = new HttpClient($url);
+        $http->setCacheTime(60*60*24); //24 hours
 
-		$data = $http->getBody();
+        $data = $http->getBody();
 
-		if ($http->getStatus() != 200) {
-			d('TheMovieDbMetadata->getInfo server error: '.$http->getStatus() );
-			d( $http->getHeaders() );
-			return false;
-		}
+        if ($http->getStatus() != 200) {
+            d('TheMovieDbMetadata->getInfo server error: '.$http->getStatus() );
+            d( $http->getHeaders() );
+            return false;
+        }
 
-		$res = $this->parseResult($data);
-		return $res[0];
-	}
+        $res = $this->parseResult($data);
+        return $res[0];
+    }
 
-	private function parseResult($data)
-	{
-		$movies = array();
+    private function parseResult($data)
+    {
+        $movies = array();
 
-		$reader = new XMLReader();
-		if ($this->debug) echo 'Parsing movies: '.$data.ln();
-		$reader->xml($data);
+        $reader = new XMLReader();
+        if ($this->debug) echo 'Parsing movies: '.$data.ln();
+        $reader->xml($data);
 
-		while ($reader->read())
-		{
-			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'movies')
-				break;
+        while ($reader->read())
+        {
+            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'movies')
+                break;
 
-			if ($reader->nodeType != XMLReader::ELEMENT)
-				continue;
+            if ($reader->nodeType != XMLReader::ELEMENT)
+                continue;
 
-			switch ($reader->name) {
-			case 'movies': break;
+            switch ($reader->name) {
+            case 'movies': break;
 
-			case 'movie':
-				$movies[] = $this->parseMovie($reader);
-				break;
+            case 'movie':
+                $movies[] = $this->parseMovie($reader);
+                break;
 
-			default:
-				//TODO LATER: themoviedb xml exposes opensearch xml tags, see if that can be used
-				//echo "parseSearchResult unknown ".$reader->name.ln();
-				break;
-			}
-		}
+            default:
+                //TODO LATER: themoviedb xml exposes opensearch xml tags, see if that can be used
+                //echo "parseSearchResult unknown ".$reader->name.ln();
+                break;
+            }
+        }
 
-		$reader->close();
-		return $movies;
-	}
+        $reader->close();
+        return $movies;
+    }
 
-	private function parseMovie($reader)
-	{
-		$id       = '';
-		$name     = '';
-		$imdb     = '';
-		$summary  = '';
-		$released = '';
-		$score    = ''; //0.0 to 1.0 match score
-		$images   = array();
-		$categories = array();
-		while ($reader->read()) {
-			if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'movie') {
-				//XXX cache write title + id combo
-				return array('title'=>$name, 'id'=>$id, 'imdb'=>$imdb, 'score'=>$score, 'summary'=>$summary, 'released'=>$released, 'images'=>$images, 'categories'=>$categories);
-			}
+    private function parseMovie($reader)
+    {
+        $id       = '';
+        $name     = '';
+        $imdb     = '';
+        $summary  = '';
+        $released = '';
+        $score    = ''; //0.0 to 1.0 match score
+        $images   = array();
+        $categories = array();
+        while ($reader->read()) {
+            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'movie') {
+                //XXX cache write title + id combo
+                return array('title'=>$name, 'id'=>$id, 'imdb'=>$imdb, 'score'=>$score, 'summary'=>$summary, 'released'=>$released, 'images'=>$images, 'categories'=>$categories);
+            }
 
-			if ($reader->nodeType != XMLReader::ELEMENT)
-				continue;
+            if ($reader->nodeType != XMLReader::ELEMENT)
+                continue;
 
-			switch ($reader->name) {
-			case 'name':
-				$reader->read();
-				$name = $reader->value;
-				break;
+            switch ($reader->name) {
+            case 'name':
+                $reader->read();
+                $name = $reader->value;
+                break;
 
-			case 'imdb_id':
-				$reader->read();
-				$imdb = $reader->value;
-				break;
+            case 'imdb_id':
+                $reader->read();
+                $imdb = $reader->value;
+                break;
 
-			case 'id':
-				$reader->read();
-				$id = $reader->value;
-				break;
+            case 'id':
+                $reader->read();
+                $id = $reader->value;
+                break;
 
-			case 'score':
-				$reader->read();
-				$score = $reader->value;
-				break;
+            case 'score':
+                $reader->read();
+                $score = $reader->value;
+                break;
 
-			case 'overview':
-				$reader->read();
-				$summary = $reader->value;
-				break;
+            case 'overview':
+                $reader->read();
+                $summary = $reader->value;
+                break;
 
-			case 'released': //release date
-				$reader->read();
-				$released = $reader->value;
-				break;
+            case 'released': //release date
+                $reader->read();
+                $released = $reader->value;
+                break;
 
-			case 'images': break;
+            case 'images': break;
 
-			case 'image':
-				//TODO: rewrite logic to select 1 of each image type
-				if ($reader->getAttribute('type') == 'poster' && $reader->getAttribute('size') != 'mid') break;
-				if ($reader->getAttribute('type') == 'backdrop' && $reader->getAttribute('size') != 'poster') break;
+            case 'image':
+                //TODO: rewrite logic to select 1 of each image type
+                if ($reader->getAttribute('type') == 'poster' && $reader->getAttribute('size') != 'mid') break;
+                if ($reader->getAttribute('type') == 'backdrop' && $reader->getAttribute('size') != 'poster') break;
 
-				$images[] = array(
-				'type'=> $reader->getAttribute('type'),
-				'url' => $reader->getAttribute('url'),
-				'size'=> $reader->getAttribute('size'),
-				'id'  => $reader->getAttribute('id') );
-				break;
+                $images[] = array(
+                'type'=> $reader->getAttribute('type'),
+                'url' => $reader->getAttribute('url'),
+                'size'=> $reader->getAttribute('size'),
+                'id'  => $reader->getAttribute('id') );
+                break;
 
-			case 'popularity': break;
-			case 'alternative_name': break;
-			case 'type': break; //"movie"
-			case 'url': break;
-			case 'rating': break;
+            case 'popularity': break;
+            case 'alternative_name': break;
+            case 'type': break; //"movie"
+            case 'url': break;
+            case 'rating': break;
 
-			case 'runtime': break; //in minutes, XXX store as Duration
-			case 'budget': break;
-			case 'revenue': break;
-			case 'homepage': break;
-			case 'trailer': break; //XXX youtube trailer
+            case 'runtime': break; //in minutes, XXX store as Duration
+            case 'budget': break;
+            case 'revenue': break;
+            case 'homepage': break;
+            case 'trailer': break; //XXX youtube trailer
 
-			case 'countries': break;
+            case 'countries': break;
 
-			case 'categories': break;
-			case 'category':
-				$categories[] = array(
-				'type'=> $reader->getAttribute('type'), //type="genre".. is there other types or is this just useless?
-				'url' => $reader->getAttribute('url'),
-				'name'=> $reader->getAttribute('name') );
-				break;
+            case 'categories': break;
+            case 'category':
+                $categories[] = array(
+                'type'=> $reader->getAttribute('type'), //type="genre".. is there other types or is this just useless?
+                'url' => $reader->getAttribute('url'),
+                'name'=> $reader->getAttribute('name') );
+                break;
 
-			//XXX parse studios properly
-			case 'studios': break;
-			case 'studio': break;
+            //XXX parse studios properly
+            case 'studios': break;
+            case 'studio': break;
 
-			//XXX parse cast properly
-			case 'cast': break;
-			case 'person': break;
+            //XXX parse cast properly
+            case 'cast': break;
+            case 'person': break;
 
-			default: echo "parseMovie bad entry " .$reader->name.ln();
-			}
-		}
-	}
+            default: echo "parseMovie bad entry " .$reader->name.ln();
+            }
+        }
+    }
 }
 

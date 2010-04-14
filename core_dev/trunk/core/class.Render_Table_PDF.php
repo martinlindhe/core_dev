@@ -11,29 +11,29 @@ require_once('output_pdf.php');
 
 class Render_Table_PDF extends Render_Table
 {
-	protected $default_ext = '.pdf';
+    protected $default_ext = '.pdf';
 
-	function render()
-	{
-		$out = pdfBOF();
+    function render()
+    {
+        $out = pdfBOF();
 
 /*
-		$i = 0;
-		foreach ($this->data as $data) {
-			$out .= '"'.$data.'"';
-			$i++;
-			if ($i == $this->columns) {
-				$out .= $this->EOL;
-				$i = 0;
-			} else {
-				$out .= $this->separator;
-			}
-		}
+        $i = 0;
+        foreach ($this->data as $data) {
+            $out .= '"'.$data.'"';
+            $i++;
+            if ($i == $this->columns) {
+                $out .= $this->EOL;
+                $i = 0;
+            } else {
+                $out .= $this->separator;
+            }
+        }
 */
-		$out .= pdfTrailer();
+        $out .= pdfTrailer();
 
-		return $out;
-	}
+        return $out;
+    }
 
 }
 ?>

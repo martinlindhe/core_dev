@@ -14,10 +14,10 @@
  */
 function file_suffix($filename)
 {
-	$pos = strrpos($filename, '.');
-	if ($pos === false) return '';
+    $pos = strrpos($filename, '.');
+    if ($pos === false) return '';
 
-	return substr($filename, $pos);
+    return substr($filename, $pos);
 }
 
 /**
@@ -27,20 +27,20 @@ function file_suffix($filename)
  */
 function file_get_mime_by_suffix($name)
 {
-	if (!$name) return;
+    if (!$name) return;
 
-	$ext = file_suffix($name);
-	switch ($ext)
-	{
-	case '.jpg': return 'image/jpeg';
-	case '.png': return 'image/png';
-	case '.gif': return 'image/gif';
+    $ext = file_suffix($name);
+    switch ($ext)
+    {
+    case '.jpg': return 'image/jpeg';
+    case '.png': return 'image/png';
+    case '.gif': return 'image/gif';
 
-	case '.mov': return 'video/quicktime';
-	default:
-		dp('file_get_mime_by_suffix unhandled ext: '.$ext);
-		return 'application/octet-stream'; //unknown type
-	}
+    case '.mov': return 'video/quicktime';
+    default:
+        dp('file_get_mime_by_suffix unhandled ext: '.$ext);
+        return 'application/octet-stream'; //unknown type
+    }
 }
 
 /**
@@ -51,15 +51,15 @@ function file_get_mime_by_suffix($name)
  */
 function estimateDownloadTime($size)
 {
-	if (!is_numeric($size)) return false;
+    if (!is_numeric($size)) return false;
 
-	$arr = array();
-	$arr[56]   = ceil($size / ((  56*1024)/8)); //56k modem
-	$arr[512]  = ceil($size / (( 512*1024)/8)); //0.5mbit
-	$arr[1024] = ceil($size / ((1024*1024)/8)); //1mbit
-	$arr[8196] = ceil($size / ((8196*1024)/8)); //8mbit
+    $arr = array();
+    $arr[56]   = ceil($size / ((  56*1024)/8)); //56k modem
+    $arr[512]  = ceil($size / (( 512*1024)/8)); //0.5mbit
+    $arr[1024] = ceil($size / ((1024*1024)/8)); //1mbit
+    $arr[8196] = ceil($size / ((8196*1024)/8)); //8mbit
 
-	return $arr;
+    return $arr;
 }
 
 /**
@@ -67,18 +67,18 @@ function estimateDownloadTime($size)
  */
 function dir_get_tree($outerDir)
 {
-	$dirs = array_diff( scandir($outerDir), array('.', '..') );
-	$res = array();
+    $dirs = array_diff( scandir($outerDir), array('.', '..') );
+    $res = array();
 
-	foreach ($dirs as $d)
-	{
-		if (is_dir($outerDir.'/'.$d) )
-			$res[$d] = dir_get_tree( $outerDir.'/'.$d );
-		else
-			$res[] = $d;
-	}
+    foreach ($dirs as $d)
+    {
+        if (is_dir($outerDir.'/'.$d) )
+            $res[$d] = dir_get_tree( $outerDir.'/'.$d );
+        else
+            $res[] = $d;
+    }
 
-	return $res;
+    return $res;
 }
 
 /**
@@ -90,22 +90,22 @@ function dir_get_tree($outerDir)
  */
 function dir_get_by_extension($path, $filter_ext, $prefix = '')
 {
-	$e = scandir($path);
+    $e = scandir($path);
 
-	$out = array();
-	foreach ($e as $name)
-	{
-		if ($name == '.' || $name == '..')
-			continue;
+    $out = array();
+    foreach ($e as $name)
+    {
+        if ($name == '.' || $name == '..')
+            continue;
 
-		if ($prefix && strpos($name, $prefix) !== 0)
-			continue;
+        if ($prefix && strpos($name, $prefix) !== 0)
+            continue;
 
-		if (file_suffix($name) == $filter_ext)
-			$out[] = $name;
-	}
+        if (file_suffix($name) == $filter_ext)
+            $out[] = $name;
+    }
 
-	return $out;
+    return $out;
 }
 
 ?>

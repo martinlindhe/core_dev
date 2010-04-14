@@ -10,21 +10,21 @@
 
 $config['feedback']['enabled'] = true;
 
-define('FEEDBACK_SUBMIT',	1);	//user submitted "site feedback", general comments
+define('FEEDBACK_SUBMIT',    1);    //user submitted "site feedback", general comments
 
 /**
  * subjectId is the userId if its a abuse report
  */
 function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
 {
-	global $h, $db;
-	if (!is_numeric($_type) || !is_numeric($_subjectId)) return false;
+    global $h, $db;
+    if (!is_numeric($_type) || !is_numeric($_subjectId)) return false;
 
-	$q = 'SELECT feedbackId FROM tblFeedback WHERE feedbackType='.$_type.' AND subj="'.$db->escape($_subj).'" AND body="'.$db->escape($_body).'" AND userId='.$h->session->id;
-	if ($db->getOneItem($q)) return false;
+    $q = 'SELECT feedbackId FROM tblFeedback WHERE feedbackType='.$_type.' AND subj="'.$db->escape($_subj).'" AND body="'.$db->escape($_body).'" AND userId='.$h->session->id;
+    if ($db->getOneItem($q)) return false;
 
-	$q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$h->session->id.',subjectId='.$_subjectId.',timeCreated=NOW()';
-	return $db->insert($q);
+    $q = 'INSERT INTO tblFeedback SET feedbackType='.$_type.',subj="'.$db->escape($_subj).'",body="'.$db->escape($_body).'",userId='.$h->session->id.',subjectId='.$_subjectId.',timeCreated=NOW()';
+    return $db->insert($q);
 }
 
 /**
@@ -32,11 +32,11 @@ function saveFeedback($_type, $_subj, $_body = '', $_subjectId = 0)
  */
 function answerFeedback($_id, $_answer)
 {
-	global $h, $db;
-	if (!is_numeric($_id) || !$h->session->id) return false;
+    global $h, $db;
+    if (!is_numeric($_id) || !$h->session->id) return false;
 
-	$q = 'UPDATE tblFeedback SET answer="'.$db->escape($_answer).'", answeredBy='.$h->session->id.',timeAnswered=NOW() WHERE feedbackId='.$_id;
-	return $db->update($q);
+    $q = 'UPDATE tblFeedback SET answer="'.$db->escape($_answer).'", answeredBy='.$h->session->id.',timeAnswered=NOW() WHERE feedbackId='.$_id;
+    return $db->update($q);
 }
 
 /**
@@ -44,16 +44,16 @@ function answerFeedback($_id, $_answer)
  */
 function getFeedback($_type = 0, $_sql_limit = '')
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
-	$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
-	$q .= ' WHERE t1.answeredBy=0';
-	if ($_type) $q .= ' AND t1.feedbackType='.$_type;
-	$q .= $_sql_limit;
+    $q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
+    $q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+    $q .= ' WHERE t1.answeredBy=0';
+    if ($_type) $q .= ' AND t1.feedbackType='.$_type;
+    $q .= $_sql_limit;
 
-	return $db->getArray($q);
+    return $db->getArray($q);
 }
 
 /**
@@ -61,13 +61,13 @@ function getFeedback($_type = 0, $_sql_limit = '')
  */
 function getFeedbackCnt($_type = 0)
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
-	$q .= ' WHERE answeredBy=0';
-	if ($_type) $q .= ' AND feedbackType='.$_type;
-	return $db->getOneItem($q);
+    $q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+    $q .= ' WHERE answeredBy=0';
+    if ($_type) $q .= ' AND feedbackType='.$_type;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -75,10 +75,10 @@ function getFeedbackCnt($_type = 0)
  */
 function getFeedbackCountPeriod($dateStart, $dateStop)
 {
-	global $db;
+    global $db;
 
-	$q = 'SELECT count(feedbackId) AS cnt FROM tblFeedback WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
-	return $db->getOneItem($q);
+    $q = 'SELECT count(feedbackId) AS cnt FROM tblFeedback WHERE timeCreated BETWEEN "'.$db->escape($dateStart).'" AND "'.$db->escape($dateStop).'"';
+    return $db->getOneItem($q);
 }
 
 /**
@@ -86,16 +86,16 @@ function getFeedbackCountPeriod($dateStart, $dateStop)
  */
 function getAnsweredFeedback($_type = 0, $_sql_limit = '')
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
-	$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
-	$q .= ' WHERE t1.answeredBy != 0';
-	if ($_type) $q .= ' AND t1.feedbackType='.$_type;
-	$q .= $_sql_limit;
+    $q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
+    $q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+    $q .= ' WHERE t1.answeredBy != 0';
+    if ($_type) $q .= ' AND t1.feedbackType='.$_type;
+    $q .= $_sql_limit;
 
-	return $db->getArray($q);
+    return $db->getArray($q);
 }
 
 /**
@@ -103,13 +103,13 @@ function getAnsweredFeedback($_type = 0, $_sql_limit = '')
  */
 function getAnsweredFeedbackCnt($_type = 0)
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
-	$q .= ' WHERE answeredBy != 0';
-	if ($_type) $q .= ' AND feedbackType='.$_type;
-	return $db->getOneItem($q);
+    $q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+    $q .= ' WHERE answeredBy != 0';
+    if ($_type) $q .= ' AND feedbackType='.$_type;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -117,16 +117,16 @@ function getAnsweredFeedbackCnt($_type = 0)
  */
 function searchFeedback($_type = 0, $_search, $_sql_limit = '')
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
-	$q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
-	$q .= ' WHERE t1.answeredBy != 0 AND (t1.body LIKE "%'.$db->escape($_search).'%" OR t1.answer LIKE "%'.$db->escape($_search).'%")';
-	if ($_type) $q .= ' AND t1.feedbackType='.$_type;
-	$q .= $_sql_limit;
+    $q  = 'SELECT t1.*,t2.userName FROM tblFeedback AS t1';
+    $q .= ' LEFT JOIN tblUsers AS t2 ON (t1.userId=t2.userId)';
+    $q .= ' WHERE t1.answeredBy != 0 AND (t1.body LIKE "%'.$db->escape($_search).'%" OR t1.answer LIKE "%'.$db->escape($_search).'%")';
+    if ($_type) $q .= ' AND t1.feedbackType='.$_type;
+    $q .= $_sql_limit;
 
-	return $db->getArray($q);
+    return $db->getArray($q);
 }
 
 /**
@@ -134,13 +134,13 @@ function searchFeedback($_type = 0, $_search, $_sql_limit = '')
  */
 function searchFeedbackCnt($_type = 0, $_search)
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
-	$q .= ' WHERE answeredBy != 0 AND (body LIKE "%'.$db->escape($_search).'%" OR answer LIKE "%'.$db->escape($_search).'%")';
-	if ($_type) $q .= ' AND feedbackType='.$_type;
-	return $db->getOneItem($q);
+    $q  = 'SELECT COUNT(feedbackId) FROM tblFeedback';
+    $q .= ' WHERE answeredBy != 0 AND (body LIKE "%'.$db->escape($_search).'%" OR answer LIKE "%'.$db->escape($_search).'%")';
+    if ($_type) $q .= ' AND feedbackType='.$_type;
+    return $db->getOneItem($q);
 }
 
 /**
@@ -148,11 +148,11 @@ function searchFeedbackCnt($_type = 0, $_search)
  */
 function deleteFeedback($_id)
 {
-	global $h, $db;
-	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
-	$q = 'DELETE FROM tblFeedback WHERE feedbackId='.$_id;
-	return $db->delete($q);
+    $q = 'DELETE FROM tblFeedback WHERE feedbackId='.$_id;
+    return $db->delete($q);
 }
 
 /**
@@ -160,10 +160,10 @@ function deleteFeedback($_id)
  */
 function getFeedbackItem($_id)
 {
-	global $h, $db;
-	if (!$h->session->isAdmin || !is_numeric($_id)) return false;
+    global $h, $db;
+    if (!$h->session->isAdmin || !is_numeric($_id)) return false;
 
-	$q = 'SELECT * FROM tblFeedback WHERE feedbackId='.$_id;
-	return $db->getOneRow($q);
+    $q = 'SELECT * FROM tblFeedback WHERE feedbackId='.$_id;
+    return $db->getOneRow($q);
 }
 ?>

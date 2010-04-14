@@ -10,50 +10,50 @@ require_once('input_xml.php');
 
 class Stock_webservicex
 {
-	private $api_url = 'http://www.webservicex.net/stockquote.asmx?wsdl';
+    private $api_url = 'http://www.webservicex.net/stockquote.asmx?wsdl';
 
-	function getQuote($code)
-	{
-		$client = new SoapClient($this->api_url);
+    function getQuote($code)
+    {
+        $client = new SoapClient($this->api_url);
 
-		try {
-			$params['symbol'] = $code;
-			$val = $client->GetQuote($params);
-			$xml = $val->GetQuoteResult;
+        try {
+            $params['symbol'] = $code;
+            $val = $client->GetQuote($params);
+            $xml = $val->GetQuoteResult;
 
-			$x = new xml_input();
-			$p = $x->parse($xml);
+            $x = new xml_input();
+            $p = $x->parse($xml);
 
-			//FIXME adjust timezone of timestamp
-			$timestamp = strtotime($p['StockQuotes|Stock|Date'].' '.$p['StockQuotes|Stock|Time']);
+            //FIXME adjust timezone of timestamp
+            $timestamp = strtotime($p['StockQuotes|Stock|Date'].' '.$p['StockQuotes|Stock|Time']);
 
-			$res = array(
-			'Symbol'       =>$p['StockQuotes|Stock|Symbol'],
-			'Name'         =>$p['StockQuotes|Stock|Name'],
-			'Last'         =>$p['StockQuotes|Stock|Last'],
-			'Timestamp'    =>$timestamp,
-			'Change'       =>$p['StockQuotes|Stock|Change'],
-			'Open'         =>$p['StockQuotes|Stock|Open'],
-			'High'         =>$p['StockQuotes|Stock|High'],
-			'Low'          =>$p['StockQuotes|Stock|Low'],
-			'Volume'       =>@$p['StockQuotes|Stock|Volume'],
-			'PreviousClose'=>$p['StockQuotes|Stock|PreviousClose'],
-			'PercentChange'=>$p['StockQuotes|Stock|PercentageChange'],
-			'Earns'        =>$p['StockQuotes|Stock|Earns'],
-			'MktCap'       =>$p['StockQuotes|Stock|MktCap'], //XXX ???
-			'AnnRange'     =>$p['StockQuotes|Stock|AnnRange'],//XXX ???
-			'P-E'          =>$p['StockQuotes|Stock|P-E']//XXX???
-			);
-			return $res;
+            $res = array(
+            'Symbol'       =>$p['StockQuotes|Stock|Symbol'],
+            'Name'         =>$p['StockQuotes|Stock|Name'],
+            'Last'         =>$p['StockQuotes|Stock|Last'],
+            'Timestamp'    =>$timestamp,
+            'Change'       =>$p['StockQuotes|Stock|Change'],
+            'Open'         =>$p['StockQuotes|Stock|Open'],
+            'High'         =>$p['StockQuotes|Stock|High'],
+            'Low'          =>$p['StockQuotes|Stock|Low'],
+            'Volume'       =>@$p['StockQuotes|Stock|Volume'],
+            'PreviousClose'=>$p['StockQuotes|Stock|PreviousClose'],
+            'PercentChange'=>$p['StockQuotes|Stock|PercentageChange'],
+            'Earns'        =>$p['StockQuotes|Stock|Earns'],
+            'MktCap'       =>$p['StockQuotes|Stock|MktCap'], //XXX ???
+            'AnnRange'     =>$p['StockQuotes|Stock|AnnRange'],//XXX ???
+            'P-E'          =>$p['StockQuotes|Stock|P-E']//XXX???
+            );
+            return $res;
 
-		} catch (Exception $e) {
-			echo 'exception: '.$e, "\n";
-			echo 'Request header:'.$client->__getLastRequestHeaders()."\n";
-			echo 'Request: '.$client->__getLastRequest()."\n";
-			echo 'Response: '. $client->__getLastResponse()."\n";
-			return false;
-		}
-	}
+        } catch (Exception $e) {
+            echo 'exception: '.$e, "\n";
+            echo 'Request header:'.$client->__getLastRequestHeaders()."\n";
+            echo 'Request: '.$client->__getLastRequest()."\n";
+            echo 'Response: '. $client->__getLastResponse()."\n";
+            return false;
+        }
+    }
 
 }
 

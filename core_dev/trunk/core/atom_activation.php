@@ -5,7 +5,7 @@
  * Code to implement activation procedures
  *
  * Utility script: cron\cleanup_activations.php
- * 		This script deletes all > 30 day old entries from tblActivation
+ *         This script deletes all > 30 day old entries from tblActivation
  *
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
@@ -13,15 +13,15 @@
 //FIXME: tblActivation.answer was only used for CAPTCHA's. safe to drop?
 //TODO: create a cleanup script that deletes un-activated users entirely
 
-define('ACTIVATE_EMAIL',		1);
-define('ACTIVATE_SMS',			2);
-define('ACTIVATE_CHANGE_PWD',	3);		//used to allow the user to set a new password from a email link when he forgot password
-define('ACTIVATE_ACCOUNT',		4);		//used to activate a pre-generated account
+define('ACTIVATE_EMAIL',        1);
+define('ACTIVATE_SMS',            2);
+define('ACTIVATE_CHANGE_PWD',    3);        //used to allow the user to set a new password from a email link when he forgot password
+define('ACTIVATE_ACCOUNT',        4);        //used to activate a pre-generated account
 
-$config['activate']['expire_time_email']		= (24*60*60)*30; 	///< 30 days
-$config['activate']['expire_time_sms']			= (24*60*60)*30;	///< 30 days
-$config['activate']['expire_time_change_pwd']	= (24*60*60)*30; 	///< 30 days
-$config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
+$config['activate']['expire_time_email']        = (24*60*60)*30;     ///< 30 days
+$config['activate']['expire_time_sms']            = (24*60*60)*30;    ///< 30 days
+$config['activate']['expire_time_change_pwd']    = (24*60*60)*30;     ///< 30 days
+$config['activate']['expire_time_account']        = (24*60*60)*30;    ///< 30 days
 
 /**
  * Returns an unused numeric activation code
@@ -32,15 +32,15 @@ $config['activate']['expire_time_account']		= (24*60*60)*30;	///< 30 days
  */
 function generateActivationCode($_type, $lo, $hi)
 {
-	global $db;
+    global $db;
 
-	$expiry = getActivationExpireTime($_type);
+    $expiry = getActivationExpireTime($_type);
 
-	do {
-		$code = mt_rand($lo, $hi);
-		$q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'" AND timeActivated IS NULL AND timeCreated < NOW() + INTERVAL '.$expiry.' SECOND';
-	} while ($db->getOneItem($q));
-	return $code;
+    do {
+        $code = mt_rand($lo, $hi);
+        $q = 'SELECT COUNT(*) FROM tblActivation WHERE rnd="'.$code.'" AND timeActivated IS NULL AND timeCreated < NOW() + INTERVAL '.$expiry.' SECOND';
+    } while ($db->getOneItem($q));
+    return $code;
 }
 
 /**
@@ -51,21 +51,21 @@ function generateActivationCode($_type, $lo, $hi)
  */
 function getActivationExpireTime($_type)
 {
-	global $config;
-	switch ($_type)
-	{
-		case ACTIVATE_EMAIL:		return $config['activate']['expire_time_email'];
-		case ACTIVATE_SMS:			return $config['activate']['expire_time_sms'];
-		case ACTIVATE_CHANGE_PWD:	return $config['activate']['expire_time_change_pwd'];
-		case ACTIVATE_ACCOUNT:		return $config['activate']['expire_time_account'];
-		default:
-			if (!empty($config['activate']['expire_time_application_specific'])) {
-				return $config['activate']['expire_time_application_specific'];
-			}
-			else {
-				die('UNKNOWN TYPE '.$_type);
-			}
-	}
+    global $config;
+    switch ($_type)
+    {
+        case ACTIVATE_EMAIL:        return $config['activate']['expire_time_email'];
+        case ACTIVATE_SMS:            return $config['activate']['expire_time_sms'];
+        case ACTIVATE_CHANGE_PWD:    return $config['activate']['expire_time_change_pwd'];
+        case ACTIVATE_ACCOUNT:        return $config['activate']['expire_time_account'];
+        default:
+            if (!empty($config['activate']['expire_time_application_specific'])) {
+                return $config['activate']['expire_time_application_specific'];
+            }
+            else {
+                die('UNKNOWN TYPE '.$_type);
+            }
+    }
 }
 
 /**
@@ -77,23 +77,23 @@ function getActivationExpireTime($_type)
  */
 function verifyActivation($_type, $_code, $_answer = '')
 {
-	global $db, $config;
-	if (!is_numeric($_type)) return false;
+    global $db, $config;
+    if (!is_numeric($_type)) return false;
 
-	$expired = getActivationExpireTime($_type);
+    $expired = getActivationExpireTime($_type);
 
-	$q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
-	$q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
+    $q = 'SELECT COUNT(entryId) FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+    $q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
 
-	switch ($_type) {
-		case ACTIVATE_EMAIL:
-		case ACTIVATE_SMS:
-		case ACTIVATE_CHANGE_PWD:
-			if (!is_numeric($_answer)) return false;
-			$q .= ' AND userId='.$_answer;
-			break;
-	}
-	return $db->getOneItem($q);
+    switch ($_type) {
+        case ACTIVATE_EMAIL:
+        case ACTIVATE_SMS:
+        case ACTIVATE_CHANGE_PWD:
+            if (!is_numeric($_answer)) return false;
+            $q .= ' AND userId='.$_answer;
+            break;
+    }
+    return $db->getOneItem($q);
 }
 
 /**
@@ -105,14 +105,14 @@ function verifyActivation($_type, $_code, $_answer = '')
  */
 function getActivationUserId($_type, $_code)
 {
-	global $db, $config;
-	if (!is_numeric($_type)) return false;
+    global $db, $config;
+    if (!is_numeric($_type)) return false;
 
-	$expired = getActivationExpireTime($_type);
+    $expired = getActivationExpireTime($_type);
 
-	$q = 'SELECT userId FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
-	$q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
-	return $db->getOneItem($q);
+    $q = 'SELECT userId FROM tblActivation WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+    $q .= ' AND timeActivated IS NULL AND timeCreated >= DATE_SUB(NOW(), INTERVAL '.$expired.' SECOND)';
+    return $db->getOneItem($q);
 }
 
 /**
@@ -124,12 +124,12 @@ function getActivationUserId($_type, $_code)
  */
 function getActivationDate($_type, $_id)
 {
-	global $db, $config;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db, $config;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT timeActivated FROM tblActivation WHERE timeActivated IS NOT NULL AND type='.$_type.' AND userId='.$_id;
-	$q .= ' LIMIT 1';
-	return $db->getOneItem($q);
+    $q = 'SELECT timeActivated FROM tblActivation WHERE timeActivated IS NOT NULL AND type='.$_type.' AND userId='.$_id;
+    $q .= ' LIMIT 1';
+    return $db->getOneItem($q);
 }
 
 
@@ -142,12 +142,12 @@ function getActivationDate($_type, $_id)
  */
 function getActivationCode($_type, $_id)
 {
-	global $db, $config;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db, $config;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND userId='.$_id;
-	$q .= ' LIMIT 1';
-	return $db->getOneItem($q);
+    $q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND userId='.$_id;
+    $q .= ' LIMIT 1';
+    return $db->getOneItem($q);
 }
 
 /**
@@ -159,12 +159,12 @@ function getActivationCode($_type, $_id)
  */
 function getActivationCodeByEntryId($_type, $_id)
 {
-	global $db, $config;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db, $config;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND entryId='.$_id;
-	$q .= ' LIMIT 1';
-	return $db->getOneItem($q);
+    $q = 'SELECT rnd FROM tblActivation WHERE timeActivated IS NULL AND type='.$_type.' AND entryId='.$_id;
+    $q .= ' LIMIT 1';
+    return $db->getOneItem($q);
 }
 
 /**
@@ -177,21 +177,21 @@ function getActivationCodeByEntryId($_type, $_id)
  */
 function createActivation($_type, $_code, $_answer = '')
 {
-	global $db;
-	if (!is_numeric($_type)) return false;
+    global $db;
+    if (!is_numeric($_type)) return false;
 
-	$q = 'INSERT INTO tblActivation SET type='.$_type.',rnd="'.$db->escape($_code).'",timeCreated=NOW()';
-	switch ($_type) {
-		case ACTIVATE_EMAIL:
-		case ACTIVATE_SMS:
-		case ACTIVATE_CHANGE_PWD:
-		case ACTIVATE_ACCOUNT:
-			if (!is_numeric($_answer)) return false;
-			removeActivations($_type, $_answer);
-			$q .= ',userId='.$_answer;
-			break;
-	}
-	return $db->insert($q);
+    $q = 'INSERT INTO tblActivation SET type='.$_type.',rnd="'.$db->escape($_code).'",timeCreated=NOW()';
+    switch ($_type) {
+        case ACTIVATE_EMAIL:
+        case ACTIVATE_SMS:
+        case ACTIVATE_CHANGE_PWD:
+        case ACTIVATE_ACCOUNT:
+            if (!is_numeric($_answer)) return false;
+            removeActivations($_type, $_answer);
+            $q .= ',userId='.$_answer;
+            break;
+    }
+    return $db->insert($q);
 }
 
 /**
@@ -203,11 +203,11 @@ function createActivation($_type, $_code, $_answer = '')
  */
 function removeActivations($_type, $_id)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_id)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_id)) return false;
 
-	$q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND userId='.$_id;
-	$db->update($q);
+    $q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND userId='.$_id;
+    $db->update($q);
 }
 
 /**
@@ -218,10 +218,10 @@ function removeActivations($_type, $_id)
  */
 function removeActivation($_type, $_code)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_code)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_code)) return false;
 
-	$q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
-	$db->update($q);
+    $q = 'UPDATE tblActivation SET timeActivated = NOW() WHERE type='.$_type.' AND rnd="'.$db->escape($_code).'"';
+    $db->update($q);
 }
 ?>

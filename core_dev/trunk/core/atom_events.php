@@ -9,26 +9,26 @@
 
 //FIXME cleanup some constant naming. for example use EVENT_APPROVED_xxx
 
-define('EVENT_USER_LOGIN',			0x01);
-define('EVENT_USER_LOGOUT',			0x02);
+define('EVENT_USER_LOGIN',            0x01);
+define('EVENT_USER_LOGOUT',            0x02);
 
-define('EVENT_CALL_BEGIN',			0x50);
-define('EVENT_CALL_END',			0x51);
-define('EVENT_RECORDED_PRES',		0x52);
-define('EVENT_RECORDED_MSG',		0x53);
-define('EVENT_RECORDED_CHATREQ',	0x54);
-define('EVENT_PRES_APPROVED',		0x55);	//referer = fileId
-define('EVENT_PRES_DENIED',			0x56);	//referer = fileId
-define('EVENT_RECORDED_BLOG',		0x57);	//referer = fileId
-define('EVENT_CALLER_UNREGISTER',	0x58);
-define('EVENT_CALL_FORWARDED',		0x59);
+define('EVENT_CALL_BEGIN',            0x50);
+define('EVENT_CALL_END',            0x51);
+define('EVENT_RECORDED_PRES',        0x52);
+define('EVENT_RECORDED_MSG',        0x53);
+define('EVENT_RECORDED_CHATREQ',    0x54);
+define('EVENT_PRES_APPROVED',        0x55);    //referer = fileId
+define('EVENT_PRES_DENIED',            0x56);    //referer = fileId
+define('EVENT_RECORDED_BLOG',        0x57);    //referer = fileId
+define('EVENT_CALLER_UNREGISTER',    0x58);
+define('EVENT_CALL_FORWARDED',        0x59);
 
-define('EVENT_MSG_APPROVED',		0x60);	//referer = fileId
-define('EVENT_MSG_DENIED',			0x61);	//referer = fileId
-define('EVENT_BLOCKED_ANON_CALL',	0x62);	//call was dropped because caller was anonymous
-define('EVENT_BLOCKED_CALLER',		0x63);	//caller is blocked from service
+define('EVENT_MSG_APPROVED',        0x60);    //referer = fileId
+define('EVENT_MSG_DENIED',            0x61);    //referer = fileId
+define('EVENT_BLOCKED_ANON_CALL',    0x62);    //call was dropped because caller was anonymous
+define('EVENT_BLOCKED_CALLER',        0x63);    //caller is blocked from service
 
-define('EVENT_CALLDROP_LINEFULL',	0x70);	//call was dropped because line is full
+define('EVENT_CALLDROP_LINEFULL',    0x70);    //call was dropped because line is full
 
 $event_name[EVENT_USER_LOGIN] = 'User login';
 $event_name[EVENT_USER_LOGOUT] = 'User logout';
@@ -57,11 +57,11 @@ $event_name[EVENT_CALLDROP_LINEFULL] = 'Call dropped (LINE FULL)';
  */
 function addEvent($_type, $_category = 0, $ownerId = 0, $_referer = 0)
 {
-	global $db;
-	if (!is_numeric($_type) || !is_numeric($_category) || !is_numeric($ownerId) || !is_numeric($_referer)) return false;
+    global $db;
+    if (!is_numeric($_type) || !is_numeric($_category) || !is_numeric($ownerId) || !is_numeric($_referer)) return false;
 
-	$q = 'INSERT INTO tblEvents SET type='.$_type.', category='.$_category.', ownerId='.$ownerId.',refererId='.$_referer.',timeCreated=NOW()';
-	return $db->insert($q);
+    $q = 'INSERT INTO tblEvents SET type='.$_type.', category='.$_category.', ownerId='.$ownerId.',refererId='.$_referer.',timeCreated=NOW()';
+    return $db->insert($q);
 }
 
 /**
@@ -69,16 +69,16 @@ function addEvent($_type, $_category = 0, $ownerId = 0, $_referer = 0)
  */
 function getEvents($_category = 0, $ownerId = 0, $limit = '')
 {
-	global $db;
-	if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
+    global $db;
+    if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
 
-	$q = 'SELECT * FROM tblEvents';
-	$q .= ' WHERE timeCreated IS NOT NULL';
-	if ($_category) $q .= ' AND category='.$_category;
-	if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	$q .= ' ORDER BY timeCreated DESC, eventId DESC'.$limit;
+    $q = 'SELECT * FROM tblEvents';
+    $q .= ' WHERE timeCreated IS NOT NULL';
+    if ($_category) $q .= ' AND category='.$_category;
+    if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+    $q .= ' ORDER BY timeCreated DESC, eventId DESC'.$limit;
 
-	return $db->getArray($q);
+    return $db->getArray($q);
 }
 
 /**
@@ -86,16 +86,16 @@ function getEvents($_category = 0, $ownerId = 0, $limit = '')
  */
 function getEventCnt($_category = 0, $ownerId = 0)
 {
-	global $db;
-	if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
+    global $db;
+    if (!is_numeric($_category) || !is_numeric($ownerId)) return false;
 
-	$q = 'SELECT COUNT(*) FROM tblEvents';
-	if ($_category) {
-		$q .= ' WHERE category='.$_category;
-		if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-	}
+    $q = 'SELECT COUNT(*) FROM tblEvents';
+    if ($_category) {
+        $q .= ' WHERE category='.$_category;
+        if ($ownerId) $q .= ' AND ownerId='.$ownerId;
+    }
 
-	return $db->getOneItem($q);
+    return $db->getOneItem($q);
 }
 
 /**
@@ -103,11 +103,11 @@ function getEventCnt($_category = 0, $ownerId = 0)
  */
 function showEvents($_category = 0, $ownerId = 0)
 {
-	$list = getEvents($_category, $ownerId);
+    $list = getEvents($_category, $ownerId);
 
-	$heads = array(t('Category'), t('Owner'), t('Type'), t('Referer'), t('Time'));
+    $heads = array(t('Category'), t('Owner'), t('Type'), t('Referer'), t('Time'));
 
-	echo xhtmlTable($list, $heads, 'eventRow');
+    echo xhtmlTable($list, $heads, 'eventRow');
 }
 
 /**
@@ -115,17 +115,17 @@ function showEvents($_category = 0, $ownerId = 0)
  */
 function eventRow($row, $i)
 {
-	global $event_name;
+    global $event_name;
 
-	$out  = '<tr>';
-	$out .= '<td>'.$row['category'].'</td>';
-	$out .= '<td>'.$row['ownerId'].'</td>';
-	$out .= '<td>'.$event_name[ $row['type'] ].'</td>';
-	$out .= '<td>'.$row['refererId'].'</td>';
-	$out .= '<td>'.$row['timeCreated'].'</td>';
-	$out .= '</tr>';
+    $out  = '<tr>';
+    $out .= '<td>'.$row['category'].'</td>';
+    $out .= '<td>'.$row['ownerId'].'</td>';
+    $out .= '<td>'.$event_name[ $row['type'] ].'</td>';
+    $out .= '<td>'.$row['refererId'].'</td>';
+    $out .= '<td>'.$row['timeCreated'].'</td>';
+    $out .= '</tr>';
 
-	return $out;
+    return $out;
 }
 
 ?>

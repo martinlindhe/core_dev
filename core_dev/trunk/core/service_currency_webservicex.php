@@ -10,22 +10,22 @@ define('WEBSERVICEX_CURRENCY_API', 'http://www.webservicex.net/CurrencyConvertor
 
 function webservicex_currency_conversion_rate($from, $to)
 {
-	$client = new SoapClient(WEBSERVICEX_CURRENCY_API);
+    $client = new SoapClient(WEBSERVICEX_CURRENCY_API);
 
-	try {
-		$params['FromCurrency'] = strtoupper($from);
-		$params['ToCurrency']   = strtoupper($to);
+    try {
+        $params['FromCurrency'] = strtoupper($from);
+        $params['ToCurrency']   = strtoupper($to);
 
-		$rate = $client->ConversionRate($params);
-		return $rate->ConversionRateResult;
+        $rate = $client->ConversionRate($params);
+        return $rate->ConversionRateResult;
 
-	} catch (Exception $e) {
-		echo 'exception: '.$e, "\n";
-		echo 'Request header:'.$client->__getLastRequestHeaders()."\n";
-		echo 'Request: '.$client->__getLastRequest()."\n";
-		echo 'Response: '. $client->__getLastResponse()."\n";
-		return false;
-	}
+    } catch (Exception $e) {
+        echo 'exception: '.$e, "\n";
+        echo 'Request header:'.$client->__getLastRequestHeaders()."\n";
+        echo 'Request: '.$client->__getLastRequest()."\n";
+        echo 'Response: '. $client->__getLastResponse()."\n";
+        return false;
+    }
 }
 
 ?>

@@ -12,86 +12,86 @@
 
 class ini
 {
-	private $filename;
+    private $filename;
 
-	function __construct($filename)
-	{
-		$this->filename = $filename;
-	}
+    function __construct($filename)
+    {
+        $this->filename = $filename;
+    }
 
-	function get($section, $key)
-	{
-		if (!file_exists($this->filename)) return false;
+    function get($section, $key)
+    {
+        if (!file_exists($this->filename)) return false;
 
-		$lines = file($this->filename, FILE_IGNORE_NEW_LINES);
+        $lines = file($this->filename, FILE_IGNORE_NEW_LINES);
 
-		$current_section = '';
-		$current_key     = '';
+        $current_section = '';
+        $current_key     = '';
 
-		foreach ($lines as $line_num => $l) {
+        foreach ($lines as $line_num => $l) {
 
-			if (substr($l, 0, 1) == '[' && substr($l, -1) == ']')
-				$current_section = substr($l, 1, -1);
+            if (substr($l, 0, 1) == '[' && substr($l, -1) == ']')
+                $current_section = substr($l, 1, -1);
 
-			if (strpos($l, '=') !== false) {
-				list($current_key, $val) = explode('=', $l, 2);
+            if (strpos($l, '=') !== false) {
+                list($current_key, $val) = explode('=', $l, 2);
 
-				if ($current_section == $section && $current_key == $key)
-					return $val;
-			}
-		}
-	}
+                if ($current_section == $section && $current_key == $key)
+                    return $val;
+            }
+        }
+    }
 
-	/**
-	 * Returns ini content parsed, used by set()
-	 */
-	function getAsArray()
-	{
-		if (!file_exists($this->filename)) return false;
+    /**
+     * Returns ini content parsed, used by set()
+     */
+    function getAsArray()
+    {
+        if (!file_exists($this->filename)) return false;
 
-		$lines = file($this->filename, FILE_IGNORE_NEW_LINES);
+        $lines = file($this->filename, FILE_IGNORE_NEW_LINES);
 
-		$current_section = '';
-		$current_key     = '';
-		$res = array();
+        $current_section = '';
+        $current_key     = '';
+        $res = array();
 
-		foreach ($lines as $line_num => $l) {
+        foreach ($lines as $line_num => $l) {
 
-			if (substr($l, 0, 1) == '[' && substr($l, -1) == ']') {
-				$current_section = substr($l, 1, -1);
-				$res[ $current_section ] = array();
-			}
+            if (substr($l, 0, 1) == '[' && substr($l, -1) == ']') {
+                $current_section = substr($l, 1, -1);
+                $res[ $current_section ] = array();
+            }
 
-			if (strpos($l, '=') !== false) {
-				list($current_key, $val) = explode('=', $l, 2);
+            if (strpos($l, '=') !== false) {
+                list($current_key, $val) = explode('=', $l, 2);
 
-				$res[ $current_section ][ $current_key ] = $val;
-			}
-		}
+                $res[ $current_section ][ $current_key ] = $val;
+            }
+        }
 
-		return $res;
-	}
+        return $res;
+    }
 
-	function set($section, $key, $val)
-	{
-		$data = $this->getAsArray();
+    function set($section, $key, $val)
+    {
+        $data = $this->getAsArray();
 
-		$data[ $section ][ $key ] = $val;
+        $data[ $section ][ $key ] = $val;
 
-		$out = '';
+        $out = '';
 
-		foreach ($data as $section => $values) {
+        foreach ($data as $section => $values) {
 
-			$out .= "[".$section."]\n";
+            $out .= "[".$section."]\n";
 
-			foreach ($values as $key => $val)
-				$out .= $key."=".$val."\n";
+            foreach ($values as $key => $val)
+                $out .= $key."=".$val."\n";
 
-			$out .= "\n";
-		}
+            $out .= "\n";
+        }
 
-		file_put_contents($this->filename, $out);
-	}
+        file_put_contents($this->filename, $out);
+    }
 
 }
 
