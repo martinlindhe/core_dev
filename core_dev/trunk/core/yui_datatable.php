@@ -20,13 +20,30 @@ class yui_datatable
     private $columns         = array();
     private $datalist        = array();
     private $div_holder_name = 'myDataTableHolder';
+    private $caption         = ''; //caption of the datatable
 
     function addColumn($key, $label)
     {
         $this->columns[] = array('key' => $key, 'label' => $label, 'sortable' => true, 'resizeable' => true); //XXX i jsArray2D om val === bool, skriv ut numeriskt
     }
 
-    function setDataList($arr) { $this->datalist = $arr; }
+    function setDataList($arr)
+    {
+        //only include registered array keys
+
+        foreach ($arr as $row)
+        {
+            $inc_row = array();
+            foreach ($row as $key => $val)
+                foreach ($this->columns as $inc_col)
+                    if ($inc_col['key'] == $key)
+                        $inc_row[$key] = $val;
+
+            $res[] = $inc_row;
+        }
+
+        $this->datalist = $res;
+    }
 
     function render()
     {
@@ -82,7 +99,7 @@ class yui_datatable
                 '};'.
 
                 'var myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",'.
-                    'myColumnDefs, myDataSource, {caption:"DataTable Caption"});'.
+                    'myColumnDefs, myDataSource, {caption:"'.$this->caption.'"});'.
 
                 'return {'.
                     'oDS: myDataSource,'.
