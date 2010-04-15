@@ -187,7 +187,7 @@ class handler
                     $this->session->theme = loadUserdataTheme($this->session->id, $this->session->default_theme);
                 }
 
-                $this->log('User logged in', LOGLEVEL_NOTICE);
+                $this->log( Users::getName($this->session->id).' logged in', LOGLEVEL_NOTICE);
                 $this->session->startPage();
             } else {
                 $this->error = t('Login failed');
