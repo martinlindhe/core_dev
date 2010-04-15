@@ -38,6 +38,8 @@ class XHTML_Header implements IXMLHeader
         $this->core_dev_root = coredev_webroot();
     }
 
+    function setCoreDevRoot($s) { $this->core_dev_root = $s; }
+
     function setTitle($t) { $this->title = $t; }
     function setFavicon($uri) { $this->favicon = $uri; }
     function setReloadTime($secs) { $this->reload_time = $secs; }
