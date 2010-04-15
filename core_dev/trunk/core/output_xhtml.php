@@ -2,13 +2,14 @@
 /**
  * $Id$
  *
- * Helper functions for rapid XHTML generation
+ * Helper functions for XHTML generation
  *
-  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
 require_once('locale.php');
 require_once('xhtml_header.php');
+require_once('output_js.php');
 
 /**
  * Takes an array of menu entries and creates a <ul><li>-style menu
@@ -503,63 +504,6 @@ function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url 
 
     $extern_url = $scheme.'://'.$_SERVER['SERVER_NAME'].$port.$path;
     return $extern_url;
-}
-
-/**
- * @param $list    array(key1=>val1, key2=>val2)
- * @return ["val1","val2",]   or  [key1:"val1",key2:"val2",]
- */
-function jsArray1D($list, $with_keys = true)
-{
-    $res = '[';
-
-    foreach ($list as $key => $val) {
-        $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
-        $res .= ($with_keys ? $key.':' : '').(is_numeric($val) ? $val : '"'.$val.'"').',';
-    }
-
-    $res .= ']';
-
-    return $res;
-}
-
-/**
- * Generates Javascript arrays
- * @param $list 2d array
- */
-function jsArray2D($list)
-{
-    $res = '['."\n";
-
-    foreach ($list as $l)
-    {
-        $res .= '{ ';
-
-        foreach ($l as $key => $val) {
-            $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
-            $res .= $key.':'.(is_numeric($val) ? $val : '"'.$val.'"').',';
-        }
-
-        $res .= '},'."\n";
-    }
-    $res .= ']';
-
-    return $res;
-}
-
-/**
- * @param $ms reload time in milliseconds (1/1000th second)
- */
-function jsReload($ms)
-{
-    if (!is_numeric($ms)) return false;
-
-    $res =
-    '<script type="text/javascript">'.
-    'setTimeout("location.reload();", '.$ms.');'.
-    '</script>';
-
-    return $res;
 }
 
 /**
