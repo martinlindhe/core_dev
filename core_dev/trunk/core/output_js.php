@@ -8,21 +8,32 @@
  */
 
 /**
+ * used internally by jsArray1D, jsArray2D
+ */
+function jsArrayFlat($list, $with_keys)
+{
+    $res = '';
+    foreach ($list as $key => $val)
+    {
+        $res .= ($with_keys ? $key.':' : '');
+        if (is_bool($val)) $res .= ($val ? '1' : '0');
+        else if (is_numeric($val)) $res .= $val;
+        else {
+            $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
+            $res .= '"'.$val.'"';
+        }
+        $res .= ',';
+    }
+    return $res;
+}
+
+/**
  * @param $list    array(key1=>val1, key2=>val2)
  * @return ["val1","val2",]   or  [key1:"val1",key2:"val2",]
  */
 function jsArray1D($list, $with_keys = true)
 {
-    $res = '[';
-
-    foreach ($list as $key => $val) {
-        $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
-        $res .= ($with_keys ? $key.':' : '').(is_numeric($val) ? $val : '"'.$val.'"').',';
-    }
-
-    $res .= ']';
-
-    return $res;
+    return '['.jsArrayFlat($list, $with_keys).']';
 }
 
 /**
@@ -34,16 +45,8 @@ function jsArray2D($list)
     $res = '['."\n";
 
     foreach ($list as $l)
-    {
-        $res .= '{ ';
+        $res .= '{ '.jsArrayFlat($l, true).'},'."\n";
 
-        foreach ($l as $key => $val) {
-            $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
-            $res .= $key.':'.(is_numeric($val) ? $val : '"'.$val.'"').',';
-        }
-
-        $res .= '},'."\n";
-    }
     $res .= ']';
 
     return $res;
