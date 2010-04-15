@@ -27,6 +27,7 @@ $valid_urls = array(
 'http://hh-1hallo.msn.blabla.com:80800/test/test/test.aspx?dd=dd&id=dki',
 'http://web5.uottawa.ca/admingov/reglements-methodes.html',
 'ftp://username:password@example.com:21/file.zip',
+'http://www.esa.int',
 );
 
 foreach ($valid_urls as $url)
@@ -37,6 +38,7 @@ $invalid_urls = array(
 'http:// invalid with spaces.com',
 'http://invalid.url-with a.space.com',
 'http://good-domain.com/bad url with space',
+'https://ssl.',   //XXX is detected as valid
 );
 
 foreach ($invalid_urls as $url)
