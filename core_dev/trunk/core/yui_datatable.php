@@ -13,18 +13,35 @@
 //TODO: enable pagination
 //TODO: enable inline cell editing
 
-//FIXME: include all scripts in one request
-
 class yui_datatable
 {
     private $columns         = array();
     private $datalist        = array();
     private $div_holder_name = 'myDataTableHolder';
-    private $caption         = ''; //caption of the datatable
+    private $caption         = ''; ///< caption for the datatable
 
     function addColumn($key, $label)
     {
-        $this->columns[] = array('key' => $key, 'label' => $label, 'sortable' => true, 'resizeable' => true); //XXX i jsArray2D om val === bool, skriv ut numeriskt
+        $this->columns[$key]['key']      = $key; ///XXX stupid, but simplifies other code
+        $this->columns[$key]['label']    = $label;
+        $this->columns[$key]['sortable'] = true;
+        //$this->columns[$key]['resizeable'] = true; //is disabled by default
+    }
+
+    /**
+     * Configures column type
+     */
+    function setColumnType($key, $type, $extra = '')
+    {
+        switch ($type) {
+        case 'link':
+            //$this->columns[$key]['type']       = $type;
+            $this->columns[$key]['formatter']  = 'myFormatLink';
+            $this->columns[$key]['extra_data'] = $extra;
+            break;
+
+        default: throw new Exception('Unknown column type '.$type);
+        }
     }
 
     function setDataList($arr)
@@ -36,7 +53,7 @@ class yui_datatable
             $inc_row = array();
             foreach ($row as $key => $val)
                 foreach ($this->columns as $inc_col)
-                    if ($inc_col['key'] == $key)
+                    if (isset($this->columns[$key]))
                         $inc_row[$key] = $val;
 
             $res[] = $inc_row;
@@ -49,14 +66,14 @@ class yui_datatable
     {
         $res = '<div id="'.$this->div_holder_name.'"></div> ';
 
-        //CSS file (default YUI Sam Skin)
-        $res .=
-        '<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.8.0r4/build/datatable/assets/skins/sam/datatable.css">'.
-        //Dependencies
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script>'.
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script>'.
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/datasource/datasource-min.js"></script>'.
+        $res .= '<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css">';
+        //$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js"></script>';
 
+        //Debug version:
+        $res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-debug.js&2.8.0r4/build/dom/dom-debug.js&2.8.0r4/build/event/event-debug.js&2.8.0r4/build/element/element-debug.js&2.8.0r4/build/datasource/datasource-debug.js&2.8.0r4/build/datatable/datatable-debug.js&2.8.0r4/build/logger/logger-debug.js"></script>';
+
+
+/*
         //OPTIONAL: JSON Utility (for DataSource)
         '<script src="http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js"></script>'.
 
@@ -71,34 +88,40 @@ class yui_datatable
 
         //OPTIONAL: Calendar (enables calendar editors)
         '<script src="http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js"></script>'.
+*/
 
-        //Source files
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/datatable/datatable-min.js"></script>';
-
-        //XXX remove this hack
-        $xxx = array();
-        foreach ($this->columns as $row) {
-            $xxx[] = $row['key'];
-        }
+        $data_var = 'yui_dt'.mt_rand(0,99999);
 
         $res .=
         '<script type="text/javascript">'."\n".
-
-        'YAHOO.example.Data = {'."\n".
-            'bookorders: '.jsArray2D($this->datalist).
-        '};'."\n".
+        'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n".
 
         'YAHOO.util.Event.addListener(window, "load", function() {'.
             'YAHOO.example.Basic = function() {'.
-                'var myColumnDefs = '.jsArray2D($this->columns).';'."\n".
 
-                'var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);'.
-                'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
-                'myDataSource.responseSchema = {'.
-                    'fields: '.jsArray1D($xxx, false).
+                /**
+                 * elLiner reference to parent cell
+                 * oRecord reference to current row, read other column value with oRecord.getData("key_name")
+                 * oColumn reference to current column (pointer to a row in myColumnDefs)
+                 * oData is the cell data
+                 */
+                'this.myFormatLink = function(elLiner, oRecord, oColumn, oData) {'.
+                    'var prefix = oColumn["extra_data"];'.
+                    'elLiner.innerHTML = "<a href=\"" + prefix + oData + "\">" + oData + "</a>";'.
                 '};'.
 
-                'var myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",'.
+                // Add the custom formatter to the shortcuts
+                'YAHOO.widget.DataTable.Formatter.myFormatLink = this.myFormatLink;'."\n".
+
+                'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
+                'myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
+                'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
+                'myDataSource.responseSchema = {'.
+                    //XXX return 2d array with key:name,parser:datatype    see http://developer.yahoo.com/yui/datatable/#basicsort
+                    'fields: '.jsArray1D(array_keys($this->columns), false).
+                '};'.
+
+                'this.myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",'.
                     'myColumnDefs, myDataSource, {caption:"'.$this->caption.'"});'.
 
                 'return {'.

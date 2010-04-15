@@ -45,7 +45,7 @@ function jsArray2D($list)
     $res = '['."\n";
 
     foreach ($list as $l)
-        $res .= '{ '.jsArrayFlat($l, true).'},'."\n";
+        $res .= '{'.jsArrayFlat($l, true).'},'."\n";
 
     $res .= ']';
 
