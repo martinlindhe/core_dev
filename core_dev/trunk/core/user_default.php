@@ -4,29 +4,31 @@
  *
  * Default user class, using tblUsers
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
+
+//STATUS: bad.. need rethinking & rewrite
 
 //TODO: implement remove() & unregister()
 
 require_once('user_base.php');
 require_once('class.Users.php');
 
-require_once('functions_userdata.php');    //for verifyRequiredUserdataFields()
+require_once('functions_userdata.php'); //for verifyRequiredUserdataFields()
 require_once('atom_moderation.php');    //for isReservedUsername()
 
-define('USERLEVEL_NORMAL',        0);
-define('USERLEVEL_WEBMASTER',    1);
-define('USERLEVEL_ADMIN',        2);
-define('USERLEVEL_SUPERADMIN',    3);
+define('USERLEVEL_NORMAL',      0);
+define('USERLEVEL_WEBMASTER',   1);
+define('USERLEVEL_ADMIN',       2);
+define('USERLEVEL_SUPERADMIN',  3);
 
 class user_default extends user_base
 {
-    var $reserved_usercheck = true;        ///< check if username is listed as reserved username, requires tblStopwords
-    var $userdata = true;                 ///< shall we use tblUserdata for required userdata fields?
+    var $reserved_usercheck = true;     ///< check if username is listed as reserved username, requires tblStopwords
+    var $userdata = true;               ///< shall we use tblUserdata for required userdata fields?
 
-    var $minlen_username = 3;            ///< minimum length for valid usernames
-    var $minlen_password = 4;            ///< minimum length for valid passwords
+    var $minlen_username = 3;           ///< minimum length for valid usernames
+    var $minlen_password = 4;           ///< minimum length for valid passwords
 
     function __construct($conf = array())
     {
@@ -34,14 +36,6 @@ class user_default extends user_base
         if (isset($conf['minlen_password'])) $this->minlen_password = $conf['minlen_password'];
         if (isset($conf['reserved_usercheck'])) $this->reserved_usercheck = $conf['reserved_usercheck'];
         if (isset($conf['userdata'])) $this->userdata = $conf['userdata'];
-    }
-
-    /**
-     * Creates a tblUsers entry without username or password
-     */
-    function reserve()
-    {
-        return Users::reserveId();
     }
 
     /**
@@ -72,7 +66,9 @@ class user_default extends user_base
             if ($chk !== true) return $chk;
         }
 
-        if (Users::cnt()) {
+        $userlist = new UserList();
+
+        if ($userlist->getCount()) {
             if (Users::getId($username)) return t('Username already exists');
         } else {
             //No users exists, give this user superadmin status

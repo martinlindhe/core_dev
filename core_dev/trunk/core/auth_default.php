@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: drop all code, refactor into AuthHandler.php
+
 //TODO: handleForgotPassword(): use client_smtp.php instead!
 
 require_once('auth_base.php');
@@ -53,68 +55,7 @@ class auth_default extends auth_base
         if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip());
     }
 
-    /**
-     * Handles logins
-     *
-     * @param $username
-     * @param $password
-     * @return true on success
-     */
-    function login($username, $password)
-    {
-        $data = $this->validLogin($username, $password);
 
-        if (!$data) {
-            $this->error = t('Login failed');
-            dp('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
-            return false;
-        }
-
-        if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
-            if ($this->mail_activate && !Users::isActivated($data['userId'])) {
-                $this->error = t('This account has not yet been activated.');
-                return false;
-            }
-
-            if (!$this->allow_login) {
-                $this->error = t('Logins currently not allowed.');
-                return false;
-            }
-
-            $blocked = isBlocked(BLOCK_USERID, $data['userId']);
-            if ($blocked) {
-                $this->error = t('Account blocked');
-                dp('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
-                return false;
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Logs out the user
-     */
-    function logout($userId)
-    {
-        $users = new Users();
-        $users->logoutTime($userId);
-
-        addEvent(EVENT_USER_LOGOUT, 0, $userId);
-    }
-
-    /**
-     * Checks if this is a valid login
-     *
-     * @return if valid login, return user data, else false
-     */
-    function validLogin($username, $password)
-    {
-        $users = new Users();
-        $id = $users->getId($username);
-        $enc_password = sha1( $id.sha1($this->sha1_key).sha1($password) );
-
-        return $users->validLogin($username, $enc_password);
-    }
 
 }
 ?>

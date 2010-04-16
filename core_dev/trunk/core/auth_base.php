@@ -7,16 +7,13 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: drop all code, refactor into AuthHandler.php
+
 require_once('atom_activation.php');    //for mail activation
 require_once('class.Sendmail.php');        //for sending mail
 
 abstract class auth_base
 {
-    abstract function login($username, $password);
-    abstract function logout($userId);
-
-    abstract function validLogin($username, $password);
-
     public $mail_activate_msg =
         "Hello. Someone (probably you) registered an account from IP __IP__
 
