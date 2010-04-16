@@ -3,6 +3,8 @@
  * $Id$
  */
 
+//TODO: kill all code, it predates admin_list_users.php which is being rewritten
+
 require_once('find_config.php');
 $h->session->requireAdmin();
 

@@ -18,11 +18,5 @@ if (!empty($config['feedback']['enabled'])) {
 }
 echo '<br/>';
 
-echo 'Registered users: <a href="admin_list_users.php">'.Users::cnt().'</a><br/>';
-echo 'Webmasters: <a href="admin_list_users.php?mode='.USERLEVEL_WEBMASTER.'">'.Users::webmasterCnt().'</a><br/>';
-echo 'Admins: <a href="admin_list_users.php?mode='.USERLEVEL_ADMIN.'">'.Users::adminCnt().'</a><br/>';
-echo 'SuperAdmins: <a href="admin_list_users.php?mode='.USERLEVEL_SUPERADMIN.'">'.Users::superAdminCnt().'</a><br/>';
-echo 'Users logged in: <a href="admin_users.php?online">'.Users::onlineCnt().'</a><br/>';
-
 require('design_admin_foot.php');
 ?>
