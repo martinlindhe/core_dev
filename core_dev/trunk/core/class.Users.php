@@ -120,31 +120,6 @@ class UsersXXX_DEPRECATE_KILL_KILL
     }
 
     /**
-     * Set user mode to $_mode
-     */
-    function setMode($_id, $_mode)
-    {
-        global $db, $session;
-        if (!$session->isSuperAdmin || !is_numeric($_id) || !is_numeric($_mode)) return false;
-
-        $q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
-        $db->update($q);
-
-        if ($_id == $session->id) return true;
-
-        switch ($_mode) {
-            case USERLEVEL_NORMAL: $msg = $session->username.' has reduced your usermode to normal member.'; break;
-            case USERLEVEL_WEBMASTER: $msg = $session->username.' has granted you webmaster rights.'; break;
-            case USERLEVEL_ADMIN: $msg = $session->username.' has granted you admin rights.'; break;
-            case USERLEVEL_SUPERADMIN: $msg = $session->username.' has granted you super admin rights.'; break;
-        }
-        sendMessage($_id, 'System message', $msg);
-
-        $session->log('Changed usermode for '.Users::getName($_id).' to '.$_mode);    //FIXME lookup from Session->userModes
-        return true;
-    }
-
-    /**
      * Returns the $_limit last users logged in, ordered by the latest logins first
      */
     function lastLoggedIn($_limit = 50)

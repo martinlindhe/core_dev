@@ -11,6 +11,7 @@
 //TODO: use editable yui_datatable
 
 require_once('AdminComponent.php');
+require_once('admin.UserHandler.php');
 
 class UserList extends AdminComponent
 {
@@ -33,15 +34,12 @@ class UserList extends AdminComponent
      */
     function onlineCount()
     {
-        global $db, $h;
+        global $db;
 
-        if (empty($h->session))
-            $timeout = 60 * 30; //30min
-        else
-            $timeout = $h->session->online_timeout;
+        $session = SessionHandler::getInstance();
 
         $q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
-        $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$timeout.' SECOND)';
+        $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
         return $db->getOneItem($q);
     }
 
@@ -50,15 +48,12 @@ class UserList extends AdminComponent
      */
     function allOnline()
     {
-        global $db, $h;
+        global $db;
 
-        if (empty($h->session))
-            $timeout = 60 * 30; //30min
-        else
-            $timeout = $h->session->online_timeout;
+        $session = SessionHandler::getInstance();
 
         $q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
-        $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$timeout.' SECOND)';
+        $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
         $q .= ' ORDER BY timeLastActive DESC';
         return $db->getArray($q);
     }
@@ -81,9 +76,9 @@ class UserList extends AdminComponent
 
     function render()
     {
-        global $h;
+        $session = SessionHandler::getInstance();
 
-        if ($h->session->isSuperAdmin && !empty($_GET['del']))
+        if ($session->isSuperAdmin && !empty($_GET['del']))
             Users::removeUser($_GET['del']);
 
         echo 'Registered users: <a href="'.$_SERVER['PHP_SELF'].'">'.$this->getCount().'</a><br/>';
@@ -100,13 +95,15 @@ class UserList extends AdminComponent
         if (!empty($_GET['user_mode'])) $mode = $_GET['user_mode'];
 
         //process updates
-        if ($h->session->isSuperAdmin && !empty($_POST)) {
+        if ($session->isSuperAdmin && !empty($_POST)) {
             $list = $this->getUsers($mode);
             foreach ($list as $row) {
                 if (empty($_POST['mode_'.$row['userId']])) continue;
                 $newmode = $_POST['mode_'.$row['userId']];
-                if ($newmode != $row['userMode'])
-                    Users::setMode($row['userId'], $newmode);
+                if ($newmode != $row['userMode']) {
+                    $userhandler = new UserHandler();
+                    $userhandler->setMode($row['userId'], $newmode);
+                }
             }
 
             if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode'])) {
@@ -128,7 +125,7 @@ class UserList extends AdminComponent
 
         $list = $this->getUsers($mode, $filter);
 
-        if ($h->session->isSuperAdmin) echo '<form method="post" action="">';
+        if ($session->isSuperAdmin) echo '<form method="post" action="">';
         echo '<table summary="" border="1">';
         echo '<tr>';
         echo '<th>Username</th>';
@@ -143,14 +140,14 @@ class UserList extends AdminComponent
             echo '<td>'.$user['timeLastActive'].'</td>';
             echo '<td>'.$user['timeCreated'].'</td>';
             echo '<td>';
-            if ($h->session->isSuperAdmin) {
+            if ($session->isSuperAdmin) {
                 echo '<select name="mode_'.$user['userId'].'">';
                 echo '<option value="'.USERLEVEL_NORMAL.'"'.($user['userMode']==USERLEVEL_NORMAL?' selected="selected"':'').'>Normal</option>';
                 echo '<option value="'.USERLEVEL_WEBMASTER.'"'.($user['userMode']==USERLEVEL_WEBMASTER?' selected="selected"':'').'>Webmaster</option>';
                 echo '<option value="'.USERLEVEL_ADMIN.'"'.($user['userMode']==USERLEVEL_ADMIN?' selected="selected"':'').'>Admin</option>';
                 echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
                 echo '</select> ';
-                if ($h->session->id != $user['userId'] && !$user['timeDeleted']) {
+                if ($session->id != $user['userId'] && !$user['timeDeleted']) {
                     echo coreButton('Delete', '?del='.$user['userId']);
                 }
             } else {
@@ -162,7 +159,7 @@ class UserList extends AdminComponent
         echo '<tr>';
         echo '<td colspan="3">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
         echo '<td>';
-        if ($h->session->isSuperAdmin) {
+        if ($session->isSuperAdmin) {
             echo '<select name="u_mode">';
             echo '<option value="'.USERLEVEL_NORMAL.'">Normal</option>';
             echo '<option value="'.USERLEVEL_WEBMASTER.'">Webmaster</option>';
@@ -176,7 +173,7 @@ class UserList extends AdminComponent
         echo '</tr>';
         echo '</table>';
 
-        if ($h->session->isSuperAdmin) {
+        if ($session->isSuperAdmin) {
             echo xhtmlSubmit('Save changes');
             echo '</form>';
         }

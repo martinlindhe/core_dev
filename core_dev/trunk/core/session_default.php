@@ -16,9 +16,6 @@ require_once('atom_logging.php');   //for logEntry()
 
 class session_default_DEPRECATE
 {
-    var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
-    //TODO: make online_timeout configurable
-
     //Aliases of $_SESSION[] variables
     var $lastActive;            ///< last active
     var $started;               ///< timestamp of when the session started

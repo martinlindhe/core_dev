@@ -18,6 +18,7 @@ class SessionHandler extends CoreBase
     var $usermode;              ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
     var $referer = '';          ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
     var $timeout = 86400;       ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+    var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 
     var $name = 'core_dev_sid'; ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page = 'index.php'; ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
@@ -62,7 +63,7 @@ class SessionHandler extends CoreBase
 //        if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
         if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
         if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
-        if (!isset($_SESSION['mode'])) $_SESSION['mode'] = 0;
+        if (!isset($_SESSION['usermode'])) $_SESSION['usermode'] = 0;
         if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
         if (!isset($_SESSION['isWebmaster'])) $_SESSION['isWebmaster'] = 0;
         if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
@@ -75,7 +76,7 @@ class SessionHandler extends CoreBase
 //        $this->ip = &$_SESSION['ip'];
         $this->id = &$_SESSION['id'];    //if id is set, also means that the user is logged in
         $this->username = &$_SESSION['username'];
-        $this->mode = &$_SESSION['mode'];
+        $this->usermode = &$_SESSION['usermode'];
         $this->lastActive = &$_SESSION['lastActive'];
         $this->isWebmaster = &$_SESSION['isWebmaster'];
         $this->isAdmin = &$_SESSION['isAdmin'];
