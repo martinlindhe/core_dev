@@ -32,27 +32,6 @@ class session_default_DEPRECATE
     ); ///< user modes
 
 
-    /**
-     * Kills the current session, clearing all session variables
-     */
-    function end()
-    {
-        $this->started = 0;
-        $this->username = '';
-        $this->ip = 0;
-        $this->mode = 0;
-        $this->isWebmaster = false;
-        $this->isAdmin = false;
-        $this->isSuperAdmin = false;
-        $this->theme = $this->default_theme;
-        $this->referer = '';
-
-        if (!$this->id) return;
-
-        $this->id = 0;
-    }
-
-
 
 
 }

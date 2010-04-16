@@ -7,6 +7,8 @@
 
 //STATUS: WIP, rewriting
 
+//TODO: maybe rename to LoginHandler (?)
+
 //TODO: cleanup/rewrite handleEvents()
 
 require_once('ViewModel.php');
@@ -98,12 +100,16 @@ $session->setUserName(xx);
     /**
      * Logs out the user
      */
-    function logout($userId)
+    function logout()
     {
-        $users = new Users();
-        $users->logoutTime($userId);
+        $session = SessionHandler::getInstance();
 
-        addEvent(EVENT_USER_LOGOUT, 0, $userId);
+        //addEvent(EVENT_USER_LOGOUT, 0, $session->id);
+        $session->setLogoutTime();
+        $session->end();
+        dp('User logged out');
+        $session->showLoggedOutStartPage();
+        die;
     }
 
     /**
@@ -120,6 +126,11 @@ $session->setUserName(xx);
         */
 
         $session = SessionHandler::getInstance();
+
+        //Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
+        if (isset($_GET['logout'])) {
+            $this->logout();
+        }
 
         //Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
         if (!$session->id && !empty($_POST['login_usr']) && isset($_POST['login_pwd'])) {

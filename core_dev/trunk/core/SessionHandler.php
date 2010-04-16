@@ -64,7 +64,7 @@ class SessionHandler extends CoreBase
         if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
         if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
         if (!isset($_SESSION['usermode'])) $_SESSION['usermode'] = 0;
-        if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
+//        if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
         if (!isset($_SESSION['isWebmaster'])) $_SESSION['isWebmaster'] = 0;
         if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
         if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
@@ -77,7 +77,7 @@ class SessionHandler extends CoreBase
         $this->id = &$_SESSION['id'];    //if id is set, also means that the user is logged in
         $this->username = &$_SESSION['username'];
         $this->usermode = &$_SESSION['usermode'];
-        $this->lastActive = &$_SESSION['lastActive'];
+//        $this->lastActive = &$_SESSION['lastActive'];
         $this->isWebmaster = &$_SESSION['isWebmaster'];
         $this->isAdmin = &$_SESSION['isAdmin'];
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
@@ -86,6 +86,23 @@ class SessionHandler extends CoreBase
 
 //        if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip()); //FIXME map to $this->auth->ip
 
+    }
+
+    /**
+     * Kills the current session, clearing all session variables
+     */
+    function end()
+    {
+        $this->started = 0;
+        $this->id = 0;
+        $this->username = '';
+        $this->usermode = 0;
+//        $this->ip = 0;
+        $this->isWebmaster  = false;
+        $this->isAdmin      = false;
+        $this->isSuperAdmin = false;
+        //$this->theme = $this->default_theme;
+        $this->referer = '';
     }
 
     /**
@@ -116,7 +133,7 @@ class SessionHandler extends CoreBase
 
         //addEvent(EVENT_USER_LOGIN, 0, $this->id);
 
-        dp($this->username.' logged in', LOGLEVEL_NOTICE);
+        dp($this->username.' logged in');
     }
 
     private function updateActiveTime()
@@ -131,14 +148,11 @@ class SessionHandler extends CoreBase
         $db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
     }
 
-/*
-    function logoutTime()
+    function setLogoutTime()
     {
         global $db;
         $db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->id);
     }
-*/
-
 
     /**
      * Handles session events, such as idle timeout check. called from the constructor
@@ -147,14 +161,6 @@ class SessionHandler extends CoreBase
     {
         //force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
         if (!empty($config['no_session']) || !$this->id) return;
-
-        //Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
-        if (isset($_GET['logout'])) {
-            $this->auth->logout($this->session->id);
-            $this->end();
-            $this->log('User logged out', LOGLEVEL_NOTICE);
-            $this->loggedOutStartPage();
-        }
 
         //Logged in: Check user activity - log out inactive user
         //FIXME: redo this- check lastactive timestamp from db when session is resumed instead

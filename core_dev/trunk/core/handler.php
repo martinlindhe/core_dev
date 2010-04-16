@@ -10,11 +10,12 @@
 //STATUS: drop & rewrite. keep SessionHandler part, see end of handleSessionEvents()
 
 require_once('core.php');
-require_once('db_mysqli.php');
-require_once('files_default.php');
+//require_once('db_mysqli.php');
+//require_once('files_default.php');
 //require_once('auth_default.php');
-require_once('session_default.php');
+//require_once('session_default.php');
 
+require_once('SqlFactory.php');
 require_once('ErrorHandler.php');
 require_once('AuthHandler.php');
 require_once('SessionHandler.php');

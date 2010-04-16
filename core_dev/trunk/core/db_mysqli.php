@@ -4,12 +4,14 @@
  *
  * MySQL db driver using the php_mysqli extension
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
+
+//STATUS: deprecating but keeping for compatiblity for a while, see sql_mysql.php for new driver
 
 require_once('db_base.php');
 
-class db_mysqli extends db_base
+class db_mysqli_XXX_DEPRECATED extends db_base
 {
     /**
      * Destructor

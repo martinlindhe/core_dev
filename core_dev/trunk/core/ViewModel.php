@@ -22,7 +22,6 @@ class ViewModel extends ArrayObject
         $errors = ErrorHandler::getInstance();
         $auth = AuthHandler::getInstance();
 
-
         ob_start();
         include(dirname(__FILE__) . '/' . $this->template);
         return ob_get_clean();
