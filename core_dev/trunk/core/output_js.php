@@ -55,7 +55,7 @@ function jsArray2D($list)
 /**
  * @param $ms reload time in milliseconds (1/1000th second)
  */
-function jsReload($ms)
+function js_reload($ms)
 {
     if (!is_numeric($ms)) return false;
 
@@ -65,6 +65,22 @@ function jsReload($ms)
     '</script>';
 
     return $res;
+}
+
+/**
+ * Redirects the user to a different page
+ */
+function js_redirect($url)
+{
+    if (headers_sent()) {
+        die(
+        '<script type="text/javascript">'.
+        'document.location.href="'.$url.'";'.
+        '</script>');
+    } else {
+        header('Location: '.$url);
+        die;
+    }
 }
 
 ?>

@@ -147,7 +147,7 @@ class XHTML_Header implements IXMLHeader
         $res .= '</script>';
 
         if ($this->reload_time)
-            $res .= jsReload($this->reload_time * 1000);
+            $res .= js_reload($this->reload_time * 1000);
 
         $res .= "\n";
         return $res;
