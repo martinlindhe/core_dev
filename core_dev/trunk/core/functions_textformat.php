@@ -429,4 +429,19 @@ function strip_spaces($s)
     return str_replace(' ', '', $s);
 }
 
+/**
+ * reduce excessive whitespace to a single space
+ */
+function reduce_whitespace($s)
+{
+    $s = str_replace('&#160;', ' ', $s); //nbsp in hex
+    $s = str_replace('&nbsp;', ' ', $s);
+    do {
+        $tmp = $s;
+        $s = str_replace('  ', ' ', $s);
+    } while ($s != $tmp);
+    return $s;
+}
+
+
 ?>

@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Locale functions for multi-language support
+ * Locale handling for multi-language support
  *
  * Uses ISO 639-2 language codes, see http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  *
@@ -23,10 +23,12 @@ class LocaleHandler
 {
     static $_instance; ///< singleton class
     var $handle;
-    private $locale = 'eng';  ///< 3-letter string representing current locale (ISO 639-2)
+    private $locale = '';  ///< 3-letter string representing current locale (ISO 639-2)
 
     private function __construct()
     {
+        //defaults to english
+        $this->set('eng');
     }
 
     public static function getInstance()
@@ -58,11 +60,15 @@ class LocaleHandler
      * @param $n month number (1-12)
      */
     function getMonthLong($n) { return $this->handle->month_long[$n-1]; }
+    function getMonthShort($n) { return $this->handle->month_short[$n-1]; }
 
     /**
      * @param $n weekday number (0-6), 0=sunday, 1=monday
      */
     function getWeekdayLong($n) { return $this->handle->weekday_long[$n]; }
+    function getWeekdayMedium($n) { return $this->handle->weekday_medium[$n]; }
+    function getWeekdayShort($n) { return $this->handle->weekday_short[$n]; }
+    function getWeekday1Char($n) { return $this->handle->weekday_1char[$n]; }
 
 }
 
