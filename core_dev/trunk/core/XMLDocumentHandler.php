@@ -26,6 +26,7 @@ class XMLDocumentHandler extends CoreBase
 
     private function __construct()
     {
+        $this->handleEvents();
     }
 
     public static function getInstance()
@@ -52,7 +53,7 @@ class XMLDocumentHandler extends CoreBase
         $this->objs[] = $obj;
     }
 
-    function handleEvents()
+    private function handleEvents()
     {
         $auth = AuthHandler::getInstance();
         $auth->handleEvents();
@@ -63,8 +64,6 @@ class XMLDocumentHandler extends CoreBase
 
     function render()
     {
-        $this->handleEvents();
-
 /*
         if (!empty($_POST))
             foreach ($this->objs as $obj)
