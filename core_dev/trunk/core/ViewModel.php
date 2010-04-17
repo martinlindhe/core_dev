@@ -19,11 +19,13 @@ class ViewModel extends ArrayObject
     public function render()
     {
         //available variables in the scope of the view
-        $errors = ErrorHandler::getInstance();
-        $auth = AuthHandler::getInstance();
+        $errors  = ErrorHandler::getInstance();
+        $auth    = AuthHandler::getInstance();
+        $session = SessionHandler::getInstance();
+        $header  = XHTMLHeader::getInstance();
 
         ob_start();
-        include(dirname(__FILE__) . '/' . $this->template);
+        include($this->template);
         return ob_get_clean();
     }
 }

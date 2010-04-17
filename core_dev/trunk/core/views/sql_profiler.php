@@ -9,6 +9,7 @@
 
 $rand_id = mt_rand(1,5000000);
 
+echo '<br/>';
 echo '<a href="#" onclick="return toggle_element(\'sql_profiling'.$rand_id.'\');">'.$this->db->queries_cnt.' sql</a>';
 
 $sql_height = ($this->db->queries_cnt*60)+70;

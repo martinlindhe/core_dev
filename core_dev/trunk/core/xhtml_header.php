@@ -2,70 +2,88 @@
 /**
  * $Id$
  *
- * XHTML header controller class
  * Generates a XHTML compilant header
  *
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('core.php');
-require_once('output_xhtml.php');
+require_once('IXMLComponent.php');
 
 //STATUS: ok
-//XXX: remove usage of getProjectPath
 
-interface IXMLHeader
-{
-    public function render();
-}
+//TODO: rewrite "include feeds" functionality
 
-class XHTML_Header implements IXMLHeader
+//TODO LATER: look at xmlwriter in php 6
+
+class XHTMLHeader extends CoreBase implements IXMLComponent
 {
+    static $_instance;                  ///< singleton class
+
     private $title, $favicon;
-    private $js            = array();
-    private $css           = array();
-    private $feeds         = array();
-    private $search        = array();
-    private $onload        = array();
-    private $keywords      = array();
 
-    private $reload_time   = 0;          ///< time after page load to reload the page, in seconds
-    private $mimetype      = 'text/html';
-    private $core_dev_root = '';         ///< web path to core_dev for ajax api calls
+    private $embed_js      = '';
+    private $embed_css     = '';
 
-    function __construct()
+    private $include_js    = array();
+    private $include_css   = array();
+    private $include_feeds = array();
+
+    private $meta_keywords = array();
+    private $opensearch    = array();
+
+    private $reload_time   = 0;         ///< time after page load to reload the page, in seconds
+    private $core_dev_root = '';        ///< web path to core_dev for ajax api calls
+
+    private function __construct()
     {
-        $this->core_dev_root = coredev_webroot();
     }
+
+    public static function getInstance()
+    {
+        if (!(self::$_instance instanceof self))
+            self::$_instance = new self();
+
+        return self::$_instance;
+    }
+
+    public function handlePost($p) {}
 
     function setCoreDevRoot($s) { $this->core_dev_root = $s; }
 
     function setTitle($t) { $this->title = $t; }
     function setFavicon($uri) { $this->favicon = $uri; }
     function setReloadTime($secs) { $this->reload_time = $secs; }
-    function setMimeType($type) { $this->mimetype = $mime; }
 
-    function addFeed($uri) { $this->feeds[] = $uri; }
-    function addJs($uri) { $this->js[] = $uri; }
-    function addCss($uri) { $this->css[] = $uri; }
+    function includeFeed($uri) { $this->include_feeds[] = $uri; }
+    function includeJs($uri) { $this->include_js[] = $uri; }
+    function includeCss($uri) { $this->include_css[] = $uri; }
+
+    /**
+     * CSS snippets to be added to XXX
+     */
+    function addCss($s) { $this->embed_css .= $s; }
+
+    /**
+     * JavaScript snippets to be added to the <body onload=""> tag
+     */
     function addOnload($js) { $this->onload[] = $js; }
 
     function addOpenSearch($uri, $name = 'Search box')
     {
         $arr = array('url' => $uri, 'name' => $name);
-        $this->search[] = $arr;
+        $this->opensearch[] = $arr;
     }
 
     /**
      * Adds META keywords tags
      */
-    function addKeyword($w)
+    function addMetaKeyword($w)
     {
         if (is_array($w))
             foreach ($w as $t)
-                $this->keywords[] = $t;
+                $this->meta_keywords[] = $t;
         else
-            $this->keywords[] = $w;
+            $this->meta_keywords[] = $w;
     }
 
     /**
@@ -75,76 +93,54 @@ class XHTML_Header implements IXMLHeader
     {
         global $h;
 
-        if ($this->mimetype)
-            header('Content-type: '.$this->mimetype);
-
         $res =
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
         "\n".
         '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.
-        '<head>'.
-        '<title>'.$this->title.'</title>'.
-        '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+        '<head>';
 
-        if ($this->keywords)
-            $res .= '<meta name="keywords" content="'.implode(',',$this->keywords).'"/>';
+        $res .= '<style type="text/css">';
+        $res .= '@import url('.$this->core_dev_root.'css/core.css);';
 
-        $res .= '<link rel="stylesheet" type="text/css" href="'.$this->core_dev_root.'css/core.css"/>';
+        foreach ($this->include_css as $css)
+            $res .= '@import url('.$css.');';
+        $res .= $this->embed_css;
 
-        foreach ($this->css as $css)
-            $res .= '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
+        $res .= '</style>';
 
-        foreach ($this->feeds as $feed) {
+        $res .= '<title>'.$this->title.'</title>';
+
+        $res .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+
+        if ($this->meta_keywords)
+            $res .= '<meta name="keywords" content="'.implode(',',$this->meta_keywords).'"/>';
+
+        foreach ($this->include_feeds as $feed) {
             //XXX: clean up feed URI's etc, make it more general
             if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
             else $extra = '';
             $res .= "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
         }
 
-        foreach ($this->search as $search)
+        foreach ($this->opensearch as $search)
             $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
 
         if ($this->favicon)
             $res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
 
-        //XXX: make theme path configurable
-        $theme_dir = $this->core_dev_root.'css/themes/';
-
-        if (!empty($h->session) && $theme_dir)
-            $res .= '<link rel="stylesheet" type="text/css" href="'.$theme_dir.$h->session->theme.'"/>';
-
         $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
-        //$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/swfobject.js"></script>';
 
-        /*
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ajax.js"></script>';
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/fileareas.js"></script>';
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/chat_1on1.js"></script>';
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/prototype.js"></script>';
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/scriptaculous.js?load=builder,effects,dragdrop,controls,slider"></script>';
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/ext/cropper.js"></script>';
-        */
+        //XXX let classes register needed js,css etc headers somehow
 
-        if (!empty($h->files) && $h->files->allow_rating) //XXX fixme: let files class register this one
-            $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/rate.js"></script>';
-
-        foreach ($this->js as $uri)
+        foreach ($this->include_js as $uri)
             $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
 
         $res .= '</head>';
 
         $res .= '<body class="yui-skin-sam"'; // required for YUI
-        if (count($this->onload)) {
-            $res .= ' onload="';
-            foreach ($this->onload as $onload)
-                $res .= $onload;
-        }
-        $res .= '">';
-
-        $res .= '<script type="text/javascript">';
-        //XXX rename _ext_core to _core_api since its url to coredev api
-        $res .= 'var _ext_ref="'.getProjectPath(2).'",_ext_core="'.$this->core_dev_root.'api/";';
-        $res .= '</script>';
+        if ($this->embed_js)
+            $res .= ' onload="'.implode('', $this->embed_js).'"';
+        $res .= '>';
 
         if ($this->reload_time)
             $res .= js_reload($this->reload_time * 1000);

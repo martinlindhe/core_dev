@@ -9,6 +9,18 @@
 //TODO: re-add "forgot password" feature
 //TODO: use xhtml_form (?)
 
+$header->addCss('
+.login_box {
+ font-size: 14px;
+ border: 1px solid #aaa;
+ min-width: 280px;
+ color: #000;
+ background-color: #DDD;
+ padding: 10px;
+ border-radius:15px 15px 15px 15px; /*css3*/
+ -moz-border-radius:15px 15px 15px 15px; /*ff*/
+}');
+
 echo '<div class="login_box">';
 
 $tab = 'login';    //default tab show login form

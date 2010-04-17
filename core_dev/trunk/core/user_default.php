@@ -17,12 +17,7 @@ require_once('class.Users.php');
 require_once('functions_userdata.php'); //for verifyRequiredUserdataFields()
 require_once('atom_moderation.php');    //for isReservedUsername()
 
-define('USERLEVEL_NORMAL',      0);
-define('USERLEVEL_WEBMASTER',   1);
-define('USERLEVEL_ADMIN',       2);
-define('USERLEVEL_SUPERADMIN',  3);
-
-class user_default extends user_base
+class user_default_XXX_DEPRECATED extends user_base
 {
     var $reserved_usercheck = true;     ///< check if username is listed as reserved username, requires tblStopwords
     var $userdata = true;               ///< shall we use tblUserdata for required userdata fields?

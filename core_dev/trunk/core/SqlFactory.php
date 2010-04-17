@@ -7,10 +7,7 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: ok
-
-//require_once('db_mysql.php');
-//require_once('db_mysql_profiler.php');
+//STATUS: wip
 
 class SqlFactory
 {

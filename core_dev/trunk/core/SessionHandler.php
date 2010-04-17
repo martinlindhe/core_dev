@@ -9,6 +9,10 @@
 
 //TODO: drop session_default.php, session_base.php
 
+define('USERLEVEL_NORMAL',      0);
+define('USERLEVEL_WEBMASTER',   1);
+define('USERLEVEL_ADMIN',       2);
+define('USERLEVEL_SUPERADMIN',  3);
 
 class SessionHandler extends CoreBase
 {
