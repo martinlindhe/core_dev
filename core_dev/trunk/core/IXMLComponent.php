@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: IXMLComponent.php 201 2010-04-07 19:28:04Z ml $
+ * $Id$
  *
  *
  * @author Martin Lindhe, 2010 <martin@startwars.org>

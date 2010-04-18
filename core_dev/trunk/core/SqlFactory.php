@@ -9,27 +9,31 @@
 
 //STATUS: wip
 
+require_once('SqlHandler.php');
+
 class SqlFactory
 {
     /**
      * Returns a SQL database object
      * @param $type <string> type of database handler (mysql)
-     * @param $conf <array> config options
      * @param $profiler <bool> set to true to profile SQL performance
      */
-    public static function factory($driver = 'mysql', $conf = '', $profiler = false)
+    public static function factory($driver = 'mysql', $profiler = false)
     {
         if (!require_once('sql_'.$driver.($profiler ? '_profiler': '').'.php'))
             throw new Exception('DatabaseFactory: Unknown driver '.$driver);
 
-        switch(strtolower($driver)) {
-        case 'mysql':
+        $targetClass = 'Database'.strtolower($driver).($profiler ? 'Profiler' : '');
 
-            //XXX more elegant way to select profiler?
-            return $profiler ? DatabaseMySQLProfiler::getInstance($conf) : DatabaseMySQL::getInstance($conf);
-        }
+        if (!class_exists($targetClass))
+            throw new Exception ('Database driver not found '.$targetClass);
+
+        $rc = new ReflectionClass($targetClass);
+        if (!$rc->implementsInterface('IDB_SQL'))
+            throw new Exception('Database driver must implement IDB_SQL');
+
+        return new $targetClass();
     }
-
 }
 
 ?>

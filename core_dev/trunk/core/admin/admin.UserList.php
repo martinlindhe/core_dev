@@ -5,7 +5,8 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-//STATUS: cleanup & rewrite
+//STATUS: wip
+//TODO: move GET/POST handling to separate function
 //TODO: factor our sql from here
 
 //TODO: use editable yui_datatable
@@ -77,6 +78,9 @@ class UserList extends AdminComponent
     function render()
     {
         $session = SessionHandler::getInstance();
+
+        if (!$session->isAdmin)
+            return;
 
         if ($session->isSuperAdmin && !empty($_GET['del']))
             Users::removeUser($_GET['del']);

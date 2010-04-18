@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: XMLDocument.php 201 2010-04-07 19:28:04Z ml $
+ * $Id$
  *
  * Renders a set of views into a XML document (XML, XHTML, VoiceXML)
  *

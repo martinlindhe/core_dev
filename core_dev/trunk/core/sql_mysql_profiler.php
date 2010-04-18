@@ -14,10 +14,8 @@
 
 require_once('sql_mysql.php');
 
-class DatabaseMySQLProfiler extends DatabaseMySQL
+class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 {
-    private static $_instance; //singleton instance
-
     var $time_initial = 0;       ///< profiler: microtime for db instance
     var $time_measure = 0;       ///< profiler: time when profiling started
     var $time_connect = 0;       ///< profiler: time it took to connect to db
@@ -26,31 +24,10 @@ class DatabaseMySQLProfiler extends DatabaseMySQL
     var $queries      = array(); ///< Used internally for the SQL profiler
     var $query_error  = array(); ///< Used internally for the SQL profiler
 
-    private function __construct($conf) //singleton: requires private constructor
+    function __construct()
     {
-        global $config;
-
         $this->time_initial = microtime(true);
-
-        if (!is_array($conf))
-            return;
-
-        if (!empty($conf['host']))     $this->host     = $conf['host'];
-        if (!empty($conf['port']))     $this->port     = $conf['port'];
-        if (!empty($conf['username'])) $this->username = $conf['username'];
-        if (!empty($conf['password'])) $this->password = $conf['password'];
-        if (!empty($conf['database'])) $this->database = $conf['database'];
-        if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
-    }
-
-    private function __clone() {}      //singleton: prevent cloning of class
-
-    public static function getInstance($param = '')
-    {
-        if ( !(self::$_instance instanceof self) )
-            self::$_instance = new self($param);
-
-        return self::$_instance;
+        $this->xx_test = mt_rand(0,9999999);
     }
 
     /**
@@ -58,10 +35,11 @@ class DatabaseMySQLProfiler extends DatabaseMySQL
      */
     public function renderProfiler()
     {
-        //XXXX TODO: make db model available too
-
         $view = new ViewModel('views/sql_profiler.php');
+
+        //makes db model available
         $view->db = $this;
+
         return $view->render();
     }
 

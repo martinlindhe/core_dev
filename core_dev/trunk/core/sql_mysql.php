@@ -3,7 +3,6 @@
  * $Id: db_mysql.php 201 2010-04-07 19:28:04Z ml $
  *
  * MySQL db driver using the php_mysqli extension
- * Implemented as a singleton class
  *
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
@@ -14,30 +13,19 @@ require_once('ISql.php');
 //STATUS: wip
 //TODO: move all measure_*() to db_mysql_profiler parent methods
 
-class DatabaseMySQL extends CoreBase implements IDB_SQL
+class DatabaseMysql extends CoreBase implements IDB_SQL
 {
-    private static $_instance;       ///< singleton instance
+    var $db_handle       = false;  ///< Internal db handle
+    var $host            = '';     ///< Hostname or numeric IP address of the db server
+    var $port            = 0;      ///< Port number
+    var $username        = '';     ///< Username to use to connect to the database
+    var $password        = '';     ///< Password to use to connect to the database
+    var $database        = '';     ///< Name of the database to connect to
+    var $charset         = 'utf8'; ///< What character set to use
+    protected $connected = false;  ///< Are we connected to the db?
 
-    var $db_handle    = false; ///< Internal db handle
-    var $host         = '';    ///< Hostname or numeric IP address of the db server
-    var $port         = 0;     ///< Port number
-    var $username     = '';    ///< Username to use to connect to the database
-    var $password     = '';    ///< Password to use to connect to the database
-    var $database     = '';    ///< Name of the database to connect to
-    var $charset      = 'utf8';///< What character set to use
-    protected $connected    = false; ///< Are we connected to the db?
-
-    /**
-     * Constructor. Initializes db driver and connects to the database
-     *
-     * @param $settings is array with DB-specific settings
-     */
-    private function __construct($conf) //singleton: requires private constructor
+    function setConfig($conf)
     {
-        global $config;
-
-        $this->time_initial = microtime(true);
-
         if (!is_array($conf))
             return;
 
@@ -47,16 +35,6 @@ class DatabaseMySQL extends CoreBase implements IDB_SQL
         if (!empty($conf['password'])) $this->password = $conf['password'];
         if (!empty($conf['database'])) $this->database = $conf['database'];
         if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
-    }
-
-    private function __clone() {}      //singleton: prevent cloning of class
-
-    public static function getInstance($param = '')
-    {
-        if ( !(self::$_instance instanceof self) )
-            self::$_instance = new self($param);
-
-        return self::$_instance;
     }
 
     /**
@@ -84,11 +62,7 @@ class DatabaseMySQL extends CoreBase implements IDB_SQL
         if (!$this->username) $this->username = 'root';
 
         //silence warning from failed connection and display our error instead
-        if (!$this->db_handle = @new mysqli($this->host, $this->username,
-                                            $this->password, $this->database, $this->port)) {
-            throw new Exception("Could not connect to the database");
-            return false;
-        }
+        $this->db_handle = @new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
             die('<div class="critical">db_mysqli->connect: '.$this->db_handle->connect_error.'</div>');
