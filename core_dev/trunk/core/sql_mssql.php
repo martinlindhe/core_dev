@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: dont work. need rewrite, see sql_mysql.php
+
 require_once('db_base.php');
 
 class db_mssql extends db_base
@@ -129,9 +131,9 @@ class db_mssql extends db_base
         if ($result) {
             $query = 'select SCOPE_IDENTITY() AS last_insert_id';
             $query_result = mssql_query($query, $this->db_handle) or die('Query failed, no insert id: '.$query);
-                                       
+
             $query_result = mssql_fetch_object($query_result);
-           
+
             $ret_id = $query_result->last_insert_id;;
             mssql_free_result($query_result);
         } else {
@@ -340,7 +342,7 @@ class db_mssql extends db_base
      * Lock table from reading
      *
      * @param $t table to lock
-     * 
+     *
      * FIXME
      */
     function lock($t)
@@ -350,7 +352,7 @@ class db_mssql extends db_base
 
     /**
      * Unlock tables
-     * 
+     *
      * FIXME
      */
     function unlock()
@@ -360,7 +362,7 @@ class db_mssql extends db_base
 
     /**
      * Returns true if a database with this name already exists
-     * 
+     *
      * FIXME
      */
     function findDatabase($dbname)
@@ -380,7 +382,7 @@ class db_mssql extends db_base
     }
 
     /**
-     * 
+     *
      * FIXME
      */
     function createDatabase($dbname, $charset = 'utf8')
@@ -393,7 +395,7 @@ class db_mssql extends db_base
 
     /**
      * Returns true if a table with this name already exists
-     * 
+     *
      * FIXME
      */
     function findTable($tblname)
@@ -407,7 +409,7 @@ class db_mssql extends db_base
     }
 
     /**
-     * 
+     *
      * FIXME
      */
     function createTable($tblname, $layout, $charset = 'utf8')
@@ -435,7 +437,7 @@ class db_mssql extends db_base
     }
 
     /**
-     * 
+     *
      * FIXME
      */
     function verifyTable($tblname, $layout, $charset = 'utf8')
@@ -450,7 +452,7 @@ class db_mssql extends db_base
     }
 
     /**
-     * 
+     *
      * FIXME
      */
     function parseLayout($layout)

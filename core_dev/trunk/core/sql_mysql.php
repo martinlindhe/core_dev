@@ -94,35 +94,13 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      * @param $q the query to execute
      * @return result
      */
-    function real_query($q)
+    private function real_query($q)
     {
         if (!$this->connected)
             $this->connect();
 
         return $this->db_handle->query($q);
     }
-
-    /**
-     * Performs a general query. Should only be used with special commands that don't return anything.
-     * Use the other functions for common SQL operations such as select, insert, update, delete
-     * Example: LOCK TABLES
-     *
-     * @param $q is the query to execute
-     * @return the result of the query, if anything
-     */
-    /*function query($q)
-    {
-        $this->measure_time();
-
-        $result = $this->real_query($q);
-
-        if (!$result && $this->getDebug())
-            $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-
-        $this->measure_query($q);
-
-        return $result;
-    }*/
 
     /**
      * Performs a query that does a INSERT
@@ -132,22 +110,12 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function insert($q)
     {
-        $this->measure_time();
-
         $result = $this->real_query($q);
 
-        $ret_id = 0;
+        if ($result)
+            return $this->db_handle->insert_id;
 
-        if ($result) {
-            $ret_id = $this->db_handle->insert_id;
-        } else {
-            if ($this->getDebug())
-                $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-        }
-
-        $this->measure_query($q);
-
-        return $ret_id;
+        return false;
     }
 
     /**
@@ -167,22 +135,12 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function delete($q)
     {
-        $this->measure_time();
-
         $result = $this->real_query($q);
 
-        $affected_rows = false;
+        if ($result)
+            return $this->db_handle->affected_rows;
 
-        if ($result) {
-            $affected_rows = $this->db_handle->affected_rows;
-        } else {
-            if ($this->getDebug())
-                $this->query_error[ $this->queries_cnt ] = $this->db_handle->error;
-        }
-
-        $this->measure_query($q);
-
-        return $affected_rows;
+        return false;
     }
 
     /**
@@ -195,6 +153,52 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     function update($q) { return $this->delete($q); }
 
     /**
+     * Selects one column of one row of data
+     * Example: SELECT a FROM t WHERE id=1 (where id is distinct)
+     *
+     * @param $q is the query to execute
+     * @return one column-result only
+     */
+    function getOneItem($q)
+    {
+        if (!$result = $this->real_query($q))
+            return false;
+
+        if ($result->num_rows > 1) {
+            echo "ERROR: DatabaseMysql::getOneItem() returned ".$result->num_rows." rows!\n";
+            return false;
+        }
+
+        $data = $result->fetch_row();
+        $result->free();
+
+        return $data[0];
+    }
+
+    /**
+     * Selects one row of data
+     * Example: SELECT * FROM t WHERE id=1 (where id is distinct)
+     *
+     * @param $q is the query to execute
+     * @return one row-result with columns as array indexes
+     */
+    function getOneRow($q)
+    {
+        if (!$result = $this->real_query($q))
+            return false;
+
+        if ($result->num_rows > 1) {
+            echo "ERROR: DatabaseMysql::getOneRow() returned ".$result->num_rows." rows!\n";
+            return false;
+        }
+
+        $data = $result->fetch_array(MYSQLI_ASSOC);
+        $result->free();
+
+        return $data;
+    }
+
+    /**
      * Selects data
      * Example: SELECT * FROM t
      *
@@ -203,23 +207,15 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function getArray($q)
     {
-        $this->measure_time();
-
-        if (!$result = $this->real_query($q)) {
-            if ($this->getDebug())
-                $this->profileError($q, $this->db_handle->error);
-            return array();
-        }
+        if (!$result = $this->real_query($q))
+            return false;
 
         $data = array();
 
-        while ($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc())
             $data[] = $row;
-        }
 
         $result->free();
-
-        $this->measure_query($q);
 
         return $data;
     }
@@ -230,6 +226,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function get1dArray($q)
     {
+        die('fixme update get1dArray');
         $this->measure_time();
 
         if (!$result = $this->real_query($q)) {
@@ -259,6 +256,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function getMappedArray($q)
     {
+        die('fixme update getMappedArray');
         $this->measure_time();
 
         if (!$result = $this->real_query($q)) {
@@ -288,6 +286,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function getNumArray($q)
     {
+        die('fixme update getNumArray');
         $this->measure_time();
 
         if (!$result = $this->real_query($q)) {
@@ -306,72 +305,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         $this->measure_query($q);
 
         return $data;
-    }
-
-    /**
-     * Selects one row of data
-     * Example: SELECT * FROM t WHERE id=1 (where id is distinct)
-     *
-     * @param $q is the query to execute
-     * @return one row-result with columns as array indexes
-     */
-    function getOneRow($q)
-    {
-        if (!$result = $this->real_query($q)) {
-
-            if ($this->getDebug())
-                $this->setError( $this->db_handle->error.': '.$q );
-            else
-                $this->setError( $this->db_handle->error );
-
-            return array();
-        }
-
-        if ($result->num_rows > 1) {
-            echo "ERROR: DB_MySQLi::getOneRow() returned ".$result->num_rows." rows!\n";
-            if ($this->getDebug())
-                echo "Query: ".$q."\n";
-            die;
-        }
-
-        $data = $result->fetch_array(MYSQLI_ASSOC);
-
-        $result->free();
-
-        return $data;
-    }
-
-    /**
-     * Selects one column of one row of data
-     * Example: SELECT a FROM t WHERE id=1 (where id is distinct)
-     *
-     * @param $q is the query to execute
-     * @return one column-result only
-     */
-    function getOneItem($q)
-    {
-        $this->measure_time();
-
-        if (!$result = $this->real_query($q)) {
-            if ($this->getDebug())
-                $this->profileError($q, $this->db_handle->error);
-            return '';
-        }
-
-        if ($result->num_rows > 1) {
-            echo "ERROR: DB_MySQLi::getOneItem() returned ".$result->num_rows." rows!\n";
-            if ($this->getDebug())
-                echo "Query: ".$q."\n";
-            die;
-        }
-
-        $data = $result->fetch_row();
-        $result->free();
-
-        $this->measure_query($q);
-
-        if (!$data) return false;
-        return $data[0];
     }
 
 }

@@ -36,10 +36,6 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     public function renderProfiler()
     {
         $view = new ViewModel('views/sql_profiler.php');
-
-        //makes db model available
-        $view->db = $this;
-
         return $view->render();
     }
 
@@ -50,17 +46,83 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         $this->measure_connect();
     }
 
+    function insert($q)
+    {
+        $this->measure_time();
+        $res = parent::insert($q);
+        $this->measure_query($q);
+
+        if ($res === false)
+            $this->profileError($q, $this->db_handle->error);
+
+        return $res;
+    }
+
+    function delete($q)
+    {
+        $this->measure_time();
+        $res = parent::delete($q);
+        $this->measure_query($q);
+
+        if ($res === false)
+            $this->profileError($q, $this->db_handle->error);
+
+        return $res;
+    }
+
+    function getOneItem($q)
+    {
+        $this->measure_time();
+        $res = parent::getOneItem($q);
+        $this->measure_query($q);
+
+        if ($res === false)
+            $this->profileError($q, $this->db_handle->error);
+
+        return $res;
+    }
+
     function getOneRow($q)
     {
         $this->measure_time();
         $res = parent::getOneRow($q);
         $this->measure_query($q);
 
-        if (!$res)
+        if ($res === false)
             $this->profileError($q, $this->db_handle->error);
 
         return $res;
     }
+
+    function getArray($q)
+    {
+        $this->measure_time();
+        $res = parent::getArray($q);
+        $this->measure_query($q);
+
+        if ($res === false)
+            $this->profileError($q, $this->db_handle->error);
+
+        return $res;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Shows MySQLi driver status
@@ -137,7 +199,6 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
      */
     function measure_time()
     {
-        if (!$this->getDebug()) return;
         $this->time_measure = microtime(true);
     }
 
@@ -154,7 +215,6 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
      */
     function measure_query($q)
     {
-        if (!$this->getDebug()) return;
         $this->time_spent[ $this->queries_cnt ] = microtime(true) - $this->time_measure;
         $this->queries[ $this->queries_cnt ] = $q;
         $this->queries_cnt++;

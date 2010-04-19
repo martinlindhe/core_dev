@@ -250,4 +250,16 @@ function encode_cookie_string($arr)
     return $res;
 }
 
+/**
+ * Returns true if client ip is localhost
+ */
+function is_client_localhost()
+{
+    //XXX resolve ip's to common format
+    if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' ||  $_SERVER['REMOTE_ADDR'] == '::ffff:127.0.0.1')
+        return true;
+
+    return false;
+}
+
 ?>

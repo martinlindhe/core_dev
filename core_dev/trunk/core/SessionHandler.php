@@ -119,7 +119,6 @@ class SessionHandler extends CoreBase
      */
     function start($id, $username, $usermode)
     {
-        global $config;
         $this->id = $id;
         $this->username = $username;
         $this->usermode = $usermode;
@@ -132,7 +131,8 @@ class SessionHandler extends CoreBase
         $this->updateLoginTime();
 
         //FIXME: move the sql somehwere else
-        global $db;
+        $db = SqlHandler::getInstance();
+
         $geoip = IPv4_to_GeoIP(client_ip());
         $db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$geoip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
@@ -143,19 +143,19 @@ class SessionHandler extends CoreBase
 
     private function updateActiveTime()
     {
-        global $db;
+        $db = SqlHandler::getInstance();
         $db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
     }
 
     private function updateLoginTime()
     {
-        global $db;
+        $db = SqlHandler::getInstance();
         $db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
     }
 
     function setLogoutTime()
     {
-        global $db;
+        $db = SqlHandler::getInstance();
         $db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->id);
     }
 
@@ -248,8 +248,6 @@ class SessionHandler extends CoreBase
      */
     function showErrorPage()
     {
-        global $db;
-
         if ($db->getErrorCount()) {
             echo "DEBUG: session->redirect aborted due to error".ln();
             return;

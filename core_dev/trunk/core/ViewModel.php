@@ -22,6 +22,7 @@ class ViewModel extends ArrayObject
         $errors  = ErrorHandler::getInstance();
         $auth    = AuthHandler::getInstance();
         $session = SessionHandler::getInstance();
+        $db      = SqlHandler::getInstance();
         $header  = XHTMLHeader::getInstance();
 
         ob_start();

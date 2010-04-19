@@ -5,6 +5,8 @@
  * Tool to view, modify and delete a user
  */
 
+//STATUS: wip
+
 class UserEditor
 {
     function render()
@@ -14,29 +16,33 @@ class UserEditor
         if (!$session->isSuperAdmin)
             return;
 
-
         if (empty($_GET['id'])) die;
 
         $user = new UserHandler($_GET['id']);
         if (!$user->getId()) {
             echo '<h2>No such user exists</h2>';
-            die;
-        }
-
-        if ($session->isSuperAdmin) {
-            if (isset($_GET['delete'])) $user->remove();
-            //if (isset($_GET['block'])) addBlock(BLOCK_USERID, $userId);
-            if (!empty($_POST['chgpwd'])) {
-                $user->setPassword($_POST['chgpwd']);
-                echo '<div class="item">Password changed!</div>';
-            }
+            return;
         }
 
         echo '<h1>User admin for '.$user->getName().'</h1>';
 
         if ($session->isSuperAdmin) {
-            echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$user->getId().'&amp;delete">Delete user</a><br/><br/>';
-            echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$user->getId().'&amp;block">Block user</a><br/><br/>';
+            if (isset($_GET['remove'])) {
+                $user->remove();
+                echo '<div class="item">User removed</div>';
+                return;
+            }
+            //if (isset($_GET['block'])) addBlock(BLOCK_USERID, $userId);
+            if (!empty($_POST['chgpwd'])) {
+                $user->setPassword($_POST['chgpwd']);
+                echo '<div class="item">Password changed!</div>';
+                return;
+            }
+        }
+
+        if ($session->isSuperAdmin) {
+            echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$user->getId().'&remove">Remove user</a><br/><br/>';
+            //echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$user->getId().'&block">Block user</a><br/><br/>';
 
             echo xhtmlForm();
             echo t('Change password').': ';

@@ -54,12 +54,12 @@ class AuthHandler extends CoreBase
      */
     function login($username, $password)
     {
-        global $db;
-
         $user = new User();
         $id = $user->loadByName($username);
 
         $enc_password = sha1( $id.sha1($this->encrypt_key).sha1($password) );
+
+        $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_password).'" AND timeDeleted IS NULL';
         $data = $db->getOneRow($q);
