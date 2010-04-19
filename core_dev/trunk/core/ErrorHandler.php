@@ -9,11 +9,10 @@
 
 class ErrorHandler
 {
-    static $_instance; ///< singleton class
+    static $_instance; ///< singleton
 
-    private function __construct()
-    {
-    }
+    private function __construct() { }
+    private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
     {

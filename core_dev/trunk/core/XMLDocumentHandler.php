@@ -16,7 +16,7 @@ require_once('class.CoreBase.php');
 
 class XMLDocumentHandler extends CoreBase
 {
-    static $_instance;               ///< singleton class
+    static $_instance;               ///< singleton
 
     private $design_head;
     private $design_foot;
@@ -28,6 +28,8 @@ class XMLDocumentHandler extends CoreBase
     {
         $this->handleEvents();
     }
+
+    private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
     {

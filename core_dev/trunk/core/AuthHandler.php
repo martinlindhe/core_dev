@@ -15,16 +15,15 @@ require_once('ViewModel.php');
 
 class AuthHandler extends CoreBase
 {
-    static $_instance;               ///< singleton class
+    static $_instance;               ///< singleton
     var $allow_logins = true;        ///< do app currently allow logins?
     var $allow_registrations = true; ///< do app currently allow registrations?
     private $encrypt_key = '';
     var $check_ip = true;
-    private $ip; ///< used for validating if client ip changes
+    private $ip;                     ///< to validate if client ip changes
 
-    private function __construct()
-    {
-    }
+    private function __construct() { }
+    private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
     {

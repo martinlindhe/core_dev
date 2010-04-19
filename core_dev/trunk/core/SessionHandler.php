@@ -16,26 +16,27 @@ define('USERLEVEL_SUPERADMIN',  3);
 
 class SessionHandler extends CoreBase
 {
-    static $_instance; ///< singleton class
+    static $_instance;             ///< singleton
+
     var $id;
     var $username;
-    var $usermode;              ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
-    var $referer = '';          ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
-    var $timeout = 86400;       ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+    var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
+    var $referer = '';             ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
+    var $timeout = 86400;          ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 
-    var $name = 'core_dev_sid'; ///< session cookie name, needs to be unique for multiple projects on same webhost
+    var $name = 'core_dev_sid';    ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page = 'index.php'; ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
     var $logged_out_start_page = 'index.php';
     var $error_page = 'error.php'; ///< redirects the user to this page to show errors
 
-    var $isWebmaster;           ///< is user webmaster?
-    var $isAdmin;               ///< is user admin?
-    var $isSuperAdmin;          ///< is user superadmin?
+    var $isWebmaster;              ///< is user webmaster?
+    var $isAdmin;                  ///< is user admin?
+    var $isSuperAdmin;             ///< is user superadmin?
 
-    private function __construct()
-    {
-    }
+    private function __construct() { }
+
+    private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
     {

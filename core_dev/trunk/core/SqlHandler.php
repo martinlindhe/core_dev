@@ -28,9 +28,9 @@ class SqlHandler
 {
     static $_instances = array();
 
-    private function __construct() //singleton class
-    {
-    }
+    private function __construct() { } //singleton
+
+    private function __clone() {}      //singleton: prevent cloning of class
 
     /**
      * Registers a database object to the instance pool
