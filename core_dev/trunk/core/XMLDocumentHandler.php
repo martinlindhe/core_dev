@@ -106,6 +106,14 @@ class XMLDocumentHandler extends CoreBase
             echo $obj->render();
         }
 
+        //if ($session->isAdmin) {
+            $db = SqlHandler::getInstance();
+
+            if ($db instanceof DatabaseMySQLProfiler)
+                echo $db->renderProfiler();
+        //}
+
+
         if ($this->design_foot) {
             $view = new ViewModel($this->design_foot);
             echo $view->render();
