@@ -13,6 +13,7 @@
 
 require_once('AdminComponent.php');
 require_once('admin.UserHandler.php');
+require_once('admin.UserEditor.php');
 
 class UserList extends AdminComponent
 {
@@ -75,11 +76,11 @@ class UserList extends AdminComponent
         return $db->getArray($q);
     }
 
-    function render()
+    function render()  //XXX make a view of this
     {
         $session = SessionHandler::getInstance();
 
-        if (!$session->isAdmin)
+        if (!$session->isSuperAdmin)
             return;
 
         if ($session->isSuperAdmin && !empty($_GET['del'])) {

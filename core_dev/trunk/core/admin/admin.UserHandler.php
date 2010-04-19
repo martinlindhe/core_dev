@@ -10,14 +10,20 @@
 class UserHandler
 {
     private $id;
+    private $name;
 
     function __construct($id = 0)
     {
-        if ($id)
-            $this->id = $id;
+        if (is_numeric($id)) {
+
+            $user = new User($id);
+            $this->id   = $user->getId();
+            $this->name = $user->getName();
+        }
     }
 
     function getId() { return $this->id; }
+    function getName() { return $this->name; }
 
     function create($username, $usermode)
     {
@@ -25,7 +31,8 @@ class UserHandler
         if (!is_numeric($usermode)) return false;
 
         $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",userMode='.$usermode.',timeCreated=NOW()';
-        $this->id = $db->insert($q);
+        $this->id   = $db->insert($q);
+        $this->name = $username;
 
         dp('Created user '.$this->id.' with usermode '.$usermode);
 

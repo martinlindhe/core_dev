@@ -66,7 +66,7 @@ class AuthHandler extends CoreBase
 
         if (!$data) {
             $this->setError( t('Login failed') );
-            dp('Failed login attempt: username '.$username, LOGLEVEL_WARNING);
+            dp('Failed login attempt: username '.$username);
             return false;
         }
 //XXXX konfigurera $session härifrån:
