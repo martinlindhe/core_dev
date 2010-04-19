@@ -10,17 +10,24 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
+//STATUS: wip
+
 class RequestHandler
 {
     static $_instance; ///< singleton
-    protected $_controller, $_action, $_params, $_body;
+
+    protected $_controller; ///< /CONTROLLER/view/id/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
+    protected $_view;       //<  /controller/VIEW/id/   XXX view parameter for the "controller", or later will be the method to run on the controller
+    protected $_id;         ///< /controller/view/ID/
+    protected $_params;
+//    protected $_body;
 
     public function getParams() { return $this->_params; }
     public function getController() { return $this->_controller; }
-    public function getAction() { return $this->_action; }
-    public function getBody() { return $this->_body; }
-    public function setBody($body) { $this->_body = $body; }
-    public function addBody($body) { $this->_body .= $body; }
+    public function getView() { return $this->_view; }
+//    public function getBody() { return $this->_body; }
+//    public function setBody($body) { $this->_body = $body; }
+//    public function addBody($body) { $this->_body .= $body; }
 
     public static function getInstance()
     {
@@ -33,21 +40,30 @@ class RequestHandler
     private function __construct()
     {
         $request = $_SERVER['REQUEST_URI'];
-        $request = str_replace('?', '/', $request);
-        $request = str_replace('&', '/', $request);
-        $request = str_replace('=', '/', $request);
 
         $arr = explode('/', trim($request, '/'));
         $this->_controller = !empty($arr[0]) ? $arr[0] : 'index';
-        $this->_action     = !empty($arr[1]) ? $arr[1] : 'render';
+        $this->_view       = !empty($arr[1]) ? $arr[1] : 'default';
+
+//XXX if controller or view contains non-alphanumeric letters, DIE here!
+
+        //$request = str_replace('?', '/', $request);
+        //$request = str_replace('&', '/', $request);
+        //$request = str_replace('=', '/', $request);
+
 
         if (count($arr) <= 2)
             return;
 
+        if (is_numeric($arr[2]))
+            $this->_id = $arr[2];
+/*
+        //XXX FIXME parse params properly
         for ($idx=2, $cnt = count($arr); $idx < $cnt; $idx += 2)
             $res[ $arr[$idx] ] = isset($arr[$idx+1]) ? $arr[$idx+1] : true;
 
         $this->_params = $res;
+*/
     }
 
     private function __clone() {}      //singleton: prevent cloning of class
@@ -57,22 +73,21 @@ class RequestHandler
      */
     public function route()
     {
-        if (!class_exists($this->getController()))
-            throw new Exception("No controller named ".$this->getController() );
+        $view_file = 'views/'.$this->getController().'.php';
 
-        $rc = new ReflectionClass($this->getController());
-        if (!$rc->implementsInterface('IController'))
-            throw new Exception("Controller dont implement IController");
+        if (!file_exists($view_file))
+            throw new Exception('No file named '.$view_file );
 
-        if (!$rc->hasMethod($this->getAction()))
-            throw new Exception("No action named ".$this->getAction()." on controller ".$this->getController() );
+        //XXX expose params.. using Req::getParams() inside view, or exposing here?
+        $view = new ViewModel($view_file);
+        $view->view   = $this->_view;
+        $view->id     = $this->_id;
+        //$view->params = $this->_params;
 
-        $controller = $rc->newInstance();
-        $method = $rc->getMethod($this->getAction());
-        $method->invoke($controller);
+        $page = XMLDocumentHandler::getInstance();
+        $page->attach( $view->render() );
     }
 
 }
 
 ?>
-

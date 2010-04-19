@@ -9,6 +9,9 @@
 
 class UserEditor
 {
+    private $id;
+    function setId($n) { $this->id = $n; }
+
     function render()
     {
         $session = SessionHandler::getInstance();
@@ -16,9 +19,7 @@ class UserEditor
         if (!$session->isSuperAdmin)
             return;
 
-        if (empty($_GET['id'])) die;
-
-        $user = new UserHandler($_GET['id']);
+        $user = new UserHandler($this->id);
         if (!$user->getId()) {
             echo '<h2>No such user exists</h2>';
             return;
@@ -27,7 +28,7 @@ class UserEditor
         echo '<h1>User admin for '.$user->getName().'</h1>';
 
         if ($session->isSuperAdmin) {
-            if (isset($_GET['remove'])) {
+            if ($session->id != $this->id && isset($_GET['remove'])) {
                 $user->remove();
                 echo '<div class="item">User removed</div>';
                 return;
@@ -41,8 +42,10 @@ class UserEditor
         }
 
         if ($session->isSuperAdmin) {
-            echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$user->getId().'&remove">Remove user</a><br/><br/>';
-            //echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$user->getId().'&block">Block user</a><br/><br/>';
+            if ($session->id != $this->id) {
+                echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$this->id.'&remove">Remove user</a><br/><br/>';
+                //echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$this->id.'&block">Block user</a><br/><br/>';
+            }
 
             echo xhtmlForm();
             echo t('Change password').': ';

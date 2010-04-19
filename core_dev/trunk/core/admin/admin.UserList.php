@@ -145,7 +145,7 @@ class UserList extends AdminComponent
         foreach ($list as $user)
         {
             echo '<tr'.($user['timeDeleted']?' class="critical"':'').'>';
-            echo '<td><a href="admin_user.php?id='.$user['userId'].'">'.$user['userName'].'</a></td>';
+            echo '<td><a href="/admin/useredit/'.$user['userId'].'">'.$user['userName'].'</a></td>';
             echo '<td>'.$user['timeLastActive'].'</td>';
             echo '<td>'.$user['timeCreated'].'</td>';
             echo '<td>';

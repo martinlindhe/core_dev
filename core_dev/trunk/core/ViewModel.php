@@ -24,6 +24,7 @@ class ViewModel extends ArrayObject
         $session = SessionHandler::getInstance();
         $db      = SqlHandler::getInstance();
         $header  = XHTMLHeader::getInstance();
+        $page    = XMLDocumentHandler::getInstance();
 
         ob_start();
         include($this->template);
