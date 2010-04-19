@@ -226,14 +226,8 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function get1dArray($q)
     {
-        die('fixme update get1dArray');
-        $this->measure_time();
-
-        if (!$result = $this->real_query($q)) {
-            if ($this->getDebug())
-                $this->profileError($q, $this->db_handle->error);
-            return array();
-        }
+        if (!$result = $this->real_query($q))
+            return false;
 
         $data = array();
 
@@ -241,8 +235,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
             $data[] = $row[0];
 
         $result->free();
-
-        $this->measure_query($q);
 
         return $data;
     }

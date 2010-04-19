@@ -119,7 +119,14 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         return $res;
     }
 
+    function get1dArray($q)
+    {
+        $this->measure_time();
+        $res = parent::get1dArray($q);
+        $this->measure_query($q);
 
+        return $res;
+    }
 
 
 
