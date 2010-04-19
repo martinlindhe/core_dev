@@ -9,7 +9,7 @@
 
 //FIXME: get rid of getProjectPath()
 
-require_once('locale.php'); //for translations
+require_once('LocaleHandler.php'); //for translations
 require_once('output_xhtml.php');   //for XHTML output helper functions
 require_once('functions_general.php');  //FIXME: anything in there worth keeping?
 require_once('functions_textformat.php');   //for decodeDataSize()

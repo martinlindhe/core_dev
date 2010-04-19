@@ -7,7 +7,7 @@
   * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-require_once('locale.php');
+require_once('LocaleHandler.php');
 require_once('xhtml_header.php');
 require_once('output_js.php');
 
