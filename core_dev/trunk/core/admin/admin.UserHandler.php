@@ -2,78 +2,86 @@
 /**
  * $Id$
  *
- * Class to deal with registering, editing, removing, validating, activating etc a user
+ * Class to deal with creating and modifying a user
  */
 
-//STATUS: draft
+//STATUS: wip
 
 class UserHandler
 {
-    function registerUser($username, $mode)
-    {
-        global $db;
-        if (!is_numeric($mode)) return false;
+    private $id;
 
-        $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",userMode='.$mode.',timeCreated=NOW()';
-        return $db->insert($q);
+    function __construct($id = 0)
+    {
+        if ($id)
+            $this->id = $id;
     }
 
-    function updateUser($id, $username, $mode)
+    function getId() { return $this->id; }
+
+    function create($username, $usermode)
     {
         global $db;
-        if (!is_numeric($id) || !is_numeric($mode)) return false;
+        if (!is_numeric($usermode)) return false;
 
-        $q = 'UPDATE tblUsers SET userName="'.$db->escape($username).'",userMode='.$_mode.',timeCreated=NOW() WHERE userId='.$id;
+        $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",userMode='.$usermode.',timeCreated=NOW()';
+        $this->id = $db->insert($q);
+
+        dp('Created user '.$this->id.' with usermode '.$usermode);
+
+        return $this->id;
+    }
+
+    /**
+     * Marks specified user as "deleted"
+     */
+    function remove()
+    {
+        global $db;
+
+        $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$this->id;
         $db->update($q);
     }
 
+
+/*
+    function setUserName($username)
+    {
+        global $db;
+
+        $q = 'UPDATE tblUsers SET userName="'.$db->escape($username).'" WHERE userId='.$this->id;
+        $db->update($q);
+    }
+*/
     /**
      * Sets a new password for the user
      *
      * @param $_id user id
-     * @param $_pwd1 password to set
-     * @param $_pwd2 password to compare with (optional)
+     * @param $_pwd password to set
      */
-    function setPassword($_id, $_pwd1, $_pwd2 = '', $key = '')
+    function setPassword($_pwd)
     {
-        global $db, $h;
-        if (!is_numeric($_id)) return false;
-        /* This function is referenced in the Auth-class too, but in that
-         * context you cant use the $auth-object, since it's itself.
-         * If $key is empty, the reference wasn't from the Auth-class
-         * so therefore use the key from the Auth-object instead.
-         */
-        if (empty($key)) $key = $h->auth->sha1_key;
+        global $db;
 
-        if ($_pwd2) {
-            if (strlen($_pwd1) < 4) {
-                $h->error = t('Password must be at least 4 characters long');
-                return false;
-            }
-
-            if ($_pwd1 != $_pwd2) {
-                $h->error = t('The passwords doesnt match');
-                return false;
-            }
-        }
-//FIXME move password algorithm out of here!!!
-        $q = 'UPDATE tblUsers SET userPass="'.sha1( $_id.sha1($key).sha1($_pwd1) ).'" WHERE userId='.$_id;
+        $auth = AuthHandler::getInstance();
+        $q = 'UPDATE tblUsers SET userPass="'.sha1( $this->id.sha1( $auth->getEncryptKey() ).sha1($_pwd) ).'" WHERE userId='.$this->id;
         $db->update($q);
+
         return true;
     }
 
     /**
      * Set user mode to $_mode
      */
-    function setMode($_id, $_mode)
+    function setMode($usermode)
     {
         global $db;
-        if (!is_numeric($_id) || !is_numeric($_mode)) return false;
+        if (!is_numeric($usermode)) return false;
 
-        $q = 'UPDATE tblUsers SET userMode='.$_mode.' WHERE userId='.$_id;
+        $q = 'UPDATE tblUsers SET userMode='.$usermode.' WHERE userId='.$this->id;
         $db->update($q);
 
-//dp('Changed usermode for '.Users::getName($_id).' to '.$_mode);    //FIXME lookup from Session->userModes
+        dp('Changed usermode for user '.$this->id.' to '.$usermode);
         return true;
     }
 

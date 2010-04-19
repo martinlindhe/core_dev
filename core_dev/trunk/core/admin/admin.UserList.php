@@ -82,8 +82,10 @@ class UserList extends AdminComponent
         if (!$session->isAdmin)
             return;
 
-        if ($session->isSuperAdmin && !empty($_GET['del']))
-            Users::removeUser($_GET['del']);
+        if ($session->isSuperAdmin && !empty($_GET['del'])) {
+            $userhandler = new UserHandler($_GET['del']);
+            $userhandler->remove();
+        }
 
         echo 'Registered users: <a href="'.$_SERVER['PHP_SELF'].'">'.$this->getCount().'</a><br/>';
         echo 'Webmasters: <a href="'.$_SERVER['PHP_SELF'].'?user_mode='.USERLEVEL_WEBMASTER.'">'.$this->getCount(USERLEVEL_WEBMASTER).'</a><br/>';
@@ -105,13 +107,15 @@ class UserList extends AdminComponent
                 if (empty($_POST['mode_'.$row['userId']])) continue;
                 $newmode = $_POST['mode_'.$row['userId']];
                 if ($newmode != $row['userMode']) {
-                    $userhandler = new UserHandler();
-                    $userhandler->setMode($row['userId'], $newmode);
+                    $userhandler = new UserHandler($row['userId']);
+                    $userhandler->setMode($newmode);
                 }
             }
 
             if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode'])) {
-                $newUserId = $h->user->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
+                $auth = AuthHandler::getInstance();
+
+                $newUserId = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
                 if (!is_numeric($newUserId)) {
                     echo '<div class="critical">'.$newUserId.'</div>';
                 } else {

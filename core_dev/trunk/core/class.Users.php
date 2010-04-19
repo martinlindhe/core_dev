@@ -190,18 +190,6 @@ class UsersXXX_DEPRECATE_KILL_KILL
     }
 
     /**
-     * Marks specified user as "deleted"
-     */
-    function removeUser($userId)
-    {
-        global $db;
-        if (!is_numeric($userId)) return false;
-
-        $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$userId;
-        $db->update($q);
-    }
-
-    /**
      * Randomly selects a user's presentation
      */
     function randomUserPage()
