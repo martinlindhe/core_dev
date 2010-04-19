@@ -41,9 +41,20 @@ class Episode extends CoreProperty
             throw new Exception ('Unhandled episode format: '.$s);
     }
 
+    /**
+     * @return Episode in "1x7" format
+     */
     function get()
     {
         return $this->season.'x'.$this->episode;
+    }
+
+    /**
+     * @return Episode in "S01E07" format
+     */
+    function getFormatted()
+    {
+        return 'S'.str_pad($this->season, 2, '0', STR_PAD_LEFT).'E'.str_pad($this->episode, 2, '0', STR_PAD_LEFT);
     }
 }
 
