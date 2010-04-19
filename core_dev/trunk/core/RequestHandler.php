@@ -17,7 +17,7 @@ class RequestHandler
     static $_instance; ///< singleton
 
     protected $_controller; ///< /CONTROLLER/view/id/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
-    protected $_view;       //<  /controller/VIEW/id/   XXX view parameter for the "controller", or later will be the method to run on the controller
+    protected $_view;       ///< /controller/VIEW/id/  XXX view parameter for the "controller", or later will be the method to run on the controller
     protected $_id;         ///< /controller/view/ID/
     protected $_params;
 //    protected $_body;

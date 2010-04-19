@@ -27,8 +27,9 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     function __construct()
     {
         $this->time_initial = microtime(true);
-        $this->xx_test = mt_rand(0,9999999);
     }
+
+    function getErrorCount() { return count($query_error); }
 
     /**
      * Renders the object using a view script

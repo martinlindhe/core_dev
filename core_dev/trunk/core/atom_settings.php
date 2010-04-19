@@ -7,82 +7,14 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-define('SETTING_APPDATA',      1); ///< setting global to the whole application
-define('SETTING_USERDATA',     2); ///< settings used to store personal userdata
-define('SETTING_CALLERDATA',   3); ///< settings used to store data of a caller
-define('SETTING_EXTERNALDATA', 4); ///< settings used to store data with external ownerid (such as a Facebook id)
-//TODO remove these and make more userdata field types instead
+//STATUS: deprecated, use Setting.php
 
-//XXX use id's from 50 and up for application specified types
+die('atom_settings.php deprecated!');
+
 
 $config['settings']['default_signature'] = 'Signature';    //default name of the userdata field used to contain the forum signature
 
-/**
- * Saves a setting associated with $ownerId
- *
- * @param $_type type of setting
- * @param $categoryId setting category (use 0 if unneeded)
- * @param $ownerId owner of the setting
- * @param $settingName name of the setting, text-string
- * @param $settingValue value of the setting
- * @return true on success
- */
-function saveSetting($_type, $categoryId, $ownerId, $settingName, $settingValue)
-{
-    global $db;
-    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
-    if ($_type != SETTING_APPDATA && !$ownerId) return false;
 
-    $settingName = $db->escape($settingName);
-    $settingValue = $db->escape($settingValue);
-
-    $q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$ownerId;
-    $q .= ' AND categoryId='.$categoryId;
-    $q .= ' AND settingType='.$_type;
-    $q .= ' AND settingName="'.$settingName.'"';
-    if ($db->getOneItem($q)) {
-        $q = 'UPDATE tblSettings SET settingValue="'.$settingValue.'",timeSaved=NOW() WHERE ownerId='.$ownerId;
-        $q .= ' AND categoryId='.$categoryId;
-        $q .= ' AND settingType='.$_type;
-        $q .= ' AND settingName="'.$settingName.'"';
-        $db->update($q);
-    } else {
-        $q = 'INSERT INTO tblSettings SET ownerId='.$ownerId.',';
-        $q .= 'categoryId='.$categoryId.',';
-        $q .= 'settingType='.$_type.',settingName="'.$settingName.'",';
-        $q .= 'settingValue="'.$settingValue.'",timeSaved=NOW()';
-        $db->insert($q);
-    }
-    return true;
-}
-
-/**
- * Loads a setting associated with $ownerId
- *
- * @param $_type type of setting
- * @param $categoryId setting category (use 0 if unneeded)
- * @param $ownerId owner of the setting
- * @param $settingName name of the setting, text-string
- * @param $defaultValue is the default value to return if no such setting was previously stored
- * @param $all if true, return the full row
- * @return the value of the requested setting
- */
-function loadSetting($_type, $categoryId, $ownerId, $settingName, $defaultValue = '', $all = false)
-{
-    global $db;
-    if (!is_numeric($_type) || !is_numeric($categoryId) || !is_numeric($ownerId) || !$settingName) return false;
-
-    if ($all) $q = 'SELECT * FROM tblSettings';
-    else      $q = 'SELECT settingValue FROM tblSettings';
-    $q .= ' WHERE settingType='.$_type;
-    $q .= ' AND categoryId='.$categoryId;
-    if ($ownerId) $q .= ' AND ownerId='.$ownerId;
-    $q .= ' AND settingName="'.$db->escape($settingName).'"';
-    $result = $db->getOneRow($q);
-    if ($all) return $result;
-    if ($result) return $result['settingValue'];
-    return $defaultValue;
-}
 
 /**
  * Loads the owner of a name-value pair

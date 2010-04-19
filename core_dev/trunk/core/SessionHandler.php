@@ -211,7 +211,7 @@ class SessionHandler extends CoreBase
      */
     function requireWebmaster()
     {
-        if ($this->usermode == USERLEVEL_WEBMASTER) return;
+        if ($this->isWebmaster) return;
         $this->setError( t('The page you requested requires webmaster rights to view.') );
         $this->showErrorPage();
     }
@@ -221,7 +221,7 @@ class SessionHandler extends CoreBase
      */
     function requireAdmin()
     {
-        if ($this->usermode == USERLEVEL_ADMIN) return;
+        if ($this->isAdmin) return;
         $this->setError( t('The page you requested requires admin rights to view.') );
         $this->showErrorPage();
     }
@@ -231,7 +231,7 @@ class SessionHandler extends CoreBase
      */
     function requireSuperAdmin()
     {
-        if ($this->usermode == USERLEVEL_SUPERADMIN) return;
+        if ($this->isSuperAdmin) return;
         $this->setError( t('The page you requested requires superadmin rights to view.') );
         $this->showErrorPage();
     }
@@ -250,6 +250,8 @@ class SessionHandler extends CoreBase
      */
     function showErrorPage()
     {
+        $db = SqlHandler::getInstance();
+
         if ($db->getErrorCount()) {
             echo "DEBUG: session->redirect aborted due to error".ln();
             return;
