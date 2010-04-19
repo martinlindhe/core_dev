@@ -9,6 +9,7 @@
 //TODO: move GET/POST handling to separate function
 //TODO: factor our sql from here
 
+//TODO: move render() to a view
 //TODO: use editable yui_datatable
 
 require_once('AdminComponent.php');
@@ -17,17 +18,23 @@ require_once('admin.UserEditor.php');
 
 class UserList extends AdminComponent
 {
+    private $usermode;
+    function setMode($n) { $this->usermode = $n; }
+
     /**
      * @return total number of users (excluding deleted ones)
      */
-    function getCount($mode = 0)
+    function getCount($usermode = 0)
     {
-        global $db;
-        if (!is_numeric($mode)) return false;
+        if (!is_numeric($usermode)) return false;
+
+        $db = SqlHandler::getInstance();
 
         $q = 'SELECT COUNT(*) FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
-        if ($mode) $q .= ' AND userMode='.$mode;
+        if ($usermode)
+            $q .= ' AND userMode='.$usermode;
+
         return $db->getOneItem($q);
     }
 
@@ -36,9 +43,8 @@ class UserList extends AdminComponent
      */
     function onlineCount()
     {
-        global $db;
-
         $session = SessionHandler::getInstance();
+        $db = SqlHandler::getInstance();
 
         $q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
         $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
@@ -50,9 +56,8 @@ class UserList extends AdminComponent
      */
     function allOnline()
     {
-        global $db;
-
         $session = SessionHandler::getInstance();
+        $db = SqlHandler::getInstance();
 
         $q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
         $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
@@ -61,18 +66,19 @@ class UserList extends AdminComponent
     }
 
     /**
-     * @param $mode usermode
      * @param $filter partial username matching
      */
-    function getUsers($mode = 0, $filter = '')
+    function getUsers($filter = '')
     {
-        global $db;
-        if (!is_numeric($mode)) return false;
+        $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
-        if ($mode) $q .= ' AND userMode='.$mode;
+        if ($this->usermode)
+            $q .= ' AND userMode='.$this->usermode;
+
         if ($filter) $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+
         return $db->getArray($q);
     }
 
@@ -88,22 +94,19 @@ class UserList extends AdminComponent
             $userhandler->remove();
         }
 
-        echo 'Registered users: <a href="'.$_SERVER['PHP_SELF'].'">'.$this->getCount().'</a><br/>';
-        echo 'Webmasters: <a href="'.$_SERVER['PHP_SELF'].'?user_mode='.USERLEVEL_WEBMASTER.'">'.$this->getCount(USERLEVEL_WEBMASTER).'</a><br/>';
-        echo 'Admins: <a href="'.$_SERVER['PHP_SELF'].'?user_mode='.USERLEVEL_ADMIN.'">'.$this->getCount(USERLEVEL_ADMIN).'</a><br/>';
-        echo 'SuperAdmins: <a href="'.$_SERVER['PHP_SELF'].'?user_mode='.USERLEVEL_SUPERADMIN.'">'.$this->getCount(USERLEVEL_SUPERADMIN).'</a><br/>';
+        echo 'All users: <a href="/admin/userlist/">'.$this->getCount().'</a><br/>';
+        echo 'Webmasters: <a href="/admin/userlist/'.USERLEVEL_WEBMASTER.'">'.$this->getCount(USERLEVEL_WEBMASTER).'</a><br/>';
+        echo 'Admins: <a href="/admin/userlist/'.USERLEVEL_ADMIN.'">'.$this->getCount(USERLEVEL_ADMIN).'</a><br/>';
+        echo 'SuperAdmins: <a href="/admin/userlist/'.USERLEVEL_SUPERADMIN.'">'.$this->getCount(USERLEVEL_SUPERADMIN).'</a><br/>';
 //XXX TODO: lista användare online
-        echo 'Users online: <a href="'.$_SERVER['PHP_SELF'].'?show_online">'.$this->onlineCount().'</a><br/>';
+        echo 'Users online: <a href="/admin/userlist/0/online">'.$this->onlineCount().'</a><br/>';
 
         $filter = '';
         if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
 
-        $mode = 0;
-        if (!empty($_GET['user_mode'])) $mode = $_GET['user_mode'];
-
         //process updates
         if ($session->isSuperAdmin && !empty($_POST)) {
-            $list = $this->getUsers($mode);
+            $list = $this->getUsers();
             foreach ($list as $row) {
                 if (empty($_POST['mode_'.$row['userId']])) continue;
                 $newmode = $_POST['mode_'.$row['userId']];
@@ -116,11 +119,11 @@ class UserList extends AdminComponent
             if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode'])) {
                 $auth = AuthHandler::getInstance();
 
-                $newUserId = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
-                if (!is_numeric($newUserId)) {
-                    echo '<div class="critical">'.$newUserId.'</div>';
+                $new_id = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
+                if (!is_numeric($new_id)) {
+                    echo '<div class="critical">'.$new_id.'</div>';
                 } else {
-                    echo '<div class="okay">New user created. <a href="admin_user.php?id='.$newUserId.'">'.$_POST['u_name'].'</a></div>';
+                    echo '<div class="okay">New user created. <a href="/admin/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
                 }
             }
         }
@@ -132,7 +135,7 @@ class UserList extends AdminComponent
         echo xhtmlFormClose();
         echo '<br/>';
 
-        $list = $this->getUsers($mode, $filter);
+        $list = $this->getUsers($filter);
 
         if ($session->isSuperAdmin) echo '<form method="post" action="">';
         echo '<table summary="" border="1">';

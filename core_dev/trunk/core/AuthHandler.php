@@ -109,7 +109,6 @@ $session->setUserName(xx);
         //addEvent(EVENT_USER_LOGOUT, 0, $session->id);
         $session->setLogoutTime();
         $session->end();
-        dp('User logged out');
         $session->showLoggedOutStartPage();
         die;
     }
