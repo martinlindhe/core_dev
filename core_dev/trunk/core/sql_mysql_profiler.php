@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: db_mysql_profiler.php 201 2010-04-07 19:28:04Z ml $
+ * $Id$
  *
  * MySQL driver profiler class
  *

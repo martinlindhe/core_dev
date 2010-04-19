@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: db_mysql.php 201 2010-04-07 19:28:04Z ml $
+ * $Id$
  *
  * MySQL db driver using the php_mysqli extension
  *
