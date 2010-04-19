@@ -71,11 +71,11 @@ echo
 count($db->queries).' SQL queries: '.round($sql_time, 2).'s, '.
 'PHP: '.round($php_time, 2).'s)<br/>';
 
-if (is_client_localhost()) {
-
-    echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> using <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
-    echo '<b>'.$db->host.':'.$db->port.'</b> running <b>MySQL '.$db->db_handle->server_info.'</b><br/>';
-    echo '<b>'.$_SERVER['SERVER_NAME'].'</b> running <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
+if (is_client_localhost())
+{
+    echo 'Database <b>'.$db->host.':'.$db->port.'</b> with <b>MySQL '.$db->db_handle->server_info.'</b><br/>';
+    echo 'Webserver <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> with <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
+    echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
 }
 
 //show memory usage

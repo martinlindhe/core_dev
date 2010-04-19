@@ -106,7 +106,17 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         return $res;
     }
 
+    function getMappedArray($q)
+    {
+        $this->measure_time();
+        $res = parent::getMappedArray($q);
+        $this->measure_query($q);
 
+        if ($res === false)
+            $this->profileError($q, $this->db_handle->error);
+
+        return $res;
+    }
 
 
 
