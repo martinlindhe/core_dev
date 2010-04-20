@@ -443,5 +443,12 @@ function reduce_whitespace($s)
     return $s;
 }
 
+/**
+ * @return formatted currency value with space as thousands separator: "221012.87" -> "221 012.87"
+ */
+function format_currency($n)
+{
+    return number_format($n, 2, '.', ' ');
+}
 
 ?>

@@ -25,6 +25,7 @@ class ViewModel extends ArrayObject
         $db      = SqlHandler::getInstance();
         $header  = XHTMLHeader::getInstance();
         $page    = XMLDocumentHandler::getInstance();
+        $locale  = LocaleHandler::getInstance();
 
         ob_start();
         include($this->template);

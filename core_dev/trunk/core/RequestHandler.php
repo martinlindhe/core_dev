@@ -20,14 +20,10 @@ class RequestHandler
     protected $_view;       ///< /controller/VIEW/id/  XXX view parameter for the "controller", or later will be the method to run on the controller
     protected $_id;         ///< /controller/view/ID/
     protected $_params;
-//    protected $_body;
 
     public function getParams() { return $this->_params; }
     public function getController() { return $this->_controller; }
     public function getView() { return $this->_view; }
-//    public function getBody() { return $this->_body; }
-//    public function setBody($body) { $this->_body = $body; }
-//    public function addBody($body) { $this->_body .= $body; }
 
     public static function getInstance()
     {
@@ -78,7 +74,7 @@ class RequestHandler
         if (!file_exists($view_file))
             throw new Exception('No file named '.$view_file );
 
-        //XXX expose params.. using Req::getParams() inside view, or exposing here?
+        //expose request params for the view
         $view = new ViewModel($view_file);
         $view->view   = $this->_view;
         $view->id     = $this->_id;
