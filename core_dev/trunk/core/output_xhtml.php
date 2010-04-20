@@ -431,8 +431,9 @@ function coreButton($name, $link = '', $title = '')
     $out = '';
     if ($link) $out .= '<a href="'.$link.'">';
     if (!$title) $title = t($name);
-    //FIXME: make path configurable, so user can override core_dev icon set
-    $out .= '<img src="'.coredev_webroot().'gfx/'.$img.'" alt="'.$title.'" title="'.$title.'"/>';
+
+    $header = XhtmlHeader::getInstance();
+    $out .= '<img src="'.$header->getCoreDevRoot().'gfx/'.$img.'" alt="'.$title.'" title="'.$title.'"/>';
     if ($link) $out .= '</a>';
     return $out;
 }

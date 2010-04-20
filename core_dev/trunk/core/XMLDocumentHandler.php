@@ -9,9 +9,6 @@
 
 //STATUS: WIP
 
-//require_once('XHTMLHeader.php');
-//require_once('XHTMLMenu.php');
-
 require_once('class.CoreBase.php');
 
 class XMLDocumentHandler extends CoreBase
@@ -75,7 +72,7 @@ class XMLDocumentHandler extends CoreBase
         if ($this->mimetype)
             header('Content-type: '.$this->mimetype);
 
-        $header = XHTMLHeader::getInstance();
+        $header = XhtmlHeader::getInstance();
         echo $header->render();
 
         if ($this->design_head) {

@@ -9,13 +9,13 @@
 
 require_once('IXMLComponent.php');
 
-//STATUS: ok
+//STATUS: wip
 
 //TODO: rewrite "include feeds" functionality
 
 //TODO LATER: look at xmlwriter in php 6
 
-class XHTMLHeader extends CoreBase implements IXMLComponent
+class XhtmlHeader extends CoreBase implements IXMLComponent
 {
     static $_instance;                  ///< singleton class
 
@@ -49,6 +49,7 @@ class XHTMLHeader extends CoreBase implements IXMLComponent
     public function handlePost($p) {}
 
     function setCoreDevRoot($s) { $this->core_dev_root = $s; }
+    function getCoreDevRoot() { return $this->core_dev_root; }
 
     function setTitle($t) { $this->title = $t; }
     function setFavicon($uri) { $this->favicon = $uri; }
