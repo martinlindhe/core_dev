@@ -8,7 +8,7 @@
  */
 
 require_once('LocaleHandler.php');
-require_once('xhtml_header.php');
+require_once('XhtmlHeader.php');
 require_once('output_js.php');
 
 /**
