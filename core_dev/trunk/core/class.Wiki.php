@@ -2,19 +2,18 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-require_once('functions_fileareas.php');
 require_once('atom_revisions.php');
 require_once('functions_textformat.php');
 
-//TODO: make a class for revision handling
-//TODO: use events instead of revisions for "uploaded file", "locked", "unlocked"
+//STATUS: wip - cleanup & rewrite code
 
-//FIXME: URLadd() messar upp länkarna med extradata vid lock/unlock
-//TODO: kunna resiza textarean me js som i dokuwiki
-//TODO: use recaptcha to validate anon editors
+//TODO: make a render view
+
+//TODO: reimplement file attachments
+//TODO: use yui_richedit (?)
 
 class Wiki
 {
@@ -26,7 +25,6 @@ class Wiki
     var $first_tab   = 'Wiki';
     var $allow_edit  = false;  ///< false = only allow admins to edit the wiki articles. true = allow all, even anonymous
     var $allow_html  = false;  ///< allow html code in the wiki article? VERY UNSAFE to allow others do this
-    var $allow_files = true;   ///< allow file uploads to the wiki
 
     function getName() { return $this->name; }
 
@@ -50,20 +48,14 @@ class Wiki
 
     function __construct($name = '')
     {
-        global $h;
-
         $this->setName($name);
-
-        if ($h->files)
-            $this->tabs[] = 'WikiFiles';
-        else
-            $this->allow_files = false;
     }
 
     function load()
     {
-        global $db;
         if (!$this->name) return false;
+
+        $db = SqlHandler::getInstance();
 
         $q =
         'SELECT * FROM tblWiki AS t1'.
@@ -86,11 +78,11 @@ class Wiki
      */
     function formatText()
     {
-        global $h;
+        $session = SessionHandler::getInstance();
 
         if (empty($this->text)) {
             $res = t('The wiki').' "'.$this->name.'" '.t('does not yet exist').'!<br/>';
-            if ($h->session->id && $h->session->isWebmaster)
+            if ($session->id && $session->isWebmaster)
                 $res .= coreButton('Create', '?WikiEdit:'.$this->name);
 
             return $res;
@@ -107,7 +99,8 @@ class Wiki
      */
     function update($text)
     {
-        global $h, $db;
+        $db = SqlHandler::getInstance();
+        $session = SessionHandler::getInstance();
 
         $text = trim($text);
 
@@ -123,17 +116,18 @@ class Wiki
         if (!empty($data) && $data['wikiId']) {
             addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
 
-            $q = 'UPDATE tblWiki SET msg="'.$db->escape($this->text).'",createdBy='.$h->session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$db->escape($this->name).'"';
+            $q = 'UPDATE tblWiki SET msg="'.$db->escape($this->text).'",createdBy='.$session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$db->escape($this->name).'"';
             $db->update($q);
             return;
         }
-        $q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($this->name).'",msg="'.$db->escape($this->text).'",createdBy='.$h->session->id.',revision=1,timeCreated=NOW()';
+        $q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($this->name).'",msg="'.$db->escape($this->text).'",createdBy='.$session->id.',revision=1,timeCreated=NOW()';
         $db->insert($q);
     }
 
     function render()
     {
-        global $h, $db;
+        $db = SqlHandler::getInstance();
+        $session = SessionHandler::getInstance();
 
         $current_tab = $this->first_tab;
 
@@ -155,48 +149,38 @@ class Wiki
             unset($_POST['wiki_'.$this->id]);
         }
 
-        if ($h->session->isAdmin && !empty($_GET['wikilock'])) {
-            $q = 'UPDATE tblWiki SET lockedBy='.$h->session->id.',timeLocked=NOW() WHERE wikiId='.$this->id;
+        if ($session->isAdmin && !empty($_GET['wikilock'])) {
+            $q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$this->id;
             $db->update($q);
-            $this->lockerId = $h->session->id;
-            addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been locked', now(), $h->session->id, REV_CAT_LOCKED);
-        } else if ($h->session->isAdmin && isset($_GET['wikilock'])) {
+            $this->lockerId = $session->id;
+            addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
+        } else if ($session->isAdmin && isset($_GET['wikilock'])) {
             $q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$this->id;
             $db->update($q);
             $this->lockerId = 0;
-            addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been unlocked', now(), $h->session->id, REV_CAT_UNLOCKED);
+            addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
         }
 
         //Only display the text for normal visitors
-        if (!$h->session->isAdmin && !$this->allow_edit) {
+        if (!$session->isAdmin && !$this->allow_edit) {
             echo '<div class="wiki">';
             echo '<div class="wiki_body">'.$this->formatText().'</div>';
             echo '</div>';
             return;
         }
 
-        //Show files tab? also hide files tab if wiki isn't yet created
-        if (in_array('WikiFiles', $this->tabs) && $this->text) {
-            $wiki_menu = array(
-            $_SERVER['PHP_SELF'].'?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
-            $_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name => t('Edit'),
-            $_SERVER['PHP_SELF'].'?WikiHistory:'.$this->name => t('History'),
-            $_SERVER['PHP_SELF'].'?WikiFiles:'.$this->name => t('Files').' ('.$h->files->getFileCount(FILETYPE_WIKI, $this->id).')'
-            );
-        } else {
-            $wiki_menu = array(
-            $_SERVER['PHP_SELF'].'?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
-            $_SERVER['PHP_SELF'].'?WikiEdit:'.$this->name => t('Edit'),
-            $_SERVER['PHP_SELF'].'?WikiHistory:'.$this->name => t('History')
-            );
-        }
+        $wiki_menu = array(
+        '/wiki/?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
+        '/wiki/?WikiEdit:'.$this->name => t('Edit'),
+        '/wiki/?WikiHistory:'.$this->name => t('History')
+        );
 
         echo '<div class="wiki">';
         echo xhtmlMenu($wiki_menu, 'wiki_menu');
         echo '<div class="wiki_body">';
 
         //Display the wiki toolbar for admins
-        if ($current_tab == 'WikiEdit' && ($h->session->isAdmin || !$this->lockerId)) {
+        if ($current_tab == 'WikiEdit' && ($session->isAdmin || !$this->lockerId)) {
 
             echo xhtmlForm('wiki_edit', URLadd('WikiEdit:'.$this->name));
 
@@ -216,9 +200,8 @@ class Wiki
                 '<input type="button" class="button" value="[quote]" onclick="insertTags(\''.$wikiRandId.'\',\'[quote name=]\',\'[/quote]\',\'quote\')"/>'.
                 '<br/>';
 
-            if ($this->lockerId) {
+            if ($this->lockerId)
                 echo '<div class="wiki_locked">This article is currently locked from editing.</div>';
-            }
 
             $rows = 8+substr_count($this->text, "\n");
             if ($rows > 36) $rows = 36;
@@ -230,10 +213,9 @@ class Wiki
             else echo t('never');
             echo '<br>';
 
-
             echo xhtmlSubmit('Save');
 
-            if ($h->session->isAdmin) {
+            if ($session->isAdmin) {
                 if ($this->lockerId) {
                     echo '<input type="button" class="button" value="'.t('Unlock').'" onclick="location.href=\''.URLadd('WikiEdit:'.$this->name, '&amp;wikilock=0').'\'"/>';
                     echo xhtmlImage(coredev_webroot().'gfx/icon_locked.png', 'This wiki is currently locked');
@@ -244,34 +226,7 @@ class Wiki
                 }
             }
 
-            //List "unused files" for this Wiki when in edit mode
-            if ($this->allow_files) {
-                $filelist = $h->files->getFiles(FILETYPE_WIKI, $this->id);
-                if ($filelist) {
-                    $str = '';
-
-                    foreach ($filelist as $row) {
-                        $temp = explode('.', $row['fileName']);
-
-                        $showTag = $linkTag = '[[file:'.$row['fileId'].']]';
-
-                        if (in_array($row['fileMime'], $h->files->image_mime_types)) {
-                            $showTag = showThumb($row['fileId'], $showTag);
-                        }
-
-                        if (strpos($text, $linkTag) === false) {
-                            $str .= '<span onclick="document.wiki_edit.wiki_'.$data['wikiId'].'.value += \' '.$linkTag.'\';">'.$showTag.'</span>, ';
-                        }
-                    }
-                    if (substr($str, -2) == ', ') $str = substr($str, 0, -2);
-                    if ($str) {
-                        echo '<b>'.t('Unused files').':</b> '.$str;
-                    }
-                }
-            }
             echo xhtmlFormClose();
-        } else if ($current_tab == 'WikiFiles') {
-            echo showFiles(FILETYPE_WIKI, $this->id);
         } else if ($current_tab == 'WikiHistory') {
             if ($this->text) {
                 echo t('Current version').':<br/>';
