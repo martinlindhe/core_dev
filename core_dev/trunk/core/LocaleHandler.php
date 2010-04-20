@@ -17,6 +17,7 @@ require_once('locale_ger.php');
 
 abstract class CoreLocale
 {
+    abstract function formatCurrency($n);
 }
 
 class LocaleHandler
@@ -57,6 +58,8 @@ class LocaleHandler
     }
 
     function get() { return $this->locale; }
+
+    function formatCurrency($n) { return $this->handle->formatCurrency($n); }
 
     /**
      * @param $n month number (1-12)

@@ -29,6 +29,12 @@ class Locale_GER extends CoreLocale
 
     var $weekday_1char = array(
         'S', 'M', 'D', 'M', 'D', 'F', 'S');
+
+    function formatCurrency($n)
+    {
+        die('formatCurrency GER TODO');
+    }
+
 }
 
 ?>

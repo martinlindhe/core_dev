@@ -33,6 +33,14 @@ class Locale_SWE extends CoreLocale
 
     var $weekday_1char = array(
         'S', 'M', 'T', 'O', 'T', 'F', 'S');
+
+    /**
+     * @return formatted currency value with space as thousands separator: "221012.87" -> "221 012.87"
+     */
+    function formatCurrency($n)
+    {
+        return number_format($n, 2, '.', ' ');
+    }
 }
 
 $day_suff_swe = array(//den 1:a, 5:e osv...
