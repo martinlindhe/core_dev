@@ -12,27 +12,6 @@ require_once('XhtmlHeader.php');
 require_once('output_js.php');
 
 /**
- * Takes an array of menu entries and creates a <ul><li>-style menu
- */
-function xhtmlMenu($menu_arr, $class = 'ulli_menu', $current_class = 'ulli_menu_current')
-{
-    $cur = basename($_SERVER['SCRIPT_NAME']);
-
-    $res = '<ul class="'.$class.'">';
-    foreach ($menu_arr as $url => $text) {
-        //FIXME: highlitar inte wiki parametrar t.ex "Wiki:Hello", "Blog:243"
-        if ($cur == $url) $res .= '<li class="'.$current_class.'">';
-        else $res .= '<li>';
-
-        if ($url) $res .= '<a href="'.xhtmlGetUrl($url).'">'.$text.'</a>';
-        else $res .= $text;
-        $res .= '</li>';
-    }
-    $res .= '</ul>';
-    return $res;
-}
-
-/**
  * Generates "pagers", splitting up listings of content on several pages
  *
  * Reads the 'p' get parameter for current page
@@ -121,14 +100,14 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 /**
  * Creates a select-dropdown from a indexed array
  */
-function xhtmlSelectArray($_name, $_arr, $_default = 0, $_onchange = '')
+function xhtmlSelectArray($_name, $_arr, $_default = '', $_onchange = '')
 {
     $out = '<select name="'.strip_tags($_name).'"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
 
     $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
 
     foreach ($_arr as $id => $title)
-        $out .= '<option value="'.$id.'"'.($_default && $_default == $id ? ' selected':'').'>'.$title.'</option>';
+        $out .= '<option value="'.$id.'"'.($_default && $_default == $id ? ' selected="selected"':'').'>'.$title.'</option>';
 
     $out .= '</select>';
 
@@ -151,7 +130,7 @@ function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $oncl
 {
     $out = '';
     if (!$onclick) $out .= xhtmlHidden($_name, 0);
-    $out .= '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked':'').($onclick ? ' onclick="'.$onclick.'"' : '').'/>';
+    $out .= '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked="checked"':'').($onclick ? ' onclick="'.$onclick.'"' : '').'/>';
     if ($_title) $out .= '<label for="lab_'.$_name.'"> '.$_title.'</label>';
 
     return $out;
@@ -181,7 +160,9 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 {
     $out = '';
     foreach ($_arr as $id => $title) {
-        $out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked' : '').'/>';
+        echo $id." = ".$_default."<br>";
+        echo ($_default == $id)."<br>";
+        $out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked="checked"' : '').'/>';
         $out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
     }
     return $out;

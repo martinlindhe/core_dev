@@ -193,12 +193,12 @@ class XhtmlForm
      * Adds a select dropdown list to the form
      * @param $arr array with id=>name pairs
      */
-    function addDropdown($name, $str, $arr, $default = 0)
+    function addDropdown($name, $str, $arr, $default = '')
     {
         $this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
     }
 
-    function addRadio($name, $str, $arr, $default = 0)
+    function addRadio($name, $str, $arr, $default = '')
     {
         $this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
     }
@@ -207,7 +207,7 @@ class XhtmlForm
      * Adds a category to the form
      * @param $cat_type category type
      */
-    function addCategory($name, $str, $cat_type, $default = 0)
+    function addCategory($name, $str, $cat_type, $default = '')
     {
         $this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $str, 'cat_type' => $cat_type, 'default' => $default);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id
+ * $Id$
  *
  * Views blogs (BlogEntry objects), by category or user
  *
