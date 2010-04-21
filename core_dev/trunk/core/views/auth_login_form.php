@@ -55,7 +55,7 @@ if (isset($_POST['register_usr'])) {
     $tab = 'register';
 }
 
-echo $errors->render();
+echo $error->render();
 
 echo '<div id="login_form_layer"'.($tab!='login'?' style="display: none;"':'').'>';
 if (!$auth->allow_logins) {

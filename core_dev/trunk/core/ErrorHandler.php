@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Shows errors from various handlers (if any)
+ * Handles errors
  *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
@@ -10,6 +10,7 @@
 class ErrorHandler
 {
     static $_instance; ///< singleton
+    private $errors = array();
 
     private function __construct() { }
     private function __clone() {}      //singleton: prevent cloning of class
@@ -22,20 +23,15 @@ class ErrorHandler
         return self::$_instance;
     }
 
-    function render($clear_errors = true)
+    function add($s) { $this->errors[] = $s; }
+
+    function render($clear_errors = false)
     {
-        $session = SessionHandler::getInstance();
-        if ($session->getError())
-            echo '<div class="critical">'.$session->getError().'</div><br/>';
+        foreach ($this->errors as $e)
+            echo '<div class="critical">'.$e.'</div><br/>';
 
-        $auth = AuthHandler::getInstance();
-        if ($auth->getError())
-            echo '<div class="critical">'.$auth->getError().'</div><br/>';
-
-        if ($clear_errors) {
-            $session->setError('');
-            $auth->setError('');
-        }
+        if ($clear_errors)
+            $this->errors = array();
     }
 }
 

@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-//TODO: drop session_default.php, session_base.php
+//FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
 define('USERLEVEL_NORMAL',      0);
 define('USERLEVEL_WEBMASTER',   1);
@@ -51,9 +51,6 @@ class SessionHandler extends CoreBase
 
     function init()
     {
-        //ini_set('session.gc_probability', 1);
-        //ini_set('session.gc_divisor', 1);
-
         //disable garbage collector to work around ubuntu/debian bug, see:
         //   http://forum.kohanaphp.com/comments.php?DiscussionID=565
         ini_set('session.gc_probability', 0);
@@ -64,29 +61,21 @@ class SessionHandler extends CoreBase
         session_start();
 //XXX fixa bort all denna skit (?)
         if (!isset($_SESSION['started']) || !$_SESSION['started']) $_SESSION['started'] = time();
-//        if (!isset($_SESSION['error'])) $_SESSION['error'] = '';
-//        if (!isset($_SESSION['ip'])) $_SESSION['ip'] = 0;
         if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
         if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
         if (!isset($_SESSION['usermode'])) $_SESSION['usermode'] = 0;
-//        if (!isset($_SESSION['lastActive'])) $_SESSION['lastActive'] = 0;
         if (!isset($_SESSION['isWebmaster'])) $_SESSION['isWebmaster'] = 0;
         if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
         if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
-//        if (!isset($_SESSION['theme'])) $_SESSION['theme'] = $this->default_theme;
         if (!isset($_SESSION['referer'])) $_SESSION['referer'] = '';
 
         $this->started = &$_SESSION['started'];
-//        $this->error = &$_SESSION['error'];
-//        $this->ip = &$_SESSION['ip'];
         $this->id = &$_SESSION['id'];    //if id is set, also means that the user is logged in
         $this->username = &$_SESSION['username'];
         $this->usermode = &$_SESSION['usermode'];
-//        $this->lastActive = &$_SESSION['lastActive'];
         $this->isWebmaster = &$_SESSION['isWebmaster'];
         $this->isAdmin = &$_SESSION['isAdmin'];
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
-//        $this->theme = &$_SESSION['theme'];
         $this->referer = &$_SESSION['referer'];
 
 //        if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip()); //FIXME map to $this->auth->ip
@@ -100,16 +89,14 @@ class SessionHandler extends CoreBase
     {
         dp($this->username.' logged out');
 
-        $this->started = 0;
-        $this->id = 0;
-        $this->username = '';
-        $this->usermode = 0;
-//        $this->ip = 0;
+        $this->started      = 0;
+        $this->id           = 0;
+        $this->username     = '';
+        $this->usermode     = 0;
         $this->isWebmaster  = false;
         $this->isAdmin      = false;
         $this->isSuperAdmin = false;
-        //$this->theme = $this->default_theme;
-        $this->referer = '';
+        $this->referer      = '';
     }
 
     /**
@@ -124,7 +111,6 @@ class SessionHandler extends CoreBase
         $this->id = $id;
         $this->username = $username;
         $this->usermode = $usermode;
-        //$this->lastActive = time();
 
         if ($this->usermode >= USERLEVEL_WEBMASTER) $this->isWebmaster = true;
         if ($this->usermode >= USERLEVEL_ADMIN) $this->isAdmin = true;
@@ -175,7 +161,7 @@ class SessionHandler extends CoreBase
         if ($this->lastActive < (time()-$this->timeout)) {
             $this->log('Session timed out after '.(time()-$this->session->lastActive).' (timeout is '.($this->session->timeout).')', LOGLEVEL_NOTICE);
             $this->end();
-            $this->setError('Session timed out');
+            $error->add('Session timed out');
             $this->showErrorPage();
         }*/
 
@@ -198,10 +184,12 @@ class SessionHandler extends CoreBase
      */
     function requireLoggedIn()
     {
-        global $config;
         if ($this->id) return;
-        $this->setError( t('The page you requested requires you to be logged in.') );
-        if (empty($config['no_redirect'])) $this->referer = $_SERVER['REQUEST_URI'];
+
+        $error = ErrorHandler::getInstance();
+        $error->add('The page you requested requires you to be logged in.');
+
+        $this->referer = $_SERVER['REQUEST_URI'];
         $this->showErrorPage();
     }
 
@@ -212,7 +200,9 @@ class SessionHandler extends CoreBase
     function requireWebmaster()
     {
         if ($this->isWebmaster) return;
-        $this->setError( t('The page you requested requires webmaster rights to view.') );
+
+        $error = ErrorHandler::getInstance();
+        $error->add('The page you requested requires webmaster rights to view.');
         $this->showErrorPage();
     }
 
@@ -222,7 +212,9 @@ class SessionHandler extends CoreBase
     function requireAdmin()
     {
         if ($this->isAdmin) return;
-        $this->setError( t('The page you requested requires admin rights to view.') );
+
+        $error = ErrorHandler::getInstance();
+        $error->add('The page you requested requires admin rights to view.');
         $this->showErrorPage();
     }
 
@@ -232,7 +224,9 @@ class SessionHandler extends CoreBase
     function requireSuperAdmin()
     {
         if ($this->isSuperAdmin) return;
-        $this->setError( t('The page you requested requires superadmin rights to view.') );
+
+        $error = ErrorHandler::getInstance();
+        $error->add('The page you requested requires superadmin rights to view.');
         $this->showErrorPage();
     }
 

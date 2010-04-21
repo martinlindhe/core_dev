@@ -10,13 +10,9 @@
 class CoreBase
 {
     private $debug = false;
-    private $error = '';    ///< error string
 
     function getDebug() { return $this->debug; }
     function setDebug($bool = true) { $this->debug = $bool; }
-
-    function getError() { return $this->error; }
-    function setError($s) { $this->error = $s; }
 }
 
 ?>

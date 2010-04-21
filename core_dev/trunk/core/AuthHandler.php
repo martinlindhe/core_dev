@@ -8,6 +8,7 @@
 //STATUS: WIP, rewriting
 
 //TODO: maybe rename to LoginHandler (?)
+//TODO: reimplement user-block & ip-block
 
 //TODO: cleanup/rewrite handleEvents()
 
@@ -15,15 +16,15 @@ require_once('ViewModel.php');
 
 class AuthHandler extends CoreBase
 {
-    static $_instance;               ///< singleton
-    var $allow_logins = true;        ///< do app currently allow logins?
-    var $allow_registrations = true; ///< do app currently allow registrations?
+    static  $_instance;                  ///< singleton
+    var     $allow_logins = true;        ///< do app currently allow logins?
+    var     $allow_registrations = true; ///< do app currently allow registrations?
     private $encrypt_key = '';
-    var $check_ip = true;
-    private $ip;                     ///< to validate if client ip changes
+    var     $check_ip = true;
+    private $ip;                         ///< to validate if client ip changes
 
     private function __construct() { }
-    private function __clone() {}      //singleton: prevent cloning of class
+    private function __clone() {}        ///< singleton: prevent cloning of class
 
     public static function getInstance()
     {
@@ -52,57 +53,47 @@ class AuthHandler extends CoreBase
      * @param $password
      * @return true on success
      */
-    function login($username, $password)
+    private function login($username, $password)
     {
+        $db      = SqlHandler::getInstance();
+        $error   = ErrorHandler::getInstance();
+        $session = SessionHandler::getInstance();
+
+        if (!$this->allow_logins) {
+            $error->add('Logins currently not allowed.');
+            return false;
+        }
+
         $user = new User();
         $id = $user->loadByName($username);
 
         $enc_password = sha1( $id.sha1($this->encrypt_key).sha1($password) );
 
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_password).'" AND timeDeleted IS NULL';
-        $data = $db->getOneRow($q);
-
-        if (!$data) {
-            $this->setError( t('Login failed') );
+        $row = $db->getOneItem($q);
+        if (!$row) {
             dp('Failed login attempt: username '.$username);
+            $error->add('Login failed');
             return false;
         }
-//XXXX konfigurera $session härifrån:
-/*
-$session->setId(xx);
-$session->setUserMode(xx);
-$session->setUserName(xx);
-*/
 
-        if (!$this->allow_logins) {
-            $this->setError( t('Logins currently not allowed.') );
-            return false;
-        }
+        $session->start($row['userId'], $row['userName'], $row['userMode']);
 
 /*
         if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
             if ($this->mail_activate && !Users::isActivated($data['userId'])) {
-                $this->setError( t('This account has not yet been activated.') );
-                return false;
-            }
-
-            $blocked = isBlocked(BLOCK_USERID, $data['userId']);
-            if ($blocked) {
-                $this->setError( t('Account blocked') );
-                dp('Login attempt from blocked user: username '.$username, LOGLEVEL_WARNING);
+                $error->add('This account has not yet been activated.');
                 return false;
             }
         }
 */
-        return $data;
+        return true;
     }
 
     /**
      * Logs out the user
      */
-    function logout()
+    private function logout()
     {
         $session = SessionHandler::getInstance();
 
@@ -134,11 +125,26 @@ $session->setUserName(xx);
     {
         if (!is_numeric($usermode)) return false;
 
-        if ($username != trim($username)) return t('Username contains invalid spaces');
+        $error = ErrorHandler::getInstance();
 
-        if (strlen($username) < $this->minlen_username) return t('Username must be at least').' '.$this->minlen_username.' '.t('characters long');
-        if (strlen($password1) < $this->minlen_password) return t('Password must be at least').' '.$this->minlen_password.' '.t('characters long');
-        if ($password1 != $password2) return t('The passwords doesnt match');
+        if ($username != trim($username)) {
+            $error->add('Username contains invalid spaces');
+            return false;
+        }
+
+        if (strlen($username) < $this->minlen_username) {
+            $error->add('Username must be at least '.$this->minlen_username.' characters long');
+            return false;
+        }
+
+        if (strlen($password1) < $this->minlen_password) {
+            $error->add('Password must be at least '.$this->minlen_password.' characters long');
+            return false;
+        }
+        if ($password1 != $password2) {
+            $error->add('The passwords doesnt match');
+            return false;
+        }
 
 //        if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
 /*
@@ -153,7 +159,10 @@ $session->setUserName(xx);
         if ($userlist->getCount()) {
             $user = new User();
 
-            if ($user->loadByName($username)) return t('Username already exists');
+            if ($user->loadByName($username)) {
+                $error->add('Username already exists');
+                return false;
+            }
         } else {
             //No users exists, give this user superadmin status
             $_mode = USERLEVEL_SUPERADMIN;
@@ -179,41 +188,17 @@ $session->setUserName(xx);
      */
     function handleEvents()
     {
-        //FIXME verify this works:
-        /*
-        if ($this->ip && isBlocked(BLOCK_IP, $this->ip)) {
-            die('You have been blocked from this site.');
-        }
-        if (!$this->user_agent) $this->user_agent = !empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        */
-
         $session = SessionHandler::getInstance();
+        $error   = ErrorHandler::getInstance();
 
         //Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
-        if (isset($_GET['logout'])) {
+        if (isset($_GET['logout']))
             $this->logout();
-        }
 
         //Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
-        if (!$session->id && !empty($_POST['login_usr']) && isset($_POST['login_pwd'])) {
+        if (!$session->id && !empty($_POST['login_usr']) && isset($_POST['login_pwd']))
+            $this->login($_POST['login_usr'], $_POST['login_pwd']);
 
-            $data = $this->login($_POST['login_usr'], $_POST['login_pwd']);
-            if ($data) {
-
-                $session->start($data['userId'], $data['userName'], $data['userMode']);
-
-                //Load custom theme
-                /*
-                if ($session->allow_themes && $this->user->userdata) {
-                    $session->theme = loadUserdataTheme($session->id, $session->default_theme);
-                }
-                */
-
-                //$session->showStartPage();
-            } else {
-                $this->setError(t('Login failed'));
-            }
-        }
 
 /*
         //Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
@@ -236,9 +221,9 @@ $session->setUserName(xx);
         //Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
         if ($session->id && $this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP(client_ip())) ) {
             $msg = t('Client IP changed.').'Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4(client_ip());
-            $this->setError($msg);
+            $error->add($msg);
 die($msg);
-            dp($msg, LOGLEVEL_ERROR);
+            dp($msg);
             $session->end();
             $session->errorPage();
         }

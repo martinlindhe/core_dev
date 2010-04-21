@@ -19,7 +19,7 @@ class ViewModel extends ArrayObject
     public function render()
     {
         //available variables in the scope of the view
-        $errors  = ErrorHandler::getInstance();
+        $error   = ErrorHandler::getInstance();
         $auth    = AuthHandler::getInstance();
         $session = SessionHandler::getInstance();
         $db      = SqlHandler::getInstance();
