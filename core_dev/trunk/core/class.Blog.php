@@ -12,8 +12,6 @@
 //TODO: use Comments class
 //TODO richedit editor
 
-require_once('xhtml_form.php');
-
 require_once('class.BlogEntry.php');
 
 class Blog

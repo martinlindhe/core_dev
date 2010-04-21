@@ -7,7 +7,8 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//STATUS: mostly ok, but REFACTOR INTO MVC pattern
+//STATUS: drop & redo :P into CommentList
+
 //TODO: implement and use oo-pager for CommentList
 
 require_once('class.CoreItem.php');
@@ -15,7 +16,7 @@ require_once('class.CoreList.php');
 require_once('class.User.php');
 require_once('client_captcha.php');
 require_once('prop_Timestamp.php');
-require_once('xhtml_form.php');
+require_once('XhtmlForm.php');
 
 class CommentItem extends CoreItem
 {
@@ -216,7 +217,7 @@ class CommentList extends CoreList
         }
 
         if ($h->session->id || $this->anon_access) {
-            $form = new xhtml_form('addcomment');
+            $form = new XhtmlForm('addcomment');
             $form->addTextarea('comment_'.$this->type, t('Write a comment'), '', 30, 6);
 
             if ($this->private_comments)

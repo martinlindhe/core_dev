@@ -7,33 +7,35 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
+//STATUS: wip
+
+//TODO: register js includes properly by page renderer singleton class
+
 require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
 require_once('yui_dateinterval.php');
 require_once('yui_richedit.php');
 
-//TODO: register js includes properly by page renderer singleton class
-
-class xhtml_form
+class XhtmlForm
 {
-    private $enctype = '';     ///< TODO: set multipart type if form contains file upload parts
-    private $handled = false;  ///< is set to true when form data has been processed by callback function
-    private $name    = '';
+    private $enctype          = '';     ///< TODO: set multipart type if form contains file upload parts
+    private $handled          = false;  ///< is set to true when form data has been processed by callback function
+    private $name             = '';
 
     private $handler;
-    private $objectinstance = false;
+    private $objectinstance   = false;
 
-    private $formData = array();
+    private $formData         = array();
 
-    private $listenGet = false;
+    private $listenGet        = false;
 
-    private $elems = array();
+    private $elems            = array();
     private $yui_dateinterval = false;    ///< include yui files for date interval picker?
     private $yui_richedit     = false;    ///< include yui files for richedit?
 
-    private $success = '';
-    private $error   = 'Submitted form was rejected!';
+    private $success          = '';
+    private $error            = 'Submitted form was rejected!';
 
     function __construct($name = '')
     {
@@ -232,7 +234,7 @@ class xhtml_form
         global $h;
 
         if (!$this->objectinstance && !function_exists($this->handler))
-            die('FATAL: xhtml_form() does not have a defined data handler');
+            die('FATAL: XhtmlForm does not have a defined data handler');
 
         $res = '';
         if ($this->yui_dateinterval) {

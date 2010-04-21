@@ -7,7 +7,7 @@
 
 //STATUS: need cleanup, move non-view code out
 //TODO: re-add "forgot password" feature
-//TODO: use xhtml_form (?)
+//TODO: use XhtmlForm (?)
 
 $header->addCss('
 .login_box {
