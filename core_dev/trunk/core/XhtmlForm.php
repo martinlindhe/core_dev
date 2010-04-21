@@ -318,7 +318,7 @@ class XhtmlForm
 
             case 'DATEINTERVAL':
                 $res .= '<td colspan="2">';
-
+                $res .= $e['str'].'<br/><br/>';
                 $res .= '<div id="cal1Container"></div>';
                 $res .= '<div style="clear:both"></div>';
 
