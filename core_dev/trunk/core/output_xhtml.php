@@ -160,8 +160,6 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 {
     $out = '';
     foreach ($_arr as $id => $title) {
-        echo $id." = ".$_default."<br>";
-        echo ($_default == $id)."<br>";
         $out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked="checked"' : '').'/>';
         $out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
     }

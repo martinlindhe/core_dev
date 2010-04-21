@@ -11,18 +11,20 @@
 require_once('ISql.php');
 
 //STATUS: wip
+//TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
+
 //TODO: move all measure_*() to db_mysql_profiler parent methods
 
 class DatabaseMysql extends CoreBase implements IDB_SQL
 {
-    var $db_handle       = false;  ///< Internal db handle
-    var $host            = '';     ///< Hostname or numeric IP address of the db server
-    var $port            = 0;      ///< Port number
-    var $username        = '';     ///< Username to use to connect to the database
-    var $password        = '';     ///< Password to use to connect to the database
-    var $database        = '';     ///< Name of the database to connect to
-    var $charset         = 'utf8'; ///< What character set to use
-    protected $connected = false;  ///< Are we connected to the db?
+    var $db_handle       = false;       ///< Internal db handle
+    var $host            = 'localhost'; ///< Hostname or numeric IP address of the db server
+    var $port            = 3306;        ///< Port number
+    var $username        = 'root';      ///< Username to use to connect to the database
+    var $password        = '';          ///< Password to use to connect to the database
+    var $database        = '';          ///< Name of the database to connect to
+    var $charset         = 'utf8';      ///< What character set to use
+    protected $connected = false;       ///< Are we connected to the db?
 
     function setConfig($conf)
     {
@@ -37,14 +39,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
     }
 
-    /**
-     * Destructor
-     */
-    function __destruct()
-    {
-        $this->disconnect();
-    }
-
     function disconnect()
     {
         if ($this->connected)
@@ -56,11 +50,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function connect()
     {
-        //MySQL defaults
-        if (!$this->host)     $this->host     = 'localhost';
-        if (!$this->port)     $this->port     = 3306;
-        if (!$this->username) $this->username = 'root';
-
         //silence warning from failed connection and display our error instead
         $this->db_handle = @new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
