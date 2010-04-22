@@ -77,7 +77,6 @@ class XhtmlForm
         global $h;
 
         $p = array();
-
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
                 foreach ($this->elems as $row) {
@@ -204,6 +203,15 @@ class XhtmlForm
     }
 
     /**
+     * Adds a multi-select listbox
+     */
+    function addListbox($name, $str, $arr, $default = '')
+    {
+        //FIXME: $default param is ignored by xhtmlSelectMultiple()
+        $this->elems[] = array('type' => 'LISTBOX', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
+    }
+
+    /**
      * Adds a category to the form
      * @param $cat_type category type
      */
@@ -294,6 +302,11 @@ class XhtmlForm
             case 'RADIO':
                 $res .= '<td>'.$e['str'].'</td>';
                 $res .= '<td>'.xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
+                break;
+
+            case 'LISTBOX':
+                $res .= '<td>'.$e['str'].'</td>';
+                $res .= '<td>'.xhtmlSelectMultiple($e['name'], $e['arr'], $e['default'], 4).'</td>';
                 break;
 
             case 'SUBMIT':

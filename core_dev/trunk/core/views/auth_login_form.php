@@ -93,7 +93,7 @@ echo '</div>';
 if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg) {
     echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
 
-    if ($h->auth->activation_sent) {
+    if ($auth->activation_sent) {
         echo t('An email with your activation code has been sent.').'<br/>';
         echo t('Follow the link in the mail to complete your registration.').'<br/>';
         /*    //FIXME implement this:
@@ -127,7 +127,7 @@ if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg
                 xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Repeat password')).
             '</td>'.
             '</tr>';
-        if ($h->user->userdata) {
+        if ($user->userdata) {
             showRequiredUserdataFields();
         }
         echo '</table><br/>';

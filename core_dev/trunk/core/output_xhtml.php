@@ -115,6 +115,23 @@ function xhtmlSelectArray($_name, $_arr, $_default = '', $_onchange = '')
 }
 
 /**
+ * @param $_size number of fields shown
+ */
+function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_size = 5, $_onchange = '')
+{
+    //TODO not ignore the default param
+
+    $out = '<select multiple size="'.$_size.'" name="'.strip_tags($_name).'[]"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
+
+    foreach ($_arr as $id => $title)
+        $out .= '<option value="'.$id.'">'.$title.'</option>';
+
+    $out .= '</select>';
+
+    return $out;
+}
+
+/**
  * Creates a hidden input field
  */
 function xhtmlHidden($_name, $_val = 1)
