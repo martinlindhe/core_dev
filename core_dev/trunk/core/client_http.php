@@ -9,7 +9,15 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: good
+//STATUS: ok
+
+//FIXME header parsing should preserve all fields, ex:
+/*
+WWW-Authenticate: Negotiate
+WWW-Authenticate: NTLM
+*/
+
+//NTLM login to IIS server does a redirect and header is not parsed properly afterwards
 
 //FIXME "301 moved permanently" doesnt properly re-parse the subsequent request, which curl does automatically. see $max_redirects
 
@@ -29,6 +37,7 @@ class HttpClient extends CoreBase
     private $referer    = '';  ///< if set, send Referer header
     private $cookies = array(); ///< holds cookies to be sent to the server in the following request
     private $max_redirects = 99;
+    private $username, $password;
 
     function __construct($url = '')
     {
@@ -116,8 +125,8 @@ class HttpClient extends CoreBase
 
     function setUrl($s) { $this->Url->set($s); }
 
-    function setUsername($s) { $this->Url->setUsername($s); }
-    function setPassword($s) { $this->Url->setPassword($s); }
+    function setUsername($s) { $this->username = $s; }
+    function setPassword($s) { $this->password = $s; }
 
     /**
      * @param $n max number of redirects, set 0 to disable redirects
@@ -164,15 +173,16 @@ class HttpClient extends CoreBase
         if ($this->referer)
             curl_setopt($ch, CURLOPT_REFERER, $this->referer);
 
-        if ($this->Url->getUsername()) {
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-            curl_setopt($ch, CURLOPT_USERPWD, $this->Url->getUsername().':'.$this->Url->getPassword());
+        if ($this->username) {
+            //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_NTLM); //for "Server: Microsoft-IIS/5.0"
+            curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
         }
 
         $cache = new Cache();
         $cache->setCacheTime($this->cache_time);
 
-        if (!$this->Url->getUsername() && empty($post_params) && $this->cache_time && $cache->isActive()) {
+        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive()) {
 
             if ($this->getDebug()) $cache->setDebug();
             $key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
@@ -224,16 +234,14 @@ class HttpClient extends CoreBase
         }
 
         $res = curl_exec($ch);
-
         curl_close($ch);
 
-        if ($this->getDebug()) {
+        if ($this->getDebug())
             echo "Got ".strlen($res)." bytes".ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
-        }
 
         $this->parseResponse($res);
 
-        if (!$this->Url->getUsername() && empty($post_params) && $cache->isActive()) {
+        if (!$this->username && empty($post_params) && $cache->isActive()) {
             $cache->set($key_head, serialize($this->headers));
             if (!$head_only)
                 $cache->set($key_full, $res);
@@ -277,12 +285,11 @@ class HttpClient extends CoreBase
             $this->headers[ strtolower($col[0]) ] = $col[1];
         }
 
-        // store cookies sent from the server in our cookie pool for reuse in subsequent requests
+        // store cookies sent from the server in our cookie pool for possible manipulation
         $raw_cookies = $this->getHeader('set-cookie');
 
         if ($raw_cookies)
             $this->setCookies( decode_cookie_string($raw_cookies) );
-
     }
 
 }

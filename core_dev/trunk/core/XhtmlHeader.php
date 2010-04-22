@@ -7,13 +7,14 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('IXMLComponent.php');
-
 //STATUS: wip
 
 //TODO: rewrite "include feeds" functionality
 
 //TODO LATER: look at xmlwriter in php 6
+
+require_once('IXMLComponent.php');
+require_once('class.CoreBase.php');
 
 class XhtmlHeader extends CoreBase implements IXMLComponent
 {

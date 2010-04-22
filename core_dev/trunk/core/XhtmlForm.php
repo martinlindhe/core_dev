@@ -205,10 +205,10 @@ class XhtmlForm
     /**
      * Adds a multi-select listbox
      */
-    function addListbox($name, $str, $arr, $default = '')
+    function addListbox($name, $str, $arr, $default = '', $size = 4)
     {
         //FIXME: $default param is ignored by xhtmlSelectMultiple()
-        $this->elems[] = array('type' => 'LISTBOX', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
+        $this->elems[] = array('type' => 'LISTBOX', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default, 'size' => $size);
     }
 
     /**
@@ -306,7 +306,7 @@ class XhtmlForm
 
             case 'LISTBOX':
                 $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlSelectMultiple($e['name'], $e['arr'], $e['default'], 4).'</td>';
+                $res .= '<td>'.xhtmlSelectMultiple($e['name'], $e['arr'], $e['default'], $e['size']).'</td>';
                 break;
 
             case 'SUBMIT':

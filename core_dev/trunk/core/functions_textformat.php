@@ -436,6 +436,7 @@ function reduce_whitespace($s)
 {
     $s = str_replace('&#160;', ' ', $s); //nbsp in hex
     $s = str_replace('&nbsp;', ' ', $s);
+    $s = str_replace("\t",     ' ', $s); //tabs -> spaces
     do {
         $tmp = $s;
         $s = str_replace('  ', ' ', $s);

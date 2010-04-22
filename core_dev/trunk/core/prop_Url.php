@@ -40,7 +40,7 @@ class Url extends CoreProperty
         if ($this->port && scheme_default_port($this->scheme) != $this->port)
             $port = ':'.$this->port;
 
-        $res = $this->scheme.'://'.$this->host.$port.$this->path;
+        $res = $this->scheme.'://'.($this->username ? $this->username.':'.$this->password.'@' : '').$this->host.$port.$this->path;
 
         if (!empty($this->param)) {
             if ($safe)
