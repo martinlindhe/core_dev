@@ -9,27 +9,26 @@
 
 //STATUS: wip XXX make it a general sql profiler, split out showConfig() and showStatus() to views connected to the mysql driver
 
-//XXX: theres some pointless overrides here like the constructor & getInstance, because we extend a singleton class (is that wrong?)
 //TODO: make showProfile, showStatus, showConfig into separate views
 
 require_once('sql_mysql.php');
 
 class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 {
-    var $time_initial = 0;       ///< profiler: microtime for db instance
-    var $time_measure = 0;       ///< profiler: time when profiling started
-    var $time_connect = 0;       ///< profiler: time it took to connect to db
-    var $time_spent   = array(); ///< Used internally for the SQL profiler
-    var $queries_cnt  = 0;       ///< Used internally for the SQL profiler
-    var $queries      = array(); ///< Used internally for the SQL profiler
-    var $query_error  = array(); ///< Used internally for the SQL profiler
+    var $ts_initial   = 0;       ///< microtime for db instance
+    var $time_measure = 0;       ///< time when profiling started
+    var $time_connect = 0;       ///< time it took to connect to db
+    var $time_spent   = array(); ///< time spent for each query
+    var $queries_cnt  = 0;       ///< number of queries executed XXX FIXME USELESS?!?!
+    var $queries      = array(); ///< queries executed
+    var $query_error  = array(); ///< query error messages
 
     function __construct()
     {
-        $this->time_initial = microtime(true);
+        $this->ts_initial = microtime(true);
     }
 
-    function getErrorCount() { return count($query_error); }
+    function getErrorCount() { return count($this->query_error); }
 
     /**
      * Renders the object using a view script

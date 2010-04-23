@@ -62,8 +62,8 @@ for ($i=0; $i < $db->queries_cnt; $i++)
     echo '<hr/>';
 }
 
-$total_time = microtime(true) - $db->time_initial + $sql_time + $db->time_connect;
-$php_time = $total_time - $sql_time - $db->time_connect;
+$total_time = microtime(true) - $db->ts_initial;
+$php_time   = $total_time - $sql_time - $db->time_connect;
 
 echo
 'Time spent: <b>'.round($total_time, 2).'s</b> '.
@@ -78,8 +78,7 @@ if (is_client_localhost())
     echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
 }
 
-//show memory usage
-echo dm();
+echo dm(); //memory usage
 echo 'Server time: '.date('r T');
 
 echo '</div>';
