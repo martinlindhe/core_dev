@@ -9,9 +9,10 @@
 
 //STATUS: WIP
 
-//TODO: enable ajax loading of data
+//TODO: enable XHR loading of data
 //TODO: enable pagination
 //TODO: enable inline cell editing
+//TODO: support other formats than json for XHR data
 
 class yui_datatable
 {
@@ -20,7 +21,7 @@ class yui_datatable
     private $div_holder_name = 'myDataTableHolder';
     private $caption         = ''; ///< caption for the datatable
 
-    private $data_retreiver  = ''; ///< url to retrieve data from
+    private $xhr_retreiver  = ''; ///< url to retrieve data from XMLHttpRequest
 
     function setCaption($s) { $this->caption = $s; }
 
@@ -75,7 +76,7 @@ class yui_datatable
      */
     function setDataRetriever($url)
     {
-        $this->data_retreiver = $url;
+        $this->xhr_retreiver = $url;
     }
 
     function render()
@@ -103,7 +104,7 @@ class yui_datatable
         $res = '<div id="'.$this->div_holder_name.'"></div> ';
         $res .=
         '<script type="text/javascript">'."\n".
-        (!$this->data_retreiver ? 'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n" : '').
+        (!$this->xhr_retreiver ? 'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n" : '').
 
         'YAHOO.util.Event.addListener(window, "load", function() {'.
             'YAHOO.example.Basic = function() {'.
@@ -123,9 +124,10 @@ class yui_datatable
                 'YAHOO.widget.DataTable.Formatter.myFormatLink = myFormatLink;'."\n".
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
-                ($this->data_retreiver ?
+                ($this->xhr_retreiver ?
                     //rpc
-                    'var myDataSource = new YAHOO.util.XHRDataSource("'.$this->data_retreiver.'");'.
+                    'var myDataSource = new YAHOO.util.XHRDataSource("'.$this->xhr_retreiver.'");'.
+                    'this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;'.
                     'myDataSource.responseSchema = {'.
                         'fields: '.jsArray1D(array_keys($this->columns), false).','.
                         'resultsList: "Response.results",'.
@@ -143,7 +145,7 @@ class yui_datatable
 
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
-                    ($this->data_retreiver ? 'dynamicData:true,' : '').
+                    ($this->xhr_retreiver ? 'dynamicData:true,' : '').
                 '};'.
 
                 'myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",myColumnDefs, myDataSource, myConfigs);'.

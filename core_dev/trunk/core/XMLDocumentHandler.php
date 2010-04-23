@@ -17,6 +17,7 @@ class XMLDocumentHandler extends CoreBase
 
     private $design_head;
     private $design_foot;
+    private $enable_design = true;
     private $mimetype = 'text/html';
 
     var $objs = array();  ///< IXMLComponent objects
@@ -43,6 +44,11 @@ class XMLDocumentHandler extends CoreBase
      */
     function designHead($n) { $this->design_head = $n; }
     function designFoot($n) { $this->design_foot = $n; }
+
+    /**
+     * Removes XhtmlHeader, designHead & designFoot for this request
+     */
+    function disableDesign() { $this->enable_design = false; }
 
     /**
      * Attaches a controller object to the main body
@@ -72,12 +78,14 @@ class XMLDocumentHandler extends CoreBase
         if ($this->mimetype)
             header('Content-type: '.$this->mimetype);
 
-        $header = XhtmlHeader::getInstance();
-        echo $header->render();
+        if ($this->enable_design) {
+            $header = XhtmlHeader::getInstance();
+            echo $header->render();
 
-        if ($this->design_head) {
-            $view = new ViewModel($this->design_head);
-            echo $view->render();
+            if ($this->design_head) {
+                $view = new ViewModel($this->design_head);
+                echo $view->render();
+            }
         }
 
 /*
@@ -106,15 +114,14 @@ class XMLDocumentHandler extends CoreBase
             echo $obj->render();
         }
 
-        //if ($session->isAdmin) {
+        if ($this->enable_design) { //&& $session->isAdmin) {
             $db = SqlHandler::getInstance();
 
             if ($db instanceof DatabaseMySQLProfiler)
                 echo $db->renderProfiler();
-        //}
+        }
 
-
-        if ($this->design_foot) {
+        if ($this->enable_design && $this->design_foot) {
             $view = new ViewModel($this->design_foot);
             echo $view->render();
         }
