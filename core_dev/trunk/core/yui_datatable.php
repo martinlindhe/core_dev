@@ -22,7 +22,7 @@ class yui_datatable
 
     function addColumn($key, $label)
     {
-        $this->columns[$key]['key']      = $key; ///XXX stupid, but simplifies other code
+        $this->columns[$key]['key']      = $key;
         $this->columns[$key]['label']    = $label;
         $this->columns[$key]['sortable'] = true;
         //$this->columns[$key]['resizeable'] = true; //is disabled by default
@@ -35,7 +35,6 @@ class yui_datatable
     {
         switch ($type) {
         case 'link':
-            //$this->columns[$key]['type']       = $type;
             $this->columns[$key]['formatter']  = 'myFormatLink';
             $this->columns[$key]['extra_data'] = $extra;
             break;
@@ -64,31 +63,32 @@ class yui_datatable
 
     function render()
     {
-        $res = '<div id="'.$this->div_holder_name.'"></div> ';
+        $header = XhtmlHeader::getInstance();
 
-        $res .= '<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css">';
-        //$res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js"></script>';
+        $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css');
+        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js');
 
         //Debug version:
-        $res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-debug.js&2.8.0r4/build/dom/dom-debug.js&2.8.0r4/build/event/event-debug.js&2.8.0r4/build/element/element-debug.js&2.8.0r4/build/datasource/datasource-debug.js&2.8.0r4/build/datatable/datatable-debug.js&2.8.0r4/build/logger/logger-debug.js"></script>';
-
+        //$header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-debug.js&2.8.0r4/build/dom/dom-debug.js&2.8.0r4/build/event/event-debug.js&2.8.0r4/build/element/element-debug.js&2.8.0r4/build/datasource/datasource-debug.js&2.8.0r4/build/datatable/datatable-debug.js&2.8.0r4/build/logger/logger-debug.js');
 
 /*
         //OPTIONAL: JSON Utility (for DataSource)
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js"></script>'.
+        //http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js
 
         //OPTIONAL: Connection Manager (enables XHR for DataSource)
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js"></script>'.
+        //http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js
 
         //OPTIONAL: Get Utility (enables dynamic script nodes for DataSource)
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/get/get-min.js"></script>'.
+        //<script src="http://yui.yahooapis.com/2.8.0r4/build/get/get-min.js
 
         //OPTIONAL: Drag Drop (enables resizeable or reorderable columns)
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/dragdrop/dragdrop-min.js"></script>'.
+        //http://yui.yahooapis.com/2.8.0r4/build/dragdrop/dragdrop-min.js
 
         //OPTIONAL: Calendar (enables calendar editors)
-        '<script src="http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js"></script>'.
+        //http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js
 */
+
+        $res = '<div id="'.$this->div_holder_name.'"></div> ';
 
         $data_var = 'yui_dt'.mt_rand(0,99999);
 

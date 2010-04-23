@@ -9,8 +9,6 @@
 
 //STATUS: wip
 
-//TODO: register js includes properly by page renderer singleton class
-
 require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
@@ -31,8 +29,6 @@ class XhtmlForm
     private $listenGet        = false;
 
     private $elems            = array();
-    private $yui_dateinterval = false;    ///< include yui files for date interval picker?
-    private $yui_richedit     = false;    ///< include yui files for richedit?
 
     private $success          = '';
     private $error            = 'Submitted form was rejected!';
@@ -168,7 +164,6 @@ class XhtmlForm
      */
     function addRichedit($name, $str, $val = '', $width = 500, $height = 200)
     {
-        $this->yui_richedit = true;
         $this->elems[] = array('type' => 'RICHEDIT', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
     }
 
@@ -225,7 +220,6 @@ class XhtmlForm
      */
     function addDateInterval($namefrom, $nameto, $str)
     {
-        $this->yui_dateinterval = true;
         $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str);
     }
 
@@ -245,16 +239,6 @@ class XhtmlForm
             die('FATAL: XhtmlForm does not have a defined data handler');
 
         $res = '';
-        if ($this->yui_dateinterval) {
-            //use http://developer.yahoo.com/yui/articles/hosting/ to generate urls:
-            $res .= '<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css">';
-            $res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js"></script>';
-        }
-
-        if ($this->yui_richedit) {
-            $res .= '<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0r4/build/assets/skins/sam/skin.css"> ';
-            $res .= '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/container/container_core-min.js&2.8.0r4/build/menu/menu-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/button/button-min.js&2.8.0r4/build/editor/editor-min.js"></script> ';
-        }
 
         $res .= xhtmlForm($this->name, '', 'post', $this->enctype);
 

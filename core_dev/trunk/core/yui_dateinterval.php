@@ -31,6 +31,11 @@ class yui_dateinterval
 
     function render()
     {
+        $header = XhtmlHeader::getInstance();
+
+        $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css');
+        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js');
+
         $res = '
         (function() {
 
@@ -198,7 +203,7 @@ class yui_dateinterval
             cal.render();
         });';
 
-        return '<script type="text/javascript">'.$res. '</script>';
+        return '<script type="text/javascript">'.$res.'</script>';
     }
 
 }

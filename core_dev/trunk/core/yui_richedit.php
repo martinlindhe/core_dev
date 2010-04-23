@@ -29,8 +29,12 @@ class yui_richedit
 
     function render()
     {
+        $header = XhtmlHeader::getInstance();
+
+        $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/assets/skins/sam/skin.css');
+        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/container/container_core-min.js&2.8.0r4/build/menu/menu-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/button/button-min.js&2.8.0r4/build/editor/editor-min.js');
+
         $res =
-        '<script type="text/javascript">'.
         'var myEditor = new YAHOO.widget.Editor("'.$this->input_name.'", {'.
             'width: "'.$this->width.'px",'.
             'height: "'.$this->height.'px",'.
@@ -73,10 +77,9 @@ class yui_richedit
             '}'.
         '}'.
         ');'.
-        'myEditor.render();'.
-        '</script>';
+        'myEditor.render();';
 
-        return $res;
+        return '<script type="text/javascript">'.$res.'</script>';
     }
 }
 
