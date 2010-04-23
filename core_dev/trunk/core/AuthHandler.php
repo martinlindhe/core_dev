@@ -70,7 +70,7 @@ class AuthHandler extends CoreBase
         $enc_password = sha1( $id.sha1($this->encrypt_key).sha1($password) );
 
         $q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_password).'" AND timeDeleted IS NULL';
-        $row = $db->getOneItem($q);
+        $row = $db->getOneRow($q);
         if (!$row) {
             dp('Failed login attempt: username '.$username);
             $error->add('Login failed');
@@ -78,6 +78,7 @@ class AuthHandler extends CoreBase
         }
 
         $session->start($row['userId'], $row['userName'], $row['userMode']);
+        dp($session->username.' logged in');
 
 /*
         if ($data['userMode'] != USERLEVEL_SUPERADMIN) {
@@ -96,6 +97,8 @@ class AuthHandler extends CoreBase
     private function logout()
     {
         $session = SessionHandler::getInstance();
+
+        dp($session->username.' logged out');
 
         //addEvent(EVENT_USER_LOGOUT, 0, $session->id);
         $session->setLogoutTime();

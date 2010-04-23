@@ -49,16 +49,26 @@ class SessionHandler extends CoreBase
     function setName($s) { $this->name = $s; }
     function setTimeout($n) { $this->timeout = $n; }
 
-    function init()
+    /**
+     * Resumes the session from previous request
+     */
+    function resume()
     {
-        //disable garbage collector to work around ubuntu/debian bug, see:
-        //   http://forum.kohanaphp.com/comments.php?DiscussionID=565
-        ini_set('session.gc_probability', 0);
-
         ini_set('session.gc_maxlifetime', $this->timeout);
 
         session_name($this->name);
         session_start();
+
+        if (empty($_COOKIE[$this->name])) {
+            dp('Session timeout');
+            $this->end();
+            $this->showStartPage();
+            die;
+        }
+
+        //sets httponly param to mitigate XSS attacks
+        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', '', false, true);
+
 //XXX fixa bort all denna skit (?)
         if (!isset($_SESSION['started']) || !$_SESSION['started']) $_SESSION['started'] = time();
         if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
@@ -79,7 +89,6 @@ class SessionHandler extends CoreBase
         $this->referer = &$_SESSION['referer'];
 
 //        if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip()); //FIXME map to $this->auth->ip
-
     }
 
     /**
@@ -87,8 +96,6 @@ class SessionHandler extends CoreBase
      */
     function end()
     {
-        dp($this->username.' logged out');
-
         $this->started      = 0;
         $this->id           = 0;
         $this->username     = '';
@@ -112,8 +119,8 @@ class SessionHandler extends CoreBase
         $this->username = $username;
         $this->usermode = $usermode;
 
-        if ($this->usermode >= USERLEVEL_WEBMASTER) $this->isWebmaster = true;
-        if ($this->usermode >= USERLEVEL_ADMIN) $this->isAdmin = true;
+        if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster = true;
+        if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin = true;
         if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
         $this->updateLoginTime();
@@ -125,8 +132,6 @@ class SessionHandler extends CoreBase
         $db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$geoip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 
         //addEvent(EVENT_USER_LOGIN, 0, $this->id);
-
-        dp($this->username.' logged in');
     }
 
     private function updateActiveTime()
