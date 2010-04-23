@@ -20,6 +20,10 @@ class yui_datatable
     private $div_holder_name = 'myDataTableHolder';
     private $caption         = ''; ///< caption for the datatable
 
+    private $data_retreiver  = ''; ///< url to retrieve data from
+
+    function setCaption($s) { $this->caption = $s; }
+
     function addColumn($key, $label)
     {
         $this->columns[$key]['key']      = $key;
@@ -43,6 +47,10 @@ class yui_datatable
         }
     }
 
+    /**
+     * Loads the datatable with a static array of data
+     * Cannot be used with setDataRetreiver()
+     */
     function setDataList($arr)
     {
         //only include registered array keys
@@ -61,23 +69,26 @@ class yui_datatable
         $this->datalist = $res;
     }
 
+    /**
+     * Configures the datatable to load data from a callback url
+     * Cannot be used with setDataList()
+     */
+    function setDataRetriever($url)
+    {
+        $this->data_retreiver = $url;
+    }
+
     function render()
     {
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css');
-        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js');
+        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/connection/connection-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js&2.8.0r4/build/json/json-min.js');
 
         //Debug version:
-        //$header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-debug.js&2.8.0r4/build/dom/dom-debug.js&2.8.0r4/build/event/event-debug.js&2.8.0r4/build/element/element-debug.js&2.8.0r4/build/datasource/datasource-debug.js&2.8.0r4/build/datatable/datatable-debug.js&2.8.0r4/build/logger/logger-debug.js');
+        //$header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-debug.js&2.8.0r4/build/event/event-debug.js&2.8.0r4/build/connection/connection-debug.js&2.8.0r4/build/dom/dom-debug.js&2.8.0r4/build/element/element-debug.js&2.8.0r4/build/datasource/datasource-debug.js&2.8.0r4/build/datatable/datatable-debug.js&2.8.0r4/build/json/json-debug.js&2.8.0r4/build/logger/logger-debug.js');
 
 /*
-        //OPTIONAL: JSON Utility (for DataSource)
-        //http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js
-
-        //OPTIONAL: Connection Manager (enables XHR for DataSource)
-        //http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js
-
         //OPTIONAL: Get Utility (enables dynamic script nodes for DataSource)
         //<script src="http://yui.yahooapis.com/2.8.0r4/build/get/get-min.js
 
@@ -87,14 +98,12 @@ class yui_datatable
         //OPTIONAL: Calendar (enables calendar editors)
         //http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js
 */
-
-        $res = '<div id="'.$this->div_holder_name.'"></div> ';
-
         $data_var = 'yui_dt'.mt_rand(0,99999);
 
+        $res = '<div id="'.$this->div_holder_name.'"></div> ';
         $res .=
         '<script type="text/javascript">'."\n".
-        'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n".
+        (!$this->data_retreiver ? 'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n" : '').
 
         'YAHOO.util.Event.addListener(window, "load", function() {'.
             'YAHOO.example.Basic = function() {'.
@@ -105,24 +114,39 @@ class yui_datatable
                  * oColumn reference to current column (pointer to a row in myColumnDefs)
                  * oData is the cell data
                  */
-                'this.myFormatLink = function(elLiner, oRecord, oColumn, oData) {'.
+                'myFormatLink = function(elLiner, oRecord, oColumn, oData) {'.
                     'var prefix = oColumn["extra_data"];'.
                     'elLiner.innerHTML = "<a href=\"" + prefix + oData + "\">" + oData + "</a>";'.
                 '};'.
 
                 // Add the custom formatter to the shortcuts
-                'YAHOO.widget.DataTable.Formatter.myFormatLink = this.myFormatLink;'."\n".
+                'YAHOO.widget.DataTable.Formatter.myFormatLink = myFormatLink;'."\n".
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
-                'myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
-                'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
-                'myDataSource.responseSchema = {'.
-                    //XXX return 2d array with key:name,parser:datatype    see http://developer.yahoo.com/yui/datatable/#basicsort
-                    'fields: '.jsArray1D(array_keys($this->columns), false).
+                ($this->data_retreiver ?
+                    //rpc
+                    'var myDataSource = new YAHOO.util.XHRDataSource("'.$this->data_retreiver.'");'.
+                    'myDataSource.responseSchema = {'.
+                        'fields: '.jsArray1D(array_keys($this->columns), false).','.
+                        'resultsList: "Response.results",'.
+                        'metaFields: { totalRecords: "Response.totalRecords" }'. // Access server-provided dynamic value
+                    '};'
+                    :
+                    //embedded js-array
+                    'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
+                    'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
+                    'myDataSource.responseSchema = {'.
+                        //XXX return 2d array with key:name,parser:datatype    see http://developer.yahoo.com/yui/datatable/#basicsort
+                        'fields: '.jsArray1D(array_keys($this->columns), false).
+                    '};'
+                ).
+
+                'var myConfigs = {'.
+                    'caption:"'.$this->caption.'",'.
+                    ($this->data_retreiver ? 'dynamicData:true,' : '').
                 '};'.
 
-                'this.myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",'.
-                    'myColumnDefs, myDataSource, {caption:"'.$this->caption.'"});'.
+                'myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",myColumnDefs, myDataSource, myConfigs);'.
 
                 'return {'.
                     'oDS: myDataSource,'.
