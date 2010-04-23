@@ -30,6 +30,8 @@ class SessionHandler extends CoreBase
     var $logged_out_start_page = '/';
     var $error_page = '/error';    ///< redirects the user to this page to show errors
 
+    var $update_activity = true;   ///< update user last active?
+
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?
     var $isSuperAdmin;             ///< is user superadmin?
@@ -136,6 +138,8 @@ class SessionHandler extends CoreBase
 
     private function updateActiveTime()
     {
+        if (!$this->id || !$this->update_activity) return;
+
         $db = SqlHandler::getInstance();
         $db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
     }
@@ -153,12 +157,11 @@ class SessionHandler extends CoreBase
     }
 
     /**
-     * Handles session events, such as idle timeout check. called from the constructor
+     * Handles session events, such as idle timeout check
      */
     function handleEvents()
     {
-        //force session handling to be skipped to disallow automatic requests from keeping a user "logged in"
-        if (!empty($config['no_session']) || !$this->id) return;
+
 
         //Logged in: Check user activity - log out inactive user
         //FIXME: redo this- check lastactive timestamp from db when session is resumed instead
@@ -169,8 +172,6 @@ class SessionHandler extends CoreBase
             $error->add('Session timed out');
             $this->showErrorPage();
         }*/
-
-        if (!$this->id) return;
 
         $this->updateActiveTime();
     }
