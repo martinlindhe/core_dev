@@ -7,13 +7,13 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-//require_once('core_Base.php');
+require_once('class.CoreBase.php');
 require_once('ISql.php');
 
 //STATUS: wip
-//TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
+//TODO: update getNumArray()
 
-//TODO: move all measure_*() to db_mysql_profiler parent methods
+//TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
 class DatabaseMysql extends CoreBase implements IDB_SQL
 {
@@ -278,6 +278,15 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         $this->measure_query($q);
 
         return $data;
+    }
+
+    /**
+     * Shows the config view
+     */
+    public function renderConfig()
+    {
+        $view = new ViewModel('views/mysql_config.php');
+        return $view->render();
     }
 
 }
