@@ -37,6 +37,7 @@ class HttpClient extends CoreBase
     private $referer    = '';  ///< if set, send Referer header
     private $cookies = array(); ///< holds cookies to be sent to the server in the following request
     private $max_redirects = 99;
+    private $content_type = '';
     private $username, $password;
 
     function __construct($url = '')
@@ -71,6 +72,7 @@ class HttpClient extends CoreBase
         return false;
     }
 
+    function setContentType($s) { $this->content_type = $s; }
     function setReferer($s) { $this->referer = $s; }
 
     /**
@@ -156,6 +158,9 @@ class HttpClient extends CoreBase
             echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".ln();
             return false;
         }
+
+        if ($this->content_type)
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$this->content_type));
 
         if ($this->Url->getScheme() == 'https') {
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);

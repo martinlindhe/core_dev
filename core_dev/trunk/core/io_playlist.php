@@ -40,7 +40,7 @@ require_once('input_asx.php');
 require_once('input_m3u.php'); //XXX: TODO support input m3u playlists
 require_once('io_newsfeed.php');
 
-require_once('xhtml_header.php');
+require_once('XhtmlHeader.php');
 
 class MediaItem extends CoreBase //XXX rename to PlaylistItem ?
 {
@@ -168,7 +168,7 @@ class Playlist extends CoreList
         case 'html':
             $res = '';
             if ($this->headers) {
-                $header = new xhtml_header();
+                $header = XhtmlHeader::getInstance();
                 $header->setTitle($this->title);
                 $res = $header->render();
             }
