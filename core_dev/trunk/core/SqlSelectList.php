@@ -18,10 +18,12 @@ abstract class SqlSelectList
     private $result_limit;
     private $result_idx    = 0;
     private $columns = array();
+    private $period_from, $period_to;
 
     protected $table_name;
     protected $owner_name;
     protected $child_name;
+    protected $timestamp_name;
 
     function __construct($owner, $child)
     {
@@ -41,6 +43,19 @@ abstract class SqlSelectList
      * How many results to return
      */
     function setResultRows($n) { if (is_numeric($n)) $this->result_limit = $n; }
+
+    /**
+     * Specifies selection of entries over a time period (timestamp column is $timestamp_name)
+     */
+    function setPeriod($from, $to)
+    {
+        $from = ts($from);
+        $to   = ts($to);
+        if (!$from || !$to) return false;
+
+        $this->period_from = $from;
+        $this->period_to   = $to;
+    }
 
     /**
      * Index of results to return
@@ -65,6 +80,9 @@ abstract class SqlSelectList
 
         $q = 'SELECT COUNT('.$this->child_name.') FROM '.$this->table_name.' WHERE '.$this->owner_name.'='.$this->owner;
 
+        if ($this->period_from)
+            $q .= ' AND DATE('.$this->timestamp_name.') BETWEEN "'.sql_date($this->period_from).'" AND "'.sql_date($this->period_to).'"';
+
         //XXX FIXME: auto-escape depending on value of $this->child
         if ($this->child)
             $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
@@ -78,6 +96,9 @@ abstract class SqlSelectList
 
         $q = 'SELECT '.implode(',', $this->columns).' FROM '.$this->table_name.' WHERE '.$this->owner_name.'='.$this->owner;
 
+        if ($this->period_from)
+            $q .= ' AND DATE('.$this->timestamp_name.') BETWEEN "'.sql_date($this->period_from).'" AND "'.sql_date($this->period_to).'"';
+
         if ($this->child)
             $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
 
@@ -89,6 +110,7 @@ abstract class SqlSelectList
 
         return $db->getArray($q);
     }
+
 }
 
 ?>
