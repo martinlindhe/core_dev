@@ -35,14 +35,15 @@ class WsdlGenerator
         header('Content-type: text/xml');
         $res = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
-        $res .= '<definitions name="'.$this->interface_name.'"
-                targetNamespace="http://example.org/'.$this->interface_name.'.wsdl"
-                xmlns:tns="http://example.org/'.$this->interface_name.'.wsdl"
-                xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-                xmlns="http://schemas.xmlsoap.org/wsdl/">';
+        $res .=
+        '<definitions name="'.$this->interface_name.'"
+            targetNamespace="http://example.org/'.$this->interface_name.'.wsdl"
+            xmlns:tns="http://example.org/'.$this->interface_name.'.wsdl"
+            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+            xmlns="http://schemas.xmlsoap.org/wsdl/">';
 
         //Describe function parameter datatypes and return datatypes
         foreach ($this->messages as $name => $params) {
@@ -62,32 +63,36 @@ class WsdlGenerator
 
         //Describe what <message> responds to a specific <operation> input and output
         $res .= '<portType name="'.$this->interface_name.'PortType">';
-            foreach ($this->messages as $operation => $params) {
-                $res .= '<operation name="'.$operation.'">';
-                    $res .= '<input message="tns:'.$operation.'Request"/>';
-                    $res .= '<output message="tns:'.$operation.'Response"/>';
-                $res .= '</operation>';
-            }
+
+            foreach ($this->messages as $operation => $params)
+                $res .= '<operation name="'.$operation.'">'.
+                    '<input message="tns:'.$operation.'Request"/>'.
+                    '<output message="tns:'.$operation.'Response"/>'.
+                '</operation>';
+
         $res .= '</portType>';
 
         //Describe how to encode data for each <operation> input and output
         $res .= '<binding name="'.$this->interface_name.'Binding" type="tns:'.$this->interface_name.'PortType">';
             $res .= '<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>';
-            foreach ($this->messages as $operation => $params) {
-                $res .= '<operation name="'.$operation.'">';
-                    $res .= '<soap:operation soapAction="urn:#'.$operation.'"/>';
-                    $res .= '<input><soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>';
-                    $res .= '<output><soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>';
-                $res .= '</operation>';
-            }
+
+            foreach ($this->messages as $operation => $params)
+                $res .=
+                '<operation name="'.$operation.'">'.
+                    '<soap:operation soapAction="urn:#'.$operation.'"/>'.
+                    '<input><soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>'.
+                    '<output><soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>'.
+                '</operation>';
+
         $res .= '</binding>';
 
         //Describe URL for the service
-        $res .= '<service name="'.$this->interface_name.'Service">';
-            $res .= '<port name="'.$this->interface_name.'Port" binding="tns:'.$this->interface_name.'Binding">';
-                $res .= '<soap:address location="'.$this->interface_url.'"/>';
-            $res .= '</port>';
-        $res .= '</service>';
+        $res .=
+        '<service name="'.$this->interface_name.'Service">'.
+            '<port name="'.$this->interface_name.'Port" binding="tns:'.$this->interface_name.'Binding">'.
+                '<soap:address location="'.$this->interface_url.'"/>'.
+            '</port>'.
+        '</service>';
 
         $res .= '</definitions>';
     }

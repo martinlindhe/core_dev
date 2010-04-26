@@ -7,6 +7,7 @@
 
 //STATUS: wip
 
+//TODO: is setActive() method even nessecary with the RequestHandler blacklist???
 //FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
 define('USERLEVEL_NORMAL',      0);
