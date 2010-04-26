@@ -14,11 +14,10 @@
 
 class yui_datatable
 {
-    private $columns         = array();
-    private $datalist        = array();
-    private $div_holder_name = 'myDataTableHolder';
-    private $caption         = ''; ///< caption for the datatable
-
+    private $columns        = array();
+    private $datalist       = array();
+    private $div_holder     = ''; ///< name of div tag to hold the datatable
+    private $caption        = ''; ///< caption for the datatable
     private $xhr_retreiver  = ''; ///< url to retrieve data from XMLHttpRequest
 
     function setCaption($s) { $this->caption = $s; }
@@ -28,7 +27,13 @@ class yui_datatable
         $this->columns[$key]['key']      = $key;
         $this->columns[$key]['label']    = $label;
         $this->columns[$key]['sortable'] = true;
-        //$this->columns[$key]['resizeable'] = true; //is disabled by default
+        //$this->columns[$key]['resizeable'] = true; //disabled by default
+
+        if (substr($key, 0, 4) == 'time')
+            $this->setColumnType($key, 'time');
+
+        if (substr($key, 0, 4) == 'date')
+            $this->setColumnType($key, 'date');
     }
 
     /**
@@ -40,6 +45,14 @@ class yui_datatable
         case 'link':
             $this->columns[$key]['formatter']  = 'formatLink';
             $this->columns[$key]['extra_data'] = $extra;
+            break;
+
+        case 'date':
+            $this->columns[$key]['formatter']  = 'formatDate';
+            break;
+
+        case 'time':
+            $this->columns[$key]['formatter']  = 'formatTime';
             break;
 
         default: throw new Exception('Unknown column type '.$type);
@@ -94,7 +107,11 @@ class yui_datatable
         //OPTIONAL: Calendar (enables calendar editors)
         //http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js
 */
-        $data_var = 'yui_dt'.mt_rand(0,99999);
+
+        if (!$this->div_holder)
+            $this->div_holder = 'YuiDtHold'.mt_rand(0,9999);
+
+        $data_var = 'YuiDt'.mt_rand(0,9999);
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
@@ -111,8 +128,25 @@ class yui_datatable
                     'elLiner.innerHTML = "<a href=\"" + prefix + oData + "\">" + oData + "</a>";'.
                 '};'.
 
+                //oData cell data "YYYY-MM-DD HH:MM:SS"
+                'this.formatDate = function(elLiner, oRecord, oColumn, oData) {'.
+                    'if (!oData) return;'.
+                    'var a1 = oData.substr(0,10).split("-");'.
+                    'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2];'.
+                '};'.
+
+                'this.formatTime = function(elLiner, oRecord, oColumn, oData) {'.
+                    'if (!oData) return;'.
+                    //'return new Date(oData);'.  //XXX why dont this work?
+                    'var a1 = oData.substr(0,10).split("-");'.
+                    'var a2 = oData.substr(11,8).split(":");'.
+                    'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2]+" "+a2[0]+":"+a2[1]+":"+a2[2];'.
+                '};'.
+
                 // Add the custom formatter to the shortcuts
                 'YAHOO.widget.DataTable.Formatter.formatLink = this.formatLink;'.
+                'YAHOO.widget.DataTable.Formatter.formatDate = this.formatDate;'.
+                'YAHOO.widget.DataTable.Formatter.formatTime = this.formatTime;'.
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
                 ($this->xhr_retreiver ?
@@ -121,9 +155,9 @@ class yui_datatable
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;'.
                     'myDataSource.connXhrMode = "queueRequests";'. //XXX ???
                     'myDataSource.responseSchema = {'.
-                        'resultsList: "Result.Data",'.
+                        'resultsList: "Result.data",'.
                         'fields: '.jsArray1D(array_keys($this->columns), false).','.
-                        'metaFields: { totalRecords:"Result.TotalRecords" }'. // Access server-provided dynamic value
+                        'metaFields: { totalRecords:"Result.totalRecords" }'. // XXX ???
                     '};'
                     :
                     //embedded js-array
@@ -139,7 +173,7 @@ class yui_datatable
                     ($this->xhr_retreiver ? 'dynamicData:true,' : '').
                 '};'.
 
-                'myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder_name.'",myColumnDefs, myDataSource, myConfigs);'.
+                'myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
                 'return {'.
                     'oDS: myDataSource,'.
@@ -149,7 +183,7 @@ class yui_datatable
         '});';
 
         return
-        '<div id="'.$this->div_holder_name.'"></div>'.
+        '<div id="'.$this->div_holder.'"></div>'.
         '<script type="text/javascript">'.$res.'</script>';
     }
 
