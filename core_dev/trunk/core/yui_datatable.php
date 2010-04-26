@@ -38,7 +38,7 @@ class yui_datatable
     {
         switch ($type) {
         case 'link':
-            $this->columns[$key]['formatter']  = 'myFormatLink';
+            $this->columns[$key]['formatter']  = 'formatLink';
             $this->columns[$key]['extra_data'] = $extra;
             break;
 
@@ -106,13 +106,13 @@ class yui_datatable
                  * oColumn reference to current column (pointer to a row in myColumnDefs)
                  * oData is the cell data
                  */
-                'myFormatLink = function(elLiner, oRecord, oColumn, oData) {'.
+                'this.formatLink = function(elLiner, oRecord, oColumn, oData) {'.
                     'var prefix = oColumn["extra_data"];'.
                     'elLiner.innerHTML = "<a href=\"" + prefix + oData + "\">" + oData + "</a>";'.
                 '};'.
 
                 // Add the custom formatter to the shortcuts
-                'YAHOO.widget.DataTable.Formatter.myFormatLink = myFormatLink;'.
+                'YAHOO.widget.DataTable.Formatter.formatLink = this.formatLink;'.
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
                 ($this->xhr_retreiver ?
