@@ -16,9 +16,10 @@ class RequestHandler
 {
     static $_instance; ///< singleton
 
-    protected $_controller; ///< /CONTROLLER/view/id/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
-    protected $_view;       ///< /controller/VIEW/id/  XXX view parameter for the "controller", or later will be the method to run on the controller
-    protected $_id;         ///< /controller/view/ID/
+    protected $_controller; ///< /CONTROLLER/view/owner/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
+    protected $_view;       ///< /controller/VIEW/owner/   XXX view parameter for the "controller", or later will be the method to run on the controller
+    protected $_owner;      ///< /controller/view/OWNER/   numeric id
+    protected $_child;      ///< /controller/view/owner/CHILD/  numeric id
     protected $_params;
 
     public function getParams() { return $this->_params; }
@@ -52,7 +53,10 @@ class RequestHandler
             return;
 
         if (is_numeric($arr[2]))
-            $this->_id = $arr[2];
+            $this->_owner = $arr[2];
+
+        if (isset($arr[3]) && is_numeric($arr[3]))
+            $this->_child = $arr[3];
 /*
         //XXX FIXME parse params properly
         for ($idx=2, $cnt = count($arr); $idx < $cnt; $idx += 2)
@@ -77,7 +81,8 @@ class RequestHandler
         //expose request params for the view
         $view = new ViewModel($view_file);
         $view->view   = $this->_view;
-        $view->id     = $this->_id;
+        $view->owner  = $this->_owner;
+        $view->child  = $this->_child;
         //$view->params = $this->_params;
 
         $page = XMLDocumentHandler::getInstance();
