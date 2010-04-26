@@ -14,49 +14,53 @@
 
 class yui_datatable
 {
-    private $columns        = array();
-    private $datalist       = array();
-    private $div_holder     = ''; ///< name of div tag to hold the datatable
-    private $caption        = ''; ///< caption for the datatable
-    private $xhr_retreiver  = ''; ///< url to retrieve data from XMLHttpRequest
+    private $columns    = array();
+    private $response_fields = array();
+    private $datalist   = array();
+    private $div_holder = ''; ///< name of div tag to hold the datatable
+    private $caption    = ''; ///< caption for the datatable
+    private $xhr_source = ''; ///< url to retrieve data from XMLHttpRequest
+
+    private $rows_per_page = 25; ///< for the paginator
 
     function setCaption($s) { $this->caption = $s; }
+    function setRowsPerPage($n) { $this->rows_per_page = $n; }
 
-    function addColumn($key, $label)
+    function addColumn($key, $label, $type = '', $extra = '')
     {
-        $this->columns[$key]['key']      = $key;
-        $this->columns[$key]['label']    = $label;
-        $this->columns[$key]['sortable'] = true;
-        //$this->columns[$key]['resizeable'] = true; //disabled by default
+        $arr = array('key' => $key, 'label' => $label, 'sortable' => true);
+        $response = array('key' => $key);
+        //$arr['resizable'] = true;   //disabled by default
 
-        if (substr($key, 0, 4) == 'time')
-            $this->setColumnType($key, 'time');
+        if (!$type && substr($key, 0, 4) == 'time')
+            $type = 'time';
 
-        if (substr($key, 0, 4) == 'date')
-            $this->setColumnType($key, 'date');
-    }
+        if (!$type && substr($key, 0, 4) == 'date')
+            $type = 'date';
 
-    /**
-     * Configures column type
-     */
-    function setColumnType($key, $type, $extra = '')
-    {
-        switch ($type) {
-        case 'link':
-            $this->columns[$key]['formatter']  = 'formatLink';
-            $this->columns[$key]['extra_data'] = $extra;
-            break;
+        if ($type)
+            switch ($type) {
+            case 'link':
+                $arr['formatter']  = 'formatLink';
+                $arr['extra_data'] = $extra;
+                break;
 
-        case 'date':
-            $this->columns[$key]['formatter']  = 'formatDate';
-            break;
+            case 'date':
+                $arr['formatter']  = 'formatDate';
+                //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
+                break;
 
-        case 'time':
-            $this->columns[$key]['formatter']  = 'formatTime';
-            break;
+            case 'time':
+                $arr['formatter']  = 'formatTime';
+                //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
+                break;
 
-        default: throw new Exception('Unknown column type '.$type);
-        }
+            default: throw new Exception('Unknown column type '.$type);
+            }
+
+        $this->response_fields[] = $response;
+
+        $this->columns[] = $arr;
     }
 
     /**
@@ -66,13 +70,13 @@ class yui_datatable
     function setDataList($arr)
     {
         //only include registered array keys
-
+die('XXX BROKEN');
         foreach ($arr as $row)
         {
             $inc_row = array();
             foreach ($row as $key => $val)
                 foreach ($this->columns as $inc_col)
-                    if (isset($this->columns[$key]))
+                    if (isset($this->columns[$key])) //XXX broken check
                         $inc_row[$key] = $val;
 
             $res[] = $inc_row;
@@ -85,33 +89,29 @@ class yui_datatable
      * Configures the datatable to load data from a callback url
      * Cannot be used with setDataList()
      */
-    function setDataRetriever($url) { $this->xhr_retreiver = $url; }
+    function setDataSource($url) { $this->xhr_source = $url; }
 
     function render()
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/datatable/assets/skins/sam/datatable.css');
-        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/connection/connection-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/datatable/datatable-min.js&2.8.0r4/build/json/json-min.js');
+        $header->includeCss('http://yui.yahooapis.com/2.8.0r4/build/paginator/assets/skins/sam/paginator.css');
+        $header->includeCss('http://yui.yahooapis.com/2.8.0r4/build/datatable/assets/skins/sam/datatable.css');
 
-        //Debug version:
-        //$header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-debug.js&2.8.0r4/build/event/event-debug.js&2.8.0r4/build/connection/connection-debug.js&2.8.0r4/build/dom/dom-debug.js&2.8.0r4/build/element/element-debug.js&2.8.0r4/build/datasource/datasource-debug.js&2.8.0r4/build/datatable/datatable-debug.js&2.8.0r4/build/json/json-debug.js&2.8.0r4/build/logger/logger-debug.js');
-
-/*
-        //OPTIONAL: Get Utility (enables dynamic script nodes for DataSource)
-        //<script src="http://yui.yahooapis.com/2.8.0r4/build/get/get-min.js
-
-        //OPTIONAL: Drag Drop (enables resizeable or reorderable columns)
-        //http://yui.yahooapis.com/2.8.0r4/build/dragdrop/dragdrop-min.js
-
-        //OPTIONAL: Calendar (enables calendar editors)
-        //http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js
-*/
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/datasource/datasource-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/paginator/paginator-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/datatable/datatable-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js');
 
         if (!$this->div_holder)
             $this->div_holder = 'YuiDtHold'.mt_rand(0,9999);
 
         $data_var = 'YuiDt'.mt_rand(0,9999);
+
+        $col1 = $this->columns[0];
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
@@ -129,15 +129,15 @@ class yui_datatable
                 '};'.
 
                 //oData cell data "YYYY-MM-DD HH:MM:SS"
-                'this.formatDate = function(elLiner, oRecord, oColumn, oData) {'.
-                    'if (!oData) return;'.
+                'this.formatDate = function(sData) {'.
+                    'if (!sData) return;'.
                     'var a1 = oData.substr(0,10).split("-");'.
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2];'.
                 '};'.
 
                 'this.formatTime = function(elLiner, oRecord, oColumn, oData) {'.
                     'if (!oData) return;'.
-                    //'return new Date(oData);'.  //XXX why dont this work?
+                    //'return new Date(sData);'.  //dont work because js date dont parse mysql datestamps (???)
                     'var a1 = oData.substr(0,10).split("-");'.
                     'var a2 = oData.substr(11,8).split(":");'.
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2]+" "+a2[0]+":"+a2[1]+":"+a2[2];'.
@@ -149,31 +149,43 @@ class yui_datatable
                 'YAHOO.widget.DataTable.Formatter.formatTime = this.formatTime;'.
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
-                ($this->xhr_retreiver ?
+                ($this->xhr_source ?
                     //rpc
-                    'var myDataSource = new YAHOO.util.XHRDataSource("'.$this->xhr_retreiver.'");'.
+                    'var myDataSource = new YAHOO.util.DataSource("'.$this->xhr_source.'");'.
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;'.
-                    'myDataSource.connXhrMode = "queueRequests";'. //XXX ???
+                    //'myDataSource.connXhrMode = "queueRequests";'. //XXX ???
                     'myDataSource.responseSchema = {'.
-                        'resultsList: "Result.data",'.
-                        'fields: '.jsArray1D(array_keys($this->columns), false).','.
-                        'metaFields: { totalRecords:"Result.totalRecords" }'. // XXX ???
+                        'resultsList: "records",'.
+                        'fields: '.jsArray2D($this->response_fields).','.
+                        'metaFields: { totalRecords:"totalRecords" }'. // XXX ???
                     '};'
                     :
                     //embedded js-array
                     'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n".
                     'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
-                    //XXX return 2d array with key:name,parser:datatype    see http://developer.yahoo.com/yui/datatable/#basicsort
-                    'myDataSource.responseSchema = { fields:'.jsArray1D(array_keys($this->columns), false).'};'
+                    'myDataSource.responseSchema = { fields:'.jsArray2D($this->response_fields).'};'
                 ).
 
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
-                    ($this->xhr_retreiver ? 'dynamicData:true,' : '').
+                    ($this->xhr_source ?
+                        'dynamicData:true,'.
+                        'initialRequest: "sort='.$col1['key'].'&dir=asc&startIndex=0&results='.$this->rows_per_page.'",'. // Initial request for first page of data
+                        'sortedBy : {key:"'.$col1['key'].'", dir:YAHOO.widget.DataTable.CLASS_ASC},'.        //XXX test with static data
+                        'paginator: new YAHOO.widget.Paginator({ rowsPerPage:'.$this->rows_per_page.' })'  //XXX test with static data
+                        :
+                        ''
+                    ).
                 '};'.
 
                 'myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
+
+                // Update totalRecords on the fly with value from server
+                'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
+                    'oPayload.totalRecords = oResponse.meta.totalRecords;'. //XXXX???
+                    'return oPayload;'.
+                '};'.
 
                 'return {'.
                     'oDS: myDataSource,'.
