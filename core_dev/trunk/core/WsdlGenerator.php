@@ -19,10 +19,12 @@ class WsdlGenerator
 
     private $messages = array();
 
-    function __construct($interface_name, $interface_url)
+    function __construct($interface_name, $interface_path)
     {
+        $page = XmlDocumentHandler::getInstance();
+
         $this->interface_name = $interface_name;
-        $this->interface_url  = $interface_url;
+        $this->interface_url  = $page->getBaseUrl().$interface_path;
     }
 
     function message($name, $params = array())
@@ -95,6 +97,8 @@ class WsdlGenerator
         '</service>';
 
         $res .= '</definitions>';
+
+        return $res;
     }
 
 }

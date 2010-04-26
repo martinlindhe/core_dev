@@ -7,11 +7,11 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: WIP
+//STATUS: wip
 
 require_once('class.CoreBase.php');
 
-class XMLDocumentHandler extends CoreBase
+class XmlDocumentHandler extends CoreBase
 {
     static $_instance;               ///< singleton
 
@@ -19,6 +19,7 @@ class XMLDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design = true;
     private $mimetype = 'text/html';
+    private $base_url = '';
 
     var $objs = array();  ///< IXMLComponent objects
 
@@ -38,6 +39,14 @@ class XMLDocumentHandler extends CoreBase
     }
 
     function setMimeType($type) { $this->mimetype = $mime; }
+
+    /**
+     * Sets base URL for current website
+     * @param $s base url, e.g. http://www.example.com/  (with ending / )
+     */
+    function setBaseUrl($s) { $this->base_url = $s; }
+
+    function getBaseUrl() { return $this->base_url; }
 
     /**
      * Specifies php scripts to include for additional design

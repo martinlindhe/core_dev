@@ -465,7 +465,7 @@ function xhtmlOpenSearch($script, $name, $icon = '')
  *
  * @param $script (optional) if unset, returns currently executing script including GET parameters
  */
-function xhtmlGetUrl($script = '') //XXX see prop_Url.php for more advanced url manipluation
+function xhtmlGetUrl_DEPRECATED($script = '') //XXX see prop_Url.php for more advanced url manipluation
 {
     $default_port = 0;
     if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
