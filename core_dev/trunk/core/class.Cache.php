@@ -9,22 +9,54 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-//STATUS: good
+//STATUS: wip
 
+//TODO: remove isActive(), add isConnected() ??
+//TODO: rename setCacheTime -> setTimeout
+
+require_once('core.php');
 require_once('class.CoreBase.php');
 
 class Cache extends CoreBase
 {
     private $handle      = false;
-    private $persistent  = true;  ///< use persistent connections?
-    private $expire_time = 60;    ///< expiration time, in seconds
+    private $persistent  = true;   ///< use persistent connections?
+    private $expire_time = 0;      ///< expiration time, in seconds
     private $driver      = 'memcache';
+    private $server_pool = array();
+    private $connected   = false;  ///< memcache server connection open?
 
     /**
      * @param $server_pool array of "host[:port]" addresses to memcache servers
      */
-    function __construct($server_pool = false)
+    function addServer($host, $port = 11211)
     {
+        $this->server_pool[] = array('host' => $host, 'port' => intval($port) );
+    }
+
+    /**
+     * @param $server_pool array of "host[:port]" addresses to memcache servers
+     */
+    function addServerPool($pool)
+    {
+        foreach ($pool as $server)
+        {
+            $ex = explode(':', $server);
+            if (empty($ex[1])) $ex[1] = 11211;
+            list($host, $port) = $ex;
+
+            $this->addServer($host, $port);
+        }
+    }
+
+    private function connect()
+    {
+        if (!$this->expire_time)
+            return false;
+
+        if ($this->connected)
+            return true;
+
         if (class_exists('Memcached')) {
             //php5-memcached for php 5.3 or newer
             $this->driver = 'memcached';
@@ -38,16 +70,13 @@ class Cache extends CoreBase
             return false;
         }
 
-        if (!$server_pool) $server_pool = array('127.0.0.1:11211');
+        if (!$this->server_pool)
+            $this->addServer('127.0.0.1');
 
-        foreach ($server_pool as $server) {
+        foreach ($this->server_pool as $server)
+            $this->handle->addServer($server['host'], $server['port'], $this->persistent);
 
-            $ex = explode(':', $server);
-            if (empty($ex[1])) $ex[1] = 11211;
-            list($host, $port) = $ex;
-
-            $this->handle->addServer($host, $port, $this->persistent);
-        }
+        $this->connected = true;
 
         return true;
     }
@@ -55,16 +84,20 @@ class Cache extends CoreBase
     /**
      * @return true if cache is active
      */
-    function isActive() { return ($this->handle && $this->expire_time) ? true : false; }
+    function isActive() { return $this->expire_time ? true : false; }
 
     /**
      * @param $s cache time in seconds; max 2592000 (30 days)
      */
-    function setCacheTime($s) { $this->expire_time = $s; }
+    function setTimeout($s) { $this->expire_time = $s; }
+    function setCacheTime($s) { $this->setTimeout($s); } ///XXX DEPRECATE
+
+    function getServerPool() { return $this->server_pool; }
 
     function get($key)
     {
-        if (!$this->handle || !$this->expire_time) return false;
+        if (!$this->connect())
+            return false;
 
         $val = $this->handle->get($key);
 
@@ -77,7 +110,8 @@ class Cache extends CoreBase
 
     function set($key, $val)
     {
-        if (!$this->handle || !$this->expire_time) return false;
+        if (!$this->connect())
+            return false;
 
         if ($this->driver == 'memcache') {
             //XXX HACK force quiet bogus warnings from memcache in 2009

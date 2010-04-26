@@ -6,10 +6,18 @@ require_once('class.Cache.php');
 
 $pool = array(
 '127.0.0.1',
-'192.168.77.220:27788'
+//'192.168.77.220:27788'
 );
 
-$cache = new Cache($pool);
+$cache = new Cache();
+$cache->setDebug();
+$cache->addServerPool($pool);
+$cache->setTimeout(60);
+
+var_dump ( $cache->getServerPool() );
+
+if (!$cache->isActive() )
+    die("CACHE NOT ACTIVE\n");
 
 $x = $cache->get('coredev_cache_test');
 if ($x) {
