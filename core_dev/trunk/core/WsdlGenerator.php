@@ -1,0 +1,97 @@
+<?php
+/**
+ * $Id$
+ *
+ * Helper class for creating SOAP (WSDL) XML interfaces
+ *
+ * Documentation:
+ * http://en.wikipedia.org/wiki/Web_Services_Description_Language
+ *
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
+ */
+
+//STATUS: wip
+
+class WsdlGenerator
+{
+    public $interface_name = '';
+    public $interface_url  = '';
+
+    private $messages = array();
+
+    function __construct($interface_name, $interface_url)
+    {
+        $this->interface_name = $interface_name;
+        $this->interface_url  = $interface_url;
+    }
+
+    function message($name, $params = array())
+    {
+        $this->messages[$name] = $params;
+    }
+
+    function render()
+    {
+        header('Content-type: text/xml');
+        $res = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+        $res .= '<definitions name="'.$this->interface_name.'"
+                targetNamespace="http://example.org/'.$this->interface_name.'.wsdl"
+                xmlns:tns="http://example.org/'.$this->interface_name.'.wsdl"
+                xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                xmlns="http://schemas.xmlsoap.org/wsdl/">';
+
+        //Describe function parameter datatypes and return datatypes
+        foreach ($this->messages as $name => $params) {
+            $res .= '<message name="'.$name.'Request">';
+                foreach ($params as $part => $type) {
+                    if ($part == 'response') continue;
+                    $res .= '<part name="'.$part.'" type="xsd:'.$type.'"/>';
+                }
+            $res .= '</message>';
+
+            $res .= '<message name="'.$name.'Response">';
+                if (!$params['response']) $res_type = 'integer';
+                else $res_type = $params['response'];
+                $res .= '<part name="Result" type="xsd:'.$res_type.'"/>';
+            $res .= '</message>';
+        }
+
+        //Describe what <message> responds to a specific <operation> input and output
+        $res .= '<portType name="'.$this->interface_name.'PortType">';
+            foreach ($this->messages as $operation => $params) {
+                $res .= '<operation name="'.$operation.'">';
+                    $res .= '<input message="tns:'.$operation.'Request"/>';
+                    $res .= '<output message="tns:'.$operation.'Response"/>';
+                $res .= '</operation>';
+            }
+        $res .= '</portType>';
+
+        //Describe how to encode data for each <operation> input and output
+        $res .= '<binding name="'.$this->interface_name.'Binding" type="tns:'.$this->interface_name.'PortType">';
+            $res .= '<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>';
+            foreach ($this->messages as $operation => $params) {
+                $res .= '<operation name="'.$operation.'">';
+                    $res .= '<soap:operation soapAction="urn:#'.$operation.'"/>';
+                    $res .= '<input><soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>';
+                    $res .= '<output><soap:body use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>';
+                $res .= '</operation>';
+            }
+        $res .= '</binding>';
+
+        //Describe URL for the service
+        $res .= '<service name="'.$this->interface_name.'Service">';
+            $res .= '<port name="'.$this->interface_name.'Port" binding="tns:'.$this->interface_name.'Binding">';
+                $res .= '<soap:address location="'.$this->interface_url.'"/>';
+            $res .= '</port>';
+        $res .= '</service>';
+
+        $res .= '</definitions>';
+    }
+
+}
+
+?>

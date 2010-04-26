@@ -63,7 +63,7 @@ abstract class SqlSelectList
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT COUNT(*) FROM '.$this->table_name.' WHERE '.$this->owner_name.'='.$this->owner;
+        $q = 'SELECT COUNT('.$this->child_name.') FROM '.$this->table_name.' WHERE '.$this->owner_name.'='.$this->owner;
         //XXX FIXME: auto-escape depending on value of $this->child
         $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
 

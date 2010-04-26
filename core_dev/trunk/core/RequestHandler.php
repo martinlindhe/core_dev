@@ -12,6 +12,8 @@
 
 //STATUS: wip
 
+//TODO: parse $_GET params into $_params
+
 class RequestHandler
 {
     static $_instance; ///< singleton
@@ -21,10 +23,17 @@ class RequestHandler
     protected $_owner;      ///< /controller/view/OWNER/   numeric id
     protected $_child;      ///< /controller/view/owner/CHILD/  numeric id
     protected $_params;
+    protected $exclude_session = array();
 
-    public function getParams() { return $this->_params; }
-    public function getController() { return $this->_controller; }
     public function getView() { return $this->_view; }
+    //public function getParams() { return $this->_params; }
+
+    /**
+     * Registers a list of controllers that should not invoke $session->resume()
+     * XXX this is a hack. dont know how to handle this elegantly.
+     * the problem is to mark certain requests as "no session", for example RPC:s
+     */
+    function excludeSession($arr) { $this->exclude_session = $arr; }
 
     public static function getInstance()
     {
@@ -73,13 +82,19 @@ class RequestHandler
      */
     public function route()
     {
-        $view_file = 'views/'.$this->getController().'.php';
+        $file = 'views/'.$this->_controller.'.php';
 
-        if (!file_exists($view_file))
-            throw new Exception('No file named '.$view_file );
+        if (!file_exists($file))
+            throw new Exception('No file named '.$file );
+
+        if (!in_array($this->_controller, $this->exclude_session)) {
+            //automatically resumes session unless it is blacklisted
+            $session = SessionHandler::getInstance();
+            $session->resume();
+        }
 
         //expose request params for the view
-        $view = new ViewModel($view_file);
+        $view = new ViewModel($file);
         $view->view   = $this->_view;
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;

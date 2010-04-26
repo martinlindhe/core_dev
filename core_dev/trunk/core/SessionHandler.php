@@ -30,7 +30,7 @@ class SessionHandler extends CoreBase
     var $logged_out_start_page = '/';
     var $error_page = '/error';    ///< redirects the user to this page to show errors
 
-    var $update_activity = true;   ///< update user last active?
+    var $active = true;            ///< is session active (update user last active?)
 
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?
@@ -51,11 +51,15 @@ class SessionHandler extends CoreBase
     function setName($s) { $this->name = $s; }
     function setTimeout($n) { $this->timeout = $n; }
 
+    function setActive($b) { $this->active = $b; }
+
     /**
      * Resumes the session from previous request
      */
     function resume()
     {
+        if (!$this->active) return;
+
         ini_set('session.gc_maxlifetime', $this->timeout);
 
         session_name($this->name);
@@ -138,7 +142,7 @@ class SessionHandler extends CoreBase
 
     private function updateActiveTime()
     {
-        if (!$this->id || !$this->update_activity) return;
+        if (!$this->id || !$this->active) return;
 
         $db = SqlHandler::getInstance();
         $db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
