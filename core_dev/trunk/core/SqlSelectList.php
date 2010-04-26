@@ -64,8 +64,10 @@ abstract class SqlSelectList
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT COUNT('.$this->child_name.') FROM '.$this->table_name.' WHERE '.$this->owner_name.'='.$this->owner;
+
         //XXX FIXME: auto-escape depending on value of $this->child
-        $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
+        if ($this->child)
+            $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
 
         return $db->getOneItem($q);
     }
@@ -75,7 +77,9 @@ abstract class SqlSelectList
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT '.implode(',', $this->columns).' FROM '.$this->table_name.' WHERE '.$this->owner_name.'='.$this->owner;
-        $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
+
+        if ($this->child)
+            $q .= ' AND '.$this->child_name.'="'.$db->escape($this->child).'"';
 
         if ($this->sort_column)
             $q .= ' ORDER BY '.$this->sort_column.' '.$this->sort_order;

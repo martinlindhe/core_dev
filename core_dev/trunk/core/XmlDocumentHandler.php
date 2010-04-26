@@ -23,11 +23,6 @@ class XmlDocumentHandler extends CoreBase
 
     var $objs = array();  ///< IXMLComponent objects
 
-    private function __construct()
-    {
-        $this->handleEvents();
-    }
-
     private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
@@ -65,15 +60,6 @@ class XmlDocumentHandler extends CoreBase
     function attach($obj)
     {
         $this->objs[] = $obj;
-    }
-
-    private function handleEvents()
-    {
-        $auth = AuthHandler::getInstance();
-        $auth->handleEvents();
-
-        $session = SessionHandler::getInstance();
-        $session->handleEvents();
     }
 
     function render()

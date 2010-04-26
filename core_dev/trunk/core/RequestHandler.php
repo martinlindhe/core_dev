@@ -13,13 +13,14 @@
 //STATUS: wip
 
 //TODO: parse $_GET params into $_params
+//TODO: special view for login/logout events
 
 class RequestHandler
 {
     static $_instance; ///< singleton
 
-    protected $_controller; ///< /CONTROLLER/view/owner/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
-    protected $_view;       ///< /controller/VIEW/owner/   XXX view parameter for the "controller", or later will be the method to run on the controller
+    protected $_controller = 'index'; ///< /CONTROLLER/view/owner/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
+    protected $_view = 'default';       ///< /controller/VIEW/owner/   XXX view parameter for the "controller", or later will be the method to run on the controller
     protected $_owner;      ///< /controller/view/OWNER/   numeric id
     protected $_child;      ///< /controller/view/owner/CHILD/  numeric id
     protected $_params;
@@ -48,24 +49,26 @@ class RequestHandler
         $request = $_SERVER['REQUEST_URI'];
 
         $arr = explode('/', trim($request, '/'));
-        $this->_controller = !empty($arr[0]) ? $arr[0] : 'index';
-        $this->_view       = !empty($arr[1]) ? $arr[1] : 'default';
+
+        if ($arr && substr($arr[0],0,1) != '?') {
+            if (!empty($arr[0]))
+                $this->_controller = $arr[0];
+
+            if (!empty($arr[1]))
+                $this->_view = $arr[1];
+
+            if (count($arr) <= 2)
+                return;
+
+            if (is_numeric($arr[2]))
+                $this->_owner = $arr[2];
+
+            if (isset($arr[3]) && is_numeric($arr[3]))
+                $this->_child = $arr[3];
+        }
 
 //XXX if controller or view contains non-alphanumeric letters, DIE here!
 
-        //$request = str_replace('?', '/', $request);
-        //$request = str_replace('&', '/', $request);
-        //$request = str_replace('=', '/', $request);
-
-
-        if (count($arr) <= 2)
-            return;
-
-        if (is_numeric($arr[2]))
-            $this->_owner = $arr[2];
-
-        if (isset($arr[3]) && is_numeric($arr[3]))
-            $this->_child = $arr[3];
 /*
         //XXX FIXME parse params properly
         for ($idx=2, $cnt = count($arr); $idx < $cnt; $idx += 2)
@@ -93,6 +96,10 @@ class RequestHandler
             $session->resume();
         }
 
+        //XXX handle login/logout requests to any page. FIXME: use a special view for these
+        $auth = AuthHandler::getInstance();
+        $auth->handleEvents();
+
         //expose request params for the view
         $view = new ViewModel($file);
         $view->view   = $this->_view;
@@ -100,7 +107,7 @@ class RequestHandler
         $view->child  = $this->_child;
         //$view->params = $this->_params;
 
-        $page = XMLDocumentHandler::getInstance();
+        $page = XmlDocumentHandler::getInstance();
         $page->attach( $view->render() );
     }
 

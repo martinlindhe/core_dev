@@ -7,6 +7,7 @@
 
 //STATUS: wip
 
+//TODO: remember client ip between requests in order to mitigate session hijacking
 //TODO: is setActive() method even nessecary with the RequestHandler blacklist???
 //FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
@@ -74,26 +75,31 @@ class SessionHandler extends CoreBase
         }
 
         //sets httponly param to mitigate XSS attacks
-        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', '', false, true);
+        $domain = ''; //XXX read domain name from XmlDocumentHandler->getBaseUrl()
+        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
 
-//XXX fixa bort all denna skit (?)
-        if (!isset($_SESSION['started']) || !$_SESSION['started']) $_SESSION['started'] = time();
-        if (!isset($_SESSION['id'])) $_SESSION['id'] = 0;
-        if (!isset($_SESSION['username'])) $_SESSION['username'] = '';
-        if (!isset($_SESSION['usermode'])) $_SESSION['usermode'] = 0;
-        if (!isset($_SESSION['isWebmaster'])) $_SESSION['isWebmaster'] = 0;
-        if (!isset($_SESSION['isAdmin'])) $_SESSION['isAdmin'] = 0;
-        if (!isset($_SESSION['isSuperAdmin'])) $_SESSION['isSuperAdmin'] = 0;
-        if (!isset($_SESSION['referer'])) $_SESSION['referer'] = '';
-
-        $this->started = &$_SESSION['started'];
-        $this->id = &$_SESSION['id'];    //if id is set, also means that the user is logged in
-        $this->username = &$_SESSION['username'];
-        $this->usermode = &$_SESSION['usermode'];
-        $this->isWebmaster = &$_SESSION['isWebmaster'];
-        $this->isAdmin = &$_SESSION['isAdmin'];
+        $this->id           = &$_SESSION['id'];    //if id is set, also means that the user is logged in
+        $this->username     = &$_SESSION['username'];
+        $this->usermode     = &$_SESSION['usermode'];
+        $this->isWebmaster  = &$_SESSION['isWebmaster'];
+        $this->isAdmin      = &$_SESSION['isAdmin'];
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
-        $this->referer = &$_SESSION['referer'];
+        $this->referer      = &$_SESSION['referer'];
+
+        if (!$this->id)
+            return;
+
+        //Logged in: Check user activity - log out inactive user
+        //FIXME: redo this- check lastactive timestamp from db when session is resumed instead
+        /*
+        if ($this->lastActive < (time()-$this->timeout)) {
+            $this->log('Session timed out after '.(time()-$this->session->lastActive).' (timeout is '.($this->session->timeout).')', LOGLEVEL_NOTICE);
+            $this->end();
+            $error->add('Session timed out');
+            $this->showErrorPage();
+        }*/
+
+        $this->updateActiveTime();
 
 //        if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip()); //FIXME map to $this->auth->ip
     }
@@ -103,14 +109,13 @@ class SessionHandler extends CoreBase
      */
     function end()
     {
-        $this->started      = 0;
-        $this->id           = 0;
-        $this->username     = '';
-        $this->usermode     = 0;
-        $this->isWebmaster  = false;
-        $this->isAdmin      = false;
-        $this->isSuperAdmin = false;
-        $this->referer      = '';
+        unset($_SESSION['id']);
+        unset($_SESSION['username']);
+        unset($_SESSION['usermode']);
+        unset($_SESSION['referer']);
+        unset($_SESSION['isWebmaster']);
+        unset($_SESSION['isAdmin']);
+        unset($_SESSION['isSuperAdmin']);
     }
 
     /**
@@ -159,26 +164,6 @@ class SessionHandler extends CoreBase
     {
         $db = SqlHandler::getInstance();
         $db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->id);
-    }
-
-    /**
-     * Handles session events, such as idle timeout check
-     */
-    function handleEvents()
-    {
-
-
-        //Logged in: Check user activity - log out inactive user
-        //FIXME: redo this- check lastactive timestamp from db when session is resumed instead
-        /*
-        if ($this->lastActive < (time()-$this->timeout)) {
-            $this->log('Session timed out after '.(time()-$this->session->lastActive).' (timeout is '.($this->session->timeout).')', LOGLEVEL_NOTICE);
-            $this->end();
-            $error->add('Session timed out');
-            $this->showErrorPage();
-        }*/
-
-        $this->updateActiveTime();
     }
 
     /**
