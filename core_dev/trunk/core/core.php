@@ -193,9 +193,26 @@ function var_name(&$var, $scope = false)
 }
 
 /**
+ * @return true if string only contain a-z, A-Z, 0-9 or _
+ */
+function is_alphanumeric($s)
+{
+    if (!is_string($s))
+        return false;
+
+    $regexp = '/^([\w])+$/';
+    preg_match($regexp, $s, $matches);
+
+    if ($matches && $matches[0] == $s)
+        return true;
+
+    return false;
+}
+
+/**
  * Loads all active plugins
  */
-function loadPlugins()
+function loadPlugins_DEPRECATED()
 {
     global $config;
 
@@ -215,7 +232,7 @@ function loadPlugins()
  *
  * @return for example "/sample/core_dev/"
  */
-function coredev_webroot()
+function coredev_webroot_DEPRECATED()
 {
     if (substr($_SERVER['REQUEST_URI'], -1) == '/')
         $path = $_SERVER['REQUEST_URI'];
@@ -235,7 +252,7 @@ function coredev_webroot()
  * Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
  * run from the / path it will return nothing, else the directory name of the directory script are run from
  */
-function getProjectPath($_amp = 1)
+function getProjectPath_DEPRECATED($_amp = 1)
 {
     global $config;
 
@@ -270,7 +287,7 @@ function getProjectPath($_amp = 1)
  * a) implement a proper template engine which could also handle this
  * b) turn output buffering on in php.ini (not always an option)
  */
-function goLoc($url)
+function goLoc_DEPRECATED($url)
 {
     echo
         '<script type="text/javascript">'.
