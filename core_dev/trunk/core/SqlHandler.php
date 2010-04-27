@@ -24,6 +24,8 @@
 
 //STATUS: wip
 
+require_once('sql_misc.php');
+
 class SqlHandler
 {
     static $_instances = array();

@@ -181,34 +181,6 @@ function now()
 }
 
 /**
- * Returns given UNIX timestamp in MySQL datetime format
- *
- * @param $ts is a UNIX timestamp
- * @return given UNIX timestamp in MySQL datetime format
- */
-function sql_datetime($ts)
-{
-    if (!is_numeric($ts))
-        $ts = strtotime($ts);
-
-    return date('Y-m-d H:i:s', $ts);
-}
-
-/**
- * Returns given UNIX timestamp in MySQL date format
- *
- * @param $ts is a UNIX timestamp
- * @return given UNIX timestamp in MySQL date format
- */
-function sql_date($ts)
-{
-    if (!is_numeric($ts))
-        $ts = strtotime($ts);
-
-    return date('Y-m-d', $ts);
-}
-
-/**
  * Returns MySQL datetime in UNIX timestamp format
  *
  * @param $datetime is a MySQL datetime
