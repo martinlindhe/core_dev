@@ -67,13 +67,13 @@ echo '<table cellpadding="2">';
 echo '<tr>'.
     '<td>'.t('Username').':</td>'.
     '<td>'.xhtmlInput('login_usr').' '.
-        xhtmlImage(coredev_webroot().'gfx/icon_user.png', t('Username')).
+        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
     '</td>'.
     '</tr>';
 echo '<tr>'.
     '<td>'.t('Password').':</td>'.
         '<td>'.xhtmlPassword('login_pwd').' '.
-        xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Password')).
+        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
         '</td>'.
     '</tr>';
 echo '</table>';
@@ -114,17 +114,17 @@ if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg
         echo '<tr>'.
             '<td>'.t('Username').':</td>'.
             '<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
-                xhtmlImage(coredev_webroot().'gfx/icon_user.png', t('Username')).
+                xhtmlImage( $header->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
             '</td>'.
             '</tr>';
         echo '<tr><td>'.t('Password').':</td>'.
             '<td>'.xhtmlPassword('register_pwd').' '.
-                xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Password')).
+                xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
             '</td>'.
             '</tr>';
         echo '<tr><td>'.t('Again').':</td>'.
             '<td>'.xhtmlPassword('register_pwd2').' '.
-                xhtmlImage(coredev_webroot().'gfx/icon_keys.png', t('Repeat password')).
+                xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Repeat password')).
             '</td>'.
             '</tr>';
         if ($user->userdata) {

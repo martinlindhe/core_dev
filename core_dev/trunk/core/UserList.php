@@ -12,11 +12,9 @@
 //TODO: move render() to a view
 //TODO: use editable yui_datatable
 
-require_once('AdminComponent.php');
-require_once('admin.UserHandler.php');
-require_once('admin.UserEditor.php');
+require_once('UserHandler.php');
 
-class UserList extends AdminComponent
+class UserList
 {
     private $usermode;
     function setMode($n) { $this->usermode = $n; }
