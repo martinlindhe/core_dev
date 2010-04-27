@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Http Client class to GET/POST data using the http protocol
+ * HTTP Client class to GET/POST data using the http protocol
  *
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
  *
@@ -10,6 +10,9 @@
  */
 
 //STATUS: ok
+
+//TODO rename to HttpClient.php
+//TODO: extend from Url ???
 
 //FIXME header parsing should preserve all fields, ex:
 /*

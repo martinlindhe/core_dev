@@ -21,6 +21,16 @@ function file_suffix($filename)
 }
 
 /**
+ * @param $filename string with input filename
+ * @return replaces $filename suffix with $suffix
+ */
+function file_set_suffix($filename, $suffix) //XXX rename function to not indicate that the input file is changed ("set")
+{
+    $len = strlen(file_suffix($filename));
+    return substr($filename, 0, -$len).$suffix;
+}
+
+/**
  * Returns a mimetype based on the file extension
  *
  * @param $name a filename or full URL
@@ -85,10 +95,11 @@ function dir_get_tree($outerDir)
  * Returns array with files filtered on extension
  *
  * @param $path path to directory to look in
- * @param $filter_ext extension including dot, example: ".avi"
+ * @param $filter_ext array of extensions including dot, example: array(".avi", ".mkv")
  * @param $prefix require prefix in filenames
+ * @param $full_path true to return full paths in matches
  */
-function dir_get_by_extension($path, $filter_ext, $prefix = '')
+function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_path = false)
 {
     $e = scandir($path);
 
@@ -101,8 +112,10 @@ function dir_get_by_extension($path, $filter_ext, $prefix = '')
         if ($prefix && strpos($name, $prefix) !== 0)
             continue;
 
-        if (file_suffix($name) == $filter_ext)
-            $out[] = $name;
+        $suffix = file_suffix($name);
+
+        if (!$filter_ext || in_array($suffix, $filter_ext))
+            $out[] = ($full_path ? $path.$name : $name);
     }
 
     return $out;

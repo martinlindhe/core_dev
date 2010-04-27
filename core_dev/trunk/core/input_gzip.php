@@ -1,10 +1,14 @@
 <?php
 /**
  * $Id$
+ *
+ * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
+//XXX gzdecode() dont exist in php 5.3, where is it?
+
 /**
- * gzdecode() dont exist in php 5.3, XXX where is it?
+ * Decompresses gzip compressed data
  */
 function gzdecode($data)
 {
