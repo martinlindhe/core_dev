@@ -218,7 +218,7 @@ class XhtmlForm
     /**
      * Adds a calendar date selector
      */
-    function addDateInterval($namefrom, $nameto, $str)
+    function addDateInterval($namefrom, $nameto, $str = '')
     {
         $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str);
     }
@@ -315,14 +315,13 @@ class XhtmlForm
 
             case 'DATEINTERVAL':
                 $res .= '<td colspan="2">';
-                $res .= $e['str'].'<br/><br/>';
+                if ($e['str']) $res .= $e['str'].'<br/><br/>';
                 $res .= '<div id="cal1Container"></div>';
                 $res .= '<div style="clear:both"></div>';
 
                 $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
                 $dateselect = new yui_dateinterval();
-
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
