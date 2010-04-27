@@ -13,6 +13,8 @@
 
 //STATUS: wip
 
+//FIXME: selection of a new time is buggy if the calendar was rendered with a selection
+
 class yui_dateinterval
 {
     private $name_from = 'yui_dateinterval_from';

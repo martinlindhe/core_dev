@@ -256,11 +256,6 @@ class XhtmlForm
                     $e['checked'] = true;
                 break;
 
-            case 'DATEINTERVAL':
-                $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : '';
-                $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : '';
-                break;
-
             default:
                 if (!empty($e['name']) && isset($this->formData[$e['name']]))
                     $e['default'] = $this->formData[$e['name']];
@@ -341,6 +336,10 @@ class XhtmlForm
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
+
+                $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : '';
+                $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : '';
+
                 $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
                 $res .= $dateselect->render();
 
