@@ -262,4 +262,17 @@ function is_client_localhost()
     return false;
 }
 
+/**
+ * Embeds a array for use in a URL
+ * @return string, e.g. name[]=val1&name[]=val2
+ */
+function url_array($name, $arr)
+{
+    $res = array();
+    foreach ($arr as $s)
+        $res[] = $name.'[]='.$s;
+
+    return implode('&', $res);
+}
+
 ?>

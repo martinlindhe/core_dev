@@ -133,10 +133,16 @@ function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_size = 5, $_onchan
 
 /**
  * Creates a hidden input field
+ * @param $_val field value, or array of multiple values
  */
 function xhtmlHidden($_name, $_val = 1)
 {
-    $out = '<input type="hidden" name="'.$_name.'" value="'.$_val.'"/>';
+    $out = '';
+    if (is_array($_val))
+        foreach ($_val as $v)
+            $out .= '<input type="hidden" name="'.$_name.'[]" value="'.$v.'"/>';
+    else
+        $out .= '<input type="hidden" name="'.$_name.'" value="'.$_val.'"/>';
     return $out;
 }
 

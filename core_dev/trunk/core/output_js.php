@@ -83,4 +83,12 @@ function js_redirect($url)
     }
 }
 
+/**
+ * Renders a date in Javascript format (american): MM/DD/YYYY
+ */
+function js_date($ts)
+{
+    return date('m/d/Y', $ts);
+}
+
 ?>

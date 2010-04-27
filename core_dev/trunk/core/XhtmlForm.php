@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//FIXME: dateinterval selection is not auto-filled on next request, see handle()
+
 require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
@@ -19,17 +21,12 @@ class XhtmlForm
 {
     private $enctype          = '';     ///< TODO: set multipart type if form contains file upload parts
     private $handled          = false;  ///< is set to true when form data has been processed by callback function
-    private $name             = '';
-
+    private $name;
     private $handler;
     private $objectinstance   = false;
-
     private $formData         = array();
-
     private $listenGet        = false;
-
     private $elems            = array();
-
     private $success          = '';
     private $error            = 'Submitted form was rejected!';
 
@@ -76,11 +73,18 @@ class XhtmlForm
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
                 foreach ($this->elems as $row) {
-                    if (   !empty($row['name'])     && $row['name'] == $key
-                        || !empty($row['namefrom']) && $row['namefrom'] == $key
-                        || !empty($row['nameto'])   && $row['nameto'] == $key
-                    )
-                        $p[ $key ] = $val;
+                    switch ($row['type']) {
+                    case 'DATEINTERVAL':
+                        if (!empty($row['namefrom']) && $row['namefrom'] == $key ||
+                            !empty($row['nameto'])   && $row['nameto']   == $key)
+                            $p[ $key ] = $val;
+                        break;
+
+                    default:
+                        if (!empty($row['name']) && $row['name'] == $key)
+                            $p[ $key ] = $val;
+                        break;
+                    }
                 }
 
         //catch named GET parameters if no POST parameters are found
@@ -91,7 +95,7 @@ class XhtmlForm
                         $p[ $key ] = $val;
 
         if (!$p) return false;
-
+/*
         //find new_catname tag and handle it
         foreach ($this->elems as $id => $e) {
             if (!empty($e['name']) && !empty($p['new_'.$e['name']])) {
@@ -106,18 +110,16 @@ class XhtmlForm
                 unset( $p['new_'.$e['name']] );
             }
         }
-
+*/
         $this->formData = $p;
 
-        if ($this->objectinstance) {
+        if ($this->objectinstance)
             $call = array($this->objectinstance, $this->handler);
-        } else {
+        else
             $call = $this->handler;
-        }
 
-        if (call_user_func($call, $this->formData, $this)) {
+        if (call_user_func($call, $this->formData, $this))
             $this->handled = true;
-        }
 
         if ($this->handled) {
             if ($this->success) echo '<div class="okay">'.$this->success.'</div><br/>';
@@ -247,8 +249,22 @@ class XhtmlForm
         foreach ($this->elems as $e)
         {
             //fills in form with previous entered data
-            if (!empty($e['name']) && isset($this->formData[$e['name']]))
-                $e['default'] = $this->formData[$e['name']];
+            switch ($e['type']) {
+            case 'CHECKBOX':
+                //dont set a unset checkbox to value 0, it breaks the form
+                if (!empty($e['name']) && !empty($this->formData[$e['name']]))
+                    $e['checked'] = true;
+                break;
+
+            case 'DATEINTERVAL':
+                $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : '';
+                $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : '';
+                break;
+
+            default:
+                if (!empty($e['name']) && isset($this->formData[$e['name']]))
+                    $e['default'] = $this->formData[$e['name']];
+            }
 
             $res .= '<tr>';
             switch ($e['type']) {
@@ -325,6 +341,7 @@ class XhtmlForm
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
+                $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
                 $res .= $dateselect->render();
 
                 $res .= '</td>';

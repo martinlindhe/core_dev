@@ -17,17 +17,26 @@
 
 //STATUS: wip
 
+//FIXME: visar inte värden ja sätter i name_from eller name_to fälten
+
 class yui_dateinterval
 {
     private $name_from = 'yui_dateinterval_from';
     private $name_to   = 'yui_dateinterval_to';
     private $div_name  = 'yui_dateinterval_holder';
     private $start_weekday = 1; //0=sundays, 1=mondays
+    private $select_from, $select_to;
 
     function setNameFrom($s) { $this->name_from = $s; }
     function setNameTo($s) { $this->name_to = $s; }
     function setDivName($s) { $this->div_name = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
+
+    function setSelection($date_from, $date_to)
+    {
+        $this->select_from = ts($date_from);
+        $this->select_to   = ts($date_to);
+    }
 
     function render()
     {
@@ -36,8 +45,8 @@ class yui_dateinterval
         $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css');
         $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js');
 
-        $res = '
-        (function() {
+        $res =
+        '(function() {
 
             function IntervalCalendar(container, cfg) {
                 this._iState = 0;
@@ -163,45 +172,46 @@ class yui_dateinterval
 
         $locale = LocaleHandler::getInstance();
 
-        $res .= '
-        YAHOO.util.Event.onDOMReady(function()
-        {
-            var inTxt  = YAHOO.util.Dom.get("'.$this->name_from.'");
-            var outTxt = YAHOO.util.Dom.get("'.$this->name_to.'");
+        $res .=
+        'YAHOO.util.Event.onDOMReady(function()'.
+        '{'.
+            'var inTxt  = YAHOO.util.Dom.get("'.$this->name_from.'");'.
+            'var outTxt = YAHOO.util.Dom.get("'.$this->name_to.'");'.
 
-            var inDate, outDate, interval;
+            'var inDate, outDate, interval;'.
 
-            inTxt.value  = "";
-            outTxt.value = "";
+            'inTxt.value  = "";'.
+            'outTxt.value = "";'.
 
-            var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_name.'", {pages:2});
+            'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_name.'", {pages:2});'.
 
-            cal.cfg.setProperty("start_weekday", '.  $this->start_weekday.');
-            cal.cfg.setProperty("MONTHS_SHORT", '.   jsArray1D($locale->handle->month_short, false).');
-            cal.cfg.setProperty("MONTHS_LONG", '.    jsArray1D($locale->handle->month_long, false).');
-            cal.cfg.setProperty("WEEKDAYS_1CHAR", '. jsArray1D($locale->handle->weekday_1char, false).');
-            cal.cfg.setProperty("WEEKDAYS_SHORT", '. jsArray1D($locale->handle->weekday_short, false).');
-            cal.cfg.setProperty("WEEKDAYS_MEDIUM", '.jsArray1D($locale->handle->weekday_medium, false).');
-            cal.cfg.setProperty("WEEKDAYS_LONG", '.  jsArray1D($locale->handle->weekday_long, false).');
+            ($this->select_from && $this->select_to ? 'cal.cfg.setProperty("selected","'.js_date($this->select_from).'-'.js_date($this->select_to).'");' : '').
+            'cal.cfg.setProperty("start_weekday",'.  $this->start_weekday.');'.
+            'cal.cfg.setProperty("MONTHS_SHORT",'.   jsArray1D($locale->handle->month_short, false).');'.
+            'cal.cfg.setProperty("MONTHS_LONG",'.    jsArray1D($locale->handle->month_long, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_1CHAR",'. jsArray1D($locale->handle->weekday_1char, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_SHORT",'. jsArray1D($locale->handle->weekday_short, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_MEDIUM",'.jsArray1D($locale->handle->weekday_medium, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_LONG",'.  jsArray1D($locale->handle->weekday_long, false).');'.
 
-            cal.selectEvent.subscribe(function() {
-                interval = this.getInterval();
+            'cal.selectEvent.subscribe(function() {'.
+                'interval = this.getInterval();'.
 
-                if (interval.length == 2) {
-                    inDate = interval[0];
-                    inTxt.value =  inDate.getFullYear() + "-" + (inDate.getMonth() + 1) + "-" + inDate.getDate();
+                'if (interval.length == 2) {'.
+                    'inDate = interval[0];'.
+                    'inTxt.value =  inDate.getFullYear() + "-" + (inDate.getMonth() + 1) + "-" + inDate.getDate();'.
 
-                    if (interval[0].getTime() != interval[1].getTime()) {
-                        outDate = interval[1];
-                        outTxt.value = outDate.getFullYear() + "-" + (outDate.getMonth() + 1) + "-" + outDate.getDate();
-                    } else {
-                        outTxt.value = "";
-                    }
-                }
-            }, cal, true);
+                    'if (interval[0].getTime() != interval[1].getTime()) {'.
+                        'outDate = interval[1];'.
+                        'outTxt.value = outDate.getFullYear() + "-" + (outDate.getMonth() + 1) + "-" + outDate.getDate();'.
+                    '} else {'.
+                        'outTxt.value = "";'.
+                    '}'.
+                '}'.
+            '}, cal, true);'.
 
-            cal.render();
-        });';
+            'cal.render();'.
+        '});';
 
         return '<script type="text/javascript">'.$res.'</script>';
     }
