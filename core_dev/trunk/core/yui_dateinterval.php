@@ -4,13 +4,9 @@
  *
  * Renders a Yahoo UI date interval selector (javascript)
  *
- * Based on:
- * http://developer.yahoo.com/yui/examples/calendar/intervalcal.html
- *
- * See also:
+ * Documentation:
  * http://developer.yahoo.com/yui/calendar/
  * http://developer.yahoo.com/yui/docs/YAHOO.widget.CalendarGroup.html
- *
  *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
@@ -176,8 +172,8 @@ class yui_dateinterval
             'var inTxt  = YAHOO.util.Dom.get("'.$this->name_from.'");'.
             'var outTxt = YAHOO.util.Dom.get("'.$this->name_to.'");'.
             'var inDate, outDate, interval;'.
-            'inTxt.value  = "'.sql_date($this->select_from).'";'.
-            'outTxt.value = "'.sql_date($this->select_to).'";'.
+            ($this->select_from ? 'inTxt.value  = "'.sql_date($this->select_from).'";' : '').
+            ($this->select_to   ? 'outTxt.value = "'.sql_date($this->select_to).'";' : '').
 
             'var myConfigs = {'.
                 'pages:2,'.
