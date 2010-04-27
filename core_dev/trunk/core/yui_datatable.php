@@ -9,7 +9,6 @@
 
 //STATUS: WIP
 
-//TODO: enable pagination
 //TODO: enable inline cell editing
 
 class yui_datatable
@@ -21,12 +20,28 @@ class yui_datatable
     private $caption    = ''; ///< caption for the datatable
     private $xhr_source = ''; ///< url to retrieve data from XMLHttpRequest
 
-    private $rows_per_page = 25; ///< for the paginator
+    private $rows_per_page = 20; ///< for the paginator
 
     function setCaption($s) { $this->caption = $s; }
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
 
-    function addColumn($key, $label, $type = '', $extra = '')
+    /**
+     * Needed to embed data in the table linked to other cells, see $col_label param for addColumn()
+     */
+    function addHiddenColumn($key)
+    {
+        $this->columns[] = array('key' => $key, 'hidden' => true);
+        $this->response_fields[] = array('key' => $key);
+    }
+
+    /**
+     * @param $key column key
+     * @param $label column label
+     * @param $type render column as this type of data
+     * @param $extra extra-data for column type (for "link" its url prefix)
+     * @param $col_label use a different cell content for the label of this cell
+     */
+    function addColumn($key, $label, $type = '', $extra = '', $col_label = '')
     {
         $arr = array('key' => $key, 'label' => $label, 'sortable' => true);
         $response = array('key' => $key);
@@ -43,6 +58,7 @@ class yui_datatable
             case 'link':
                 $arr['formatter']  = 'formatLink';
                 $arr['extra_data'] = $extra;
+                $arr['col_label']  = $col_label;
                 break;
 
             case 'date':
@@ -125,7 +141,9 @@ die('XXX BROKEN');
                  */
                 'this.formatLink = function(elLiner, oRecord, oColumn, oData) {'.
                     'var prefix = oColumn["extra_data"];'.
-                    'elLiner.innerHTML = "<a href=\"" + prefix + oData + "\">" + oData + "</a>";'.
+                    'var col_label_name = oColumn["col_label"];'.
+                    'var col_label = oRecord._oData[col_label_name];'.
+                    'elLiner.innerHTML = "<a href=\"" + prefix + oData + "\">" + (col_label ? col_label : oData) + "</a>";'.
                 '};'.
 
                 //oData cell data "YYYY-MM-DD HH:MM:SS"
