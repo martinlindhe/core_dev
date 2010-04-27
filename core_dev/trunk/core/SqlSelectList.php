@@ -9,16 +9,12 @@
 
 //STATUS: wip
 
-abstract class SqlSelectList
+require_once('XhrBackend.php');
+
+abstract class SqlSelectList extends XhrBackend
 {
     private $owner;
     private $child;
-    private $sort_column;
-    private $sort_order;
-    private $result_limit;
-    private $result_idx    = 0;
-    private $columns = array();
-    private $period_from, $period_to;
 
     protected $table_name;
     protected $owner_name;
@@ -33,46 +29,6 @@ abstract class SqlSelectList
 
     function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
     function setChild($s) { $this->child = $s; }
-
-    /**
-     * Specify which columns to include in the result-set
-     */
-    function setColumns($arr) { $this->columns = $arr; }
-
-    /**
-     * How many results to return
-     */
-    function setResultRows($n) { if (is_numeric($n)) $this->result_limit = $n; }
-
-    /**
-     * Specifies selection of entries over a time period (timestamp column is $timestamp_name)
-     */
-    function setPeriod($from, $to)
-    {
-        $from = ts($from);
-        $to   = ts($to);
-        if (!$from || !$to) return false;
-
-        $this->period_from = $from;
-        $this->period_to   = $to;
-    }
-
-    /**
-     * Index of results to return
-     */
-    function setResultIndex($n) { if (is_numeric($n)) $this->result_idx = $n; }
-
-    //XXX require to be a registered column!
-    function sortBy($s) { $this->sort_column = $s; }
-
-    function sortOrder($s)
-    {
-        $s = strtoupper($s);
-        if (!in_array($s, array('DESC', 'ASC')))
-            throw new Exception ('Bad sortOrder');
-
-        $this->sort_order = $s;
-    }
 
     function getTotalCount()
     {
