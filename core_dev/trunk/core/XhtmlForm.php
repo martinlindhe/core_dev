@@ -25,7 +25,6 @@ class XhtmlForm
     private $post_handler;    ///< function to call as POST callback
     private $objectinstance   = false;
     private $formData         = array();
-    private $listenGet        = false;
     private $elems            = array();
     private $success          = '';
     private $error            = 'Submitted form was rejected!';
@@ -43,11 +42,6 @@ class XhtmlForm
     function setError($s) { $this->error = $s; }
 
     function setSuccess($s) { $this->success = $s; }
-
-    /**
-     * $param $bool set to true to look for form parameters in _GET if not found in _POST
-     */
-    function setListenGet($bool) { $this->listenGet = $bool; }
 
     /**
      * Defines the function/object->method that will handle form submit processing
@@ -103,11 +97,13 @@ class XhtmlForm
                 }
 
         //catch named GET parameters if no POST parameters are found
-        if ($this->listenGet && !empty($_GET))
+/*
+        if (!empty($_GET))
             foreach ($_GET as $key => $val)
                 foreach ($this->elems as $row)
                     if (!empty($row['name']) && !isset($_POST[$row['name']]) && $row['name'] == $key)
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+*/
 
         if (!$p) return false;
 /*
