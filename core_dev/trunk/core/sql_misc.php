@@ -40,12 +40,13 @@ function sql_date($ts)
  *
  * @return e.g. key=val1 OR key=val2 OR key=val3
  */
-function sql_or_array($key, $vals)
+function sql_or_array($key, $vals, $pad = '')
 {
     $db = SqlHandler::getInstance();
 
     $tmp = array();
     foreach ($vals as $val) {
+        $val .= $pad;
         $tmp[] = $key.(is_numeric($val) ? $val : '"'.$db->escape($val).'"');
     }
 
