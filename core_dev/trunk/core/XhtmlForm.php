@@ -31,6 +31,7 @@ class XhtmlForm
     private $error            = 'Submitted form was rejected!';
     private $url_handler;     ///< sends form to a different url
     private $form_method;     ///< get/post
+    private $auto_code        = true; ///< automatically encode/decode form data using urlencode
 
     function __construct($name = '', $url_handler = '', $form_method = 'post')
     {
@@ -84,12 +85,19 @@ class XhtmlForm
                     case 'DATEINTERVAL':
                         if (!empty($row['namefrom']) && $row['namefrom'] == $key ||
                             !empty($row['nameto'])   && $row['nameto']   == $key)
-                            $p[ $key ] = $val;
+                            $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         break;
 
                     default:
-                        if (!empty($row['name']) && $row['name'] == $key)
-                            $p[ $key ] = $val;
+                        if (!empty($row['name']) && $row['name'] == $key) {
+                            if (is_array($val)) {
+                                foreach ($val as $idx => $v)
+                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                $p[ $key ] = $val;
+                            }
+                            else
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                        }
                         break;
                     }
                 }
@@ -99,7 +107,7 @@ class XhtmlForm
             foreach ($_GET as $key => $val)
                 foreach ($this->elems as $row)
                     if (!empty($row['name']) && !isset($_POST[$row['name']]) && $row['name'] == $key)
-                        $p[ $key ] = $val;
+                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
 
         if (!$p) return false;
 /*
@@ -267,6 +275,9 @@ class XhtmlForm
                 if (!empty($e['name']) && isset($this->formData[$e['name']]))
                     $e['default'] = $this->formData[$e['name']];
             }
+
+            if ($this->auto_code && isset($e['value']))
+                $e['value'] = urlencode($e['value']);
 
             $res .= '<tr>';
             switch ($e['type']) {
