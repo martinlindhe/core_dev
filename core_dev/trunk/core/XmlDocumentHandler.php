@@ -33,7 +33,7 @@ class XmlDocumentHandler extends CoreBase
         return self::$_instance;
     }
 
-    function setMimeType($type) { $this->mimetype = $mime; }
+    function setMimeType($s) { $this->mimetype = $s; }
 
     /**
      * Sets base URL for current website

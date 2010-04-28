@@ -11,6 +11,8 @@
 
 //STATUS: wip
 
+require_once('CsvWriter.php');
+
 class XhrResponse
 {
     private $data;
@@ -18,7 +20,7 @@ class XhrResponse
 
     function __construct($format = 'json')
     {
-        if ($format != 'json')
+        if (!in_array($format, array('json', 'csv')))
             throw new Exception('Unsupported XhrResponse format '.$format);
 
         $this->format = $format;
@@ -29,6 +31,14 @@ class XhrResponse
 
     function render()
     {
+        switch ($this->format) {
+        case 'json': return $this->renderJson();
+        case 'csv':  return $this->renderCsv();
+        }
+    }
+
+    function renderJson()
+    {
         $res = array(
         'totalRecords' => $this->total_records, //total results available: mapped to js var in yui_datatable
         'records'      => $this->data,          //mapped to js var in yui_datatable
@@ -36,6 +46,16 @@ class XhrResponse
         //'firstResultPosition'   => 1,    //???
         );
         return json_encode($res);
+    }
+
+    function renderCsv()
+    {
+        $page = XmlDocumentHandler::getInstance();
+        $page->setMimeType('text/plain');
+
+        $writer = new CsvWriter();
+        $writer->setData($this->data);
+        return $writer->render();
     }
 }
 

@@ -41,7 +41,7 @@ class Render_Table_CSV extends Render_Table
         if ($this->heads) {
             $i = 0;
             foreach ($this->heads as $h) {
-                $out .= csvEscape($h);
+                $out .= csv_escape($h);
                 $i++;
                 if ($i < $this->columns) {
                     $out .= $this->separator;
@@ -52,7 +52,7 @@ class Render_Table_CSV extends Render_Table
 
         $i = 0;
         foreach ($this->data as $data) {
-            $out .= csvEscape($data);
+            $out .= csv_escape($data);
             $i++;
             if ($i == $this->columns) {
                 $out .= $this->EOL;
