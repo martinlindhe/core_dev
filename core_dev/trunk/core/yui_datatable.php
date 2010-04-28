@@ -10,23 +10,23 @@
 //STATUS: WIP
 
 //TODO: enable inline cell editing
+//HMM: remove addHiddenColumn() ? it is currently unused
 
 class yui_datatable
 {
-    private $columns    = array();
+    private $columns         = array();
     private $response_fields = array();
-    private $datalist   = array();
-    private $div_holder = ''; ///< name of div tag to hold the datatable
-    private $caption    = ''; ///< caption for the datatable
-    private $xhr_source = ''; ///< url to retrieve data from XMLHttpRequest
-
-    private $rows_per_page = 20; ///< for the paginator
+    private $datalist        = array();
+    private $div_holder      = ''; ///< name of div tag to hold the datatable
+    private $caption         = ''; ///< caption for the datatable
+    private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
+    private $rows_per_page   = 20; ///< for the paginator
 
     function setCaption($s) { $this->caption = $s; }
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
 
     /**
-     * Needed to embed data in the table linked to other cells, see $col_label param for addColumn()
+     * Adds a hidden column to the dataset, needed to embed data in the table linked to other cells, see $col_label param for addColumn()
      */
     function addHiddenColumn($key)
     {
