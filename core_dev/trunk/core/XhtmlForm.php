@@ -22,17 +22,21 @@ class XhtmlForm
     private $enctype          = '';     ///< TODO: set multipart type if form contains file upload parts
     private $handled          = false;  ///< is set to true when form data has been processed by callback function
     private $name;
-    private $handler;
+    private $post_handler;    ///< function to call as POST callback
     private $objectinstance   = false;
     private $formData         = array();
     private $listenGet        = false;
     private $elems            = array();
     private $success          = '';
     private $error            = 'Submitted form was rejected!';
+    private $url_handler;     ///< sends form to a different url
+    private $form_method;     ///< get/post
 
-    function __construct($name = '')
+    function __construct($name = '', $url_handler = '', $form_method = 'post')
     {
-        $this->name = $name;
+        $this->name        = $name;
+        $this->url_handler = $url_handler;
+        $this->form_method = $form_method;
     }
 
     function setError($s) { $this->error = $s; }
@@ -54,7 +58,10 @@ class XhtmlForm
      */
     function setHandler($f, $objectinstance = false)
     {
-        $this->handler = $f;
+        if ($this->url_handler)
+            throw new Exception ('Cant use setHandler together with a separate url_handler');
+
+        $this->post_handler = $f;
 
         if (is_object($objectinstance))
             $this->objectinstance = $objectinstance;
@@ -114,9 +121,9 @@ class XhtmlForm
         $this->formData = $p;
 
         if ($this->objectinstance)
-            $call = array($this->objectinstance, $this->handler);
+            $call = array($this->objectinstance, $this->post_handler);
         else
-            $call = $this->handler;
+            $call = $this->post_handler;
 
         if (call_user_func($call, $this->formData, $this))
             $this->handled = true;
@@ -237,12 +244,12 @@ class XhtmlForm
     {
         global $h;
 
-        if (!$this->objectinstance && !function_exists($this->handler))
-            die('FATAL: XhtmlForm does not have a defined data handler');
+        if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
+            throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 
         $res = '';
 
-        $res .= xhtmlForm($this->name, '', 'post', $this->enctype);
+        $res .= xhtmlForm($this->name, $this->url_handler, $this->form_method, $this->enctype);
 
         $res .= '<table cellpadding="10" cellspacing="0" border="1">';
 
