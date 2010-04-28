@@ -21,6 +21,8 @@ class yui_datatable
     private $caption         = ''; ///< caption for the datatable
     private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
     private $rows_per_page   = 20; ///< for the paginator
+    private $sort_column     = 1;
+    private $sort_order      = 'asc';
 
     function setCaption($s) { $this->caption = $s; }
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
@@ -32,6 +34,24 @@ class yui_datatable
     {
         $this->columns[] = array('key' => $key, 'hidden' => true);
         $this->response_fields[] = array('key' => $key);
+    }
+
+    /**
+     * Configure initial sort order. If unset, defaults to first column, ascending
+     *
+     * @param $col sort by column name
+     * @param $order asc,desc
+     */
+    function setInitialSort($col, $order)
+    {
+        if (!in_array($order, array('asc', 'desc')))
+            return false;
+
+        foreach ($this->columns as $idx => $c)
+            if ($c['key'] == $col)
+                $this->sort_column = $idx;
+
+        $this->sort_order = $order;
     }
 
     /**
@@ -127,8 +147,6 @@ die('XXX BROKEN');
 
         $data_var = 'YuiDt'.mt_rand(0,9999);
 
-        $col1 = $this->columns[0];
-
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
             'YAHOO.example.Basic = function() {'.
@@ -189,8 +207,11 @@ die('XXX BROKEN');
                     'caption:"'.$this->caption.'",'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
-                        'initialRequest: "sort='.$col1['key'].'&dir=asc&startIndex=0&results='.$this->rows_per_page.'",'. // Initial request for first page of data
-                        'sortedBy : {key:"'.$col1['key'].'", dir:YAHOO.widget.DataTable.CLASS_ASC},'.        //XXX test with static data
+                        'initialRequest: "sort='.$this->columns[ $this->sort_column ]['key'].'&dir='.$this->sort_order.'&startIndex=0&results='.$this->rows_per_page.'",'. // Initial request for first page of data
+                        'sortedBy: {'.         //XXX test with static data
+                            'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
+                            'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
+                        '},'.
                         'paginator: new YAHOO.widget.Paginator({ rowsPerPage:'.$this->rows_per_page.' })'  //XXX test with static data
                         :
                         ''
