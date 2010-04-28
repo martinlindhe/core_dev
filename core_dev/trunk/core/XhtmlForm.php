@@ -69,8 +69,6 @@ class XhtmlForm
      */
     function handle()
     {
-        global $h;
-
         $p = array();
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
@@ -246,8 +244,6 @@ class XhtmlForm
      */
     function render()
     {
-        global $h;
-
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 

@@ -351,7 +351,6 @@ function xhtmlTable($arr, $heads = '', $callback = '')
  */
 function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
 {
-    global $h;
     if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 
     $out = '<select name="'.strip_tags($selectName).'">';

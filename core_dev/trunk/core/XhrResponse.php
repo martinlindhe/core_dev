@@ -52,6 +52,7 @@ class XhrResponse
     {
         $page = XmlDocumentHandler::getInstance();
         $page->setMimeType('text/plain');
+        $page->sendAttachment('export.csv');
 
         $writer = new CsvWriter();
         $writer->setData($this->data);

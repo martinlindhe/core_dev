@@ -20,6 +20,7 @@ class XmlDocumentHandler extends CoreBase
     private $enable_design = true;
     private $mimetype = 'text/html';
     private $base_url = '';
+    private $attachment_name;
 
     var $objs = array();  ///< IXMLComponent objects
 
@@ -42,6 +43,11 @@ class XmlDocumentHandler extends CoreBase
     function setBaseUrl($s) { $this->base_url = $s; }
 
     function getBaseUrl() { return $this->base_url; }
+
+    /**
+     * Sends HTTP headers that prompts the client browser to download the page content with given name
+     */
+    function sendAttachment($s) { $this->attachment_name = $s; }
 
     /**
      * Specifies php scripts to include for additional design
@@ -72,6 +78,11 @@ class XmlDocumentHandler extends CoreBase
 
         if ($this->mimetype)
             header('Content-type: '.$this->mimetype);
+
+        //prompts the user to save the file
+        if ($this->attachment_name)
+            header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
+
 
         if ($this->enable_design) {
             $header = XhtmlHeader::getInstance();
