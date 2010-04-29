@@ -42,7 +42,7 @@ class yui_datatable
      * @param $col sort by column name
      * @param $order asc,desc
      */
-    function setInitialSort($col, $order)
+    function setSortOrder($col, $order)
     {
         if (!in_array($order, array('asc', 'desc')))
             return false;
