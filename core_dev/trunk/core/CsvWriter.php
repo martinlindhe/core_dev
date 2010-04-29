@@ -5,21 +5,26 @@
  * CSV writer class
  *
  * Output using separator ";" and eol "\r\n" is tested & works with
- * OpenOffice 3.1, Gnumeric 1.9.9 and Microsoft Excel xxx
+ * OpenOffice Spreadsheet 3.1, Gnumeric 1.9.9 and Microsoft Excel xxx
  *
  * http://en.wikipedia.org/wiki/Comma-separated_values
+ *
+ * Mime-Type: text/csv
+ * Extension: .csv
  *
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
+//STATUS: good
+
 class CsvWriter
 {
-    private $rows         = array();
+    private $data         = array();
     private $separator    = ';';
     private $eol          = "\r\n";
     private $write_header = true;
 
-    function setData($data) { $this->rows = $data; }
+    function setData($data) { $this->data = $data; }
 
     /**
      * Escapes data if nessecary
@@ -52,16 +57,16 @@ class CsvWriter
         //first row contains the column names
         if ($this->write_header) {
             $header = array();
-            foreach ($this->rows[0] as $idx => $val)
+            foreach ($this->data[0] as $idx => $val)
                 $header[] = $this->escape($idx);
 
             $res .= implode($this->separator, $header).$this->eol;
         }
 
-        foreach ($this->rows as $row) {
+        foreach ($this->data as $row) {
             $line = array();
-            foreach ($row as $col)
-                $line[] = $this->escape($col);
+            foreach ($row as $val)
+                $line[] = $this->escape($val);
 
             $res .= implode($this->separator, $line).$this->eol;
         }

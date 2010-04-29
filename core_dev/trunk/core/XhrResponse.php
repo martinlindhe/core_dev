@@ -12,6 +12,7 @@
 //STATUS: wip
 
 require_once('CsvWriter.php');
+require_once('XlsWriter.php');
 
 class XhrResponse
 {
@@ -20,7 +21,7 @@ class XhrResponse
 
     function __construct($format = 'json')
     {
-        if (!in_array($format, array('json', 'csv')))
+        if (!in_array($format, array('json', 'csv', 'xls')))
             throw new Exception('Unsupported XhrResponse format '.$format);
 
         $this->format = $format;
@@ -34,6 +35,7 @@ class XhrResponse
         switch ($this->format) {
         case 'json': return $this->renderJson();
         case 'csv':  return $this->renderCsv();
+        case 'xls':  return $this->renderXls();
         }
     }
 
@@ -51,10 +53,21 @@ class XhrResponse
     function renderCsv()
     {
         $page = XmlDocumentHandler::getInstance();
-        $page->setMimeType('text/plain');
+        $page->setMimeType('text/csv');
         $page->sendAttachment('export.csv');
 
         $writer = new CsvWriter();
+        $writer->setData($this->data);
+        return $writer->render();
+    }
+
+    function renderXls()
+    {
+        $page = XmlDocumentHandler::getInstance();
+        $page->setMimeType('application/vnd.ms-excel');
+        $page->sendAttachment('export.xls');
+
+        $writer = new XlsWriter();
         $writer->setData($this->data);
         return $writer->render();
     }
