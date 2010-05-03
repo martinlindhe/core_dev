@@ -15,6 +15,8 @@
 
 //STATUS: good
 
+//TODO: untangle smtp class, create a new connect() method
+
 //TODO: figure out the proper "multipart" content-type to set on attachments/embedded files.
 //      the current approach works for Thunderbird, but message with attachment is shown without
 //      attachments before they are fully loaded (no gem next to mail)
@@ -26,11 +28,11 @@ require_once('network.php'); //for is_email()
 class SendMail extends CoreBase
 {
     private $smtp;
-    private $version     = 'core_dev 0.2-dev Sendmail'; //XXX read core_dev version
+    private $version     = 'core_dev Sendmail 0.9';
 
     private $from_adr, $from_name;
     private $rply_adr, $rply_name;
-    private $subject;
+    protected $subject;
     private $to_adr      = array();
     private $cc_adr      = array();
     private $bcc_adr     = array();
@@ -39,13 +41,23 @@ class SendMail extends CoreBase
 
     function __construct($server = '', $username = '', $password = '', $port = 25)
     {
+        $this->setServer($server, $username, $password, $port);
+    }
+
+    function __destruct()
+    {
+        $this->disconnect();
+    }
+
+    function setServer($server = '', $username = '', $password = '', $port = 25)
+    {
         mb_internal_encoding('UTF-8');    //XXX: required for utf8-encoded text (php 5.2)
 
         $this->smtp = new smtp($server, $username, $password, $port);
         $this->from_adr = $username;
     }
 
-    function close()
+    private function disconnect()
     {
         $this->smtp->close();
     }
@@ -124,7 +136,7 @@ class SendMail extends CoreBase
     /**
      * Sends a email
      */
-    function send($msg)
+    function send($msg = '')
     {
         if ($this->getDebug())
             $this->smtp->debug = true;
