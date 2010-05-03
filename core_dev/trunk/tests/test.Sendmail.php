@@ -5,7 +5,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 die('XXX: sendmail is working so test is disabled /martin');
 
 require('core.php');
-require('class.Sendmail.php');
+require('Sendmail.php');
 
 $config['debug'] = true;
 
