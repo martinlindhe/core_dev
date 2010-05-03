@@ -10,7 +10,7 @@
 //STATUS: WIP
 
 //TODO: enable inline cell editing
-//HMM: remove addHiddenColumn() ? it is currently unused
+//TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
 class yui_datatable
 {
@@ -30,8 +30,9 @@ class yui_datatable
     /**
      * Adds a hidden column to the dataset, needed to embed data in the table linked to other cells, see $col_label param for addColumn()
      */
-    function addHiddenColumn($key)
+    private function addHiddenColumn($key)
     {
+        if (!$key) return;
         $this->columns[] = array('key' => $key, 'hidden' => true);
         $this->response_fields[] = array('key' => $key);
     }
@@ -79,6 +80,7 @@ class yui_datatable
                 $arr['formatter']  = 'formatLink';
                 $arr['extra_data'] = $extra;
                 $arr['col_label']  = $col_label;
+                $this->addHiddenColumn($col_label);
                 break;
 
             case 'date':
@@ -91,11 +93,14 @@ class yui_datatable
                 //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
                 break;
 
+            case 'money';
+                $arr['formatter']  = 'formatMoney';
+                break;
+
             default: throw new Exception('Unknown column type '.$type);
             }
 
         $this->response_fields[] = $response;
-
         $this->columns[] = $arr;
     }
 
@@ -165,8 +170,8 @@ die('XXX BROKEN');
                 '};'.
 
                 //oData cell data "YYYY-MM-DD HH:MM:SS"
-                'this.formatDate = function(sData) {'.
-                    'if (!sData) return;'.
+                'this.formatTime = function(elLiner, oRecord, oColumn, oData) {'.
+                    'if (!oData) return;'.
                     'var a1 = oData.substr(0,10).split("-");'.
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2];'.
                 '};'.
@@ -179,10 +184,16 @@ die('XXX BROKEN');
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2]+" "+a2[0]+":"+a2[1]+":"+a2[2];'.
                 '};'.
 
+                'this.formatMoney = function(elLiner, oRecord, oColumn, oData) {'.
+                    'if (!oData) return;'.
+                    'elLiner.innerHTML = Number(oData).toFixed(2);'.
+                '};'.
+
                 // Add the custom formatter to the shortcuts
                 'YAHOO.widget.DataTable.Formatter.formatLink = this.formatLink;'.
                 'YAHOO.widget.DataTable.Formatter.formatDate = this.formatDate;'.
                 'YAHOO.widget.DataTable.Formatter.formatTime = this.formatTime;'.
+                'YAHOO.widget.DataTable.Formatter.formatMoney = this.formatMoney;'.
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
                 ($this->xhr_source ?

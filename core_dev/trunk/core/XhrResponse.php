@@ -16,6 +16,7 @@ require_once('XlsWriter.php');
 
 class XhrResponse
 {
+    private $total_records;
     private $data;
     private $format; //XXX allow other formats
 
