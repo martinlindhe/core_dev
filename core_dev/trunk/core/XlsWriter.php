@@ -37,10 +37,9 @@ class XlsWriter
     /** End Of File marker */
     private function eof() { return pack("ss", 0x0A, 0x00); }
 
-    /** Writes a number */
-    function writeNumber($val)
+    /** Writes a number (dobule) */
+    function writeDouble($val)
     {
-        //FIXME this don't output good enough precision, seem to round to 2 decimals (at least Open Office)
         return pack("sssssd", 0x203, 14, $this->row, $this->col, 0x0, $val);    //0x203 = double
     }
 
@@ -70,7 +69,7 @@ class XlsWriter
             $this->col = 0;
             foreach ($row as $val) {
                 if (is_numeric($val))
-                    $res .= $this->writeNumber($val);
+                    $res .= $this->writeDouble($val);
                 else
                     $res .= $this->writeText($val);
                 $this->col++;

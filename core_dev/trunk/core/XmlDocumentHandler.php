@@ -61,6 +61,18 @@ class XmlDocumentHandler extends CoreBase
     function disableDesign() { $this->enable_design = false; }
 
     /**
+     * Send http headers to disable browser cache
+     */
+    private function noCache()
+    {
+        //FIXME: are these all needed for modern browsers?
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: '.gmdate('D,d M YH:i:s').' GMT');
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Pragma: no-cache');
+    }
+
+    /**
      * Attaches a controller object to the main body
      */
     function attach($obj)
@@ -77,12 +89,13 @@ class XmlDocumentHandler extends CoreBase
 */
 
         if ($this->mimetype)
-            header('Content-type: '.$this->mimetype);
+            header('Content-Type: '.$this->mimetype);
 
         //prompts the user to save the file
-        if ($this->attachment_name)
+        if ($this->attachment_name) {
+            $this->noCache();
             header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
-
+        }
 
         if ($this->enable_design) {
             $header = XhtmlHeader::getInstance();
