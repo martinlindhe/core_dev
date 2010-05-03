@@ -14,7 +14,6 @@
  */
 
 //STATUS: good
-//TODO: rename -> util_Sendmail.php
 
 //TODO: figure out the proper "multipart" content-type to set on attachments/embedded files.
 //      the current approach works for Thunderbird, but message with attachment is shown without
@@ -24,7 +23,7 @@ require_once('class.CoreBase.php');
 require_once('client_smtp.php');
 require_once('network.php'); //for is_email()
 
-class Sendmail extends CoreBase
+class SendMail extends CoreBase
 {
     private $smtp;
     private $version     = 'core_dev 0.2-dev Sendmail'; //XXX read core_dev version
