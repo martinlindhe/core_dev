@@ -12,7 +12,7 @@
  *
  * http://en.wikipedia.org/wiki/FTPS
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
 //STATUS: ok
@@ -21,7 +21,7 @@
 
 //XXX: see curl_multi_exec() for performing multiple operations
 
-class ftp extends CoreBase
+class FtpClient extends CoreBase
 {
     private $scheme, $host;
     private $port     = 21;
