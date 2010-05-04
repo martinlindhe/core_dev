@@ -99,6 +99,9 @@ function formatDataSize($bytes) //XXX use ConvertDatasize class
     return $bytes.' '.$unit;
 }
 
+/**
+ * Useful for formatting money values
+ */
 function formatNumber($number)
 {
     $decimal_mark = ',';

@@ -7,8 +7,9 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: WIP
+//STATUS: wip
 
+//TODO: attempt to hide the bottom paginator
 //TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
@@ -152,7 +153,7 @@ die('XXX BROKEN');
         $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/datatable/datatable-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js');
 
-        $data_var = 'yui_dt_data'.mt_rand(0,9999);
+        $data_var = 'yui_dt_data'.mt_rand(0,99999);
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
@@ -225,7 +226,13 @@ die('XXX BROKEN');
                             'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
                             'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
                         '},'.
-                        'paginator: new YAHOO.widget.Paginator({ rowsPerPage:'.$this->rows_per_page.' })'  //XXX test with static data
+                        'paginator: new YAHOO.widget.Paginator({'.
+                            'rowsPerPage:'.$this->rows_per_page.','.
+
+                            // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
+                            'template: "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
+                            'rowsPerPageOptions: [15, 20, 25, 50, 75, 100, 250, 500, 1000],'.
+                        '})'  //XXX test paginator with static data
                         :
                         ''
                     ).

@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-$rand_id = mt_rand(1,5000000);
+$rand_id = mt_rand(0,99999);
 
 echo '<br/><br/>';
 echo '<a href="#" onclick="return toggle_element(\'sql_profiling'.$rand_id.'\');">'.$db->queries_cnt.' sql</a>';
