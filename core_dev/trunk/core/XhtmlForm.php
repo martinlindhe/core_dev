@@ -358,7 +358,7 @@ class XhtmlForm
 
             case 'RICHEDIT':
                 $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
+                $res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], 1, 1).'</td>';
 
                 $richedit = new yui_richedit();
                 $richedit->setWidth($e['width']);
