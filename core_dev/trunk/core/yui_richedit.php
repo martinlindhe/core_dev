@@ -19,7 +19,7 @@ class yui_richedit
 {
     private $width      = 500;
     private $height     = 200;
-    private $input_name = 'yui_richedit_input';
+    private $input_name = 'yui_richedit_input';  ///< name of <textarea> to decorate with rich editor
     private $titlebar   = '';
     private $show_dompath = false; //Displays the DOM bar at the bottom
 
@@ -32,7 +32,18 @@ class yui_richedit
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/assets/skins/sam/skin.css');
-        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/container/container_core-min.js&2.8.0r4/build/menu/menu-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/button/button-min.js&2.8.0r4/build/editor/editor-min.js');
+
+        //Utility Dependencies
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js');
+
+        //Needed for Menus, Buttons and Overlays used in the Toolbar
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/container/container_core-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/menu/menu-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js');
+
+        //Source file for Rich Text Editor
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/editor/editor-min.js');
 
         $res =
         'var myEditor = new YAHOO.widget.Editor("'.$this->input_name.'", {'.

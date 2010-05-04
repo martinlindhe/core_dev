@@ -17,15 +17,20 @@
 
 class yui_dateinterval
 {
-    private $name_from = 'yui_dateinterval_from';
-    private $name_to   = 'yui_dateinterval_to';
-    private $div_name  = 'yui_dateinterval_holder';
+    private $name_from     = 'yui_di_from';
+    private $name_to       = 'yui_di_to';
+    private $div_holder;
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $select_from, $select_to;
 
+    function __construct()
+    {
+         $this->div_holder = 'yui_di_hold'.mt_rand(0,99999);
+    }
+
     function setNameFrom($s) { $this->name_from = $s; }
     function setNameTo($s) { $this->name_to = $s; }
-    function setDivName($s) { $this->div_name = $s; }
+    function setDivName($s) { $this->div_holder = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
 
     function setSelection($date_from, $date_to)
@@ -39,132 +44,132 @@ class yui_dateinterval
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/combo?2.8.0r4/build/calendar/assets/skins/sam/calendar.css');
-        $header->includeJs('http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js&2.8.0r4/build/calendar/calendar-min.js');
+
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/calendar/calendar-min.js');
 
         $res =
-        '(function() {
+        '(function() {'.
 
-            function IntervalCalendar(container, cfg) {
-                this._iState = 0;
+            'function IntervalCalendar(container, cfg) {'.
+                'this._iState = 0;'.
 
-                cfg = cfg || {};
-                cfg.multi_select = true;
+                'cfg = cfg || {};'.
+                'cfg.multi_select = true;'.
 
-                IntervalCalendar.superclass.constructor.call(this, container, cfg);
+                'IntervalCalendar.superclass.constructor.call(this, container, cfg);'.
 
-                this.beforeSelectEvent.subscribe(this._intervalOnBeforeSelect, this, true);
-                this.selectEvent.subscribe(this._intervalOnSelect, this, true);
-                this.beforeDeselectEvent.subscribe(this._intervalOnBeforeDeselect, this, true);
-                this.deselectEvent.subscribe(this._intervalOnDeselect, this, true);
-            }
+                'this.beforeSelectEvent.subscribe(this._intervalOnBeforeSelect, this, true);'.
+                'this.selectEvent.subscribe(this._intervalOnSelect, this, true);'.
+                'this.beforeDeselectEvent.subscribe(this._intervalOnBeforeDeselect, this, true);'.
+                'this.deselectEvent.subscribe(this._intervalOnDeselect, this, true);'.
+            '}'.
 
-            IntervalCalendar._DEFAULT_CONFIG = YAHOO.widget.CalendarGroup._DEFAULT_CONFIG;
+            'IntervalCalendar._DEFAULT_CONFIG = YAHOO.widget.CalendarGroup._DEFAULT_CONFIG;'.
 
-            YAHOO.lang.extend(IntervalCalendar, YAHOO.widget.CalendarGroup, {
+            'YAHOO.lang.extend(IntervalCalendar, YAHOO.widget.CalendarGroup, {'.
 
-                _dateString : function(d) {
-                    var a = [];
-                    a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_MONTH_POSITION.key)-1] = (d.getMonth() + 1);
-                    a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_DAY_POSITION.key)-1] = d.getDate();
-                    a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_YEAR_POSITION.key)-1] = d.getFullYear();
-                    var s = this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.DATE_FIELD_DELIMITER.key);
-                    return a.join(s);
-                },
+                '_dateString : function(d) {'.
+                    'var a = [];'.
+                    'a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_MONTH_POSITION.key)-1] = (d.getMonth() + 1);'.
+                    'a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_DAY_POSITION.key)-1] = d.getDate();'.
+                    'a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_YEAR_POSITION.key)-1] = d.getFullYear();'.
+                    'var s = this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.DATE_FIELD_DELIMITER.key);'.
+                    'return a.join(s);'.
+                '},'.
 
-                _dateIntervalString : function(l, u) {
-                    var s = this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.DATE_RANGE_DELIMITER.key);
-                    return (this._dateString(l)
-                            + s + this._dateString(u));
-                },
+                '_dateIntervalString : function(l, u) {'.
+                    'var s = this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.DATE_RANGE_DELIMITER.key);'.
+                    'return (this._dateString(l) + s + this._dateString(u));'.
+                '},'.
 
-                getInterval : function() {
+                'getInterval : function() {'.
                     // Get selected dates
-                    var dates = this.getSelectedDates();
-                    if(dates.length > 0) {
+                    'var dates = this.getSelectedDates();'.
+                    'if(dates.length > 0) {'.
                         // Return lower and upper date in array
-                        var l = dates[0];
-                        var u = dates[dates.length - 1];
-                        return [l, u];
-                    }
-                    else {
+                        'var l = dates[0];'.
+                        'var u = dates[dates.length - 1];'.
+                        'return [l, u];'.
+                    '} else {'.
                         // No dates selected, return empty array
-                        return [];
-                    }
-                },
+                        'return [];'.
+                    '}'.
+                '},'.
 
-                setInterval : function(d1, d2) {
+                'setInterval : function(d1, d2) {'.
                     // Determine lower and upper dates
-                    var b = (d1 <= d2);
-                    var l = b ? d1 : d2;
-                    var u = b ? d2 : d1;
+                    'var b = (d1 <= d2);'.
+                    'var l = b ? d1 : d2;'.
+                    'var u = b ? d2 : d1;'.
                     // Update configuration
-                    this.cfg.setProperty("selected", this._dateIntervalString(l, u), false);
-                    this._iState = 2;
-                },
+                    'this.cfg.setProperty("selected", this._dateIntervalString(l, u), false);'.
+                    'this._iState = 2;'.
+                '},'.
 
-                resetInterval : function() {
+                'resetInterval : function() {'.
                     // Update configuration
-                    this.cfg.setProperty("selected", [], false);
-                    this._iState = 0;
-                },
+                    'this.cfg.setProperty("selected", [], false);'.
+                    'this._iState = 0;'.
+                '},'.
 
-                _intervalOnBeforeSelect : function(t,a,o) {
+                '_intervalOnBeforeSelect : function(t,a,o) {'.
                     // Update interval state
-                    this._iState = (this._iState + 1) % 3;
-                    if(this._iState == 0) {
+                    'this._iState = (this._iState + 1) % 3;'.
+                    'if(this._iState == 0) {'.
                         // If starting over with upcoming selection, first deselect all
-                        this.deselectAll();
-                        this._iState++;
-                    }
-                },
+                        'this.deselectAll();'.
+                        'this._iState++;'.
+                    '}'.
+                '},'.
 
-                _intervalOnSelect : function(t,a,o) {
+                '_intervalOnSelect : function(t,a,o) {'.
                     // Get selected dates
-                    var dates = this.getSelectedDates();
-                    if(dates.length > 1) {
+                    'var dates = this.getSelectedDates();'.
+                    'if(dates.length > 1) {'.
                         /* If more than one date is selected, ensure that the entire interval
                             between and including them is selected */
-                        var l = dates[0];
-                        var u = dates[dates.length - 1];
-                        this.cfg.setProperty("selected", this._dateIntervalString(l, u), false);
-                    }
+                        'var l = dates[0];'.
+                        'var u = dates[dates.length - 1];'.
+                        'this.cfg.setProperty("selected", this._dateIntervalString(l, u), false);'.
+                    '}'.
                     // Render changes
-                    this.render();
-                },
+                    'this.render();'.
+                '},'.
 
-                _intervalOnBeforeDeselect : function(t,a,o) {
-                    if(this._iState != 0) {
+                '_intervalOnBeforeDeselect : function(t,a,o) {'.
+                    'if(this._iState != 0) {'.
                         /* If part of an interval is already selected, then swallow up
                             this event because it is superfluous (see _intervalOnDeselect) */
-                        return false;
-                    }
-                },
+                        'return false;'.
+                    '}'.
+                '},'.
 
-                _intervalOnDeselect : function(t,a,o) {
-                    if(this._iState != 0) {
+                '_intervalOnDeselect : function(t,a,o) {'.
+                    'if(this._iState != 0) {'.
                         // If part of an interval is already selected, then first deselect all
-                        this._iState = 0;
-                        this.deselectAll();
+                        'this._iState = 0;'.
+                        'this.deselectAll();'.
 
                         // Get individual date deselected and page containing it
-                        var d = a[0];
-                        var date = YAHOO.widget.DateMath.getDate(d[0], d[1] - 1, d[2]);
-                        var page = this.getCalendarPage(date);
-                        if(page) {
+                        'var d = a[0];'.
+                        'var date = YAHOO.widget.DateMath.getDate(d[0], d[1] - 1, d[2]);'.
+                        'var page = this.getCalendarPage(date);'.
+                        'if(page) {'.
                             // Now (re)select the individual date
-                            page.beforeSelectEvent.fire();
-                            this.cfg.setProperty("selected", this._dateString(date), false);
-                            page.selectEvent.fire([d]);
-                        }
+                            'page.beforeSelectEvent.fire();'.
+                            'this.cfg.setProperty("selected", this._dateString(date), false);'.
+                            'page.selectEvent.fire([d]);'.
+                        '}'.
                         // Swallow up since we called deselectAll above
-                        return false;
-                    }
-                }
-            });
+                        'return false;'.
+                    '}'.
+                '}'.
+            '});'.
 
-            YAHOO.namespace("example.calendar");
-            YAHOO.example.calendar.IntervalCalendar = IntervalCalendar;
-        })();';
+            'YAHOO.namespace("example.calendar");'.
+            'YAHOO.example.calendar.IntervalCalendar = IntervalCalendar;'.
+        '})();';
 
         $locale = LocaleHandler::getInstance();
 
@@ -189,7 +194,7 @@ class yui_dateinterval
                 'WEEKDAYS_LONG:'.  jsArray1D($locale->handle->weekday_long, false).','.
             '};'.
 
-            'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_name.'",myConfigs);'.
+            'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_holder.'",myConfigs);'.
 
             'cal.selectEvent.subscribe(function() {'.
                 'interval = this.getInterval();'.

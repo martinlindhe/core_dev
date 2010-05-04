@@ -17,12 +17,17 @@ class yui_datatable
     private $columns         = array();
     private $response_fields = array();
     private $datalist        = array();
-    private $div_holder      = ''; ///< name of div tag to hold the datatable
+    private $div_holder;           ///< name of div tag to hold the datatable
     private $caption         = ''; ///< caption for the datatable
     private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
     private $rows_per_page   = 20; ///< for the paginator
     private $sort_column     = 1;
     private $sort_order      = 'asc';
+
+    function __construct()
+    {
+        $this->div_holder = 'yui_dt'.mt_rand(0,9999);
+    }
 
     function setCaption($s) { $this->caption = $s; }
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
@@ -147,10 +152,7 @@ die('XXX BROKEN');
         $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/datatable/datatable-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js');
 
-        if (!$this->div_holder)
-            $this->div_holder = 'YuiDtHold'.mt_rand(0,9999);
-
-        $data_var = 'YuiDt'.mt_rand(0,9999);
+        $data_var = 'yui_dt_data'.mt_rand(0,9999);
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
