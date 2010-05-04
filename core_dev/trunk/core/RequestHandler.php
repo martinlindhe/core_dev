@@ -48,6 +48,13 @@ class RequestHandler
     {
         $request = $_SERVER['REQUEST_URI'];
 
+        //exclude application root from parsed request
+        $page = XmlDocumentHandler::getInstance();
+        $parsed = parse_url($page->getBaseUrl());
+
+        if (substr($request, 0, strlen($parsed['path'])) == $parsed['path'])
+            $request = substr($request, strlen($parsed['path']) );
+
         $arr = explode('/', trim($request, '/'));
 
         if ($arr && substr($arr[0],0,1) != '?') {
