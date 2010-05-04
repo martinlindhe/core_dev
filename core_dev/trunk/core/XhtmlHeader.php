@@ -11,8 +11,6 @@
 
 //TODO: rewrite "include feeds" functionality
 
-//TODO LATER: look at xmlwriter in php 6
-
 require_once('IXMLComponent.php');
 require_once('class.CoreBase.php');
 

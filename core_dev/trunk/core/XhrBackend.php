@@ -51,6 +51,9 @@ abstract class XhrBackend
         $this->period_to   = $to;
     }
 
+    function getDateFromAsString() { return date('Y-m-d', $this->period_from); }
+    function getDateToAsString() { return date('Y-m-d', $this->period_to); }
+
     /**
      * Index of results to return
      */

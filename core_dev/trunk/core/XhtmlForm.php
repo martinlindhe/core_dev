@@ -247,9 +247,7 @@ class XhtmlForm
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 
-        $res = '';
-
-        $res .= xhtmlForm($this->name, $this->url_handler, $this->form_method, $this->enctype);
+        $res = xhtmlForm($this->name, $this->url_handler, $this->form_method, $this->enctype);
 
         $res .= '<table cellpadding="10" cellspacing="0" border="1">';
 
