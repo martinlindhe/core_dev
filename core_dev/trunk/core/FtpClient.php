@@ -29,6 +29,7 @@ class FtpClient extends CoreBase
     private $username = 'anonymous';
     private $password = 'anon@ftp.com';
     private $curl     = false; ///< curl handle
+    private $timeout  = 30;    ///< timeout in seconds before giving up each command
 
     function __construct($address = '')
     {
@@ -45,6 +46,7 @@ class FtpClient extends CoreBase
         $this->close();
     }
 
+    function setTimeout($n) { if is_numeric($n) $this->timeout = $n; }
 
     /**
      * Connects to the ftp server
@@ -147,7 +149,7 @@ class FtpClient extends CoreBase
 
         curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
-        curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
 
         $fp = fopen($local_file, 'w');
         if (!$fp) {
@@ -183,7 +185,7 @@ class FtpClient extends CoreBase
 
         curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
-        curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
 
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
         $res = curl_exec($this->curl);
@@ -238,6 +240,8 @@ class FtpClient extends CoreBase
 
         curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
+        curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
+
         $fp = fopen($local_file, 'r');
         curl_setopt($this->curl, CURLOPT_UPLOAD, 1);
         curl_setopt($this->curl, CURLOPT_INFILE, $fp);
@@ -280,7 +284,7 @@ class FtpClient extends CoreBase
 
         curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
 
-        curl_setopt($this->curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
 
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         $raw = curl_exec($this->curl);
