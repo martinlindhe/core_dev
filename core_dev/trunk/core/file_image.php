@@ -8,7 +8,7 @@
 
 //STATUS: draft
 
-require_once('client_http.php');
+require_once('HttpClient.php');
 
 class FileImage
 {

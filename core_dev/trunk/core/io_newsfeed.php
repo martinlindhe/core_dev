@@ -19,7 +19,7 @@ require_once('prop_Duration.php');
 require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
 
-require_once('client_http.php');
+require_once('HttpClient.php');
 
 require_once('input_rss.php');
 require_once('input_atom.php');

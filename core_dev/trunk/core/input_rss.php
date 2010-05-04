@@ -11,8 +11,10 @@
 
 //STATUS: good
 
+//TODO: extend from HttpClient
+
 require_once('class.CoreBase.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 require_once('io_newsfeed.php'); //for NewsItem object
 
 class input_rss extends CoreBase

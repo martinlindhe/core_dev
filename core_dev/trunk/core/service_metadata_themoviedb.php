@@ -14,7 +14,7 @@
 //TODO: store movie title + imdb id in db
 
 require_once('class.CoreBase.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 require_once('service_metadata_imdb.php');
 
 class TheMovieDbMetadata extends CoreBase

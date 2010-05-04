@@ -7,9 +7,11 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
+//STATUS: unused???
+
 //TODO: drop this and wrap php 5 class XMLReader?: http://www.ibm.com/developerworks/library/x-pullparsingphp.html
 
-require_once('client_http.php');
+require_once('HttpClient.php');
 
 class xml_input
 {

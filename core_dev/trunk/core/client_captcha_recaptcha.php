@@ -17,7 +17,7 @@
 //STATUS: good
 
 require_once('class.CoreBase.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 
 class CaptchaRecaptcha extends CoreBase
 {

@@ -11,6 +11,8 @@
 
 //STATUS: ok, needs more testing
 
+//TODO: extend from HttpClient
+
 /* FIXME test: only tried it with 1-entry files:
 <asx version="3.0">
   <entry>
@@ -22,7 +24,7 @@
 */
 
 require_once('class.CoreBase.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 require_once('io_playlist.php'); //for MediaItem object
 
 class input_asx extends CoreBase

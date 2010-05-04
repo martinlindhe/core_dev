@@ -8,7 +8,7 @@
 //STATUS: finished
 
 require_once('class.CoreBase.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 require_once('client_shorturl_isgd.php');
 require_once('client_shorturl_tinyurl.php');
 require_once('client_shorturl_trim.php');

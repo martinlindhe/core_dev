@@ -3,7 +3,7 @@
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
 require_once('core.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 
 // test http client
 $http = new HttpClient('http://www.google.com/');

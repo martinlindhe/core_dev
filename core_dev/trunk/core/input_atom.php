@@ -11,8 +11,10 @@
 
 //STATUS: good
 
+//TODO: extend from HttpClient
+
 require_once('class.CoreBase.php');
-require_once('client_http.php');
+require_once('HttpClient.php');
 
 class input_atom extends CoreBase
 {
