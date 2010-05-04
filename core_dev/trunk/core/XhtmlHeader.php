@@ -61,7 +61,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     function includeCss($uri) { $this->include_css[] = $uri; }
 
     /**
-     * CSS snippets to be added to XXX
+     * CSS snippets to be added inside <head>
      */
     function addCss($s) { $this->embed_css .= $s; }
 

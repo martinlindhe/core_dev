@@ -7,14 +7,21 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: WIP
+//STATUS: wip
 
-//TODO: include external yui files in a smarter way
 //TODO: use jsArray-functions more
 
 class yui_chart
 {
     private $data_source = '';
+    private $div_holder;
+    private $width  = 700;
+    private $height = 400;
+
+    function __construct()
+    {
+        $this->div_holder = 'yui_chart'.mt_rand(0,99999);
+    }
 
     function setDataSource($arr) { $this->data_source = $arr; }
 
@@ -30,40 +37,42 @@ class yui_chart
 
     function render()
     {
-        $res = '<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.8.0r4/build/yahoo/yahoo-min.js&2.8.0r4/build/dom/dom-min.js&2.8.0r4/build/event/event-min.js&2.8.0r4/build/element/element-min.js&2.8.0r4/build/json/json-min.js&2.8.0r4/build/datasource/datasource-min.js&2.8.0r4/build/swf/swf-min.js&2.8.0r4/build/charts/charts-min.js"></script>';
+        $header = XhtmlHeader::getInstance();
 
-        $res .=
-        '<style type="text/css">'.
-        '#chart { width: 500px; height: 350px; }'.
-        '</style>';
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/datasource/datasource-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/swf/swf-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/charts/charts-min.js');
 
-        $res .=
-        '<div id="chart">'.
+        $header->addCss('#'.$this->div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
+
+        $res =
+        '<div id="'.$this->div_holder.'">'.
         'Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. '.
         'You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.'.
         '</div>';
 
         $res .=
         '<script type="text/javascript">'.
-        'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.0r4/build/charts/assets/charts.swf";';
+        'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.0r4/build/charts/assets/charts.swf";'.
 
         //--- data
-        $res .=
-        'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'."\n".
-        'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.DataSource);'."\n".
-        'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'."\n";
+        'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'.
+        'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.DataSource);'.
+        'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
 
-        $res .=
-        'myDataSource.responseSchema = { fields: [ ';
-        $res .= '"'.$this->x_field_name.'",';
+        'myDataSource.responseSchema = { fields: [ "'.$this->x_field_name.'",';
         for ($i=0; $i < count($this->y_fields); $i++)
             $res .= '"'.$this->y_fields[$i]['name'].'",';
-
-        $res .= '] };'."\n";
+        $res .= '] };';
 
         //--- chart
-        $res .= 'var seriesDef = [';
-        $res .= '{ displayName: "'.$this->x_field_title.'", yField: "'.$this->x_field_name.'" }, ';
+        $res .=
+        'var seriesDef = ['.
+        '{ displayName: "'.$this->x_field_title.'", yField: "'.$this->x_field_name.'" }, ';
 
         for ($i=0; $i < count($this->y_fields); $i++)
             $res .= '{ displayName: "'.$this->y_fields[$i]['title'].'", yField: "'.$this->y_fields[$i]['name'].'" }, ';
@@ -76,28 +85,24 @@ class yui_chart
             var toolTipText = series.displayName + " at " + item.'.$this->x_field_name.';
             toolTipText += "\n" + item[series.yField];
             return toolTipText;
-        }'."\n";
+        };'.
 
         //Style object for chart
-        $res .=
         'var styleDef ='.
         '{'.
             'xAxis: { labelRotation:-90 },'.
             'yAxis: { titleRotation:-90 }'.
-        '}'."\n";
+        '};'.
 
-        $res .=
         'var yAxisWidget = new YAHOO.widget.NumericAxis();'.
         'yAxisWidget.minimum = 0;'.
-        'yAxisWidget.title = "'.$this->y_title.'";';
+        'yAxisWidget.title = "'.$this->y_title.'";'.
 
-        $res .=
         'var xAxisWidget = new YAHOO.widget.CategoryAxis();'.
         'xAxisWidget.minimum = 0;'.
-        'xAxisWidget.title = "'.$this->x_field_title.'";';
+        'xAxisWidget.title = "'.$this->x_field_title.'";'.
 
-        $res .=
-        'var mychart = new YAHOO.widget.LineChart( "chart", myDataSource, {'.
+        'var mychart = new YAHOO.widget.LineChart( "'.$this->div_holder.'", myDataSource, {'.
         'series: seriesDef,'.
         'xField: "'.$this->x_field_name.'",'.
         'yAxis: yAxisWidget,'.
@@ -106,7 +111,7 @@ class yui_chart
         'dataTipFunction: YAHOO.example.getDataTipText,'.
         //only needed for flash player express install
         'expressInstall: "assets/expressinstall.swf"'.
-        '});'."\n";
+        '});';
 
         $res .= '</script>';
 
