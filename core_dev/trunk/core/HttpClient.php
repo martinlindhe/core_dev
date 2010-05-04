@@ -11,7 +11,6 @@
 
 //STATUS: ok
 
-//TODO rename to HttpClient.php
 //TODO: extend from Url ???
 
 //FIXME header parsing should preserve all fields, ex:
@@ -20,8 +19,7 @@ WWW-Authenticate: Negotiate
 WWW-Authenticate: NTLM
 */
 
-//NTLM login to IIS server does a redirect and header is not parsed properly afterwards
-
+//FIXME NTLM login to IIS server does a redirect and header is not parsed properly afterwards
 //FIXME "301 moved permanently" doesnt properly re-parse the subsequent request, which curl does automatically. see $max_redirects
 
 require_once('core.php');

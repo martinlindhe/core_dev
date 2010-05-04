@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
 /**
@@ -249,6 +249,24 @@ function formatTime($ts = 0, $relative = false)
 
     //2007-04-14 15:22
     return date('Y-m-d H:i', $ts);
+}
+
+/**
+ * @return true if input string is a US date: "m/d/yyyy"
+ */
+function is_us_date($s)
+{
+    if (!is_string($s))
+        return false;
+
+    $p = explode('/', $s);
+    if (count($p) != 3)
+        return false;
+
+    if (!checkdate($p[0], $p[1], $p[2]))
+        return false;
+
+    return true;
 }
 
 ?>
