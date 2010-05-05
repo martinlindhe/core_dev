@@ -152,7 +152,7 @@ function dh($m)
 
     for ($i=0; $i<strlen($m); $i++) {
         $x = substr($m, $i, 1);
-        if (ord($x) > 30)
+        if (ord($x) > 30 && ord($x) < 0x80)
             $bytes .= $x;
         else
             $bytes .= '.';

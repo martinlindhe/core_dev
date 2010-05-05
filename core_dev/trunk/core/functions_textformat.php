@@ -447,4 +447,15 @@ function reduce_whitespace($s)
     return $s;
 }
 
+/**
+ * Strips BOM marker from UTF-8 text
+ */
+function utf8_strip_bom($s)
+{
+    if (substr($s, 0, 3) == "\xEF\xBB\xBF")
+        return substr($s, 3);
+
+    return $s;
+}
+
 ?>
