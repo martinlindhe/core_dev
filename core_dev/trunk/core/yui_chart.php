@@ -39,13 +39,13 @@ class yui_chart
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/datasource/datasource-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/json/json-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/swf/swf-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/connection/connection-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.0r4/build/charts/charts-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/element/element-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/datasource/datasource-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/json/json-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/swf/swf-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/connection/connection-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/charts/charts-min.js');
 
         $header->addCss('#'.$this->div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
 
@@ -57,7 +57,7 @@ class yui_chart
 
         $res .=
         '<script type="text/javascript">'.
-        'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.0r4/build/charts/assets/charts.swf";'.
+        'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.1/build/charts/assets/charts.swf";'.
 
         //--- data
         'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'.
