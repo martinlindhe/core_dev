@@ -39,6 +39,8 @@ class SendMail extends CoreBase
     private $html        = false;
     private $attachments = array();
 
+    private $connected = false;
+
     function __construct($server = '', $username = '', $password = '', $port = 25)
     {
         $this->setServer($server, $username, $password, $port);
@@ -57,9 +59,23 @@ class SendMail extends CoreBase
         $this->from_adr = $username;
     }
 
+    private function connect()
+    {
+        if ($this->getDebug())
+            $this->smtp->debug = true;
+
+        if (!$this->smtp->login())
+            return false;
+
+        $this->connected = true;
+    }
+
     private function disconnect()
     {
-        $this->smtp->close();
+        if ($this->connected)
+            $this->smtp->close();
+
+        $this->connected = false;
     }
 
     function setFrom($s, $n = '')
@@ -138,11 +154,7 @@ class SendMail extends CoreBase
      */
     function send($msg = '')
     {
-        if ($this->getDebug())
-            $this->smtp->debug = true;
-
-        if (!$this->smtp->login())
-            return false;
+        $this->connect();
 
         if (!$this->smtp->_MAIL_FROM($this->from_adr))
             return false;
