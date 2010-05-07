@@ -99,9 +99,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function insert($q)
     {
-        $result = $this->real_query($q);
-
-        if ($result)
+        if ($this->real_query($q))
             return $this->db_handle->insert_id;
 
         return false;

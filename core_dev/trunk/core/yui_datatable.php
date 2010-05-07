@@ -24,6 +24,7 @@ class yui_datatable
     private $rows_per_page   = 20; ///< for the paginator
     private $sort_column     = 1;
     private $sort_order      = 'asc';
+    private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
 
     function __construct()
     {
@@ -99,8 +100,14 @@ class yui_datatable
                 //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
                 break;
 
-            case 'money';
+            case 'money':
                 $arr['formatter']  = 'formatMoney';
+                break;
+
+            case 'array':
+                //"extra" contains an array of string representations of this column's values
+                $arr['formatter'] = 'formatArray'.count($this->embed_arrays);
+                $this->embed_arrays[] = $extra;
                 break;
 
             default: throw new Exception('Unknown column type '.$type);
@@ -190,8 +197,18 @@ die('XXX BROKEN');
                 'this.formatMoney = function(elLiner, oRecord, oColumn, oData) {'.
                     'if (!oData) return;'.
                     'elLiner.innerHTML = Number(oData).toFixed(2);'.
-                '};'.
+                '};';
 
+                for ($i=0; $i<count($this->embed_arrays); $i++) {
+                    $res .=
+                    'this.formatArray'.$i.' = function(elLiner, oRecord, oColumn, oData) {'.
+                        'var a='.jsArray1D($this->embed_arrays[$i]).';'."\n".
+                        'elLiner.innerHTML = a[oData];'.
+                    '};'.
+                    'YAHOO.widget.DataTable.Formatter.formatArray'.$i.' = this.formatArray'.$i.';';
+                }
+
+                $res .=
                 // Add the custom formatter to the shortcuts
                 'YAHOO.widget.DataTable.Formatter.formatLink = this.formatLink;'.
                 'YAHOO.widget.DataTable.Formatter.formatDate = this.formatDate;'.

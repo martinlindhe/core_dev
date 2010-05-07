@@ -12,19 +12,19 @@
  */
 function jsArrayFlat($list, $with_keys)
 {
-    $res = '';
+    $all = array();
     foreach ($list as $key => $val)
     {
-        $res .= ($with_keys ? $key.':' : '');
+        $res = ($with_keys ? $key.':' : '');
         if (is_bool($val)) $res .= ($val ? '1' : '0');
         else if (is_numeric($val)) $res .= $val;
         else {
-            $val = str_replace('"', '&quot;', $val); //XXX cannot contain "
+            $val = str_replace('"', '&quot;', $val); //cannot contain "
             $res .= '"'.$val.'"';
         }
-        $res .= ',';
+        $all[] = $res;
     }
-    return $res;
+    return implode(',', $all);
 }
 
 /**
@@ -33,7 +33,7 @@ function jsArrayFlat($list, $with_keys)
  */
 function jsArray1D($list, $with_keys = true)
 {
-    return '['.jsArrayFlat($list, $with_keys).']';
+    return '{'.jsArrayFlat($list, $with_keys).'}';
 }
 
 /**
@@ -42,10 +42,10 @@ function jsArray1D($list, $with_keys = true)
  */
 function jsArray2D($list)
 {
-    $res = '['."\n";
+    $res = '[';
 
     foreach ($list as $l)
-        $res .= '{'.jsArrayFlat($l, true).'},'."\n";
+        $res .= jsArray1D($l, true).',';
 
     $res .= ']';
 
