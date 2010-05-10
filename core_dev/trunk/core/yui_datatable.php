@@ -124,13 +124,13 @@ class yui_datatable
     function setDataList($arr)
     {
         //only include registered array keys
-die('XXX BROKEN');
+
         foreach ($arr as $row)
         {
             $inc_row = array();
             foreach ($row as $key => $val)
                 foreach ($this->columns as $inc_col)
-                    if (isset($this->columns[$key])) //XXX broken check
+                    if ($inc_col['key'] == $key)
                         $inc_row[$key] = $val;
 
             $res[] = $inc_row;
@@ -180,7 +180,7 @@ die('XXX BROKEN');
                 '};'.
 
                 //oData cell data "YYYY-MM-DD HH:MM:SS"
-                'this.formatTime = function(elLiner, oRecord, oColumn, oData) {'.
+                'this.formatDate = function(elLiner, oRecord, oColumn, oData) {'.
                     'if (!oData) return;'.
                     'var a1 = oData.substr(0,10).split("-");'.
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2];'.
@@ -188,7 +188,6 @@ die('XXX BROKEN');
 
                 'this.formatTime = function(elLiner, oRecord, oColumn, oData) {'.
                     'if (!oData) return;'.
-                    //'return new Date(sData);'.  //dont work because js date dont parse mysql datestamps (???)
                     'var a1 = oData.substr(0,10).split("-");'.
                     'var a2 = oData.substr(11,8).split(":");'.
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2]+" "+a2[0]+":"+a2[1]+":"+a2[2];'.
