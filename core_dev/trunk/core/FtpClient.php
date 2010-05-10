@@ -46,7 +46,7 @@ class FtpClient extends CoreBase
         $this->close();
     }
 
-    function setTimeout($n) { if is_numeric($n) $this->timeout = $n; }
+    function setTimeout($n) { if (is_numeric($n)) $this->timeout = $n; }
 
     /**
      * Connects to the ftp server
