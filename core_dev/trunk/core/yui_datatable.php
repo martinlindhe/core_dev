@@ -83,37 +83,43 @@ class yui_datatable
         if (!$type && substr($key, 0, 4) == 'date')
             $type = 'date';
 
-        if ($type)
-            switch ($type) {
-            case 'link':
-                $arr['formatter']  = 'formatLink';
-                $arr['extra_data'] = $extra;
-                $arr['col_label']  = $col_label;
-                $this->addHiddenColumn($col_label);
-                break;
+        if (!$type)
+            $type = 'text';
 
-            case 'date':
-                $arr['formatter']  = 'formatDate';
-                //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
-                break;
+        switch ($type) {
+        case 'text':
+            $arr['maxAutoWidth'] = 600;
+            break;
 
-            case 'time':
-                $arr['formatter']  = 'formatTime';
-                //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
-                break;
+        case 'link':
+            $arr['formatter']  = 'formatLink';
+            $arr['extra_data'] = $extra;
+            $arr['col_label']  = $col_label;
+            $this->addHiddenColumn($col_label);
+            break;
 
-            case 'money':
-                $arr['formatter']  = 'formatMoney';
-                break;
+        case 'date':
+            $arr['formatter']  = 'formatDate';
+            //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
+            break;
 
-            case 'array':
-                //"extra" contains an array of string representations of this column's values
-                $arr['formatter'] = 'formatArray'.count($this->embed_arrays);
-                $this->embed_arrays[] = $extra;
-                break;
+        case 'time':
+            $arr['formatter']  = 'formatTime';
+            //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
+            break;
 
-            default: throw new Exception('Unknown column type '.$type);
-            }
+        case 'money':
+            $arr['formatter']  = 'formatMoney';
+            break;
+
+        case 'array':
+            //"extra" contains an array of string representations of this column's values
+            $arr['formatter'] = 'formatArray'.count($this->embed_arrays);
+            $this->embed_arrays[] = $extra;
+            break;
+
+        default: throw new Exception('Unknown column type '.$type);
+        }
 
         $this->response_fields[] = $response;
         $this->columns[] = $arr;
@@ -244,7 +250,7 @@ class yui_datatable
                         'rowsPerPage:'.$this->rows_per_page.','.
                         // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
                         'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
-                        'rowsPerPageOptions:['.implode(',', array(15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
+                        'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
