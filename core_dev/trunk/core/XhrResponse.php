@@ -48,6 +48,18 @@ class XhrResponse
         //'pageSize'     => count($this->data), //results returned ... unused???
         //'firstResultPosition'   => 1,    //???
         );
+
+        //attaches sql debug in the response
+        $db = SqlHandler::getInstance();
+
+        if ($db instanceof DatabaseMysqlProfiler) {
+            $res['db'] = array(
+            'queries' => $db->queries,
+            'time_spent' => $db->time_spent,
+            'errors' => $db->query_error,
+            );
+        }
+
         return json_encode($res);
     }
 

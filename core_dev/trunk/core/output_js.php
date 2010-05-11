@@ -17,7 +17,7 @@ function jsArrayFlat($list, $with_keys)
     {
         $res = ($with_keys ? $key.':' : '');
         if (is_bool($val)) $res .= ($val ? '1' : '0');
-        else if (is_numeric($val)) $res .= $val;
+        else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0')) $res .= $val;
         else {
             $val = str_replace('"', '&quot;', $val); //cannot contain "
             $res .= '"'.$val.'"';

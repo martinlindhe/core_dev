@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//FIXME: re-enable sorting when static data source is used
+
 //TODO: attempt to hide the bottom paginator
 //TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
