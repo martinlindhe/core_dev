@@ -9,7 +9,7 @@
 
 require_once('client_stock_webservicex.php'); //NASDAQ only (?)
 
-require_once('class.Cache.php');
+require_once('Cache.php');
 
 class Stock
 {

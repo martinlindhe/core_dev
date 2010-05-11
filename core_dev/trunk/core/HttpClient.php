@@ -26,7 +26,7 @@ require_once('core.php');
 require_once('network.php');
 
 require_once('prop_Url.php');
-require_once('class.Cache.php');
+require_once('Cache.php');
 
 class HttpClient extends CoreBase
 {

@@ -13,7 +13,7 @@
  */
 
 require_once('class.CoreConverter.php');
-require_once('class.Cache.php');
+require_once('Cache.php');
 
 require_once('service_currency_webservicex.php');
 

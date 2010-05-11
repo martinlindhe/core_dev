@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('class.Cache.php');
+require_once('Cache.php');
 require_once('client_weather_webservicex.php');
 
 class Weather extends CoreBase

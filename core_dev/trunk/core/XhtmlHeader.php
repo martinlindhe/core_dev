@@ -98,7 +98,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         '<head>';
 
         $res .= '<style type="text/css">';
-        $res .= '@import url('.$this->core_dev_root.'css/core.css);';
+        //$res .= '@import url('.$this->core_dev_root.'css/core.css);';
 
         foreach ($this->include_css as $css)
             $res .= '@import url('.$css.');';
@@ -126,7 +126,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         if ($this->favicon)
             $res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
 
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
+        //$res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
 
         //XXX let classes register needed js,css etc headers somehow
 
