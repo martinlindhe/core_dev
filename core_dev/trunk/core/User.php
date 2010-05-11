@@ -65,7 +65,7 @@ class User extends CoreBase
         if (!$this->id)
             return t('Anonymous');
 
-        return '<a '.($class?' class="'.$class.'"':'').'href="user.php?id='.$this->id.'">'.$this->name.'</a>';
+        return $this->name;
     }
 
 }

@@ -8,7 +8,7 @@
 //STATUS: drop all code! refactor into views rendered from AuthHandler.php
 
 require_once('output_xhtml.php');
-require_once('class.User.php');
+require_once('User.php');
 
 /**
  * Displays a account registration form

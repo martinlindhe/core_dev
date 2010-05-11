@@ -18,7 +18,7 @@ class XhrResponse
 {
     private $total_records;
     private $data;
-    private $format; //XXX allow other formats
+    private $format;
 
     function __construct($format = 'json')
     {
@@ -43,10 +43,8 @@ class XhrResponse
     function renderJson()
     {
         $res = array(
-        'totalRecords' => $this->total_records, //total results available: mapped to js var in yui_datatable
-        'records'      => $this->data,          //mapped to js var in yui_datatable
-        //'pageSize'     => count($this->data), //results returned ... unused???
-        //'firstResultPosition'   => 1,    //???
+        'totalRecords' => $this->total_records, //total results available, mapped in yui_datatable
+        'records'      => $this->data,          //mapped in yui_datatable
         );
 
         //attaches sql debug in the response

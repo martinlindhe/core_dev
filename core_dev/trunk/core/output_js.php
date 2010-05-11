@@ -55,18 +55,18 @@ function jsArray2D($list)
 }
 
 /**
+ * Reload current page after specified period of time
+ *
  * @param $ms reload time in milliseconds (1/1000th second)
  */
 function js_reload($ms)
 {
     if (!is_numeric($ms)) return false;
 
-    $res =
+    return
     '<script type="text/javascript">'.
     'setTimeout("location.reload();", '.$ms.');'.
     '</script>';
-
-    return $res;
 }
 
 /**

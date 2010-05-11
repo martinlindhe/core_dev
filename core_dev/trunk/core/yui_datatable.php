@@ -132,6 +132,8 @@ class yui_datatable
      */
     function setDataList($arr)
     {
+        $res = array();
+
         foreach ($arr as $row)
         {
             $inc_row = array();

@@ -9,14 +9,14 @@
 
 //STATUS: drop & redo :P into CommentList
 
-//TODO: implement and use oo-pager for CommentList
-
 require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
 require_once('class.User.php');
 require_once('client_captcha.php');
 require_once('prop_Timestamp.php');
 require_once('XhtmlForm.php');
+
+die('DONT USE Comments_borked.php');
 
 class CommentItem extends CoreItem
 {
@@ -94,8 +94,6 @@ class CommentItem extends CoreItem
 
 class CommentList extends CoreList
 {
-    private $owner;
-    private $type;
     private $show_deleted = false;   ///< shall deleted comments be included?
     private $show_private = false;   ///< shall private comments be included?
     private $anon_access  = false;   ///< do we allow anonymous comments?
@@ -107,20 +105,12 @@ class CommentList extends CoreList
 
     function __construct($type)
     {
-        if (!is_numeric($type)) return false;
-        $this->type = $type;
-
         $this->Captcha = new Captcha();
 
         $this->Captcha->setPrivKey('6LfqDQQAAAAAAKOMPfoJYcpqfZBlWQZf1BYiq7qt');
         $this->Captcha->setPubKey( '6LfqDQQAAAAAAMF-GaCBYHRJFetLd_BrjO8-2HBW');
     }
 
-    function setOwner($id)
-    {
-        if (!is_numeric($id)) return false;
-        $this->owner = $id;
-    }
 
     function setAnonAccess($bool = true) { $this->anon_access = $bool; }
     function setPrivate($bool = true) { $this->private_comments = $bool; }
