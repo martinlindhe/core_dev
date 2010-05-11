@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-//FIXME: re-enable sorting when static data source is used
+//FIXME: setSortOrder dont update sort order proerly when used with a static data source
 
 //TODO: attempt to hide the bottom paginator
 //TODO: enable inline cell editing
@@ -121,12 +121,11 @@ class yui_datatable
 
     /**
      * Loads the datatable with a static array of data
-     * Cannot be used with setDataRetreiver()
+     * Only includes registered array keys
+     * Cannot be used with setDataSource()
      */
     function setDataList($arr)
     {
-        //only include registered array keys
-
         foreach ($arr as $row)
         {
             $inc_row = array();
@@ -225,7 +224,7 @@ class yui_datatable
                     'myDataSource.responseSchema = {'.
                         'resultsList: "records",'.
                         'fields: '.jsArray2D($this->response_fields).','.
-                        'metaFields: { totalRecords:"totalRecords" }'. // XXX ???
+                        'metaFields: { totalRecords:"totalRecords" }'. // mapped to XhrResponse "totalRecords" field, needed for paginator
                     '};'
                     :
                     //embedded js-array
@@ -237,20 +236,19 @@ class yui_datatable
 
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
+                    'sortedBy: {'.
+                        'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
+                        'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
+                    '},'.
+                    'paginator: new YAHOO.widget.Paginator({'.
+                        'rowsPerPage:'.$this->rows_per_page.','.
+                        // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
+                        'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
+                        'rowsPerPageOptions:['.implode(',', array(15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
+                    '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
-                        'initialRequest: "sort='.$this->columns[ $this->sort_column ]['key'].'&dir='.$this->sort_order.'&startIndex=0&results='.$this->rows_per_page.'",'. // Initial request for first page of data
-                        'sortedBy: {'.         //XXX test with static data
-                            'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
-                            'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
-                        '},'.
-                        'paginator: new YAHOO.widget.Paginator({'.
-                            'rowsPerPage:'.$this->rows_per_page.','.
-
-                            // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
-                            'template: "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
-                            'rowsPerPageOptions: [15, 20, 25, 50, 75, 100, 250, 500, 1000],'.
-                        '})'  //XXX test paginator with static data
+                        'initialRequest:"sort='.$this->columns[ $this->sort_column ]['key'].'&dir='.$this->sort_order.'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
                         :
                         ''
                     ).
@@ -260,7 +258,7 @@ class yui_datatable
 
                 // Update totalRecords on the fly with value from server
                 'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
-                    'oPayload.totalRecords = oResponse.meta.totalRecords;'. //XXXX???
+                    'oPayload.totalRecords = oResponse.meta.totalRecords;'. // Reads XhrResponse "totalRecords" field, needed for paginator
                     'return oPayload;'.
                 '};'.
 
