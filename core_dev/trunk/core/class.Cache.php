@@ -108,8 +108,11 @@ class Cache extends CoreBase
         return $val;
     }
 
-    function set($key, $val)
+    function set($key, $val = '')
     {
+        if (!$val)
+            return $this->delete($key);
+
         if (!$this->connect())
             return false;
 
@@ -121,6 +124,17 @@ class Cache extends CoreBase
         }
 
         if ($this->getDebug()) echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$this->expire_time." sec)".ln();
+        return $ret;
+    }
+
+    function delete($key)
+    {
+        if (!$this->connect())
+            return false;
+
+        $ret = $this->handle->delete($key);
+        if ($this->getDebug()) echo "CACHE DELETE ".$key.ln();
+
         return $ret;
     }
 }
