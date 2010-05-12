@@ -17,6 +17,9 @@ class yui_chart
     private $div_holder;
     private $width  = 700;
     private $height = 400;
+    private $x_field_name, $x_field_title;
+    private $t_title; ///< display title for Y dimension
+    private $y_fields = array();
 
     function __construct()
     {
@@ -25,15 +28,18 @@ class yui_chart
 
     function setDataSource($arr) { $this->data_source = $arr; }
 
-    private $x_field_name, $x_field_title;
-
     function setXField($name, $title) { $this->x_field_name = $name; $this->x_field_title = $title; }
 
-    private $t_title; ///< display title for Y dimension
     function setYTitle($title) { $this->y_title = $title; }
 
-    private $y_fields = array();
-    function addYField($name, $title) { $this->y_fields[] = array('name'=>$name, 'title'=>$title); }
+    function addYField($name, $title)
+    {
+        foreach ($this->y_fields as $field)
+            if ($field['name'] == $name)
+                return false;
+
+        $this->y_fields[] = array('name' => $name, 'title' => $title);
+    }
 
     function render()
     {
@@ -61,10 +67,10 @@ class yui_chart
 
         //--- data
         'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'.
-        'var myDataSource = new YAHOO.util.DataSource( YAHOO.example.DataSource);'.
+        'var myDataSource = new YAHOO.util.DataSource(YAHOO.example.DataSource);'.
         'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
 
-        'myDataSource.responseSchema = { fields: [ "'.$this->x_field_name.'",';
+        'myDataSource.responseSchema = { fields: ["'.$this->x_field_name.'",';
         for ($i=0; $i < count($this->y_fields); $i++)
             $res .= '"'.$this->y_fields[$i]['name'].'",';
         $res .= '] };';
@@ -102,7 +108,7 @@ class yui_chart
         'xAxisWidget.minimum = 0;'.
         'xAxisWidget.title = "'.$this->x_field_title.'";'.
 
-        'var mychart = new YAHOO.widget.LineChart( "'.$this->div_holder.'", myDataSource, {'.
+        'var mychart = new YAHOO.widget.LineChart("'.$this->div_holder.'",myDataSource,{'.
         'series: seriesDef,'.
         'xField: "'.$this->x_field_name.'",'.
         'yAxis: yAxisWidget,'.
