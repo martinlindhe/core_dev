@@ -203,7 +203,6 @@ class yui_datatable
                 '};'.
 
                 'this.formatMoney = function(elLiner, oRecord, oColumn, oData) {'.
-                    'if (!oData) return;'.
                     'elLiner.innerHTML = Number(oData).toFixed(2);'.
                 '};';
 
