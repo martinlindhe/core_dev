@@ -12,75 +12,6 @@ require_once('XhtmlHeader.php');
 require_once('output_js.php');
 
 /**
- * Generates "pagers", splitting up listings of content on several pages
- *
- * Reads the 'p' get parameter for current page
- * Example: $pager = makePager(102, 25);        will create a pager for total of 102 items with 25 items per page
- *
- * @return $pager array with some properties filled
- */
-function makePager($_total_cnt, $_items_per_page = 0, $_add_value = '')
-{
-    if (!$_items_per_page) $_items_per_page = $_total_cnt;
-
-    $pager['page'] = 1;
-    $pager['items_per_page'] = $_items_per_page;
-    if (!empty($_GET['p']) && is_numeric($_GET['p'])) $pager['page'] = $_GET['p'];
-
-    $pager['tot_pages'] = ceil($_total_cnt / $_items_per_page);
-    if ($pager['tot_pages'] < 1) $pager['tot_pages'] = 1;
-    $pager['head'] = t('Page').' '.$pager['page'].' '.t('of').' '.$pager['tot_pages'].' ('.t('displaying').' '.t('total').' '.$_total_cnt.' '.t('items').')<br/><br/>';
-
-    $pager['index'] = ($pager['page']-1) * $pager['items_per_page'];
-    $pager['limit'] = ' LIMIT '.$pager['index'].','.$pager['items_per_page'];
-
-    if ($pager['tot_pages'] <= 1) return $pager;
-
-    if ($pager['page'] > 1) {
-        $pager['head'] .= '<a href="'.URLadd('p', $pager['page']-1, $_add_value).'">';
-        $pager['head'] .= '<img src="'.coredev_webroot().'gfx/arrow_prev.png" alt="'.t('Previous').'" width="11" height="12"/></a>';
-    }
-    if ($pager['tot_pages'] <= 10) {
-        for ($i=1; $i <= $pager['tot_pages']; $i++) {
-            $pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
-        }
-    } else {
-        //extended pager for lots of pages
-
-        for ($i=1; $i <= 3; $i++) {
-            $pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
-        }
-        if ($pager['page'] > 1) {
-            $pager['head'] .= ' ... ';
-        }
-
-        if ($pager['page'] >= 2 && $pager['page'] < $pager['tot_pages']) {
-            for ($i=$pager['page']-2; $i <= $pager['page']+2; $i++) {
-                if ($i > $pager['tot_pages'] || $i == 0 || $i == 1 || $i == 2 || $i == 3
-                 || $i == $pager['tot_pages']-2 || $i == $pager['tot_pages']-1
-                 || $i == $pager['tot_pages']) continue;
-                $pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
-            }
-        }
-
-        if ($pager['page'] < $pager['tot_pages']) {
-            $pager['head'] .= ' ... ';
-        }
-        for ($i=$pager['tot_pages']-2; $i <= $pager['tot_pages']; $i++) {
-            $pager['head'] .= ($i==$pager['page']?'<b>':'').' <a href="'.URLadd('p', $i, $_add_value).'">'.$i.'</a> '.($i==$pager['page']?'</b>':'');
-        }
-    }
-
-    if ($pager['page'] < $pager['tot_pages']) {
-        $pager['head'] .= '<a href="'.URLadd('p', $pager['page']+1, $_add_value).'">';
-        $pager['head'] .= '<img src="'.coredev_webroot().'gfx/arrow_next.png" alt="'.t('Next').'" width="11" height="12"/></a>';
-    }
-
-    $pager['head'] .= '<br/>';
-    return $pager;
-}
-
-/**
  * Creates a select-dropdown with numbers
  */
 function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
@@ -121,12 +52,30 @@ function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_size = 5, $_onchan
 {
     //TODO not ignore the default param
 
-    $out = '<select multiple size="'.$_size.'" name="'.strip_tags($_name).'[]"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
+    $rnd = mt_rand(0,99999);
 
+    $out = js_embed(
+    'function toggle_multi_'.$rnd.'() {'.
+        'var e = document.getElementById("multi_'.$rnd.'");'.
+        'if (e.multiple == true) {'.
+            'e.multiple = false;'.
+        '} else {'.
+            'e.multiple = true;'.
+        '}'.
+    '}'
+    );
+
+    $out .= '<select id="multi_'.$rnd.'" name="'.strip_tags($_name).'[]"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
+
+    $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
     foreach ($_arr as $id => $title)
         $out .= '<option value="'.$id.'">'.$title.'</option>';
 
     $out .= '</select>';
+
+    $header = XhtmlHeader::getInstance();
+
+    $out .= '<a href="#" onclick="toggle_multi_'.$rnd.'(); return false;" style="vertical-align: bottom;"><img src="'.$header->getCoreDevRoot().'gfx/bullet_toggle_plus.png"/></a>';
 
     return $out;
 }

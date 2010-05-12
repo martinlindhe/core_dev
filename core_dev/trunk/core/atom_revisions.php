@@ -45,14 +45,14 @@ function showRevisions($articleType, $articleId, $articleName)
 
     $q = 'SELECT COUNT(*) FROM tblRevisions WHERE fieldId='.$articleId.' AND fieldType='.$articleType;
     $tot_cnt = $db->getOneItem($q);
-    $pager = makePager($tot_cnt, 5);
+//    $pager = makePager($tot_cnt, 5);
 
     $q  = 'SELECT * FROM tblRevisions ';
     $q .= 'WHERE fieldId='.$articleId.' AND fieldType='.$articleType;
-    $q .= ' ORDER BY timeCreated DESC'.$pager['limit'];
+    $q .= ' ORDER BY timeCreated DESC';//.$pager['limit'];
     $list = $db->getArray($q);
 
-    echo $pager['head'];
+//    echo $pager['head'];
 
     if (!$list) {
         echo '<b>There is no edit history of this wiki in the database.</b><br/>';
