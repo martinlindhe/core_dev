@@ -9,15 +9,24 @@
 
 $rand_id = mt_rand(0,99999);
 
+echo js_embed(
+//Toggles element with name "n" between visible and hidden
+'function toggle_sql_profiler()'.
+'{'.
+    'var e = document.getElementById("sql_prof_'.$rand_id.'");'.
+    'e.style.display = (e.style.display ? "" : "none");'.
+'}'
+);
+
 echo '<br/><br/>';
-echo '<a href="#" onclick="return toggle_element(\'sql_profiling'.$rand_id.'\');">'.$db->queries_cnt.' sql</a>';
+echo '<a href="#" onclick="return toggle_sql_profiler();">'.$db->queries_cnt.' sql</a>';
 
 $sql_height = ($db->queries_cnt*60)+70;
 if ($sql_height > 400) $sql_height = 400;
 
 $css_display = count($db->query_error) ? '' : ' display:none;';
 
-echo '<div id="sql_profiling'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+echo '<div id="sql_prof_'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
 $sql_time = 0;
 for ($i=0; $i < $db->queries_cnt; $i++)

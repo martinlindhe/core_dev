@@ -63,10 +63,8 @@ function js_reload($ms)
 {
     if (!is_numeric($ms)) return false;
 
-    return
-    '<script type="text/javascript">'.
-    'setTimeout("location.reload();", '.$ms.');'.
-    '</script>';
+    return js_embed('setTimeout("location.reload();", '.$ms.');');
+
 }
 
 /**
@@ -75,10 +73,8 @@ function js_reload($ms)
 function js_redirect($url)
 {
     if (headers_sent()) {
-        die(
-        '<script type="text/javascript">'.
-        'document.location.href="'.$url.'";'.
-        '</script>');
+        echo js_embed('document.location.href="'.$url.'";');
+        die;
     } else {
         header('Location: '.$url);
         die;
@@ -91,6 +87,11 @@ function js_redirect($url)
 function js_date($ts)
 {
     return date('m/d/Y', $ts);
+}
+
+function js_embed($s)
+{
+    return '<script type="text/javascript">'.$s.'</script>';
 }
 
 ?>

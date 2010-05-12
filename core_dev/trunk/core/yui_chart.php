@@ -66,7 +66,7 @@ class yui_chart
         'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.1/build/charts/assets/charts.swf";'.
 
         //--- data
-        'YAHOO.example.DataSource = '.jsArray2D($this->data_source).';'.
+        'YAHOO.example.DataSource = '.($this->data_source ? jsArray2D($this->data_source) : '""').';'.
         'var myDataSource = new YAHOO.util.DataSource(YAHOO.example.DataSource);'.
         'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
 

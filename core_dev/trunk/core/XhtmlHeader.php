@@ -18,14 +18,15 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 {
     static $_instance;                  ///< singleton class
 
-    private $title, $favicon;
+    private $title;
+    private $favicon;
 
-    private $embed_js      = '';
-    private $embed_css     = '';
+    private $embed_js = array();
+    private $embed_css;
 
     private $include_js    = array();
     private $include_css   = array();
-    private $include_feeds = array();
+    //private $include_feed = array();
 
     private $meta_keywords = array();
     private $opensearch    = array();
@@ -33,9 +34,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     private $reload_time   = 0;         ///< time after page load to reload the page, in seconds
     private $core_dev_root = '';        ///< web path to core_dev for ajax api calls
 
-    private function __construct()
-    {
-    }
+    private function __construct() { }
 
     public static function getInstance()
     {
@@ -54,19 +53,15 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     function setFavicon($uri) { $this->favicon = $uri; }
     function setReloadTime($secs) { $this->reload_time = $secs; }
 
-    function includeFeed($uri) { $this->include_feeds[] = $uri; }
+    //function includeFeed($uri) { $this->include_feed[] = $uri; }
     function includeJs($uri) { $this->include_js[] = $uri; }
     function includeCss($uri) { $this->include_css[] = $uri; }
 
-    /**
-     * CSS snippets to be added inside <head>
-     */
+    /** CSS snippets to be added inside <head> */
     function addCss($s) { $this->embed_css .= $s; }
 
-    /**
-     * JavaScript snippets to be added to the <body onload=""> tag
-     */
-    function addOnload($js) { $this->onload[] = $js; }
+    /**JavaScript snippets to be added to the <body onload=""> tag */
+    function addJs($s) { $this->embed_js[] = $s; }
 
     function addOpenSearch($uri, $name = 'Search box')
     {
@@ -74,9 +69,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $this->opensearch[] = $arr;
     }
 
-    /**
-     * Adds META keywords tags
-     */
+    /** Adds META keywords tags */
     function addMetaKeyword($w)
     {
         if (is_array($w))
@@ -86,19 +79,15 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
             $this->meta_keywords[] = $w;
     }
 
-    /**
-     * Creates a complete XHTML header, showing rss feeds if available, etc
-     */
+    /** Creates a complete XHTML header, showing rss feeds if available, etc */
     public function render()
     {
         $res =
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
-        "\n".
         '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.
-        '<head>';
+        '<head>'."\n";
 
         $res .= '<style type="text/css">';
-        //$res .= '@import url('.$this->core_dev_root.'css/core.css);';
 
         foreach ($this->include_css as $css)
             $res .= '@import url('.$css.');';
@@ -112,23 +101,19 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         if ($this->meta_keywords)
             $res .= '<meta name="keywords" content="'.implode(',',$this->meta_keywords).'"/>';
-
+/*
         foreach ($this->include_feeds as $feed) {
             //XXX: clean up feed URI's etc, make it more general
             if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
             else $extra = '';
             $res .= "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
         }
-
+*/
         foreach ($this->opensearch as $search)
             $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
 
         if ($this->favicon)
             $res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
-
-        $res .= '<script type="text/javascript" src="'.$this->core_dev_root.'js/coredev.js"></script>';
-
-        //XXX let classes register needed js,css etc headers somehow
 
         foreach ($this->include_js as $uri)
             $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
