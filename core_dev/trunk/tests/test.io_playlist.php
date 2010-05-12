@@ -9,7 +9,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('io_newsfeed.php');
 require_once('io_playlist.php');
-require_once('class.Cache.php');
+require_once('Cache.php');
 
 
 $url = 'http://styggve.dyndns.org/webtv/playrapport.php?format=xspf';

@@ -262,7 +262,6 @@ class HttpClient extends CoreBase
     /**
      * Parse HTTP response data into object variables and sets status code
      */
-
     private function parseResponse($res)
     {
         $pos = strpos($res, "\r\n\r\n");
