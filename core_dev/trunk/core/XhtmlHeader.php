@@ -63,10 +63,9 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     /**JavaScript snippets to be added to the <body onload=""> tag */
     function addJs($s) { $this->embed_js[] = $s; }
 
-    function addOpenSearch($uri, $name = 'Search box')
+    function addOpenSearch($uri, $name)
     {
-        $arr = array('url' => $uri, 'name' => $name);
-        $this->opensearch[] = $arr;
+        $this->opensearch[] = array('url' => $uri, 'name' => $name);
     }
 
     /** Adds META keywords tags */
@@ -109,8 +108,8 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
             $res .= "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
         }
 */
-        foreach ($this->opensearch as $search)
-            $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$search['url'].'" title="'.$search['name'].'"/>';
+        foreach ($this->opensearch as $os)
+            $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$os['url'].'" title="'.$os['name'].'"/>';
 
         if ($this->favicon)
             $res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';

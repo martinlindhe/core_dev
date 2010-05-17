@@ -396,22 +396,28 @@ function coreButton($name, $link = '', $title = '')
  * @param $name name of search engine
  * @param $icon (optional) url to icon resource
  */
-function xhtmlOpenSearch($script, $name, $icon = '')
+function xhtmlOpenSearch($url, $name, $icon = '')
 {
-    //header('Content-type: application/opensearchdescription+xml');
-    header('Content-type: application/xml');
+    $page = XmlDocumentHandler::getInstance();
+    $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
+    $page->setMimeType('application/xml');       // or "application/opensearchdescription+xml"
 
-    echo '<?xml version="1.0" encoding="UTF-8"?>';
-    echo '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">';
-        echo '<ShortName>'.$name.'</ShortName>';
-        echo '<Description>'.$name.'</Description>';
+    if ($icon && substr($icon, 0, 4) != 'http')
+        $icon = $page->getBaseUrl().$icon;
 
-        if ($icon)
-            echo '<Image height="16" width="16" type="image/x-icon">'.xhtmlGetUrl($icon).'</Image>';
+    if (substr($url, 0, 4) != 'http')
+        $url = $page->getBaseUrl().$url;
 
-        echo '<Url type="text/html" template="'.xhtmlGetUrl($script).'{searchTerms}"/>';
+    $res =
+    '<?xml version="1.0" encoding="UTF-8"?>'.
+        '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">'.
+        '<ShortName>'.$name.'</ShortName>'.
+        '<Description>'.$name.'</Description>'.
+        ($icon ? '<Image height="16" width="16" type="image/x-icon">'.$icon.'</Image>' : '').
+        '<Url type="text/html" template="'.$url.'{searchTerms}"/>'.
+    '</OpenSearchDescription>';
 
-    echo '</OpenSearchDescription>';
+    return $res;
 }
 
 /**
