@@ -48,7 +48,7 @@ function xhtmlSelectArray($_name, $_arr, $_default = '', $_onchange = '')
 /**
  * @param $_size number of fields shown
  */
-function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_size = 5, $_onchange = '')
+function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')
 {
     //TODO not ignore the default param
 
