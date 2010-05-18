@@ -79,12 +79,7 @@ function URLadd($_key, $_val = '', $_extra = '')    //FIXME: is this function ev
  */
 function confirmed($text, $_var, $_id = 0)
 {
-    global $project;    //path to design includes
-    global $h, $db, $config, $time_start;
-
     if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
-
-    require_once($project.'design_head.php');
 
     echo $text.'<br/><br/>';
     if ($_id) {
@@ -97,7 +92,6 @@ function confirmed($text, $_var, $_id = 0)
     }
     echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
 
-    require_once($project.'design_foot.php');
     die;
 }
 
