@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+//XXX: fix auto-focusing on current day... dont use input field hack
+
 //TODO: add a render2D() method that gives a normal calendar
 //TODO: configurable starting day of week
 
@@ -15,6 +17,7 @@ class XhtmlCalendar
     private $year, $month;
     private $current_month = false; ///< if true, the displayed month is current month
     private $events = array();
+    private $auto_focus = false;
 
     function __construct($year = '', $month = '')
     {
@@ -46,6 +49,18 @@ class XhtmlCalendar
         $this->events[$ts][] = $title;
     }
 
+    /** If true, auto focuses the calendar view on current day */
+    function setAutoFocus($b)
+    {
+        $this->auto_focus = $b;
+/*
+        if ($this->current_month && $this->auto_focus) {
+            $header = XhtmlHeader::getInstance();
+            $header->addJs("document.getElementById('cal_current_day').focus();");
+        }
+*/
+    }
+
     function renderFlat()
     {
         $loc = LocaleHandler::getInstance();
@@ -62,14 +77,22 @@ class XhtmlCalendar
             $weekday = date('w', $ts);
 
             $style = '';
-            if ($weekday==0 || $weekday==6) $style='background-color:#aaa"';
-            if ($i == date('j') && $this->current_month) $style='background-color:#77ee77"';
+            if ($weekday==0 || $weekday==6)
+                $style = 'background-color:#aaa"';
+
+            if ($i == date('j') && $this->current_month)
+                $style = 'background-color:#77ee77"';
 
             $res .=
             '<tr style="'.$style.'">'.
+
                 '<td valign="top" align="right">'.$i.'</td>'.
                 '<td valign="top">'.$loc->getWeekdayLong( $weekday ).'</td>'.
                 '<td>';
+
+                    if ($i == date('j') && $this->current_month && $this->auto_focus)
+                        $res .= '<a id="cal_current_day"></a>';
+
                     foreach ($this->events as $event_ts => $events)
                         if ($event_ts == $ts)
                             $res .= implode('<hr/>', $events);
@@ -80,6 +103,7 @@ class XhtmlCalendar
         }
 
         $res .= '</table>';
+
         return $res;
     }
 }
