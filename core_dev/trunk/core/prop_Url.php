@@ -10,7 +10,7 @@
 //STATUS: good
 
 require_once('class.CoreProperty.php');
-require_once('network.php'); //for is_url(), scheme_default_port()
+require_once('network.php'); //for is_url(), scheme_default_port(), url_query()
 
 class Url extends CoreProperty
 {
@@ -65,6 +65,15 @@ class Url extends CoreProperty
         return '<a href="'.$this->get().'">'.$text.'</a>';
     }
 
+    private function reset()
+    {
+        $this->scheme = 'http';
+        $this->host   = '';
+        $this->port   = '';
+        $this->path   = '';
+        $this->params = array();
+    }
+
     /**
      * Parses url and initializes the object for this url
      */
@@ -72,6 +81,8 @@ class Url extends CoreProperty
     {
         if (!$url)
             return false;
+
+        $this->reset();
 
         $parsed = parse_url($url);
 
