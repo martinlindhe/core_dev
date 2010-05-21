@@ -264,6 +264,7 @@ function is_client_localhost()
 
 /**
  * Embeds a array for use in a URL
+ *
  * @return string, e.g. name[]=val1&name[]=val2
  */
 function url_array($name, $arr)
@@ -273,6 +274,27 @@ function url_array($name, $arr)
         $res[] = $name.'[]='.$s;
 
     return implode('&', $res);
+}
+
+/**
+ * Builds a url query
+ * basically the same as PHP's http_build_query except it doesnt auto-encode values and thus dont break urls
+ * with other separators than &, such as ; (commonly used by eg. git web interface)
+ *
+ * @param $arr key=>val pairs
+ * @return string, e.g. name1=val&name2=val3&name3
+ */
+function url_query($arr, $separator = '&')
+{
+    $res = array();
+    foreach ($arr as $key => $val)
+        if ($val)
+            $res[] = $key.'='.$val;
+        else
+            $res [] = $key;
+
+    return implode($separator, $res);
+
 }
 
 ?>

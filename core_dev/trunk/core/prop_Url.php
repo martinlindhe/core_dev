@@ -18,7 +18,7 @@ class Url extends CoreProperty
     private $host;
     private $port;
     private $path;
-    private $param  = array();
+    private $params  = array();
     private $username, $password; ///< for HTTP AUTH
 
     function setUsername($username) { $this->username = $username; }
@@ -28,7 +28,7 @@ class Url extends CoreProperty
     function getScheme()   { return $this->scheme; }
     function getUsername() { return $this->username; }
     function getPassword() { return $this->password; }
-    function getParams() { return $this->param; }
+    function getParams() { return $this->params; }
 
     /**
      * @param $safe outputs URL in a safe format (& => &amp;)
@@ -42,11 +42,12 @@ class Url extends CoreProperty
 
         $res = $this->scheme.'://'.($this->username ? $this->username.':'.$this->password.'@' : '').$this->host.$port.$this->path;
 
-        if (!empty($this->param)) {
+        if (!empty($this->params)) {
             if ($safe)
-                $res .= '?'.htmlspecialchars(http_build_query($this->param));
-            else
-                $res .= '?'.http_build_query($this->param);
+                $res .= '?'.htmlspecialchars(url_query($this->params, '&'));
+            else {
+                $res .= '?'.url_query($this->params, '&');
+            }
         }
 
         return $res;
@@ -87,7 +88,7 @@ class Url extends CoreProperty
             $this->port = $parsed['port'];
 
         if (!empty($parsed['query']))
-            parse_str($parsed['query'], $this->param);
+            parse_str($parsed['query'], $this->params);
 
         return true;
     }
@@ -103,14 +104,14 @@ class Url extends CoreProperty
      */
     function setParam($name, $val = false)
     {
-        unset($this->param[$name]);
-        $this->param[$name] = $val;
+        unset($this->params[$name]);
+        $this->params[$name] = $val;
     }
 
     function getParam($name)
     {
-        if (isset($this->param[$name]))
-            return $this->param[$name];
+        if (isset($this->params[$name]))
+            return $this->params[$name];
 
         return false;
     }
@@ -120,9 +121,9 @@ class Url extends CoreProperty
      */
     function removeParam($name)
     {
-        foreach ($this->param as $n=>$val)
+        foreach ($this->params as $n=>$val)
             if ($name == $n)
-                unset($this->param[$n]);
+                unset($this->params[$n]);
     }
 
 }
