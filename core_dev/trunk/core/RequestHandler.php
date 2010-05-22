@@ -19,10 +19,10 @@ class RequestHandler
 {
     static $_instance; ///< singleton
 
-    protected $_controller = 'index'; ///< /CONTROLLER/view/owner/   XXX not actually a controller (yet), its the file to run in the applications /views/ directory
-    protected $_view = 'default';       ///< /controller/VIEW/owner/   XXX view parameter for the "controller", or later will be the method to run on the controller
-    protected $_owner  = 0;      ///< /controller/view/OWNER/   numeric id
-    protected $_child  = 0;      ///< /controller/view/owner/CHILD/  numeric id
+    protected $_controller = 'index'; ///< /CONTROLLER/view/owner/        XXX not actually a controller (yet), its the file to run in the applications /views/ directory
+    protected $_view = 'default';     ///< /controller/VIEW/owner/        XXX view parameter for the "controller", or later will be the method to run on the controller
+    protected $_owner  = 0;           ///< /controller/view/OWNER/        alphanumeric id
+    protected $_child  = 0;           ///< /controller/view/owner/CHILD/  alphanumeric id
     protected $_params;
     protected $exclude_session = array();
 
@@ -67,10 +67,10 @@ class RequestHandler
             if (count($arr) <= 2)
                 return;
 
-            if (is_numeric($arr[2]))
+            if (is_alphanumeric($arr[2]))
                 $this->_owner = $arr[2];
 
-            if (isset($arr[3]) && is_numeric($arr[3]))
+            if (isset($arr[3]) && is_alphanumeric($arr[3]))
                 $this->_child = $arr[3];
         }
 
