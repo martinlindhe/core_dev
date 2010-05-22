@@ -26,7 +26,7 @@ require_once('input_atom.php');
 
 class NewsItem extends CoreBase
 {
-    var $title;
+    private $title;
     var $desc;
     var $author;
 
@@ -37,14 +37,21 @@ class NewsItem extends CoreBase
     var $video_url;
 
     var $Duration;  ///< video duration
-    var $Timestamp;
-    var $Url;       ///< location of news article
+    private $Timestamp;
+    private $Url;       ///< location of news article
+
+    function setTime($s) { $this->Timestamp = new Timestamp($s); }
+    function setUrl($s) { $this->Url = new Url($s); }
+
+    function setTitle($s) { $this->title = $s; }
+
+    function getTime() { return $this->Timestamp; }
+    function getUrl() { return $this->Url; }
+    function getTitle() { return $this->title; }
 
     function __construct()
     {
         $this->Duration  = new Duration();
-        $this->Timestamp = new Timestamp();
-        $this->Url       = new Url();
     }
 }
 
@@ -183,16 +190,16 @@ class NewsFeed extends CoreList
         foreach ($this->getItems() as $item)
         {
             //link directly to video if no webpage url was found
-            if (!$item->Url->get() && $item->video_url)
+            if (!$item->getUrl() && $item->video_url)
                 $item->Url->set( $item->video_url );
 
             $res .=
             '<entry>'.
-                '<id>'.($item->guid ? $item->guid : $item->Url->get(true) ).'</id>'.
-                '<title><![CDATA['.$item->title.']]></title>'.
-                '<link rel="alternate" href="'.$item->Url->get(true).'"/>'.
+                '<id>'.($item->guid ? $item->guid : $item->getUrl() ).'</id>'.
+                '<title><![CDATA['.$item->getTitle().']]></title>'.
+                '<link rel="alternate" href="'.$item->getUrl().'"/>'.
                 '<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
-                '<updated>'.$item->Timestamp->getRFC3339().'</updated>'.
+                '<updated>'.$item->getTime()->getRFC3339().'</updated>'.
                 '<author><name>'.$item->author.'</name></author>'.
                 ($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').
                 ($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.htmlspecialchars($item->image_url).'"/>' : '').
@@ -225,15 +232,15 @@ class NewsFeed extends CoreList
         foreach ($this->getItems() as $item)
         {
             //link directly to video if no webpage url was found
-            if (!$item->Url->get() && $item->video_url)
+            if (!$item->getUrl() && $item->video_url)
                 $item->Url->set( $item->video_url );
 
             $res .=
             '<item>'.
-                '<title><![CDATA['.$item->title.']]></title>'.
-                '<link>'.$item->Url->get(true).'</link>'.
+                '<title><![CDATA['.$item->getTitle().']]></title>'.
+                '<link>'.$item->getUrl().'</link>'.
                 '<description><![CDATA['.$item->desc.']]></description>'.
-                '<pubDate>'.$item->Timestamp->getRFC882().'</pubDate>'.
+                '<pubDate>'.$item->getTime()->getRFC882().'</pubDate>'.
                 ($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
                 ($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.htmlspecialchars($item->video_url).'"'.($item->Duration->get() ? ' duration="'.$item->Duration->inSeconds().'"' : '').'/>' : '').
                 ($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.htmlspecialchars($item->image_url).'"/>' : '').

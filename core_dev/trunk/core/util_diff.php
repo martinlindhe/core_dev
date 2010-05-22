@@ -34,8 +34,8 @@ class Diff extends CoreBase
     /**
      * Fills internal buffer with diff output
      *
-     * @param $file1 filename of revision 1
-     * @param $file2 filename of revision 2
+     * @param $file1 filename of revision 1 (old)
+     * @param $file2 filename of revision 2 (new)
      */
     function diffFiles($file1, $file2)
     {
@@ -58,8 +58,8 @@ class Diff extends CoreBase
         else
         {
             //TODO: is it possible to feed strings directly into diff? "If a FILE is ‘-’, read standard input."
-            $f1 = tempnam('', 'diff');
-            $f2 = tempnam('', 'diff');
+            $f1 = tempnam('', 'coredev_diff');
+            $f2 = tempnam('', 'coredev_diff');
 
             //avoids "\ No newline at end of file" from diff command
             file_put_contents($f1, $this->r1 . str_get_ending($this->r1) );
@@ -91,13 +91,13 @@ class Diff extends CoreBase
 
     function renderXml()
     {
-        //Indents xml to generate better looking diffs
+        // indents xml to generate better looking diffs
         $this->r1 = $this->indentXml($this->r1);
         $this->r2 = $this->indentXml($this->r2);
 
         $x = implode("\n", $this->getDiff());
 
-        return '<pre>'.htmlspecialchars( $x  ).'</pre>';
+        return '<pre>'.htmlspecialchars( $x ).'</pre>';
     }
 
     function indentXml($xml)
