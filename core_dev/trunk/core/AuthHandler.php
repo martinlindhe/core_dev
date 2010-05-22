@@ -13,6 +13,7 @@
 //TODO: cleanup/rewrite handleEvents()
 
 require_once('ViewModel.php');
+require_once('User.php');
 
 class AuthHandler extends CoreBase
 {

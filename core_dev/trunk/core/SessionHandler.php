@@ -67,17 +67,6 @@ class SessionHandler extends CoreBase
         session_name($this->name);
         session_start();
 
-        if (empty($_COOKIE[$this->name])) {
-            dp('Session timeout');
-            $this->end();
-            $this->showStartPage();
-            die;
-        }
-
-        //sets httponly param to mitigate XSS attacks
-        $domain = ''; //XXX read domain name from XmlDocumentHandler->getBaseUrl()
-        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
-
         $this->id           = &$_SESSION['id'];    //if id is set, also means that the user is logged in
         $this->username     = &$_SESSION['username'];
         $this->usermode     = &$_SESSION['usermode'];
@@ -86,8 +75,17 @@ class SessionHandler extends CoreBase
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
         $this->referer      = &$_SESSION['referer'];
 
+        if (empty($_COOKIE[$this->name])) {
+            dp('Session expired');
+            $this->end();
+        }
+
         if (!$this->id)
             return;
+
+        //sets httponly param to mitigate XSS attacks
+        $domain = ''; //XXX read domain name from XmlDocumentHandler->getBaseUrl()
+        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
 
         //Logged in: Check user activity - log out inactive user
         //FIXME: redo this- check lastactive timestamp from db when session is resumed instead
@@ -109,13 +107,13 @@ class SessionHandler extends CoreBase
      */
     function end()
     {
-        unset($_SESSION['id']);
-        unset($_SESSION['username']);
-        unset($_SESSION['usermode']);
-        unset($_SESSION['referer']);
-        unset($_SESSION['isWebmaster']);
-        unset($_SESSION['isAdmin']);
-        unset($_SESSION['isSuperAdmin']);
+        $this->id           = 0;
+        $this->username     = '';
+        $this->usermode     = 0;
+        $this->referer      = '';
+        $this->isWebmaster  = false;
+        $this->isAdmin      = false;
+        $this->isSuperAdmin = false;
     }
 
     /**
@@ -131,8 +129,8 @@ class SessionHandler extends CoreBase
         $this->username = $username;
         $this->usermode = $usermode;
 
-        if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster = true;
-        if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin = true;
+        if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
+        if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
         if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
         $this->updateLoginTime();
