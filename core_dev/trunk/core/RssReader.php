@@ -15,7 +15,7 @@
 
 require_once('class.CoreBase.php');
 require_once('HttpClient.php');
-require_once('io_newsfeed.php'); //for NewsItem object
+require_once('NewsItem.php');
 
 class RssReader extends CoreBase
 {
