@@ -1,6 +1,8 @@
 <?php
 /**
  * $Id$
+ *
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
 class NewsItem

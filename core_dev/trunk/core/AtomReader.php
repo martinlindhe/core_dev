@@ -4,6 +4,7 @@
  *
  * Parses an Atom 1.0 feed into NewsItem objects
  *
+ * http://www.atomenabled.org/developers/syndication/
  * http://en.wikipedia.org/wiki/Atom_(standard)
  *
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>

@@ -3,7 +3,9 @@
  * $Id$
  *
  * Renders the feed in Atom 1.0 format
- * http://www.atomenabled.org/developers/syndication
+ *
+ * http://www.atomenabled.org/developers/syndication/
+ * http://en.wikipedia.org/wiki/Atom_(standard)
  *
  * Output mostly comply with http://feedvalidator.org/
  *
@@ -11,6 +13,10 @@
  */
 
 //MIME: application/atom+xml
+
+//STATUS: wip
+
+//TODO: extend this class for specific video feeds
 
 //XXX atom output: no way to embed video duration, <link length="x"> is size of the resource, in bytes.
 
@@ -40,7 +46,7 @@ class AtomWriter extends FeedWriter
                 '<id>'.($item->guid ? $item->guid : $item->getUrl() ).'</id>'.
                 '<title><![CDATA['.$item->getTitle().']]></title>'.
                 '<link rel="alternate" href="'.$item->getUrl().'"/>'.
-                '<summary><![CDATA['.($item->desc ? $item->desc : ' ').']]></summary>'.
+                '<content type="html"><![CDATA['.($item->desc ? $item->desc : ' ').']]></content>'.
                 '<updated>'.$item->getTime()->getRFC3339().'</updated>'.
                 '<author><name>'.$item->author.'</name></author>'.
                 ($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').

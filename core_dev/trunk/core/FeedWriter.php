@@ -7,12 +7,11 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-/*
+require_once('class.CoreList.php');
+
 require_once('prop_Duration.php');
 require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
-*/
-require_once('class.CoreList.php');
 
 require_once('NewsItem.php');
 
