@@ -96,6 +96,9 @@ class Cache extends CoreBase
 
     function get($key)
     {
+        if (strlen($key) > 250)
+            throw new Exception ('Key length too long');
+
         if (!$this->connect())
             return false;
 
@@ -110,6 +113,9 @@ class Cache extends CoreBase
 
     function set($key, $val = '')
     {
+        if (strlen($key) > 250)
+            throw new Exception ('Key length too long');
+
         if (!$val)
             return $this->delete($key);
 
@@ -129,6 +135,9 @@ class Cache extends CoreBase
 
     function delete($key)
     {
+        if (strlen($key) > 250)
+            throw new Exception ('Key length too long');
+
         if (!$this->connect())
             return false;
 
