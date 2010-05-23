@@ -132,9 +132,13 @@ class NewsFeed extends CoreList
     /**
      * Sorts the list
      */
-    function sort($callback = '')
+    function sort($order = 'desc')
     {
-        if (!$callback) $callback = array($this, 'sortListDesc');
+        switch ($order) {
+        case 'asc':  die('FIXME implement ascending sort'); break;
+        case 'desc': $callback = array($this, 'sortListDesc'); break;
+        default: return false;
+        }
 
         uasort($this->items, $callback);
     }
@@ -145,9 +149,9 @@ class NewsFeed extends CoreList
      */
     private function sortListDesc($a, $b)
     {
-        if (!$a->Timestamp->get()) return 1;
+        if (!$a->getTime()) return 1;
 
-        return ($a->Timestamp->get() > $b->Timestamp->get()) ? -1 : 1;
+        return ($a->getTime() > $b->getTime()) ? -1 : 1;
     }
 
     /**
