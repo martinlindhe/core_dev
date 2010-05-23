@@ -24,14 +24,19 @@ abstract class FeedWriter extends CoreList
 {
     protected $version   = 'core_dev NewsFeed 1.0';
     protected $title     = 'Untitled news feed';
+    protected $author    = 'unknown';  ///< feed author
     protected $desc;
     protected $url       = '';      ///< full url to this feed
     protected $ttl       = 15;      ///< time to live, in minutes
+    protected $TimeUpdated;         ///< timestamp of last updated time, if set
 
     function getTitle() { return $this->title; }
 
     function setTitle($n) { $this->title = $n; }
     function setUrl($n) { $this->url = $n; }
+    function setAuthor($s) { $this->author = $s; }
+
+    function setTimeUpdated($ts) { $this->TimeUpdated = new Timestamp($ts); }
 
     /**
      * Adds a entry to the feed list

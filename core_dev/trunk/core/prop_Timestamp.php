@@ -84,18 +84,22 @@ class Timestamp extends CoreProperty
     }
 
     /**
-     * Formats timestamp according to RFC 882 (actually RFC 2882 which supersedes RFC 882)
+     * Formats timestamp according to RFC 822
+     * Used in: RSS feeds
      *
-     * @example Fri, 19 Dec 2008 16:50:19 +0100
-     * @return RFC 882 formatted timestamp
+     * http://asg.web.cmu.edu/rfc/rfc822.html#sec-5
+     *
+     * @example Fri, 19 Dec 2008 16:50:19 +0200
+     * @return RFC 822 formatted timestamp
      */
-    function getRFC882()
+    function getRFC822()
     {
         return date('r', $this->value);
     }
 
     /**
      * Formats timestamp according to RFC 3339
+     * Used in: Atom feeds
      *
      * @example 2008-12-19T16:50:19+01:00
      * @return RFC 3339 formatted timestamp

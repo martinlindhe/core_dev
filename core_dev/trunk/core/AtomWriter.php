@@ -17,7 +17,6 @@
 //STATUS: wip
 
 //TODO: extend this class for specific video feeds
-
 //XXX atom output: no way to embed video duration, <link length="x"> is size of the resource, in bytes.
 
 require_once('FeedWriter.php');
@@ -31,8 +30,9 @@ class AtomWriter extends FeedWriter
         '<feed xmlns="http://www.w3.org/2005/Atom">'.
             '<id>'.htmlspecialchars($this->url).'</id>'.
             '<title><![CDATA['.$this->title.']]></title>'.
-            //'<updated>'.$this->Timestamp->getRFC3339().'</updated>'.
+            ($this->TimeUpdated ? '<updated>'.$this->TimeUpdated->getRFC3339().'</updated>' : '').
             '<link rel="self" href="'.htmlspecialchars($this->url).'"/>'.
+            '<author><name>'.$this->author.'</name></author>'.
             '<generator>'.$this->version.'</generator>'."\n";
 
         foreach ($this->getItems() as $item)
@@ -48,7 +48,7 @@ class AtomWriter extends FeedWriter
                 '<link rel="alternate" href="'.$item->getUrl().'"/>'.
                 '<content type="html"><![CDATA['.($item->desc ? $item->desc : ' ').']]></content>'.
                 '<updated>'.$item->getTime()->getRFC3339().'</updated>'.
-                '<author><name>'.$item->author.'</name></author>'.
+                ($item->author ? '<author><name>'.$item->author.'</name></author>' : '').
                 ($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').
                 ($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.htmlspecialchars($item->image_url).'"/>' : '').
             '</entry>'."\n";
