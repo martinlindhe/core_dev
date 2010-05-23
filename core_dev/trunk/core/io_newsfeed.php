@@ -6,7 +6,7 @@
  *
  * Output mostly comply with http://feedvalidator.org/
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
 //STATUS: ok, need more testing
@@ -21,8 +21,8 @@ require_once('prop_Timestamp.php');
 
 require_once('HttpClient.php');
 
-require_once('input_rss.php');
-require_once('input_atom.php');
+require_once('RssReader.php');
+require_once('AtomReader.php');
 
 class NewsItem extends CoreBase
 {
@@ -115,9 +115,9 @@ class NewsFeed extends CoreList
         }
 
         if (strpos($data, '<rss ') !== false) {
-            $feed = new input_rss();
+            $feed = new RssReader();
         } else if (strpos($data, '<feed ') !== false) {
-            $feed = new input_atom();
+            $feed = new AtomReader();
         } else {
             echo 'NewsFeed->load error: unhandled feed: '.substr($data, 0, 100).' ...'.ln();
             return false;

@@ -17,7 +17,7 @@ require_once('class.CoreBase.php');
 require_once('HttpClient.php');
 require_once('io_newsfeed.php'); //for NewsItem object
 
-class input_rss extends CoreBase
+class RssReader extends CoreBase
 {
     private $items = array();   ///< list of NewsItem objects
     private $reader;            ///< XMLReader object
@@ -40,7 +40,7 @@ class input_rss extends CoreBase
 
             //FIXME check http client return code for 404
             if (strpos($data, '<rss ') === false) {
-                dp('input_rss->parse FAIL: cant parse feed from '.$http->getUrl() );
+                dp('RssReader->parse FAIL: cant parse feed from '.$http->getUrl() );
                 return false;
             }
         }
@@ -231,7 +231,7 @@ class input_rss extends CoreBase
                     break;
 
                 default:
-                    echo 'input_rss->parseItem() unknown MEDIA:CONTENT: '.$this->reader->getAttribute('type').ln();
+                    echo 'RssReader->parseItem() unknown MEDIA:CONTENT: '.$this->reader->getAttribute('type').ln();
                     break;
                 }
                 break;

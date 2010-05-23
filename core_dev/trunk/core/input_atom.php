@@ -16,7 +16,7 @@
 require_once('class.CoreBase.php');
 require_once('HttpClient.php');
 
-class input_atom extends CoreBase
+class AtomReader extends CoreBase
 {
     private $items = array();
     private $reader;            ///< XMLReader object
@@ -38,7 +38,7 @@ class input_atom extends CoreBase
 
             //FIXME check http client return code for 404
             if (strpos($data, '<feed ') === false) {
-                dp('input_atom->parse FAIL: cant parse feed from '.$u->getUrl() );
+                dp('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
                 return false;
             }
         }
@@ -137,7 +137,7 @@ class input_atom extends CoreBase
                         break;
 
                     default:
-                        die('input_atom->parseEntry() unknown enclosure mime: '.$this->reader->getAttribute('type') );
+                        die('AtomReader->parseEntry() unknown enclosure mime: '.$this->reader->getAttribute('type') );
                     }
                     break;
 
@@ -149,7 +149,7 @@ class input_atom extends CoreBase
                         break;
 
                     default:
-                        die('input_atom->parseEntry() unknown image mime: '.$this->reader->getAttribute('type') );
+                        die('AtomReader->parseEntry() unknown image mime: '.$this->reader->getAttribute('type') );
                     }
                     break;
 
@@ -160,7 +160,7 @@ class input_atom extends CoreBase
                 case 'self': //XXX ???
                     break;
                 default:
-                    die('input_atom->parseEntry() unknown link type: '.$this->reader->getAttribute('rel') );
+                    die('AtomReader->parseEntry() unknown link type: '.$this->reader->getAttribute('rel') );
                 }
                 break;
 
