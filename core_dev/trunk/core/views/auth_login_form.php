@@ -21,6 +21,21 @@ $header->addCss('
  -moz-border-radius:15px 15px 15px 15px; /*ff*/
 }');
 
+echo js_embed(
+//Makes element with name "n" invisible in browser
+'function hide_element(n)'.
+'{'.
+    'var e = document.getElementById(n);'.
+    'e.style.display = "none";'.
+'}'.
+//Makes element with name "n" visible in browser
+'function show_element(n)'.
+'{'.
+    'var e = document.getElementById(n);'.
+    'e.style.display = "";'.
+'}'
+);
+
 echo '<div class="login_box">';
 
 $tab = 'login';    //default tab show login form
@@ -92,18 +107,19 @@ echo '</div>';
 
 if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg) {
     echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
-
+/*
     if ($auth->activation_sent) {
         echo t('An email with your activation code has been sent.').'<br/>';
         echo t('Follow the link in the mail to complete your registration.').'<br/>';
-        /*    //FIXME implement this:
+
         echo 'You can also enter activation code here to finish:<br/>';
         echo '<form method="post" action="">';
         echo '<input type="text" size="10"/>';
         echo '<input type="submit" class="button" value="Complete registration"/>';
         echo '</form>';
-        */
+
     } else {
+*/
         echo '<b>'.t('Register new account').'</b><br/><br/>';
         if ($allow_superadmin_reg) {
             echo '<div class="critical">'.t('The account you create now will be the super administrator account.').'</div><br/>';
@@ -127,21 +143,23 @@ if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg
                 xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Repeat password')).
             '</td>'.
             '</tr>';
+/*
         if ($user->userdata) {
             showRequiredUserdataFields();
         }
+*/
         echo '</table><br/>';
 
         if (!$allow_superadmin_reg) {
             echo xhtmlButton('Log in', "hide_element('login_register_layer'); show_element('login_form_layer')");
         }
         echo xhtmlSubmit('Register', 'button', 'font-weight: bold');
-        if ($forgot_pwd) {
+        /*if ($forgot_pwd) {
             echo xhtmlButton('Forgot password', "hide_element('login_register_layer'); show_element('login_forgot_pwd_layer')");
-        }
+        }*/
             echo xhtmlFormClose();
         echo '</div>';
-    }
+//    }
 }
 /*
 if ($forgot_pwd) {

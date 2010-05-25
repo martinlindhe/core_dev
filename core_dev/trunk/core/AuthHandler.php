@@ -204,24 +204,28 @@ class AuthHandler extends CoreBase
             $this->login($_POST['login_usr'], $_POST['login_pwd']);
 
 
-/*
         //Handle new user registrations. POST to any page with 'register_usr', 'register_pwd' & 'register_pwd2' to attempt registration
-        if (!$session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2']) && ($this->auth->allow_registration || !Users::cnt())) {
-            $preId = 0;
-            if (!empty($_POST['preId']) && is_numeric($_POST['preId'])) $preId = $_POST['preId'];
-            $check = $this->user->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL, $preId);
-            if (is_numeric($check)) {
-                Users::setPassword($check, $_POST['register_pwd'], $_POST['register_pwd'], $this->auth->sha1_key);
-                if ($this->auth->mail_activate) {
-                    $this->auth->sendActivationMail($check);
+        if (!$session->id && isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2'])) {
+
+            $userlist = new UserList();
+
+            if ($this->allow_registrations || !$userlist->getCount()) {
+                $check = $this->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'], USERLEVEL_NORMAL);
+                if ($check) {
+/*
+                    if ($this->auth->mail_activate) {
+                        $this->auth->sendActivationMail($check);
+                    } else {
+*/
+                        $this->login($_POST['register_usr'], $_POST['register_pwd']);
+//                    }
                 } else {
-                    $this->auth->login($_POST['register_usr'], $_POST['register_pwd']);
+                    $error->add('Registration failed');
                 }
-            } else {
-                $this->error = t('Registration failed').', '.$check;
             }
         }
-*/
+
+
         //Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
         if ($session->id && $this->check_ip && $this->ip && ($this->ip != IPv4_to_GeoIP(client_ip())) ) {
             $msg = t('Client IP changed.').'Client IP changed! Old IP: '.GeoIP_to_IPv4($this->auth->ip).', current: '.GeoIP_to_IPv4(client_ip());
