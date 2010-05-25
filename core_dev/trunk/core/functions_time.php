@@ -43,10 +43,16 @@ function age($ts)
 {
     if (!is_numeric($ts)) $ts = strtotime($ts);
 
-    $dt1 = new DateTime(sql_date($ts));
-    $dt2 = new DateTime(now());
-    $interval = $dt1->diff($dt2);
-    return $interval->y;
+    if (PHP_VERSION_ID >= 50300) {
+        //requires php 5.3
+        $dt1 = new DateTime(sql_date($ts));
+        $dt2 = new DateTime(now());
+        $interval = $dt1->diff($dt2);
+        return $interval->y;
+    }
+
+    $ts2 = time();
+    return floor(($ts2 - $ts) / 60 / 60 / 24 / 365.25);
 }
 
 /**
