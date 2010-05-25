@@ -51,7 +51,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     function connect()
     {
         //silence warning from failed connection and display our error instead
-        $this->db_handle = @new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
+        $this->db_handle = new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
             die('<div class="critical">db_mysqli->connect: '.$this->db_handle->connect_error.'</div>');

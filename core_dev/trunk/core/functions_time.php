@@ -5,6 +5,10 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
+//STATUS: hmm
+
+require_once('sql_misc.php');
+
 /**
  * Converts a SQL timestamp to a text string representing how long ago this timestamp occured
  *
@@ -35,57 +39,14 @@ function ago($sql_time)
  * @param $sql_time sql timestamp representing day of birth
  * @return number of years old
  */
-function age($sql_time)
+function age($ts)
 {
-    if (!$sql_time) return false;
+    if (!is_numeric($ts)) $ts = strtotime($ts);
 
-    $age = date_diff2($sql_time, 'now', 2, true);
-    return $age['years'];
-}
-
-/**
- * Calculates difference between two dates
- *
- * @param $t1 oldest timestamp (or datetime)
- * @param $t2 newer timestamp (or datetime)
- * @param $precision how exact? (year,month,day,hour,minute,second)
- * @param $arr set to true to return result as a array with precision as index, default is text string
- */
-function date_diff2($t1, $t2, $precision = 6, $arr = false) ///XXX php5.3 has a date_diff() function
-{
-    if (preg_match('/\D/', $t1) && ($t1 = strtotime($t1)) === false) return false;
-    if (preg_match('/\D/', $t2) && ($t2 = strtotime($t2)) === false) return false;
-
-    if ($t1 > $t2) list($t1, $t2) = array($t2, $t1);
-
-    $diffs = array(
-        'year' => 0, 'month' => 0, 'day' => 0,
-        'hour' => 0, 'minute' => 0, 'second' => 0,
-    );
-
-    foreach (array_keys($diffs) as $interval) {
-        while ($t2 >= ($t3 = strtotime("+1 ${interval}", $t1))) {
-            $t1 = $t3;
-            ++$diffs[$interval];
-        }
-    }
-    $stack = array();
-    foreach ($diffs as $interval => $num) {
-        $name = $interval . ($num != 1 ? 's' : '');
-        $stack[] = array($num, $name);
-    }
-
-    $ret = array();
-
-    while (count($ret) < $precision && ($item = array_shift($stack)) !== null) {
-        if ($item[0] > 0) {
-            if (!$arr) $ret[] = $item[0].' '.t($item[1]);
-            else $ret[ $item[1] ] = $item[0];
-        }
-    }
-
-    if (!$arr) return implode(', ', $ret);
-    return $ret;
+    $dt1 = new DateTime(sql_date($ts));
+    $dt2 = new DateTime(now());
+    $interval = $dt1->diff($dt2);
+    return $interval->y;
 }
 
 /**
@@ -166,7 +127,7 @@ function exectime($c, &$retval = 0)
     //XXX: Use 2>&1 in $c to redirect stderr to $output buffer
     $output = array();
     $exec_start = microtime(true);
-    exec($c, $output, &$retval);
+    exec($c, $output, $retval);
 
     return microtime(true) - $exec_start;
 }

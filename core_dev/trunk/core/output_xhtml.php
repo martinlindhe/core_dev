@@ -246,56 +246,6 @@ function xhtmlMap($shapes, $name, $id = '')
 }
 
 /**
- * Creates a table out of a named array and/or callback function
- *
- * @param $arr is a normal $list array
- * @param $heads is array('User' => 'userId', 'Last active' => 'timeLastActive')
- * @param $callback is funct name to call to customize each row
- */
-function xhtmlTable($arr, $heads = '', $callback = '')
-{
-    $out = '<table>';
-
-    $heads_idx = false;
-
-    if (is_array($heads)) {
-        $out .= '<tr>';
-
-        if (key($heads)) $heads_idx = true;
-        else $heads_idx = false;
-
-        foreach ($heads as $t => $x) {
-            if ($heads_idx) $out .= '<th>'.$t.'</th>';
-            else $out .= '<th>'.$x.'</th>';
-        }
-        $out .= '</tr>';
-    }
-
-    $i = 0;
-    foreach ($arr as $row) {
-        if (function_exists($callback)) {
-            $out .= call_user_func($callback, $row, &$i);
-            $i++;
-        } else if (is_array($heads) && $heads_idx) {
-            $out .= '<tr>';
-            foreach ($heads as $t => $x) {
-                $out .= '<td>';
-                if ($x == 'userId') {
-                    $out .= Users::link($row['userId'], $row['userName']);
-                } else {
-                    $out .= $row[ $x ];
-                }
-                $out .= '</td>';
-            }
-            $out .= '</tr>';
-        }
-    }
-
-    $out .= '</table>';
-    return $out;
-}
-
-/**
  * Creates select-dropdown menus out of specified category
  */
 function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
