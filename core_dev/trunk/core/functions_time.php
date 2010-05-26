@@ -41,32 +41,50 @@ function ago($sql_time)
  */
 function age($ts)
 {
-    if (!is_numeric($ts)) $ts = strtotime($ts);
+    return num_years($ts, time());
+}
+
+/**
+ * Calculates the number of years between two dates
+ */
+function num_years($d1, $d2)
+{
+    $d1 = ts($d1);
+    $d2 = ts($d2);
 
     if (PHP_VERSION_ID >= 50300) {
         //requires php 5.3
-        $dt1 = new DateTime(sql_date($ts));
-        $dt2 = new DateTime(now());
+        $dt1 = new DateTime(sql_date($d1));
+        $dt2 = new DateTime(sql_date($d2));
         $interval = $dt1->diff($dt2);
         return $interval->y;
     }
 
-    $ts2 = time();
-    return floor(($ts2 - $ts) / 60 / 60 / 24 / 365.25);
+    return floor(($d2 - $d1) / 60 / 60 / 24 / 365.25);
 }
 
 /**
- * @return number of days the date period spans over
+ * @return number of days (also counting the dates) the date period spans over
  */
-function num_days($date1, $date2)
+function num_days($d1, $d2)
 {
-    $date1 = ts($date1);
-    $date2 = ts($date2);
+    $d1 = ts($d1);
+    $d2 = ts($d2);
 
-    if ($date1 > $date2)
-        $date_diff = $date1 - $date2;
+    if (PHP_VERSION_ID >= 50300) {
+        //requires php 5.3
+        $dt1 = new DateTime(sql_date($d1));
+        $dt2 = new DateTime(sql_date($d2));
+        $interval = $dt1->diff($dt2);
+
+        $days = $interval->format('%a'); //Total amount of days
+        return $days + 1;
+    }
+
+    if ($d1 > $d2)
+        $date_diff = $d1 - $d2;
     else
-        $date_diff = $date2 - $date1;
+        $date_diff = $d2 - $d1;
 
     $days = ceil($date_diff / (3600*24)) + 1;
 

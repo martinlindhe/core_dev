@@ -22,7 +22,7 @@ echo '<br/><br/>';
 echo '<a href="#" onclick="return toggle_sql_profiler();">'.$db->queries_cnt.' sql</a>';
 
 $sql_height = ($db->queries_cnt*60)+70;
-if ($sql_height > 400) $sql_height = 400;
+if ($sql_height > 200) $sql_height = 200;
 
 $css_display = count($db->query_error) ? '' : ' display:none;';
 
