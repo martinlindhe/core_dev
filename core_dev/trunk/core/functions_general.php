@@ -77,9 +77,9 @@ function URLadd($_key, $_val = '', $_extra = '')    //FIXME: is this function ev
  *        deleteBlog($_GET['BlogDelete:'.$_id]);
  * }
  */
-function confirmed($text, $_var, $_id = 0)
+function confirmed($text, $_var = '', $_id = 0)
 {
-    if (!$_var || !is_numeric($_id) || isset($_GET['confirmed'])) return true;
+    if (!is_numeric($_id) || isset($_GET['confirmed'])) return true;
 
     echo $text.'<br/><br/>';
     if ($_id) {
@@ -88,7 +88,7 @@ function confirmed($text, $_var, $_id = 0)
     } else {
         //Wiki-style links
         //fixme: use URLadd() here
-        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_var.'&amp;confirmed">Yes, I am sure</a><br/><br/>';
+        echo '<a href="'.$_SERVER['REQUEST_URI'].($_var ? '?'.$_var.'&amp;' : '?').'confirmed">Yes, I am sure</a><br/><br/>';
     }
     echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
 

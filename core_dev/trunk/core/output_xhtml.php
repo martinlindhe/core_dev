@@ -316,7 +316,7 @@ function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $sele
 function coreButton($name, $link = '', $title = '')
 {
     switch ($name) {
-        case 'Edit':   $img = 'icon_edit.png'; break;
+        case 'Edit':   $img = 'icon_create.png'; break;
         case 'Create': $img = 'icon_create.png'; break;
         case 'Delete': $img = 'icon_delete.png'; break;
         case 'Folder': $img = 'icon_folder.png'; break;
