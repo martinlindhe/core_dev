@@ -80,6 +80,23 @@ class UserList
         return $db->getArray($q);
     }
 
+    /**
+     * Returns a id->name array
+     */
+    function getFlat($filter = '')
+    {
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT userId, userName FROM tblUsers';
+        $q .= ' WHERE timeDeleted IS NULL';
+        if ($this->usermode)
+            $q .= ' AND userMode='.$this->usermode;
+
+        if ($filter) $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+
+        return $db->getMappedArray($q);
+    }
+
     function render()  //XXX make a view of this
     {
         $session = SessionHandler::getInstance();
