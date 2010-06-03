@@ -155,6 +155,7 @@ class HttpClient extends CoreBase
     private function get($head_only = false, $post_params = array())
     {
         $ch = curl_init( $this->Url->get() );
+
         if (!$ch) {
             echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".ln();
             return false;

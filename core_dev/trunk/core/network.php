@@ -282,14 +282,15 @@ function url_array($name, $arr)
  * with other separators than &, such as ; (commonly used by eg. git web interface)
  *
  * @param $arr key=>val pairs
+ * @param $safe url encodes "unsafe" characters in key values
  * @return string, e.g. name1=val&name2=val3&name3
  */
-function url_query($arr, $separator = '&')
+function url_query($arr, $separator = '&', $safe = true)
 {
     $res = array();
     foreach ($arr as $key => $val)
         if ($val)
-            $res[] = $key.'='.$val;
+            $res[] = $key.'='.($safe ? urlencode($val) : $val);
         else
             $res [] = $key;
 
