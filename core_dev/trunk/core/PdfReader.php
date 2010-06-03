@@ -1,9 +1,13 @@
 <?php
 /**
  * $Id$
+ *
+ * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
 //STATUS: very much WIP
+
+//TODO: rewrite pdf_parse_dict() to handle multi-dimensional dictionaries
 
 class PdfReader
 {
@@ -110,6 +114,7 @@ class PdfReader
                 $dict = pdf_parse_dict($s);
 
 //                d($dict);
+                echo "Reading ".$dict['Filter']." data (".$dict['Length']." bytes)\n";
 
                 $stream = fread($this->fp, $dict['Length']);
 
@@ -146,22 +151,31 @@ class PdfReader
 //XXX assumes 2d dictionary. they can be multi-dimensonal with nested << >>
 function pdf_parse_dict($s)
 {
-    // <</Filter/DCTDecode/Type/XObject/Length 17619/BitsPerComponent 8/Height 181/ColorSpace/DeviceRGB/Subtype/Image/Width 420>>
     if (substr($s, 0, 2) == '<<' && substr($s, -2) == '>>')
         $s = substr($s, 2, strlen($s) - 4);
     else
         throw new Exception ('Unexpected dict format '.$s);
 
-    ///XXX hack fulparser
-    $s = str_replace(' ', '/', substr($s, 1));
+    $current_key = '';
+    $dict = array();
     $x = explode('/', $s);
 
-    if (count($x) % 2 != 0)
-        throw new Exception ('Failed dict parse');
+    foreach ($x as $val) {
+        if (!$val) continue;
+        if (strpos($val, ' ') !== false) {
+            $xx = explode(' ', $val, 2);
+            $dict[ $xx[0] ] = $xx[1];
+        } else {
+            if (!$current_key)
+                $current_key = $val;
+            else {
+                $dict[ $current_key ] = $val;
+                $current_key = '';
+            }
 
-    $dict = array();
-    for ($i=0; $i<count($x); $i+=2)
-        $dict[ $x[$i] ] = $x[$i+1];
+
+        }
+    }
 
     return $dict;
 }
