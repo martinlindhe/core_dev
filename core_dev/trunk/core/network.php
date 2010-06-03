@@ -290,12 +290,46 @@ function url_query($arr, $separator = '&', $safe = true)
     $res = array();
     foreach ($arr as $key => $val)
         if ($val)
-            $res[] = $key.'='.($safe ? urlencode($val) : $val);
+            $res[] = $key.'='.($safe ? coredev_urlencode($val) : $val);
         else
             $res [] = $key;
 
     return implode($separator, $res);
+}
 
+/**
+ * Similar to urlencode(), rawurlencode() except it does not escape ;
+ * Attempts to follow RFC 1738 better than PHP 5.3 does:
+ *
+ * The characters ";", "/", "?", ":", "@", "=" and "&" are the characters which may be
+ * reserved for special meaning within a scheme. No other characters may
+ * be reserved within a scheme.
+ *
+ * Usually a URL has the same interpretation when an octet is
+ * represented by a character and when it encoded. However, this is not
+ * true for reserved characters: encoding a character reserved for a
+ * particular scheme may change the semantics of a URL.
+ *
+ * Thus, only alphanumerics, the special characters "$-_.+!*'(),", and
+ * reserved characters used for their reserved purposes may be used
+ * unencoded within a URL.
+ */
+function coredev_urlencode($s)
+{
+    $res = '';
+    for ($i=0; $i<strlen($s); $i++) {
+        $c = substr($s, $i, 1);
+        switch ($c) {
+        case ':': $c = '%3A'; break;
+        case ' ': $c = '+'; break;
+        }
+        if (ord($c) >= 128 || ord($c) <= 15)
+            $c = '%'.strtoupper(dechex(ord($c)));
+
+        $res .= $c;
+    }
+
+    return $res;
 }
 
 ?>

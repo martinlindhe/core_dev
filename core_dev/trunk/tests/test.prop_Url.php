@@ -21,4 +21,7 @@ if ($url->get() != 'http://www.google.com/?param')                  echo "FAIL 3
 $url = new Url('http://git.ffmpeg.org/?p=ffmpeg;a=blob_plain;f=Changelog;hb=HEAD');
 if ($url->get() != 'http://git.ffmpeg.org/?p=ffmpeg;a=blob_plain;f=Changelog;hb=HEAD') echo "FAIL 4 ".$url->get()."\n";
 
+$url = new Url('http://test.com/?data=29%3A30+minuter+p%E5+skoj%3A1%3A9900');
+if ($url->get() != 'http://test.com/?data=29%3A30+minuter+p%E5+skoj%3A1%3A9900') echo "FAIL 5 ".$url->get()."\n";
+
 ?>
