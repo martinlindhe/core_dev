@@ -126,7 +126,7 @@ class HttpClient extends CoreBase
 
     function setUserAgent($ua) { $this->user_agent = $ua; }
 
-    function setUrl($s) { $this->Url->set($s); }
+    function setUrl($s) { $this->Url = new Url($s); }
 
     function setUsername($s) { $this->username = $s; }
     function setPassword($s) { $this->password = $s; }
