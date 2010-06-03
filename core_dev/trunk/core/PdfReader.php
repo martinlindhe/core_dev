@@ -2,6 +2,14 @@
 /**
  * $Id$
  *
+ * http://www.adobe.com/devnet/pdf/pdf_reference_archive.html
+ *
+ * PDF Reference, Sixth Edition, version 1.7:
+ * http://www.adobe.com/devnet/acrobat/pdfs/pdf_reference_1-7.pdf
+ *
+ * + Errata to Sixth Edition:
+ * http://www.adobe.com/devnet/pdf/pdfs/pdf_17_errata.pdf
+ *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
@@ -11,11 +19,11 @@
 
 class PdfReader
 {
-    private $filename;                ///< input filename
-    private $version, $major, $minor; ///< PDF version details
+    private $filename;                  ///< input filename
+    private $version, $major, $minor;   ///< PDF version details
     private $supported_versions = array('1.4');
-    private $stream_no = 0;           ///< internal counter for current stream
-    private $fp; ///< file pointer
+    private $stream_no = 0;             ///< internal counter for current stream
+    private $fp;                        ///< file pointer
 
     function __construct($filename)
     {
@@ -76,11 +84,11 @@ class PdfReader
 
             list($idx, $cnt) = explode(' ', $row);
 
-            echo "Reading ".$cnt." lines of xref:\n";
+            //echo "Reading ".$cnt." lines of xref:\n";
 
             for ($i=0; $i<$cnt; $i++) {
                 $row = trim( fgets($this->fp, 1000) );
-                echo ($idx+$i).": ".$row."\n";
+                echo "\t".($idx+$i).":\t".$row."\n";
             }
             return;
         }
@@ -96,8 +104,7 @@ class PdfReader
 
             $row = trim( fgets($this->fp, 1000) );
             echo $row."\n";
-            $dict = pdf_parse_dict($row);
-            d($dict);
+//            $dict = pdf_parse_dict($row);
             return;
         }
 
@@ -118,6 +125,7 @@ class PdfReader
 
                 $stream = fread($this->fp, $dict['Length']);
 
+                // DCTDecode = jpeg image
                 if ($dict['Filter'] == 'FlateDecode') {
 //                    echo "Writing decompressed stream\n";
                     $stream = gzuncompress($stream);
