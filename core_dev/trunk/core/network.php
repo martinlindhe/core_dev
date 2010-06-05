@@ -227,7 +227,11 @@ function decode_cookie_string($raw)
     $pairs = explode(';', $raw);
     foreach ($pairs as $key => $val) {
         $x = explode('=', $val);
-        $out[ $x[0] ] = $x[1];
+
+        if (isset($x[1]))
+            $out[ $x[0] ] = $x[1];
+        else
+            $out[ $x[0] ] = true;
     }
     return $out;
 }

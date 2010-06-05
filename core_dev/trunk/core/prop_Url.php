@@ -79,6 +79,9 @@ class Url extends CoreProperty
      */
     function set($url)
     {
+        if (!$url)
+            return false;
+
         if (!is_url($url))
             throw new Exception ('not a url');
 
