@@ -57,18 +57,16 @@ class Cache extends CoreBase
         if ($this->connected)
             return true;
 
-        if (class_exists('Memcached')) {
+        if (extension_loaded('memcached')) {
             //php5-memcached for php 5.3 or newer
             $this->driver = 'memcached';
             $this->handle = new Memcached;
-        } else if (class_exists('Memcache')) {
+        } else if (extension_loaded('memcache')) {
             //php5-memcache for php 5.2 or older
             $this->driver = 'memcache';
             $this->handle = new Memcache;
-        } else {
-            dp("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
-            return false;
-        }
+        } else
+            throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
 
         if (!$this->server_pool)
             $this->addServer('127.0.0.1');
@@ -97,7 +95,7 @@ class Cache extends CoreBase
     function get($key)
     {
         if (strlen($key) > 250)
-            throw new Exception ('Key length too long');
+            throw new Exception ('Key length too long '.$key);
 
         if (!$this->connect())
             return false;

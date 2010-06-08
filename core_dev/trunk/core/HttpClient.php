@@ -192,8 +192,8 @@ class HttpClient extends CoreBase
         if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive()) {
 
             if ($this->getDebug()) $cache->setDebug();
-            $key_head = 'url_head//'.htmlspecialchars( $this->Url->get() );
-            $key_full = 'url//'.     htmlspecialchars( $this->Url->get() );
+            $key_head = 'url_head//'.sha1( $this->Url->get() );
+            $key_full = 'url//'.     sha1( $this->Url->get() );
 
             if ($head_only) {
                 $this->headers = unserialize( $cache->get($key_head) );
