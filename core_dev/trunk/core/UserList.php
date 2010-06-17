@@ -101,7 +101,7 @@ class UserList
     {
         $session = SessionHandler::getInstance();
 
-        if (!$session->isSuperAdmin)
+        if (!$session->isAdmin)
             return;
 
         if ($session->isSuperAdmin && !empty($_GET['del'])) {
@@ -120,18 +120,23 @@ class UserList
         if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
 
         //process updates
-        if ($session->isSuperAdmin && !empty($_POST)) {
+        if ($session->isSuperAdmin && !empty($_POST))
+        {
             $list = $this->getUsers();
-            foreach ($list as $row) {
-                if (empty($_POST['mode_'.$row['userId']])) continue;
-                $newmode = $_POST['mode_'.$row['userId']];
-                if ($newmode != $row['userMode']) {
+
+            foreach ($list as $row)
+            {
+                if (!isset($_POST['mode_'.$row['userId']]))
+                    continue;
+
+                if ($_POST['mode_'.$row['userId']] != $row['userMode']) {
                     $userhandler = new UserHandler($row['userId']);
-                    $userhandler->setMode($newmode);
+                    $userhandler->setMode($_POST['mode_'.$row['userId']]);
                 }
             }
 
-            if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode'])) {
+            if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode']))
+            {
                 $auth = AuthHandler::getInstance();
 
                 $new_id = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
@@ -168,14 +173,12 @@ class UserList
             echo '<td>'.$user['timeCreated'].'</td>';
             echo '<td>';
             if ($session->isSuperAdmin) {
-                echo '<select name="mode_'.$user['userId'].'">';
-                echo '<option value="'.USERLEVEL_NORMAL.'"'.($user['userMode']==USERLEVEL_NORMAL?' selected="selected"':'').'>Normal</option>';
-                echo '<option value="'.USERLEVEL_WEBMASTER.'"'.($user['userMode']==USERLEVEL_WEBMASTER?' selected="selected"':'').'>Webmaster</option>';
-                echo '<option value="'.USERLEVEL_ADMIN.'"'.($user['userMode']==USERLEVEL_ADMIN?' selected="selected"':'').'>Admin</option>';
-                echo '<option value="'.USERLEVEL_SUPERADMIN.'"'.($user['userMode']==USERLEVEL_SUPERADMIN?' selected="selected"':'').'>Super admin</option>';
-                echo '</select> ';
+                //XXX have user modes elsewhere
+                $user_modes = array(USERLEVEL_NORMAL => 'Normal', USERLEVEL_WEBMASTER => 'Webmaster', USERLEVEL_ADMIN => 'Admin', USERLEVEL_SUPERADMIN => 'Super admin');
+
+                echo xhtmlSelectArray('mode_'.$user['userId'], $user_modes, $user['userMode'], '', false);
                 if ($session->id != $user['userId'] && !$user['timeDeleted']) {
-                    echo coreButton('Delete', '?del='.$user['userId']);
+                    echo coreButton('Delete', '/admin/userlist/?del='.$user['userId']);
                 }
             } else {
                 echo $user['userMode'];
@@ -201,6 +204,7 @@ class UserList
         echo '</table>';
 
         if ($session->isSuperAdmin) {
+            echo '<br/>';
             echo xhtmlSubmit('Save changes');
             echo '</form>';
         }
