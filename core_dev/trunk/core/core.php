@@ -366,4 +366,21 @@ function str_get_ending($s)
     return "\n";
 }
 
+/**
+ * Pads input string $s to exactly $len chars with $pad_s and cuts to exactly $len chars, from the left
+ */
+function strpad_exact($s, $len, $pad_s = ' ')
+{
+    return substr( str_pad($s, $len, $pad_s, STR_PAD_RIGHT), 0, $len);
+}
+
+/**
+ * Prefixes input string $s with $pad_s and cuts to exactly $len chars, from the right
+ */
+function strpre_exact($s, $len, $pad_s = ' ')
+{
+    return substr( str_pad($s, $len, $pad_s, STR_PAD_LEFT), -$len);
+}
+
+
 ?>
