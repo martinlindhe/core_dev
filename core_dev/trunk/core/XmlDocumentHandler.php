@@ -133,18 +133,24 @@ class XmlDocumentHandler extends CoreBase
             echo $obj->render();
         }
 
-        if ($this->enable_design) { //&& $session->isAdmin) {
+        if ($this->enable_design && class_exists('SqlHandler')) { //&& $session->isAdmin) {
             $db = SqlHandler::getInstance();
 
             if ($db instanceof DatabaseMySQLProfiler)
                 echo $db->renderProfiler();
         }
 
-        if ($this->enable_design && $this->design_foot) {
-            $view = new ViewModel($this->design_foot);
-            echo $view->render();
+        if ($this->enable_design) {
+            if ($this->design_foot) {
+                $view = new ViewModel($this->design_foot);
+                echo $view->render();
+            }
+
+            //XXX <body> and <html> tags is opened in XhtmlHeader->render()
+            echo "\n".'</body></html>';
         }
     }
+
 }
 
 ?>

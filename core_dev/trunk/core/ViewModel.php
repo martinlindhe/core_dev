@@ -19,13 +19,13 @@ class ViewModel extends ArrayObject
     public function render()
     {
         //available variables in the scope of the view
-        $error   = ErrorHandler::getInstance();
-        $auth    = AuthHandler::getInstance();
-        $session = SessionHandler::getInstance();
-        $db      = SqlHandler::getInstance();
-        $header  = XhtmlHeader::getInstance();
-        $page    = XmlDocumentHandler::getInstance();
-        $locale  = LocaleHandler::getInstance();
+        if (class_exists('ErrorHandler'))       $error   = ErrorHandler::getInstance();
+        if (class_exists('AuthHandler'))        $auth    = AuthHandler::getInstance();
+        if (class_exists('SessionHandler'))     $session = SessionHandler::getInstance();
+        if (class_exists('SqlHandler'))         $db      = SqlHandler::getInstance();
+        if (class_exists('XhtmlHeader'))        $header  = XhtmlHeader::getInstance();
+        if (class_exists('XmlDocumentHandler')) $page    = XmlDocumentHandler::getInstance();
+        if (class_exists('LocaleHandler'))      $locale  = LocaleHandler::getInstance();
 
         ob_start();
         include($this->template);

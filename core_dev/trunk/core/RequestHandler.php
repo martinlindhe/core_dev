@@ -15,6 +15,8 @@
 //TODO: parse $_GET params into $_params
 //TODO: special view for login/logout events
 
+require_once('ViewModel.php');
+
 class RequestHandler
 {
     static $_instance; ///< singleton
@@ -97,15 +99,17 @@ class RequestHandler
         if (!file_exists($file))
             throw new Exception('No file named '.$file );
 
-        if (!in_array($this->_controller, $this->exclude_session)) {
+        if (!in_array($this->_controller, $this->exclude_session) && class_exists('SessionHandler') ) {
             //automatically resumes session unless it is blacklisted
             $session = SessionHandler::getInstance();
             $session->resume();
         }
 
-        //XXX handle login/logout requests to any page. FIXME: use a special view for these
-        $auth = AuthHandler::getInstance();
-        $auth->handleEvents();
+        if (class_exists('AuthHandler')) {
+            //XXX handle login/logout requests to any page. FIXME: use a special view for these
+            $auth = AuthHandler::getInstance();
+            $auth->handleEvents();
+        }
 
         //expose request params for the view
         $view = new ViewModel($file);

@@ -337,9 +337,9 @@ function numbers_only($s)
 /**
  * Rounds a number to exactly $precision number of decimals, padding with zeros if nessecary
  */
-function round_decimals($val, $precision = 0)
+function round_decimals($val, $precision = 0, $separator = '.', $combinator = '.')
 {
-    $ex = explode('.', round($val, $precision));
+    $ex = explode($separator, round($val, $precision));
 
     if (empty($ex[1]) || strlen($ex[1]) < $precision)
         $ex[1] = str_pad(@$ex[1], $precision, '0');
@@ -347,7 +347,7 @@ function round_decimals($val, $precision = 0)
     if (!$precision)
         return $ex[0];
 
-    return implode('.', $ex);
+    return implode($combinator, $ex);
 }
 
 /**
