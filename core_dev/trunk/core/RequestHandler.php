@@ -15,6 +15,7 @@
 //TODO: parse $_GET params into $_params
 //TODO: special view for login/logout events
 
+require_once('core.php'); //for is_alphanumeric()
 require_once('ViewModel.php');
 
 class RequestHandler
