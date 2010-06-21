@@ -200,14 +200,14 @@ function var_name(&$var, $scope = false)
 }
 
 /**
- * @return true if string only contain a-z, A-Z, 0-9 or _
+ * @return true if string only contain a-z, A-Z, 0-9, - or _         (FALSE: " ' <space> etc)
  */
 function is_alphanumeric($s)
 {
     if (!is_string($s))
         return false;
 
-    $regexp = '/^([\w])+$/';
+    $regexp = '/^([0-9a-zA-Z_-])+$/';
     preg_match($regexp, $s, $matches);
 
     if ($matches && $matches[0] == $s)
