@@ -17,10 +17,6 @@
 
 //TODO: untangle smtp class, create a new connect() method
 
-//TODO: figure out the proper "multipart" content-type to set on attachments/embedded files.
-//      the current approach works for Thunderbird, but message with attachment is shown without
-//      attachments before they are fully loaded (no gem next to mail)
-
 require_once('class.CoreBase.php');
 require_once('client_smtp.php');
 require_once('network.php'); //for is_email()
@@ -212,14 +208,14 @@ class SendMail extends CoreBase
         }
 
         if (count($this->attachments)) {
-            $boundary = '------------0'.time().md5(mt_rand(0, 9999999999999).microtime());
+            $rnd = md5( time().'))<>(('.mt_rand(0, 9999999999999).'))<>(('.microtime() );
+            $boundary = '------------0'.substr($rnd, 0, 23);
             $header .=
-            //"Content-Type: ".(count($this->embedded) ? "multipart/related" : "multipart/mixed").";".
-            "Content-Type: multipart/related;".    //XXX what is "multipart/alternative"?
-                " type=\"".($this->html ? "text/html" : "text/plain")."\";\r\n".
-                " boundary=\"".$boundary."\"\r\n".
+            "Content-Type: multipart/mixed;\r\n".
+            " boundary=\"".$boundary."\"\r\n".
             "\r\n".
-            "This is a multi-part message in MIME format.\r\n\r\n".
+            "This is a multi-part message in MIME format.\r\n".
+            "\r\n".
             "--".$boundary."\r\n";
         }
 
@@ -245,7 +241,7 @@ class SendMail extends CoreBase
             chunk_split(base64_encode($a->data));
         }
 
-        if ($attachment_data)
+        if (count($this->attachments))
             $attachment_data .= "--".$boundary."--";
 
         return $this->smtp->_DATA($header.$attachment_data);
