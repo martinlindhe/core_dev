@@ -78,39 +78,64 @@ class SendMail extends CoreBase
         $this->connected = false;
     }
 
+    function setSubject($s) { $this->subject = $s; }
+
+    function setHtml($bool = true) { $this->html = $bool; }
+
     function setFrom($s, $n = '')
     {
-        if (!is_email($s)) return false;
+        if (!is_email($s))
+            throw new Exception ('Cant set invalid from address '.$s);
+
         $this->from_adr  = $s;
         $this->from_name = $n;
     }
 
     function setReplyTo($s, $n = '')
     {
-        if (!is_email($s)) return false;
+        if (!is_email($s))
+            throw new Exception ('Cant set reply-to to invalid address '.$s);
+
         $this->rply_adr  = $s;
         $this->rply_name = $n;
     }
 
-    function setSubject($s) { $this->subject = $s; }
-
-    function setHtml($bool = true) { $this->html = $bool; }
-
     function addRecipient($s)
     {
-        if (!is_email($s)) return false;
+        if (!is_email($s))
+            throw new Exception ('Cant add invalid recipient '.$s);
+
         $this->to_adr[] = $s;
+    }
+
+    function addCc($s)
+    {
+        if (!is_email($s))
+            throw new Exception ('Cant add invalid cc '.$s);
+
+        $this->cc_adr[] = $s;
+    }
+
+    function addBcc($s)
+    {
+        if (!is_email($s))
+            throw new Exception ('Cant add invalid bcc '.$s);
+
+        $this->bcc_adr[] = $s;
     }
 
     /**
      * Adds a list of recipients
-     * @param $a is a array or comma-separated string of mail addresses
+     * @param $a is a array or string (separated by comma/semicolon/newlines/whitespace) of mail addresses
      */
     function addRecipients($a)
     {
         if (!is_array($a)) {
+            $a = trim($a);
+            $a = str_replace("\n", ' ', $a);
+            $a = str_replace("\r", ' ', $a);
             $a = str_replace(';', ',', $a);
-            $a = str_replace(' ', '', $a);
+            $a = str_replace(' ', ',', $a);
 
             //translate comma-separated string to array
             $a = explode(',', $a);
@@ -120,32 +145,18 @@ class SendMail extends CoreBase
             $this->addRecipient($s);
     }
 
-    function addCc($s)
+    function attachFile($filename)
     {
-        if (!is_email($s)) return false;
-        $this->cc_adr[] = $s;
+        return $this->embedFile($filename, '');
     }
 
-    function addBcc($s)
+    function embedFile($filename, $cid)
     {
-        if (!is_email($s)) return false;
-        $this->bcc_adr[] = $s;
-    }
-
-    function attach($file)
-    {
-        return $this->embed($file, '');
-    }
-
-    function embed($file, $cid)
-    {
-        if (!file_exists($file)) {
-            echo "Error: File ".$file." not found".ln();
-            return false;
-        }
+        if (!file_exists($filename))
+            throw new Exception ('File ".$filename." not found');
 
         //<img src="cid:pic_name">
-        $this->attachments[] = array($file, $cid);
+        $this->attachments[] = array($filename, $cid);
         return true;
     }
 
@@ -157,14 +168,14 @@ class SendMail extends CoreBase
         $this->connect();
 
         if (!$this->smtp->_MAIL_FROM($this->from_adr))
-            return false;
+            throw new Exception ('Failed to set from address');
 
         $header =
-            "Date: ".date('r')."\r\n".
-            "From: ".(mb_encode_mimeheader($this->from_name, 'UTF-8') ? mb_encode_mimeheader($this->from_name, 'UTF-8')." <".$this->from_adr.">" : $this->from_adr)."\r\n".
-            "Subject: ".mb_encode_mimeheader($this->subject, 'UTF-8')."\r\n".
-            "User-Agent: ".$this->version."\r\n".
-            "MIME-Version: 1.0\r\n";
+        "Date: ".date('r')."\r\n".
+        "From: ".(mb_encode_mimeheader($this->from_name, 'UTF-8') ? mb_encode_mimeheader($this->from_name, 'UTF-8')." <".$this->from_adr.">" : $this->from_adr)."\r\n".
+        "Subject: ".mb_encode_mimeheader($this->subject, 'UTF-8')."\r\n".
+        "User-Agent: ".$this->version."\r\n".
+        "MIME-Version: 1.0\r\n";
 
         if ($this->rply_adr)
             $header .= "Reply-To: ".(mb_encode_mimeheader($this->rply_name, 'UTF-8') ? mb_encode_mimeheader($this->rply_name, 'UTF-8')." <".$this->rply_adr.">" : $this->rply_adr)."\r\n";
@@ -185,36 +196,36 @@ class SendMail extends CoreBase
         if (count($this->attachments)) {
             $boundary = '------------0'.time().md5(mt_rand(0, 9999999999999).microtime());
             $header .=
-                //"Content-Type: ".(count($this->embedded) ? "multipart/related" : "multipart/mixed").";".
-                "Content-Type: multipart/related;".    //XXX what is "multipart/alternative"?
-                    " type=\"".($this->html ? "text/html" : "text/plain")."\";\r\n".
-                    " boundary=\"".$boundary."\"\r\n".
-                "\r\n".
-                "This is a multi-part message in MIME format.\r\n\r\n".
-                "--".$boundary."\r\n";
+            //"Content-Type: ".(count($this->embedded) ? "multipart/related" : "multipart/mixed").";".
+            "Content-Type: multipart/related;".    //XXX what is "multipart/alternative"?
+                " type=\"".($this->html ? "text/html" : "text/plain")."\";\r\n".
+                " boundary=\"".$boundary."\"\r\n".
+            "\r\n".
+            "This is a multi-part message in MIME format.\r\n\r\n".
+            "--".$boundary."\r\n";
         }
 
         $header .=
-            "Content-Type: ".($this->html ? "text/html" : "text/plain")."; charset=utf-8\r\n".
-            "Content-Transfer-Encoding: 7bit\r\n".
-            "\r\n".
-            $msg."\r\n";
+        "Content-Type: ".($this->html ? "text/html" : "text/plain")."; charset=utf-8\r\n".
+        "Content-Transfer-Encoding: 7bit\r\n".
+        "\r\n".
+        $msg."\r\n";
 
         $attachment_data = '';
         foreach ($this->attachments as $a)
         {
             $data = file_get_contents($a[0]);
             $attachment_data .=
-                "\r\n".
-                "--".$boundary."\r\n".
-                "Content-Type: image/png;\r\n".    //FIXME: get mimetype
-                " name=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
-                "Content-Transfer-Encoding: base64\r\n".
-                ($a[1] ? "Content-ID: <".$a[1].">\r\n" : "").
-                "Content-Disposition: ".($a[1] ? "inline" : "attachment").";\r\n".
-                " filename=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
-                "\r\n".
-                chunk_split(base64_encode($data));
+            "\r\n".
+            "--".$boundary."\r\n".
+            "Content-Type: image/png;\r\n".    //FIXME: get mimetype
+            " name=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
+            "Content-Transfer-Encoding: base64\r\n".
+            ($a[1] ? "Content-ID: <".$a[1].">\r\n" : "").
+            "Content-Disposition: ".($a[1] ? "inline" : "attachment").";\r\n".
+            " filename=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
+            "\r\n".
+            chunk_split(base64_encode($data));
         }
 
         if ($attachment_data) $attachment_data .= "--".$boundary."--";
