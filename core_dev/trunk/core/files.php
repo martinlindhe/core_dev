@@ -45,6 +45,7 @@ function file_get_mime_by_suffix($name)
     case '.jpg': return 'image/jpeg';
     case '.png': return 'image/png';
     case '.gif': return 'image/gif';
+    case '.txt': return 'text/plain';
 
     case '.mov': return 'video/quicktime';
     default:

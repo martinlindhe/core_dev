@@ -24,6 +24,14 @@
 require_once('class.CoreBase.php');
 require_once('client_smtp.php');
 require_once('network.php'); //for is_email()
+require_once('files.php'); //for file_get_mime_by_suffix()
+
+class MailAttachment
+{
+    var $data;
+    var $filename;
+    var $content_id = ''; //set for embedded images
+}
 
 class SendMail extends CoreBase
 {
@@ -37,7 +45,7 @@ class SendMail extends CoreBase
     private $cc_adr      = array();
     private $bcc_adr     = array();
     private $html        = false;
-    private $attachments = array();
+    private $attachments = array();  ///< MailAttachment objects
 
     private $connected = false;
 
@@ -65,7 +73,7 @@ class SendMail extends CoreBase
             $this->smtp->debug = true;
 
         if (!$this->smtp->login())
-            return false;
+            throw new Exception ('Cant connect to smtp server');
 
         $this->connected = true;
     }
@@ -145,19 +153,29 @@ class SendMail extends CoreBase
             $this->addRecipient($s);
     }
 
-    function attachFile($filename)
+    function attachData($data, $filename)
     {
-        return $this->embedFile($filename, '');
+        $att = new MailAttachment();
+        $att->data       = $data;
+        $att->filename   = basename($filename);
+        $this->attachments[] = $att;
     }
 
-    function embedFile($filename, $cid)
+    function attachFile($filename)
+    {
+        $this->embedFile($filename);
+    }
+
+    function embedFile($filename, $cid = '')
     {
         if (!file_exists($filename))
             throw new Exception ('File ".$filename." not found');
 
-        //<img src="cid:pic_name">
-        $this->attachments[] = array($filename, $cid);
-        return true;
+        $att = new MailAttachment();
+        $att->data       = file_get_contents($filename);
+        $att->filename   = basename($filename);
+        $att->content_id = $cid;                  //<img src="cid:pic_name">
+        $this->attachments[] = $att;
     }
 
     /**
@@ -214,21 +232,21 @@ class SendMail extends CoreBase
         $attachment_data = '';
         foreach ($this->attachments as $a)
         {
-            $data = file_get_contents($a[0]);
             $attachment_data .=
             "\r\n".
             "--".$boundary."\r\n".
-            "Content-Type: image/png;\r\n".    //FIXME: get mimetype
-            " name=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
+            "Content-Type: ".file_get_mime_by_suffix($a->filename).";\r\n".
+            " name=\"".mb_encode_mimeheader($a->filename, 'UTF-8')."\"\r\n".
             "Content-Transfer-Encoding: base64\r\n".
-            ($a[1] ? "Content-ID: <".$a[1].">\r\n" : "").
-            "Content-Disposition: ".($a[1] ? "inline" : "attachment").";\r\n".
-            " filename=\"".mb_encode_mimeheader(basename($a[0]), 'UTF-8')."\"\r\n".
+            ($a->content_id ? "Content-ID: <".$a->content_id.">\r\n" : "").
+            "Content-Disposition: ".($a->content_id ? "inline" : "attachment").";\r\n".
+            " filename=\"".mb_encode_mimeheader($a->filename, 'UTF-8')."\"\r\n".
             "\r\n".
-            chunk_split(base64_encode($data));
+            chunk_split(base64_encode($a->data));
         }
 
-        if ($attachment_data) $attachment_data .= "--".$boundary."--";
+        if ($attachment_data)
+            $attachment_data .= "--".$boundary."--";
 
         return $this->smtp->_DATA($header.$attachment_data);
     }
