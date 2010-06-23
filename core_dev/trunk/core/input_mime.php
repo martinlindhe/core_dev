@@ -7,98 +7,104 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-//STATUS: rewrite into a class
+//STATUS: WIP rewrite into a class & rename: MimeReader
 
-$config['mime']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
+//FIXME: parseHeader() limitation - multiple keys with same name will just be glued together (Received are one such common header key)
 
-/**
- * Email parser
- *
- * @param $msg raw email text from mail server
- * @param $callback callback function to execute after mail is parsed
- * @return all attachments, body & header nicely parsed up
- */
-function mimeParseMail($msg, $callback = '')
+//FIXME: dont handle non-multipart mails???
+
+class EMail
 {
-    //Separate header from mail body
-    $pos = strpos($msg, "\r\n\r\n");
-    if ($pos === false) return false;
-
-    $header = mimeParseHeader(substr($msg, 0, $pos));
-    $body = trim(substr($msg, $pos + strlen("\r\n\r\n")));
-    $res = mimeParseAttachments($header, $body);
-
-    if (function_exists($callback)) {
-        return call_user_func($callback, $res);
-    }
-    return $res;
+    var $id;
+    var $headers;
+    var $attachments;
 }
 
-/**
- * Parses a string of email headers into an array
- * XXX: limitation - multiple keys with same name will just be
- *         glued together (Received are one such common header key)
- */
-function mimeParseHeader($raw_head)
+class MimeReader
 {
-    $arr = explode("\n", $raw_head);
-    $header = array();
+    private $headers = array(); //parsed array of mime headers
+    private $attachments = array(); //parsed array of  mail attachments
+    private $allowed_mime_types = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
 
-    foreach ($arr as $row)
+    function getHeaders() { return $this->headers; }
+    function getAttachments() { return $this->attachments; }
+
+    function getAsEMail($id)
     {
-        $pos = strpos($row, ': ');
-        if ($pos) $curr_key = substr($row, 0, $pos);
-        if (!$curr_key) die('super error');
-        if (empty($header[ $curr_key ])) {
-            $header[ $curr_key ] = substr($row, $pos + strlen(': '));
-        } else {
-            $header[ $curr_key ] .= $row;
-        }
-
-        $header[ $curr_key ] = normalizeString($header[ $curr_key ]);
+        $mail = new EMail();
+        $mail->id          = $id;
+        $mail->headers     = $this->headers;
+        $mail->attachments = $this->attachments;
+        return $mail;
     }
 
-    return $header;
-}
+    /**
+     * Parses a email (header & body)
+     */
+    function parseMail($data)
+    {
+        //Separate header from mail body
+        $pos = strpos($data, "\r\n\r\n");
+        if ($pos === false) return false;
 
-/**
- * Parses and decodes attachments
- */
-function mimeParseAttachments(&$header, &$body)
-{
-    global $config;
+        $this->headers = $this->parseHeader(substr($data, 0, $pos));
 
-    $att = array();
+        $body = trim(substr($data, $pos + strlen("\r\n\r\n")));
 
-    $content = explode(';', $header['Content-Type']);
-
-    $att['header'] = $header;    //XXX: the main email header
-
-    //Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-    //Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
-    switch ($content[0]) {
-        case 'text/plain':
-            //returns main message as an text/plain attachment also
-            $att[0]['mimetype'] = $content[0];
-            $att[0]['header'] = $header;
-            $att[0]['body'] = $body;
-            return $att;
+        $this->attachments = $this->parseAttachments($body);
+        return true;
     }
 
-    $multipart_id = '';
-    foreach ($content as $part)
+    /**
+     * Parses a string of email headers into an array
+     */
+    function parseHeader($raw_head)
     {
-        $part = trim($part);
-        if ($part == 'multipart/mixed' || $part == 'multipart/related') {
-            continue;
+        $arr = explode("\n", $raw_head);
+        $header = array();
+
+        foreach ($arr as $row)
+        {
+            $pos = strpos($row, ': ');
+            if ($pos) $curr_key = substr($row, 0, $pos);
+            if (!$curr_key) die('super error');
+            if (empty($header[ $curr_key ])) {
+                $header[ $curr_key ] = substr($row, $pos + strlen(': '));
+            } else {
+                $header[ $curr_key ] .= $row;
+            }
+
+            $header[ $curr_key ] = normalizeString($header[ $curr_key ]);
         }
 
-        $pos = strpos($part, '=');
-        if ($pos === false) die("multipart header err\n");
-        $key = substr($part, 0, $pos);
-        $val = substr($part, $pos+1);
+        return $header;
+    }
 
-        switch ($key) {
+
+    /**
+     * Parses and decodes attachments
+     */
+    function parseAttachments($body)
+    {
+        $att = array();
+
+        //find multipart separator
+        $content = explode(';', $this->headers['Content-Type']);
+
+        //Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
+        $multipart_id = '';
+        foreach ($content as $part)
+        {
+            $part = trim($part);
+            if ($part == 'multipart/mixed' || $part == 'multipart/related')
+                continue;
+
+            $pos = strpos($part, '=');
+            if ($pos === false) die("multipart header err\n");
+            $key = substr($part, 0, $pos);
+            $val = substr($part, $pos+1);
+
+            switch ($key) {
             case 'boundary':
                 $multipart_id = '--'.str_replace('"', '', $val);
                 break;
@@ -106,56 +112,57 @@ function mimeParseAttachments(&$header, &$body)
             default:
                 echo "Unknown param: ".$key." = ".$val."\n";
                 break;
-        }
-    }
-    if (!$multipart_id) die('didnt find multipart id');
-
-    //echo "Splitting msg using id '".$multipart_id."'\n";
-
-    //Parses attachments into array
-    $part_cnt = 0;
-    do {
-        $p1 = strpos($body, $multipart_id);
-        $p2 = strpos($body, $multipart_id, $p1+strlen($multipart_id));
-
-        if ($p1 === false || $p2 === false) {
-            echo "p1: ".$p1.", p2: ".$p2."\n";
-            die("error parsing attachment\n");
-        }
-
-        //$current contains a whole block with attachment & attachment header
-        $current = substr($body, $p1 + strlen($multipart_id), $p2 - $p1 - strlen($multipart_id));
-
-        $head_pos = strpos($current, "\r\n\r\n");
-        if ($head_pos) {
-            $a_head = trim(substr($current, 0, $head_pos));
-            $a_body = trim(substr($current, $head_pos+2));
-        } else {
-            die("error: '".$current."'\n");
-        }
-
-        $att[ $part_cnt ]['header'] = mimeParseHeader($a_head);
-        $att[ $part_cnt ]['body'] = $a_body;
-        $body = substr($body, $p2);
-
-        $params = explode('; ', $att[ $part_cnt ]['header']['Content-Type']);
-        $att[ $part_cnt ]['mimetype'] = $params[0];
-
-        if (!empty($att[ $part_cnt ]['header']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['header']['Content-Location'];
-        if (empty($att[ $part_cnt ]['filename'])) {
-            //Extract name from [Content-Type] => image/jpeg; name="header.jpg"
-            //or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
-            if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
-                $att[ $part_cnt ]['filename'] = str_replace('"', '', substr($params[1], 5) );
             }
         }
+        if (!$multipart_id)
+            throw new Exception ('didnt find multipart id');
 
-        if (!in_array($att[ $part_cnt ]['mimetype'], $config['mime']['allowed_mime_types'])) {
-            echo "Unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
-            continue;
-        }
+        //echo "Splitting msg using id '".$multipart_id."'\n";
 
-        switch ($att[ $part_cnt ]['header']['Content-Transfer-Encoding']) {
+        //Parses attachments into array
+        $part_cnt = 0;
+        do {
+            $p1 = strpos($body, $multipart_id);
+            $p2 = strpos($body, $multipart_id, $p1+strlen($multipart_id));
+
+            if ($p1 === false || $p2 === false) {
+                echo "p1: ".$p1.", p2: ".$p2."\n";
+                die("error parsing attachment\n");
+            }
+
+            //$current contains a whole block with attachment & attachment header
+            $current = substr($body, $p1 + strlen($multipart_id), $p2 - $p1 - strlen($multipart_id));
+
+            $head_pos = strpos($current, "\r\n\r\n");
+            if ($head_pos) {
+                $a_head = trim(substr($current, 0, $head_pos));
+                $a_body = trim(substr($current, $head_pos+2));
+            } else {
+                die("error: '".$current."'\n");
+            }
+
+            $att[ $part_cnt ]['header'] = $this->parseHeader($a_head); //attachment headers
+            $att[ $part_cnt ]['body']   = $a_body;
+            $body = substr($body, $p2);
+
+            $params = explode('; ', $att[ $part_cnt ]['header']['Content-Type']);
+            $att[ $part_cnt ]['mimetype'] = $params[0];
+
+            if (!empty($att[ $part_cnt ]['header']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['header']['Content-Location'];
+            if (empty($att[ $part_cnt ]['filename'])) {
+                //Extract name from [Content-Type] => image/jpeg; name="header.jpg"
+                //or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
+                if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
+                    $att[ $part_cnt ]['filename'] = str_replace('"', '', substr($params[1], 5) );
+                }
+            }
+
+            if (!in_array($att[ $part_cnt ]['mimetype'], $this->allowed_mime_types)) {
+                echo "Unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
+                continue;
+            }
+
+            switch ($att[ $part_cnt ]['header']['Content-Transfer-Encoding']) {
             case '7bit':
                 break;
 
@@ -169,19 +176,22 @@ function mimeParseAttachments(&$header, &$body)
             default:
                 echo "Unknown transfer encoding: '". $att[ $part_cnt ]['header']['Content-Transfer-Encoding']."'\n";
                 break;
-        }
+            }
 
-        $part_cnt++;
+            $part_cnt++;
 
-    } while ($body != $multipart_id.'--');
+        } while ($body != $multipart_id.'--');
 
-    return $att;
+        return $att;
+    }
+
 }
 
+
 /**
- * Parses a MIME Authenticate response, useful for client_smtp.php, input_sip.php etc
+ * Parses a MIME Authenticate response, used in client_smtp.php, input_sip.php
  */
-function parseAuthRequest($s)
+function parseAuthRequest($s)   //XXX move into MimeReader class???
 {
     $chal_str = explode(',', $s);
 
