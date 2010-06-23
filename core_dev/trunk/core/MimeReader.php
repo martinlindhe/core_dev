@@ -4,7 +4,7 @@
  *
  * Parses MIME formatted email messages
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
 //STATUS: WIP rewrite into a class & rename: MimeReader

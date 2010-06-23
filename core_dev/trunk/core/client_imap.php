@@ -10,31 +10,35 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: unused(?) cleanup and expose in GetMail interface. move getMail() logic from here to GetMail class
+//STATUS: wip - expose in GetMail interface. move getMail() logic from here to GetMail class
 
 //TODO: ability to use SSL to connect to server, see imap_open()
+//FIXME: cant find a way to specify connection timeout
 
-require_once('input_mime.php');
+require_once('MimeReader.php');
 
-class imap extends CoreBase
+class ImapReader extends CoreBase
 {
     var $handle = false;
 
-    var $server, $port;
-    var $username, $password;
+    private $server;
+    private $port     = 143;  //XXX: "ssl" default port is 993
+    private $username;
+    private $password;
+    private $emails = array(); ///< array of EMail objects
 
-    var $tot_mails = 0;
+    private $tot_mails = 0;
 
-    function __construct($server = '', $username = '', $password = '', $port = 143)
+    function __construct()
     {
         if (!extension_loaded('imap'))
             throw new Exception ('php5-imap extension is required');
-
-        $this->server   = $server;
-        $this->port     = $port;    //XXX: "ssl" default port is 993
-        $this->username = $username;
-        $this->password = $password;
     }
+
+    function setServer($s) { $this->server = $s; }
+    function setUsername($s) { $this->username = $s; }
+    function setPassword($s) { $this->password = $s; }
+    function setPort($n) { $this->port = $n; }
 
     function __destruct()
     {
@@ -49,7 +53,16 @@ class imap extends CoreBase
         return true;
     }
 
-    function getMail($callback = '', $timeout = 30)    //FIXME: cant find a way to specify connection timeout
+    function deleteMail($mail_id)
+    {
+        imap_delete($this->handle, $mail_id);
+        imap_expunge($this->handle);
+    }
+
+    /**
+     * @param $callback function that is called with parsed mail header + attachments
+     */
+    function getMail($callback = '', $timeout = 30)
     {
         if (!$this->login()) return false;
 
@@ -67,15 +80,15 @@ class imap extends CoreBase
             $msg = stream_get_contents($fp);
             fclose($fp);
 
-            if ($callback && mimeParseMail($msg, $callback)) {
-                imap_delete($this->handle, $i);
-            } else {
-                echo "Leaving ".$i." on server\n";
-            }
+
+            $mime = new MimeReader();
+            $mime->parseMail($msg);
+
+            $this->emails[] = $mime->getAsEMail($i);
         }
 
-        //deletes all mails marked for deletion by imap_delete()
-        imap_expunge($this->handle);
+        if (function_exists($callback))
+            call_user_func($callback, $this->emails, $this);
     }
 
 }

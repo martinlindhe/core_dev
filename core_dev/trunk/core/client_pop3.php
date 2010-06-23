@@ -14,12 +14,14 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
+//STATUS: needs updating to use MimeReader class, see usage in client_imap
+
 //STATUS: unused(?) rewrite & expose into GetMail interface. move getMail() logic from here to GetMail class
 //TESTING: pop3-server to test with: mail.startwars.org
 
-//TODO: rewrite input_mime to a reusable class
+//$mail = new pop3('mail.startwars.org', 'martintest@startwars.org', 'test111'); //pop3 test
 
-require_once('input_mime.php');
+require_once('MimeReader.php');
 
 class pop3 extends CoreBase
 {

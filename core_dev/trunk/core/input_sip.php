@@ -11,10 +11,12 @@
  * @author Martin Lindhe, 2007-2009
  */
 
+//STATUS: needs updating to work with new MimeReader class
+
 //TODO: debug output: show sip messages
 //TODO: return correct error codes on failures
 
-require_once('input_mime.php');
+require_once('MimeReader.php');
 require_once('input_sdp.php');
 require_once('output_sdp.php');
 

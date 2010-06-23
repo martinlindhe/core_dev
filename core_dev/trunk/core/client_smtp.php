@@ -27,7 +27,7 @@
  * TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
  */
 
-require_once('input_mime.php');    //for parseAuthRequest()
+require_once('MimeReader.php');    //for parseAuthRequest()
 
 class smtp
 {
