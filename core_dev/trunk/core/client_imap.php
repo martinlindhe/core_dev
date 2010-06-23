@@ -2,15 +2,15 @@
 /**
  * $Id$
  *
- * Fetches mails from a IMAP email server
- *
- * Required PHP extension: php_imap (sudo aptitude install php5-imap)
+ * Fetches mails from a IMAP email server by using the php5-imap extension
  *
  * References:
  * http://tools.ietf.org/html/rfc3501
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
+
+//STATUS: unused(?) cleanup and expose in GetMail interface. move getMail() logic from here to GetMail class
 
 //TODO: ability to use SSL to connect to server, see imap_open()
 
@@ -27,10 +27,11 @@ class imap extends CoreBase
 
     function __construct($server = '', $username = '', $password = '', $port = 143)
     {
-        global $config;
-        if (!empty($config['debug'])) $this->debug = true;
-        $this->server = $server;
-        $this->port = $port;    //XXX: "ssl" default port is 993
+        if (!extension_loaded('imap'))
+            throw new Exception ('php5-imap extension is required');
+
+        $this->server   = $server;
+        $this->port     = $port;    //XXX: "ssl" default port is 993
         $this->username = $username;
         $this->password = $password;
     }
@@ -58,7 +59,7 @@ class imap extends CoreBase
         $this->tot_mails = $msginfo->Nmsgs;
 
         for ($i=1; $i<= $this->tot_mails; $i++) {
-            if ($this->debug) echo "Downloading ".$i." of ".$this->tot_mails." ...\n";
+            if ($this->getDebug()) echo "Downloading ".$i." of ".$this->tot_mails." ...\n";
             //XXX hack because retarded imap_fetchbody() dont allow to fetch the whole message
             $fp = fopen("php://temp", 'w');
             imap_savebody($this->handle, $fp, $i);

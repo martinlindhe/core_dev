@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
+//STATUS: rewrite into a class
+
 $config['mime']['allowed_mime_types'] = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
 
 /**

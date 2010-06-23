@@ -11,8 +11,13 @@
  * APOP details: http://tools.ietf.org/html/rfc1939#page-15
  * More examples & info: http://www.thewebmasters.net/php/POP3.phtml
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
+
+//STATUS: unused(?) rewrite & expose into GetMail interface. move getMail() logic from here to GetMail class
+//TESTING: pop3-server to test with: mail.startwars.org
+
+//TODO: rewrite input_mime to a reusable class
 
 require_once('input_mime.php');
 
@@ -28,8 +33,6 @@ class pop3 extends CoreBase
 
     function __construct($server = '', $username = '', $password = '', $port = 110)
     {
-        global $config;
-
         $this->server   = $server;
         $this->port     = $port;
         $this->username = $username;
@@ -41,11 +44,14 @@ class pop3 extends CoreBase
         if ($this->handle) $this->_QUIT();
     }
 
-    function login($timeout)
+    /**
+     * @param $timeout connection timeout in seconds
+     */
+    function login($timeout = 30)
     {
         $this->handle = fsockopen($this->server, $this->port, $errno, $errstr, $timeout);
         if (!$this->handle) {
-            if ($this->debug) echo "pop3->login() connection failed: ".$errno.": ".$errstr."\n";
+            if ($this->getDebug()) echo "pop3->login() connection failed: ".$errno.": ".$errstr."\n";
             return false;
         }
 
@@ -61,7 +67,7 @@ class pop3 extends CoreBase
             $apop_hash = trim(substr($res, $pos));
             $this->write('APOP '.$this->username.' '.md5($apop_hash.$this->password));
             if ($this->is_ok()) return true;
-            if ($this->debug) echo "pop3->login() APOP failed, trying normal method\n";
+            if ($this->getDebug()) echo "pop3->login() APOP failed, trying normal method\n";
         }
 
         $this->write('USER '.$this->username);
@@ -81,13 +87,13 @@ class pop3 extends CoreBase
     function read()
     {
         $var = fgets($this->handle, 128);
-        if ($this->debug) echo "Read: ".$var."\n";
+        if ($this->getDebug()) echo "Read: ".$var."\n";
         return $var;
     }
 
     function write($str)
     {
-        if ($this->debug) echo "Wrote: ".$str."\n";
+        if ($this->getDebug()) echo "Wrote: ".$str."\n";
         fputs($this->handle, $str."\r\n");
     }
 
@@ -97,7 +103,10 @@ class pop3 extends CoreBase
     function is_ok($cmd = '')
     {
         if (!$cmd) $cmd = $this->read();
-        if (ereg("^\+OK", $cmd)) return true;
+
+        if (substr($cmd, 0, 3) == '+OK')
+            return true;
+
         return false;
     }
 
@@ -200,7 +209,7 @@ class pop3 extends CoreBase
     {
         if (!$this->login($timeout) || !$this->_STAT()) return false;
 
-        if ($this->debug) {
+        if ($this->getDebug()) {
             if ($this->tot_mails) {
                 echo $this->tot_mails." mail(s)\n";
             } else {
@@ -212,7 +221,7 @@ class pop3 extends CoreBase
             $msg_size = $this->_LIST($i);
             if (!$msg_size) continue;
 
-            if ($this->debug) echo "Downloading ".$i." of ".$this->tot_mails." ... (".$msg_size." bytes)\n";
+            if ($this->getDebug()) echo "Downloading ".$i." of ".$this->tot_mails." ... (".$msg_size." bytes)\n";
 
             $msg = $this->_RETR($i);
             if ($msg) {
