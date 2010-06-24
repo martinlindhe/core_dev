@@ -88,6 +88,7 @@ class SendMail extends CoreBase
 
     function setFrom($s, $n = '')
     {
+        $s = trim($s);
         if (!is_email($s))
             throw new Exception ('Cant set invalid from address '.$s);
 
@@ -97,6 +98,7 @@ class SendMail extends CoreBase
 
     function setReplyTo($s, $n = '')
     {
+        $s = trim($s);
         if (!is_email($s))
             throw new Exception ('Cant set reply-to to invalid address '.$s);
 
@@ -106,6 +108,7 @@ class SendMail extends CoreBase
 
     function addRecipient($s)
     {
+        $s = trim($s);
         if (!is_email($s))
             throw new Exception ('Cant add invalid recipient '.$s);
 
@@ -114,6 +117,7 @@ class SendMail extends CoreBase
 
     function addCc($s)
     {
+        $s = trim($s);
         if (!is_email($s))
             throw new Exception ('Cant add invalid cc '.$s);
 
@@ -122,6 +126,7 @@ class SendMail extends CoreBase
 
     function addBcc($s)
     {
+        $s = trim($s);
         if (!is_email($s))
             throw new Exception ('Cant add invalid bcc '.$s);
 
