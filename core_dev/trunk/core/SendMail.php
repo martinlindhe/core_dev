@@ -144,7 +144,6 @@ class SendMail extends CoreBase
             $a = str_replace("\n", ' ', $a);
             $a = str_replace("\r", ' ', $a);
             $a = str_replace(';', ',', $a);
-            $a = str_replace(' ', ',', $a);
 
             //translate comma-separated string to array
             $a = explode(',', $a);
