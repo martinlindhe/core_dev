@@ -42,10 +42,10 @@ class ImapReader extends CoreBase
 
     function __destruct()
     {
-        if ($this->handle) imap_close($this->handle);
+        $this->disconnect();
     }
 
-    function login()
+    private function connect()
     {
         $this->handle = imap_open('{'.$this->server.':'.$this->port.'/imap/novalidate-cert}INBOX', $this->username, $this->password);
         if (!$this->handle) return false;
@@ -53,10 +53,20 @@ class ImapReader extends CoreBase
         return true;
     }
 
+    private function disconnect()
+    {
+        if (!$this->handle)
+            return;
+
+        //deletes all mails marked for deletion
+        imap_expunge($this->handle);
+
+        imap_close($this->handle);
+    }
+
     function deleteMail($mail_id)
     {
         imap_delete($this->handle, $mail_id);
-        imap_expunge($this->handle);
     }
 
     /**
@@ -64,7 +74,7 @@ class ImapReader extends CoreBase
      */
     function getMail($callback = '', $timeout = 30)
     {
-        if (!$this->login()) return false;
+        if (!$this->connect()) return false;
 
         $folders = imap_listmailbox($this->handle, "{".$this->server.":".$this->port."}", "*");
 

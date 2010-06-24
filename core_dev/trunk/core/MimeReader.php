@@ -10,10 +10,9 @@
 //STATUS: WIP
 
 //TODO hmm: make a base mime reader class and extend a EMailReader class from it??
+//TODO: decode subject & filenames from windows latin1 encoding
 
 //FIXME: parseHeader() limitation - multiple keys with same name will just be glued together (Received are one such common header key)
-
-//FIXME: dont handle non-multipart mails???
 
 class EMail
 {
@@ -26,7 +25,8 @@ class MimeReader
 {
     private $headers = array(); //parsed array of mime headers
     private $attachments = array(); //parsed array of  mail attachments
-    private $allowed_mime_types = array('text/plain', 'text/html', 'image/jpeg', 'image/png', 'video/3gpp');
+    private $allowed_mime_types = array('text/plain', 'text/html', 'image/jpeg', 'image/png', 'video/3gpp', 'application/pdf');
+    private $from_adr;              //from e-mail address
 
     function getHeaders() { return $this->headers; }
     function getAttachments() { return $this->attachments; }
@@ -37,6 +37,7 @@ class MimeReader
         $mail->id          = $id;
         $mail->headers     = $this->headers;
         $mail->attachments = $this->attachments;
+        $mail->from        = $this->from_adr;
         return $mail;
     }
 
@@ -52,8 +53,23 @@ class MimeReader
         $this->headers = $this->parseHeader(substr($data, 0, $pos));
 
         $body = trim(substr($data, $pos + strlen("\r\n\r\n")));
-
         $this->attachments = $this->parseAttachments($body);
+
+        $from = $this->headers['From'];
+        if (is_email($from))
+            $this->from_adr = $from;
+        else {
+            //XXX simplify extraction
+            $p = strrpos($from, ' ');
+            $s = substr($from, $p+1);
+            $s = str_replace('<', '', $s);
+            $s = str_replace('>', '', $s);
+            if (is_email($s))
+                $this->from_adr = $s;
+            else
+                echo "XXX FAILED TO extract adr from ".$from."\n"; ///XXX should not be possilbe
+        }
+
         return true;
     }
 
@@ -93,6 +109,15 @@ class MimeReader
         //find multipart separator
         $content = explode('; ', $this->headers['Content-Type']);
 
+        if ($content[0] == 'text/plain') {
+            // if mail header "Content-Type" dont contain "multipart/XXXX" (see below) then it's a plain message
+
+            //returns message body as an attachment
+            $att[0]['mimetype'] = $content[0];
+            $att[0]['body']     = $body;
+            return $att;
+        }
+
         //Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
         $multipart_id = '';
         foreach ($content as $part)
@@ -101,7 +126,7 @@ class MimeReader
                 continue;
 
             $pos = strpos($part, '=');
-            if ($pos === false) die("multipart header err\n");
+            if ($pos === false) die("multipart header error, Content-Type: ".$this->headers['Content-Type']."\n");
             $key = substr($part, 0, $pos);
             $val = substr($part, $pos+1);
 
