@@ -7,7 +7,9 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: WIP rewrite into a class & rename: MimeReader
+//STATUS: WIP
+
+//TODO hmm: make a base mime reader class and extend a EMailReader class from it??
 
 //FIXME: parseHeader() limitation - multiple keys with same name will just be glued together (Received are one such common header key)
 
@@ -24,7 +26,7 @@ class MimeReader
 {
     private $headers = array(); //parsed array of mime headers
     private $attachments = array(); //parsed array of  mail attachments
-    private $allowed_mime_types = array('text/plain', 'image/jpeg', 'image/png', 'video/3gpp');
+    private $allowed_mime_types = array('text/plain', 'text/html', 'image/jpeg', 'image/png', 'video/3gpp');
 
     function getHeaders() { return $this->headers; }
     function getAttachments() { return $this->attachments; }
@@ -89,14 +91,13 @@ class MimeReader
         $att = array();
 
         //find multipart separator
-        $content = explode(';', $this->headers['Content-Type']);
+        $content = explode('; ', $this->headers['Content-Type']);
 
         //Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
         $multipart_id = '';
         foreach ($content as $part)
         {
-            $part = trim($part);
-            if ($part == 'multipart/mixed' || $part == 'multipart/related')
+            if ($part == 'multipart/mixed' || $part == 'multipart/related' || $part == 'multipart/alternative')
                 continue;
 
             $pos = strpos($part, '=');
