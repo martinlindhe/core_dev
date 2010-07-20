@@ -344,10 +344,9 @@ class XhtmlForm
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
-                $dateselect->setSelection($e['init_from'], $e['init_to']);
 
-                $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : '';
-                $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : '';
+                $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : $e['init_from'];
+                $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : $e['init_to'];
 
                 $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
                 $res .= $dateselect->render();
