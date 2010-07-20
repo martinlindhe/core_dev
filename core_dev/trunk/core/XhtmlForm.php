@@ -229,9 +229,9 @@ class XhtmlForm
     /**
      * Adds a calendar date selector
      */
-    function addDateInterval($namefrom, $nameto, $str = '')
+    function addDateInterval($namefrom, $nameto, $str = '', $init_from = '', $init_to = '')
     {
-        $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str);
+        $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str, 'init_from' => $init_from, 'init_to' => $init_to);
     }
 
     function addCaptcha($objectinstance)
@@ -344,6 +344,7 @@ class XhtmlForm
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
+                $dateselect->setSelection($e['init_from'], $e['init_to']);
 
                 $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : '';
                 $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : '';
