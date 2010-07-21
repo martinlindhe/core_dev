@@ -22,12 +22,22 @@ class PdfReader
     private $filename;                  ///< input filename
     private $version, $major, $minor;   ///< PDF version details
     private $supported_versions = array('1.4');
-    private $stream_no = 0;             ///< internal counter for current stream
+    private $streams = array();         ///< holder of stream data
     private $fp;                        ///< file pointer
 
     function __construct($filename)
     {
         $this->filename = $filename;
+    }
+
+    function getStream($n)
+    {
+        return $this->streams[$n];
+    }
+
+    function getStreamCount()
+    {
+        return count($this->streams);
     }
 
     private function parseHeader($s)
@@ -68,7 +78,7 @@ class PdfReader
         if (!$row)
             return;
 
-        echo $row;
+//        echo $row;
 
         if (substr($row, 0, 1) == '%') {
             //echo "%comment\n";
@@ -88,7 +98,7 @@ class PdfReader
 
             for ($i=0; $i<$cnt; $i++) {
                 $row = trim( fgets($this->fp, 1000) );
-                echo "\t".($idx+$i).":\t".$row."\n";
+                //echo "\t".($idx+$i).":\t".$row."\n";
             }
             return;
         }
@@ -96,14 +106,14 @@ class PdfReader
         if ($row == "startxref\n") {
             //offset to xref header
             $row = trim( fgets($this->fp, 1000) );
-            echo $row."\n";
+//            echo $row."\n";
             return;
         }
 
         if ($row == "trailer\n") {
 
             $row = trim( fgets($this->fp, 1000) );
-            echo $row."\n";
+//            echo $row."\n";
 //            $dict = pdf_parse_dict($row);
             return;
         }
@@ -119,9 +129,8 @@ class PdfReader
                 $s = substr($s, 0, -6);
 
                 $dict = pdf_parse_dict($s);
-
 //                d($dict);
-                echo "Reading ".$dict['Filter']." data (".$dict['Length']." bytes)\n";
+//                echo "Reading ".$dict['Filter']." data (".$dict['Length']." bytes)\n";
 
                 $stream = fread($this->fp, $dict['Length']);
 
@@ -131,13 +140,15 @@ class PdfReader
                     $stream = gzuncompress($stream);
                 }
 
-                file_put_contents('stream.'.$this->stream_no, $stream);
-
-                $this->stream_no++;
-
                 $data = fread($this->fp, 11);
                 if ($data != "\nendstream\n")
                     throw new Exception ('unexpected end stream '.$data);
+
+                if (isset($dict['Type']) && $dict['Type'] == 'XObject' && $dict['Subtype'] == 'Image') {
+                    ; //XXX hack, exclude images
+                } else {
+                    $this->streams[] = $stream;
+                }
             }
 
             $data = fread($this->fp, 7);

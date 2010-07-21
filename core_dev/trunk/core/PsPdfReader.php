@@ -31,6 +31,8 @@ class PsPdfReader
     {
         if (is_file($data))
             $this->loadFromFile($data);
+        else
+            $this->loadFromData($data);
     }
 
     function loadFromFile($filename)
@@ -38,7 +40,17 @@ class PsPdfReader
         if (!is_file($filename))
             throw new Exception ('file not found');
 
-        $this->data = file_get_contents($filename);
+        $data = file_get_contents($filename);
+
+        $this->loadFromData($data);
+    }
+
+    function loadFromData($data)
+    {
+        //postscript is stored as latin1, convert to utf-8
+        $data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
+
+        $this->data = $data;
     }
 
     function parse()
@@ -53,6 +65,7 @@ class PsPdfReader
         $in_chunk = false;
 
         foreach ($rows as $row) {
+            //echo $row."\n";
 
             $t = explode(' ', $row, 2);
 
@@ -61,15 +74,25 @@ class PsPdfReader
             case 'ET': $in_chunk = false; $chunk_cnt++; break;
             default:
                 if ($in_chunk) {
+                    //chunks contained inside "BT" and "ET" tags
                     $chunks[ $chunk_cnt ] [] = $row;
                 } else {
-                    echo "Unknown: ".$row."\n";
+                    //echo "XXX Unknown: ".$row."\n";
                 }
             }
         }
 
-        d($chunks);
+        //XXX hack, just strips control chars- may break
 
+        $txt = array();
+        foreach ($chunks as $c) {
+            //XXX hack, all lines is wrapped inside (text)Tj", strip it away
+            if (substr($c[2], -3) == ')Tj' && substr($c[2], 0, 1) == '(')
+                $txt[] = substr($c[2], 1, -3);
+            else
+                $txt[] = $c[2];
+        }
+        return $txt;
     }
 
 }
