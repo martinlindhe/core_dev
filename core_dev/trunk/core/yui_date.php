@@ -53,7 +53,11 @@ class yui_date
             ($this->selected_date ? 'inTxt.value  = "'.sql_date($this->selected_date).'";' : '').
 
             'var cal = YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("'.$this->div_holder.'");'.
-            ($this->selected_date ? 'cal.cfg.setProperty("selected", "'.js_date($this->selected_date).'");' : '').
+            ($this->selected_date ?
+                'cal.cfg.setProperty("selected", "'.js_date($this->selected_date).'");'.
+                'cal.cfg.setProperty("pagedate", "'.date('n/Y', $this->selected_date).'");'
+                : ''
+            ).
             'cal.cfg.setProperty("start_weekday",'.$this->start_weekday.');'.
             'cal.cfg.setProperty("MONTHS_SHORT",['.   jsArrayFlat($locale->handle->month_short, false).']);'.
             'cal.cfg.setProperty("MONTHS_LONG",['.    jsArrayFlat($locale->handle->month_long, false).']);'.

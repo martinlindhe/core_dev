@@ -184,7 +184,11 @@ class yui_dateinterval
 
             'var myConfigs = {'.
                 'pages:2,'.
-                ($this->select_from && $this->select_to ? 'selected:"'.js_date($this->select_from).'-'.js_date($this->select_to).'",' : '').
+                ($this->select_from && $this->select_to ?
+                    'selected:"'.js_date($this->select_from).'-'.js_date($this->select_to).'",'.
+                    'pagedate:"'.date('n/Y', $this->select_from).'",'
+                    : ''
+                ).
                 'start_weekday:'.  $this->start_weekday.','.
                 'MONTHS_SHORT:['.   jsArrayFlat($locale->handle->month_short, false).'],'.
                 'MONTHS_LONG:['.    jsArrayFlat($locale->handle->month_long, false).'],'.
