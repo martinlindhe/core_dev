@@ -25,7 +25,7 @@ class yui_dateinterval
 
     function __construct()
     {
-         $this->div_holder = 'yui_di_hold'.mt_rand(0,99999);
+        $this->div_holder = 'yui_di_hold'.mt_rand(0,99999);
     }
 
     function setNameFrom($s) { $this->name_from = $s; }

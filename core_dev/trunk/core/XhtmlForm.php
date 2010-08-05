@@ -14,6 +14,7 @@
 require_once('client_captcha.php');
 require_once('output_xhtml.php');
 
+require_once('yui_date.php');
 require_once('yui_dateinterval.php');
 require_once('yui_richedit.php');
 
@@ -227,7 +228,15 @@ class XhtmlForm
     }
 
     /**
-     * Adds a calendar date selector
+     * Adds a date selector
+     */
+    function addDate($name, $str = '', $init = '')
+    {
+        $this->elems[] = array('type' => 'DATE', 'name' => $name, 'str' => $str, 'init' => $init);
+    }
+
+    /**
+     * Adds a date interval selector
      */
     function addDateInterval($namefrom, $nameto, $str = '', $init_from = '', $init_to = '')
     {
@@ -332,16 +341,36 @@ class XhtmlForm
                 $res .= '</td>';
                 break;
 
-            case 'DATEINTERVAL':
+            case 'DATE':
                 $res .= '<td colspan="2">';
                 if ($e['str']) $res .= $e['str'].'<br/><br/>';
                 $res .= '<div id="cal1Container"></div>';
                 $res .= '<div style="clear:both"></div>';
 
+                $res .= xhtmlInput($e['name']).'<br/>';
+
+                $dateselect = new yui_date();
+                $dateselect->setDivName('cal1Container');
+                $dateselect->setName($e['name']);
+
+                $e['name_val'] = !empty($this->formData[$e['name']]) ? $this->formData[$e['name']] : $e['init'];
+
+                $dateselect->setSelection($e['name_val']);
+                $res .= $dateselect->render();
+
+                $res .= '</td>';
+                break;
+
+            case 'DATEINTERVAL':
+                $res .= '<td colspan="2">';
+                if ($e['str']) $res .= $e['str'].'<br/><br/>';
+                $res .= '<div id="cal2Container"></div>';
+                $res .= '<div style="clear:both"></div>';
+
                 $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
                 $dateselect = new yui_dateinterval();
-                $dateselect->setDivName('cal1Container');
+                $dateselect->setDivName('cal2Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
 
