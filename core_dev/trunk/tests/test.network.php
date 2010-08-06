@@ -28,6 +28,7 @@ $valid_urls = array(
 'http://web5.uottawa.ca/admingov/reglements-methodes.html',
 'ftp://username:password@example.com:21/file.zip',
 'http://www.esa.int',
+'http://at.activation.com/track/me;1442:PPS35:tta/',
 );
 
 foreach ($valid_urls as $url)
