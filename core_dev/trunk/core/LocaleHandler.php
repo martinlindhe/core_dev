@@ -65,7 +65,9 @@ class LocaleHandler
      * @param $n month number (1-12)
      */
     function getMonthLong($n) { return $this->handle->month_long[$n-1]; }
+    function getMonthsLong() { return $this->handle->month_long; }
     function getMonthShort($n) { return $this->handle->month_short[$n-1]; }
+    function getMonthsShort() { return $this->handle->month_short; }
 
     /**
      * @param $n weekday number (0-6), 0=sunday, 1=monday
