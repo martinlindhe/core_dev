@@ -31,6 +31,7 @@ class ConvertMass extends CoreConverter
     'hectogram' => 'hg',
     'kilogram'  => 'kg',
     'kilo'      => 'kg',
+    'ton'       => 't',  //"metric tonne"
     'tonne'     => 't',
     'ounce'     => 'oz',    'ounces' => 'oz',
     'pound'     => 'lb',    'pounds' => 'lb',

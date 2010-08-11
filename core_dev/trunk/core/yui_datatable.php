@@ -15,6 +15,8 @@
 //TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
+//TODO: attach some js snippet which reads db queries from xhr response and renders in the sql profiler widget
+
 class yui_datatable
 {
     private $columns         = array();
