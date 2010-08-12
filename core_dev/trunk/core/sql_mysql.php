@@ -63,6 +63,17 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     }
 
     /**
+     * Returns a unique id for the db connection. Useful for naming TEMPORARY TABLEs
+     */
+    function getThreadId()
+    {
+        if (!$this->connected)
+            $this->connect();
+
+        return $this->db_handle->thread_id;
+    }
+
+    /**
      * Escapes a string for use in queries
      *
      * @param $q is the query to escape

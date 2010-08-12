@@ -12,6 +12,7 @@ require_once('ISql.php');
 
 //STATUS: wip
 //TODO: update getNumArray()
+//TODO: add something like mysql's getThreadId()
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
@@ -148,7 +149,7 @@ class DatabaseMssql extends CoreBase implements IDB_SQL
         if ($result) {
             $affected_rows = mssql_rows_affected($this->db_handle);
         }
-        
+
         return $affected_rows;
     }
 
