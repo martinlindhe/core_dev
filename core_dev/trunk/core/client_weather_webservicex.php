@@ -10,7 +10,7 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-//STATUS: ok, need testing
+//STATUS: wip
 
 require_once('conv_temperature.php');
 require_once('input_xml.php');
@@ -39,7 +39,7 @@ class Weather_webservicex extends CoreBase
             }
 
 //XXX parse it properly
-d($xml);
+//d($xml);
             return $xml;
 
         } catch (Exception $e) {
@@ -57,7 +57,7 @@ d($xml);
         'CountryName' => $country,
         'CityName'    => $city
         );
-print_r($params);
+//print_r($params);
         try {
             $val = $this->client->GetWeather($params);
             $data = $val->GetWeatherResult;
@@ -77,6 +77,7 @@ print_r($params);
             $reader->xml($data);
 
             $celcius = false;
+            $skycond = '';
 
             while ($reader->read())
             {
@@ -120,7 +121,7 @@ print_r($params);
 
                         case 'Visibility': //<Visibility> 5 mile(s):0</Visibility>
                             $reader->read();
-                            $visibility = $reader->value; //XXX: parse string
+                            $visibility = trim($reader->value); //XXX: parse string
                             break;
 
                         case 'SkyConditions': //<SkyConditions> mostly cloudy</SkyConditions>
