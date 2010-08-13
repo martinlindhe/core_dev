@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO: move setCoreDevInclude to a "core_dev handler" ? or "setup handler", or "config handler" ?
+
 require_once('class.CoreBase.php');
 
 class XmlDocumentHandler extends CoreBase
@@ -21,6 +23,7 @@ class XmlDocumentHandler extends CoreBase
     private $mimetype = 'text/html';
     private $base_url = '';
     private $attachment_name;
+    private $coredev_inc = '';       ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
 
     var $objs = array();  ///< IXMLComponent objects
 
@@ -43,6 +46,17 @@ class XmlDocumentHandler extends CoreBase
     function setBaseUrl($s) { $this->base_url = $s; }
 
     function getBaseUrl() { return $this->base_url; }
+
+    function setCoreDevInclude($path)
+    {
+        ///XXX peka på "/path/to/core_dev/core/" katalogen, hör egentligen inte till page handlern men den hör inte till något bra objekt... separat core-dev handler????
+        if (!is_dir($path))
+            throw new Exception ('path not found '.$path);
+
+        $this->coredev_inc = $path;
+    }
+
+    function getCoreDevInclude() { return $this->coredev_inc; }
 
     /**
      * Sends HTTP headers that prompts the client browser to download the page content with given name

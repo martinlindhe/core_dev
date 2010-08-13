@@ -109,12 +109,13 @@ class UserList
             $userhandler->remove();
         }
 
-        echo 'All users: <a href="/admin/userlist/">'.$this->getCount().'</a><br/>';
-        echo 'Webmasters: <a href="/admin/userlist/'.USERLEVEL_WEBMASTER.'">'.$this->getCount(USERLEVEL_WEBMASTER).'</a><br/>';
-        echo 'Admins: <a href="/admin/userlist/'.USERLEVEL_ADMIN.'">'.$this->getCount(USERLEVEL_ADMIN).'</a><br/>';
-        echo 'SuperAdmins: <a href="/admin/userlist/'.USERLEVEL_SUPERADMIN.'">'.$this->getCount(USERLEVEL_SUPERADMIN).'</a><br/>';
+        echo '<h1>Manage users</h1>';
+        echo 'All users: <a href="/admin/core/userlist/">'.$this->getCount().'</a><br/>';
+        echo 'Webmasters: <a href="/admin/core/userlist/'.USERLEVEL_WEBMASTER.'">'.$this->getCount(USERLEVEL_WEBMASTER).'</a><br/>';
+        echo 'Admins: <a href="/admin/core/userlist/'.USERLEVEL_ADMIN.'">'.$this->getCount(USERLEVEL_ADMIN).'</a><br/>';
+        echo 'SuperAdmins: <a href="/admin/core/userlist/'.USERLEVEL_SUPERADMIN.'">'.$this->getCount(USERLEVEL_SUPERADMIN).'</a><br/>';
 //XXX TODO: lista användare online
-        echo 'Users online: <a href="/admin/userlist/0/online">'.$this->onlineCount().'</a><br/>';
+        echo 'Users online: <a href="/admin/core/userlist/0/online">'.$this->onlineCount().'</a><br/>';
 
         $filter = '';
         if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
@@ -143,7 +144,7 @@ class UserList
                 if (!is_numeric($new_id)) {
                     echo '<div class="critical">'.$new_id.'</div>';
                 } else {
-                    echo '<div class="okay">New user created. <a href="/admin/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
+                    echo '<div class="okay">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
                 }
             }
         }
@@ -168,7 +169,7 @@ class UserList
         foreach ($list as $user)
         {
             echo '<tr'.($user['timeDeleted']?' class="critical"':'').'>';
-            echo '<td><a href="/admin/useredit/'.$user['userId'].'">'.$user['userName'].'</a></td>';
+            echo '<td><a href="/admin/core/useredit/'.$user['userId'].'">'.$user['userName'].'</a></td>';
             echo '<td>'.$user['timeLastActive'].'</td>';
             echo '<td>'.$user['timeCreated'].'</td>';
             echo '<td>';
@@ -178,7 +179,7 @@ class UserList
 
                 echo xhtmlSelectArray('mode_'.$user['userId'], $user_modes, $user['userMode'], '', false);
                 if ($session->id != $user['userId'] && !$user['timeDeleted']) {
-                    echo coreButton('Delete', '/admin/userlist/?del='.$user['userId']);
+                    echo coreButton('Delete', '/admin/core/userlist/?del='.$user['userId']);
                 }
             } else {
                 echo $user['userMode'];

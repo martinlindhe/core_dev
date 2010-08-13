@@ -16,6 +16,14 @@ class ViewModel extends ArrayObject
         $this->template = $template;
     }
 
+    /**
+     * Allows the user to register variables available in the view model
+     */
+    function registerVar($name, $val)
+    {
+        $this->$name = $val;
+    }
+
     public function render()
     {
         //available variables in the scope of the view
