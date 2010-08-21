@@ -190,6 +190,17 @@ function is_email($adr)
 }
 
 /**
+ * @return protocol part of url, e.g. "http"
+ */
+function get_protocol($url)
+{
+    $p = strpos($url, '://');
+    if (!$p) return false;
+
+    return substr($url, 0, $p);
+}
+
+/**
  * @return default port for protocol $scheme
  */
 function scheme_default_port($scheme)

@@ -36,7 +36,7 @@ class RssReader extends CoreBase
             $http = new HttpClient($data);
             if ($this->getDebug()) $http->setDebug();
             $http->setCacheTime(60 * 60); //1h
-            $data = $u->getBody();
+            $data = $http->getBody();
 
             //FIXME check http client return code for 404
             if (strpos($data, '<rss ') === false) {
@@ -116,7 +116,7 @@ class RssReader extends CoreBase
 
         while ($this->reader->read()) {
             if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'item') {
-                if ($item->title == $item->desc) $item->desc = '';
+                if ($item->getTitle() == $item->desc) $item->desc = '';
                 $this->items[] = $item;
                 return;
             }
@@ -127,7 +127,7 @@ class RssReader extends CoreBase
             switch (strtolower($this->reader->name)) {
             case 'title':
                 $this->reader->read();
-                $item->title = trim( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
+                $item->setTitle( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
                 break;
 
             case 'description':
@@ -142,12 +142,12 @@ class RssReader extends CoreBase
 
             case 'link':
                 $this->reader->read();
-                $item->Url->set( $this->reader->value );
+                $item->setUrl( $this->reader->value );
                 break;
 
             case 'pubdate':
                 $this->reader->read();
-                $item->Timestamp->set( $this->reader->value );
+                $item->setTime( $this->reader->value );
                 break;
 
             case 'guid':

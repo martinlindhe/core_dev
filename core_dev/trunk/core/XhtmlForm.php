@@ -96,13 +96,12 @@ class XhtmlForm
                 }
 
         //catch named GET parameters if no POST parameters are found
-/*
+
         if (!empty($_GET))
             foreach ($_GET as $key => $val)
                 foreach ($this->elems as $row)
                     if (!empty($row['name']) && !isset($_POST[$row['name']]) && $row['name'] == $key)
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
-*/
 
         if (!$p) return false;
 /*
