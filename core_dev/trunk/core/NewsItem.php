@@ -17,17 +17,19 @@ class NewsItem
     var $video_mime;
     var $video_url;
 
-    var $Duration;  ///< video duration
+    private $Duration;  ///< video duration
     private $Timestamp;
     private $Url;       ///< location of news article
 
     function setTime($s) { $this->Timestamp = new Timestamp($s); }
     function setUrl($s) { $this->Url = new Url($s); }
+    function setDuration($s) { $this->Duration = new Duration($s); }
 
     function setTitle($s) { $this->title = $s; }
 
     function getTime() { return $this->Timestamp; }
     function getUrl() { return $this->Url; }
+    function getDuration() { return $this->Duration; }
     function getTitle() { return $this->title; }
 
     function __construct()

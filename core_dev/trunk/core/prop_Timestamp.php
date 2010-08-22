@@ -16,10 +16,12 @@ class Timestamp extends CoreProperty
 {
     private $value; ///< internal representation of time, as a Unix timestamp
 
+    function get() { return $this->getUnix(); } //XXX deprecate??!?
+
     /**
      * @return a numeric Unix timestamp
      */
-    function get()
+    function getUnix()
     {
         if (!$this->value)
             return false;

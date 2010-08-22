@@ -170,7 +170,7 @@ class RssReader extends CoreBase
                         $item->video_url  = $this->reader->getAttribute('url');
                         $item->video_mime = $this->reader->getAttribute('type');
 
-                        $item->Duration->set($this->reader->getAttribute('duration'));
+                        $item->setDuration($this->reader->getAttribute('duration'));
                     }
                     break;
 
@@ -189,7 +189,7 @@ class RssReader extends CoreBase
                     }
 
                     $item->video_mime  = $this->reader->getAttribute('type');
-                    $item->Duration->set($this->reader->getAttribute('duration'));
+                    $item->setDuration($this->reader->getAttribute('duration'));
                     break;
 
                 case 'video/mp4':
@@ -197,7 +197,7 @@ class RssReader extends CoreBase
                     if (!$item->video_url) {
                         $item->video_url  = $this->reader->getAttribute('url');
                         $item->video_mime = $this->reader->getAttribute('type');
-                        $item->Duration->set($this->reader->getAttribute('duration'));
+                        $item->setDuration($this->reader->getAttribute('duration'));
                     }
                     break;
 
@@ -206,14 +206,14 @@ class RssReader extends CoreBase
                     if (!$item->video_url) {
                         $item->video_url  = $this->reader->getAttribute('url');
                         $item->video_mime = $this->reader->getAttribute('type');
-                        $item->Duration->set($this->reader->getAttribute('duration'));
+                        $item->setDuration($this->reader->getAttribute('duration'));
                     }
                     break;
 
                 case 'video/quicktime':
                     $item->video_url  = $this->reader->getAttribute('url');
                     $item->video_mime = $this->reader->getAttribute('type');
-                    $item->Duration->set($this->reader->getAttribute('duration'));
+                    $item->setDuration($this->reader->getAttribute('duration'));
                     break;
 
                 case 'image/jpeg':

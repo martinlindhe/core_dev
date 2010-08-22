@@ -8,9 +8,7 @@
  */
 
 /**
- * Returns the file extension for given filename
- *
- * @return file extension, example ".jpg"
+ * @return file extension for given filename, example ".jpg"
  */
 function file_suffix($filename)
 {
@@ -18,6 +16,17 @@ function file_suffix($filename)
     if ($pos === false) return '';
 
     return substr($filename, $pos);
+}
+
+/**
+ * @return filename without file extension for given filename
+ */
+function no_suffix($filename)
+{
+    $pos = strrpos($filename, '.');
+    if ($pos === false) return $filename;
+
+    return substr($filename, 0, $pos);
 }
 
 /**
