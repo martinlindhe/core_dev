@@ -27,9 +27,9 @@ class NewsItem
 
     function setTitle($s) { $this->title = $s; }
 
-    function getTime() { return $this->Timestamp; }
-    function getUrl() { return $this->Url; }
-    function getDuration() { return $this->Duration; }
+    function getTime() { return $this->Timestamp->getUnix(); }
+    function getUrl() { return $this->Url->get(); }
+    function getDuration() { return $this->Duration->get(); }
     function getTitle() { return $this->title; }
 
     function __construct()

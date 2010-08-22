@@ -9,7 +9,7 @@
 
 require_once('class.CoreBase.php');
 
-class CoreProperty extends CoreBase
+abstract class CoreProperty extends CoreBase
 {
     /**
      * Initialize object to specified value
@@ -28,6 +28,9 @@ class CoreProperty extends CoreBase
     {
         return $this->get().'';       //XXX cp. '' evaluerar true eller javetinte nåt är fel
     }
+
+    abstract function set($s);
+    abstract function get();
 
 }
 
