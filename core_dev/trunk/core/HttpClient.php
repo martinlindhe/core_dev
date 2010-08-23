@@ -38,6 +38,7 @@ class HttpClient extends CoreBase
     private $referer    = '';  ///< if set, send Referer header
     private $cookies = array(); ///< holds cookies to be sent to the server in the following request
     private $max_redirects = 99;
+    private $connection_timeout = 120; ///< 2 minutes
     private $content_type = '';
     private $username, $password;
 
@@ -73,6 +74,7 @@ class HttpClient extends CoreBase
         return false;
     }
 
+    function setConnectionTimeout($n) { if (is_numeric($n)) $this->connection_timeout = $n; }
     function setContentType($s) { $this->content_type = $s; }
     function setReferer($s) { $this->referer = $s; }
 
@@ -208,6 +210,7 @@ class HttpClient extends CoreBase
             }
         }
 
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connection_timeout);
         curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_NOBODY, $head_only ? 1 : 0);
