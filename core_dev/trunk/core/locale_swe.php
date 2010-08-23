@@ -119,6 +119,7 @@ function t_swe($s)
     case 'Modify': return 'Ändra';
     case 'Create': return 'Skapa';
     case 'Update': return 'Uppdatera';
+    case 'Article': return 'Artikel';
     case 'Test': return 'Testa';
     case 'Activate': return 'Aktivera';
     case 'Show': return 'Visa';

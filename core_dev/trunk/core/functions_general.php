@@ -8,7 +8,7 @@
 /**
  * XXX
  */
-function URLadd($_key, $_val = '', $_extra = '')    //FIXME: is this function even required???
+function URLadd_DEPRECATED($_key, $_val = '', $_extra = '')    //FIXME: is this function even required???
 {
     $curr_url = 'http://localhost'.$_SERVER['REQUEST_URI'];
 
@@ -97,9 +97,9 @@ function confirmed($text, $_var = '', $_id = 0)
 
 /**
  * Looks for formatted wiki section commands, like: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
- * used by Wiki.php, class.Blogs.php for special url creation to allow these modules to be embedded in other pages
+ * used by class.Blogs.php for special url creation to allow these modules to be embedded in other pages
  */
-function fetchSpecialParams($allowed_tabs)
+function fetchSpecialParams_DEPRECATED($allowed_tabs)  //XXXX  DELETE, DEPRICATE ETC ETC!!!
 {
     $paramName = '';
     $current_tab = '';

@@ -283,22 +283,41 @@ class XhtmlForm
                 $res .= xhtmlHidden($e['name'], $e['value']);
                 break;
 
-            case 'INPUT':
-                if ($e['str']) {
-                    $res .= '<td>'.$e['str'].'</td>';
-                    $res .= '<td>'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
-                } else {
-                    $res .= '<td colspan="2">'.xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
-                }
-                break;
-
             case 'CHECKBOX':
                 $res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default'], $e['checked']).'</td>';
                 break;
 
+            case 'INPUT':
+                if ($e['str']) {
+                    $res .= '<td>'.$e['str'].'</td><td>';
+                } else {
+                    $res .= '<td colspan="2">';
+                }
+                $res .= xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
+                break;
+
             case 'TEXTAREA':
-                $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
+                if ($e['str']) {
+                    $res .= '<td>'.$e['str'].'</td><td>';
+                } else {
+                    $res .= '<td colspan="2">';
+                }
+                $res .= xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
+                break;
+
+            case 'RICHEDIT':
+                if ($e['str']) {
+                    $res .= '<td>'.$e['str'].'</td><td>';
+                } else {
+                    $res .= '<td colspan="2">';
+                }
+                $res .= xhtmlTextarea($e['name'], $e['default'], 1, 1).'</td>';
+
+                $richedit = new yui_richedit();
+                $richedit->setInputName($e['name']);
+                $richedit->setWidth($e['width']);
+                $richedit->setHeight($e['height']);
+                $res .= $richedit->render();
                 break;
 
             case 'TEXT':
@@ -325,7 +344,6 @@ class XhtmlForm
                 break;
 
             case 'CATEGORY':
-
                 $cat = new CategoryList($e['cat_type']);
                 $cat->setOwner($h->session->id);
 
@@ -380,17 +398,6 @@ class XhtmlForm
                 $res .= $dateselect->render();
 
                 $res .= '</td>';
-                break;
-
-            case 'RICHEDIT':
-                $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlTextarea($e['name'], $e['default'], 1, 1).'</td>';
-
-                $richedit = new yui_richedit();
-                $richedit->setWidth($e['width']);
-                $richedit->setHeight($e['height']);
-                $richedit->setInputName($e['name']);
-                $res .= $richedit->render();
                 break;
 
             case 'CAPTCHA':
