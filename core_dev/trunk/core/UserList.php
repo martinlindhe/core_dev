@@ -97,7 +97,7 @@ class UserList
         return $db->getMappedArray($q);
     }
 
-    function render()  //XXX make a view of this
+    function render()
     {
         $session = SessionHandler::getInstance();
 

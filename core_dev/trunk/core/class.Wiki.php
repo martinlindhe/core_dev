@@ -129,6 +129,52 @@ class Wiki
         $db = SqlHandler::getInstance();
         $session = SessionHandler::getInstance();
 
+        $header = XhtmlHeader::getInstance();
+
+        $header->addCss('
+        .wiki {
+         font-size: 14px;
+        }
+        .wiki_body {
+         padding: 10px;
+         background-color: #F0F0F0;
+         color: #000;
+         border-width: 1px;
+         border-left-style: solid;
+         border-right-style: solid;
+         border-bottom-style: solid;
+         border-top-style: solid;
+        }
+        .wiki_locked {
+         padding: 5px;
+         padding-left: 25px;
+         font-size: 20px;
+         background: #ee99aa url("../../gfx/icon_locked.png") no-repeat;
+         background-position: 5px 50%;
+        }
+        .wiki_menu {
+         font-size: 12px;
+         margin-top: 0;
+         padding-left: 0;
+        }
+        .wiki_menu li {
+         margin-left: 2px;
+         margin-right: 2px;
+         display: inline;
+         border: 1px #000 solid;
+         background-color: #ddd;
+         padding: 4px;
+
+        }
+        .wiki_menu li a {
+         color: #000;
+         text-decoration: none;
+        }
+        .wiki_menu li:hover {
+         background-color: #fff;
+        }');
+
+
         $current_tab = $this->first_tab;
 
         //Looks for formatted wiki section commands: Wiki:Page, WikiEdit:Page, WikiHistory:Page, WikiFiles:Page
@@ -169,14 +215,16 @@ class Wiki
             return;
         }
 
-        $wiki_menu = array(
-        '/wiki/?Wiki:'.$this->name => 'Wiki:'.str_replace('_', ' ', $this->name),
-        '/wiki/?WikiEdit:'.$this->name => t('Edit'),
-        '/wiki/?WikiHistory:'.$this->name => t('History')
-        );
-
         echo '<div class="wiki">';
-        echo xhtmlMenu($wiki_menu, 'wiki_menu');
+
+        $menu = new XhtmlMenu();
+        $menu->setCss('wiki_menu');
+        $menu->add('Wiki:'.str_replace('_', ' ', $this->name), '/wiki/?Wiki:'.$this->name);
+        $menu->add(t('Edit'), '/wiki/?WikiEdit:'.$this->name);
+        $menu->add(t('History'), '/wiki/?WikiHistory:'.$this->name);
+        echo $menu->render();
+
+        //echo xhtmlMenu($wiki_menu, 'wiki_menu');
         echo '<div class="wiki_body">';
 
         //Display the wiki toolbar for admins

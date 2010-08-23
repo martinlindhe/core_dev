@@ -169,50 +169,6 @@ overflow: auto;
 }
 
 
-/* wiki style */
-.wiki {
-    font-size: 14px;
-}
-.wiki_body {
-    padding: 10px;
-    background-color: #F0F0F0;
-    color: #000;
-    border-width: 1px;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-bottom-style: solid;
-    border-top-style: solid;
-}
-.wiki_locked {
-    padding: 5px;
-    padding-left: 25px;
-    font-size: 20px;
-    background: #ee99aa url('../../gfx/icon_locked.png') no-repeat;
-    background-position: 5px 50%;
-}
-.wiki_menu {
-    font-size: 12px;
-    margin-top: 0;
-    padding-left: 0;
-}
-.wiki_menu li {
-    margin-left: 2px;
-    margin-right: 2px;
-    display: inline;
-    border: 1px #000 solid;
-    background-color: #ddd;
-    padding: 4px;
-
-}
-.wiki_menu li a {
-    color: #000;
-    text-decoration: none;
-}
-.wiki_menu li:hover {
-    background-color: #fff;
-}
-
-
 /* default styles for "user settings" list */
 .settings {
     min-width: 300px;
