@@ -12,7 +12,7 @@
 
 //STATUS: wip
 
-//TODO: parse $_GET params into $_params
+//TODO: parse $_GET params into $_params ?
 //TODO: special view for login/logout events
 
 require_once('core.php'); //for is_alphanumeric()
@@ -28,6 +28,8 @@ class RequestHandler
     protected $_child = '';           ///< /controller/view/owner/CHILD/  alphanumeric id
     protected $_params;
     protected $exclude_session = array();
+
+    private function __clone() {}      //singleton: prevent cloning of class
 
     public function getView() { return $this->_view; }
     //public function getParams() { return $this->_params; }
@@ -96,8 +98,6 @@ class RequestHandler
         $this->_params = $res;
 */
     }
-
-    private function __clone() {}      //singleton: prevent cloning of class
 
     /**
      * Creates a instance of requested controller and invokes requested method on that controller

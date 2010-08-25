@@ -195,7 +195,7 @@ function relurl_add($p)
     foreach ($p as $key => $val)
         $u->setParam($key, $val);
 
-    return $u->get();
+    return $u->get(); //XXX dont return full url, add a Url->getRelative() ?
 }
 
 /** Creates "are you sure?" pages */

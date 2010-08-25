@@ -262,29 +262,22 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     /**
      * Selects data
      * Example: SELECT textRow FROM t
+     * SHOW TABLES FROM mysql
      *
      * @param $q is the query to execute
      * @return an 1-dimensional array with a numeric index
      */
     function getNumArray($q)
     {
-        die('fixme update getNumArray');
-        $this->measure_time();
-
-        if (!$result = $this->real_query($q)) {
-            if ($this->getDebug())
-                $this->profileError($q, $this->db_handle->error);
+        if (!$result = $this->real_query($q))
             return array();
-        }
 
         $data = array();
 
         while ($row = $result->fetch_row())
-            $data[] = $row;
+            $data[] = $row[0];
 
         $result->free();
-
-        $this->measure_query($q);
 
         return $data;
     }
