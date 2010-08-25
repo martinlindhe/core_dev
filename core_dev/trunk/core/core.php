@@ -7,12 +7,9 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-//FIXME: get rid of getProjectPath()
-
-require_once('LocaleHandler.php'); //for translations
-require_once('output_xhtml.php');   //for XHTML output helper functions
-require_once('functions_general.php');  //FIXME: anything in there worth keeping?
-require_once('functions_textformat.php');   //for decodeDataSize()
+require_once('LocaleHandler.php');        //for translations
+require_once('output_xhtml.php');         //for XHTML output helper functions
+require_once('functions_textformat.php'); //for decodeDataSize()
 require_once('prop_Timestamp.php');
 require_once('network.php');
 require_once('files.php');
@@ -34,10 +31,12 @@ if (!defined('PHP_VERSION_ID')) {
  */
 function d($v)
 {
+    $cli = php_sapi_name() == 'cli';
+
     if (is_string($v)) {
         //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
 
-        if (php_sapi_name() == 'cli') {
+        if ($cli) {
             var_dump($v);
         } else {
             $out = htmlentities($v, ENT_QUOTES, 'UTF-8');
@@ -58,9 +57,9 @@ function d($v)
         return;
     }
 
-    if (php_sapi_name() != 'cli') echo '<pre>';
+    if (!$cli) echo '<pre>';
     print_r($v);
-    if (php_sapi_name() != 'cli') echo '</pre>';
+    if (!$cli) echo '</pre>';
 }
 
 /**
@@ -68,8 +67,10 @@ function d($v)
  */
 function ds($s)
 {
-    if (php_sapi_name() == 'cli') return $s;
-    else return htmlentities($s);
+    if (php_sapi_name() == 'cli')
+        return $s;
+    else
+        return htmlentities($s);
 }
 
 /**
@@ -91,9 +92,8 @@ function dp($str)
         $str = serialize($str);
 
     error_log($str);
-    if (!empty($config['debug'])) {
+    if (!empty($config['debug']))
         error_log(date('[r] ').$str.PHP_EOL, 3, '/tmp/core_dev.log');
-    }
 }
 
 /**
@@ -237,7 +237,7 @@ function randstr($len)
 /**
  * Checks if a string contains only numbers 0-9
  */
-function numbers_only($s)
+function numbers_only($s) //XXXX FIXME use a regexp
 {
     $ok = array('0','1','2','3','4','5','6','7','8','9');
     for ($i=0; $i<strlen($s); $i++) {
