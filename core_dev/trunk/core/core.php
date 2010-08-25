@@ -296,5 +296,4 @@ function strpre_exact($s, $len, $pad_s = ' ')
     return substr( str_pad($s, $len, $pad_s, STR_PAD_LEFT), -$len);
 }
 
-
 ?>

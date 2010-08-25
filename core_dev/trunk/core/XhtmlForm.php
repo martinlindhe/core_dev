@@ -329,18 +329,27 @@ class XhtmlForm
                 break;
 
             case 'DROPDOWN':
-                $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
+                if ($e['str'])
+                    $res .= '<td>'.$e['str'].'</td><td>';
+                else
+                    $res .= '<td colspan="2">';
+                $res .= xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'RADIO':
-                $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
+                if ($e['str'])
+                    $res .= '<td>'.$e['str'].'</td><td>';
+                else
+                    $res .= '<td colspan="2">';
+                $res .= xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'LISTBOX':
-                $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>'.xhtmlSelectMultiple($e['name'], $e['arr'], $e['default']).'</td>';
+                if ($e['str'])
+                    $res .= '<td>'.$e['str'].'</td><td>';
+                else
+                    $res .= '<td colspan="2">';
+                $res .= xhtmlSelectMultiple($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'SUBMIT':

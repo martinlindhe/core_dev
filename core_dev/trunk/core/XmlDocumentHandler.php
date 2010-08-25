@@ -182,4 +182,33 @@ function relurl($url)
     return $page->getBaseUrl().$url;
 }
 
+/**
+ * Modifies parameters to current request URI
+ * @param $p array of key=>val pairs
+ */
+function relurl_add($p)
+{
+    $page = XmlDocumentHandler::getInstance();
+
+    $u = new Url( $page->getBaseUrl() );
+    $u->setPath($_SERVER['REDIRECT_URL']);
+    foreach ($p as $key => $val)
+        $u->setParam($key, $val);
+
+    return $u->get();
+}
+
+/** Creates "are you sure?" pages */
+function confirmed($text)
+{
+    if (isset($_GET['cd_confirmed']))
+        return true;
+
+    echo $text.'<br/><br/>';
+
+    echo '<a href="'.relurl_add(array('cd_confirmed'=>1)).'">Yes, I am sure</a><br/><br/>';
+    echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
+    return false;
+}
+
 ?>
