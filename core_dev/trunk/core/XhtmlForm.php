@@ -9,6 +9,7 @@
 
 //STATUS: wip
 
+//TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
 //FIXME: dateinterval selection is not auto-filled on next request, see handle()
 
 require_once('client_captcha.php');
@@ -181,9 +182,9 @@ class XhtmlForm
     /**
      * Adds a text string to the form
      */
-    function addText($str)
+    function addText($str, $str2 = '')
     {
-        $this->elems[] = array('type' => 'TEXT', 'str' => $str);
+        $this->elems[] = array('type' => 'TEXT', 'str' => $str, 'str2' => $str2);
     }
 
     /**
@@ -321,7 +322,10 @@ class XhtmlForm
                 break;
 
             case 'TEXT':
-                $res .= '<td colspan="2">'.$e['str'].'</td>';
+                if ($e['str2'])
+                    $res .= '<td>'.$e['str'].'</td><td>'.$e['str2'].'</td>';
+                else
+                    $res .= '<td colspan="2">'.$e['str'].'</td>';
                 break;
 
             case 'DROPDOWN':

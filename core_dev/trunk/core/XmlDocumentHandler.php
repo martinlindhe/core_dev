@@ -167,4 +167,19 @@ class XmlDocumentHandler extends CoreBase
 
 }
 
+/** @param $dst redirects user to destination url relative to website base url */
+function redir($dst)
+{
+    $page = XmlDocumentHandler::getInstance();
+    header('Location: '.$page->getBaseUrl().$dst);
+    die;
+}
+
+/** @param $url partial url to generate a url relative website base */
+function relurl($url)
+{
+    $page = XmlDocumentHandler::getInstance();
+    return $page->getBaseUrl().$url;
+}
+
 ?>
