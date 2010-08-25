@@ -49,10 +49,15 @@ class RequestHandler
 
     private function __construct()
     {
-        $request = $_SERVER['REQUEST_URI'];
+        // REDIRECT_URL holds the (public) url the page was redirected to (when using mod_rewrite), also it dont mangle utf8 in url
+        if (isset($_SERVER['REDIRECT_URL']))
+            $request = $_SERVER['REDIRECT_URL'];
+        else
+            $request = $_SERVER['REQUEST_URI'];
 
         //exclude application root from parsed request
         $page = XmlDocumentHandler::getInstance();
+
         $parsed = parse_url($page->getBaseUrl());
 
         if (substr($request, 0, strlen($parsed['path'])) == $parsed['path'])
@@ -70,14 +75,18 @@ class RequestHandler
             if (count($arr) <= 2)
                 return;
 
-            if (is_alphanumeric($arr[2]))
+            if ($arr[2]) {
+                if (!is_alphanumeric($arr[2]))
+                    die('XXX owner');
                 $this->_owner = $arr[2];
+            }
 
-            if (isset($arr[3]) && is_alphanumeric($arr[3]))
+            if (!empty($arr[3])) {
+                if (!is_alphanumeric($arr[3]))
+                    die('XXX child');
                 $this->_child = $arr[3];
+            }
         }
-
-//XXX if controller or view contains non-alphanumeric letters, DIE here!
 
 /*
         //XXX FIXME parse params properly

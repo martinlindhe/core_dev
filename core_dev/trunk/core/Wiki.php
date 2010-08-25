@@ -9,8 +9,6 @@ require_once('atom_revisions.php');
 
 //STATUS: wip - mostly working
 
-//TODO: handle utf8 chars in wiki articles by allowing it in view->owenr
-
 //TODO: reimplement locking
 //TODO: reimplement file attachments
 
