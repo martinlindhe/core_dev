@@ -22,4 +22,7 @@ if (!is_alphanumeric('a_2'))       echo "FAIL 11\n"; // _ is ok
 if (!is_alphanumeric('2öäåaÄÄÖÅ')) echo "FAIL 12\n"; // utf8 is ok
 if (!is_alphanumeric('日本語'))     echo "FAIL 13\n"; // utf8 is ok
 if (!is_alphanumeric('한국어'))      echo "FAIL 14\n"; // utf8 is ok
+if (!is_alphanumeric('لقمة'))      echo "FAIL 15\n"; // utf8 is ok
+
+
 ?>
