@@ -76,6 +76,7 @@ class Wiki
     private function load($name)
     {
         if (!$name) return false;
+        $this->name = $name;
 
         $db = SqlHandler::getInstance();
 
@@ -85,7 +86,6 @@ class Wiki
         $data = $db->getOneRow($q);
         if (!$data) return false;
 
-        $this->name       = $data['wikiName'];
         $this->id         = $data['wikiId'];
         $this->text       = $data['msg'];
         $this->editorId   = $data['createdBy'];   // XXX rename tblWiki.createdBy to .editorId
@@ -118,7 +118,7 @@ class Wiki
         if (empty($this->text)) {
             $res = t('The wiki').' "'.$this->name.'" '.t('does not yet exist').'!<br/>';
             if ($session->id && $session->isWebmaster)
-                $res .= coreButton('Create', '?WikiEdit:'.$this->name);
+                $res .= coreButton('Create', relurl('wiki/edit/'.$this->name));
 
             return $res;
         }
@@ -197,11 +197,9 @@ class Wiki
 
             $q = 'SELECT * FROM tblWiki WHERE wikiName="'.$db->escape($name).'"';
             $data = $db->getOneRow($q);
-            if (!$data)
-                return false;
 
             //abort if we are trying to save a exact copy as the last one
-            if ($data['msg'] == $text)
+            if ($data && $data['msg'] == $text)
                 return false;
 
             if (!empty($data) && $data['wikiId']) {
@@ -235,6 +233,7 @@ class Wiki
 */
         $form = new XhtmlForm('wiki_edit');
         $form->addHidden('wiki_name', $this->name); ///XXXX ugly hack
+        $form->addText('Edit wiki article '.$this->name);
 /*
         if ($this->lockerId)
             echo '<div class="wiki_locked">This article is currently locked from editing.</div>';
