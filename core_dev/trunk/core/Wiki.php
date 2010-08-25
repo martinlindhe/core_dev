@@ -88,9 +88,9 @@ class Wiki
 
         $this->id         = $data['wikiId'];
         $this->text       = $data['msg'];
-        $this->editorId   = $data['createdBy'];   // XXX rename tblWiki.createdBy to .editorId
-        $this->lockerId   = $data['lockedBy'];    // XXX rename to lockerId
-        $this->timestamp  = $data['timeCreated']; // XXX rename to timestamp
+        $this->editorId   = $data['editorId'];
+        $this->lockerId   = $data['lockerId'];
+        $this->timestamp  = $data['timeSaved'];
         $this->timeLocked = $data['timeLocked'];
         return true;
     }
@@ -155,12 +155,12 @@ class Wiki
 
 /*
         if ($session->isAdmin && !empty($_GET['wikilock'])) {
-            $q = 'UPDATE tblWiki SET lockedBy='.$session->id.',timeLocked=NOW() WHERE wikiId='.$this->id;
+            $q = 'UPDATE tblWiki SET lockerId='.$session->id.',timeLocked=NOW() WHERE wikiId='.$this->id;
             $db->update($q);
             $this->lockerId = $session->id;
             addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
         } else if ($session->isAdmin && isset($_GET['wikilock'])) {
-            $q = 'UPDATE tblWiki SET lockedBy=0 WHERE wikiId='.$this->id;
+            $q = 'UPDATE tblWiki SET lockerId=0 WHERE wikiId='.$this->id;
             $db->update($q);
             $this->lockerId = 0;
             addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
@@ -203,13 +203,13 @@ class Wiki
                 return false;
 
             if (!empty($data) && $data['wikiId']) {
-                addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeCreated'], $data['createdBy'], REV_CAT_TEXT_CHANGED);
+                addRevision(REVISIONS_WIKI, $data['wikiId'], $data['msg'], $data['timeSaved'], $data['editorId'], REV_CAT_TEXT_CHANGED);
 
-                $q = 'UPDATE tblWiki SET msg="'.$db->escape($p['text']).'",createdBy='.$session->id.',revision=revision+1,timeCreated=NOW() WHERE wikiName="'.$db->escape($name).'"';
+                $q = 'UPDATE tblWiki SET msg="'.$db->escape($p['text']).'",editorId='.$session->id.',revision=revision+1,timeSaved=NOW() WHERE wikiName="'.$db->escape($name).'"';
                 $db->update($q);
                 return true;
             }
-            $q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($name).'",msg="'.$db->escape($p['text']).'",createdBy='.$session->id.',revision=1,timeCreated=NOW()';
+            $q = 'INSERT INTO tblWiki SET wikiName="'.$db->escape($name).'",msg="'.$db->escape($p['text']).'",editorId='.$session->id.',revision=1,timeSaved=NOW()';
             $db->insert($q);
             return true;
         }
