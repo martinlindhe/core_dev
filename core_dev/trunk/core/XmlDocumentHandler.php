@@ -198,6 +198,11 @@ function relurl_add($p)
     return $u->get(); //XXX dont return full url, add a Url->getRelative() ?
 }
 
+function ahref($url, $title)
+{
+    return '<a href="'.relurl($url).'">'.$title.'</a>';
+}
+
 /** Creates "are you sure?" pages */
 function confirmed($text)
 {
