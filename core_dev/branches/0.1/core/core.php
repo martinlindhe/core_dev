@@ -9,11 +9,11 @@
  */
 
 //Include required core_dev files:
-require_once('locale.php');	//for translations
-require_once('output_xhtml.php');	//for XHTML output helper functions
-require_once('functions_defaults.php');	//default appearance such as time display
-require_once('functions_general.php');	//FIXME: anything in there worth keeping?
-require_once('functions_textformat.php');	//for decodeDataSize()
+require_once('locale.php'); //for translations
+require_once('output_xhtml.php');   //for XHTML output helper functions
+require_once('functions_defaults.php'); //default appearance such as time display
+require_once('functions_general.php');  //FIXME: anything in there worth keeping?
+require_once('functions_textformat.php');   //for decodeDataSize()
 
 require_once('atom_ip.php'); //included here for compatiblity: it is renamed to network.php in TRUNK and always available
 
@@ -25,18 +25,18 @@ require_once('atom_ip.php'); //included here for compatiblity: it is renamed to 
  */
 function d($v)
 {
-	if (is_string($v)) {
-		if (php_sapi_name() == 'cli') echo $v;
-		else echo htmlentities($v);
-	}
-	else {
-		if (extension_loaded('xdebug')) var_dump($v);	//xdebug's var_dump is awesome
-		else {
-			echo '<pre>';
-			print_r($v);
-			echo '</pre>';
-		}
-	}
+    if (is_string($v)) {
+        if (php_sapi_name() == 'cli') echo $v;
+        else echo htmlentities($v);
+    }
+    else {
+        if (extension_loaded('xdebug')) var_dump($v);   //xdebug's var_dump is awesome
+        else {
+            echo '<pre>';
+            print_r($v);
+            echo '</pre>';
+        }
+    }
 }
 
 /**
@@ -44,15 +44,15 @@ function d($v)
  */
 function dp($str)
 {
-	global $config;
+    global $config;
 
-	if (is_array($str))
-		$str = serialize($str);
+    if (is_array($str))
+        $str = serialize($str);
 
-	error_log($str);
-	if (!empty($config['debug'])) {
-		error_log(date('[r] ').$str."\n", 3, '/tmp/core_dev.log');
-	}
+    error_log($str);
+    if (!empty($config['debug'])) {
+        error_log(date('[r] ').$str."\n", 3, '/tmp/core_dev.log');
+    }
 }
 
 /**
@@ -60,34 +60,34 @@ function dp($str)
  */
 function dh($m)
 {
-	echo "[[dumping ".strlen($m)." bytes]]\n";
-	$j = 0;
-	$bytes = '';
-	$hex = '';
+    echo "[[dumping ".strlen($m)." bytes]]\n";
+    $j = 0;
+    $bytes = '';
+    $hex = '';
 
-	for ($i=0; $i<strlen($m); $i++) {
-		$x = substr($m, $i, 1);
-		if (ord($x) > 30) {
-			$bytes .= $x;
-		} else {
-			$bytes .= '.';
-		}
-		$hex .= bin2hex($x).' ';
+    for ($i=0; $i<strlen($m); $i++) {
+        $x = substr($m, $i, 1);
+        if (ord($x) > 30) {
+            $bytes .= $x;
+        } else {
+            $bytes .= '.';
+        }
+        $hex .= bin2hex($x).' ';
 
-		$j++;
-		if ($j == 15) {
-			$j = 0;
-			echo "$hex $bytes\n";
-			$bytes = '';
-			$hex = '';
-		}
-	}
+        $j++;
+        if ($j == 15) {
+            $j = 0;
+            echo "$hex $bytes\n";
+            $bytes = '';
+            $hex = '';
+        }
+    }
 
-	if ($j) {
-		echo $hex." ";
-		echo str_repeat(' ', (15-strlen($bytes))*3 );
-		echo "$bytes\n";
-	}
+    if ($j) {
+        echo $hex." ";
+        echo str_repeat(' ', (15-strlen($bytes))*3 );
+        echo "$bytes\n";
+    }
 }
 
 /**
@@ -95,30 +95,30 @@ function dh($m)
  */
 function dm($db = '')
 {
-	$limit = decodeDataSize(ini_get('memory_limit'));
+    $limit = decodeDataSize(ini_get('memory_limit'));
 
-	require_once('functions_textformat.php');	//for formatDataSize()
-	echo "[Memory usage]\n";
-	echo "Limit  : ".formatDataSize($limit)."\n";
-	echo "Current: ".formatDataSize(memory_get_usage(true))." (".round(memory_get_usage(true) / $limit * 100, 2)." %)\n";
-	echo "Peak   : ".formatDataSize(memory_get_peak_usage(true))." (".round(memory_get_peak_usage(true) / $limit * 100, 2)." %)\n\n";
+    require_once('functions_textformat.php');   //for formatDataSize()
+    echo "[Memory usage]\n";
+    echo "Limit  : ".formatDataSize($limit)."\n";
+    echo "Current: ".formatDataSize(memory_get_usage(true))." (".round(memory_get_usage(true) / $limit * 100, 2)." %)\n";
+    echo "Peak   : ".formatDataSize(memory_get_peak_usage(true))." (".round(memory_get_peak_usage(true) / $limit * 100, 2)." %)\n\n";
 
-	echo "[emalloc memory report]\n";
-	echo "Current: ".formatDataSize(memory_get_usage(false))." (".round(memory_get_usage(false) / $limit * 100, 2)." %)\n";
-	echo "Peak   : ".formatDataSize(memory_get_peak_usage(false))." (".round(memory_get_peak_usage(false) / $limit * 100, 2)." %)\n\n";
+    echo "[emalloc memory report]\n";
+    echo "Current: ".formatDataSize(memory_get_usage(false))." (".round(memory_get_usage(false) / $limit * 100, 2)." %)\n";
+    echo "Peak   : ".formatDataSize(memory_get_peak_usage(false))." (".round(memory_get_peak_usage(false) / $limit * 100, 2)." %)\n\n";
 
-	if (extension_loaded('xdebug')) {
-		echo "[Xdebug Memory report]\n";
-		echo "Current: ".formatDataSize(xdebug_memory_usage())." (".round(xdebug_memory_usage() / $limit * 100, 2)." %)\n";
-		echo "Peak   : ".formatDataSize(xdebug_peak_memory_usage())." (".round(xdebug_peak_memory_usage() / $limit * 100, 2)." %)\n\n";
-	}
+    if (extension_loaded('xdebug')) {
+        echo "[Xdebug Memory report]\n";
+        echo "Current: ".formatDataSize(xdebug_memory_usage())." (".round(xdebug_memory_usage() / $limit * 100, 2)." %)\n";
+        echo "Peak   : ".formatDataSize(xdebug_peak_memory_usage())." (".round(xdebug_peak_memory_usage() / $limit * 100, 2)." %)\n\n";
+    }
 
-	if ($db) {
-		echo "[DB driver memory usage]\n";
-		echo "Query history: ".sizeof($db->queries)."\n";	//XXX how to get actual size of the array?
-	}
+    if ($db) {
+        echo "[DB driver memory usage]\n";
+        echo "Query history: ".sizeof($db->queries)."\n";   //XXX how to get actual size of the array?
+    }
 
-	echo "---\n";
+    echo "---\n";
 }
 
 /**
@@ -128,8 +128,8 @@ function dm($db = '')
  */
 function require_core($file)
 {
-	global $config;
-	require_once($config['core']['fs_root'].'core/'.$file);
+    global $config;
+    require_once($config['core']['fs_root'].'core/'.$file);
 }
 
 /**
@@ -137,13 +137,13 @@ function require_core($file)
  */
 function loadPlugins()
 {
-	global $config;
+    global $config;
 
-	if (empty($config['plugins'])) return;
+    if (empty($config['plugins'])) return;
 
-	foreach ($config['plugins'] as $plugin) {
-		require_once($config['core']['fs_root'].'plugins/'.$plugin.'/plugin.php');
-	}
+    foreach ($config['plugins'] as $plugin) {
+        require_once($config['core']['fs_root'].'plugins/'.$plugin.'/plugin.php');
+    }
 }
 
 /**
@@ -154,42 +154,42 @@ function loadPlugins()
  */
 function exectime($c, &$retval = 0)
 {
-	//XXX: Use 2>&1 in $c to redirect stderr to $output buffer
-	$output = array();
-	$exec_start = microtime(true);
-	exec($c, $output, &$retval);
+    //XXX: Use 2>&1 in $c to redirect stderr to $output buffer
+    $output = array();
+    $exec_start = microtime(true);
+    exec($c, $output, &$retval);
 
-	return microtime(true) - $exec_start;
+    return microtime(true) - $exec_start;
 }
 
 /**
  * Returns the project's path as a "project name" identifier. in a webroot hierarchy if scripts are
  * run from the / path it will return nothing, else the directory name of the directory script are run from
  */
-function getProjectPath($_amp = 1)	//FIXME: get rid of this function
+function getProjectPath($_amp = 1)  //FIXME: get rid of this function
 {
-	global $config;
+    global $config;
 
-	if ($_amp == 3) return $config['app']['web_root'];
+    if ($_amp == 3) return $config['app']['web_root'];
 
-	if (!empty($_GET['pr'])) {
-		$proj_name = basename(strip_tags($_GET['pr']));
-	} else {
-		$project_path = dirname($_SERVER['SCRIPT_NAME']);
-		$pos = strrpos($project_path, '/');
-		$proj_name = substr($project_path, $pos+1);
-	}
+    if (!empty($_GET['pr'])) {
+        $proj_name = basename(strip_tags($_GET['pr']));
+    } else {
+        $project_path = dirname($_SERVER['SCRIPT_NAME']);
+        $pos = strrpos($project_path, '/');
+        $proj_name = substr($project_path, $pos+1);
+    }
 
-	if ($proj_name == 'admin') $proj_name = '';
+    if ($proj_name == 'admin') $proj_name = '';
 
-	if ($proj_name) {
-		switch ($_amp) {
-			case 0: return '?pr='.$proj_name;
-			case 1: return '&amp;pr='.$proj_name;
-			case 2: return '&pr='.$proj_name;
-		}
-	}
-	return '';
+    if ($proj_name) {
+        switch ($_amp) {
+            case 0: return '?pr='.$proj_name;
+            case 1: return '&amp;pr='.$proj_name;
+            case 2: return '&pr='.$proj_name;
+        }
+    }
+    return '';
 }
 
 /**
@@ -198,7 +198,7 @@ function getProjectPath($_amp = 1)	//FIXME: get rid of this function
  */
 function now()
 {
-	return strftime('%Y-%m-%d %H:%M:%S');
+    return strftime('%Y-%m-%d %H:%M:%S');
 }
 
 /**
@@ -208,7 +208,7 @@ function now()
  */
 function sql_datetime($timestamp)
 {
-	return date('Y-m-d H:i:s', $timestamp);
+    return date('Y-m-d H:i:s', $timestamp);
 }
 
 /**
@@ -218,7 +218,7 @@ function sql_datetime($timestamp)
  */
 function datetime_to_timestamp($datetime)
 {
-	return strtotime($datetime);
+    return strtotime($datetime);
 }
 
 /**
@@ -229,8 +229,8 @@ function datetime_to_timestamp($datetime)
  */
 function datetime_less($d1, $d2)
 {
-	if (strtotime($d1) < strtotime($d2)) return true;
-	return false;
+    if (strtotime($d1) < strtotime($d2)) return true;
+    return false;
 }
 
 /**
@@ -244,9 +244,9 @@ function datetime_less($d1, $d2)
  */
 function goLoc($url)
 {
-	echo '<script type="text/javascript">';
-	echo 'document.location.href = "'.$url.'";';
-	echo '</script>';
+    echo '<script type="text/javascript">';
+    echo 'document.location.href = "'.$url.'";';
+    echo '</script>';
 }
 
 /**
@@ -254,18 +254,18 @@ function goLoc($url)
  */
 function randstr($len)
 {
-	$res = '';
-	for ($i=0; $i<$len; $i++) {
-		$rnd = mt_rand(0, 61);
-		if ($rnd < 10) {
-			$res .= chr($rnd+48);
-		} else if ($rnd < 36) {
-			$res .= chr($rnd+55);
-		} else {
-			$res .= chr($rnd+61);
-		}
-	}
-	return $res;
+    $res = '';
+    for ($i=0; $i<$len; $i++) {
+        $rnd = mt_rand(0, 61);
+        if ($rnd < 10) {
+            $res .= chr($rnd+48);
+        } else if ($rnd < 36) {
+            $res .= chr($rnd+55);
+        } else {
+            $res .= chr($rnd+61);
+        }
+    }
+    return $res;
 }
 
 /**
@@ -273,13 +273,28 @@ function randstr($len)
  */
 function numbers_only($s)
 {
-	$ok = array('0','1','2','3','4','5','6','7','8','9');
-	for ($i=0; $i<strlen($s); $i++) {
-		$c = substr($s, $i, 1);
-		if (!in_array($c, $ok)) return false;
-	}
+    $ok = array('0','1','2','3','4','5','6','7','8','9');
+    for ($i=0; $i<strlen($s); $i++) {
+        $c = substr($s, $i, 1);
+        if (!in_array($c, $ok)) return false;
+    }
 
-	return true;
+    return true;
 }
 
+/**
+ * Rounds a number to exactly $precision number of decimals, padding with zeros if nessecary
+ */
+function round_decimals($val, $precision = 0, $separator = '.', $combinator = '.')
+{
+    $ex = explode($separator, round($val, $precision));
+
+    if (empty($ex[1]) || strlen($ex[1]) < $precision)
+        $ex[1] = str_pad(@$ex[1], $precision, '0');
+
+    if (!$precision)
+        return $ex[0];
+
+    return implode($combinator, $ex);
+}
 ?>
