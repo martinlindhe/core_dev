@@ -100,6 +100,8 @@ class Cache extends CoreBase
         if (!$this->connect())
             return false;
 
+        $key = str_replace(' ', '_', $key);
+
         $val = $this->handle->get($key);
 
         if ($this->getDebug()) {
@@ -114,11 +116,13 @@ class Cache extends CoreBase
         if (strlen($key) > 250)
             throw new Exception ('Key length too long');
 
-        if (!$val)
-            return $this->delete($key);
-
         if (!$this->connect())
             return false;
+
+        $key = str_replace(' ', '_', $key);
+
+        if (!$val)
+            return $this->delete($key);
 
         if ($this->driver == 'memcache') {
             //XXX HACK force quiet bogus warnings from memcache in 2009
@@ -138,6 +142,8 @@ class Cache extends CoreBase
 
         if (!$this->connect())
             return false;
+
+        $key = str_replace(' ', '_', $key);
 
         $ret = $this->handle->delete($key);
         if ($this->getDebug()) echo "CACHE DELETE ".$key.ln();

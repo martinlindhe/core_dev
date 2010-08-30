@@ -16,12 +16,25 @@
 
 //STATUS: ok
 
+require_once('Cache.php');
+
 class VideoHash
 {
+    /**
+     * @return 16-character string
+     */
     static function Calc($file)
     {
         if (!file_exists($file))
             return false;
+
+        $hash_cache = new Cache();
+        $hash_cache->setCacheTime(60*60*24*7); //7 days
+        $hash = $hash_cache->get('videohash/'.$file);
+        if ($hash) {
+            //echo "CACHE: REUSING VIDEO HASH ".$hash."\n";
+            return $hash;
+        }
 
         $handle = fopen($file, 'rb');
         $fsize = filesize($file);
@@ -43,7 +56,11 @@ class VideoHash
 
         fclose($handle);
 
-        return sprintf("%04x%04x%04x%04x", $hash[3], $hash[2], $hash[1], $hash[0]);
+        $res = sprintf("%04x%04x%04x%04x", $hash[3], $hash[2], $hash[1], $hash[0]);
+
+        //echo "CALCULATED HASH ".$res." for ".$file."\n";
+        $hash_cache->set('videohash/'.$file, $res);
+        return $res;
     }
 
     private static function AddUINT64($a, $handle)
