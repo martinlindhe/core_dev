@@ -20,7 +20,8 @@ WWW-Authenticate: NTLM
 */
 
 //FIXME NTLM login to IIS server does a redirect and header is not parsed properly afterwards
-//FIXME "301 moved permanently" doesnt properly re-parse the subsequent request, which curl does automatically. see $max_redirects
+//FIXME "301 moved permanently" doesnt properly re-parse the subsequent request,
+//      which curl does automatically. see $max_redirects
 
 require_once('core.php');
 require_once('network.php');

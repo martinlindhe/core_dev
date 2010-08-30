@@ -108,8 +108,9 @@ function dir_get_tree($outerDir)
  * @param $filter_ext array of extensions including dot, example: array(".avi", ".mkv")
  * @param $prefix require prefix in filenames
  * @param $full_path true to return full paths in matches
+ * @param $include_dirs should we return directories?
  */
-function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_path = false)
+function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_path = false, $include_dirs = true)
 {
     $e = scandir($path);
 
@@ -119,16 +120,48 @@ function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_
         if ($name == '.' || $name == '..')
             continue;
 
+        if (!$include_dirs && is_dir($path.'/'.$name))
+            continue;
+
         if ($prefix && strpos($name, $prefix) !== 0)
             continue;
 
         $suffix = file_suffix($name);
 
         if (!$filter_ext || in_array($suffix, $filter_ext))
-            $out[] = ($full_path ? $path.$name : $name);
+            $out[] = ($full_path ? $path.'/'.$name : $name);
     }
 
     return $out;
+}
+
+/**
+ * Expands a input argument to a file of lists matching certain extensions
+ * @param $in input argument
+ * @param $filter_ext array of extensions including dot, example: array(".avi", ".mkv")
+ * @return array with filenames
+ */
+function expand_arg_files($in, $filter_ext = array() )
+{
+    if (is_file($in)) {
+        if ($filter_ext)
+            throw new Exception ('XXX respect $ext');
+
+        //XXX: expand to full path
+        return array($in);
+    }
+
+    if (is_dir($in))
+        return dir_get_by_extension($in, $filter_ext, '', true, false);
+
+    if (strpos($in, "\n") !== false) {
+        if ($filter_ext)
+            throw new Exception ('XXX respect $ext');
+
+        return explode("\n", trim($in)); // newline-separated list of filenames with full path
+    }
+
+    throw new Exception ('Unknown input');
 }
 
 ?>
