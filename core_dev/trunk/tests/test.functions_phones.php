@@ -4,6 +4,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('functions_phones.php');
 
-if (!ValidMobilNr('46737308872')) echo "FAIL 1\n";
-if (!ValidMobilNr('0737308872')) echo "FAIL 2\n";
+
+if (formatMSID('0707308763', '46') != '46707308763') echo "FAIL 1\n";
+
 ?>

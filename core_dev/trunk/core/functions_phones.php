@@ -514,47 +514,6 @@ $area_code[46][980] = 'Kiruna';
 $area_code[46][981] = 'Vittangi';
 
 /**
- * Returns textual representation of country code
- * @param $cc E.164 country code
- */
-function E164cc($cc)
-{
-    global $e164_cc;
-
-    if (!empty($e164_cc[$cc])) return '+'.$cc.' ('. $e164_cc[$cc].')';
-    return $cc;
-}
-
-/**
- * XXX
- */
-function prettyAnr($country, $anr)
-{
-    global $e164_cc, $area_code;
-
-    if ($country == 'SIP') return 'SIP:'.$anr;
-
-    $parsed_anr = parseAnr($country.$anr);
-
-    $out = '+'.$parsed_anr['country'];
-    if ($parsed_anr['area_code']) $out .= '-'.$parsed_anr['area_code'];
-    $out .= '-'.$parsed_anr['anr'];
-
-    $suff = '';
-
-    if (!empty($e164_cc[$parsed_anr['country']])) {
-        $suff = ' ('. $e164_cc[$parsed_anr['country']];
-        if ($parsed_anr['area_code']) {
-            $suff .= ', '.$area_code[$parsed_anr['country']][$parsed_anr['area_code']];
-        } else {
-            $suff .= ', UNKNOWN AREA';
-        }
-        $suff .= ')';
-    }
-    return $out.$suff;
-}
-
-/**
  * Returns input phone number in MSID format
  * Defaults to swedish (+46) in case of missing country code
  *
@@ -566,12 +525,21 @@ function formatMSID($anr, $cc = '46')
 {
     $anr = cleanupAnr($anr);
 
-    if (substr($anr, 0, 1) == '0') {
-        //Swedish numer without country code
+    // numer without country code
+    if (substr($anr, 0, 1) == '0')
         $anr = $cc.substr($anr, 1);
-    }
 
     return $anr;
+}
+
+/**
+ * Takes a text string representing a phone number
+ * as input and returns it in a common format
+ */
+function cleanupAnr($anr)
+{
+    $anr = str_replace(array("\t", ' ', '-', '+'), '', $anr);
+    return trim($anr);
 }
 
 /**
@@ -586,24 +554,7 @@ function parseAnr($anr)
 {
     global $e164_cc;
 
-    $anr = cleanupAnr($anr);
-
-    if (!is_numeric($anr)) {
-        //SIP user address
-        //FIXME users could perform call spoofing if we allow numerical usernames from sip callers
-        $res['country'] = 'SIP';
-        $res['anr'] = $anr;
-        $res['area_code'] = '';
-        return $res;
-    }
-
-    if (substr($anr, 0, 1) == '0') {
-        //Swedish numer without country code
-        $res['country'] = '46';
-        $res['anr'] = substr($anr, 1);
-        $res['area_code'] = parseAreaCode($res['country'], $res['anr']);
-        return $res;
-    }
+    $anr = formatMSID($anr);
 
     if (substr($anr, 0, 1) == '1') {
         //US, Canada
@@ -675,46 +626,6 @@ function parseAreaCode($country, &$anr)
     }
     echo "parseAreaCode() ERROR: invalid area code for ".$country." - ".$anr."!\n";
     return '';
-}
-
-/**
- * Takes a text string representing a phone number
- * as input and returns it in a common format
- */
-function cleanupAnr($anr)
-{
-    $anr = trim($anr);
-    $anr = str_replace("\t", '', $anr);
-    $anr = str_replace(' ', '', $anr);
-    $anr = str_replace('-', '', $anr);
-    $anr = str_replace('+', '', $anr);
-    return $anr;
-}
-
-/**
- * Returns true if $_mobil is a valid swedish cellphone number
- */
-function ValidMobilNr($_mobil)    //XXX cleanup, rename etc
-{
-    $_mobil = str_replace('-', '', $_mobil);
-    $_mobil = str_replace(' ', '', $_mobil);
-
-    if (substr($_mobil, 0, 2) == '46')
-        $_mobil = '0'.substr($_mobil, 2);
-
-    $prefix = substr($_mobil, 0, 3);
-    $number = substr($_mobil, 3);
-
-    switch ($prefix) {
-        case '070':
-        case '072':
-        case '073':
-        case '075':
-        case '076':
-            return true;
-    }
-
-    return false;
 }
 
 ?>
