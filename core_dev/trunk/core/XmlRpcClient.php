@@ -11,7 +11,7 @@
 
 require_once('HttpClient.php');
 
-class ClientXmlRpc extends HttpClient
+class XmlRpcClient extends HttpClient
 {
     protected $rpc_url;
     protected $user_agent = 'core_dev XML-RPC client 1.0';
@@ -19,7 +19,7 @@ class ClientXmlRpc extends HttpClient
     function __construct()
     {
         if (!function_exists('xmlrpc_server_create'))
-            throw new Exception ('ClientXmlRpc FAIL: php5-xmlrpc not found');
+            throw new Exception ('XmlRpcClient FAIL: php5-xmlrpc not found');
     }
 
     function setRpcUrl($s)

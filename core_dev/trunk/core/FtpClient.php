@@ -33,14 +33,15 @@ class FtpClient extends CoreBase
     private $curl     = false; ///< curl handle
     private $timeout  = 30;    ///< timeout in seconds before giving up each command
 
-    function __construct($address = '')
+    function __construct($url = '')
     {
         if (!function_exists('curl_init')) {
             echo "ERROR: php5-curl missing".ln();
             return false;
         }
 
-        $this->setAddress($address);
+        if ($url)
+            $this->setAddress($url);
     }
 
     function __destruct()
@@ -61,14 +62,14 @@ class FtpClient extends CoreBase
     function setTimeout($n) { if (is_numeric($n)) $this->timeout = $n; }
 
     /**
-     * @param $address "ftp://user:pwd@host:port/"
+     * @param $url "ftp://user:pwd@host:port/"
      */
-    function setAddress($address)
+    function setAddress($url) //XXX rename method
     {
-        if (!$address)
-            return false;
+        if (!$url)
+            throw new Exception ('setAddress called with empty parameter');
 
-        $p = parse_url($address);
+        $p = parse_url($url);
         if (!$p)
             return false;
 
