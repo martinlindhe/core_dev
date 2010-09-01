@@ -21,6 +21,8 @@
 
 //XXX: see curl_multi_exec() for performing multiple operations
 
+require_once('class.CoreBase.php');
+
 class FtpClient extends CoreBase
 {
     private $scheme, $host;
@@ -46,7 +48,49 @@ class FtpClient extends CoreBase
         $this->close();
     }
 
+    function getPath() { return $this->path; }
+
+    /**
+     * Returns a string representing the current server URL
+     */
+    function getUrl()
+    {
+        return $this->scheme.'://'.urlencode($this->username).':'.urlencode($this->password).'@'.$this->host.':'.$this->port.$this->path;
+    }
+
     function setTimeout($n) { if (is_numeric($n)) $this->timeout = $n; }
+
+    /**
+     * @param $address "ftp://user:pwd@host:port/"
+     */
+    function setAddress($address)
+    {
+        if (!$address)
+            return false;
+
+        $p = parse_url($address);
+        if (!$p)
+            return false;
+
+        $this->scheme = $p['scheme'];
+        $this->host   = $p['host'];
+
+        if (!empty($p['port'])) $this->port = $p['port'];
+        if (!empty($p['path'])) $this->setPath($p['path']);
+
+        if (!empty($p['user'])) $this->username = $p['user'];
+        if (!empty($p['pass'])) $this->password = $p['pass'];
+        return true;
+    }
+
+    function setPath($remote_path)
+    {
+        //XXX: verify if remote path exists!
+        if (substr($remote_path, 0, 1) == '/')
+            $this->path = $remote_path;
+        else
+            $this->path = '/'.$remote_path;
+    }
 
     /**
      * Connects to the ftp server
@@ -96,44 +140,6 @@ class FtpClient extends CoreBase
         curl_close($this->curl);
         $this->curl = false;
     }
-
-    /**
-     * Returns a string representing the current server URL
-     */
-    function getUrl()
-    {
-        return $this->scheme.'://'.urlencode($this->username).':'.urlencode($this->password).'@'.$this->host.':'.$this->port.$this->path;
-    }
-
-    /**
-     * @param $address "ftp://user:pwd@host:port/"
-     */
-    function setAddress($address)
-    {
-        $p = parse_url($address);
-        if (!$p) return false;
-
-        $this->scheme = $p['scheme'];
-        $this->host   = $p['host'];
-
-        if (!empty($p['port'])) $this->port = $p['port'];
-        if (!empty($p['path'])) $this->setPath($p['path']);
-
-        if (!empty($p['user'])) $this->username = $p['user'];
-        if (!empty($p['pass'])) $this->password = $p['pass'];
-        return true;
-    }
-
-    function setPath($remote_path)
-    {
-        //XXX: verify if remote path exists!
-        if (substr($remote_path, 0, 1) == '/')
-            $this->path = $remote_path;
-        else
-            $this->path = '/'.$remote_path;
-    }
-
-    function getPath() { return $this->path; }
 
     /**
      * Get a file from a FTP server
