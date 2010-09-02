@@ -554,6 +554,9 @@ function parseAnr($anr)
 {
     global $e164_cc;
 
+    if (!$anr)
+        return '';
+
     $anr = formatMSID($anr);
 
     if (substr($anr, 0, 1) == '1') {
