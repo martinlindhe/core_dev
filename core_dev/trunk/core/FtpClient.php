@@ -168,7 +168,8 @@ class FtpClient extends CoreBase
         fclose($fp);
 
         if (curl_errno($this->curl)) {
-            $this->setError( curl_error($this->curl) );
+            //$this->setError( curl_error($this->curl) );
+            throw new Exception ('curl error "'.curl_error($this->curl).'" while reading '.$remote_file ); //XXX use ErrorHandler ?
 
             if (!filesize($local_file))
                 unlink($local_file);
