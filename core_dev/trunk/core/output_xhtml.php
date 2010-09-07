@@ -339,6 +339,18 @@ function coreButton($name, $link = '', $title = '')
     return $out;
 }
 
+function countryFlag($code)
+{
+    $locale = LocaleHandler::getInstance();
+    $header = XhtmlHeader::getInstance();
+
+    $title = $locale->getCountryName($code);
+    if (!$title)
+        throw new Exception ('unhandled country flag code '.$code);
+
+    return '<img src="'.$header->getCoreDevRoot().'gfx/flags/'.$code.'.png" alt="'.$title.'" title="'.$title.'"/>';
+}
+
 /**
  * Implements a OpenSearch compatible search engine
  *
