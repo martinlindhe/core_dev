@@ -72,7 +72,7 @@ class SsnSwedish
             $ssn = substr($ssn, 2);
 
         if (strlen($ssn) != 10 || !is_numeric($ssn))
-            return false;
+            throw new Exception ('SsnSwedish set to invalid ssn: '.$ssn);
 
         $this->valid = false;
         $this->ssn   = $ssn;
