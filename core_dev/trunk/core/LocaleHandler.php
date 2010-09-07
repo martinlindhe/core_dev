@@ -61,21 +61,20 @@ class LocaleHandler
 
     function formatCurrency($n) { return $this->handle->formatCurrency($n); }
 
-    /**
-     * @param $n month number (1-12)
-     */
+    /** @param $n month number (1-12) */
     function getMonthLong($n) { return $this->handle->month_long[$n-1]; }
     function getMonthsLong() { return $this->handle->month_long; }
     function getMonthShort($n) { return $this->handle->month_short[$n-1]; }
     function getMonthsShort() { return $this->handle->month_short; }
 
-    /**
-     * @param $n weekday number (0-6), 0=sunday, 1=monday
-     */
+    /** @param $n weekday number (0-6), 0=sunday, 1=monday */
     function getWeekdayLong($n) { return $this->handle->weekday_long[$n]; }
     function getWeekdayMedium($n) { return $this->handle->weekday_medium[$n]; }
     function getWeekdayShort($n) { return $this->handle->weekday_short[$n]; }
     function getWeekday1Char($n) { return $this->handle->weekday_1char[$n]; }
+
+    /** @param $s 3-letter country code (SWE, NOR) */
+    function getCountryName($s) { return $this->handle->country_3char[strtoupper($s)]; }
 
 }
 

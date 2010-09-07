@@ -30,6 +30,11 @@ class Locale_GER extends CoreLocale
     var $weekday_1char = array(
         'S', 'M', 'D', 'M', 'D', 'F', 'S');
 
+    var $country_3char = array(
+    'SWE' => 'Schweden',
+    'NOR' => 'Norwegen',
+    );
+
     function formatCurrency($n)
     {
         die('formatCurrency GER TODO');

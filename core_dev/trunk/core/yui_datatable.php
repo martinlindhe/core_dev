@@ -204,8 +204,10 @@ class yui_datatable
                     'elLiner.innerHTML = a1[0]+"-"+a1[1]+"-"+a1[2]+" "+a2[0]+":"+a2[1]+":"+a2[2];'.
                 '};'.
 
+                //oData cell data is value in lowest representation (cents, öre)
                 'this.formatMoney = function(elLiner, oRecord, oColumn, oData) {'.
-                    'elLiner.innerHTML = Number(oData).toFixed(2);'.
+                    'var val = Number(oData) / 100;'.
+                    'elLiner.innerHTML = val.toFixed(2);'.
                 '};';
 
                 for ($i=0; $i<count($this->embed_arrays); $i++) {

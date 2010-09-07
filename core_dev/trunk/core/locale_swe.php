@@ -34,12 +34,18 @@ class Locale_SWE extends CoreLocale
     var $weekday_1char = array(
         'S', 'M', 'T', 'O', 'T', 'F', 'S');
 
+    var $country_3char = array(
+    'SWE' => 'Sverige',
+    'NOR' => 'Norge',
+    );
+
     /**
+     * @n currency in lowest representation (cents, ören)
      * @return formatted currency value with space as thousands separator: "221012.87" -> "221 012.87"
      */
     function formatCurrency($n)
     {
-        return number_format($n, 2, '.', ' ');
+        return number_format($n / 100, 2, '.', ' ');
     }
 }
 
