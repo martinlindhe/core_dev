@@ -431,19 +431,19 @@ function xhtmlGetUrl_DEPRECATED($script = '') //XXX see prop_Url.php for more ad
  *
  * @param $params array with params (Name=>Value) for each tag
  */
-function toXmlTags($tagname, $params)
+function toXmlTags($tagname, $params, $pad_before = '', $pad_after = "\n")
 {
     if (!is_array($params)) die('toXmlTags need array with params!');
 
     $res = '';
     foreach ($params as $p)
     {
-        $res .= '<'.$tagname;
+        $res .= $pad_before.'<'.$tagname;
 
         foreach ($p as $param_name => $param_val)
             $res .= ' '.$param_name.'="'.$param_val.'"';
 
-        $res .= '/>'."\n";
+        $res .= '/>'.$pad_after;
     }
 
     return $res;
