@@ -13,8 +13,9 @@ require_once('output_xhtml.php');
 
 class xhtml_header
 {
-	var $title   = '';
-	var $favicon = '';
+	var $title       = '';
+	var $favicon     = '';
+    var $description = '';
 	var $reload_time = 0; ///< time after page load to reload the page, in seconds
 	var $mime_type = 'text/html';
 
@@ -94,6 +95,14 @@ class xhtml_header
 	}
 
 	/**
+	 * Set META Description tag
+	 */
+	function setDescription($w)
+	{
+        $this->description = $w;
+	}
+
+	/**
 	 * Adds Javascript to reload the page after a period of time
 	 * @param $secs seconds until reload
 	 */
@@ -126,6 +135,9 @@ class xhtml_header
 
 		if ($this->keywords)
 			echo '<meta name="keywords" content="'.implode(',',$this->keywords).'"/>';
+            
+        if (!empty($this->description)) 
+			echo '<meta name="description" content="'.$this->description.'"/>';
 
 		if (!empty($config['core']['web_root'])) {
 			echo '<link rel="stylesheet" type="text/css" href="'.$config['core']['web_root'].'css/core.css"/>';
