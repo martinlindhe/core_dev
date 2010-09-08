@@ -1,5 +1,7 @@
 <?php
 /**
+ * $Id$
+ *
  * Hash algorithm interface
  *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
