@@ -16,14 +16,13 @@
 
 //STATUS: ok
 
+require_once('IHash.php');
 require_once('Cache.php');
 
-class VideoHash
+class VideoHash implements IHash
 {
-    /**
-     * @return 16-character string
-     */
-    static function Calc($file)
+    /** @return 16-character string */
+    public static function CalcFile($file)
     {
         if (!file_exists($file))
             return false;
@@ -38,6 +37,8 @@ class VideoHash
 
         $handle = fopen($file, 'rb');
         $fsize = filesize($file);
+        if ($fsize < 65536) //XXXX what is minimum possible size?
+            return false;
 
         $hash = array(
         3 => 0,
@@ -61,6 +62,12 @@ class VideoHash
         //echo "CALCULATED HASH ".$res." for ".$file."\n";
         $hash_cache->set('videohash/'.$file, $res);
         return $res;
+    }
+
+    public static function CalcString($s)
+    {
+        // XXX need reworking the code to implement, and not very useful
+        throw new Exception ('VideoHash::CalcString not supported');
     }
 
     private static function AddUINT64($a, $handle)
