@@ -137,6 +137,7 @@ function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_
 
 /**
  * Expands a input argument to a file of lists matching certain extensions
+ *
  * @param $in input argument
  * @param $filter_ext array of extensions including dot, example: array(".avi", ".mkv")
  * @return array with filenames
@@ -145,7 +146,7 @@ function expand_arg_files($in, $filter_ext = array() )
 {
     if (is_file($in)) {
         if ($filter_ext)
-            throw new Exception ('XXX respect $ext');
+            throw new Exception ('XXX respect $filter_ext');
 
         //XXX: expand to full path
         return array($in);
@@ -156,7 +157,7 @@ function expand_arg_files($in, $filter_ext = array() )
 
     if (strpos($in, "\n") !== false) {
         if ($filter_ext)
-            throw new Exception ('XXX respect $ext');
+            throw new Exception ('XXX respect $filter_ext');
 
         return explode("\n", trim($in)); // newline-separated list of filenames with full path
     }

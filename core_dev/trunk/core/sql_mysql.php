@@ -162,10 +162,8 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         if (!$result = $this->real_query($q))
             return false;
 
-        if ($result->num_rows > 1) {
-            echo "ERROR: DatabaseMysql::getOneItem() returned ".$result->num_rows." rows!\n";
-            return false;
-        }
+        if ($result->num_rows > 1)
+            throw new Exception ('DatabaseMysql::getOneItem() returned '.$result->num_rows.' rows');
 
         $data = $result->fetch_row();
         $result->free();
@@ -185,10 +183,8 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         if (!$result = $this->real_query($q))
             return false;
 
-        if ($result->num_rows > 1) {
-            echo "ERROR: DatabaseMysql::getOneRow() returned ".$result->num_rows." rows!\n";
-            return false;
-        }
+        if ($result->num_rows > 1)
+            throw new Exception ('DatabaseMysql::getOneRow() returned '.$result->num_rows.' rows');
 
         $data = $result->fetch_array(MYSQLI_ASSOC);
         $result->free();
