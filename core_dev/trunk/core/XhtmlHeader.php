@@ -69,13 +69,6 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $this->opensearch[] = array('url' => $uri, 'name' => $name);
     }
 
-    /** Set META description tag */
-    function setMetaDescription($s)
-    {
-        $this->meta_desc = $s;
-    }
-
-
     /** Adds META keywords tags */
     function addMetaKeyword($w)
     {
@@ -85,6 +78,9 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         else
             $this->meta_keywords[] = $w;
     }
+
+    /** Set META description tag */
+    function setMetaDescription($s) { $this->meta_desc = $s; }
 
     /** Creates a complete XHTML header, showing rss feeds if available, etc */
     public function render()
