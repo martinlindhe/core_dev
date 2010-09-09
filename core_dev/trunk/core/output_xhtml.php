@@ -433,7 +433,8 @@ function xhtmlGetUrl_DEPRECATED($script = '') //XXX see prop_Url.php for more ad
  */
 function toXmlTags($tagname, $params, $pad_before = '', $pad_after = "\n")
 {
-    if (!is_array($params)) die('toXmlTags need array with params!');
+    if (!is_array($params))
+        throw new Exception ('toXmlTags need array with params!');
 
     $res = '';
     foreach ($params as $p)

@@ -28,6 +28,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     private $include_css   = array();
     //private $include_feed = array();
 
+    private $meta_desc;
     private $meta_keywords = array();
     private $opensearch    = array();
 
@@ -68,6 +69,13 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $this->opensearch[] = array('url' => $uri, 'name' => $name);
     }
 
+    /** Set META description tag */
+    function setMetaDescription($s)
+    {
+        $this->meta_desc = $s;
+    }
+
+
     /** Adds META keywords tags */
     function addMetaKeyword($w)
     {
@@ -100,6 +108,10 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         if ($this->meta_keywords)
             $res .= '<meta name="keywords" content="'.implode(',',$this->meta_keywords).'"/>';
+
+        if ($this->meta_desc)
+            $res .= '<meta name="description" content="'.$this->meta_desc.'"/>';
+
 /*
         foreach ($this->include_feeds as $feed) {
             //XXX: clean up feed URI's etc, make it more general
