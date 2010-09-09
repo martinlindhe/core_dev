@@ -519,14 +519,14 @@ $area_code[46][981] = 'Vittangi';
  *
  * @param $anr user typed phone number
  * @param $cc country code
- * @return MSID formatted phone number (46707123456) or false if input is invalid
+ * @return MSID formatted phone number (46707123456)
  */
 function formatMSID($anr, $cc = '46')
 {
     $anr = cleanupAnr($anr);
 
     // numer without country code
-    if (substr($anr, 0, 1) == '0')
+    if (substr($anr, 0, 1) == '0' && strlen($anr) >= 6 )
         $anr = $cc.substr($anr, 1);
 
     return $anr;
