@@ -9,6 +9,8 @@
 //TODO: re-add "forgot password" feature
 //TODO: use XhtmlForm (?)
 
+require_once('UserList.php');
+
 $header->addCss('
 .login_box {
  font-size: 14px;

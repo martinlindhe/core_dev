@@ -9,6 +9,8 @@
 
 require_once('class.CoreBase.php');
 
+require_once('network.php'); //For get_protocol()
+
 class XhtmlMenu extends CoreBase
 {
     private $items       = array();
@@ -17,6 +19,10 @@ class XhtmlMenu extends CoreBase
 
     public function add($title, $link)
     {
+        if (!get_protocol($link) && substr($link, 0, 1) != '/') {
+            $page = XmlDocumentHandler::getInstance();
+            $link = $page->getBaseUrl().$link;
+        }
         $this->items[] = array('title'=>$title, 'link'=>$link);
     }
 
