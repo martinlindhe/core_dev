@@ -93,9 +93,10 @@ function dir_get_tree($outerDir)
     foreach ($dirs as $d)
     {
         if (is_dir($outerDir.'/'.$d) )
-            $res[$d] = dir_get_tree( $outerDir.'/'.$d );
+            foreach (dir_get_tree( $outerDir.'/'.$d ) as $r)
+                $res[] = $r;
         else
-            $res[] = $d;
+            $res[] = $outerDir.'/'.$d;
     }
 
     return $res;
@@ -144,6 +145,15 @@ function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_
  */
 function expand_arg_files($in, $filter_ext = array() )
 {
+    if (is_array($in)) {
+        $res = array();
+        foreach ($in as $f)
+            if (in_array( file_suffix($f), $filter_ext))
+                $res[] = $f;
+
+        return $res;
+    }
+
     if (is_file($in)) {
         if ($filter_ext)
             throw new Exception ('XXX respect $filter_ext');
