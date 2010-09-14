@@ -19,7 +19,7 @@ class ApiCustomerList
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblCustomers';
-        if (is_numeric($owner))
+        if (is_numeric($owner) && $owner)
             $q .= ' WHERE ownerId='.$owner;
 
         $list = $db->getArray($q);
