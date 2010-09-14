@@ -28,7 +28,7 @@ class ApiCustomer
     function getName() { return $this->name; }
     function getOwner() { return $this->owner; }
 
-    function setPassword() { $this->password = $s; }
+    function setPassword($s) { $this->password = $s; }
 
     function loadFromSql($row)
     {

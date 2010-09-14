@@ -134,6 +134,9 @@ class yui_datatable
      */
     function setDataList($arr)
     {
+        if (!is_array($arr))
+            throw new Exception ('yui_datatable->setDataList() needs an array');
+
         $res = array();
 
         foreach ($arr as $row)

@@ -74,7 +74,14 @@ class LocaleHandler
     function getWeekday1Char($n) { return $this->handle->weekday_1char[$n]; }
 
     /** @param $s 3-letter country code (SWE, NOR) */
-    function getCountryName($s) { return $this->handle->country_3char[strtoupper($s)]; }
+    function getCountryName($s)
+    {
+        $s = strtoupper($s);
+        if (!isset($this->handle->country_3char[$s]))
+            throw new Exception ('Unknown country name '.$s);
+
+        return $this->handle->country_3char[$s];
+    }
 
 }
 
