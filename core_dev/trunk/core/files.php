@@ -58,7 +58,7 @@ function file_get_mime_by_suffix($name)
 
     case '.mov': return 'video/quicktime';
     default:
-        dp('file_get_mime_by_suffix unhandled ext: '.$ext);
+        echo 'WARNING: file_get_mime_by_suffix unhandled ext: '.$ext."\n";
         return 'application/octet-stream'; //unknown type
     }
 }
