@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//STATUS: DEPRECATE! use ApiCustomer.php instead
+
 
 /**
  * Looks up a customer name by id

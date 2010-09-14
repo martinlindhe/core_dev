@@ -20,10 +20,11 @@ class Settings
     //default types - use id's from 50 and up for application specified types
     const APPLICATION = 1;
     const USER        = 2;
+    const CUSTOMER    = 3; ///< ApiCustomer setting
 
     var $type;
     var $category = 0;
-    private $owner;
+    private $owner = 0;
 
     function __construct($type = 0)
     {
