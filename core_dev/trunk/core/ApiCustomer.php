@@ -9,8 +9,6 @@
 
 //STATUS: wip - will replace core_dev atom_customers.php
 
-//TODO: rename tblCustomers to tblApiCustomers
-
 require_once('Settings.php');
 
 class ApiCustomer
@@ -43,7 +41,7 @@ class ApiCustomer
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT * FROM tblCustomers WHERE';
+        $q = 'SELECT * FROM tblApiCustomers WHERE';
         if (is_numeric($n))
             $q .= ' customerId='.$n;
         else
