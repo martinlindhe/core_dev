@@ -17,21 +17,7 @@ abstract class XhrBackend
     protected $sort_order;
     protected $result_limit;
     protected $result_idx    = 0;
-    protected $columns       = array();
     protected $period_from, $period_to;
-
-    /**
-     * Specify which columns to include in the result-set
-     */
-    function addColumn($m)
-    {
-        if (is_alphanumeric($m))
-            $this->columns[] = $m;
-        else if (is_array($m))
-            foreach ($m as $s)
-                if (is_alphanumeric($s))
-                    $this->columns[] = $s;
-    }
 
     /**
      * How many results to return

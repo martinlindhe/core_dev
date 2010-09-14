@@ -37,7 +37,7 @@ class Locale_ENG extends CoreLocale
 
     function formatCurrency($n)
     {
-        die('formatCurrency GER TODO');
+        die('formatCurrency ENG TODO');
     }
 }
 
