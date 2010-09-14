@@ -56,4 +56,13 @@ function sql_or_array($key, $vals, $pad = '', $numeric = true)
     return implode(' OR ', $tmp);
 }
 
+/**
+ * Returns the current time in the same format as the MySQL "NOW()" command
+ * @return time in MySQL datetime format
+ */
+function now()
+{
+    return strftime('%Y-%m-%d %H:%M:%S');
+}
+
 ?>

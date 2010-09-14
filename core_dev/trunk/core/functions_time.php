@@ -157,15 +157,6 @@ function exectime($c, &$retval = 0)
 }
 
 /**
- * Returns the current time in the same format as the MySQL "NOW()" command
- * @return time in MySQL datetime format
- */
-function now()
-{
-    return strftime('%Y-%m-%d %H:%M:%S');
-}
-
-/**
  * Returns MySQL datetime in UNIX timestamp format
  *
  * @param $datetime is a MySQL datetime
