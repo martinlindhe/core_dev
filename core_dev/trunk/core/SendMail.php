@@ -27,6 +27,7 @@ class MailAttachment
     var $data;
     var $filename;
     var $content_id = ''; //set for embedded images
+    var $mimetype;
 }
 
 class SendMail extends CoreBase
@@ -153,12 +154,14 @@ class SendMail extends CoreBase
             $this->addRecipient($s);
     }
 
-    function attachData($data, $filename)
+    function attachData($data, $filename, $mimetype = '')
     {
-        $att = new MailAttachment();
-        $att->data       = $data;
-        $att->filename   = basename($filename);
-        $this->attachments[] = $att;
+        $a = new MailAttachment();
+        $a->data     = $data;
+        $a->filename = basename($filename);
+        $a->mimetype = $mimetype ? $mimetype : file_get_mime_by_suffix($filename);
+
+        $this->attachments[] = $a;
     }
 
     function attachFile($filename)
@@ -171,11 +174,13 @@ class SendMail extends CoreBase
         if (!file_exists($filename))
             throw new Exception ('File ".$filename." not found');
 
-        $att = new MailAttachment();
-        $att->data       = file_get_contents($filename);
-        $att->filename   = basename($filename);
-        $att->content_id = $cid;                  //<img src="cid:pic_name">
-        $this->attachments[] = $att;
+        $a = new MailAttachment();
+        $a->data       = file_get_contents($filename);
+        $a->filename   = basename($filename);
+        $a->mimetype   = file_get_mime_by_suffix($filename)
+        $a->content_id = $cid;                  //<img src="cid:pic_name">
+
+        $this->attachments[] = $a;
     }
 
     /**
@@ -235,7 +240,7 @@ class SendMail extends CoreBase
             $attachment_data .=
             "\r\n".
             "--".$boundary."\r\n".
-            "Content-Type: ".file_get_mime_by_suffix($a->filename).";\r\n".
+            "Content-Type: ".$a->mimetype.";\r\n".
             " name=\"".mb_encode_mimeheader($a->filename, 'UTF-8')."\"\r\n".
             "Content-Transfer-Encoding: base64\r\n".
             ($a->content_id ? "Content-ID: <".$a->content_id.">\r\n" : "").
