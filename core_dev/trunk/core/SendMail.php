@@ -177,7 +177,7 @@ class SendMail extends CoreBase
         $a = new MailAttachment();
         $a->data       = file_get_contents($filename);
         $a->filename   = basename($filename);
-        $a->mimetype   = file_get_mime_by_suffix($filename)
+        $a->mimetype   = file_get_mime_by_suffix($filename);
         $a->content_id = $cid;                  //<img src="cid:pic_name">
 
         $this->attachments[] = $a;
