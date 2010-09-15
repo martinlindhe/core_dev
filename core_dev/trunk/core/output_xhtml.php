@@ -455,13 +455,10 @@ function toXmlTags($tagname, $params, $pad_before = '', $pad_after = "\n")
  */
 function xmlentities($s)
 {
-    $s = str_replace('<', '&lt;', $s);
-    $s = str_replace('>', '&gt;', $s);
-    $s = str_replace("'", '&apos;', $s);
-    $s = str_replace('"', '&quot;', $s);
-    $s = str_replace('&', '&amp;', $s);
+    $from = array('<',    '>',    "'",      '"',      '&');
+    $to   = array('&lt;', '&gt;', '&apos;', '&quot;', '&amp;');
 
-    return $s;
+    return str_replace($from, $to, $s);
 }
 
 ?>
