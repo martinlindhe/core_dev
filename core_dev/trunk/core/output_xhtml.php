@@ -453,7 +453,7 @@ function toXmlTags($tagname, $params, $pad_before = '', $pad_after = "\n")
 /**
  * Like htmlentities() but only handles predefined xml entities
  */
-function xmlentities
+function xmlentities($s)
 {
     $s = str_replace('<', '&lt;', $s);
     $s = str_replace('>', '&gt;', $s);
