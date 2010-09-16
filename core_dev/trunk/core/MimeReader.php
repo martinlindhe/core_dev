@@ -9,24 +9,25 @@
 
 //STATUS: WIP
 
+//TODO: decode filenames from windows latin1 encoding (use imap_utf8) !
 //TODO hmm: make a base mime reader class and extend a EMailReader class from it??
-//TODO: decode subject & filenames from windows latin1 encoding
-
 //FIXME: parseHeader() limitation - multiple keys with same name will just be glued together (Received are one such common header key)
 
 class EMail
 {
     var $id;
+    var $from;
+    var $subject;
     var $headers;
     var $attachments;
 }
 
 class MimeReader
 {
-    private $headers = array(); //parsed array of mime headers
-    private $attachments = array(); //parsed array of  mail attachments
+    private $headers            = array(); ///< parsed array of mime headers
+    private $attachments        = array(); ///< parsed array of  mail attachments
+    private $from_adr;                     ///< from e-mail address
     private $allowed_mime_types = array('text/plain', 'text/html', 'image/jpeg', 'image/png', 'video/3gpp', 'application/pdf');
-    private $from_adr;              //from e-mail address
 
     function getHeaders() { return $this->headers; }
     function getAttachments() { return $this->attachments; }
@@ -35,9 +36,13 @@ class MimeReader
     {
         $mail = new EMail();
         $mail->id          = $id;
+        $mail->from        = $this->from_adr;
         $mail->headers     = $this->headers;
         $mail->attachments = $this->attachments;
-        $mail->from        = $this->from_adr;
+
+        if (isset($this->headers['Subject']))
+            $mail->subject = $this->headers['Subject'];
+
         return $mail;
     }
 
@@ -81,6 +86,8 @@ class MimeReader
         $arr = explode("\n", $raw_head);
         $header = array();
 
+        $decode_headers = array('From', 'Subject');
+
         foreach ($arr as $row)
         {
             $pos = strpos($row, ': ');
@@ -91,6 +98,10 @@ class MimeReader
             } else {
                 $header[ $curr_key ] .= $row;
             }
+
+            // decode "=?iso-8859-1?Q?Tommy_J=F8nsson?= <tommy@example.com>"
+            if (in_array($curr_key, $decode_headers))
+                $header[ $curr_key ] = imap_utf8($header[ $curr_key ]);
 
             $header[ $curr_key ] = normalizeString($header[ $curr_key ]);
         }

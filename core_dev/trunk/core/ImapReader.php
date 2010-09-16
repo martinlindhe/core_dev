@@ -22,11 +22,10 @@ class ImapReader extends CoreBase
     var $handle = false;
 
     private $server;
-    private $port     = 143;  //XXX: "ssl" default port is 993
+    private $port      = 143;     //XXX: "ssl" default port is 993
     private $username;
     private $password;
-    private $emails = array(); ///< array of EMail objects
-
+    private $emails    = array(); ///< array of EMail objects
     private $tot_mails = 0;
 
     function __construct()
@@ -81,15 +80,17 @@ class ImapReader extends CoreBase
         $msginfo = imap_mailboxmsginfo($this->handle);
         $this->tot_mails = $msginfo->Nmsgs;
 
-        for ($i=1; $i<= $this->tot_mails; $i++) {
-            if ($this->getDebug()) echo "Downloading ".$i." of ".$this->tot_mails." ...\n";
+        for ($i=1; $i<= $this->tot_mails; $i++)
+        {
+            if ($this->getDebug())
+                echo "Downloading ".$i." of ".$this->tot_mails." ...\n";
+
             //XXX hack because retarded imap_fetchbody() dont allow to fetch the whole message
             $fp = fopen("php://temp", 'w');
             imap_savebody($this->handle, $fp, $i);
             rewind($fp);
             $msg = stream_get_contents($fp);
             fclose($fp);
-
 
             $mime = new MimeReader();
             $mime->parseMail($msg);
