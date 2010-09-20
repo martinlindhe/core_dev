@@ -94,6 +94,18 @@ class FtpClient extends CoreBase
     }
 
     /**
+     * Translates curl errors to readable strings
+     */
+    private function getFtpError()
+    {
+        // error codes: http://curl.haxx.se/libcurl/c/libcurl-errors.html
+        switch (curl_errno($this->curl)) {
+        case 78: return 'Remote file not found'; //CURLE_REMOTE_FILE_NOT_FOUND
+        default: return curl_error($this->curl).' (errno '.curl_errno($this->curl).')';
+        }
+    }
+
+    /**
      * Connects to the ftp server
      */
     function connect()
@@ -167,9 +179,10 @@ class FtpClient extends CoreBase
         curl_exec($this->curl);
         fclose($fp);
 
-        if (curl_errno($this->curl)) {
-            //$this->setError( curl_error($this->curl) );
-            throw new Exception ('curl error "'.curl_error($this->curl).'" while reading '.$remote_file ); //XXX use ErrorHandler ?
+        if (curl_errno($this->curl))
+        {
+            //XXX use ErrorHandler ?
+            throw new Exception ('curl error "'.$this->getFtpError($this->curl).'" while reading '.$remote_file);
 
             if (!filesize($local_file))
                 unlink($local_file);
