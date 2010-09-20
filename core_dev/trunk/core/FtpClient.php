@@ -100,7 +100,7 @@ class FtpClient extends CoreBase
     {
         // error codes: http://curl.haxx.se/libcurl/c/libcurl-errors.html
         switch (curl_errno($this->curl)) {
-        case 78: return 'Remote file not found'; //CURLE_REMOTE_FILE_NOT_FOUND
+        case 78: return 'Remote file not found'; //CURLE_REMOTE_FILE_NOT_FOUND     XXX php 5.3 curl_error() returns "RETR response: 550", 2010-09-20
         default: return curl_error($this->curl).' (errno '.curl_errno($this->curl).')';
         }
     }
