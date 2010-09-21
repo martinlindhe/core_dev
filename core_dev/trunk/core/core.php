@@ -92,6 +92,7 @@ function dp($str)
         $str = serialize($str);
 
     error_log($str);
+
     if (!empty($config['debug']))
         error_log(date('[r] ').$str.PHP_EOL, 3, '/tmp/core_dev.log');
 }
@@ -103,19 +104,18 @@ function dm()
 {
     $conv = new ConvertDatasize();
 
-    $limit   = $conv->convLiteral(ini_get('memory_limit'), 'byte');
-    $current = $conv->convLiteral(memory_get_peak_usage(false), 'byte');
+    $res = 'Memory usage: '.round($conv->convLiteral(memory_get_peak_usage(false), 'MiB', 'byte'), 1).' MiB';
 
-    $res =
-    "Memory usage: ".
-    round($conv->convLiteral($current, 'MiB'), 1)." MiB";
+    // "-1" means "no memory limit"
+    if (ini_get('memory_limit') != '-1') {
+        //XXX simplify datasize conversion
+        $limit = $conv->convLiteral(ini_get('memory_limit'), 'byte'); //convert from "128M", or "4G" to bytes
+        $res .= ' ('.round(memory_get_peak_usage(false) / $limit * 100, 1).'% of '.$conv->convLiteral($limit, 'MiB').' MiB)';
+    } else {
+        $res .= ' (no limit)';
+    }
 
-    if ($limit)
-        $res .=
-        " (".round(memory_get_peak_usage(false) / $limit * 100, 1)."% of ".
-        $conv->convLiteral($limit, 'MiB')." MiB)".ln();
-
-    return $res;
+    return $res.ln();
 }
 
 /**
