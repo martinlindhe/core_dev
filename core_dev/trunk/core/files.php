@@ -154,13 +154,9 @@ function expand_arg_files($in, $filter_ext = array() )
         return $res;
     }
 
-    if (is_file($in)) {
-        if ($filter_ext)
-            throw new Exception ('XXX respect $filter_ext');
-
-        //XXX: expand to full path
-        return array($in);
-    }
+    if (is_file($in))
+        if (in_array(file_suffix($in), $filter_ext))
+            return array($in);        //XXX: expand to full path
 
     if (is_dir($in))
         return dir_get_by_extension($in, $filter_ext, '', true, false);
