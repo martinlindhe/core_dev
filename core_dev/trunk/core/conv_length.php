@@ -16,20 +16,20 @@ require_once('ConvertBase.php');
 class ConvertLength extends ConvertBase
 {
     protected $scale = array( ///< unit scale to Meter
-    'pm'     => 0.000000000001, //Metric: Picometer
-    'nm'     => 0.000000001,    //Metric: Nanometer
-    'mm'     => 0.001,          //Metric: Millimeter
-    'cm'     => 0.01,           //Metric: Centimeter
-    'dm'     => 0.1,            //Metric: Decimeter
-    'm'      => 1,              //Metric: Meter
-    'km'     => 1000,           //Metric: Kilometer
-//    'mil'  => 10000,          //Metric: Mile (??NAMN??=?)
-    'in'     => 0.0254,         //xx: Inch
-    'ft'     => 0.304800610,    //xx: Feet
-    'yd'     => 0.9144,         //xx: Yard
-    'ukmile' => 1852,           //UK: Mile (nautical)
-    'usmile' => 1609.344,       //US: Mile (statute)
-    'au'     => 149597871464,   //xx: Astronomical Unit
+    'pm'        => 0.000000000001, //Metric: Picometer
+    'nm'        => 0.000000001,    //Metric: Nanometer
+    'mm'        => 0.001,          //Metric: Millimeter
+    'cm'        => 0.01,           //Metric: Centimeter
+    'dm'        => 0.1,            //Metric: Decimeter
+    'm'         => 1,              //Metric: Meter
+    'km'        => 1000,           //Metric: Kilometer
+    'scandmile' => 10000,          //Metric: Scandinavian mile, http://en.wikipedia.org/wiki/Scandinavian_mile
+    'in'        => 0.0254,         //xx: Inch
+    'ft'        => 0.304800610,    //xx: Feet
+    'yd'        => 0.9144,         //xx: Yard
+    'ukmile'    => 1852,           //UK: Mile (nautical)
+    'usmile'    => 1609.344,       //US: Mile (statute)
+    'au'        => 149597871464,   //xx: Astronomical Unit
     );
 
     protected $lookup = array(
@@ -46,6 +46,7 @@ class ConvertLength extends ConvertBase
     'ukmile'       => 'ukmile',
     'usmile'       => 'usmile',
     'mile'         => 'usmile', 'miles'     => 'usmile',
+    'mil'          => 'scandmile',
     'astronomical' => 'au',
     );
 

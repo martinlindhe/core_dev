@@ -35,6 +35,8 @@ abstract class ConvertBase extends CoreBase
     function getShortcode($name)
     {
         $name = strtolower(trim($name));
+        if (!$name)
+            return false;
 
         if (!empty($this->lookup[$name]))
             return $this->lookup[$name];
@@ -42,7 +44,7 @@ abstract class ConvertBase extends CoreBase
         if (array_search($name, $this->lookup))
             return $name;
 
-        return false;
+        throw new Exception ('unhandled unit: '.$name);
     }
 
     /**
