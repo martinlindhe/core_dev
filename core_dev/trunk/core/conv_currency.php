@@ -12,12 +12,12 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('class.CoreConverter.php');
+require_once('ConvertBase.php');
 require_once('Cache.php');
 
 require_once('service_currency_webservicex.php');
 
-class ConvertCurrency extends CoreConverter
+class ConvertCurrency extends ConvertBase
 {
     private $cache_expire = 300; ///< expire time in seconds for local cache (in seconds)
 

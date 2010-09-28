@@ -11,9 +11,9 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('class.CoreConverter.php');
+require_once('ConvertBase.php');
 
-class ConvertDatasize extends CoreConverter
+class ConvertDatasize extends ConvertBase
 {
     protected $scale = array( ///< unit scale to a bit
     'bit'  => 1,

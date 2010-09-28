@@ -11,9 +11,9 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('class.CoreConverter.php');
+require_once('ConvertBase.php');
 
-class ConvertMass extends CoreConverter
+class ConvertMass extends ConvertBase
 {
     protected $scale = array( ///< unit scale to Gram
     'g'  => 1,            //Gram

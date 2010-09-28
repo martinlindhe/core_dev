@@ -12,9 +12,9 @@
 
 //TODO: handle bases above 10 (at least hex)
 
-require_once('class.CoreConverter.php');
+require_once('ConvertBase.php');
 
-class ConvertNumeral extends CoreConverter
+class ConvertNumeral extends ConvertBase
 {
     protected $scale = array( ///< digits in the numeral system
     'bin' => 2,

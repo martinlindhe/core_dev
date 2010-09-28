@@ -12,9 +12,9 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('class.CoreConverter.php');
+require_once('ConvertBase.php');
 
-class ConvertTemperature extends CoreConverter
+class ConvertTemperature extends ConvertBase
 {
     protected $lookup = array(
     'celcius'    => 'c',

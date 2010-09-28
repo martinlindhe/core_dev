@@ -9,7 +9,7 @@
 
 require_once('class.CoreBase.php');
 
-abstract class CoreConverter extends CoreBase
+abstract class ConvertBase extends CoreBase
 {
     protected $precision = 0;   ///< if set, specifies rounding precision. if unset, return exact result
 
