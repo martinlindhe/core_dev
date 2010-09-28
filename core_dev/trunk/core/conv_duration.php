@@ -27,12 +27,12 @@ class ConvertDuration extends ConvertBase
     );
 
     protected $lookup = array(
-    'second' => 'sec',
-    'minute' => 'min',
-    'hour'   => 'hr',
-    'day'    => 'dy',
-    'month'  => 'mo',
-    'year'   => 'yr',
+    'second' => 'sec', 'seconds' => 'sec',
+    'minute' => 'min', 'minutes' => 'min',
+    'hour'   => 'hr',  'hours'   => 'hr',
+    'day'    => 'dy',  'days'    => 'dy',
+    'month'  => 'mo',  'months'  => 'mo',
+    'year'   => 'yr',  'years'   => 'yr',
     );
 
     function conv($from, $to, $val)

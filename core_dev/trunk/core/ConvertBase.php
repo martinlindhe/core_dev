@@ -44,7 +44,7 @@ abstract class ConvertBase extends CoreBase
         if (array_search($name, $this->lookup))
             return $name;
 
-        throw new Exception ('unhandled unit: '.$name);
+        throw new Exception (get_class($this).': unhandled unit: '.$name);
     }
 
     /**
