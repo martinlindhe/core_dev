@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('conv_currency.php');
+require('ConvertCurrency.php');
 
 $currency = new ConvertCurrency();
 $val = 100;

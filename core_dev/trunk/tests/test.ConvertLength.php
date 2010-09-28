@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('conv_length.php');
+require('ConvertLength.php');
 
 $l = new ConvertLength();
 $l->setPrecision(2);

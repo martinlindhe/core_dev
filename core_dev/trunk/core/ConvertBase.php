@@ -7,6 +7,8 @@
 
 //STATUS: ok
 
+//TODO: add & use "recognizeType($s)" method for each class
+
 require_once('class.CoreBase.php');
 
 abstract class ConvertBase extends CoreBase
@@ -44,7 +46,8 @@ abstract class ConvertBase extends CoreBase
         if (array_search($name, $this->lookup))
             return $name;
 
-        throw new Exception (get_class($this).': unhandled unit: '.$name);
+        return false; ///XXX do throw exception when each class implements a "recognizeType($s)" method
+        //throw new Exception (get_class($this).': unhandled unit: '.$name);
     }
 
     /**

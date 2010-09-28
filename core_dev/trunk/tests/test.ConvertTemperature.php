@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('conv_temperature.php');
+require_once('ConvertTemperature.php');
 
 $t = new ConvertTemperature();
 $t->setPrecision(2);

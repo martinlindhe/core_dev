@@ -14,7 +14,7 @@ require_once('prop_Timestamp.php');
 require_once('network.php');
 require_once('files.php');
 require_once('class.CoreBase.php'); //for CoreBase class
-require_once('conv_datasize.php');
+require_once('ConvertDatasize.php');
 
 // PHP_VERSION_ID is available as of PHP 5.2.7, if our
 // version is lower than that, then emulate it

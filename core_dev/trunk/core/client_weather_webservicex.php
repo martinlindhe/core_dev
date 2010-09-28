@@ -12,7 +12,7 @@
 
 //STATUS: wip
 
-require_once('conv_temperature.php');
+require_once('ConvertTemperature.php');
 require_once('input_xml.php');
 
 class Weather_webservicex extends CoreBase

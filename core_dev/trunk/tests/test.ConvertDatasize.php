@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('conv_datasize.php');
+require('ConvertDatasize.php');
 
 $d = new ConvertDatasize();
 if ($d->conv('megabyte', 'byte', 0.5) != 524288)  echo "FAIL 1\n";
