@@ -16,14 +16,16 @@ abstract class ConvertBase extends CoreBase
     protected $precision = 0;   ///< if set, specifies rounding precision. if unset, return exact result
 
     /**
-     * Does the converter recognbize this data type?
+     * Does the converter recognize this data type?
      *
      * @return (bool)
      */
     function recognizeType($s)
     {
-        if (in_array($s, $this->lookup)) return true;
+        if (in_array($s, $this->lookup) || array_key_exists($s, $this->lookup))
+            return true;
 
+//        echo "not recognized: ".$s."<br>";
         return false;
     }
 
@@ -33,30 +35,36 @@ abstract class ConvertBase extends CoreBase
      * @param $code unit name or shortcode
      * @return unit name for the short code
      */
-    function getUnitname($code)
+    function getUnitname($s)
     {
-        $n = $this->getShortcode($code);
-        if (!$n)
-            return false;
+        if (in_array($s, $this->lookup))
+            return $this->lookup[ $s ];
 
-        return array_search($n, $this->lookup);
+        if (array_key_exists($s, $this->lookup))
+            return $s;
+
+        return false;
     }
 
     /**
      * @param $name unit name or shortcode
      * @return shortcode for the unit name
      */
-    function getShortcode($name)
+    function getShortcode($s, $lcase = true)
     {
-        $name = strtolower(trim($name));
-        if (!$name)
+        if ($lcase)
+            $s = strtolower(trim($s));
+        else
+            $s = strtoupper(trim($s));
+
+        if (!$s)
             return false;
 
-        if (!empty($this->lookup[$name]))
-            return $this->lookup[$name];
+        if (!empty($this->lookup[$s]))
+            return $this->lookup[$s];
 
-        if (array_search($name, $this->lookup))
-            return $name;
+        if (in_array($s, $this->lookup) || array_key_exists($s, $this->lookup))
+            return $s;
 
         return false; ///XXX do throw exception when each class implements a "recognizeType($s)" method
         //throw new Exception (get_class($this).': unhandled unit: '.$name);

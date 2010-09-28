@@ -12,6 +12,8 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
+//STATUS: ok
+
 require_once('ConvertBase.php');
 require_once('Cache.php');
 
@@ -21,7 +23,7 @@ class ConvertCurrency extends ConvertBase
 {
     private $cache_expire = 300; ///< expire time in seconds for local cache (in seconds)
 
-    protected $codes = array(      ///< all supported currencies as of 2009.07.23
+    protected $lookup = array(      ///< all supported currencies as of 2009.07.23
     'AFA'=>'Afghanistan Afghani',
     'ALL'=>'Albanian Lek',
     'DZD'=>'Algerian Dinar',
@@ -175,29 +177,11 @@ class ConvertCurrency extends ConvertBase
     'ZWD'=>'Zimbabwe Dollar'
     );
 
-    /**
-     * Decodes a currency code to English full name
-     * @param $code currency code
-     */
-    function getUnitname($code)
-    {
-        $code = strtoupper($code);
+    function recognizeType($s) { return parent::recognizeType( strtoupper($s) ); }
 
-        if (empty($this->codes[$code]))
-            return false;
+    function getUnitname($s) { return parent::getUnitname( strtoupper($s) ); }
 
-        return $this->codes[$code];
-    }
-
-    function getShortcode($name)
-    {
-        $n = strtoupper($name);
-
-        if (!empty($this->codes[$n]))
-            return $n;
-
-        return array_search($n, $this->codes);
-    }
+    function getShortcode($s, $lcase = false) { return parent::getShortcode( strtoupper($s), $lcase); }
 
     function setCacheTime($s) { $this->cache_expire = $s; }
 

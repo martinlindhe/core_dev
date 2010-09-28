@@ -6,11 +6,11 @@
  * http://www.webservicex.net/WS/WSDetails.aspx?CATID=2&WSID=10
  */
 
-define('WEBSERVICEX_CURRENCY_API', 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL');
+//STATUS: wip, redo into a CLASS!
 
 function webservicex_currency_conversion_rate($from, $to)
 {
-    $client = new SoapClient(WEBSERVICEX_CURRENCY_API);
+    $client = new SoapClient('http://www.webservicex.net/CurrencyConvertor.asmx?WSDL');
 
     try {
         $params['FromCurrency'] = strtoupper($from);
