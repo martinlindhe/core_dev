@@ -70,6 +70,7 @@ class ConvertLength extends ConvertBase
     {
         return parent::convLiteral($s, $to, $from);
     }
+
 }
 
 ?>

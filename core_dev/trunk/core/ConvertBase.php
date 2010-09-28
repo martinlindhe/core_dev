@@ -15,6 +15,18 @@ abstract class ConvertBase extends CoreBase
 {
     protected $precision = 0;   ///< if set, specifies rounding precision. if unset, return exact result
 
+    /**
+     * Does the converter recognbize this data type?
+     *
+     * @return (bool)
+     */
+    function recognizeType($s)
+    {
+        if (in_array($s, $this->lookup)) return true;
+
+        return false;
+    }
+
     function setPrecision($n) { $this->precision = $n; }
 
     /**
