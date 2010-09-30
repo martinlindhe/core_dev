@@ -146,7 +146,7 @@ function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled =
 {
     if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
     return '<input type="text" name="'.$_name.'" id="'.$_name.'"'.
-        ($_value ? ' value="'.$_value.'"' : '').
+        (($_value || is_string($_value)) ? ' value="'.$_value.'"' : '').
         ($_size ? ' size="'.$_size.'"': '').
         ($_maxlen ? ' maxlength="'.$_maxlen.'"': '').
         ($_disabled ? ' disabled': '').
