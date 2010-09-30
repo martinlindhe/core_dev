@@ -36,7 +36,7 @@ class MimeReader
     {
         $mail = new EMail();
         $mail->id          = $id;
-        $mail->from        = $this->from_adr;
+        $mail->from        = strtolower($this->from_adr);
         $mail->headers     = $this->headers;
         $mail->attachments = $this->attachments;
 
@@ -62,7 +62,7 @@ class MimeReader
 
         $from = $this->headers['From'];
         if (is_email($from))
-            $this->from_adr = $from;
+            $this->from_adr = strtolower($from);
         else {
             //XXX simplify extraction
             $p = strrpos($from, ' ');
@@ -70,7 +70,7 @@ class MimeReader
             $s = str_replace('<', '', $s);
             $s = str_replace('>', '', $s);
             if (is_email($s))
-                $this->from_adr = $s;
+                $this->from_adr = strtolower($s);
             else
                 echo "XXX FAILED TO extract adr from ".$from."\n"; ///XXX should not be possilbe
         }
