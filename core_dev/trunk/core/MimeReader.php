@@ -93,11 +93,10 @@ class MimeReader
             $pos = strpos($row, ': ');
             if ($pos) $curr_key = substr($row, 0, $pos);
             if (!$curr_key) die('super error');
-            if (empty($header[ $curr_key ])) {
+            if (empty($header[ $curr_key ]))
                 $header[ $curr_key ] = substr($row, $pos + strlen(': '));
-            } else {
+            else
                 $header[ $curr_key ] .= $row;
-            }
 
             // decode "=?iso-8859-1?Q?Tommy_J=F8nsson?= <tommy@example.com>"
             if (in_array($curr_key, $decode_headers))
@@ -137,7 +136,10 @@ class MimeReader
                 continue;
 
             $pos = strpos($part, '=');
-            if ($pos === false) die("multipart header error, Content-Type: ".$this->headers['Content-Type']."\n");
+
+            if ($pos === false)
+                die("multipart header error, Content-Type: ".$this->headers['Content-Type']."\n");
+
             $key = substr($part, 0, $pos);
             $val = substr($part, $pos+1);
 
@@ -185,7 +187,9 @@ class MimeReader
             $params = explode('; ', $att[ $part_cnt ]['header']['Content-Type']);
             $att[ $part_cnt ]['mimetype'] = $params[0];
 
-            if (!empty($att[ $part_cnt ]['header']['Content-Location'])) $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['header']['Content-Location'];
+            if (!empty($att[ $part_cnt ]['header']['Content-Location']))
+                $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['header']['Content-Location'];
+
             if (empty($att[ $part_cnt ]['filename'])) {
                 //Extract name from [Content-Type] => image/jpeg; name="header.jpg"
                 //or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
@@ -204,6 +208,9 @@ class MimeReader
                 break;
 
             case '8bit':
+                break;
+
+            case 'quoted-printable':
                 break;
 
             case 'base64':
@@ -228,7 +235,7 @@ class MimeReader
 /**
  * Parses a MIME Authenticate response, used in client_smtp.php, input_sip.php
  */
-function parseAuthRequest($s)   //XXX move into MimeReader class???
+function parseAuthRequest($s)   //XXX move into MimeReader class???, or see if some network.php functions do the same thing
 {
     $chal_str = explode(',', $s);
 
