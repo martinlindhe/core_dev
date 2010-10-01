@@ -36,5 +36,6 @@ if ($l->conv('nm', 'pm', 0.04) != 40)          echo "FAIL 18\n";
 
 if ($l->convLiteral('1 meter', 'cm') != 100)       echo "FAIL 19\n";
 if ($l->convLiteral('10 mil', 'kilometer') != 100) echo "FAIL 20\n";
+if ($l->convLiteral('1 micrometer', 'nanometer') != 1000) echo "FAIL 21\n";
 
 ?>

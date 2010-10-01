@@ -18,6 +18,7 @@ class ConvertLength extends ConvertBase
     protected $scale = array( ///< unit scale to Meter
     'pm'        => 0.000000000001, //Metric: Picometer
     'nm'        => 0.000000001,    //Metric: Nanometer
+    'microm'    => 0.000001,       //Metric: Micrometer
     'mm'        => 0.001,          //Metric: Millimeter
     'cm'        => 0.01,           //Metric: Centimeter
     'dm'        => 0.1,            //Metric: Decimeter
@@ -35,6 +36,7 @@ class ConvertLength extends ConvertBase
     protected $lookup = array(
     'picometer'    => 'pm',
     'nanometer'    => 'nm',
+    'micrometer'   => 'microm',
     'millimeter'   => 'mm',
     'centimeter'   => 'cm',
     'decimeter'    => 'dm',
