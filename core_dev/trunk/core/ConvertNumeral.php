@@ -52,7 +52,7 @@ class ConvertNumeral extends ConvertBase
             $from = 'hex';
         }
 
-        if ($from == 'auto')
+        if ($from == 'auto' && is_numeric($val))
             $from = 'dec';
 
         $from = $this->getShortcode($from);
