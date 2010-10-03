@@ -7,11 +7,11 @@
 
 require_once('XmlRpcClient.php');
 
-//require_once('CurrencyFetcherBase.php');
+require_once('ICurrencyFetcher.php');
 
-class CurrencyFetcherFoxRate extends XmlRpcClient
+class CurrencyFetcherFoxRate extends XmlRpcClient implements ICurrencyFetcher
 {
-    protected $rpc_url    = 'http://foxrate.org/rpc/';
+    protected $rpc_url = 'http://foxrate.org/rpc/';
 
     function getRate($from, $to)
     {

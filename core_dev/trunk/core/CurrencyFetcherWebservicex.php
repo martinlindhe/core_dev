@@ -8,9 +8,9 @@
 
 //STATUS: wip, the web service is very slow! 2010-10-03
 
-require_once('CurrencyFetcherBase.php');
+require_once('ICurrencyFetcher.php');
 
-class CurrencyFetcherWebservicex extends CurrencyFetcherBase
+class CurrencyFetcherWebservicex implements ICurrencyFetcher
 {
     function getRate($from, $to)
     {

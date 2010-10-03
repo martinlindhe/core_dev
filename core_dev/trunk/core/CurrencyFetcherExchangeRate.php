@@ -5,9 +5,9 @@
 
 //STATUS: wip
 
-require_once('CurrencyFetcherBase.php');
+require_once('ICurrencyFetcher.php');
 
-class CurrencyFetcherExchangeRate extends CurrencyFetcherBase
+class CurrencyFetcherExchangeRate implements ICurrencyFetcher
 {
     private $api_key = ''; // (free) register for one at http://www.exchangerate-api.com/api-key
 
