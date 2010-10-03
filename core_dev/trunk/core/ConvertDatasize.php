@@ -36,10 +36,10 @@ class ConvertDatasize extends ConvertBase
     'gigabit'  => 'gbit',
 
     'byte'     => 'b',
-    'kilobyte' => 'kb', 'kib' => 'kb', 'k' => 'kb',
-    'megabyte' => 'mb', 'mib' => 'mb', 'm' => 'mb',
-    'gigabyte' => 'gb', 'gib' => 'gb', 'g' => 'gb',
-    'terabyte' => 'tb', 'tib' => 'tb', 't' => 'tb',
+    'kilobyte' => 'kb', 'kbyte' => 'kb', 'kib' => 'kb', 'k' => 'kb',
+    'megabyte' => 'mb', 'mbyte' => 'mb', 'mib' => 'mb', 'm' => 'mb',
+    'gigabyte' => 'gb', 'gbyte' => 'gb', 'gib' => 'gb', 'g' => 'gb',
+    'terabyte' => 'tb', 'tbyte' => 'tb', 'tib' => 'tb', 't' => 'tb',
     'petabyte' => 'pb',
     );
 
