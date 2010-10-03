@@ -17,7 +17,7 @@
 require_once('ConvertBase.php');
 require_once('Cache.php');
 
-require_once('service_currency_webservicex.php');
+require_once('CurrencyFetcherFoxRate.php');
 
 class ConvertCurrency extends ConvertBase
 {
@@ -192,8 +192,8 @@ class ConvertCurrency extends ConvertBase
      */
     function getRate($from, $to)
     {
-        $from = $this->getShortcode(strtolower($from));
-        $to   = $this->getShortcode(strtolower($to));
+        $from = $this->getUnitname($from);
+        $to   = $this->getUnitname($to);
         if (!$from || !$to)
             return false;
 
@@ -203,7 +203,9 @@ class ConvertCurrency extends ConvertBase
         $rate = $cache->get($key);
         if ($rate) return $rate;
 
-        $rate = webservicex_currency_conversion_rate($from, $to);
+        $fetcher = New CurrencyFetcherFoxRate();
+        $rate = $fetcher->getRate($from, $to);
+
         $cache->set($key, $rate);
         return $rate;
     }
