@@ -10,7 +10,7 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//TODO: handle bases above 10 (at least hex)
+//STATUS: ok
 
 require_once('ConvertBase.php');
 
@@ -20,41 +20,51 @@ class ConvertNumeral extends ConvertBase
     'bin' => 2,
     'oct' => 8,
     'dec' => 10,
-    //'hex' => 16,
+    'hex' => 16,
     );
 
     protected $lookup = array(
     'binary'      => 'bin',
     'octal'       => 'oct',
     'decimal'     => 'dec',
-    //'hexadecimal' => 'hex',
+    'hexadecimal' => 'hex',
     );
 
     function conv($from, $to, $val)
     {
+        if (substr($val, 0, 1) == 'b') {
+            $val = substr($val, 1);
+            $from = 'binary';
+        }
+
+        if (substr($val, 0, 1) == 'o') {
+            $val = substr($val, 1);
+            $from = 'octal';
+        }
+
+        if (substr($val, 0, 1) == 'x') {
+            $val = substr($val, 1);
+            $from = 'hex';
+        }
+
+        if (substr($val, 0, 2) == '0x') {
+            $val = substr($val, 2);
+            $from = 'hex';
+        }
+
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
 
         if (!$from || !$to)
             return false;
 
-        //XXX assumes base 2 to 10
-        if (!is_numeric($val))
+        if (!is_alphanumeric($val))
             return false;
 
         $base_from = $this->scale[$from];
         $base_to   = $this->scale[$to];
 
-        $res = $val % $base_to;
-        $multiplier = $base_from;
-
-        while (($val = intval($val / $base_to)) > 0)
-        {
-            $res += ($val % $base_to) * $multiplier;
-            $multiplier *= $base_from;
-        }
-
-        return $res;
+        return base_convert($val, $base_from, $base_to);
     }
 
     function convLiteral($s, $to, $from = 'decimal')
