@@ -7,8 +7,6 @@
 
 //STATUS: ok
 
-//TODO: add & use "recognizeType($s)" method for each class
-
 require_once('class.CoreBase.php');
 
 abstract class ConvertBase extends CoreBase

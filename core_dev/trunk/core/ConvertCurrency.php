@@ -21,7 +21,7 @@ require_once('CurrencyFetcherFoxRate.php');
 
 class ConvertCurrency extends ConvertBase
 {
-    private $cache_expire = 300; ///< expire time in seconds for local cache (in seconds)
+    private $cache_expire = 1200; ///< (20m) expire time in seconds for local cache (in seconds)
 
     protected $lookup = array(      ///< all supported currencies as of 2009.07.23
     'AFA'=>'Afghanistan Afghani',
@@ -201,7 +201,8 @@ class ConvertCurrency extends ConvertBase
         $cache = new Cache();
         $cache->setCacheTime($this->cache_expire);
         $rate = $cache->get($key);
-        if ($rate) return $rate;
+        if ($rate)
+            return $rate;
 
         $fetcher = New CurrencyFetcherFoxRate();
         $rate = $fetcher->getRate($from, $to);
