@@ -34,12 +34,12 @@ class ConvertNumeral extends ConvertBase
     {
         if (substr($val, 0, 1) == 'b') {
             $val = substr($val, 1);
-            $from = 'binary';
+            $from = 'bin';
         }
 
         if (substr($val, 0, 1) == 'o') {
             $val = substr($val, 1);
-            $from = 'octal';
+            $from = 'oct';
         }
 
         if (substr($val, 0, 1) == 'x') {
@@ -51,6 +51,9 @@ class ConvertNumeral extends ConvertBase
             $val = substr($val, 2);
             $from = 'hex';
         }
+
+        if ($from == 'auto')
+            $from = 'dec';
 
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);
