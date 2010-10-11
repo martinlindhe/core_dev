@@ -132,10 +132,10 @@ class XhtmlForm
             $this->handled = true;
 
         if ($this->handled) {
-            if ($this->success) echo '<div class="okay">'.$this->success.'</div><br/>';
+            if ($this->success) echo '<div class="good">'.$this->success.'</div><br/>';
             return true;
         }
-        echo '<div class="critical">'.$this->error.'</div><br/>';
+        echo '<div class="bad">'.$this->error.'</div><br/>';
         return false;
     }
 

@@ -170,7 +170,10 @@ class Wiki
         $menu = new XhtmlMenu();
         $menu->setCss('wiki_menu');
         $menu->add(t('Article'), '/wiki/show/'.$this->name);
-        $menu->add(t('Edit'),    '/wiki/edit/'.$this->name);
+
+        if ($session->id)
+            $menu->add(t('Edit'),    '/wiki/edit/'.$this->name);
+
         $menu->add(t('History'), '/wiki/history/'.$this->name);
 
         echo '<div class="wiki">';
@@ -215,6 +218,8 @@ class Wiki
         }
 
         $session = SessionHandler::getInstance();
+        if (!$session->id)
+            return false;
 
         $menu = new XhtmlMenu();
         $menu->setCss('wiki_menu');
