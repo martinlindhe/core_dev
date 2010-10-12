@@ -65,12 +65,11 @@ class AuthHandler extends CoreBase
             return false;
         }
 
-        $user = new User();
-        $id = $user->loadByName($username);
+        $user = new User($username);
 
-        $enc_password = sha1( $id.sha1($this->encrypt_key).sha1($password) );
+        $enc_password = sha1( $user->getId() . sha1($this->encrypt_key) . sha1($password) );
 
-        $q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_password).'" AND timeDeleted IS NULL';
+        $q = 'SELECT * FROM tblUsers WHERE userId='.$user->getId().' AND userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_password).'" AND timeDeleted IS NULL';
         $row = $db->getOneRow($q);
         if (!$row) {
             dp('Failed login attempt: username '.$username);

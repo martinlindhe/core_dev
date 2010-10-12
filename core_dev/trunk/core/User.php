@@ -16,9 +16,12 @@ class User extends CoreBase
     private $id, $name;
     private $exclude_deleted = true;
 
-    function __construct($id = 0)
+    function __construct($s = 0)
     {
-        $this->loadById($id);
+        if (is_numeric($s))
+            $this->loadById($s);
+        else if (is_string($s))
+            $this->loadByName($s);
     }
 
     function setId($id)
