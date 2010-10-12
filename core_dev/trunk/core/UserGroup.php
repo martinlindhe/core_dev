@@ -24,6 +24,16 @@ class UserGroup
         );
     }
 
+    function getName() { return $this->name; }
+    function getInfo() { return $this->info; }
+    function getLevel() { return $this->level; }
+
+    function getLevelDesc()
+    {
+        $x = $this->getUserlevels();
+        return $x[ $this->level ];
+    }
+
     function setName($s) { $this->name = $s; }
     function setInfo($s) { $this->info = $s; }
     function setLevel($n) { if (is_numeric($n)) $this->level = $n; }

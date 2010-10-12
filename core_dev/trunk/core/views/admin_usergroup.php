@@ -15,6 +15,23 @@ function addUserGroupSubmit($p, $caller)
 
 $header->setTitle('Admin: Manage user groups');
 
+
+
+echo '<table>';
+echo '<tr><th>Name</th><th>Level</th><th>Info</th></tr>';
+foreach ( $caller->getList() as $grp) {
+    echo '<tr>';
+    echo '<td>'.$grp->getName().'</td>';
+    echo '<td>'.$grp->getLevelDesc().'</td>';
+    echo '<td>'.$grp->getInfo().'</td>';
+    echo '</tr>';
+}
+echo '</table>';
+echo '<br/>';
+
+
+echo '<h2>Add new group</h2>';
+
 $form = new XhtmlForm('adm_usergroup');
 $form->addInput('name', 'Group name');
 $form->addTextarea('info', 'Info');
