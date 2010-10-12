@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
-//STATUS: WIP, rewriting
+//STATUS: WIP
 
 //TODO: maybe rename to LoginHandler (?)
 //TODO: reimplement user-block & ip-block
@@ -66,6 +66,10 @@ class AuthHandler extends CoreBase
         }
 
         $user = new User($username);
+        if (!$user->getId()) {
+            $error->add('Login failed');
+            return false;
+        }
 
         $enc_password = sha1( $user->getId() . sha1($this->encrypt_key) . sha1($password) );
 

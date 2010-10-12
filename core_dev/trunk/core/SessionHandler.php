@@ -135,7 +135,6 @@ class SessionHandler extends CoreBase
 
         $this->updateLoginTime();
 
-        //FIXME: move the sql somehwere else
         $db = SqlHandler::getInstance();
 
         $geoip = IPv4_to_GeoIP(client_ip());
