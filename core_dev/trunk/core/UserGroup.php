@@ -10,9 +10,9 @@
 class UserGroup
 {
     private $name;
-    private $info;
-    private $level = 0; ///< user level
     private $id;
+    private $level = 0; ///< user level
+    private $info;
 
     static function getUserlevels()
     {
@@ -27,6 +27,14 @@ class UserGroup
     function setName($s) { $this->name = $s; }
     function setInfo($s) { $this->info = $s; }
     function setLevel($n) { if (is_numeric($n)) $this->level = $n; }
+
+    function loadFromSql($row)
+    {
+        $this->name  = $row['name'];
+        $this->id    = $row['groupId'];
+        $this->level = $row['level'];
+        $this->info  = $row['info'];
+    }
 
     function save()
     {

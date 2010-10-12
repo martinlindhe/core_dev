@@ -9,11 +9,15 @@ class ViewModel extends ArrayObject
 {
     private $template;
 
-    public function __construct($template)
+    var $caller; ///< points to calling class
+
+    public function __construct($template, $caller = false)
     {
         //makes this a property overloaded object
         parent::__construct(array(), ArrayObject::ARRAY_AS_PROPS);
         $this->template = $template;
+
+        $this->caller = $caller;
     }
 
     /**
@@ -34,6 +38,9 @@ class ViewModel extends ArrayObject
         if (class_exists('XhtmlHeader'))        $header  = XhtmlHeader::getInstance();
         if (class_exists('XmlDocumentHandler')) $page    = XmlDocumentHandler::getInstance();
         if (class_exists('LocaleHandler'))      $locale  = LocaleHandler::getInstance();
+
+        // make reference to calling object available in the namespace of the view
+        $caller = $this->caller;
 
         ob_start();
         include($this->template);
