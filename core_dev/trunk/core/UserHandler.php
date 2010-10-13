@@ -14,21 +14,28 @@ class UserHandler
 
     function __construct($id = 0)
     {
-        if (is_numeric($id)) {
-
-            $user = new User($id);
-            $this->id   = $user->getId();
-            $this->name = $user->getName();
-        }
+        if (is_numeric($id))
+            $this->loadById($id);
     }
 
     function getId() { return $this->id; }
     function getName() { return $this->name; }
 
+    function loadById($n)
+    {
+        if (!is_numeric($n))
+            return false;
+
+        $user = new User($n);
+        $this->id   = $user->getId();
+        $this->name = $user->getName();
+    }
+
     function create($username, $usermode)
     {
-        global $db;
         if (!is_numeric($usermode)) return false;
+
+        $db = SqlHandler::getInstance();
 
         $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",userMode='.$usermode.',timeCreated=NOW()';
         $this->id   = $db->insert($q);
@@ -44,12 +51,54 @@ class UserHandler
      */
     function remove()
     {
-        global $db;
+        $db = SqlHandler::getInstance();
 
         $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$this->id;
         $db->update($q);
     }
 
+    /** Adds the user to a user group */
+    function addToGroup($n)
+    {
+        if (!is_numeric($n)) return false;
+
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT COUNT(*) FROM tblGroupMembers WHERE groupId='.$n.' AND userId='.$this->id;
+        if ($db->getOneItem($q))
+            return true;
+
+        $q = 'INSERT INTO tblGroupMembers SET groupId='.$n.',userId='.$this->id;
+        $db->insert($q);
+        return true;
+    }
+
+    /** Returns a list of UserGroup objects for all groups the user is a member of */
+    function getGroups()
+    {
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT groupId FROM tblGroupMembers WHERE userId='.$this->id;
+
+        $groups = array();
+        foreach ($db->get1dArray($q) as $grp_id)
+            $groups[] = new UserGroup($grp_id);
+
+        return $groups;
+    }
+
+    /** Returns the highest access level from group membership */
+    function getUserLevelByGroup()
+    {
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT t2.level FROM tblGroupMembers AS t1'.
+        ' INNER JOIN tblUserGroups AS t2 ON (t1.groupId=t2.groupId)'.
+        ' WHERE t1.userId='.$this->id.
+        ' ORDER BY t2.level DESC LIMIT 1';
+
+        return $db->getOneItem($q);
+    }
 
 /*
     function setUserName($username)
@@ -68,27 +117,12 @@ class UserHandler
      */
     function setPassword($_pwd)
     {
-        global $db;
-
+        $db = SqlHandler::getInstance();
         $auth = AuthHandler::getInstance();
+
         $q = 'UPDATE tblUsers SET userPass="'.sha1( $this->id.sha1( $auth->getEncryptKey() ).sha1($_pwd) ).'" WHERE userId='.$this->id;
         $db->update($q);
 
-        return true;
-    }
-
-    /**
-     * Set user mode to $_mode
-     */
-    function setMode($usermode)
-    {
-        global $db;
-        if (!is_numeric($usermode)) return false;
-
-        $q = 'UPDATE tblUsers SET userMode='.$usermode.' WHERE userId='.$this->id;
-        $db->update($q);
-
-        dp('Changed usermode for user '.$this->id.' to '.$usermode);
         return true;
     }
 

@@ -121,13 +121,14 @@ class SessionHandler extends CoreBase
      *
      * @param $id user id
      * @param $username user name
-     * @param $usermode user mode
      */
-    function start($id, $username, $usermode)
+    function start($id, $username)
     {
         $this->id = $id;
         $this->username = $username;
-        $this->usermode = $usermode;
+
+        $user = new UserHandler($id);
+        $this->usermode = $user->getUserLevelByGroup();
 
         if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
         if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;

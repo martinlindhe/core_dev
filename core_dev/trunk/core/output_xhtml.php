@@ -249,7 +249,7 @@ function xhtmlMap($shapes, $name, $id = '')
 /**
  * Creates select-dropdown menus out of specified category
  */
-function xhtmlSelectCategory($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
+function xhtmlSelectCategory__XXX_DEPRECATED($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
 {
     if (!is_numeric($_type) || !is_numeric($_owner)) return false;
 

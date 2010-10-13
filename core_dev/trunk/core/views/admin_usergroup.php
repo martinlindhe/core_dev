@@ -1,6 +1,9 @@
-<h1>Manage user groups</h1>
-
 <?php
+/**
+ *
+ */
+
+//TODO: ability to remove a group or edit an existing group
 
 function addUserGroupSubmit($p, $caller)
 {
@@ -15,20 +18,7 @@ function addUserGroupSubmit($p, $caller)
 
 $header->setTitle('Admin: Manage user groups');
 
-
-
-echo '<table>';
-echo '<tr><th>Name</th><th>Level</th><th>Info</th></tr>';
-foreach ( $caller->getList() as $grp) {
-    echo '<tr>';
-    echo '<td>'.$grp->getName().'</td>';
-    echo '<td>'.$grp->getLevelDesc().'</td>';
-    echo '<td>'.$grp->getInfo().'</td>';
-    echo '</tr>';
-}
-echo '</table>';
-echo '<br/>';
-
+echo '<h1>Manage user groups</h1>';
 
 echo '<h2>Add new group</h2>';
 
@@ -40,5 +30,20 @@ $form->addDropdown('level', 'Level', UserGroup::getUserlevels() );
 $form->addSubmit('Add');
 $form->setHandler('addUserGroupSubmit');
 echo $form->render();
+
+
+echo '<br/>';
+echo '<h2>Existing groups</h2>';
+
+echo '<table>';
+echo '<tr><th>Name</th><th>Level</th><th>Info</th></tr>';
+foreach ( $caller->getList() as $grp) {
+    echo '<tr>';
+    echo '<td>'.$grp->getName().'</td>';
+    echo '<td>'.$grp->getLevelDesc().'</td>';
+    echo '<td>'.$grp->getInfo().'</td>';
+    echo '</tr>';
+}
+echo '</table>';
 
 ?>

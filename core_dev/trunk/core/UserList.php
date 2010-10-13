@@ -17,22 +17,15 @@ require_once('UserHandler.php');
 
 class UserList
 {
-    private $usermode;
-    function setMode($n) { $this->usermode = $n; }
-
     /**
      * @return total number of users (excluding deleted ones)
      */
-    function getCount($usermode = 0)
+    function getCount()
     {
-        if (!is_numeric($usermode)) return false;
-
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT COUNT(*) FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
-        if ($usermode)
-            $q .= ' AND userMode='.$usermode;
 
         return $db->getOneItem($q);
     }
@@ -73,8 +66,6 @@ class UserList
 
         $q = 'SELECT * FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
-        if ($this->usermode)
-            $q .= ' AND userMode='.$this->usermode;
 
         if ($filter) $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
 
@@ -90,8 +81,6 @@ class UserList
 
         $q = 'SELECT userId, userName FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
-        if ($this->usermode)
-            $q .= ' AND userMode='.$this->usermode;
 
         if ($filter) $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
 
@@ -112,9 +101,6 @@ class UserList
 
         echo '<h1>Manage users</h1>';
         echo 'All users: <a href="/admin/core/userlist/">'.$this->getCount().'</a><br/>';
-        echo 'Webmasters: <a href="/admin/core/userlist/'.USERLEVEL_WEBMASTER.'">'.$this->getCount(USERLEVEL_WEBMASTER).'</a><br/>';
-        echo 'Admins: <a href="/admin/core/userlist/'.USERLEVEL_ADMIN.'">'.$this->getCount(USERLEVEL_ADMIN).'</a><br/>';
-        echo 'SuperAdmins: <a href="/admin/core/userlist/'.USERLEVEL_SUPERADMIN.'">'.$this->getCount(USERLEVEL_SUPERADMIN).'</a><br/>';
 //XXX TODO: lista användare online
         echo 'Users online: <a href="/admin/core/userlist/0/online">'.$this->onlineCount().'</a><br/>';
 
@@ -124,19 +110,6 @@ class UserList
         //process updates
         if ($session->isSuperAdmin && !empty($_POST))
         {
-            $list = $this->getUsers();
-
-            foreach ($list as $row)
-            {
-                if (!isset($_POST['mode_'.$row['userId']]))
-                    continue;
-
-                if ($_POST['mode_'.$row['userId']] != $row['userMode']) {
-                    $userhandler = new UserHandler($row['userId']);
-                    $userhandler->setMode($_POST['mode_'.$row['userId']]);
-                }
-            }
-
             if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode']))
             {
                 $auth = AuthHandler::getInstance();
@@ -165,7 +138,6 @@ class UserList
         echo '<th>Username</th>';
         echo '<th>Last active</th>';
         echo '<th>Created</th>';
-        echo '<th>User mode</th>';
         echo '</tr>';
         foreach ($list as $user)
         {
@@ -173,37 +145,14 @@ class UserList
             echo '<td><a href="/admin/core/useredit/'.$user['userId'].'">'.$user['userName'].'</a></td>';
             echo '<td>'.$user['timeLastActive'].'</td>';
             echo '<td>'.$user['timeCreated'].'</td>';
-            echo '<td>';
-            if ($session->isSuperAdmin) {
-                //XXX have user modes elsewhere
-                $user_modes = array(USERLEVEL_NORMAL => 'Normal', USERLEVEL_WEBMASTER => 'Webmaster', USERLEVEL_ADMIN => 'Admin', USERLEVEL_SUPERADMIN => 'Super admin');
-
-                echo xhtmlSelectArray('mode_'.$user['userId'], $user_modes, $user['userMode'], '', false);
-                if ($session->id != $user['userId'] && !$user['timeDeleted']) {
-                    echo coreButton('Delete', '/admin/core/userlist/?del='.$user['userId']);
-                }
-            } else {
-                echo $user['userMode'];
-            }
-            echo '</td>';
             echo '</tr>';
         }
         echo '<tr>';
         echo '<td colspan="3">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
-        echo '<td>';
-        if ($session->isSuperAdmin) {
-            echo '<select name="u_mode">';
-            echo '<option value="'.USERLEVEL_NORMAL.'">Normal</option>';
-            echo '<option value="'.USERLEVEL_WEBMASTER.'">Webmaster</option>';
-            echo '<option value="'.USERLEVEL_ADMIN.'">Admin</option>';
-            echo '<option value="'.USERLEVEL_SUPERADMIN.'">Super admin</option>';
-            echo '</select>';
-        } else {
-            echo 'normal user';
-        }
-        echo '</td>';
         echo '</tr>';
         echo '</table>';
+
+        echo 'XXX TODO: on creation, select & add user to a user group';
 
         if ($session->isSuperAdmin) {
             echo '<br/>';

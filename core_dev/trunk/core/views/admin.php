@@ -10,7 +10,6 @@ switch ($this->owner)
 {
 case 'userlist':
     $userlist = new UserList();
-    $userlist->setMode($this->child);
     echo $userlist->render();
     break;
 
