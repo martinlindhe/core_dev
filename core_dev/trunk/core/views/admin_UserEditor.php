@@ -8,7 +8,7 @@
 if (!$session->isSuperAdmin)
     return;
 
-$user = new UserHandler($caller->getId() );
+$user = new User($caller->getId() );
 if (!$user->getId()) {
     echo '<h2>No such user exists</h2>';
     return;

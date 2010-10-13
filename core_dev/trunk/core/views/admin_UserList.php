@@ -9,8 +9,8 @@ if (!$session->isAdmin)
     return;
 
 if ($session->isSuperAdmin && !empty($_GET['del'])) {
-    $userhandler = new UserHandler($_GET['del']);
-    $userhandler->remove();
+    $user = new User($_GET['del']);
+    $user->remove();
 }
 
 echo '<h1>Manage users</h1>';
@@ -44,29 +44,28 @@ echo xhtmlSubmit('Search');
 echo xhtmlFormClose();
 echo '<br/>';
 
-$list = $caller->getUsers($filter);
-
-//d( $list ); die;
-
 if ($session->isSuperAdmin)
     echo xhtmlForm('add_user');
 
-echo '<table summary="" border="1">';
+echo '<table border="1">';
 echo '<tr>';
 echo '<th>Username</th>';
 echo '<th>Last active</th>';
 echo '<th>Created</th>';
+echo '<th>Acess level</th>';
 echo '</tr>';
-foreach ($list as $user)
+
+foreach ($caller->getUsers($filter) as $user)
 {
     echo '<tr>';
     echo '<td><a href="/admin/core/useredit/'.$user->getId().'">'.$user->getName().'</a></td>';
     echo '<td>'.$user->getTimeLastActive().'</td>';
     echo '<td>'.$user->getTimeCreated().'</td>';
+    echo '<td>x</td>';
     echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="3">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
+echo '<td colspan="4">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
 echo '</tr>';
 echo '</table>';
 

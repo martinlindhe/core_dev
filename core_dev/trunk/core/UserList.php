@@ -10,7 +10,6 @@
 //TODO: factor our sql from here
 
 require_once('User.php');
-require_once('UserHandler.php');
 
 class UserList
 {

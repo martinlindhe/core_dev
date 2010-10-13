@@ -174,11 +174,11 @@ class AuthHandler extends CoreBase
             $_mode = USERLEVEL_SUPERADMIN;
         }
 
-        $userhandler = new UserHandler();
-        $userhandler->create($username, $usermode);
-        $userhandler->setPassword($password1);
+        $user = new User();
+        $user->create($username, $usermode);
+        $user->setPassword($password1);
 
-        dp('Registered user: '.$username.', id '.$userhandler->getId());
+        dp('Registered user: '.$username.', id '.$user->getId());
 
 /*
         //Stores the additional data from the userdata fields that's required at registration
@@ -186,7 +186,7 @@ class AuthHandler extends CoreBase
             handleRequiredUserdataFields($newUserId);
         }
 */
-        return $userhandler->getId();
+        return $user->getId();
     }
 
     /**

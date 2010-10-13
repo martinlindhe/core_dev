@@ -127,7 +127,7 @@ class SessionHandler extends CoreBase
         $this->id = $id;
         $this->username = $username;
 
-        $user = new UserHandler($id);
+        $user = new User($id);
         $this->usermode = $user->getUserLevelByGroup();
 
         if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
