@@ -9,6 +9,7 @@
 
 //TODO: factor our sql from here
 
+require_once('User.php');
 require_once('UserHandler.php');
 
 class UserList
@@ -55,6 +56,7 @@ class UserList
 
     /**
      * @param $filter partial username matching
+     * @return array of User objects
      */
     function getUsers($filter = '')
     {
@@ -63,9 +65,18 @@ class UserList
         $q = 'SELECT * FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
 
-        if ($filter) $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+        if ($filter)
+            $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
 
-        return $db->getArray($q);
+        $users = array();
+
+        foreach ($db->getArray($q) as $row) {
+            $user = new User();
+            $user->loadFromSql($row);
+            $users[] = $user;
+        }
+
+        return $users;
     }
 
     /**
@@ -78,7 +89,8 @@ class UserList
         $q = 'SELECT userId, userName FROM tblUsers';
         $q .= ' WHERE timeDeleted IS NULL';
 
-        if ($filter) $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+        if ($filter)
+            $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
 
         return $db->getMappedArray($q);
     }

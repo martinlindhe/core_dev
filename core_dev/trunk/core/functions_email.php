@@ -5,10 +5,12 @@
  * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
  */
 
+//STATUS: DEPRECATED, DROP FILE
+
 /**
  * Send email to multiple users
  */
-function contact_users($message, $subject, $all, $presvid, $logged_in_days, $days, $res)
+function contact_users___DEPRECATED($message, $subject, $all, $presvid, $logged_in_days, $days, $res)
 {
     global $h, $db;
     if (empty($message) || empty($subject)) return false;

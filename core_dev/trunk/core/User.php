@@ -7,14 +7,14 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-//STATUS: wip   -will replace class.Users.php
+//STATUS: wip, is replacing class.Users.php
 
-require_once('class.CoreBase.php');
-
-class User extends CoreBase
+class User
 {
-    private $id, $name;
-    private $exclude_deleted = true;
+    private $id;
+    private $name;
+    private $time_created;
+    private $time_last_active;
 
     function __construct($s = 0)
     {
@@ -24,41 +24,45 @@ class User extends CoreBase
             $this->loadByName($s);
     }
 
-    function setId($id)
-    {
-        $this->loadById($id);
-    }
-
     function getId() { return $this->id; }
     function getName() { return $this->name; }
+    function getTimeCreated() { return $this->time_created; }
+    function getTimeLastActive() { return $this->time_last_active; }
+
+    function loadFromSql($row)
+    {
+        $this->id               = $row['userId'];
+        $this->name             = $row['userName'];
+        $this->time_created     = $row['timeCreated'];
+        $this->time_last_active = $row['timeLastActive'];
+    }
 
     function loadById($id)
     {
-        global $db;
         if (!is_numeric($id)) return false;
 
-        $q = 'SELECT userName FROM tblUsers WHERE userId='.$id;
-        if ($this->exclude_deleted) $q .= ' AND timeDeleted IS NULL';
-        $res = $db->getOneItem($q);
-        if (!$res) return false;
+        $db = SqlHandler::getInstance();
 
-        $this->id   = $id;
-        $this->name = $res;
+        $q = 'SELECT * FROM tblUsers WHERE userId='.$id;
+        $q .= ' AND timeDeleted IS NULL';
+
+        $row = $db->getOneRow($q);
+        if (!$row) return false;
+        $this->loadFromSql($row);
 
         return $this->name;
     }
 
     function loadByName($name)
     {
-        global $db;
+        $db = SqlHandler::getInstance();
 
-        $q = 'SELECT userId FROM tblUsers WHERE userName="'.$db->escape($name).'"';
-        if ($this->exclude_deleted) $q .= ' AND timeDeleted IS NULL';
-        $res = $db->getOneItem($q);
-        if (!$res) return false;
+        $q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($name).'"';
+        $q .= ' AND timeDeleted IS NULL';
 
-        $this->id   = $res;
-        $this->name = $name;
+        $row = $db->getOneRow($q);
+        if (!$row) return false;
+        $this->loadFromSql($row);
 
         return $this->id;
     }

@@ -46,6 +46,8 @@ echo '<br/>';
 
 $list = $caller->getUsers($filter);
 
+//d( $list ); die;
+
 if ($session->isSuperAdmin)
     echo xhtmlForm('add_user');
 
@@ -57,10 +59,10 @@ echo '<th>Created</th>';
 echo '</tr>';
 foreach ($list as $user)
 {
-    echo '<tr'.($user['timeDeleted']?' class="critical"':'').'>';
-    echo '<td><a href="/admin/core/useredit/'.$user['userId'].'">'.$user['userName'].'</a></td>';
-    echo '<td>'.$user['timeLastActive'].'</td>';
-    echo '<td>'.$user['timeCreated'].'</td>';
+    echo '<tr>';
+    echo '<td><a href="/admin/core/useredit/'.$user->getId().'">'.$user->getName().'</a></td>';
+    echo '<td>'.$user->getTimeLastActive().'</td>';
+    echo '<td>'.$user->getTimeCreated().'</td>';
     echo '</tr>';
 }
 echo '<tr>';
