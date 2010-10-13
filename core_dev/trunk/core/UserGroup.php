@@ -50,8 +50,15 @@ class UserGroup
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'INSERT INTO tblUserGroups SET name="'.$db->escape($this->name).'",info="'.$db->escape($this->info).'",level='.$this->level;
-        $this->id = $db->insert($q);
+        $q = 'SELECT groupId FROM tblUserGroups WHERE name="'.$db->escape($this->name).'"';
+        $this->id = $db->getOneItem($q);
+        if ($this->id) {
+            $q = 'UPDATE tblUserGroups SET info="'.$db->escape($this->info).'",level='.$this->level.' WHERE groupId='.$this->id;
+            $db->update($q);
+        } else {
+            $q = 'INSERT INTO tblUserGroups SET name="'.$db->escape($this->name).'",info="'.$db->escape($this->info).'",level='.$this->level;
+            $this->id = $db->insert($q);
+        }
 
         return $this->id;
     }
