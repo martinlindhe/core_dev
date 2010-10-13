@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * This is the defualt view for the UserGroupList class
  */
 
 //TODO: ability to remove a group or edit an existing group

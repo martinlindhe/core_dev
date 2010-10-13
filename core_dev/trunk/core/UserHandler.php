@@ -3,9 +3,13 @@
  * $Id$
  *
  * Class to deal with creating and modifying a user
+ *
+ * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
 //STATUS: wip
+
+//XXX merge this class into User class ?
 
 class UserHandler
 {
@@ -101,15 +105,6 @@ class UserHandler
         return $l ? $l : 0;
     }
 
-/*
-    function setUserName($username)
-    {
-        global $db;
-
-        $q = 'UPDATE tblUsers SET userName="'.$db->escape($username).'" WHERE userId='.$this->id;
-        $db->update($q);
-    }
-*/
     /**
      * Sets a new password for the user
      *

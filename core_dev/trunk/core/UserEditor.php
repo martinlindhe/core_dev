@@ -3,6 +3,8 @@
  * $Id$
  *
  * Tool to view, modify and delete a user
+ *
+ * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -23,7 +25,7 @@ class UserEditor
 
     function render()
     {
-        $view = new ViewModel('views/admin_usereditor.php', $this);
+        $view = new ViewModel('views/admin_UserEditor.php', $this);
         return $view->render();
     }
 

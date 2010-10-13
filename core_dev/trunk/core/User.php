@@ -18,7 +18,7 @@ class User
 
     function __construct($s = 0)
     {
-        if (is_numeric($s))
+        if ($s && is_numeric($s))
             $this->loadById($s);
         else if (is_string($s))
             $this->loadByName($s);

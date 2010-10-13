@@ -97,7 +97,7 @@ class UserList
 
     function render()
     {
-        $view = new ViewModel('views/admin_userlist.php', $this);
+        $view = new ViewModel('views/admin_UserList.php', $this);
         return $view->render();
     }
 }

@@ -45,7 +45,7 @@ class UserGroupList
 
     function render()
     {
-        $view = new ViewModel('views/admin_usergroup.php', $this);
+        $view = new ViewModel('views/admin_UserGroupList.php', $this);
         return $view->render();
     }
 }
