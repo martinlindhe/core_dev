@@ -53,6 +53,7 @@ echo '<th>Username</th>';
 echo '<th>Last active</th>';
 echo '<th>Created</th>';
 echo '<th>User level</th>';
+echo '<th>Groups</th>';
 echo '</tr>';
 
 foreach ($caller->getUsers($filter) as $user)
@@ -62,10 +63,17 @@ foreach ($caller->getUsers($filter) as $user)
     echo '<td>'.$user->getTimeLastActive().'</td>';
     echo '<td>'.$user->getTimeCreated().'</td>';
     echo '<td>'.$user->getUserLevelName().'</td>';
+
+    $grps = array();
+    foreach ($user->getGroups() as $g)
+        $grps[] = $g->getName();
+
+    echo '<td>'.implode(', ', $grps).'</td>';
+
     echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="4">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
+echo '<td colspan="5">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
 echo '</tr>';
 echo '</table>';
 
