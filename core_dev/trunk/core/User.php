@@ -9,6 +9,11 @@
 
 //STATUS: wip, is replacing class.Users.php
 
+define('USERLEVEL_NORMAL',      0);
+define('USERLEVEL_WEBMASTER',   1);
+define('USERLEVEL_ADMIN',       2);
+define('USERLEVEL_SUPERADMIN',  3);
+
 class User
 {
     private $id;
@@ -22,6 +27,16 @@ class User
             $this->loadById($s);
         else if (is_string($s))
             $this->loadByName($s);
+    }
+
+    static function getUserLevels()
+    {
+        return array(
+        USERLEVEL_NORMAL     => 'Normal',
+        USERLEVEL_WEBMASTER  => 'Webmaster',
+        USERLEVEL_ADMIN      => 'Admin',
+        USERLEVEL_SUPERADMIN => 'Super Admin',
+        );
     }
 
     function getId() { return $this->id; }
@@ -124,7 +139,7 @@ class User
     }
 
     /** Returns the highest access level from group membership */
-    function getUserLevelByGroup()
+    function getUserLevel()
     {
         $db = SqlHandler::getInstance();
 
@@ -135,6 +150,12 @@ class User
 
         $l = $db->getOneItem($q);
         return $l ? $l : 0;
+    }
+
+    function getUserLevelName()
+    {
+        $x = User::getUserLevels();
+        return $x[ $this->getUserLevel() ];
     }
 
     /**

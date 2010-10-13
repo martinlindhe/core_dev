@@ -25,7 +25,7 @@ echo '<h2>Add new group</h2>';
 $form = new XhtmlForm('adm_usergroup');
 $form->addInput('name', 'Group name');
 $form->addTextarea('info', 'Info');
-$form->addDropdown('level', 'Level', UserGroup::getUserlevels() );
+$form->addDropdown('level', 'Level', User::getUserLevels() );
 
 $form->addSubmit('Add');
 $form->setHandler('addUserGroupSubmit');

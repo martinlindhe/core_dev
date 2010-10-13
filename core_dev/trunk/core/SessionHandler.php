@@ -11,10 +11,7 @@
 //TODO: is setActive() method even nessecary with the RequestHandler blacklist???
 //FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
-define('USERLEVEL_NORMAL',      0);
-define('USERLEVEL_WEBMASTER',   1);
-define('USERLEVEL_ADMIN',       2);
-define('USERLEVEL_SUPERADMIN',  3);
+require_once('User.php');
 
 class SessionHandler extends CoreBase
 {
@@ -128,7 +125,7 @@ class SessionHandler extends CoreBase
         $this->username = $username;
 
         $user = new User($id);
-        $this->usermode = $user->getUserLevelByGroup();
+        $this->usermode = $user->getUserLevel();
 
         if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
         if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;

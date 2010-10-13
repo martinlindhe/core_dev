@@ -52,7 +52,7 @@ echo '<tr>';
 echo '<th>Username</th>';
 echo '<th>Last active</th>';
 echo '<th>Created</th>';
-echo '<th>Acess level</th>';
+echo '<th>User level</th>';
 echo '</tr>';
 
 foreach ($caller->getUsers($filter) as $user)
@@ -61,7 +61,7 @@ foreach ($caller->getUsers($filter) as $user)
     echo '<td><a href="/admin/core/useredit/'.$user->getId().'">'.$user->getName().'</a></td>';
     echo '<td>'.$user->getTimeLastActive().'</td>';
     echo '<td>'.$user->getTimeCreated().'</td>';
-    echo '<td>x</td>';
+    echo '<td>'.$user->getUserLevelName().'</td>';
     echo '</tr>';
 }
 echo '<tr>';

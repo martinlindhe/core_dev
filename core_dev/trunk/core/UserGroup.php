@@ -20,16 +20,6 @@ class UserGroup
             $this->loadById($id);
     }
 
-    static function getUserlevels()
-    {
-        return array(
-        USERLEVEL_NORMAL     => 'Normal',
-        USERLEVEL_WEBMASTER  => 'Webmaster',
-        USERLEVEL_ADMIN      => 'Admin',
-        USERLEVEL_SUPERADMIN => 'Super Admin',
-        );
-    }
-
     function getId() { return $this->id; }
     function getName() { return $this->name; }
     function getInfo() { return $this->info; }
@@ -37,7 +27,7 @@ class UserGroup
 
     function getLevelDesc()
     {
-        $x = $this->getUserlevels();
+        $x = User::getUserLevels();
         return $x[ $this->level ];
     }
 
