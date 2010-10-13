@@ -37,7 +37,7 @@ echo '<h2>Existing groups</h2>';
 
 echo '<table>';
 echo '<tr><th>Name</th><th>Level</th><th>Info</th></tr>';
-foreach ( $caller->getList() as $grp) {
+foreach ( $caller->getItems() as $grp) {
     echo '<tr>';
     echo '<td>'.$grp->getName().'</td>';
     echo '<td>'.$grp->getLevelDesc().'</td>';

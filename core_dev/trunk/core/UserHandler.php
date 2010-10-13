@@ -97,7 +97,8 @@ class UserHandler
         ' WHERE t1.userId='.$this->id.
         ' ORDER BY t2.level DESC LIMIT 1';
 
-        return $db->getOneItem($q);
+        $l = $db->getOneItem($q);
+        return $l ? $l : 0;
     }
 
 /*
