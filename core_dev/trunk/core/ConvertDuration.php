@@ -23,16 +23,18 @@ class ConvertDuration extends ConvertBase
     'dy'   => 86400,
     'week' => 604800,
     'mo'   => 2592000,  //30 days
-    'yr'   => 31556952, //365.2425 days (gregorian year)
+    'yr'   => 31556952, //365.2425 days (gregorian year), modern more exact measurement
+    'jyr'  => 31557600, //365.25 days (julian year), still used sometimes as a simple estimate of a "year"
     );
 
     protected $lookup = array(
-    'second' => 'sec', 'seconds' => 'sec',
-    'minute' => 'min', 'minutes' => 'min',
-    'hour'   => 'hr',  'hours'   => 'hr',
-    'day'    => 'dy',  'days'    => 'dy',
-    'month'  => 'mo',  'months'  => 'mo',
-    'year'   => 'yr',  'years'   => 'yr',
+    'second'      => 'sec', 'seconds' => 'sec',
+    'minute'      => 'min', 'minutes' => 'min',
+    'hour'        => 'hr',  'hours'   => 'hr',
+    'day'         => 'dy',  'days'    => 'dy',
+    'month'       => 'mo',  'months'  => 'mo',
+    'year'        => 'yr',  'years'   => 'yr',  'gregorian year' => 'yr',
+    'julian year' => 'jyr',
     );
 
     function conv($from, $to, $val)
