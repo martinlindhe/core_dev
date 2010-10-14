@@ -3,8 +3,6 @@
  * This is the defualt view for the UserEditor class
  */
 
-//TODO: ability to remove group membership
-
 if (!$session->isSuperAdmin)
     return;
 
@@ -22,7 +20,6 @@ if ($session->id != $caller->getId() && isset($_GET['remove'])) {
     return;
 }
 
-//if (isset($_GET['block'])) addBlock(BLOCK_USERID, $userId);
 if (!empty($_POST['change_pwd'])) {
     $user->setPassword($_POST['change_pwd']);
     echo '<div class="item">Password changed!</div>';
@@ -33,11 +30,16 @@ if (!empty($_POST['grp_id'])) {
     $user->addToGroup($_POST['grp_id']);
 }
 
+if (!empty($_GET['rm_grp'])) {
+    $user->removeFromGroup($_GET['rm_grp']);
+}
+
 echo '<h2>Group membership</h2>';
 echo 'This user is member of the following groups:<br/>';
 
 foreach ($user->getGroups() as $g) {
-    echo $g->getName()."<br>";
+    echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
+    echo $g->getName().'<br/>';
 }
 
 

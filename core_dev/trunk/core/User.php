@@ -124,6 +124,17 @@ class User
         return true;
     }
 
+    function removeFromGroup($n)
+    {
+        if (!is_numeric($n)) return false;
+
+        $db = SqlHandler::getInstance();
+
+        $q = 'DELETE FROM tblGroupMembers WHERE groupId='.$n.' AND userId='.$this->id;
+        $db->delete($q);
+        return true;
+    }
+
     /** Returns a list of UserGroup objects for all groups the user is a member of */
     function getGroups()
     {

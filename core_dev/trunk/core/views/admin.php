@@ -13,7 +13,7 @@ case 'userlist':
     echo $userlist->render();
     break;
 
-case 'useredit': //child=user id, XXX called from userlist class
+case 'useredit': //child=user id, XXX link to here is hardcoded in admin_UserList.php view
     $useredit = new UserEditor();
     $useredit->setId($this->child);
     echo $useredit->render();
