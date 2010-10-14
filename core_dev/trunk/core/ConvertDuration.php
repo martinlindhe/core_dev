@@ -17,23 +17,35 @@ require_once('ConvertBase.php');
 class ConvertDuration extends ConvertBase
 {
     protected $scale = array( ///< unit scale to a second
+    'ps'   => 0.000000000001, // picosecond
+    'ns'   => 0.000000001,    // nanosecond
+    'µs'   => 0.000001,       // microsecond (1 / xx)
+    'ms'   => 0.001,          // millisecond (1 / 1000)
+    'cs'   => 0.01,           // centisecond (1 / 100)
+    'ds'   => 0.1,            // decisecond  (1 / 10)
     'sec'  => 1,
-    'min'  => 60,
-    'hr'   => 3600,
-    'dy'   => 86400,
-    'week' => 604800,
-    'mo'   => 2592000,  //30 days
-    'yr'   => 31556952, //365.2425 days (gregorian year), modern more exact measurement
-    'jyr'  => 31557600, //365.25 days (julian year), still used sometimes as a simple estimate of a "year"
+    'min'  => 60,             // 60 sec
+    'hr'   => 3600,           // 60 minutes
+    'dy'   => 86400,          // 24 hours
+    'week' => 604800,         // 7 days
+    'mo'   => 2592000,        // 30 days
+    'yr'   => 31556952,       // 365.2425 days (gregorian year), modern more exact measurement
+    'jyr'  => 31557600,       // 365.25 days (julian year), still used sometimes as a simple estimate of a "year"
     );
 
     protected $lookup = array(
-    'second'      => 'sec', 'seconds' => 'sec',
-    'minute'      => 'min', 'minutes' => 'min',
-    'hour'        => 'hr',  'hours'   => 'hr',
-    'day'         => 'dy',  'days'    => 'dy',
-    'month'       => 'mo',  'months'  => 'mo',
-    'year'        => 'yr',  'years'   => 'yr',  'gregorian year' => 'yr',
+    'picosecond'  => 'ps',  'picoseconds'  => 'ps',
+    'nanosecond'  => 'ns',  'nanoseconds'  => 'ns',
+    'microsecond' => 'µs',  'microseconds' => 'µs',
+    'millisecond' => 'ms',  'milliseconds' => 'ms',
+    'centisecond' => 'cs',  'centiseconds' => 'cs',
+    'decisecond'  => 'ds',  'deciseconds'  => 'ds',
+    'second'      => 'sec', 'seconds'      => 'sec',
+    'minute'      => 'min', 'minutes'      => 'min',
+    'hour'        => 'hr',  'hours'        => 'hr',
+    'day'         => 'dy',  'days'         => 'dy',
+    'month'       => 'mo',  'months'       => 'mo',
+    'year'        => 'yr',  'years'        => 'yr',  'gregorian year' => 'yr',
     'julian year' => 'jyr',
     );
 
