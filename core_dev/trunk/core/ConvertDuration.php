@@ -27,7 +27,7 @@ class ConvertDuration extends ConvertBase
     'min'  => 60,             // 60 sec
     'hr'   => 3600,           // 60 minutes
     'dy'   => 86400,          // 24 hours
-    'week' => 604800,         // 7 days
+    'wk'   => 604800,         // 7 days
     'mo'   => 2592000,        // 30 days
     'yr'   => 31556952,       // 365.2425 days (gregorian year), modern more exact measurement
     'jyr'  => 31557600,       // 365.25 days (julian year), still used sometimes as a simple estimate of a "year"
@@ -44,6 +44,7 @@ class ConvertDuration extends ConvertBase
     'minute'      => 'min', 'minutes'      => 'min',
     'hour'        => 'hr',  'hours'        => 'hr',
     'day'         => 'dy',  'days'         => 'dy',
+    'week'        => 'wk',  'weeks'        => 'wk',
     'month'       => 'mo',  'months'       => 'mo',
     'year'        => 'yr',  'years'        => 'yr',  'gregorian year' => 'yr',
     'julian year' => 'jyr',
