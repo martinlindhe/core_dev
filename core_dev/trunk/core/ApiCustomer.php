@@ -29,11 +29,12 @@ class ApiCustomer
     function getOwner() { return $this->owner; }
 
     function setPassword($s) { $this->password = $s; }
+    function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
 
     function loadFromSql($row)
     {
-        $this->id = $row['customerId'];
-        $this->name = $row['customerName'];
+        $this->id    = $row['customerId'];
+        $this->name  = $row['customerName'];
         $this->owner = $row['ownerId'];
     }
 
@@ -69,6 +70,17 @@ class ApiCustomer
         $setting = new Settings(Settings::CUSTOMER);
         $setting->setOwner($this->id);
         $setting->set($key, $val);
+    }
+
+    function save()
+    {
+        if (!$this->id)
+            throw new exception ('XXX save new customer');
+
+        $db = SqlHandler::getInstance();
+
+        $q = 'UPDATE tblApiCustomers SET customerName="'.$this->name.'",ownerId='.$this->owner.' WHERE customerId='.$this->id;
+        $db->update($q);
     }
 }
 
