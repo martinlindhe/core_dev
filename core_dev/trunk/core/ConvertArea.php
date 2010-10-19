@@ -16,14 +16,18 @@ require_once('ConvertBase.php');
 class ConvertArea extends ConvertBase
 {
     protected $scale = array( ///< unit scale to square metre (m²)
+//TODO: square millimetre
+//TODO: square centimetre
     'm²'    => 1,              // square metre
     'a'     => 100,            // are (100 m²)
     'ha'    => 10000,          // hectare (10 000 m²)
     'km²'   => 1000000,        // square kilometre (100 hectares)
 
+//TODO: square inch
     'sq ft' => 0.09290304,     // square foot
     'sq yd' => 0.83612736,     // square yard = 9 square feet
     'acre'  => 4046.8564224,   // = 4840 square yards = 43560 square feet
+//TODO: square mile (U.S. mile)
     );
 
     protected $lookup = array(
