@@ -14,4 +14,6 @@ if ($m->convLiteral('3 acres', 'square meter') != 12140.57)           echo "FAIL
 if ($m->convLiteral('2 square feet', 'square meter') != 0.19)         echo "FAIL 5\n";
 if ($m->convLiteral('4 square yard', 'square meter') != 3.34)         echo "FAIL 6\n";
 
+if ($m->convLiteral('140 acre', 'hectare') != 56.66)                  echo "FAIL 7\n";
+
 ?>
