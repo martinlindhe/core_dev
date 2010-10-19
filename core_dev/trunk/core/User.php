@@ -82,17 +82,15 @@ class User
         return $this->id;
     }
 
-    function create($username, $usermode)
+    function create($username)
     {
-        if (!is_numeric($usermode)) return false;
-
         $db = SqlHandler::getInstance();
 
-        $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",userMode='.$usermode.',timeCreated=NOW()';
+        $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",timeCreated=NOW()';
         $this->id   = $db->insert($q);
         $this->name = $username;
 
-        dp('Created user '.$this->id.' with usermode '.$usermode);
+        dp('Created user '.$this->id);
 
         return $this->id;
     }

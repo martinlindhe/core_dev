@@ -19,7 +19,7 @@ case 'useredit': //child=user id, XXX link to here is hardcoded in admin_UserLis
     echo $useredit->render();
     break;
 
-case 'usergroups':
+case 'usergroup':
     $grouplist = new UserGroupList();
     echo $grouplist->render();
     break;
@@ -31,7 +31,7 @@ case 'phpinfo':
 default:
     echo '<h1>core_dev admin</h1>';
     echo '<a href="/admin/core/userlist">Manage users</a><br/>';
-    echo '<a href="/admin/core/usergroups">Manage user groups</a><br/>';
+    echo '<a href="/admin/core/usergroup">Manage user groups</a><br/>';
     echo '<br/>';
     echo '<a href="/admin/core/phpinfo">phpinfo()</a><br/>';
     break;

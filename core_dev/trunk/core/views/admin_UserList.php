@@ -24,14 +24,19 @@ if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
 //process updates
 if ($session->isSuperAdmin && !empty($_POST))
 {
-    if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']) && isset($_POST['u_mode']))
+    if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']))
     {
         $auth = AuthHandler::getInstance();
 
-        $new_id = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd'], $_POST['u_mode']);
+        $new_id = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd']);
         if (!is_numeric($new_id)) {
             echo '<div class="critical">'.$new_id.'</div>';
         } else {
+            if (!empty($_POST['u_grp'])) {
+                $user = new User($new_id);
+                $user->addToGroup($_POST['u_grp']);
+            }
+
             echo '<div class="okay">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
         }
     }
@@ -73,7 +78,12 @@ foreach ($caller->getUsers($filter) as $user)
     echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="5">Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').'</td>';
+echo '<td colspan="5">';
+echo 'Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd');
+
+$grp = new UserGroupList();
+echo xhtmlSelectArray('u_grp', $grp->getIndexedList() ).' ';
+echo '</td>';
 echo '</tr>';
 echo '</table>';
 
