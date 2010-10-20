@@ -1,15 +1,25 @@
 <?php
+//XXXXXXX IMPORTANT: renamed getHeader -> getResponseHeader, getHeaders->getResponseHeaders  ... update all users!!!
+
+
 /**
  * $Id$
  *
- * HTTP Client class to GET/POST data using the http protocol
+ * HTTP Client class to GET/POST data using the HTTP protocol
  *
+ * References
+ * ----------
  * http://tools.ietf.org/html/rfc2616 - Hypertext Transfer Protocol -- HTTP/1.1
+ *
+ * NTLM HTTP Authentication
+ * http://davenport.sourceforge.net/ntlm.html#ntlmHttpAuthentication
  *
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: ok
+//STATUS: wip
+
+//TODO: add a separate "get only headers" function
 
 //TODO: extend from Url ???
 
@@ -19,9 +29,12 @@ WWW-Authenticate: Negotiate
 WWW-Authenticate: NTLM
 */
 
-//FIXME NTLM login to IIS server does a redirect and header is not parsed properly afterwards
-//FIXME "301 moved permanently" doesnt properly re-parse the subsequent request,
-//      which curl does automatically. see $max_redirects
+/**
+ * TODO make NTLM work......... curl
+ *
+ * auth med user "sweweb":    Authorization: NTLM TlRMTVNTUAABAAAABoIIAAAAAAAAAAAAAAAAAAAAAAA=
+ * server response:           WWW-Authenticate: NTLM TlRMTVNTUAACAAAADwAPADgAAAAGgooCD0s3WhzSkKMAAAAAAAAAAIwAjABHAAAABQCTCAAAAA9VTkktWEsxUTNZNkdCRTUCAB4AVQBOAEkALQBYAEsAMQBRADMAWQA2AEcAQgBFADUAAQAeAFUATgBJAC0AWABLADEAUQAzAFkANgBHAEIARQA1AAQAHgB1AG4AaQAtAHgAawAxAHEAMwB5ADYAZwBiAGUANQADAB4AdQBuAGkALQB4AGsAMQBxADMAeQA2AGcAYgBlADUAAAAAAA==
+ */
 
 require_once('core.php');
 require_once('network.php');
@@ -31,17 +44,22 @@ require_once('Cache.php');
 
 class HttpClient extends CoreBase
 {
-    public  $Url;              ///< Url property
-    private $headers, $body;
-    private $status_code;      ///< return code from http request, such as 404
-    private $cache_time = 0;   ///< in seconds
-    private $user_agent = 'core_dev HttpClient 1.0';
-    private $referer    = '';  ///< if set, send Referer header
-    private $cookies = array(); ///< holds cookies to be sent to the server in the following request
-    private $max_redirects = 99;
-    private $connection_timeout = 120; ///< 2 minutes
-    private $content_type = '';
-    private $username, $password;
+    public  $Url;                          ///< Url property
+    private $ch;                           ///< curl handle
+    private $headers;
+    private $body;
+    private $status_code;                  ///< return code from http request, such as 404
+    private $cache_time         = 0;       ///< in seconds
+    private $user_agent         = 'core_dev HttpClient 1.0';
+    private $referer            = '';      ///< if set, send Referer header
+    private $cookies            = array(); ///< holds cookies to be sent to the server in the following request
+    private $connection_timeout = 120;     ///< 2 minutes
+    private $content_type       = '';
+
+    private $username;
+    private $password;
+
+    private $auth_method        = '';
 
     function __construct($url = '')
     {
@@ -50,22 +68,42 @@ class HttpClient extends CoreBase
             return false;
         }
 
+        $this->ch = curl_init();
+
+        if (!$this->ch)
+            throw new Exception ('curl error: '.curl_errstr($this->ch).' ('.curl_errno($this->ch) );
+
         $this->Url = new Url($url);
+    }
+
+    function __destruct()
+    {
+        curl_close($this->ch);
+    }
+
+    /**
+     * Performs a HTTP HEAD request
+     */
+    function getHead()
+    {
     }
 
     function getBody()
     {
-        $this->get(false);
-        return $this->body;
+        return $this->get();
     }
 
-    function getHeaders()
+    function post($params)
     {
-        $this->get(true);
+        return $this->get($params);
+    }
+
+    function getResponseHeaders()
+    {
         return $this->headers;
     }
 
-    function getHeader($name)
+    function getResponseHeader($name)
     {
         $name = strtolower($name);
 
@@ -134,98 +172,106 @@ class HttpClient extends CoreBase
     function setUsername($s) { $this->username = $s; }
     function setPassword($s) { $this->password = $s; }
 
-    /**
-     * @param $n max number of redirects, set 0 to disable redirects
-     */
-    function setMaxRedirects($n) { $this->max_redirects = $n; }
-
-    function saveBody($dst_name)
+    private function setAuthMethod($s)
     {
-        $data = $this->getBody();
-        file_put_contents($dst_name, $data);
+        $x = explode(' ', $s, 2);
+
+        switch ($x[0]) {
+        case 'basic': // $s = basic realm="name"
+            //XXX care about realm?
+            $this->auth_method = 'basic';
+            break;
+
+        case 'NTLM':  // $s = NTLM
+            $this->auth_method = 'NTLM';
+            break;
+
+        default:
+            d($this->headers);
+            throw new Exception ('unhandled auth method: '.$x[0]);
+        }
+
+        // force a second request to complete the authentication procedure
+        $this->getBody();
     }
 
-    function post($params)
+    function saveBody($out_file)
     {
-        return $this->get(false, $params);
+        $data = $this->getBody();
+        file_put_contents($out_file, $data);
     }
 
     /**
      * Fetches the data of the web resource
-     * @param $post_params array of key->val pairs of POST parameters to send
      * uses HTTP AUTH if username is set
+     *
+     * @param $post_params array of key->val pairs of POST parameters to send
      */
-    private function get($head_only = false, $post_params = array())
+    private function get($post_params = array())
     {
-        $ch = curl_init( $this->Url->get() );
-
-        if (!$ch) {
-            echo "curl error: ".curl_errstr($ch)." (".curl_errno($ch).")".ln();
-            return false;
-        }
-
-        if ($this->content_type)
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$this->content_type));
-
-        if ($this->Url->getScheme() == 'https') {
-            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        }
-
-        if ($this->max_redirects) {
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt($ch, CURLOPT_MAXREDIRS, $this->max_redirects);
-        } else {
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
-            curl_setopt($ch, CURLOPT_MAXREDIRS, 0);
-        }
-
-        if ($this->referer)
-            curl_setopt($ch, CURLOPT_REFERER, $this->referer);
-
-        if ($this->username) {
-            //curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_NTLM); //for "Server: Microsoft-IIS/5.0"
-            curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
-        }
-
         $cache = new Cache();
         $cache->setCacheTime($this->cache_time);
 
-        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive()) {
-
+        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive())
+        {
             if ($this->getDebug()) $cache->setDebug();
             $key_head = 'url_head//'.sha1( $this->Url->get() );
             $key_full = 'url//'.     sha1( $this->Url->get() );
 
-            if ($head_only) {
-                $this->headers = unserialize( $cache->get($key_head) );
-                if ($this->headers)
-                    return true;
-            } else {
-                $full = $cache->get($key_full);
-                if ($full) {
-                    $this->parseResponse($full);
-                    return true;
-                }
+            $full = $cache->get($key_full);
+            if ($full) {
+                $this->parseResponse($full);
+                return true;
             }
         }
 
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $this->connection_timeout);
-        curl_setopt($ch, CURLOPT_USERAGENT, $this->user_agent);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_NOBODY, $head_only ? 1 : 0);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->ch, CURLOPT_URL, $this->Url->get() );
 
-        if ($this->getDebug()) {
-            curl_setopt($ch, CURLOPT_VERBOSE, true);
+        if ($this->getDebug())
+            curl_setopt($this->ch, CURLOPT_VERBOSE, true);
+
+        if ($this->content_type)
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$this->content_type));
+
+        if ($this->Url->getScheme() == 'https') {
+            curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
+
+        curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->connection_timeout);
+        curl_setopt($this->ch, CURLOPT_USERAGENT, $this->user_agent);
+
+        curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, 0);
+        curl_setopt($this->ch, CURLOPT_MAXREDIRS, 0);
+        curl_setopt($this->ch, CURLOPT_HEADER, 1);
+        curl_setopt($this->ch, CURLOPT_NOBODY, 0);
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if ($this->referer)
+            curl_setopt($this->ch, CURLOPT_REFERER, $this->referer);
+
+        if ($this->auth_method) {
+            switch ($this->auth_method) {
+            case 'basic':
+                $key = base64_encode($this->username.':'.$this->password);
+                curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Authorization: basic '.$key) );
+                break;
+/*
+            case 'NTLM':  //DONT WORK PROPERLY, 2010-10-20
+                curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_NTLM); //for "Server: Microsoft-IIS/5.0"
+                curl_setopt($this->ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
+                curl_setopt($this->ch, CURLOPT_MAXREDIRS, 3);
+                break;
+*/
+            default:
+                throw new Exception ('unhandled auth method '.$this->auth_method);
+            }
         }
 
         if ($this->cookies) {
             if ($this->getDebug()) echo "http->get() sending cookies: ".encode_cookie_string($this->cookies).ln();
-            curl_setopt($ch, CURLOPT_COOKIE, encode_cookie_string($this->cookies));
+            curl_setopt($this->ch, CURLOPT_COOKIE, encode_cookie_string($this->cookies));
         }
 
         if (!empty($post_params)) {
@@ -238,28 +284,23 @@ class HttpClient extends CoreBase
             }
             if ($this->getDebug()) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
 
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $var);
+            curl_setopt($this->ch, CURLOPT_POST, 1);
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $var);
         } else {
             if ($this->getDebug()) echo "http->get() ".$this->Url->get()." ... ".ln();
         }
 
-        $res = curl_exec($ch);
-        curl_close($ch);
+        $res = curl_exec($this->ch);
 
         if ($this->getDebug())
             echo "Got ".strlen($res)." bytes".ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
 
         $this->parseResponse($res);
 
-        if (!$this->username && empty($post_params) && $cache->isActive()) {
+        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive()) {
             $cache->set($key_head, serialize($this->headers));
-            if (!$head_only)
-                $cache->set($key_full, $res);
+            $cache->set($key_full, $res);
         }
-
-        if ($head_only)
-            return $this->headers;
 
         return $this->body;
     }
@@ -269,6 +310,11 @@ class HttpClient extends CoreBase
      */
     private function parseResponse($res)
     {
+        $this->headers = array();
+
+        if (!$res)
+            return;
+
         $pos = strpos($res, "\r\n\r\n");
         if ($pos !== false) {
             $head = substr($res, 0, $pos);
@@ -287,19 +333,24 @@ class HttpClient extends CoreBase
         case 'HTTP/1.1 ':
             $this->status_code = intval(substr($status, 9));
             break;
+        default:
+            throw new Exception ('unhandled HTTP response '.$status);
         }
 
-        $this->headers = array();
         foreach ($headers as $h) {
             $col = explode(': ', $h, 2);
             $this->headers[ strtolower($col[0]) ] = $col[1];
         }
 
         // store cookies sent from the server in our cookie pool for possible manipulation
-        $raw_cookies = $this->getHeader('set-cookie');
+        $raw_cookies = $this->getResponseHeader('set-cookie');
 
         if ($raw_cookies)
             $this->setCookies( decode_cookie_string($raw_cookies) );
+
+        $auth = $this->getResponseHeader('www-authenticate');
+        if ($auth)
+            $this->setAuthMethod($auth);
     }
 
 }
