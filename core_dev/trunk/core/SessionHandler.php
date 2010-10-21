@@ -72,10 +72,8 @@ class SessionHandler extends CoreBase
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
         $this->referer      = &$_SESSION['referer'];
 
-        if (empty($_COOKIE[$this->name])) {
-            dp('Session expired');
+        if (empty($_COOKIE[$this->name]))
             $this->end();
-        }
 
         if (!$this->id)
             return;
