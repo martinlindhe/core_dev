@@ -221,7 +221,7 @@ class HttpClient extends CoreBase
             $full = $cache->get($key_full);
             if ($full) {
                 $this->parseResponse($full);
-                return true;
+                return $this->body;
             }
         }
 
