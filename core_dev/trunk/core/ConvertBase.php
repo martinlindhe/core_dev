@@ -85,7 +85,7 @@ abstract class ConvertBase extends CoreBase
         if (is_numeric($s)) {
             $val = $s;
         } else {
-            //HACK find first non-digit in a easier way
+            //HACK: find first non-digit
             for ($i=0; $i<strlen($s); $i++)
                 if (!is_numeric(substr($s, $i, 1)))
                     break;
