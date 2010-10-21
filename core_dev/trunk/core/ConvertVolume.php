@@ -24,7 +24,7 @@ class ConvertVolume extends ConvertBase
 
     protected $lookup = array(
     'cubic meter'      => 'm³',   'cubic meters'       => 'm³',    'cubic metre'      => 'm³',  'cubic metres'      => 'm³',
-    'litre'            => 'l',    'litres'             => 'l',
+    'liter'            => 'l',    'liters'             => 'l',     'litre'            => 'l',   'litres'            => 'l',
     );
 
     function conv($from, $to, $val)
