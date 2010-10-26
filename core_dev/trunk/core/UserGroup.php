@@ -74,6 +74,12 @@ class UserGroup
         return $this->id;
     }
 
+    function render()
+    {
+        $view = new ViewModel('views/admin_UserGroup.php', $this);
+        return $view->render();
+    }
+
 }
 
 ?>

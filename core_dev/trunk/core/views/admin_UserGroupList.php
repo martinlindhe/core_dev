@@ -3,8 +3,6 @@
  * This is the defualt view for the UserGroupList class
  */
 
-//TODO: ability to remove a group or edit an existing group
-
 function addUserGroupSubmit($p, $caller)
 {
     $grp = new UserGroup();
@@ -39,7 +37,7 @@ echo '<table>';
 echo '<tr><th>Name</th><th>Level</th><th>Info</th></tr>';
 foreach ( $caller->getItems() as $grp) {
     echo '<tr>';
-    echo '<td>'.$grp->getName().'</td>';
+    echo '<td>'.ahref('admin/core/usergroup_details/'.$grp->getId(), $grp->getName()).'</td>';
     echo '<td>'.$grp->getLevelDesc().'</td>';
     echo '<td>'.$grp->getInfo().'</td>';
     echo '</tr>';

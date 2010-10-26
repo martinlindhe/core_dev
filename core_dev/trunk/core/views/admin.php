@@ -13,7 +13,8 @@ case 'userlist':
     echo $userlist->render();
     break;
 
-case 'useredit': //child=user id, XXX link to here is hardcoded in admin_UserList.php view
+case 'useredit': //child=user id
+    // XXX link to here is hardcoded in admin_UserList.php view
     $useredit = new UserEditor();
     $useredit->setId($this->child);
     echo $useredit->render();
@@ -22,6 +23,12 @@ case 'useredit': //child=user id, XXX link to here is hardcoded in admin_UserLis
 case 'usergroup':
     $grouplist = new UserGroupList();
     echo $grouplist->render();
+    break;
+
+case 'usergroup_details': //child=group id
+    // XXX link to here is hardcoded in admin_UserGroupList.php
+    $details = new UserGroup($this->child);
+    echo $details->render();
     break;
 
 case 'phpinfo':
