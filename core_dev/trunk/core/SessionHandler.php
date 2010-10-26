@@ -169,6 +169,9 @@ class SessionHandler extends CoreBase
      */
     function ownsApiAccount($id)
     {
+        if ($this->isSuperAdmin)
+            return true;
+
         foreach ($this->getApiAccounts() as $acc)
             if ($acc->getId() == $id)
                 return true;
