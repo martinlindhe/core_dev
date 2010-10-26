@@ -145,6 +145,37 @@ class SessionHandler extends CoreBase
         return $u->getUserLevelName();
     }
 
+    /**
+     * @return array of ApiCustomer objects that is owned by groups that current user is a member of
+     */
+    function getApiAccounts()
+    {
+        $u = new User($this->id);
+
+        $res = array();
+
+        foreach ($u->getGroups() as $grp) {
+
+            $api_accts = new ApiCustomerList( $grp->getId() );
+            foreach ($api_accts->getCustomers() as $acc)
+                $res[] = $acc;
+        }
+
+        return $res;
+    }
+
+    /**
+     * @return true if user is member of a UserGroup which owns api account $id
+     */
+    function ownsApiAccount($id)
+    {
+        foreach ($this->getApiAccounts() as $acc)
+            if ($acc->getId() == $id)
+                return true;
+
+        return false;
+    }
+
     private function updateActiveTime()
     {
         if (!$this->id || !$this->active) return;

@@ -15,7 +15,7 @@ class ApiCustomer
 {
     private $id;
     private $name;
-    private $owner; ///< ownerId
+    private $owner; ///< UserGroup owner
     private $password;
 
     function __construct($n = 0)

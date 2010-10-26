@@ -16,7 +16,7 @@
  * @param $_id customer id
  * @return customer name
  */
-function getCustomerName($_id)
+function getCustomerName_DEPRECATED($_id)
 {
     global $db;
     if (!is_numeric($_id)) return false;
@@ -32,7 +32,7 @@ function getCustomerName($_id)
  * @param $password
  * @return customer id if found
  */
-function getCustomerId($name, $password = '')
+function getCustomerId_DEPRECATED($name, $password = '')
 {
     global $db;
 
@@ -46,7 +46,7 @@ function getCustomerId($name, $password = '')
 /**
  * Returns all customers
  */
-function getCustomer($customer_id)
+function getCustomer_DEPRECATED($customer_id)
 {
     global $db;
     if (!is_numeric($customer_id)) return false;
@@ -58,7 +58,7 @@ function getCustomer($customer_id)
 /**
  * Returns all customers
  */
-function getCustomers()
+function getCustomers_DEPRECATED()
 {
     global $db;
     return $db->getArray('SELECT * FROM tblCustomers');
@@ -68,7 +68,7 @@ function getCustomers()
 /**
  * Returns all customers as id->key array
  */
-function getCustomersMap()
+function getCustomersMap_DEPRECATED()
 {
     global $db;
     return $db->getMappedArray('SELECT customerId,customerName FROM tblCustomers');
@@ -77,7 +77,7 @@ function getCustomersMap()
 /**
  * Returns all customers
  */
-function getCustomersByOwner($ownerId)
+function getCustomersByOwner_DEPRECATED($ownerId)
 {
     global $db;
     if (!is_numeric($ownerId)) return false;

@@ -12,7 +12,7 @@
 class ApiCustomerList
 {
     private $customers = array();
-    private $owner;
+    private $owner; ///< UserGroup owner
 
     function __construct($owner = 0)
     {
