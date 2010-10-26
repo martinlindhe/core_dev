@@ -139,6 +139,12 @@ class SessionHandler extends CoreBase
         //addEvent(EVENT_USER_LOGIN, 0, $this->id);
     }
 
+    function getUserLevelName()
+    {
+        $u = new User($this->id);
+        return $u->getUserLevelName();
+    }
+
     private function updateActiveTime()
     {
         if (!$this->id || !$this->active) return;
