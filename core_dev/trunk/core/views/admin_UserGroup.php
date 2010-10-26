@@ -9,6 +9,8 @@ $header->setTitle('Admin: Edit user group: '.$caller->getName() );
 
 echo '<h1>Edit user group: '.$caller->getName().'</h1>';
 
+echo 'Created at '.sql_datetime($caller->getTimeCreated()).' by '.$caller->getCreatorName().'<br/><br/>';
+
 function saveUserGroupSubmit($p, $caller)
 {
     $grp = new UserGroup($p['g_id']);
