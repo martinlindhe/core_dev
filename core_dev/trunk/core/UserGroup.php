@@ -54,6 +54,25 @@ class UserGroup
         $this->info  = $row['info'];
     }
 
+    /**
+     * @return array of User objects for all group members
+     */
+    function getMembers()
+    {
+        if (!$this->id)
+            throw new Exception ('no group id set');
+
+        $db = SqlHandler::getInstance();
+
+        $res = array();
+
+        $q = 'SELECT userId FROM tblGroupMembers WHERE groupId='.$this->id;
+        foreach ($db->get1dArray($q) as $uid)
+            $res[] = new User($uid);
+
+        return $res;
+    }
+
     function save()
     {
         $db = SqlHandler::getInstance();

@@ -3,8 +3,7 @@
  * This is the defualt view for the UserGroup class
  */
 
-//TODO: ability to remove a group or edit an existing group
-//TODO: show group members
+//TODO: ability to remove a empty usergroup
 
 $header->setTitle('Admin: Edit user group: '.$caller->getName() );
 
@@ -30,5 +29,12 @@ $form->addDropdown('level', 'Level', User::getUserLevels(), $caller->getLevel() 
 $form->addSubmit('Save');
 $form->setHandler('saveUserGroupSubmit');
 echo $form->render();
+echo '<br/><br/>';
+
+echo '<h1>Group members</h1>';
+
+foreach ($caller->getMembers() as $user) {
+    echo ahref('admin/core/useredit/'.$user->getId(), $user->getName() ).'<br/>';
+}
 
 ?>
