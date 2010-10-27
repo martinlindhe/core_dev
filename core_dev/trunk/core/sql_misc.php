@@ -8,10 +8,8 @@
  */
 
 /**
- * Returns given UNIX timestamp in MySQL datetime format
- *
- * @param $ts is a UNIX timestamp
- * @return given UNIX timestamp in MySQL datetime format
+ * @param $ts UNIX timestamp
+ * @return given UNIX timestamp in MySQL datetime format (YYYY-MM-DD HH:MM:SS)
  */
 function sql_datetime($ts)
 {
@@ -22,10 +20,8 @@ function sql_datetime($ts)
 }
 
 /**
- * Returns given UNIX timestamp in MySQL date format
- *
- * @param $ts is a UNIX timestamp
- * @return given UNIX timestamp in MySQL date format
+ * @param $ts UNIX timestamp
+ * @return given UNIX timestamp in MySQL date format (YYYY-MM-DD)
  */
 function sql_date($ts)
 {
@@ -33,6 +29,18 @@ function sql_date($ts)
         $ts = strtotime($ts);
 
     return date('Y-m-d', $ts);
+}
+
+/**
+ * @param $ts UNIX timestamp
+ * @return given UNIX timestamp in MySQL time format (HH:MM:SS)
+ */
+function sql_time($ts)
+{
+    if (!is_numeric($ts))
+        $ts = strtotime($ts);
+
+    return date('H:i:s', $ts);
 }
 
 /**
