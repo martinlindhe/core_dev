@@ -7,9 +7,7 @@
 
 //STATUS: ok
 
-require_once('class.CoreBase.php');
-
-abstract class ConvertBase extends CoreBase
+abstract class ConvertBase
 {
     protected $precision = 0;   ///< if set, specifies rounding precision. if unset, return exact result
 
@@ -67,8 +65,7 @@ abstract class ConvertBase extends CoreBase
         if (in_array($s, $this->lookup) || array_key_exists($s, $this->lookup))
             return $s;
 
-        return false; ///XXX do throw exception when each class implements a "recognizeType($s)" method
-        //throw new Exception (get_class($this).': unhandled unit: '.$name);
+        throw new Exception (get_class($this).': unhandled unit: '.$name);
     }
 
     /**
