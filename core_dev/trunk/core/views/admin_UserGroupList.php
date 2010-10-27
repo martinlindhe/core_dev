@@ -11,7 +11,7 @@ function addUserGroupSubmit($p, $caller)
     $grp->setLevel($p['level']);
     $grp->save();
 
-    return true;
+    redir('admin/core/usergroup');
 }
 
 $header->setTitle('Admin: Manage user groups');
