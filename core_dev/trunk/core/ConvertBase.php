@@ -36,7 +36,10 @@ abstract class ConvertBase extends CoreBase
     function getUnitname($s)
     {
         if (in_array($s, $this->lookup))
-            return $this->lookup[ $s ];
+            if ( isset( $this->lookup[ $s ] ))
+                return $this->lookup[ $s ];
+            else
+                return $s;
 
         if (array_key_exists($s, $this->lookup))
             return $s;
