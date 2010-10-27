@@ -13,29 +13,21 @@ require_once('HttpClient.php');
 
 class XmlRpcClient extends HttpClient
 {
-    protected $rpc_url;
     protected $user_agent = 'core_dev XML-RPC client 1.0';
 
-    function __construct()
+    function __construct($s = '')
     {
         if (!function_exists('xmlrpc_server_create'))
             throw new Exception ('XmlRpcClient FAIL: php5-xmlrpc not found');
-    }
 
-    function setRpcUrl($s)
-    {
-        if (!is_url($s))
-            throw new Exception ('not a url '.$s);
-
-        $this->rpc_url = $s;
+        parent::__construct($s);
     }
 
     function call($method, $params)
     {
-        if (!$this->rpc_url)
+        if (!$this->Url->get() )
             throw new Exception ('No XML-RPC server URL set');
 
-        $this->setUrl($this->rpc_url);
         $this->setContentType('text/xml');
 
         $opts = array(

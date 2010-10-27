@@ -18,6 +18,8 @@ require_once('ConvertBase.php');
 require_once('Cache.php');
 
 require_once('CurrencyFetcherFoxRate.php');
+require_once('CurrencyFetcherExchangeRate.php');
+require_once('CurrencyFetcherWebservicex.php');
 
 class ConvertCurrency extends ConvertBase
 {
@@ -204,7 +206,12 @@ class ConvertCurrency extends ConvertBase
         if ($rate)
             return $rate;
 
-        $fetcher = New CurrencyFetcherFoxRate();
+        $fetcher = new CurrencyFetcherExchangeRate();  //very fast, 2010-10-27
+
+//        $fetcher = new CurrencyFetcherFoxRate();   //decent speed, 2010-10-27
+
+//        $fetcher = new CurrencyFetcherWebservicex();  //very slow!, been slow for months, 2010-10-27
+
         $rate = $fetcher->getRate($from, $to);
 
         $cache->set($key, $rate);
