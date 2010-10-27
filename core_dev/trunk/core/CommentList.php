@@ -80,6 +80,19 @@ class CommentList
         $session = SessionHandler::getInstance();
 
         $res = '';
+        $frm = '';
+
+        if ($session->id)
+        {
+            $form = new XhtmlForm('addcomment');
+            $form->addRichedit('comment_'.$this->type, t('Write a comment') );
+
+            $form->addSubmit('Save');
+            $form->setHandler('handleSubmit', $this);
+
+            $frm = $form->render();
+        }
+
         foreach ($this->get() as $c)
         {
             $user = new User($c['userId']);
@@ -90,18 +103,7 @@ class CommentList
             $res .= sql_date($c['timeCreated']); //XXX snygga till
             $res .= '<hr/>';
         }
-
-        if ($session->id) {
-
-            //XXX ajax submit + js update form. den kräver nu en page reload för att visa senaste inlägg
-            $form = new XhtmlForm('addcomment');
-            $form->addRichedit('comment_'.$this->type, t('Write a comment') );
-
-            $form->addSubmit('Save');
-            $form->setHandler('handleSubmit', $this);
-
-            $res .= $form->render();
-        }
+        $res .= $frm;
 
         return $res;
     }
