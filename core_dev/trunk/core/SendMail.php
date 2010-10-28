@@ -32,6 +32,8 @@ class MailAttachment
 
 class SendMail extends CoreBase
 {
+    static $_instance; ///< singleton
+
     private $smtp;
     private $version     = 'core_dev Sendmail 0.9';
 
@@ -46,14 +48,15 @@ class SendMail extends CoreBase
 
     private $connected = false;
 
-    function __construct($server = '', $username = '', $password = '', $port = 25)
-    {
-        $this->setServer($server, $username, $password, $port);
-    }
+    private function __construct() { }
+    private function __clone() {}      //singleton: prevent cloning of class
 
-    function __destruct()
+    public static function getInstance()
     {
-        $this->disconnect();
+        if (!(self::$_instance instanceof self))
+            self::$_instance = new self();
+
+        return self::$_instance;
     }
 
     function setServer($server = '', $username = '', $password = '', $port = 25)
