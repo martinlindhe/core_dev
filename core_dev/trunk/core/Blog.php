@@ -12,7 +12,7 @@
 //TODO: use Comments class
 //TODO richedit editor
 
-require_once('class.BlogEntry.php');
+require_once('BlogEntry.php');
 
 class Blog
 {
