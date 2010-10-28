@@ -49,6 +49,7 @@ class SessionHandler extends CoreBase
 
     function setName($s) { $this->name = $s; }
     function setTimeout($n) { $this->timeout = $n; }
+    function setStartPage($s) { $this->start_page = $s; }
 
     function setActive($b) { $this->active = $b; }
 
@@ -205,7 +206,7 @@ class SessionHandler extends CoreBase
     function requireLoggedOut()
     {
         if (!$this->id) return;
-        $this->startPage();
+        $this->showStartPage();
     }
 
     /**
@@ -282,7 +283,6 @@ class SessionHandler extends CoreBase
 
         js_redirect($this->error_page);
     }
-
 
     /**
      * Redirects user to default start page (logged in)

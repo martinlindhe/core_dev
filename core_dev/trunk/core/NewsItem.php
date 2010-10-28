@@ -7,7 +7,7 @@
 
 class NewsItem
 {
-    private $title;
+    var $title;
     var $desc;
     var $author;
 

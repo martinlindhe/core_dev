@@ -23,6 +23,8 @@ class ErrorHandler
         return self::$_instance;
     }
 
+    function getErrorCount() { return count($this->errors); }
+
     function add($s) { $this->errors[] = $s; }
 
     function render($clear_errors = false)

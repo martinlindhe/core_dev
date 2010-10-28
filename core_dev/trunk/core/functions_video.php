@@ -167,6 +167,9 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = 
     if (!$w) $w = 176 * 1.5;
     if (!$h) $h = 144 * 1.5;
 
+    $header = XhtmlHeader::getInstance();
+    $header->includeJs('/core_dev/js/swfobject.js');
+
     $player_url = '/core_dev/api/flash/mediaplayer.swf';
 
     $data = '<p id="'.$div_id.'">';
