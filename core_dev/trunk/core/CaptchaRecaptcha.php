@@ -107,8 +107,37 @@ class CaptchaRecaptcha extends Captcha
 
         $server = ($ssl ? $this->api_url_ssl : $this->api_url);
 
+        $locale = LocaleHandler::getInstance();
+
+        switch ($locale->get()) {
+        case 'swe': // translation was submitted to recaptcha google group: http://groups.google.com/group/recaptcha/browse_thread/thread/78a677ea59626024
+            $opts =
+            'custom_translations : {'.
+                'instructions_visual : "Skriv in de två orden:",'.
+                'instructions_audio : "Skriv in vad du hör:",'.
+                'play_again : "Spela ljudet igen",'.
+                'cant_hear_this : "Ladda ner ljudfil som MP3",'.
+                'visual_challenge : "Se en visuell captcha",'.
+                'audio_challenge : "Lyssna på en ljud-captcha",'.
+                'refresh_btn : "Ladda en ny captcha",'.
+                'help_btn : "Hjälp",'.
+                'incorrect_try_again : "Fel svar. Försök igen.",'.
+            '},';
+            break;
+
+        // http://code.google.com/intl/sv-SE/apis/recaptcha/docs/customization.html    some languages is supported already
+        case 'eng': $opts = 'lang : "en", '; break;
+        default:
+            throw new Exception ('recaptcha translation missing');
+        }
+
         return
+        '<script type="text/javascript">'.
+        'var RecaptchaOptions = { '.$opts.' };'.
+        '</script>'.
+
         '<script type="text/javascript" src="'.$server.'/challenge?k='.$this->pub_key.'"></script>'.
+
         '<noscript>'.
             '<iframe src="'.$server.'/noscript?k='.$this->pub_key.'" height="300" width="500" frameborder="0"></iframe><br/>'.
             '<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>'.

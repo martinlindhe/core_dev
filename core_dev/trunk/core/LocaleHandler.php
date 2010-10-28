@@ -47,7 +47,7 @@ class LocaleHandler
      */
     function set($s)
     {
-        $this->locale = $s;
+        $this->locale = strtolower($s);
 
         switch ($s) {
         case 'swe': $this->handle = new Locale_SWE(); break;
