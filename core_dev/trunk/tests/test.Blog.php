@@ -3,7 +3,7 @@
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
 require_once('db_mysqli.php');
-require_once('class.Blog.php');
+require_once('Blog.php');
 
 die("FIXME: rewrite test to work on fake db");
 

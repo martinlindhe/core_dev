@@ -5,7 +5,9 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-//STATUS: DEPRECATE drop this and use class.Blog with category "News" instead
+//STATUS: DEPRECATE drop this and use Blog.php with category "News" instead
+
+die('DEPRECATED, USE Blog.php');
 
 require_once('atom_comments.php');        //for news comment support
 require_once('atom_categories.php');    //for news categories support
