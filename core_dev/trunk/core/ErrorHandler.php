@@ -25,15 +25,19 @@ class ErrorHandler
 
     function getErrorCount() { return count($this->errors); }
 
-    function add($s) { $this->errors[] = $s; }
+    function add($s) { if ($s) $this->errors[] = $s; }
 
     function render($clear_errors = false)
     {
+        $res = '';
+
         foreach ($this->errors as $e)
-            echo '<div class="critical">'.$e.'</div><br/>';
+            $res .= '<div class="bad">'.$e.'</div><br/>';
 
         if ($clear_errors)
             $this->errors = array();
+
+        return $res;
     }
 }
 

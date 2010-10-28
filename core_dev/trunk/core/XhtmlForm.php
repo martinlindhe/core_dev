@@ -12,7 +12,8 @@
 //TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
 //FIXME: dateinterval selection is not auto-filled on next request, see handle()
 
-require_once('client_captcha.php');
+require_once('ErrorHandler.php');
+require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
 require_once('yui_date.php');
@@ -21,18 +22,17 @@ require_once('yui_richedit.php');
 
 class XhtmlForm
 {
-    private $enctype          = '';     ///< TODO: set multipart type if form contains file upload parts
-    private $handled          = false;  ///< is set to true when form data has been processed by callback function
+    private $enctype          = '';      ///< TODO: set multipart type if form contains file upload parts
+    private $handled          = false;   ///< is set to true when form data has been processed by callback function
     private $name;
-    private $post_handler;    ///< function to call as POST callback
+    private $post_handler;               ///< function to call as POST callback
     private $objectinstance   = false;
     private $formData         = array();
     private $elems            = array();
-    private $success          = '';
-    private $error            = 'Submitted form was rejected!';
-    private $url_handler;     ///< sends form to a different url
-    private $form_method;     ///< get/post
-    private $auto_code        = true; ///< automatically encode/decode form data using urlencode
+    private $url_handler;                ///< sends form to a different url
+    private $form_method;                ///< get/post
+    private $auto_code        = true;    ///< automatically encode/decode form data using urlencode
+    private $using_captcha    = false;
 
     function __construct($name = '', $url_handler = '', $form_method = 'post')
     {
@@ -40,10 +40,6 @@ class XhtmlForm
         $this->url_handler = $url_handler;
         $this->form_method = $form_method;
     }
-
-    function setError($s) { $this->error = $s; }
-
-    function setSuccess($s) { $this->success = $s; }
 
     /**
      * Defines the function/object->method that will handle form submit processing
@@ -71,6 +67,11 @@ class XhtmlForm
      */
     function handle()
     {
+        if ($this->using_captcha) {
+            $captcha = CaptchaRecaptcha::getInstance();
+            $captcha->verify();
+        }
+
         $p = array();
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
@@ -121,6 +122,7 @@ class XhtmlForm
             }
         }
 */
+
         $this->formData = $p;
 
         if ($this->objectinstance)
@@ -128,14 +130,20 @@ class XhtmlForm
         else
             $call = $this->post_handler;
 
-        if (call_user_func($call, $this->formData, $this))
-            $this->handled = true;
+        $error = ErrorHandler::getInstance();
 
-        if ($this->handled) {
-            if ($this->success) echo '<div class="good">'.$this->success.'</div><br/>';
-            return true;
+        if (!$error->getErrorCount())
+            if (call_user_func($call, $this->formData, $this))
+                $this->handled = true;
+
+        if ($error->getErrorCount()) {
+            echo $error->render().'<br/>';
+            return false;
         }
-        echo '<div class="bad">'.$this->error.'</div><br/>';
+
+        if ($this->handled)
+            return true;
+
         return false;
     }
 
@@ -243,9 +251,10 @@ class XhtmlForm
         $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str, 'init_from' => $init_from, 'init_to' => $init_to);
     }
 
-    function addCaptcha($objectinstance)
+    function addCaptcha()
     {
-        $this->elems[] = array('type' => 'CAPTCHA', 'obj' => $objectinstance);
+        $this->using_captcha = true;
+        $this->elems[] = array('type' => 'CAPTCHA');
     }
 
     /**
@@ -414,8 +423,10 @@ class XhtmlForm
                 break;
 
             case 'CAPTCHA':
+                $captcha = CaptchaRecaptcha::getInstance();
+
                 $res .= '<td colspan="2">';
-                $res .= $e['obj']->render();
+                $res .= $captcha->render();
                 $res .= '</td>';
                 break;
 

@@ -120,13 +120,11 @@ class XmlDocumentHandler extends CoreBase
                 echo $view->render();
             }
         }
-
 /*
         //XXX should we really show errors on top of every page?
         $error = ErrorHandler::getInstance();
         echo $error->render();
 */
-
         foreach ($this->objs as $obj)
         {
             if (is_string($obj)) {
