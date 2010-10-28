@@ -16,6 +16,7 @@
 
 require_once('class.CoreBase.php');
 require_once('HttpClient.php');
+require_once('NewsItem.php');
 
 class AtomReader extends CoreBase
 {
@@ -110,7 +111,7 @@ class AtomReader extends CoreBase
 
             case 'updated':
                 $this->reader->read();
-                $item->Timestamp->set( $this->reader->value );
+                $item->setTime( $this->reader->value );
                 break;
 
             case 'id':
@@ -121,7 +122,7 @@ class AtomReader extends CoreBase
             case 'link':
                 switch ($this->reader->getAttribute('rel')) {
                 case 'alternate':
-                    $item->Url->set( $this->reader->getAttribute('href') );
+                    $item->setUrl( $this->reader->getAttribute('href') );
                     break;
                 case 'enclosure':
                     switch ($this->reader->getAttribute('type')) {

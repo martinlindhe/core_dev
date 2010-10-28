@@ -39,6 +39,16 @@ class Locale_SWE extends CoreLocale
     'NOR' => 'Norge',
     );
 
+    var $durations = array(
+    'second' =>'sekund',    'seconds'=>'sekunder',
+    'minute' =>'minut',     'minutes'=>'minuter',
+    'hour'   =>'timme',     'hours'  =>'timmar',
+    'day'    =>'dag',       'days'   =>'dagar',
+    'week'   =>'vecka',     'weeks'  =>'veckor',
+    'month'  =>'månad',     'months' =>'månader',
+    'year'   =>'år',        'years'  =>'år'
+    );
+
     /**
      * @n currency in lowest representation (cents, ören)
      * @return formatted currency value with space as thousands separator: "221012.87" -> "221 012.87"
@@ -54,23 +64,6 @@ $day_suff_swe = array(//den 1:a, 5:e osv...
 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
 'e', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
 'e', 'a');
-
-$timeunits_swe = array(
-'second' =>'sekund',
-'seconds'=>'sekunder',
-'minute' =>'minut',
-'minutes'=>'minuter',
-'hour'   =>'timme',
-'hours'  =>'timmar',
-'day'    =>'dag',
-'days'   =>'dagar',
-'week'   =>'vecka',
-'weeks'  =>'veckor',
-'month'  =>'månad',
-'months' =>'månader',
-'year'   =>'år',
-'years'  =>'år'
-);
 
 $skyconditions_swe = array(
 'clear'         => 'molnfritt',

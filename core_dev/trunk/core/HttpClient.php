@@ -176,13 +176,13 @@ class HttpClient extends CoreBase
     {
         $x = explode(' ', $s, 2);
 
-        switch ($x[0]) {
+        switch (strtolower($x[0])) {
         case 'basic': // $s = basic realm="name"
             //XXX care about realm?
             $this->auth_method = 'basic';
             break;
 
-        case 'NTLM':  // $s = NTLM
+        case 'ntlm':  // $s = NTLM
             $this->auth_method = 'NTLM';
             break;
 

@@ -118,39 +118,41 @@ class Duration extends CoreProperty
 
         $ret = '';
 
+        $locale = LocaleHandler::getInstance();
+
         //years
         $a = date('Y', $secs) - 1970;
-        if ($a==1) $ret = $a.' year, ';
-        else if ($a>0) $ret = $a.' years, ';
+        if ($a==1) $ret = $a.' '.$locale->translateDuration('year').', ';
+        else if ($a>0) $ret = $a.' '.$locale->translateDuration('years').', ';
         $secs -= (((($a*60)*60)*24)*30)*365;
 
         //months
         $a = date('n',$secs)-1;
-        if ($a==1) $ret .= $a.' month, ';
-        else if($a>0) $ret .= $a.' months, ';
+        if ($a==1) $ret .= $a.' '.$locale->translateDuration('month').', ';
+        else if($a>0) $ret .= $a.' '.$locale->translateDuration('months').', ';
         $secs -= ((($a*60)*60)*24)*30;
 
         //days
         $a = date('j',$secs)-1;
-        if ($a==1) $ret .= $a.' day, ';
-        else if ($a>0) $ret .= $a.' days, ';
+        if ($a==1) $ret .= $a.' '.$locale->translateDuration('day').', ';
+        else if ($a>0) $ret .= $a.' '.$locale->translateDuration('days').', ';
         $secs -= (($a*60)*60)*24;
 
         //hours
         $a = date('H',$secs)-1;
-        if ($a==1) $ret .= $a.' hour, ';
-        else if ($a>0) $ret .= $a.' hours, ';
+        if ($a==1) $ret .= $a.' '.$locale->translateDuration('hour').', ';
+        else if ($a>0) $ret .= $a.' '.$locale->translateDuration('hours').', ';
         $secs -= ($a*60)*60;
 
         //minutes
         $a = date('i',$secs)-0;
-        if ($a==1) $ret .= $a.' minute, ';
-        else if ($a>0) $ret .= $a.' minutes, ';
+        if ($a==1) $ret .= $a.' '.$locale->translateDuration('minute').', ';
+        else if ($a>0) $ret .= $a.' '.$locale->translateDuration('minutes').', ';
         $secs -= $a*60;
 
         //seconds
         $a = date('s',$secs)-0;
-        if ($a>0) $ret .= $a.' seconds';
+        if ($a>0) $ret .= $a.' '.$locale->translateDuration('seconds');
 
         if (substr($ret, -2) == ', ') $ret = substr($ret, 0, -2);
         if ($ret == '') $ret = '0s';

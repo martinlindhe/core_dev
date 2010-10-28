@@ -83,6 +83,18 @@ class LocaleHandler
         return $this->handle->country_3char[$s];
     }
 
+
+    /**
+     * @param $s duration (in english), translates to current locale
+     */
+    function translateDuration($s)
+    {
+        if (array_key_exists($s, $this->handle->durations))
+            return $this->handle->durations [ $s ];
+
+        return 'XXX-FAILTRANS-'.$s.'XXX';
+    }
+
 }
 
 
