@@ -118,10 +118,8 @@ function dm()
     return $res.ln();
 }
 
-/**
- * Debug function. Prints backtrace
- */
-function dtrace()
+/** Debug function. Prints backtrace */
+function bt()
 {
     $bt = debug_backtrace();
     if (php_sapi_name() != 'cli') echo '<pre>';
@@ -146,6 +144,8 @@ function dtrace()
 
     if (php_sapi_name() != 'cli') echo '</pre>';
 }
+
+function dtrace() { return bt(); }
 
 /**
  * Debug function. Prints $m as hex + ascii values

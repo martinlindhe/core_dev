@@ -30,7 +30,7 @@ class Wiki
         $this->load($name);
 
         $header = XhtmlHeader::getInstance();
-        $header->addCss(
+        $header->embedCss(
         '.wiki {'.
         ' font-size: 14px;'.
         '}'.

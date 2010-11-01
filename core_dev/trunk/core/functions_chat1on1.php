@@ -25,7 +25,7 @@ function chat_1on1_XHTML($otherId)
     $oldMsgs = array_reverse($db->getArray('SELECT * FROM tblChat WHERE ((userId = '.$userId.' AND authorId = '.$otherId.') OR (userId = '.$otherId.' AND authorId = '.$userId.'))  AND msgRead = 1 ORDER BY msgDate desc LIMIT 10'));
 
     $header = new xhtml_header();
-    $header->addJs('chat_onload('.$otherId.', '.$userId.", '".$otherName."', '".$myName."')" );
+    $header->embedJs('chat_onload('.$otherId.', '.$userId.", '".$otherName."', '".$myName."')" );
     echo $header->render();
 
     echo '<div align="center">';

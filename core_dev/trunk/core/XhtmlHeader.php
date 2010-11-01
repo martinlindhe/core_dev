@@ -14,6 +14,7 @@
 require_once('IXMLComponent.php');
 require_once('class.CoreBase.php');
 require_once('LocaleHandler.php');
+require_once('XmlDocumentHandler.php');  // for relurl()
 
 class XhtmlHeader extends CoreBase implements IXMLComponent
 {

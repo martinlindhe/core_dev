@@ -53,7 +53,7 @@ class yui_chart
         $header->includeJs('http://yui.yahooapis.com/2.8.1/build/connection/connection-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.1/build/charts/charts-min.js');
 
-        $header->addCss('#'.$this->div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
+        $header->embedCss('#'.$this->div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
 
         $res =
         '<div id="'.$this->div_holder.'">'.

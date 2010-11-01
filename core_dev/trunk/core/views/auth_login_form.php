@@ -11,7 +11,7 @@
 
 require_once('UserList.php');
 
-$header->addCss('
+$header->embedCss('
 .login_box {
  font-size: 14px;
  border: 1px solid #aaa;

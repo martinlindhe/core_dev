@@ -189,6 +189,9 @@ function redir($dst)
 /** @param $url partial url to generate a url relative website base */
 function relurl($url)
 {
+    if (substr($url, 0, 4) == 'http')
+        return $url;
+
     $page = XmlDocumentHandler::getInstance();
     return $page->getRelativeUrl().$url;
 }
@@ -201,12 +204,12 @@ function relurl_add($p)
 {
     $page = XmlDocumentHandler::getInstance();
 
-    $u = new Url( $page->getBaseUrl() );
+    $u = new Url( $page->getUrl() );
     $u->setPath($_SERVER['REDIRECT_URL']);
     foreach ($p as $key => $val)
         $u->setParam($key, $val);
 
-    return $u->get(); //XXX dont return full url, add a Url->getRelative() ?
+    return $u->getPath();
 }
 
 function ahref($url, $title)

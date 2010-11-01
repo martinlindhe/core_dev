@@ -56,7 +56,7 @@ class XhtmlCalendar
 /*
         if ($this->current_month && $this->auto_focus) {
             $header = XhtmlHeader::getInstance();
-            $header->addJs("document.getElementById('cal_current_day').focus();");
+            $header->embedJs("document.getElementById('cal_current_day').focus();");
         }
 */
     }

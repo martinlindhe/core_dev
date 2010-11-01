@@ -24,7 +24,7 @@ class WsdlGenerator
         $page = XmlDocumentHandler::getInstance();
 
         $this->interface_name = $interface_name;
-        $this->interface_url  = $page->getBaseUrl().$interface_path;
+        $this->interface_url  = $page->getUrl().$interface_path;
     }
 
     function message($name, $params = array())

@@ -72,6 +72,9 @@ function js_reload($ms)
  */
 function js_redirect($url)
 {
+    if (substr($uri, 0, 1) != '/')
+        $uri = relurl($uri);
+
     if (headers_sent()) {
         echo js_embed('document.location.href="'.$url.'";');
         die;

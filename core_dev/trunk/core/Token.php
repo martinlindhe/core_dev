@@ -75,7 +75,7 @@ class Token
         $page = XmlDocumentHandler::getInstance();
 
         do {
-            $val = sha1($this->token_prefix.mt_rand().$page->getBaseUrl().$session->id.$this->token_suffix);
+            $val = sha1($this->token_prefix.mt_rand().$page->getUrl().$session->id.$this->token_suffix);
 
             $q =
             'SELECT tokenId FROM tblTokens'.
