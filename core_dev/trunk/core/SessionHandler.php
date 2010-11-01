@@ -25,9 +25,9 @@ class SessionHandler extends CoreBase
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 
     var $name = 'core_dev_sid';    ///< session cookie name, needs to be unique for multiple projects on same webhost
-    var $start_page = '/';         ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
-    var $logged_out_start_page = '/';
-    var $error_page = '/error';    ///< redirects the user to this page to show errors
+    var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
+    var $logged_out_start_page;
+    var $error_page = 'error';     ///< redirects the user to this page to show errors
 
     var $active = true;            ///< is session active (update user last active?)
 

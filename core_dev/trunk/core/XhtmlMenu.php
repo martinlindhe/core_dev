@@ -21,7 +21,7 @@ class XhtmlMenu extends CoreBase
     {
         if (!get_protocol($link) && substr($link, 0, 1) != '/') {
             $page = XmlDocumentHandler::getInstance();
-            $link = $page->getUrl().$link;
+            $link = $page->getRelativeUrl().$link;
         }
         $this->items[] = array('title'=>$title, 'link'=>$link);
     }
