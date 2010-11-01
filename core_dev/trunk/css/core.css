@@ -1,20 +1,16 @@
 img {
-    border: 0;
+ border: 0;
 }
-
-/* used to mark something important, like a error message */
 .critical {
-    background: url('../gfx/icon_error.png') no-repeat;
-    background-position: 8px 50%;
-    border: 1px dashed;
+ background: url('../gfx/icon_error.png') no-repeat;
+ background-position: 8px 50%;
+ border: 1px dashed;
 }
-
 .okay {
-    background: url('../gfx/icon_good.png') no-repeat;
-    background-position: 8px 50%;
-    border: 1px dashed;
+ background: url('../gfx/icon_good.png') no-repeat;
+ background-position: 8px 50%;
+ border: 1px dashed;
 }
-
 .bad, .critical {
  border: 1px dashed;
  color: #000;
