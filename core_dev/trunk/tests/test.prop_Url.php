@@ -7,21 +7,29 @@ require('prop_Url.php');
 // test url manipulation
 $url = new Url();
 $url->set('http://www.google.com/');
+if ($url->getPath() != '/')                                                            echo "FAIL 1\n";
+
 $url->setParam('category', 1);
-if ($url->get() != 'http://www.google.com/?category=1')             echo "FAIL 1 ".$url->get()."\n";
+if ($url->get() != 'http://www.google.com/?category=1')                                echo "FAIL 2 ".$url->get()."\n";
+if ($url->getPath() != '/?category=1')                                                 echo "FAIL 3\n";
 
 $url->removeParam('category');
 $url->setParam('test', 'kalas');
 $url->setParam('fest', 'bas');
-if ($url->get() != 'http://www.google.com/?test=kalas&fest=bas')    echo "FAIL 2 ".$url->get()."\n";
+if ($url->get() != 'http://www.google.com/?test=kalas&fest=bas')                       echo "FAIL 4 ".$url->get()."\n";
+if ($url->getPath() != '/?test=kalas&fest=bas')                                        echo "FAIL 5\n";
+
+
 
 $url = new Url('http://www.google.com/?param');
-if ($url->get() != 'http://www.google.com/?param')                  echo "FAIL 3 ".$url->get()."\n";
+if ($url->get() != 'http://www.google.com/?param')                                     echo "FAIL 6 ".$url->get()."\n";
+if ($url->getPath() != '/?param')                                                      echo "FAIL 7\n";
 
 $url = new Url('http://git.ffmpeg.org/?p=ffmpeg;a=blob_plain;f=Changelog;hb=HEAD');
-if ($url->get() != 'http://git.ffmpeg.org/?p=ffmpeg;a=blob_plain;f=Changelog;hb=HEAD') echo "FAIL 4 ".$url->get()."\n";
+if ($url->get() != 'http://git.ffmpeg.org/?p=ffmpeg;a=blob_plain;f=Changelog;hb=HEAD') echo "FAIL 8 ".$url->get()."\n";
+if ($url->getPath() != '/?p=ffmpeg;a=blob_plain;f=Changelog;hb=HEAD')                  echo "FAIL 9\n";
 
 $url = new Url('http://test.com/?data=29%3A30+minuter+p%E5+skoj%3A1%3A9900');
-if ($url->get() != 'http://test.com/?data=29%3A30+minuter+p%E5+skoj%3A1%3A9900') echo "FAIL 5 ".$url->get()."\n";
-
+if ($url->get() != 'http://test.com/?data=29%3A30+minuter+p%E5+skoj%3A1%3A9900')       echo "FAIL 10 ".$url->get()."\n";
+if ($url->getPath() != '/?data=29%3A30+minuter+p%E5+skoj%3A1%3A9900')                  echo "FAIL 11\n";
 ?>
