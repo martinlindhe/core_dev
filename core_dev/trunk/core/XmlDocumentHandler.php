@@ -96,6 +96,8 @@ class XmlDocumentHandler extends CoreBase
 
     function render()
     {
+        ob_start();
+
 /*
         if (!empty($_POST))
             foreach ($this->objs as $obj)
@@ -161,6 +163,7 @@ class XmlDocumentHandler extends CoreBase
             //XXX <body> and <html> tags is opened in XhtmlHeader->render()
             echo "\n".'</body></html>';
         }
+        ob_end_flush();
     }
 
 }
