@@ -4,12 +4,16 @@
  *
  * Locale handling for multi-language support
  *
- * Uses ISO 639-2 language codes, see http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+ * References
+ * ----------
+ * ISO 639-2 (language codes): http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  *
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 
 //STATUS: WIP
+
+//TODO: fix class nesting crap, LocaleHandler should just be the current locale, no $this->handle crap
 
 require_once('locale_swe.php');
 require_once('locale_eng.php');
@@ -18,6 +22,9 @@ require_once('locale_ger.php');
 abstract class CoreLocale
 {
     abstract function formatCurrency($n);
+
+    /** @return 2-letter language code, as specified in ISO 639 */
+    abstract function getLanguageCode();
 }
 
 class LocaleHandler
@@ -82,6 +89,8 @@ class LocaleHandler
 
         return $this->handle->country_3char[$s];
     }
+
+    function getLanguageCode() { return $this->handle->getLanguageCode(); }
 
 
     /**

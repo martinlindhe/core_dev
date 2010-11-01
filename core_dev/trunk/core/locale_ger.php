@@ -40,6 +40,8 @@ class Locale_GER extends CoreLocale
         die('formatCurrency GER TODO');
     }
 
+    function getLanguageCode() { return 'de'; }
+
 }
 
 ?>

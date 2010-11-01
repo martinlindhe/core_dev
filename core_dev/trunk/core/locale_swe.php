@@ -57,6 +57,9 @@ class Locale_SWE extends CoreLocale
     {
         return number_format($n / 100, 2, '.', ' ');
     }
+
+    function getLanguageCode() { return 'sv'; }
+
 }
 
 $day_suff_swe = array(//den 1:a, 5:e osv...

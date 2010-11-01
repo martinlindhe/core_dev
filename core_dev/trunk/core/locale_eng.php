@@ -39,6 +39,9 @@ class Locale_ENG extends CoreLocale
     {
         die('formatCurrency ENG TODO');
     }
+
+    function getLanguageCode() { return 'en'; }
+
 }
 
 ?>

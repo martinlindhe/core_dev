@@ -13,6 +13,7 @@
 
 require_once('IXMLComponent.php');
 require_once('class.CoreBase.php');
+require_once('LocaleHandler.php');
 
 class XhtmlHeader extends CoreBase implements IXMLComponent
 {
@@ -85,9 +86,11 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     /** Creates a complete XHTML header, showing rss feeds if available, etc */
     public function render()
     {
+        $locale = LocaleHandler::getInstance();
+
         $res =
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
-        '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'.
+        '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'">'.
         '<head>'."\n";
 
         $res .= '<style type="text/css">';
