@@ -366,10 +366,10 @@ function xhtmlOpenSearch($url, $name, $icon = '')
     $page->setMimeType('application/xml');       // or "application/opensearchdescription+xml"
 
     if ($icon && substr($icon, 0, 4) != 'http')
-        $icon = $page->getBaseUrl().$icon;
+        $icon = $page->getUrl().$icon;
 
     if (substr($url, 0, 4) != 'http')
-        $url = $page->getBaseUrl().$url;
+        $url = $page->getUrl().$url;
 
     $res =
     '<?xml version="1.0" encoding="UTF-8"?>'.

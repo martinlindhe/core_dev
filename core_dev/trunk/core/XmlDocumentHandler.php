@@ -11,7 +11,10 @@
 
 //TODO: move setCoreDevInclude to a "core_dev handler" ? or "setup handler", or "config handler" ?
 
+//XXX: extend from Url ?
+
 require_once('class.CoreBase.php');
+require_once('prop_Url.php');
 
 class XmlDocumentHandler extends CoreBase
 {
@@ -21,7 +24,7 @@ class XmlDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design = true;
     private $mimetype = 'text/html';
-    private $base_url = '';
+    private $Url;                    ///< Url object
     private $attachment_name;
     private $coredev_inc = '';       ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
 
@@ -40,12 +43,18 @@ class XmlDocumentHandler extends CoreBase
     function setMimeType($s) { $this->mimetype = $s; }
 
     /**
-     * Sets base URL for current website
+     * Sets base/root URL for current website
      * @param $s base url, e.g. http://www.example.com/  (with ending / )
      */
-    function setBaseUrl($s) { $this->base_url = $s; }
+    function setUrl($s) { $this->Url = new Url($s); }
 
-    function getBaseUrl() { return $this->base_url; }
+    /**
+     * @return relative URL for current website
+     */
+    function getRelativeUrl() { return $this->Url->getPath(); }
+
+    /** @return full base/root URL to website */
+    function getUrl() { return $this->Url->get(); }
 
     function setCoreDevInclude($path)
     {
@@ -163,6 +172,7 @@ class XmlDocumentHandler extends CoreBase
             //XXX <body> and <html> tags is opened in XhtmlHeader->render()
             echo "\n".'</body></html>';
         }
+
         ob_end_flush();
     }
 
@@ -172,7 +182,7 @@ class XmlDocumentHandler extends CoreBase
 function redir($dst)
 {
     $page = XmlDocumentHandler::getInstance();
-    header('Location: '.$page->getBaseUrl().$dst);
+    header('Location: '.$page->getRelativeUrl().$dst);
     die;
 }
 
@@ -180,7 +190,7 @@ function redir($dst)
 function relurl($url)
 {
     $page = XmlDocumentHandler::getInstance();
-    return $page->getBaseUrl().$url;
+    return $page->getRelativeUrl().$url;
 }
 
 /**

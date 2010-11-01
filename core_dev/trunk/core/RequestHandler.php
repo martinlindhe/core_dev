@@ -60,7 +60,7 @@ class RequestHandler
         //exclude application root from parsed request
         $page = XmlDocumentHandler::getInstance();
 
-        $parsed = parse_url($page->getBaseUrl());
+        $parsed = parse_url($page->getUrl());
 
         if (substr($request, 0, strlen($parsed['path'])) == $parsed['path'])
             $request = substr($request, strlen($parsed['path']) );

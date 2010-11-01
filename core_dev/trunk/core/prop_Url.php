@@ -32,7 +32,7 @@ class Url extends CoreProperty
 
     /**
      * @param $safe outputs URL in a safe format (& => &amp;)
-     * @return the url as a string
+     * @return the full url as a string
      */
     function get($safe = false)
     {
@@ -40,18 +40,26 @@ class Url extends CoreProperty
         if ($this->port && scheme_default_port($this->scheme) != $this->port)
             $port = ':'.$this->port;
 
-        $res = $this->scheme.'://'.($this->username ? $this->username.':'.$this->password.'@' : '').$this->host.$port.$this->path;
-
-        if (!empty($this->params)) {
-            if ($safe)
-                $res .= '?'.htmlspecialchars(url_query($this->params, '&'));
-            else {
-                $res .= '?'.url_query($this->params, '&');
-            }
-        }
+        $res = $this->scheme.'://'.($this->username ? $this->username.':'.$this->password.'@' : '').$this->host.$port.$this->getPath($safe);
 
         return $res;
     }
+
+    /** @return url path excluding hostname */
+    function getPath($safe = false)
+    {
+        $res = $this->path;
+
+        if (!empty($this->params))
+            if ($safe)
+                $res .= '?'.htmlspecialchars(url_query($this->params, '&'));
+            else
+                $res .= '?'.url_query($this->params, '&');
+
+        return $res;
+    }
+
+    function render() { return $this->get(); }
 
     /**
      * @param $text string to substitute location with

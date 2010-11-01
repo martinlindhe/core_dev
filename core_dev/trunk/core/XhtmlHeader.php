@@ -52,21 +52,46 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     function getCoreDevRoot() { return $this->core_dev_root; }
 
     function setTitle($t) { $this->title = $t; }
-    function setFavicon($uri) { $this->favicon = $uri; }
+
+    function setFavicon($uri)
+    {
+        if (substr($uri, 0, 1) != '/')
+            $uri = relurl($uri);
+
+        $this->favicon = $uri;
+    }
+
     function setReloadTime($secs) { $this->reload_time = $secs; }
 
     //function includeFeed($uri) { $this->include_feed[] = $uri; }
-    function includeJs($uri) { $this->include_js[] = $uri; }
-    function includeCss($uri) { $this->include_css[] = $uri; }
+
+    function includeJs($uri)
+    {
+        if (substr($uri, 0, 1) != '/')
+            $uri = relurl($uri);
+
+        $this->include_js[] = $uri;
+    }
+
+    function includeCss($uri)
+    {
+        if (substr($uri, 0, 1) == '/')
+            $this->include_css[] = $uri;
+        else
+            $this->include_css[] = relurl($uri);
+    }
 
     /** CSS snippets to be added inside <head> */
-    function addCss($s) { $this->embed_css .= $s; }
+    function embedCss($s) { $this->embed_css .= $s; }
 
     /**JavaScript snippets to be added to the <body onload=""> tag */
-    function addJs($s) { $this->embed_js[] = $s; }
+    function embedJs($s) { $this->embed_js[] = $s; }
 
     function addOpenSearch($uri, $name)
     {
+        if (substr($uri, 0, 1) != '/')
+            $uri = relurl($uri);
+
         $this->opensearch[] = array('url' => $uri, 'name' => $name);
     }
 
