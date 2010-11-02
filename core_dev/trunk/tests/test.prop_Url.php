@@ -2,7 +2,8 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('prop_Url.php');
+require_once('prop_Url.php');
+require_once('XmlDocumentHandler.php');
 
 // test url manipulation
 $url = new Url();
@@ -30,5 +31,7 @@ if ($url->getPath() != '/?p=n;hb=HEAD')                     echo "FAIL 9\n";
 $url = new Url('http://test.com/?q=minuter+p%E5+skoj');
 if ($url->get() != 'http://test.com/?q=minuter+p%E5+skoj')  echo "FAIL 10 ".$url->get()."\n";
 if ($url->getPath() != '/?q=minuter+p%E5+skoj')             echo "FAIL 11\n";
+
+if (relurl('/') != '/') echo "FAIL 12\n";
 
 ?>

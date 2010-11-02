@@ -212,9 +212,9 @@ function relurl_add($p)
     return $u->getPath();
 }
 
-function ahref($url, $title)
+function ahref($url, $title, $target = '')
 {
-    return '<a href="'.relurl($url).'">'.$title.'</a>';
+    return '<a href="'.relurl($url).'"'.($target ? ' target="'.$target.'"' : '').'>'.$title.'</a>';
 }
 
 /** Creates "are you sure?" pages */
