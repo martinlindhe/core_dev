@@ -80,7 +80,7 @@ class SessionHandler extends CoreBase
             return;
 
         //sets httponly param to mitigate XSS attacks
-        $domain = ''; //XXX read domain name from XmlDocumentHandler->getBaseUrl()
+        $domain = ''; //XXX read domain name from XmlDocumentHandler->getUrl()
         setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
 
         //Logged in: Check user activity - log out inactive user
