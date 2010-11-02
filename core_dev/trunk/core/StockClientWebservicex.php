@@ -8,7 +8,7 @@
 
 require_once('input_xml.php');
 
-class Stock_webservicex
+class StockClientWebservicex
 {
     private $api_url = 'http://www.webservicex.net/stockquote.asmx?wsdl';
 

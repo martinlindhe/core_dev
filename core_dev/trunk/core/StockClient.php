@@ -7,11 +7,11 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-require_once('client_stock_webservicex.php'); //NASDAQ only (?)
+require_once('StockClientWebservicex.php'); //NASDAQ only (?)
 
 require_once('Cache.php');
 
-class Stock
+class StockClient
 {
     private $cache_expire = 300; ///< expire time in seconds for local cache
     private $cache; ///< Cache object
@@ -31,11 +31,13 @@ class Stock
         $data = $this->cache->get('stock_nasdaq//'.$code);
         if ($data) return unserialize($data);
 
-        $client = new Stock_webservicex();
+        $client = new StockClientWebservicex();
 
         $res = $client->getQuote($code);
 
-        $this->cache->set('stock_nasdaq//'.$code, serialize($res));
+        if ($res)
+            $this->cache->set('stock_nasdaq//'.$code, serialize($res));
+
         return $res;
     }
 }

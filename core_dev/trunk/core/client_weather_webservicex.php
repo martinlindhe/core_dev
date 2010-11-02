@@ -78,6 +78,7 @@ class Weather_webservicex extends CoreBase
 
             $celcius = false;
             $skycond = '';
+            $visibility = '';
 
             while ($reader->read())
             {
