@@ -14,13 +14,10 @@ require_once('WeatherClientYahoo.php');
 
 class WeatherResult
 {
-//    var $location;
     var $city, $region, $country;
 
-//    var $wind;
     var $wind_chill, $wind_direction, $wind_speed;
 
-//    var $coords;
     var $coord_lat, $coord_long;
 
     var $time;
