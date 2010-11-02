@@ -15,7 +15,7 @@
 require_once('ConvertTemperature.php');
 require_once('input_xml.php');
 
-class Weather_webservicex extends CoreBase
+class WeatherClientWebservicex extends CoreBase
 {
     private $client;
 

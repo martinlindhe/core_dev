@@ -8,9 +8,9 @@
  */
 
 require_once('Cache.php');
-require_once('client_weather_webservicex.php');
+require_once('WeatherClientWebservicex.php');
 
-class Weather extends CoreBase
+class WeatherClient extends CoreBase
 {
     private $cache;
 
@@ -32,12 +32,12 @@ class Weather extends CoreBase
         if ($data)
             return unserialize($data);
 
-        $client = new Weather_webservicex();
+        $client = new WeatherClientWebservicex();
         $res = $client->getWeather($city, $country);
-        if (!$res)
-            return false;
 
-        $this->cache->set('weather//'.$city.'/'.$country, serialize($res));
+        if ($res)
+            $this->cache->set('weather//'.$city.'/'.$country, serialize($res));
+
         return $res;
     }
 }

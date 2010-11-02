@@ -2,12 +2,12 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('client_weather_webservicex.php');
+require_once('WeatherClient.php');
 
-$client = new weather_webservicex();
+$client = new WeatherClient();
 
 //Stockholm / Bromma
-$res = $client->getWeather('Norrkoping', 'Sweden');
+$res = $client->getWeatherReport('Norrkoping', 'Sweden');
 print_r($res);
 
 /*
