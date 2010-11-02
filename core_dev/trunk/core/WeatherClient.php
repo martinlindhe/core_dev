@@ -8,7 +8,27 @@
  */
 
 require_once('Cache.php');
-require_once('WeatherClientWebservicex.php');
+
+require_once('WeatherClientWebservicex.php'); // currently not working, 2010-11-02
+require_once('WeatherClientYahoo.php');
+
+class WeatherResult
+{
+//    var $location;
+    var $city, $region, $country;
+
+//    var $wind;
+    var $wind_chill, $wind_direction, $wind_speed;
+
+//    var $coords;
+    var $coord_lat, $coord_long;
+
+    var $time;
+
+    var $visibility;
+    var $skycond;
+    var $celcius;
+}
 
 class WeatherClient extends CoreBase
 {
@@ -23,6 +43,9 @@ class WeatherClient extends CoreBase
 
     function setCacheTime($s) { $this->cache->setCacheTime($s); }
 
+    /**
+     * @return a WeatherResult object
+     */
     function getWeatherReport($city, $country = '')
     {
         $city    = strtolower($city);
@@ -32,7 +55,8 @@ class WeatherClient extends CoreBase
         if ($data)
             return unserialize($data);
 
-        $client = new WeatherClientWebservicex();
+//        $client = new WeatherClientWebservicex();
+        $client = new WeatherClientYahoo();
         $res = $client->getWeather($city, $country);
 
         if ($res)

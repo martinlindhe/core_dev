@@ -20,8 +20,16 @@ require_once('NewsItem.php');
 class RssReader extends CoreBase
 {
     private $items = array();   ///< list of NewsItem objects
-    private $reader;            ///< XMLReader object
+    protected $reader;            ///< XMLReader object
     private $title;             ///< title of the feed
+
+    protected $ext_tags = array(); ///< to be filled with custom tags to parse, set by extending class
+
+    function __construct($data = '')
+    {
+        if ($data)
+            $this->parse($data);
+    }
 
     /**
      * @return array of NewsItem objects
@@ -29,6 +37,9 @@ class RssReader extends CoreBase
     function getItems() { return $this->items; }
 
     function getTitle() { return $this->title; }
+
+    /** XXX: MUST be implemented by plugin */
+//    function pluginParseTag($key) { }
 
     function parse($data)
     {
@@ -83,7 +94,8 @@ class RssReader extends CoreBase
             if ($this->reader->nodeType != XMLReader::ELEMENT)
                 continue;
 
-            switch (strtolower($this->reader->name)) {
+            $key = strtolower($this->reader->name);
+            switch ($key) {
             case 'title':
                 $this->reader->read();
                 $this->title = $this->reader->value;
@@ -95,7 +107,7 @@ class RssReader extends CoreBase
             case 'pubdate': break;
             case 'generator': break;
             case 'webmaster': break;
-            //case 'lastbuilddate': break; //<lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+            case 'lastbuilddate': break; //<lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
             //case 'docs': break; //<docs>http://blogs.law.harvard.edu/tech/rss</docs>
             //case 'managingeditor': break; //<managingEditor>editor@example.com</managingEditor>
 
@@ -104,7 +116,10 @@ class RssReader extends CoreBase
                 break;
 
             default:
-                //echo 'unknown channel entry ' .$this->reader->name.ln();
+                if (in_array($key, $this->ext_tags)) {
+                    $this->pluginParseTag($key);
+                } else
+                    // echo 'unknown channel entry '.$key.ln();
                 break;
             }
         }
@@ -124,7 +139,9 @@ class RssReader extends CoreBase
             if ($this->reader->nodeType != XMLReader::ELEMENT)
                 continue;
 
-            switch (strtolower($this->reader->name)) {
+            $key = strtolower($this->reader->name);
+
+            switch ($key) {
             case 'title':
                 $this->reader->read();
                 $item->setTitle( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
@@ -237,7 +254,11 @@ class RssReader extends CoreBase
                 break;
 
             default:
-                //echo 'unknown item entry ' .$this->reader->name.ln();
+                if (in_array($key, $this->ext_tags)) {
+                    $this->pluginParseTag($key);
+                } else {
+                    //echo 'unknown item entry ' .$this->reader->name.ln();
+                }
                 break;
             }
         }

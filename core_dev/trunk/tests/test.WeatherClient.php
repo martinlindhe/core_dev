@@ -6,9 +6,16 @@ require_once('WeatherClient.php');
 
 $client = new WeatherClient();
 
-//Stockholm / Bromma
+/*
 $res = $client->getWeatherReport('Norrkoping', 'Sweden');
 print_r($res);
+*/
+
+
+$res = $client->getWeatherReport('Stockholm', 'Sweden');
+print_r($res);
+
+
 
 /*
 $res = $client->getCitiesByCountry('sweden');

@@ -67,7 +67,6 @@ class WeatherClientWebservicex extends CoreBase
                 return false;
             }
 
-
             $reader = new XMLReader();
             if ($this->getDebug()) echo 'Parsing XML: '.$data.ln();
 
@@ -76,9 +75,7 @@ class WeatherClientWebservicex extends CoreBase
 
             $reader->xml($data);
 
-            $celcius = false;
-            $skycond = '';
-            $visibility = '';
+            $item = new WeatherResult();
 
             while ($reader->read())
             {
@@ -97,14 +94,14 @@ class WeatherClientWebservicex extends CoreBase
                             $reader->read();
                             list($farenheit) = explode(' ', trim($reader->value), 2);
                             $temp = new ConvertTemperature();
-                            $celcius = round($temp->conv('F','C', $farenheit), 1);
+                            $item->celcius = round($temp->conv('F','C', $farenheit), 1);
                             break;
 
                         case 'Location': //<Location>Stockholm / Bromma, Sweden (ESSB) 59-21N 017-57E 14M</Location>
                             $reader->read();
                             list($location, $rest) = explode('(', trim($reader->value));
                             list($code, $coords) = explode(')', $rest); //XXX: convert from "59-21N 017-57E 14M"
-                            $coords = trim($coords);
+                            $item->coords = trim($coords);
                             //echo 'CODE: '.$code."\n";   //ESNQ, ESSB, ESNN.... what is this?
                             break;
 
@@ -112,22 +109,22 @@ class WeatherClientWebservicex extends CoreBase
                             $reader->read();
                             list($time1, $time2) = explode(' / ', $reader->value);
                             //echo "t1: ".$time1."<br>"; echo "t2: ".$time2."<br>";
-                            $time = strtotime($time1); //FIXME strtotime() dont handle either format
+                            $item->time = strtotime($time1); //FIXME strtotime() dont handle either format
                             break;
 
                         case 'Wind': //<Wind> from the NW (320 degrees) at 9 MPH (8 KT):0</Wind>
                             $reader->read();
-                            $wind = $reader->value; //XXX: parse string
+                            $item->wind = $reader->value; //XXX: parse string
                             break;
 
                         case 'Visibility': //<Visibility> 5 mile(s):0</Visibility>
                             $reader->read();
-                            $visibility = trim($reader->value); //XXX: parse string
+                            $item->visibility = trim($reader->value); //XXX: parse string
                             break;
 
                         case 'SkyConditions': //<SkyConditions> mostly cloudy</SkyConditions>
                             $reader->read();
-                            $skycond = trim($reader->value);
+                            $item->skycond = trim($reader->value);
                             break;
 
                         case 'DewPoint': break; //<DewPoint> 12 F (-11 C)</DewPoint>
@@ -146,17 +143,7 @@ class WeatherClientWebservicex extends CoreBase
                 }
             }
 
-            $res = array(
-            'Location'     => $location,
-            'Coordinates'  => $coords,
-            'Time'         => $time,
-            'Wind'         => $wind,
-            'Visibility'   => $visibility,
-            'SkyConditions'=> $skycond,
-            'Temperature'  => $celcius
-            );
-
-            return $res;
+            return $item;
 
         } catch (Exception $e) {
             echo 'exception: '.$e, "\n";
