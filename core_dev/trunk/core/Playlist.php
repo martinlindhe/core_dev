@@ -38,28 +38,11 @@ require_once('prop_Timestamp.php');
 
 require_once('input_asx.php');
 require_once('input_m3u.php'); //XXX: TODO support input m3u playlists
-require_once('io_newsfeed.php');
+//require_once('io_newsfeed.php');
 
 require_once('XhtmlHeader.php');
 
-class MediaItem extends CoreBase //XXX rename to PlaylistItem ?
-{
-    var $title;
-    var $mime;               ///< mimetype of media
-    var $thumbnail;          ///< location of thumbnail/cover art
-    var $desc;               ///< description
-
-    var $Duration;           ///< duration of media
-    var $Timestamp;
-    var $Url;                ///< location of media
-
-    function __construct()
-    {
-        $this->Duration  = new Duration();
-        $this->Timestamp = new Timestamp();
-        $this->Url       = new Url();
-    }
-}
+require_once('MediaItem.php');
 
 class Playlist extends CoreList
 {
@@ -76,6 +59,15 @@ class Playlist extends CoreList
      */
     function addItem($i)
     {
+        /**
+         * HACK: Needed to work around a limitation in xbmc, which needs rss
+         * feeds in the format rss:// instead of http:// for all http links
+         *
+         * bug progress in xbmc: http://xbmc.org/trac/ticket/6186
+         */
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'XBMC') !== false)
+            $i->Url->setScheme('rss');
+
         switch (get_class($i)) {
         case 'MediaItem':
             $item = $i;
@@ -85,13 +77,13 @@ class Playlist extends CoreList
             //convert a NewsItem into a MediaItem
             $item = new MediaItem();
 
-            $item->title          = $i->title;
-            $item->desc           = $i->desc;
-            $item->thumbnail      = $i->image_url;
-            $item->mime           = $i->video_mime;
-            $item->Duration->set  ( $i->Duration->get() );
-            $item->Timestamp->set ( $i->Timestamp->get() );
-            $item->Url->set       ( $i->video_url );
+            $item->title        = $i->title;
+            $item->desc         = $i->desc;
+            $item->thumbnail    = $i->image_url;
+            $item->mime         = $i->video_mime;
+            $item->setDuration  ( $i->getDuration() );
+            $item->setTimestamp ( $i->getTimestamp() );
+            $item->Url->set     ( $i->video_url );
             break;
 
         default:

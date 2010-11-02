@@ -25,7 +25,7 @@
 
 require_once('class.CoreBase.php');
 require_once('HttpClient.php');
-require_once('io_playlist.php'); //for MediaItem object
+require_once('Playlist.php'); //for MediaItem object
 
 class input_asx extends CoreBase
 {

@@ -145,7 +145,7 @@ class RssReader extends CoreBase
                 break;
 
             case 'pubdate':
-                $item->setTime( $this->reader->readValue() );
+                $item->setTimestamp( $this->reader->readValue() );
                 break;
 
             case 'guid':
