@@ -14,8 +14,9 @@
 //TODO: extend from HttpClient
 
 require_once('class.CoreBase.php');
-require_once('HttpClient.php');
 require_once('NewsItem.php');
+
+require_once('XmlReader.php');
 
 class RssReader extends CoreBase
 {
@@ -43,22 +44,8 @@ class RssReader extends CoreBase
 
     function parse($data)
     {
-        if (is_url($data)) {
-            $http = new HttpClient($data);
-            if ($this->getDebug()) $http->setDebug();
-            $http->setCacheTime(60 * 60); //1h
-            $data = $http->getBody();
-
-            //FIXME check http client return code for 404
-            if (strpos($data, '<rss ') === false) {
-                dp('RssReader->parse FAIL: cant parse feed from '.$http->getUrl() );
-                return false;
-            }
-        }
-        if ($this->getDebug()) echo 'Parsing RSS: '.$data.ln();
-
-        $this->reader = new XMLReader();
-        $this->reader->xml($data);
+        $this->reader = new CoreXmlReader();
+        $this->reader->parse($data);
 
         while ($this->reader->read())
         {
@@ -97,8 +84,7 @@ class RssReader extends CoreBase
             $key = strtolower($this->reader->name);
             switch ($key) {
             case 'title':
-                $this->reader->read();
-                $this->title = $this->reader->value;
+                $this->title = $this->reader->readValue();
                 break;
 
             case 'link': break;
@@ -143,33 +129,27 @@ class RssReader extends CoreBase
 
             switch ($key) {
             case 'title':
-                $this->reader->read();
-                $item->setTitle( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
+                $item->setTitle( html_entity_decode($this->reader->readValue(), ENT_QUOTES, 'UTF-8') );
                 break;
 
             case 'description':
-                $this->reader->read();
-                $item->desc = trim( html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8') );
+                $item->desc = trim( html_entity_decode($this->reader->readValue(), ENT_QUOTES, 'UTF-8') );
                 break;
 
             case 'author':
-                $this->reader->read();
-                $item->author = $this->reader->value;
+                $item->author = $this->reader->readValue();
                 break;
 
             case 'link':
-                $this->reader->read();
-                $item->setUrl( $this->reader->value );
+                $item->setUrl( $this->reader->readValue() );
                 break;
 
             case 'pubdate':
-                $this->reader->read();
-                $item->setTime( $this->reader->value );
+                $item->setTime( $this->reader->readValue() );
                 break;
 
             case 'guid':
-                $this->reader->read();
-                $item->guid = $this->reader->value;
+                $item->guid = $this->reader->readValue();
                 break;
 
             case 'media:thumbnail':

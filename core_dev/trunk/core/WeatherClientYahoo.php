@@ -24,7 +24,7 @@ class WeatherClientYahoo
 
         if (!$x->woeid)
             throw new Exception ('location not found');
-//d($x);
+
         $url = 'http://weather.yahooapis.com/forecastrss?w='.$x->woeid.'&u=c';
 
         $client = new YahooWeatherReader($url);
@@ -120,14 +120,12 @@ class YahooWeatherReader extends RssReader
 
         // <geo:lat>57.78</geo:lat>
         case 'geo:lat':
-            $this->reader->read();
-            $this->coord_lat = $this->reader->value;
+            $this->coord_lat = $this->reader->readValue();
             break;
 
         // <geo:long>14.18</geo:long>
         case 'geo:long':
-            $this->reader->read();
-            $this->coord_long = $this->reader->value;
+            $this->coord_long = $this->reader->readValue();
             break;
 
         default:

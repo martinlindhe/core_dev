@@ -7,9 +7,12 @@
  * @author Martin Lindhe, 2009 <martin@startwars.org>
  */
 
-//STATUS: unused???
+//STATUS: unused??? see XmlReader.php instead
 
 //TODO: drop this and wrap php 5 class XMLReader?: http://www.ibm.com/developerworks/library/x-pullparsingphp.html
+
+
+die('DEPRECATED');
 
 require_once('HttpClient.php');
 

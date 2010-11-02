@@ -8,7 +8,9 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
-require_once('input_xml.php');
+// require_once('input_xml.php');
+
+///XXX FIXME UPDATE to use XmlReader.php
 
 class StockClientWebservicex
 {

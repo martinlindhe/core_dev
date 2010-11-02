@@ -13,7 +13,10 @@
 //STATUS: wip
 
 require_once('ConvertTemperature.php');
-require_once('input_xml.php');
+
+///XXX FIXME UPDATE to use XmlReader.php
+
+//require_once('input_xml.php');
 
 class WeatherClientWebservicex extends CoreBase
 {
