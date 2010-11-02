@@ -4,7 +4,7 @@
  *
  * Returns current stock quotes
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
 require_once('StockClientWebservicex.php'); //NASDAQ only (?)
