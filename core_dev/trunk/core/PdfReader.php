@@ -57,7 +57,7 @@ class PdfReader
     function read()
     {
         if (!file_exists($this->filename))
-            throw new Exception ('file not found');
+            throw new Exception ('file not found: '.$this->filename);
 
         $this->fp = fopen($this->filename, "rb");
 

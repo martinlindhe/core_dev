@@ -15,7 +15,14 @@ function jsArrayFlat($list, $with_keys)
     $all = array();
     foreach ($list as $key => $val)
     {
-        $res = ($with_keys ? $key.':' : '');
+        $res = '';
+        if ($with_keys) {
+            if (is_numeric($key))
+                $res .= $key.':';
+            else
+                $res .= '"'.$key.'":';
+        }
+
         if (is_bool($val)) $res .= ($val ? '1' : '0');
         else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0')) $res .= $val;
         else {
