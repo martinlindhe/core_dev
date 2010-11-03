@@ -171,6 +171,8 @@ function xhtmlImage($_src, $_alt = '')
 
 /**
  * Creates a <form> open tag
+ *
+ * @param $enctype set to "multipart/form-data" to handle file uploads
  */
 function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '')
 {
@@ -333,8 +335,7 @@ function coreButton($name, $link = '', $title = '')
     if ($link) $out .= '<a href="'.$link.'">';
     if (!$title) $title = t($name);
 
-    $header = XhtmlHeader::getInstance();
-    $out .= '<img src="'.$header->getCoreDevRoot().'gfx/'.$img.'" alt="'.$title.'" title="'.$title.'"/>';
+    $out .= '<img src="'.relurl('core_dev/gfx/'.$img).'" alt="'.$title.'" title="'.$title.'"/>';
     if ($link) $out .= '</a>';
     return $out;
 }
@@ -342,13 +343,12 @@ function coreButton($name, $link = '', $title = '')
 function countryFlag($code)
 {
     $locale = LocaleHandler::getInstance();
-    $header = XhtmlHeader::getInstance();
 
     $title = $locale->getCountryName($code);
     if (!$title)
         throw new Exception ('unhandled country flag code '.$code);
 
-    return '<img src="'.$header->getCoreDevRoot().'gfx/flags/'.$code.'.png" alt="'.$title.'" title="'.$title.'"/>';
+    return '<img src="'.relurl('core_dev/gfx/flags/'.$code.'.png').'" alt="'.$title.'" title="'.$title.'"/>';
 }
 
 /**

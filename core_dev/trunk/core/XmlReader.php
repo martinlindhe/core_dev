@@ -23,7 +23,7 @@ class CoreXmlReader extends XMLReader
             $data = $http->getBody();
 
             //FIXME check http client return code for 404
-            if (strpos($data, '<rss ') === false) {
+            if (strpos($data, '<?xml ') === false) {
                 throw new Exception ('RssReader->parse FAIL: cant parse feed from '.$http->getUrl() );
                 return false;
             }

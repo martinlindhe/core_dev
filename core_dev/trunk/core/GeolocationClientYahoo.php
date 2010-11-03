@@ -9,6 +9,8 @@
 
 //TODO: update to parse all data such as location
 
+require_once('XmlReader.php');
+
 class GeolocationClientYahooResult
 {
     var $woeid; ///< Yahoo woeid for location
@@ -24,11 +26,8 @@ class GeolocationClientYahoo
         $q = urlencode('select * from geo.places where text="'.$city.','.$country.'"');
         $url = 'http://query.yahooapis.com/v1/public/yql?q='.$q.'&format=xml';
 
-        $data = file_get_contents($url);
-
-        $this->reader = new XMLReader();
-
-        $this->reader->xml($data);
+        $this->reader = new CoreXmlReader();
+        $this->reader->parse($url);
 
         while ($this->reader->read())
         {
@@ -80,8 +79,7 @@ class GeolocationClientYahoo
 
             switch ($key) {
             case 'woeid':
-                $this->reader->read();
-                $item->woeid = $this->reader->value;
+                $item->woeid = $this->reader->readValue();
                 break;
 
             default:

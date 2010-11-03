@@ -28,6 +28,8 @@ class XmlDocumentHandler extends CoreBase
     private $attachment_name;
     private $coredev_inc = '';       ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
 
+    private $upload_root = '';       ///< root directory for file uploads
+
     var $objs = array();  ///< IXMLComponent objects
 
     private function __clone() {}      //singleton: prevent cloning of class
@@ -38,6 +40,14 @@ class XmlDocumentHandler extends CoreBase
             self::$_instance = new self();
 
         return self::$_instance;
+    }
+
+    function setUploadRoot($s)
+    {
+        if (!file_exists($s))
+            throw new Exception ('setUploadRoot: directory dont exist: '.$s);
+
+        $this->upload_root = $s;
     }
 
     function setMimeType($s) { $this->mimetype = $s; }
@@ -66,6 +76,7 @@ class XmlDocumentHandler extends CoreBase
     }
 
     function getCoreDevInclude() { return $this->coredev_inc; }
+    function getUploadRoot() { return $this->upload_root; }
 
     /**
      * Sends HTTP headers that prompts the client browser to download the page content with given name

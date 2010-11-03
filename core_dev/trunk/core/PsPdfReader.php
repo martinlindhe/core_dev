@@ -26,6 +26,7 @@
 class PsPdfReader
 {
     private $data;
+    private $strip_empty_lines = true; ///< strip empty lines from output?
 
     function __construct($data = '')
     {
@@ -88,9 +89,12 @@ class PsPdfReader
         foreach ($chunks as $c) {
             //XXX hack, all lines is wrapped inside (text)Tj", strip it away
             if (substr($c[2], -3) == ')Tj' && substr($c[2], 0, 1) == '(')
-                $txt[] = substr($c[2], 1, -3);
+                $s = substr($c[2], 1, -3);
             else
-                $txt[] = $c[2];
+                $s = $c[2];
+
+            if (!$this->strip_empty_lines || $s)
+                $txt[] = $s;
         }
         return $txt;
     }

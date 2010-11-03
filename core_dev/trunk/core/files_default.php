@@ -12,6 +12,9 @@
 
 //STATUS: drop this code when rewrite is finished in class.Files.php, drop files module from session handler
 
+die('DEPRECATED');
+
+
 //TODO: rename tblFiles.timeUploaded to tblFiles.timeCreated
 //FIXME: use bmp mimetype "image/x-ms-bmp" and verify it is recognized in all browsers
 

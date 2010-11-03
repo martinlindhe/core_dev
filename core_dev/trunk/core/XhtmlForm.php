@@ -22,7 +22,7 @@ require_once('yui_richedit.php');
 
 class XhtmlForm
 {
-    private $enctype          = '';      ///< TODO: set multipart type if form contains file upload parts
+    private $file_upload      = false;
     private $handled          = false;   ///< is set to true when form data has been processed by callback function
     private $name;
     private $post_handler;               ///< function to call as POST callback
@@ -30,15 +30,13 @@ class XhtmlForm
     private $formData         = array();
     private $elems            = array();
     private $url_handler;                ///< sends form to a different url
-    private $form_method;                ///< get/post
     private $auto_code        = true;    ///< automatically encode/decode form data using urlencode
     private $using_captcha    = false;
 
-    function __construct($name = '', $url_handler = '', $form_method = 'post')
+    function __construct($name = '', $url_handler = '')
     {
         $this->name        = $name;
         $this->url_handler = $url_handler;
-        $this->form_method = $form_method;
     }
 
     /**
@@ -75,16 +73,16 @@ class XhtmlForm
         $p = array();
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
-                foreach ($this->elems as $row) {
-                    switch ($row['type']) {
+                foreach ($this->elems as $e) {
+                    switch ($e['type']) {
                     case 'DATEINTERVAL':
-                        if (!empty($row['namefrom']) && $row['namefrom'] == $key ||
-                            !empty($row['nameto'])   && $row['nameto']   == $key)
+                        if (!empty($e['namefrom']) && $e['namefrom'] == $key ||
+                            !empty($e['nameto'])   && $e['nameto']   == $key)
                             $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         break;
 
                     default:
-                        if (!empty($row['name']) && $row['name'] == $key) {
+                        if (!empty($e['name']) && $e['name'] == $key) {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
@@ -101,27 +99,45 @@ class XhtmlForm
 
         if (!empty($_GET))
             foreach ($_GET as $key => $val)
-                foreach ($this->elems as $row)
-                    if (!empty($row['name']) && !isset($_POST[$row['name']]) && $row['name'] == $key)
+                foreach ($this->elems as $e)
+                    if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
 
-        if (!$p) return false;
-/*
-        //find new_catname tag and handle it
-        foreach ($this->elems as $id => $e) {
-            if (!empty($e['name']) && !empty($p['new_'.$e['name']])) {
-                //add category
-                $cat = new CategoryItem($this->elems[$id]['cat_type']);
-                $cat->setOwner($h->session->id);
-                $cat->setTitle($p['new_'.$e['name']]);
-                $id = $cat->store();
+        $page = XmlDocumentHandler::getInstance();
 
-                //modify post form category id, unset new_catname
-                $p[ $e['name'] ] = $id;
-                unset( $p['new_'.$e['name']] );
+        // include FILES uploads
+        if ($this->file_upload) {
+            foreach ($this->elems as $e) {
+                if ($e['type'] == 'FILE' && !empty($_FILES[ $e['name'] ]) ) {
+
+                    $key = $_FILES[ $e['name'] ];
+
+                    // ignore empty file uploads
+                    if (!$key['name'])
+                        continue;
+
+                    if (!is_uploaded_file($key['tmp_name'])) {
+                        $error->add('Upload failed for file '.$key['name'] );
+                        continue;
+                    }
+
+                    $dst_file = $page->getUploadRoot().$key['name'];
+
+                    if (move_uploaded_file($key['tmp_name'], $dst_file))
+                        chmod($dst_file, 0777);
+                    else
+                        throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
+
+                    $key['name'] = $dst_file;
+
+                    $p[ $e['name'] ] = $key;
+
+                    unset($_FILES[ $e['name'] ]);    //to avoid further processing of this file upload elsewhere
+                }
             }
         }
-*/
+
+        if (!$p) return false;
 
         $this->formData = $p;
 
@@ -258,6 +274,15 @@ class XhtmlForm
     }
 
     /**
+     * Adds a file uploader
+     */
+    function addFile($name, $str = '')
+    {
+         $this->file_upload = true;
+        $this->elems[] = array('type' => 'FILE', 'name' => $name, 'str' => $str);
+    }
+
+    /**
      * Renders the form in XHTML
      */
     function render()
@@ -265,7 +290,9 @@ class XhtmlForm
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 
-        $res = xhtmlForm($this->name, $this->url_handler, $this->form_method, $this->enctype);
+        $enctype = $this->file_upload ? 'multipart/form-data' : '';
+
+        $res = xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
 
         $res .= '<table cellpadding="10" cellspacing="0" border="1">';
 
@@ -298,29 +325,17 @@ class XhtmlForm
                 break;
 
             case 'INPUT':
-                if ($e['str']) {
-                    $res .= '<td>'.$e['str'].'</td><td>';
-                } else {
-                    $res .= '<td colspan="2">';
-                }
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
                 break;
 
             case 'TEXTAREA':
-                if ($e['str']) {
-                    $res .= '<td>'.$e['str'].'</td><td>';
-                } else {
-                    $res .= '<td colspan="2">';
-                }
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
                 break;
 
             case 'RICHEDIT':
-                if ($e['str']) {
-                    $res .= '<td>'.$e['str'].'</td><td>';
-                } else {
-                    $res .= '<td colspan="2">';
-                }
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlTextarea($e['name'], $e['default'], 1, 1).'</td>';
 
                 $richedit = new yui_richedit();
@@ -338,26 +353,17 @@ class XhtmlForm
                 break;
 
             case 'DROPDOWN':
-                if ($e['str'])
-                    $res .= '<td>'.$e['str'].'</td><td>';
-                else
-                    $res .= '<td colspan="2">';
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'RADIO':
-                if ($e['str'])
-                    $res .= '<td>'.$e['str'].'</td><td>';
-                else
-                    $res .= '<td colspan="2">';
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'LISTBOX':
-                if ($e['str'])
-                    $res .= '<td>'.$e['str'].'</td><td>';
-                else
-                    $res .= '<td colspan="2">';
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlSelectMultiple($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
@@ -427,6 +433,12 @@ class XhtmlForm
 
                 $res .= '<td colspan="2">';
                 $res .= $captcha->render();
+                $res .= '</td>';
+                break;
+
+            case 'FILE':
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
+                $res .= xhtmlFile($e['name']);
                 $res .= '</td>';
                 break;
 
