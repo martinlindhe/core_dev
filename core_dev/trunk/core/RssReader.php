@@ -20,9 +20,9 @@ require_once('XmlReader.php');
 
 class RssReader extends CoreBase
 {
-    private $items = array();   ///< list of NewsItem objects
-    protected $reader;            ///< XMLReader object
-    private $title;             ///< title of the feed
+    private   $items = array();    ///< list of NewsItem objects
+    protected $reader;             ///< XMLReader object
+    private   $title;              ///< title of the feed
 
     protected $ext_tags = array(); ///< to be filled with custom tags to parse, set by extending class
 
@@ -150,87 +150,6 @@ class RssReader extends CoreBase
 
             case 'guid':
                 $item->guid = $this->reader->readValue();
-                break;
-
-            case 'media:thumbnail':
-                if (!$item->image_url) { //XXX prefer full image over thumbnails
-                    $item->image_url  = $this->reader->getAttribute('url');
-                    $item->image_mime = file_get_mime_by_suffix($item->image_url);//$this->reader->getAttribute('type')
-                }
-                break;
-
-            case 'media:content':
-                switch ($this->reader->getAttribute('type')) {
-                case 'video/x-flv':
-                    //XXX HACK: prefer asf (usually mms) over flv (usually over rtmp / rtmpe) because vlc dont support rtmp(e) so well yet (2009.09.23)
-                    if (substr($this->reader->getAttribute('url'),0,4) != 'rtmp' || !$item->video_url) {
-                        $item->video_url  = $this->reader->getAttribute('url');
-                        $item->video_mime = $this->reader->getAttribute('type');
-
-                        $item->setDuration($this->reader->getAttribute('duration'));
-                    }
-                    break;
-
-                case 'video/x-ms-asf':
-                    if (file_suffix($this->reader->getAttribute('url')) == '.asx')
-                    {
-                        $asx = new input_asx();
-                        if ($this->getDebug()) $asx->setDebug();
-                        $asx->parse( $this->reader->getAttribute('url') );
-                        $list = $asx->getItems();
-
-                        if ($list)
-                            $item->video_url = $list[0]->Url->get();
-                    } else {
-                        $item->video_url = $this->reader->getAttribute('url');
-                    }
-
-                    $item->video_mime  = $this->reader->getAttribute('type');
-                    $item->setDuration($this->reader->getAttribute('duration'));
-                    break;
-
-                case 'video/mp4':
-                    //XXX rtsp protocol
-                    if (!$item->video_url) {
-                        $item->video_url  = $this->reader->getAttribute('url');
-                        $item->video_mime = $this->reader->getAttribute('type');
-                        $item->setDuration($this->reader->getAttribute('duration'));
-                    }
-                    break;
-
-                case 'video/3gpp':
-                    //XXX rtsp protocol
-                    if (!$item->video_url) {
-                        $item->video_url  = $this->reader->getAttribute('url');
-                        $item->video_mime = $this->reader->getAttribute('type');
-                        $item->setDuration($this->reader->getAttribute('duration'));
-                    }
-                    break;
-
-                case 'video/quicktime':
-                    $item->video_url  = $this->reader->getAttribute('url');
-                    $item->video_mime = $this->reader->getAttribute('type');
-                    $item->setDuration($this->reader->getAttribute('duration'));
-                    break;
-
-                case 'image/jpeg':
-                    $item->image_url  = $this->reader->getAttribute('url');
-                    $item->image_mime = $this->reader->getAttribute('type');
-                    break;
-
-                case 'text/html':
-                    //<media:content type="text/html" medium="document" url="http://svt.se/2.22620/1.1652031/krigsfartyg_soker_efter_arctic_sea">
-                    break;
-
-                case 'application/vnd.apple.mpegurl':
-                    //points to a nested m3u playlist, didnt research more
-                    //<media:content duration="91" expression="sample" height="360" lang="sv" type="application/vnd.apple.mpegurl" width="640" medium="video" url="http://www0.c90910.dna.qbrick.com/90910/od/20100221/abc_2010-0221-SL-hts-a-v1/abc_2010-0221-SL-hts-a-v1_vod.m3u8">
-                    break;
-
-                default:
-                    echo 'RssReader->parseItem() unknown MEDIA:CONTENT: '.$this->reader->getAttribute('type').ln();
-                    break;
-                }
                 break;
 
             default:

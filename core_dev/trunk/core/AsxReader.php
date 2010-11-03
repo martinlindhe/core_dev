@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Parses an ASX playlist into MediaResource objects
+ * Parses an ASX playlist into VideoResource objects
  *
  * http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
  *
@@ -27,7 +27,7 @@ require_once('class.CoreBase.php');
 require_once('HttpClient.php');
 require_once('MediaResource.php');
 
-class input_asx extends CoreBase
+class AsxReader extends CoreBase
 {
     private $items = array(); ///< MediaItem objects
 
@@ -54,13 +54,13 @@ class input_asx extends CoreBase
         if ($this->getDebug()) echo 'Parsing ASX: '.$data.ln();
         $reader->xml($data);
 
-        $item = new MediaResource();
+        $item = new VideoResource();
 
         while ($reader->read())
         {
             if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'asx') {
                 $this->items[] = $item;
-                $item = new MediaResource();
+                $item = new VideoResource();
             }
 
             if ($reader->nodeType != XMLReader::ELEMENT)
@@ -86,11 +86,11 @@ class input_asx extends CoreBase
                     case 'starttime': break; //<starttime value="00:00:00.00"/>
 
                     case 'ref': //<ref href="mms://wm0.c90901.cdn.qbrick.com/90901/kluster/20091026/aekonomi920.wmv"/>
-                        $item->Url->set( $reader->getAttribute('href') );
+                        $item->setUrl( $reader->getAttribute('href') );
                         break;
 
                     case 'duration': //<duration value="00:03:39.00"/>
-                        $item->Duration->set( $reader->getAttribute('value') );
+                        $item->setDuration( $reader->getAttribute('value') );
                         break;
 
                     default:

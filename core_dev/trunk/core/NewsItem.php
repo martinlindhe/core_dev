@@ -5,21 +5,19 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-class NewsItem
+class NewsItem extends CoreBase
 {
     var $title;
     var $desc;
     var $author;
 
     var $guid;
-    var $image_mime;
-    var $image_url;
-    var $video_mime;
-    var $video_url;
 
     var $Duration;  ///< video duration
     var $Timestamp;
     var $Url;       ///< location of news article
+
+    private $media = array();
 
     function setTimestamp($s) { $this->Timestamp = new Timestamp($s); }
     function setUrl($s) { $this->Url = new Url($s); }
@@ -37,6 +35,25 @@ class NewsItem
     {
         $this->Duration  = new Duration();
     }
+
+    function addMedia($o)
+    {
+        if ($o instanceof VideoResource)
+            $this->media[] = $o;
+        else
+            throw new Exception ('unhandled class '.get_class($o) );
+    }
+
+    /**
+     * Selects best quality video out of all available video url:s
+     */
+    function getVideoUrlBestQuality()
+    {
+        d($this->media);
+        die;
+    }
+
+
 }
 
 ?>

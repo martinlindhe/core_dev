@@ -36,7 +36,7 @@ require_once('prop_Duration.php');
 require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
 
-require_once('input_asx.php');
+require_once('AsxReader.php');
 require_once('input_m3u.php'); //XXX: TODO support input m3u playlists
 //require_once('io_newsfeed.php');
 
@@ -50,9 +50,12 @@ class Playlist extends CoreList
     private $title   = 'Untitled playlist'; ///< name of playlist
     private $format  = 'xhtml';             ///< playlist output format
 
+    private $org_url = '';                  ///< orginal source of the playlist (if external)
+
     function sendHeaders($bool = true) { $this->headers = $bool; }
     function setTitle($t) { $this->title = $t; }
     function setFormat($format) { $this->format = $format; }
+    function setOrgUrl($s) { $this->org_url = $s; }
 
     /**
      * Adds a item to the feed list
@@ -69,14 +72,13 @@ class Playlist extends CoreList
             $i->Url->setScheme('rss');
 
         switch (get_class($i)) {
-        case 'MediaResource':
+        case 'VideoResource':
             $item = $i;
             break;
 
         case 'NewsItem':
-            //convert a NewsItem into a MediaItem
-            $item = new MediaResource();
-
+            //convert a NewsItem into a VideoResource
+            $item = new VideoResource();
             $item->title        = $i->title;
             $item->desc         = $i->desc;
             $item->thumbnail    = $i->image_url;
@@ -94,7 +96,7 @@ class Playlist extends CoreList
     }
 
     /**
-     * Loads input data from ASX playlists into MediaResource entries
+     * Loads input data from ASX playlists into VideoResource entries
      */
     function load($data)
     {
@@ -104,7 +106,7 @@ class Playlist extends CoreList
         }
 
         if (strpos($data, '<asx ') !== false) {
-            $asx = new input_asx();
+            $asx = new AsxReader();
             $asx->parse($data);
             $this->addItems( $asx->getItems() );
             return true;
@@ -256,7 +258,12 @@ class Playlist extends CoreList
      */
     private function renderXHTML()
     {
-        $res = '<table border="1">';
+        $res = '';
+
+        if ($this->org_url)
+            $res .= '<a href="'.$this->org_url.'" target="_blank">Show orginal feed</a><br/><br/>';
+
+        $res .= '<table border="1">';
 
         foreach ($this->getItems() as $item)
         {
