@@ -42,7 +42,7 @@ require_once('input_m3u.php'); //XXX: TODO support input m3u playlists
 
 require_once('XhtmlHeader.php');
 
-require_once('MediaItem.php');
+require_once('MediaResource.php');
 
 class Playlist extends CoreList
 {
@@ -69,13 +69,13 @@ class Playlist extends CoreList
             $i->Url->setScheme('rss');
 
         switch (get_class($i)) {
-        case 'MediaItem':
+        case 'MediaResource':
             $item = $i;
             break;
 
         case 'NewsItem':
             //convert a NewsItem into a MediaItem
-            $item = new MediaItem();
+            $item = new MediaResource();
 
             $item->title        = $i->title;
             $item->desc         = $i->desc;
@@ -83,7 +83,7 @@ class Playlist extends CoreList
             $item->mime         = $i->video_mime;
             $item->setDuration  ( $i->getDuration() );
             $item->setTimestamp ( $i->getTimestamp() );
-            $item->Url->set     ( $i->video_url );
+            $item->setUrl       ( $i->video_url );
             break;
 
         default:
@@ -94,7 +94,7 @@ class Playlist extends CoreList
     }
 
     /**
-     * Loads input data from ASX playlists into MediaItem entries
+     * Loads input data from ASX playlists into MediaResource entries
      */
     function load($data)
     {

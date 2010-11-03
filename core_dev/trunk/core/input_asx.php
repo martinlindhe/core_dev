@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Parses an ASX playlist into MediaItem objects
+ * Parses an ASX playlist into MediaResource objects
  *
  * http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
  *
@@ -25,7 +25,7 @@
 
 require_once('class.CoreBase.php');
 require_once('HttpClient.php');
-require_once('Playlist.php'); //for MediaItem object
+require_once('MediaResource.php');
 
 class input_asx extends CoreBase
 {
@@ -54,13 +54,13 @@ class input_asx extends CoreBase
         if ($this->getDebug()) echo 'Parsing ASX: '.$data.ln();
         $reader->xml($data);
 
-        $item = new MediaItem();
+        $item = new MediaResource();
 
         while ($reader->read())
         {
             if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'asx') {
                 $this->items[] = $item;
-                $item = new MediaItem();
+                $item = new MediaResource();
             }
 
             if ($reader->nodeType != XMLReader::ELEMENT)

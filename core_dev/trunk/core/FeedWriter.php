@@ -48,9 +48,10 @@ abstract class FeedWriter extends CoreList
             $item = $i;
             break;
 
-        case 'MediaItem':
+        case 'MediaResource':
+d($i);die;
     //    d($i);
-            //convert a MediaItem into a NewsItem
+            //convert into a NewsItem
             $item = new NewsItem();
 
             $item->title        = $i->title;
