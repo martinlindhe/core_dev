@@ -11,7 +11,7 @@
 
 //STATUS: good
 
-//TODO: extend from HttpClient
+//TODO: extend from CoreXmlReader ??
 
 require_once('class.CoreBase.php');
 require_once('NewsItem.php');

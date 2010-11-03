@@ -82,7 +82,7 @@ class Playlist extends CoreList
             $item->thumbnail    = $i->image_url;
             $item->mime         = $i->video_mime;
             $item->setDuration  ( $i->getDuration() );
-            $item->setTimestamp ( $i->getTimestamp() );
+            $item->setTimestamp ( $i->getTime() );
             $item->setUrl       ( $i->video_url );
             break;
 
