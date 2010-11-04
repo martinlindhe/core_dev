@@ -33,6 +33,9 @@ class ErrorHandler
 
     function render($clear_errors = false)
     {
+        if (!isset($_SESSION['e']))
+            return '';
+
         $res = '';
 
         foreach ($_SESSION['e'] as $e)
