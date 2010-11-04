@@ -2,15 +2,16 @@
 /**
  * $Id$
  *
- * Handles errors
+ * Stores errors in a $_SESSION array to keep them persistent
  *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
+//STATUS: ok
+
 class ErrorHandler
 {
     static $_instance; ///< singleton
-    private $errors = array();
 
     private function __construct() { }
     private function __clone() {}      //singleton: prevent cloning of class
@@ -23,19 +24,19 @@ class ErrorHandler
         return self::$_instance;
     }
 
-    function getErrorCount() { return count($this->errors); }
+    function getErrorCount() { return count($_SESSION['e']); }
 
-    function add($s) { if ($s) $this->errors[] = $s; }
+    function add($s) { $_SESSION['e'][] = $s; }
 
     function render($clear_errors = false)
     {
         $res = '';
 
-        foreach ($this->errors as $e)
+        foreach ($_SESSION['e'] as $e)
             $res .= '<div class="bad">'.$e.'</div><br/>';
 
         if ($clear_errors)
-            $this->errors = array();
+            $_SESSION['e'] = array();
 
         return $res;
     }
