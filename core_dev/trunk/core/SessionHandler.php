@@ -155,11 +155,30 @@ class SessionHandler extends CoreBase
 
         $res = array();
 
-        foreach ($u->getGroups() as $grp) {
-
+        foreach ($u->getGroups() as $grp)
+        {
             $api_accts = new ApiCustomerList( $grp->getId() );
             foreach ($api_accts->getCustomers() as $acc)
                 $res[] = $acc;
+        }
+
+        return $res;
+    }
+
+    /**
+     * @return array with api account id:s that is owned by groups that current user is a member of
+     */
+    function getApiAccountIds()
+    {
+        $u = new User($this->id);
+
+        $res = array();
+
+        foreach ($u->getGroups() as $grp)
+        {
+            $api_accts = new ApiCustomerList( $grp->getId() );
+            foreach ($api_accts->getCustomers() as $acc)
+                $res[] = $acc->getId();
         }
 
         return $res;
@@ -222,7 +241,6 @@ class SessionHandler extends CoreBase
         $this->referer = $_SERVER['REQUEST_URI'];
         $this->showErrorPage();
     }
-
 
     /**
      * Locks normal users out from certain pages
