@@ -6,10 +6,10 @@
  *
  * http://en.wikipedia.org/wiki/Vcard
  *
- * See also output_ical.php
+ * See also iCalWriter.php
  */
 
-//STATUS: INCOMPLETE DRAFT
+//STATUS: UNUSED, INCOMPLETE DRAFT
 
 
 //TODO: parse vcard from the web, example http://www.agigen.se/agigen.vcf

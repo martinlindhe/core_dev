@@ -11,17 +11,19 @@
  * http://www.ietf.org/rfc/rfc2446.txt - iCalendar Transport-Independent Interoperability Protocol (iTIP)
  * http://www.ietf.org/rfc/rfc2447.txt - iCalendar Message-Based Interoperability Protocol (iMIP)
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
+
+//STATUS: wip
 
 //TODO: come up with a elegant solution to store needed data for "days off" tables
 //TODO: use daysOffSwe() in paydaysMonthly() to find out if assumed weekday really
 //      is a weekday (for example you never get salary on 25:th december)
 //TODO: verify that the calendars work with Apple Calendar & Google Calendar
 
-class ical
+class iCalWriter
 {
-    var $events = array();
+    var $events     = array();
     var $dateevents = array();
 
     var $name;
