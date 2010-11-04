@@ -24,7 +24,10 @@ class ErrorHandler
         return self::$_instance;
     }
 
-    function getErrorCount() { return count($_SESSION['e']); }
+    function getErrorCount()
+    {
+        return isset($_SESSION['e']) ? count($_SESSION['e']) : 0;
+    }
 
     function add($s) { $_SESSION['e'][] = $s; }
 
