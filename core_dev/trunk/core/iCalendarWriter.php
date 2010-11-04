@@ -25,7 +25,7 @@ class iCalendarWriter
     var $events     = array();
     var $dateevents = array();
 
-    private $prod_id = 'core_dev';
+    private $prod_id = 'core_dev.com';
 
     var $name;
 
@@ -57,8 +57,13 @@ class iCalendarWriter
             $this->tagBegin('VEVENT').
             "DTSTART;VALUE=DATE:".$c_start."\r\n".    //YYYYMMDD
             "DTEND;VALUE=DATE:".  $c_end  ."\r\n".
+            //DTSTAMP:20101104T165340Z
+            //CLASS:PUBLIC
+            //SEQUENCE:1
+            //STATUS:CONFIRMED
+            //TRANSP:OPAQUE
             "SUMMARY:".$e[1]."\r\n".
-            "UID:".md5($c_start.$c_end.$e[1])."@".$this->prod_id."r\n". //unique identifier
+            "UID:".md5($c_start.$c_end.$e[1])."@".$this->prod_id."\r\n". //unique identifier
             $this->tagEnd('VEVENT');
         }
 
