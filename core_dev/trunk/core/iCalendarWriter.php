@@ -20,18 +20,36 @@
 //      is a weekday (for example you never get salary on 25:th december)
 //TODO: verify that the calendars work with Apple Calendar & Google Calendar
 
+require_once('UUID.php');
+
 class iCalendarWriter
 {
-    var $events     = array();
-    var $dateevents = array();
+    var $events      = array();
+    var $date_events = array();
 
     private $prod_id = 'core_dev.com';
 
     var $name;
+    private $timezone;
 
     function __construct($name = '')
     {
         $this->name = $name;
+        $this->timezone = date_default_timezone_get();
+    }
+
+    /** Adds additional events to the calendar */
+    function addEvents($cal, $tz = '')
+    {
+        foreach ($cal as $a)
+            $this->events[] = array($a, $tz);
+    }
+
+    /** Adds events that is valid a whole day */
+    function addDateEvents($cal)
+    {
+        foreach ($cal as $a)
+            $this->date_events[] = $a;
     }
 
     function sendHeaders()
@@ -46,7 +64,7 @@ class iCalendarWriter
     {
         $res = '';
 
-        foreach ($this->dateevents as $e) {
+        foreach ($this->date_events as $e) {
             $y = date('Y', $e[0]);
             $m = date('m', $e[0]);
             $d = date('d', $e[0]);
@@ -58,10 +76,10 @@ class iCalendarWriter
             "DTSTART;VALUE=DATE:".$c_start."\r\n".    //YYYYMMDD
             "DTEND;VALUE=DATE:".  $c_end  ."\r\n".
             //DTSTAMP:20101104T165340Z
-            //CLASS:PUBLIC
-            //SEQUENCE:1
-            //STATUS:CONFIRMED
-            //TRANSP:OPAQUE
+            "CLASS:PUBLIC\r\n".     // XXX ??? snodde från googles kalender
+            "SEQUENCE:1\r\n".       // XXX ??? snodde från googles kalender
+            "STATUS:CONFIRMED\r\n". // XXX ??? snodde från googles kalender
+            "TRANSP:OPAQUE\r\n".    // XXX ??? snodde från googles kalender
             "SUMMARY:".$e[1]."\r\n".
             "UID:".md5($c_start.$c_end.$e[1])."@".$this->prod_id."\r\n". //unique identifier
             $this->tagEnd('VEVENT');
@@ -97,13 +115,17 @@ class iCalendarWriter
 
         switch ($obj) {
         case 'VCALENDAR':
+            $uuid  = UUID::v5('7c7884bf-14f8-478a-ab0e-778a6ac1d437', $this->name);
+
             $res .=
             "VERSION:2.0\r\n".
             "PRODID:-//".$this->prod_id."//NONSGML v1.0//EN\r\n".
-            "CALSCALE:GREGORIAN\r\n".  // http://en.wikipedia.org/wiki/Gregorian_calendar
-            "METHOD:PUBLISH\r\n".      // XXX ??? snodde från googles kalender
-            "X-WR-TIMEZONE:UTC\r\n".   // XXX ??? snodde från googles kalender
-            "X-WR-CALDESC:".$s."\r\n"; // A description of the calendar
+            "CALSCALE:GREGORIAN\r\n".                // http://en.wikipedia.org/wiki/Gregorian_calendar
+            "METHOD:PUBLISH\r\n".                    // XXX ??? snodde från googles kalender
+            "X-WR-TIMEZONE:".$this->timezone."\r\n". // Calendar timezone, like "Europe/Stockholm"
+            //"X-WR-CALDESC:xx\r\n"                  // Calendar description
+            "X-WR-RELCALID:".$uuid."\r\n".           // Calendar UUID v5
+            "X-WR-CALNAME:".$s."\r\n";               // Calendar name
             break;
 
         case 'VEVENT':
@@ -115,26 +137,6 @@ class iCalendarWriter
     function tagEnd($obj)
     {
         return "END:".$obj."\r\n";
-    }
-
-    /**
-     * Adds additional events to the calendar
-     */
-    function addEvents($cal, $tz = '')
-    {
-        foreach ($cal as $a) {
-            $this->events[] = array($a, $tz);
-        }
-    }
-
-    /**
-     * Adds events that is valid a whole day
-     */
-    function addDateEvents($cal)
-    {
-        foreach ($cal as $a) {
-            $this->dateevents[] = $a;
-        }
     }
 
     /**
