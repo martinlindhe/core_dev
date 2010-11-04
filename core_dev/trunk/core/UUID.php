@@ -27,7 +27,7 @@ class UUID
     public static function v3($ns, $name)
     {
         $hash = md5( self::toBinary($ns).$name );
-        return self::build_uuid($hash, 0x3000);
+        return self::build($hash, 0x3000);
     }
 
     /**
@@ -38,17 +38,17 @@ class UUID
     public static function v5($ns, $name)
     {
         $hash = sha1( self::toBinary($ns).$name );
-        return self::build_uuid($hash, 0x5000);
+        return self::build($hash, 0x5000);
     }
 
-    private static function build_uuid($hash, $version)
+    private static function build($hash, $version)
     {
         return sprintf('%08s-%04s-%04x-%04x-%12s',
-            substr($hash, 0, 8), // 32 bits for "time_low"
-            substr($hash, 8, 4), // 16 bits for "time_mid"
-            (hexdec(substr($hash, 12, 4)) & 0x0fff) | $version, // 16 bits for "time_hi_and_version", four most significant bits holds version number 3
-            (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000, // 16 bits, 8 bits for "clk_seq_hi_res", 8 bits for "clk_seq_low", two most significant bits holds zero and one for variant DCE1.1
-            substr($hash, 20, 12)                             // 48 bits for "node"
+        substr($hash, 0, 8), // 32 bits "time_low"
+        substr($hash, 8, 4), // 16 bits "time_mid"
+        (hexdec(substr($hash, 12, 4)) & 0x0fff) | $version, // 16 bits "time_hi_and_version", four most significant bits holds version number
+        (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000, // 16 bits, 8 bits "clk_seq_hi_res", 8 bits "clk_seq_low", two most significant bits holds zero and one for variant DCE1.1
+        substr($hash, 20, 12)                             // 48 bits "node"
         );
     }
 
