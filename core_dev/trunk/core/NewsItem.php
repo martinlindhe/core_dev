@@ -13,11 +13,18 @@ class NewsItem extends CoreBase
 
     var $guid;
 
-    var $Duration;  ///< video duration
-    var $Timestamp;
-    var $Url;       ///< location of news article
+    protected $Duration;  ///< video duration
+    protected $Timestamp;
+    protected $Url;       ///< location of news article
 
-    private $media = array();
+    protected $media = array();
+
+    function __construct()
+    {
+        $this->Timestamp = new Timestamp();
+        $this->Duration  = new Duration();
+        $this->Url       = new Url();
+    }
 
     function setTimestamp($s) { $this->Timestamp = new Timestamp($s); }
     function setUrl($s) { $this->Url = new Url($s); }
@@ -31,26 +38,28 @@ class NewsItem extends CoreBase
     function getDuration() { return $this->Duration->get(); }
     function getTitle() { return $this->title; }
 
-    function __construct()
-    {
-        $this->Duration  = new Duration();
-    }
-
     function addMedia($o)
     {
-        if ($o instanceof VideoResource)
+        if ($o instanceof VideoResource || $o instanceof ImageResource)
             $this->media[] = $o;
         else
             throw new Exception ('unhandled class '.get_class($o) );
     }
 
     /**
-     * Selects best quality video out of all available video url:s
+     * Selects best quality video out of all available VideoResource
      */
     function getVideoUrlBestQuality()
     {
-        d($this->media);
-        die;
+        //d($this->media);
+        //die;
+    }
+
+    /**
+     * Selects (best) thumbnail from ImageResource
+     */
+    function getThumbnailLink()
+    {
     }
 
 

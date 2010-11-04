@@ -38,4 +38,14 @@ class VideoResource extends AudioResource
     var $video_width;
 }
 
+class ImageResource extends CoreBase
+{
+    var $Url;
+    var $width;
+    var $height;
+
+    function setUrl($n) { $this->Url = new Url($n); }
+    function getUrl() { return $this->Url->get(); }
+}
+
 ?>

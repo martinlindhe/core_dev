@@ -20,9 +20,9 @@ require_once('XmlReader.php');
 
 class RssReader extends CoreBase
 {
-    private   $items = array();    ///< list of NewsItem objects
+    protected $items = array();    ///< list of NewsItem objects
     protected $reader;             ///< XMLReader object
-    private   $title;              ///< title of the feed
+    protected $title;              ///< title of the feed
 
     protected $ext_tags = array(); ///< to be filled with custom tags to parse, set by extending class
 
@@ -154,7 +154,7 @@ class RssReader extends CoreBase
 
             default:
                 if (in_array($key, $this->ext_tags)) {
-                    $this->pluginParseTag($key);
+                    $this->pluginParseTag($key, $item);
                 } else {
                     //echo 'unknown item entry ' .$this->reader->name.ln();
                 }
