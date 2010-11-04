@@ -5,11 +5,10 @@
  * iCalendar (.ics) file functions
  *
  * References:
+ * http://tools.ietf.org/html/rfc5545 - Internet Calendaring and Scheduling Core Object Specification (iCalendar)
+ * http://tools.ietf.org/html/rfc5546 - iCalendar Transport-Independent Interoperability Protocol (iTIP)
+ * http://tools.ietf.org/html/rfc2447 - iCalendar Message-Based Interoperability Protocol (iMIP)
  * http://en.wikipedia.org/wiki/ICalendar
- * http://severinghaus.org/projects/icv/ - iCal validator
- * http://www.ietf.org/rfc/rfc2445.txt - Internet Calendaring and Scheduling Core Object Specification (iCalendar)
- * http://www.ietf.org/rfc/rfc2446.txt - iCalendar Transport-Independent Interoperability Protocol (iTIP)
- * http://www.ietf.org/rfc/rfc2447.txt - iCalendar Message-Based Interoperability Protocol (iMIP)
  *
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
@@ -21,10 +20,12 @@
 //      is a weekday (for example you never get salary on 25:th december)
 //TODO: verify that the calendars work with Apple Calendar & Google Calendar
 
-class iCalWriter
+class iCalendarWriter
 {
     var $events     = array();
     var $dateevents = array();
+
+    private $prod_id = 'core_dev';
 
     var $name;
 
@@ -33,43 +34,53 @@ class iCalWriter
         $this->name = $name;
     }
 
-    function output()
+    function sendHeaders()
     {
         header('Content-Type: text/calendar; charset="UTF-8"');
         //header('Content-Disposition: inline; filename=calendar.ics');
-        header('Cache-Control: no-cache, must-revalidate');    //HTTP/1.1
-        header('Expires: Thu, 1 Jan 2009 00:00:00 GMT');    //date in the past
+        header('Cache-Control: no-cache, must-revalidate');   //HTTP/1.1
+        header('Expires: Thu, 1 Jan 2009 00:00:00 GMT');      //date in the past
+    }
 
-        echo $this->tagBegin('VCALENDAR', $this->name);
-        echo "UID:".md5($this->name)."@core_dev\r\n"; //unique identifier
+    function render()
+    {
+        $res = '';
 
         foreach ($this->dateevents as $e) {
-            echo $this->tagBegin('VEVENT');
             $y = date('Y', $e[0]);
             $m = date('m', $e[0]);
             $d = date('d', $e[0]);
             $c_start = date("Ymd", $e[0]);
             $c_end   = date("Ymd", mktime(0, 0, 0, $m, $d +1 , $y));    //date+1
-            echo "DTSTART;VALUE=DATE:".$c_start."\r\n";    //YYYYMMDD
-            echo "DTEND;VALUE=DATE:".  $c_end  ."\r\n";
-            echo "SUMMARY:".$e[1]."\r\n";
-            echo "UID:".md5($c_start.$c_end.$e[1])."@core_dev\r\n"; //unique identifier
-            echo $this->tagEnd('VEVENT');
+
+            $res .=
+            $this->tagBegin('VEVENT').
+            "DTSTART;VALUE=DATE:".$c_start."\r\n".    //YYYYMMDD
+            "DTEND;VALUE=DATE:".  $c_end  ."\r\n".
+            "SUMMARY:".$e[1]."\r\n".
+            "UID:".md5($c_start.$c_end.$e[1])."@".$this->prod_id."r\n". //unique identifier
+            $this->tagEnd('VEVENT');
         }
 
         foreach ($this->events as $e) {    //XXX currently unused
-            echo $this->tagBegin('VEVENT');
             $tz = $e[1];
             $c_start = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000";
             $c_end   = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959";
-            echo "DTSTART;TZID=".$c_start."\r\n";    //XXX what is this dateformat called?
-            echo "DTEND;TZID=".  $c_end.  "\r\n";
-            echo "SUMMARY:".$e[0][1]."\r\n";
-            echo "UID:".md5($c_start.$c_end.$e[0][1])."@core_dev\r\n"; //unique identifier
-            echo $this->tagEnd('VEVENT');
+
+            $res .=
+            $this->tagBegin('VEVENT').
+            "DTSTART;TZID=".$c_start."\r\n".    //XXX what is this dateformat called?
+            "DTEND;TZID=".  $c_end.  "\r\n".
+            "SUMMARY:".$e[0][1]."\r\n".
+            "UID:".md5($c_start.$c_end.$e[0][1])."@".$this->prod_id."\r\n". //unique identifier
+            $this->tagEnd('VEVENT');
         }
 
-        echo $this->tagEnd('VCALENDAR');
+        return
+        $this->tagBegin('VCALENDAR', $this->name).
+        "UID:".md5($this->name)."@".$this->prod_id."\r\n". //unique identifier
+        $res.
+        $this->tagEnd('VCALENDAR');
     }
 
     /**
@@ -80,14 +91,18 @@ class iCalWriter
         $res = "BEGIN:".$obj."\r\n";
 
         switch ($obj) {
-            case 'VCALENDAR':
-                $res .= "VERSION:2.0\r\n";
-                $res .= "PRODID:-//core_dev/".$s."/NONSGML v1.0//EN\r\n";    //XXX core_dev version
-                $res .= "CALSCALE:GREGORIAN\r\n"; //http://en.wikipedia.org/wiki/Gregorian_calendar
-                break;
+        case 'VCALENDAR':
+            $res .=
+            "VERSION:2.0\r\n".
+            "PRODID:-//".$this->prod_id."//NONSGML v1.0//EN\r\n".
+            "CALSCALE:GREGORIAN\r\n".  // http://en.wikipedia.org/wiki/Gregorian_calendar
+            "METHOD:PUBLISH\r\n".      // XXX ??? snodde från googles kalender
+            "X-WR-TIMEZONE:UTC\r\n".   // XXX ??? snodde från googles kalender
+            "X-WR-CALDESC:".$s."\r\n"; // A description of the calendar
+            break;
 
-            case 'VEVENT':
-                break;
+        case 'VEVENT':
+            break;
         }
         return $res;
     }
