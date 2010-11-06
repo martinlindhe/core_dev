@@ -30,6 +30,8 @@ class iCalendarWriter
     var $events      = array();
     var $date_events = array();
 
+    private $filename;          ///< name of output document to be sent in the http header to the client (.ics extension)
+
     private $prod_id = 'core_dev.com';
 
     var $name;
@@ -40,6 +42,8 @@ class iCalendarWriter
         $this->name = $name;
         $this->timezone = date_default_timezone_get();
     }
+
+    function setFilename($s) { $this->filename = $s; }
 
     /** Adds additional events to the calendar */
     function addEvents($cal, $tz = '')
@@ -57,8 +61,12 @@ class iCalendarWriter
 
     private function sendHeaders()
     {
+        // charset header MUST be sent
         header('Content-Type: text/calendar; charset="UTF-8"');
-        //header('Content-Disposition: inline; filename=calendar.ics');
+
+        if ($this->filename)
+            header('Content-Disposition: inline; filename='.$this->filename);
+
         header('Cache-Control: no-cache, must-revalidate');   //HTTP/1.1
         header('Expires: Thu, 1 Jan 2009 00:00:00 GMT');      //date in the past
     }
