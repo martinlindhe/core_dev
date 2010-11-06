@@ -15,6 +15,9 @@
 
 //STATUS: wip
 
+//XXX: verifiera alla uträknade datum för svenska helgdagar
+
+
 //TODO: come up with a elegant solution to store needed data for "days off" tables
 //TODO: use daysOffSwe() in paydaysMonthly() to find out if assumed weekday really
 //      is a weekday (for example you never get salary on 25:th december)
@@ -52,7 +55,7 @@ class iCalendarWriter
             $this->date_events[] = $a;
     }
 
-    function sendHeaders()
+    private function sendHeaders()
     {
         header('Content-Type: text/calendar; charset="UTF-8"');
         //header('Content-Disposition: inline; filename=calendar.ics');
@@ -62,6 +65,7 @@ class iCalendarWriter
 
     function render()
     {
+        $this->sendHeaders();
         $res = '';
 
         foreach ($this->date_events as $e) {
@@ -75,7 +79,7 @@ class iCalendarWriter
             $this->tagBegin('VEVENT').
             "DTSTART;VALUE=DATE:".$c_start."\r\n".    //YYYYMMDD
             "DTEND;VALUE=DATE:".  $c_end  ."\r\n".
-            //DTSTAMP:20101104T165340Z
+            //DTSTAMP:20101104T165340Z   /// UTC time
             "CLASS:PUBLIC\r\n".     // XXX ??? snodde från googles kalender
             "SEQUENCE:1\r\n".       // XXX ??? snodde från googles kalender
             "STATUS:CONFIRMED\r\n". // XXX ??? snodde från googles kalender
@@ -106,10 +110,8 @@ class iCalendarWriter
         $this->tagEnd('VCALENDAR');
     }
 
-    /**
-     * Creates iCalendar begin tag
-     */
-    function tagBegin($obj, $s = '')
+    /** Creates iCalendar begin tag */
+    private function tagBegin($obj, $s = '')
     {
         $res = "BEGIN:".$obj."\r\n";
 
@@ -134,7 +136,7 @@ class iCalendarWriter
         return $res;
     }
 
-    function tagEnd($obj)
+    private function tagEnd($obj)
     {
         return "END:".$obj."\r\n";
     }
@@ -222,9 +224,11 @@ class iCalendarWriter
         $res[] = array($ts, 'Midsommarafton');
 
         //Alla helgons dag (rörlig): den lördag som infaller under tiden den 31 oktober-6 november
-        $ts = mktime(0, 0, 0, 10, 31, $year);    //31:a okt
-        $dow = date('N', $ts);    //day of week. 1=monday,7=sunday
-        $ts = mktime(0, 0, 0, 10, 31-$dow+6, $year);
+        for ($i = 31; $i<= 37; $i++) {
+            $ts = mktime(0, 0, 0, 10, $i, $year);
+            $dow = date('N', $ts);    //day of week. 1=monday,7=sunday
+            if ($dow == 6) break;
+        }
         $res[] = array($ts, 'Alla helgons dag');
 
         return $res;
