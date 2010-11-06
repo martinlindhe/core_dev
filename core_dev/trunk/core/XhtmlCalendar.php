@@ -12,12 +12,15 @@
 //TODO: add a render2D() method that gives a normal calendar
 //TODO: configurable starting day of week
 
+require_once('functions_time.php');
+require_once('LocaleHandler.php');
+
 class XhtmlCalendar
 {
-    private $year, $month;
-    private $current_month = false; ///< if true, the displayed month is current month
-    private $events = array();
-    private $auto_focus = false;
+    protected $year, $month;
+    protected $current_month = false; ///< if true, the displayed month is current month
+    protected $events = array();
+    protected $auto_focus = false;
 
     function __construct($year = '', $month = '')
     {
@@ -61,16 +64,11 @@ class XhtmlCalendar
 */
     }
 
-    function renderFlat()
+    function render()
     {
         $loc = LocaleHandler::getInstance();
 
-        $res = '<h1>'.$loc->getMonthLong($this->month).' '.$this->year.'</h1>';
-        for ($i=1; $i<=12; $i++)
-            $res .= '<a href="'.$_SERVER['PHP_SELF'].'?year='.$this->year.'&month='.$i.'">'.$loc->getMonthShort($i).'</a> ';
-        $res .= '<br/>';
-
-        $res .= '<table border="1">';
+        $res = '<table border="1">';
 
         for ($i=1; $i<=$this->days_in_month; $i++) {
             $ts = mktime(0, 0, 0, $this->month, $i, $this->year);
@@ -85,20 +83,19 @@ class XhtmlCalendar
 
             $res .=
             '<tr style="'.$style.'">'.
+            '<td valign="top" align="right">'.$i.'</td>'.
+            '<td valign="top">'.$loc->getWeekdayLong( $weekday ).'</td>'.
+            '<td>';
 
-                '<td valign="top" align="right">'.$i.'</td>'.
-                '<td valign="top">'.$loc->getWeekdayLong( $weekday ).'</td>'.
-                '<td>';
+            if ($i == date('j') && $this->current_month && $this->auto_focus)
+                $res .= '<a id="cal_current_day"></a>';
 
-                    if ($i == date('j') && $this->current_month && $this->auto_focus)
-                        $res .= '<a id="cal_current_day"></a>';
-
-                    foreach ($this->events as $event_ts => $events)
-                        if ($event_ts == $ts)
-                            $res .= implode('<hr/>', $events);
+            foreach ($this->events as $event_ts => $events)
+                if ($event_ts == $ts)
+                    $res .= implode('<hr/>', $events);
 
             $res .=
-                '</td>'.
+            '</td>'.
             '</tr>';
         }
 
@@ -106,14 +103,7 @@ class XhtmlCalendar
 
         return $res;
     }
-}
 
-/*
-$cal = new XhtmlCalendar(2010, 4);
-$cal->addEvent('2010-04-14', 'fjortonde!');
-$cal->addEvent('2010-04-14', 'fjortonde222!');
-$cal->addEvent('2010-04-17', 'mer skit');
-echo $cal->renderFlat();
-*/
+}
 
 ?>
