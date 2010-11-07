@@ -23,7 +23,7 @@ class XhtmlCalendar
     protected $events = array();
     protected $auto_focus = false;
 
-    protected $year, $month;
+    protected $date;
     protected $current_month = false; ///< if true, the displayed month is current month
     protected $days_in_month;
 
@@ -32,20 +32,18 @@ class XhtmlCalendar
         $this->name = $name;
 
         // auto initialize to current year & month
-        $this->setDate( date('Y'), date('m') );
+        $this->setDate( time() );
     }
 
-    function setDate($year, $month)
+    function setDate($date)
     {
-        $this->year  = $year;
-        $this->month = $month;
+        $this->date = ts($date);
 
-        $ts = mktime(0, 0, 0, $this->month, 1, $this->year);
-        $this->days_in_month = date('t', $ts);
+        $this->days_in_month = date('t', $this->date);
 
         //are we showing current month?
         $current_ts = mktime(0, 0, 0, date('n'), 1, date('Y'));
-        if ($ts == $current_ts)
+        if ($this->date == $current_ts)
             $this->current_month = true;
     }
 
@@ -88,7 +86,7 @@ class XhtmlCalendar
         $res = '<table border="1">';
 
         for ($i=1; $i<=$this->days_in_month; $i++) {
-            $ts = mktime(0, 0, 0, $this->month, $i, $this->year);
+            $ts = mktime(0, 0, 0, date('m', $this->date), $i, date('Y', $this->date));
             $weekday = date('w', $ts);
 
             $style = '';

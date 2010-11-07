@@ -29,8 +29,8 @@ abstract class CoreLocale
 
 class LocaleHandler
 {
-    static $_instance; ///< singleton
-    var $handle;
+    static  $_instance;    ///< singleton
+    var     $handle;
     private $locale = '';  ///< 3-letter string representing current locale (ISO 639-2)
 
     private function __construct()

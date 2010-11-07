@@ -29,15 +29,16 @@ require_once('CalendarEvent.php');
 
 class iCalendarWriter
 {
-    var $events      = array();
+    var     $events   = array();
 
-    private $filename;          ///< name of output document to be sent in the http header to the client (.ics extension)
+    private $filename;                ///< name of output document to be sent in the http header to the client (.ics extension)
 
-    private $prod_id = 'core_dev.com';
-    private $mimetype = 'text/plain'; // should be "text/calendar", but "text/plain" works and shows better in browser
+    private $prod_id  = 'core_dev.com';
+    private $mimetype = 'text/plain'; ///< should be "text/calendar", but "text/plain" works and shows better in browser
 
-    var $name;
+    var     $name;
     private $timezone;
+    private $desc;                    ///< calendar description
 
     function __construct($name = '')
     {
@@ -123,12 +124,12 @@ class iCalendarWriter
             $res .=
             "VERSION:2.0\r\n".
             "PRODID:-//".$this->prod_id."//NONSGML v1.0//EN\r\n".
-            "CALSCALE:GREGORIAN\r\n".                // http://en.wikipedia.org/wiki/Gregorian_calendar
-            "METHOD:PUBLISH\r\n".                    // XXX ??? snodde från googles kalender
+            "X-WR-CALNAME:".$s."\r\n".               // Calendar name
+            ($this->desc ? "X-WR-CALDESC:".$this->desc."\r\n" : ''). // Calendar description
             "X-WR-TIMEZONE:".$this->timezone."\r\n". // Calendar timezone, like "Europe/Stockholm"
-            //"X-WR-CALDESC:xx\r\n"                  // Calendar description
             "X-WR-RELCALID:".$uuid."\r\n".           // Calendar UUID v5
-            "X-WR-CALNAME:".$s."\r\n";               // Calendar name
+            "CALSCALE:GREGORIAN\r\n".                // http://en.wikipedia.org/wiki/Gregorian_calendar
+            "METHOD:PUBLISH\r\n";                    // XXX ??? snodde från googles kalender
             break;
 
         case 'VEVENT':
