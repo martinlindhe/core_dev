@@ -23,6 +23,7 @@ class XmlDocumentHandler extends CoreBase
     private $design_head;
     private $design_foot;
     private $enable_design = true;
+    private $enable_headers = true;  ///< send http headers?
     private $mimetype = 'text/html';
     private $Url;                    ///< Url object
     private $attachment_name;
@@ -94,9 +95,25 @@ class XmlDocumentHandler extends CoreBase
      */
     function disableDesign() { $this->enable_design = false; }
 
+    function disableHeaders() { $this->enable_headers = false; }
+
     /**
      * Send http headers to disable browser cache
      */
+    private function sendHeaders()
+    {
+        if (!$this->enable_headers)
+            return;
+
+        if ($this->mimetype)
+            header('Content-Type: '.$this->mimetype);
+
+        //prompts the user to save the file
+        if ($this->attachment_name) {
+            $this->noCache();
+            header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
+        }
+    }
     private function noCache()
     {
         //FIXME: are these all needed for modern browsers?
@@ -124,14 +141,7 @@ class XmlDocumentHandler extends CoreBase
                 $obj->handlePost($_POST);
 */
 
-        if ($this->mimetype)
-            header('Content-Type: '.$this->mimetype);
-
-        //prompts the user to save the file
-        if ($this->attachment_name) {
-            $this->noCache();
-            header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
-        }
+        $this->sendHeaders();
 
         if ($this->enable_design) {
             $header = XhtmlHeader::getInstance();

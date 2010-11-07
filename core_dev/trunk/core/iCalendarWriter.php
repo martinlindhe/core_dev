@@ -34,6 +34,7 @@ class iCalendarWriter
     private $filename;          ///< name of output document to be sent in the http header to the client (.ics extension)
 
     private $prod_id = 'core_dev.com';
+    private $mimetype = 'text/plain'; // should be "text/calendar", but "text/plain" works and shows better in browser
 
     var $name;
     private $timezone;
@@ -58,8 +59,7 @@ class iCalendarWriter
     private function sendHeaders()
     {
         // charset header MUST be sent
-        //header('Content-Type: text/calendar; charset="UTF-8"');
-        header('Content-Type: text/plain; charset="UTF-8"');
+        header('Content-Type: '.$this->mimetype.'; charset="UTF-8"');
 
         if ($this->filename)
             header('Content-Disposition: inline; filename='.$this->filename);
@@ -73,8 +73,8 @@ class iCalendarWriter
         $this->sendHeaders();
         $res = '';
 
-        foreach ($this->events as $e) {
-
+        foreach ($this->events as $e)
+        {
             $y = date('Y', $e->getDate());
             $m = date('m', $e->getDate());
             $d = date('d', $e->getDate());
@@ -96,20 +96,13 @@ class iCalendarWriter
             "UID:".md5($c_start.$c_end.$title)."@".$this->prod_id."\r\n". //unique identifier
             $this->tagEnd('VEVENT');
         }
-/*  //events who lasts other period than a full day
-        foreach ($this->events as $e) {
-            $tz = $e[1];
-            $c_start = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000";
-            $c_end   = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959";
 
-            $res .=
-            $this->tagBegin('VEVENT').
-            "DTSTART;TZID=".$c_start."\r\n".    //XXX what is this dateformat called?
-            "DTEND;TZID=".  $c_end.  "\r\n".
-            "SUMMARY:".$e[0][1]."\r\n".
-            "UID:".md5($c_start.$c_end.$e[0][1])."@".$this->prod_id."\r\n". //unique identifier
-            $this->tagEnd('VEVENT');
-        }
+/*  //events who lasts other period than a full day
+    $tz = $e[1];
+    $c_start = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000";
+    $c_end   = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959";
+    "DTSTART;TZID=".$c_start."\r\n".    //XXX what is this dateformat called?
+    "DTEND;TZID=".  $c_end.  "\r\n".
 */
         return
         $this->tagBegin('VCALENDAR', $this->name).
