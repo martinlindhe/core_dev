@@ -25,10 +25,11 @@
 
 require_once('UUID.php');
 
+require_once('CalendarEvent.php');
+
 class iCalendarWriter
 {
     var $events      = array();
-    var $date_events = array();
 
     private $filename;          ///< name of output document to be sent in the http header to the client (.ics extension)
 
@@ -46,23 +47,19 @@ class iCalendarWriter
     function setFilename($s) { $this->filename = $s; }
 
     /** Adds additional events to the calendar */
-    function addEvents($cal, $tz = '')
+    function addEvent($e)
     {
-        foreach ($cal as $a)
-            $this->events[] = array($a, $tz);
-    }
+        if (!($e instanceof CalendarEvent))
+            throw new Exception ('cant handle type');
 
-    /** Adds events that is valid a whole day */
-    function addDateEvents($cal)
-    {
-        foreach ($cal as $a)
-            $this->date_events[] = $a;
+        $this->events[] = $e;
     }
 
     private function sendHeaders()
     {
         // charset header MUST be sent
-        header('Content-Type: text/calendar; charset="UTF-8"');
+        //header('Content-Type: text/calendar; charset="UTF-8"');
+        header('Content-Type: text/plain; charset="UTF-8"');
 
         if ($this->filename)
             header('Content-Disposition: inline; filename='.$this->filename);
@@ -76,12 +73,15 @@ class iCalendarWriter
         $this->sendHeaders();
         $res = '';
 
-        foreach ($this->date_events as $e) {
-            $y = date('Y', $e[0]);
-            $m = date('m', $e[0]);
-            $d = date('d', $e[0]);
-            $c_start = date("Ymd", $e[0]);
+        foreach ($this->events as $e) {
+
+            $y = date('Y', $e->getDate());
+            $m = date('m', $e->getDate());
+            $d = date('d', $e->getDate());
+            $c_start = date("Ymd", $e->getDate());
             $c_end   = date("Ymd", mktime(0, 0, 0, $m, $d +1 , $y));    //date+1
+
+            $title = strip_tags($e->title);
 
             $res .=
             $this->tagBegin('VEVENT').
@@ -92,12 +92,12 @@ class iCalendarWriter
             "SEQUENCE:1\r\n".       // XXX ??? snodde från googles kalender
             "STATUS:CONFIRMED\r\n". // XXX ??? snodde från googles kalender
             "TRANSP:OPAQUE\r\n".    // XXX ??? snodde från googles kalender
-            "SUMMARY:".$e[1]."\r\n".
-            "UID:".md5($c_start.$c_end.$e[1])."@".$this->prod_id."\r\n". //unique identifier
+            "SUMMARY:".$title."\r\n".
+            "UID:".md5($c_start.$c_end.$title)."@".$this->prod_id."\r\n". //unique identifier
             $this->tagEnd('VEVENT');
         }
-
-        foreach ($this->events as $e) {    //XXX currently unused
+/*  //events who lasts other period than a full day
+        foreach ($this->events as $e) {
             $tz = $e[1];
             $c_start = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T000000";
             $c_end   = ($tz?$tz:date('e',$e[0][0])).":".date('Ymd', $e[0][0])."T235959";
@@ -110,7 +110,7 @@ class iCalendarWriter
             "UID:".md5($c_start.$c_end.$e[0][1])."@".$this->prod_id."\r\n". //unique identifier
             $this->tagEnd('VEVENT');
         }
-
+*/
         return
         $this->tagBegin('VCALENDAR', $this->name).
         "UID:".md5($this->name)."@".$this->prod_id."\r\n". //unique identifier

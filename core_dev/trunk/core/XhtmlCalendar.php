@@ -14,20 +14,25 @@
 
 require_once('functions_time.php');
 require_once('LocaleHandler.php');
+require_once('iCalendarWriter.php');
+require_once('CalendarEvent.php');
 
 class XhtmlCalendar
 {
-    protected $year, $month;
-    protected $current_month = false; ///< if true, the displayed month is current month
+    protected $name;  ///< name of the calendar
     protected $events = array();
     protected $auto_focus = false;
 
-    function __construct($year = '', $month = '')
-    {
-        if (!$year)  $year  = date('Y');
-        if (!$month) $month = date('n');
+    protected $year, $month;
+    protected $current_month = false; ///< if true, the displayed month is current month
+    protected $days_in_month;
 
-        $this->setDate($year, $month);
+    function __construct($name = '')
+    {
+        $this->name = $name;
+
+        // auto initialize to current year & month
+        $this->setDate( date('Y'), date('m') );
     }
 
     function setDate($year, $month)
@@ -44,12 +49,12 @@ class XhtmlCalendar
             $this->current_month = true;
     }
 
-    function addEvent($date, $title)
+    function addEvent($e)
     {
-        $ts = ts($date);
-        if (!$ts) throw new Exception('invalid date '.$date);
+        if (!($e instanceof CalendarEvent))
+            throw new Exception ('cant handle type');
 
-        $this->events[$ts][] = $title;
+        $this->events[] = $e;
     }
 
     /** If true, auto focuses the calendar view on current day */
@@ -62,6 +67,18 @@ class XhtmlCalendar
             $header->embedJs("document.getElementById('cal_current_day').focus();");
         }
 */
+    }
+
+    /** Renders the calender as a iCalendar file */
+    function renderIcs()
+    {
+        $cal = new iCalendarWriter($this->name);
+        //$cal->setFilename('xxx-'.date('Y').'.ics');
+
+        foreach ($this->events as $e)
+            $cal->addEvent($e);
+
+        return $cal->render();
     }
 
     function render()
@@ -90,9 +107,9 @@ class XhtmlCalendar
             if ($i == date('j') && $this->current_month && $this->auto_focus)
                 $res .= '<a id="cal_current_day"></a>';
 
-            foreach ($this->events as $event_ts => $events)
-                if ($event_ts == $ts)
-                    $res .= implode('<hr/>', $events);
+            foreach ($this->events as $e)
+                if ($e->getDate() == $ts)
+                    $res .= $e->title.'<hr/>';
 
             $res .=
             '</td>'.
