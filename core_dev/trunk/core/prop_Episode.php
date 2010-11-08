@@ -15,9 +15,10 @@ class Episode extends CoreProperty
 {
     private $season, $episode;
 
-    function __construct($s)
+    function __construct($s = '')
     {
-        $this->set($s);
+        if ($s)
+            $this->set($s);
     }
 
     function set($s)
