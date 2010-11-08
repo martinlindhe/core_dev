@@ -51,10 +51,10 @@ class AuthHandler extends CoreBase
      * Handles logins
      *
      * @param $username
-     * @param $password
+     * @param $pwd
      * @return true on success
      */
-    private function login($username, $password)
+    private function login($username, $pwd)
     {
         $db      = SqlHandler::getInstance();
         $error   = ErrorHandler::getInstance();
@@ -65,15 +65,18 @@ class AuthHandler extends CoreBase
             return false;
         }
 
+        $username = trim($username);
+        $pwd = trim($pwd);
+
         $user = new User($username);
         if (!$user->getId()) {
             $error->add('Login failed');
             return false;
         }
 
-        $enc_password = sha1( $user->getId() . sha1($this->encrypt_key) . sha1($password) );
+        $enc_pwd = sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) );
 
-        $q = 'SELECT COUNT(*) FROM tblUsers WHERE userId='.$user->getId().' AND userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_password).'" AND timeDeleted IS NULL';
+        $q = 'SELECT COUNT(*) FROM tblUsers WHERE userId='.$user->getId().' AND userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_pwd).'" AND timeDeleted IS NULL';
         if (!$db->getOneItem($q)) {
             dp('Failed login attempt: username '.$username);
             $error->add('Login failed');
@@ -122,32 +125,31 @@ class AuthHandler extends CoreBase
      * Register new user in the database
      *
      * @param $username user name
-     * @param $password1 password
-     * @param $password2 password (repeat)
+     * @param $pwd1 password
+     * @param $pwd2 password (repeat)
      * @param $mode user mode
      * @return the user ID of the newly created user
      */
-    function register($username, $password1, $password2, $usermode = USERLEVEL_NORMAL)
+    function register($username, $pwd1, $pwd2, $usermode = USERLEVEL_NORMAL)
     {
         if (!is_numeric($usermode)) return false;
 
         $error = ErrorHandler::getInstance();
 
-        if ($username != trim($username)) {
-            $error->add('Username contains invalid spaces');
-            return false;
-        }
+        $username = trim($username);
+        $pwd1 = trim($pwd1);
+        $pwd2 = trim($pwd2);
 
         if (strlen($username) < $this->minlen_username) {
             $error->add('Username must be at least '.$this->minlen_username.' characters long');
             return false;
         }
 
-        if (strlen($password1) < $this->minlen_password) {
+        if (strlen($pwd1) < $this->minlen_password) {
             $error->add('Password must be at least '.$this->minlen_password.' characters long');
             return false;
         }
-        if ($password1 != $password2) {
+        if ($pwd1 != $pwd2) {
             $error->add('The passwords doesnt match');
             return false;
         }
@@ -176,7 +178,7 @@ class AuthHandler extends CoreBase
 
         $user = new User();
         $user->create($username, $usermode);
-        $user->setPassword($password1);
+        $user->setPassword($pwd1);
 
         dp('Registered user: '.$username.', id '.$user->getId());
 

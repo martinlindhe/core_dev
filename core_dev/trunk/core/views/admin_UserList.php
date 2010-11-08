@@ -30,14 +30,14 @@ if ($session->isSuperAdmin && !empty($_POST))
 
         $new_id = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd']);
         if (!is_numeric($new_id)) {
-            echo '<div class="critical">'.$new_id.'</div>';
+            echo $error->render(true);
         } else {
             if (!empty($_POST['u_grp'])) {
                 $user = new User($new_id);
                 $user->addToGroup($_POST['u_grp']);
             }
 
-            echo '<div class="okay">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
+            echo '<div class="good">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
         }
     }
 }
