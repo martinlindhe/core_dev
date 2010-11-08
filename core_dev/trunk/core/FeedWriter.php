@@ -117,9 +117,9 @@ d($i);die;
      */
     private function sortListDesc($a, $b)
     {
-        if (!$a->getTime()) return 1;
+        if (!$a->getTimestamp()->getUnix()) return 1;
 
-        return ($a->getTime() > $b->getTime()) ? -1 : 1;
+        return ($a->getTimestamp()->getUnix() > $b->getTimestamp()->getUnix()) ? -1 : 1;
     }
 
 }
