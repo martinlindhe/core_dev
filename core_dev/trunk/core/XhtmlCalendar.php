@@ -37,12 +37,13 @@ class XhtmlCalendar
 
     function setDate($date)
     {
-        $this->date = ts($date);
+        $this->date = ts(sql_date(ts($date))); ///XXX FIXME: helper function to round a timestamp to a datestamp
 
         $this->days_in_month = date('t', $this->date);
 
         //are we showing current month?
-        $current_ts = mktime(0, 0, 0, date('n'), 1, date('Y'));
+        $current_ts = mktime(0, 0, 0, date('n'), date('d'), date('Y'));
+
         if ($this->date == $current_ts)
             $this->current_month = true;
     }
@@ -107,7 +108,7 @@ class XhtmlCalendar
 
             foreach ($this->events as $e)
                 if ($e->getDate() == $ts)
-                    $res .= $e->title.'<hr/>';
+                    $res .= $e->title.'<br/>';
 
             $res .=
             '</td>'.
