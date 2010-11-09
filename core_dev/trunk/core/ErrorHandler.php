@@ -40,7 +40,7 @@ class ErrorHandler
         // anonymous functions requires PHP 5.3
         if (PHP_VERSION_ID < 50300)
             return;
-
+/*
         $callback = function ($errno, $errstr, $errfile, $errline, $errcontext)
         {
             // This error code is not included in error_reporting
@@ -74,6 +74,7 @@ class ErrorHandler
         };
 
         set_error_handler($callback);
+*/
     }
 
     function render($clear_errors = false)
