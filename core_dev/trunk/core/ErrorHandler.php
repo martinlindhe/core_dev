@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO: use anonymous function for set_error_handler(), requires PHP 5.3
+
 class ErrorHandler
 {
     static $_instance; ///< singleton
@@ -37,44 +39,40 @@ class ErrorHandler
 
     private function init()
     {
-        // anonymous functions requires PHP 5.3
-        if (PHP_VERSION_ID < 50300)
-            return;
-/*
-        $callback = function ($errno, $errstr, $errfile, $errline, $errcontext)
-        {
-            // This error code is not included in error_reporting
-            if (!(error_reporting() & $errno))
-                return;
-
-            // http://se.php.net/manual/en/errorfunc.constants.php
-            switch ($errno) {
-            case E_USER_ERROR:
-                echo "<b>ERROR</b> $errstr<br />\n";
-                echo "  Fatal error on line $errline in file $errfile\n";
-                exit(1);
-                break;
-
-            case E_USER_WARNING:
-                echo "<b>My WARNING</b> $errstr<br />\n";
-                break;
-
-            case E_NOTICE:
-            case E_USER_NOTICE:
-                echo "<b>Notice</b> $errstr on $errfile:$errline<br/>\n";
-                break;
-
-            default:
-                echo "Unknown error type: [$errno] $errstr<br />\n";
-                break;
-            }
-
-            // Don't execute PHP internal error handler
-            return true;
-        };
-
+        $callback = array($this, 'errorHandler');
         set_error_handler($callback);
-*/
+    }
+
+    function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    {
+        // This error code is not included in error_reporting
+        if (!(error_reporting() & $errno))
+            return;
+
+        // http://se.php.net/manual/en/errorfunc.constants.php
+        switch ($errno) {
+        case E_USER_ERROR:
+            echo "<b>ERROR</b> $errstr<br />\n";
+            echo "  Fatal error on line $errline in file $errfile\n";
+            exit(1);
+            break;
+
+        case E_USER_WARNING:
+            echo "<b>My WARNING</b> $errstr<br />\n";
+            break;
+
+        case E_NOTICE:
+        case E_USER_NOTICE:
+            echo "<b>Notice</b> $errstr on $errfile:$errline<br/>\n";
+            break;
+
+        default:
+            echo "Unknown error type: [$errno] $errstr<br />\n";
+            break;
+        }
+
+        // Don't execute PHP internal error handler
+        return true;
     }
 
     function render($clear_errors = false)

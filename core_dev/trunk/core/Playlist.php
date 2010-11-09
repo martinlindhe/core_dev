@@ -37,7 +37,7 @@ require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
 
 require_once('AsxReader.php');
-require_once('input_m3u.php'); //XXX: TODO support input m3u playlists
+require_once('M3uReader.php'); //XXX: TODO support m3u playlists
 //require_once('io_newsfeed.php');
 
 require_once('XhtmlHeader.php');
@@ -62,6 +62,9 @@ class Playlist extends CoreList
      */
     function addItem($i)
     {
+        if (!is_object($i))
+            throw new Exception ('not an object '.$i);
+
         /**
          * HACK: Needed to work around a limitation in xbmc, which needs rss
          * feeds in the format rss:// instead of http:// for all http links
@@ -74,18 +77,6 @@ class Playlist extends CoreList
         switch (get_class($i)) {
         case 'VideoResource':
             $item = $i;
-            break;
-
-        case 'NewsItem':
-            //convert a NewsItem into a VideoResource
-            $item = new VideoResource();
-            $item->title        = $i->title;
-            $item->desc         = $i->desc;
-            $item->thumbnail    = $i->image_url;
-            $item->mime         = $i->video_mime;
-            $item->setDuration  ( $i->getDuration() );
-            $item->setTimestamp ( $i->getTime() );
-            $item->setUrl       ( $i->video_url );
             break;
 
         default:

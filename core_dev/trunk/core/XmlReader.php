@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: exprimental
+//STATUS: wip
 
 //XXX TODO: rename to XmlReader when we use namespaces
 

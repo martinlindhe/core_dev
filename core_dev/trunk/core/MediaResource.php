@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-class AudioResource extends CoreBase
+abstract class MediaResource extends CoreBase
 {
     var $track_id;
     var $album_id;
@@ -16,18 +16,25 @@ class AudioResource extends CoreBase
     var $mimetype;           ///< mimetype of media
     var $desc;               ///< description
 
+    var $Url;
+
+    function setUrl($n) { $this->Url = new Url($n); }
+    function getUrl() { return $this->Url->get(); }
+}
+
+class AudioResource extends MediaResource
+{
     var $thumbnail;          ///< location of thumbnail/cover art
     var $thumb_width;
     var $thumb_height;
 
-    var $Url;
+    var $bitrate;
+
     var $Duration;
     var $Timestamp;
 
     function setTimestamp($t) { $this->Timestamp = new Timestamp($t); }
     function setDuration($n) { $this->Duration = new Duration($n); }
-    function setUrl($n) { $this->Url = new Url($n); }
-    function getUrl() { return $this->Url->get(); }
 
     function getTimestamp() { return $this->Timestamp->getUnix(); }
 }
@@ -36,9 +43,14 @@ class VideoResource extends AudioResource
 {
     var $video_height;
     var $video_width;
+
+    function renderDetails()
+    {
+        return $this->video_height.'x'.$this->video_width.' '.$this->bitrate.' bps ('.$this->mimetype.') '.$this->getUrl();
+    }
 }
 
-class ImageResource extends CoreBase
+class ImageResource extends MediaResource
 {
     var $Url;
     var $width;

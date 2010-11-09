@@ -2,21 +2,40 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * M3U playlist format reader
+ *
+ * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-class input_m3u
+//STATUS: wip
+
+require_once('HttpClient.php');
+
+class M3uReader
 {
     private $entries = array();
 
-    function __construct($data, $callback = '')
+    function __construct($data = '')
     {
+        if ($data)
+            $this->parse($data);
+    }
+
+    function parse($data)
+    {
+        if (is_url($data)) {
+            $http = new HttpClient($data);
+            $http->setCacheTime(60 * 60); //1h
+            $data = $http->getBody();
+d($data);
+        }
+
         $this->entries = array();
 
-        //if (function_exists($callback)) $this->callback = $callback;
-
         $rows = explode("\n", $data);
-        foreach ($rows as $row) {
+
+        foreach ($rows as $row)
+        {
             $p = explode(':', $row, 2);
             switch ($p[0]) {
             case '#EXTM3U': case '': break;

@@ -21,7 +21,7 @@ require_once('XmlReader.php');
 class RssReader extends CoreBase
 {
     protected $items = array();    ///< list of NewsItem objects
-    protected $reader;             ///< XMLReader object
+    protected $reader;             ///< CoreXmlReader object
     protected $title;              ///< title of the feed
 
     protected $ext_tags = array(); ///< to be filled with custom tags to parse, set by extending class
@@ -104,6 +104,7 @@ class RssReader extends CoreBase
             default:
                 if (in_array($key, $this->ext_tags)) {
                     $this->pluginParseTag($key);
+// d($key); die;
                 } else
                     // echo 'unknown channel entry '.$key.ln();
                 break;
@@ -161,6 +162,8 @@ class RssReader extends CoreBase
                 break;
             }
         }
+
+        $this->items[] = $item;
     }
 
 }
