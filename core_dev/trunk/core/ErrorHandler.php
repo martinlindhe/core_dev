@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: ok
+//STATUS: wip
 
 class ErrorHandler
 {
@@ -37,7 +37,10 @@ class ErrorHandler
 
     private function init()
     {
-        /*
+        // anonymous functions requires PHP 5.3
+        if (PHP_VERSION_ID < 50300)
+            return;
+
         $callback = function ($errno, $errstr, $errfile, $errline, $errcontext)
         {
             // This error code is not included in error_reporting
@@ -58,7 +61,7 @@ class ErrorHandler
 
             case E_NOTICE:
             case E_USER_NOTICE:
-                echo "<b>Notice</b> $errstr<br />\n";
+                echo "<b>Notice</b> $errstr on $errfile:$errline<br/>\n";
                 break;
 
             default:
@@ -71,7 +74,6 @@ class ErrorHandler
         };
 
         set_error_handler($callback);
-        */
     }
 
     function render($clear_errors = false)
