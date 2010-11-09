@@ -113,6 +113,9 @@ class SendMail extends CoreBase
     function addRecipient($s)
     {
         $s = trim($s);
+        if (!$s)
+            return;
+
         if (!is_email($s))
             throw new Exception ('Cant add invalid recipient '.$s);
 
