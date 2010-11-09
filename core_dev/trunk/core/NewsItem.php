@@ -40,6 +40,12 @@ class NewsItem extends CoreBase
     function getDuration() { return $this->Duration->get(); }
     function getTitle() { return $this->title; }
 
+    function addMediaItems($arr)
+    {
+        foreach ($arr as $o)
+            $this->addMedia($o);
+    }
+
     function addMedia($o)
     {
         if ($o instanceof VideoResource || $o instanceof ImageResource)

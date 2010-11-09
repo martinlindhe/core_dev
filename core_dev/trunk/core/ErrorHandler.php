@@ -51,14 +51,16 @@ class ErrorHandler
 
         // http://se.php.net/manual/en/errorfunc.constants.php
         switch ($errno) {
+        case E_ERROR:
         case E_USER_ERROR:
             echo "<b>ERROR</b> $errstr<br />\n";
             echo "  Fatal error on line $errline in file $errfile\n";
             exit(1);
             break;
 
+        case E_WARNING:
         case E_USER_WARNING:
-            echo "<b>My WARNING</b> $errstr<br />\n";
+            echo "<b>WARNING</b> $errstr on $errfile:$errline<br/>\n";
             break;
 
         case E_NOTICE:
