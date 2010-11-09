@@ -37,6 +37,7 @@ class ErrorHandler
 
     private function init()
     {
+        /*
         $callback = function ($errno, $errstr, $errfile, $errline, $errcontext)
         {
             // This error code is not included in error_reporting
@@ -70,6 +71,7 @@ class ErrorHandler
         };
 
         set_error_handler($callback);
+        */
     }
 
     function render($clear_errors = false)
