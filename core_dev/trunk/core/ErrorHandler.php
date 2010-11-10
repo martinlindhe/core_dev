@@ -39,11 +39,11 @@ class ErrorHandler
 
     private function init()
     {
-        $callback = array($this, 'errorHandler');
+        $callback = array($this, 'internalErrorHandler');
         set_error_handler($callback);
     }
 
-    function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    function internalErrorHandler($errno, $errstr, $errfile, $errline, $errcontext)
     {
         // This error code is not included in error_reporting
         if (!(error_reporting() & $errno))
