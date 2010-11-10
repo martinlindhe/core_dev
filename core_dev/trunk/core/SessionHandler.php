@@ -134,6 +134,9 @@ class SessionHandler extends CoreBase
 
         $db = SqlHandler::getInstance();
 
+        $error = ErrorHandler::getInstance();
+        $error->reset(); /// remove previous errors
+
         $geoip = IPv4_to_GeoIP(client_ip());
         $db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$geoip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
 

@@ -35,7 +35,15 @@ class ErrorHandler
         return isset($_SESSION['e']) ? count($_SESSION['e']) : 0;
     }
 
-    function add($s) { $_SESSION['e'][] = $s; }
+    function add($s)
+    {
+        $_SESSION['e'][] = $s;
+    }
+
+    function reset()
+    {
+        $_SESSION['e'] = array();
+    }
 
     private function init()
     {
@@ -88,7 +96,7 @@ class ErrorHandler
             $res .= '<div class="bad">'.$e.'</div><br/>';
 
         if ($clear_errors)
-            $_SESSION['e'] = array();
+            $this->reset();
 
         return $res;
     }
