@@ -351,4 +351,14 @@ class FtpClient extends CoreBase
 
 }
 
+function curl_check_protocol_support($prot)
+{
+    $v = curl_version();
+    foreach ($v['protocols'] as $p) {
+        if ($p == $prot)
+            return true;
+    }
+    return false;
+}
+
 ?>
