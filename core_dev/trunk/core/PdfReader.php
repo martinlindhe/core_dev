@@ -17,12 +17,27 @@
 
 //TODO: rewrite pdf_parse_dict() to handle multi-dimensional dictionaries
 
+/**
+ * Version status
+ *
+ * v1.3: dont work with the sample i have
+ * v1.4: works with all samples
+ */
+
+require_once('PsPdfReader.php');
+
+class PdfStream
+{
+    var $type;
+    var $data;
+}
+
 class PdfReader
 {
     private $filename;                  ///< input filename
     private $version, $major, $minor;   ///< PDF version details
-    private $supported_versions = array('1.4');
-    private $streams = array();         ///< holder of stream data
+    private $supported_versions = array('1.3', '1.4');
+    private $streams = array();         ///< PdfStream objects
     private $fp;                        ///< file pointer
 
     function __construct($filename)
@@ -30,15 +45,11 @@ class PdfReader
         $this->filename = $filename;
     }
 
-    function getStream($n)
-    {
-        return $this->streams[$n];
-    }
+    function getStream($n) { return $this->streams[$n]; }
 
-    function getStreamCount()
-    {
-        return count($this->streams);
-    }
+    function getStreams() { return $this->streams; }
+
+    function getStreamCount() { return count($this->streams); }
 
     private function parseHeader($s)
     {
@@ -52,6 +63,8 @@ class PdfReader
 
         if (!in_array($this->version ,$this->supported_versions))
             throw new Exception ('Unsupported PDF version '.$this->version);
+
+        echo "DBG: PDF v".$this->major.".".$this->minor."\n";
     }
 
     function read()
@@ -66,11 +79,34 @@ class PdfReader
         $this->parseHeader($head);
 
         while (!feof($this->fp)) {
-            $row = fgets($this->fp, 1000);
+            echo dechex(ftell($this->fp))." ";
+            $row = $this->readRow();
             $this->parseRow($row);
         }
 
         fclose($this->fp);
+    }
+
+    private function readRow()
+    {
+        $row = '';
+
+        while (!feof($this->fp)) {
+
+            $b = fread($this->fp, 1);
+
+            // skip all types of line feeds
+            if ($b == "\r" || $b == "\n") {
+                $b2 = fread($this->fp, 1);
+
+                if ($b2 != "\r" && $b2 != "\n" && !feof($this->fp))
+                    fseek($this->fp, -1, SEEK_CUR);
+
+                return $row;
+            }
+
+            $row .= $b;
+        }
     }
 
     private function parseRow($row)
@@ -78,7 +114,8 @@ class PdfReader
         if (!$row)
             return;
 
-//        echo $row;
+        echo "RAW: (".strlen($row).") ".$row."\n";
+//dh($row); echo "\n";
 
         if (substr($row, 0, 1) == '%') {
             //echo "%comment\n";
@@ -86,94 +123,124 @@ class PdfReader
             return;
         }
 
-        if ($row == "xref\n") {
+        if ($row == "xref") { //XXX: code is unused
 //            d($row);
 
             //"base index" "number of entries"
-            $row = trim( fgets($this->fp, 1000) );
-
+            $row = $this->readRow();
+d($row);
             list($idx, $cnt) = explode(' ', $row);
 
-            //echo "Reading ".$cnt." lines of xref:\n";
+            echo "DBG: Reading ".$cnt." lines of xref:\n";
 
             for ($i=0; $i<$cnt; $i++) {
                 $row = trim( fgets($this->fp, 1000) );
-                //echo "\t".($idx+$i).":\t".$row."\n";
+                echo "\t".($idx+$i).":\t".$row."\n";
             }
             return;
         }
 
-        if ($row == "startxref\n") {
+        if ($row == "startxref") {  //XXX: code is unused
             //offset to xref header
             $row = trim( fgets($this->fp, 1000) );
-//            echo $row."\n";
+            echo "DBG STARTXREF: ".$row."\n";
             return;
         }
 
-        if ($row == "trailer\n") {
-
+        if ($row == "trailer") {  //XXX: code is unused
             $row = trim( fgets($this->fp, 1000) );
-//            echo $row."\n";
+            echo "DBG TRAILER: ".$row."\n";
 //            $dict = pdf_parse_dict($row);
             return;
         }
 
         // 1 0 obj <</Filter/DCTDecode/Type/XObject/Length 17619/BitsPerComponent 8/Height 181/ColorSpace/DeviceRGB/Subtype/Image/Width 420>>stream
         // 8 0 obj<</Type/Page/Contents 6 0 R/Parent 7 0 R/Resources<</XObject<</img0 1 0 R>>/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]/Font<</F1 2 0 R/F3 4 0 R/F2 3 0 R/F4 5 0 R>>>>/MediaBox[0 0 595 842]>>
+
         list($n1, $n2, $s) = explode(' ', $row, 3);
+
+//        echo "DBG: ".$n1.",".$n2.": ".$s."\n";
 
         if (substr($s, 0, 3) == 'obj') {
             $s = trim(substr($s, 3));
 
             if (substr($s, -6) == "stream") {
                 $s = substr($s, 0, -6);
+                $this->parseStream($s);
 
-                $dict = pdf_parse_dict($s);
-//                d($dict);
-//                echo "Reading ".$dict['Filter']." data (".$dict['Length']." bytes)\n";
-
-                $stream = fread($this->fp, $dict['Length']);
-
-                // DCTDecode = jpeg image
-                if ($dict['Filter'] == 'FlateDecode') {
-//                    echo "Writing decompressed stream\n";
-                    $stream = gzuncompress($stream);
-                }
-
-                $data = fread($this->fp, 11);
-                if ($data != "\nendstream\n")
-                    throw new Exception ('unexpected end stream '.$data);
-
-                if (isset($dict['Type']) && $dict['Type'] == 'XObject' && $dict['Subtype'] == 'Image') {
-                    ; //XXX hack, exclude images
-                } else {
-                    $this->streams[] = $stream;
-                }
+//            } else {
+//                dh($s);
+//                $dict = pdf_parse_dict($s);
+//d($dict);
             }
 
-            $data = fread($this->fp, 7);
-            if ($data != "endobj\n")
-                throw new Exception ('unexpected end obj '.$data);
+            $data = fgets($this->fp, 7);
+            if ($data != "endobj")
+                throw new Exception ('unexpected end obj: '.$data);
 
             return;
 
         } else {
-            echo "DUNNO WHAT DO!\n";
-            d($row);
-            die;
+            if (trim($row)) { // a pdf 1.3 sample has a row with 9 spaces+linefeed
+                echo "DUNNO WHAT DO!\n";
+                dh($row);
+                die;
+            }
+        }
+    }
+
+    private function parseStream($s)
+    {
+        $dict = pdf_parse_dict($s);
+//        d($dict);
+
+        $stream = new PdfStream();
+
+        $stream->data = fread($this->fp, $dict['Length']);
+        $this->readRow(); //increase file pointer to next line
+
+        switch ($dict['Filter']) {
+        case 'FlateDecode':
+//d($dict);
+            $stream->type = 'text';
+            $stream->data = gzuncompress($stream->data);
+            echo "STREAM: Decompressed from ".$dict['Length']." to ".strlen($stream->data)." bytes\n";
+            break;
+
+        case 'DCTDecode'; //jpeg image
+            $stream->type = 'image';
+            echo "STREAM: Read JPEG image\n";
+            break;
+
+        default:
+            throw new Exception ('unhandled stream type: '.$dict['Filter']);
         }
 
-    }
-}
+        //XXXX more friendly line reader????
+        $data = $this->readRow();
+        if ($data != "endstream")
+            throw new Exception ('unexpected end stream: '.$data);
 
+        /*
+        if (isset($dict['Type']) && $dict['Type'] == 'XObject' && $dict['Subtype'] == 'Image')
+            return;
+        */
+
+        $this->streams[] = $stream;
+    }
+
+}
 
 //XXX assumes 2d dictionary. they can be multi-dimensonal with nested << >>
 function pdf_parse_dict($s)
 {
     if (substr($s, 0, 2) == '<<' && substr($s, -2) == '>>')
         $s = substr($s, 2, strlen($s) - 4);
-    else
-        throw new Exception ('Unexpected dict format '.$s);
+    else {
+        //throw new Exception ('Unexpected dict format: '.$s);
+        echo "Unexpected dict format: ".$s."\n";
+        return false;
+    }
 
     $current_key = '';
     $dict = array();

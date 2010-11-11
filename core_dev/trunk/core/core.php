@@ -150,23 +150,26 @@ function dtrace() { return bt(); }
 /**
  * Debug function. Prints $m as hex + ascii values
  */
-function dh($m)
+function dh($m, $row_len = 16)
 {
-    echo '[[dumping '.strlen($m).' bytes]]'.ln();
+    $len = strlen($m);
+    echo '[['.$len.'/0x'.dechex($len).' bytes:]]'.ln();
     $j = 0;
     $bytes = '';
     $hex = '';
 
-    for ($i=0; $i<strlen($m); $i++) {
+    for ($i=0; $i < $len; $i++)
+    {
         $x = substr($m, $i, 1);
+
         if (ord($x) > 30 && ord($x) < 0x80)
             $bytes .= $x;
         else
             $bytes .= '.';
+
         $hex .= bin2hex($x).' ';
 
-        $j++;
-        if ($j == 15) {
+        if (++$j == $row_len) {
             $j = 0;
             echo $hex.' '.$bytes.PHP_EOL;
             $bytes = '';
@@ -176,7 +179,7 @@ function dh($m)
 
     if ($j) {
         echo $hex.' ';
-        echo str_repeat(' ', (15-strlen($bytes))*3 );
+        echo str_repeat(' ', ($row_len - strlen($bytes)) * 3);
         echo $bytes.PHP_EOL;
     }
 }
