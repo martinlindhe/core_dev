@@ -50,8 +50,10 @@ class NewsItem extends CoreBase
     {
         if ($o instanceof VideoResource || $o instanceof ImageResource)
             $this->media[] = $o;
-        else
+        else {
+            d($o);
             throw new Exception ('unhandled class '.get_class($o) );
+        }
     }
 
     function renderMediaDetails()

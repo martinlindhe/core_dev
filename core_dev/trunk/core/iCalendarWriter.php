@@ -15,17 +15,18 @@
 
 //STATUS: wip
 
+//TODO: move paydaysMonthly() and daysOffSwe() to a child class who extend iCalendarWriter
 //XXX: verifiera alla uträknade datum för svenska helgdagar
-
-
 //TODO: come up with a elegant solution to store needed data for "days off" tables
 //TODO: use daysOffSwe() in paydaysMonthly() to find out if assumed weekday really
 //      is a weekday (for example you never get salary on 25:th december)
-//TODO: verify that the calendars work with Apple Calendar & Google Calendar
+
+//TODO: verify that the calendar output works with Apple Calendar
 
 require_once('UUID.php');
 
 require_once('CalendarEvent.php');
+require_once('functions_time.php'); // for ts()
 
 class iCalendarWriter
 {
@@ -52,9 +53,15 @@ class iCalendarWriter
     function addEvent($e)
     {
         if (!($e instanceof CalendarEvent))
-            throw new Exception ('cant handle type');
+            throw new Exception ('cant handle object type '.get_class($e));
 
         $this->events[] = $e;
+    }
+
+    function addEvents($arr)
+    {
+        foreach ($arr as $e)
+            $this->addEvent($e);
     }
 
     private function sendHeaders()
@@ -153,7 +160,8 @@ class iCalendarWriter
      */
     function daysOffSwe($year)
     {
-        if (!is_numeric($year)) return false;
+        if (!is_numeric($year))
+            return false;
 
         $res = array();
 
@@ -233,7 +241,15 @@ class iCalendarWriter
         }
         $res[] = array($ts, 'Alla helgons dag');
 
-        return $res;
+        $out = array();
+        foreach ($res as $r) {
+            $e = new CalendarEvent();
+            $e->setDate($r[0]);
+            $e->title = $r[1];
+            $out[] = $e;
+        }
+
+        return $out;
     }
 
     /**
@@ -253,7 +269,11 @@ class iCalendarWriter
             $dow = date('N', $ts);    //day of week. 1=monday,7=sunday
             if ($dow > 5) //saturday or sunday
                 $ts = mktime(0, 0, 0, $m, $dom-$dow+5, $year);    //friday selected week
-            $res[] = array($ts, $desc);
+
+            $e = new CalendarEvent();
+            $e->setDate($ts);
+            $e->title = $desc;
+            $res[] = $e;
         }
         return $res;
     }
