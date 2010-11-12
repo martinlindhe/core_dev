@@ -18,6 +18,9 @@ require_once('ConvertBase.php');
 class ConvertVolume extends ConvertBase
 {
     protected $scale = array( ///< unit scale to 1 liter
+    'ml'        => 0.001,       // milliliter
+    'cl'        => 0.01,        // centiliter
+    'dl'        => 0.1,         // deciliter
     'l'         => 1,           // liter / litre
     'm³'        => 1000,        // cubic metre = 1000 litres
     'us_gallon' => 3.785411784, // us liquid gallon
@@ -26,6 +29,9 @@ class ConvertVolume extends ConvertBase
 
     protected $lookup = array(
     'cubic meter' => 'm³',        'cubic meters'  => 'm³',    'cubic metre' => 'm³',  'cubic metres' => 'm³',
+    'milliliter'  => 'ml',        'milliliters'   => 'ml',
+    'centiliter'  => 'cl',        'centiliters'   => 'cl',
+    'deciliter'   => 'dl',        'deciliters'    => 'dl',
     'liter'       => 'l',         'liters'        => 'l',     'litre'       => 'l',   'litres'       => 'l',
     'gallon'      => 'us_gallon', 'gallons'       => 'us_gallon',
     'us gallon'   => 'us_gallon', 'us gallons'    => 'us_gallon',

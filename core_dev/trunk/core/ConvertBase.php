@@ -78,7 +78,7 @@ abstract class ConvertBase
     }
 
     /**
-     * Converts input string such as "128M" or "100 celcius" to given output unit
+     * Converts input string such as "128M", "0.5 liter" or "100 celcius" to given output unit
      *
      * @param $s literal datasize, such as "128M" or numeric
      * @param $to conversion to unit
@@ -94,10 +94,12 @@ abstract class ConvertBase
         if (is_numeric($s)) {
             $val = $s;
         } else {
-            //HACK: find first non-digit
-            for ($i=0; $i<strlen($s); $i++)
-                if (!is_numeric(substr($s, $i, 1)))
+            //HACK: find first non-digit/non-separator. replace with a regexp
+            for ($i=0; $i<strlen($s); $i++) {
+                $c = substr($s, $i, 1);
+                if (!is_numeric($c) && $c != '.' && $c != ',')
                     break;
+            }
 
             $suff = substr($s, $i);
             $val  = substr($s, 0, $i);
