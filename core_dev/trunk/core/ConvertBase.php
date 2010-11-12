@@ -21,7 +21,10 @@ abstract class ConvertBase
         if (in_array($s, $this->lookup) || array_key_exists($s, $this->lookup))
             return true;
 
-//        echo "not recognized: ".$s."<br>";
+        if (!empty($this->scale[$s]))
+            return true;
+
+        echo "not recognized: ".$s."<br>";
         return false;
     }
 
