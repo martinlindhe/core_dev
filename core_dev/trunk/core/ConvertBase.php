@@ -65,7 +65,10 @@ abstract class ConvertBase
         if (in_array($s, $this->lookup) || array_key_exists($s, $this->lookup))
             return $s;
 
-        throw new Exception (get_class($this).': unhandled unit: '.$name);
+        if (!empty($this->scale[$s]))
+            return $s;
+
+        throw new Exception (get_class($this).': unhandled unit: '.$s);
     }
 
     /**
