@@ -28,6 +28,8 @@ class ConvertVolume extends ConvertBase
     'cubic meter' => 'm³',        'cubic meters'  => 'm³',    'cubic metre' => 'm³',  'cubic metres' => 'm³',
     'liter'       => 'l',         'liters'        => 'l',     'litre'       => 'l',   'litres'       => 'l',
     'gallon'      => 'us_gallon', 'gallons'       => 'us_gallon',
+    'us gallon'   => 'us_gallon', 'us gallons'    => 'us_gallon',
+    'uk gallon'   => 'uk_gallon', 'uk gallons'    => 'uk_gallon',
     );
 
     function conv($from, $to, $val)
