@@ -64,7 +64,7 @@ class PdfReader
         if (!in_array($this->version ,$this->supported_versions))
             throw new Exception ('Unsupported PDF version '.$this->version);
 
-        echo "DBG: PDF v".$this->major.".".$this->minor."\n";
+        // echo "DBG: PDF v".$this->major.".".$this->minor."\n";
     }
 
     function read()
@@ -114,7 +114,7 @@ class PdfReader
         if (!$row)
             return;
 
-        echo "RAW: (".strlen($row).") ".$row."\n";
+        //echo "RAW: (".strlen($row).") ".$row."\n";
 //dh($row); echo "\n";
 
         if (substr($row, 0, 1) == '%') {
@@ -128,14 +128,14 @@ class PdfReader
 
             //"base index" "number of entries"
             $row = $this->readRow();
-d($row);
+//d($row);
             list($idx, $cnt) = explode(' ', $row);
 
-            echo "DBG: Reading ".$cnt." lines of xref:\n";
+//            echo "DBG: Reading ".$cnt." lines of xref:\n";
 
             for ($i=0; $i<$cnt; $i++) {
                 $row = trim( fgets($this->fp, 1000) );
-                echo "\t".($idx+$i).":\t".$row."\n";
+//                echo "\t".($idx+$i).":\t".$row."\n";
             }
             return;
         }
@@ -143,13 +143,13 @@ d($row);
         if ($row == "startxref") {  //XXX: code is unused
             //offset to xref header
             $row = trim( fgets($this->fp, 1000) );
-            echo "DBG STARTXREF: ".$row."\n";
+//            echo "DBG STARTXREF: ".$row."\n";
             return;
         }
 
         if ($row == "trailer") {  //XXX: code is unused
             $row = trim( fgets($this->fp, 1000) );
-            echo "DBG TRAILER: ".$row."\n";
+//            echo "DBG TRAILER: ".$row."\n";
 //            $dict = pdf_parse_dict($row);
             return;
         }
@@ -204,12 +204,12 @@ d($row);
 //d($dict);
             $stream->type = 'text';
             $stream->data = gzuncompress($stream->data);
-            echo "STREAM: Decompressed from ".$dict['Length']." to ".strlen($stream->data)." bytes\n";
+//            echo "STREAM: Decompressed from ".$dict['Length']." to ".strlen($stream->data)." bytes\n";
             break;
 
         case 'DCTDecode'; //jpeg image
             $stream->type = 'image';
-            echo "STREAM: Read JPEG image\n";
+//            echo "STREAM: Read JPEG image\n";
             break;
 
         default:
@@ -246,7 +246,8 @@ function pdf_parse_dict($s)
     $dict = array();
     $x = explode('/', $s);
 
-    foreach ($x as $val) {
+    foreach ($x as $val)
+    {
         if (!$val) continue;
         if (strpos($val, ' ') !== false) {
             $xx = explode(' ', $val, 2);
@@ -258,8 +259,6 @@ function pdf_parse_dict($s)
                 $dict[ $current_key ] = $val;
                 $current_key = '';
             }
-
-
         }
     }
 
