@@ -17,14 +17,14 @@ require_once('ConvertBase.php');
 
 class ConvertVolume extends ConvertBase
 {
-    protected $scale = array( ///< unit scale to cubic metre (m³)
-    'l'     => 0.001,          // litre
-    'm³'    => 1,              // cubic metre = 1000 litres
+    protected $scale = array( ///< unit scale to 1 liter
+    'l'     => 1,              // liter / litre
+    'm³'    => 1000,           // cubic metre = 1000 litres
     );
 
     protected $lookup = array(
-    'cubic meter'      => 'm³',   'cubic meters'       => 'm³',    'cubic metre'      => 'm³',  'cubic metres'      => 'm³',
-    'liter'            => 'l',    'liters'             => 'l',     'litre'            => 'l',   'litres'            => 'l',
+    'cubic meter' => 'm³',       'cubic meters'  => 'm³',    'cubic metre' => 'm³',  'cubic metres' => 'm³',
+    'liter'       => 'l',        'liters'        => 'l',     'litre'       => 'l',   'litres'       => 'l',
     );
 
     function conv($from, $to, $val)
@@ -43,7 +43,7 @@ class ConvertVolume extends ConvertBase
         return $res;
     }
 
-    function convLiteral($s, $to, $from = 'm³')
+    function convLiteral($s, $to, $from = 'liter')
     {
         return parent::convLiteral($s, $to, $from);
     }
