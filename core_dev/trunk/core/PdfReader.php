@@ -51,6 +51,18 @@ class PdfReader
 
     function getStreamCount() { return count($this->streams); }
 
+    /** @return array of "text" type streams containing PostScript markup */
+    function getPsStreams()
+    {
+        $t = array();
+
+        foreach ($this->streams as $s)
+            if ($s->type == 'text')
+                $t[] = $s;
+
+        return $t;
+    }
+
     private function parseHeader($s)
     {
         if (substr($s, 0, 5) != '%PDF-')
@@ -79,7 +91,7 @@ class PdfReader
         $this->parseHeader($head);
 
         while (!feof($this->fp)) {
-            echo dechex(ftell($this->fp))." ";
+//            echo dechex(ftell($this->fp))." ";
             $row = $this->readRow();
             $this->parseRow($row);
         }
