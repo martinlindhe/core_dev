@@ -24,7 +24,7 @@ abstract class ConvertBase
         if (!empty($this->scale[$s]))
             return true;
 
-        echo "not recognized: ".$s."<br>";
+//        echo "not recognized: ".$s."<br>";
         return false;
     }
 
@@ -43,6 +43,9 @@ abstract class ConvertBase
                 return $s;
 
         if (array_key_exists($s, $this->lookup))
+            return $s;
+
+        if (!empty($this->scale[$s]))
             return $s;
 
         return false;
