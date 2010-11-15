@@ -49,8 +49,8 @@ class RssWriter extends FeedWriter
                 '<description><![CDATA['.$item->desc.']]></description>'.
                 '<pubDate>'.$item->getTimestamp()->getRFC822().'</pubDate>'.
                 ($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
-                ($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.htmlspecialchars($item->video_url).'"'.($item->Duration->get() ? ' duration="'.$item->Duration->inSeconds().'"' : '').'/>' : '').
-                ($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.htmlspecialchars($item->image_url).'"/>' : '').
+//                ($item->video_url ? '<media:content medium="video" type="'.$item->video_mime.'" url="'.htmlspecialchars($item->video_url).'"'.($item->Duration->get() ? ' duration="'.$item->Duration->inSeconds().'"' : '').'/>' : '').
+//                ($item->image_url ? '<media:content medium="image" type="'.$item->image_mime.'" url="'.htmlspecialchars($item->image_url).'"/>' : '').
             '</item>'."\n";
         }
 
