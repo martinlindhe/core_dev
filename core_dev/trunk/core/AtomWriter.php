@@ -47,10 +47,10 @@ class AtomWriter extends FeedWriter
                 '<title><![CDATA['.$item->getTitle().']]></title>'.
                 '<link rel="alternate" href="'.$item->getUrl().'"/>'.
                 '<content type="html"><![CDATA['.($item->desc ? $item->desc : ' ').']]></content>'.
-                '<updated>'.$item->getTime()->getRFC3339().'</updated>'.
+                '<updated>'.$item->getTimestamp()->getRFC3339().'</updated>'.
                 ($item->author ? '<author><name>'.$item->author.'</name></author>' : '').
-                ($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').
-                ($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.htmlspecialchars($item->image_url).'"/>' : '').
+//                ($item->video_url ? '<link rel="enclosure" type="'.$item->video_mime.'" href="'.htmlspecialchars($item->video_url).'"/>' : '').
+//                ($item->image_url ? '<link rel="enclosure" type="'.$item->image_mime.'" href="'.htmlspecialchars($item->image_url).'"/>' : '').
             '</entry>'."\n";
         }
         $res .=
