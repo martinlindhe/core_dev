@@ -22,16 +22,17 @@ require_once('yui_richedit.php');
 
 class XhtmlForm
 {
-    private $file_upload      = false;
-    private $handled          = false;   ///< is set to true when form data has been processed by callback function
-    private $name;
-    private $post_handler;               ///< function to call as POST callback
-    private $objectinstance   = false;
-    private $formData         = array();
-    private $elems            = array();
-    private $url_handler;                ///< sends form to a different url
-    private $auto_code        = true;    ///< automatically encode/decode form data using urlencode
-    private $using_captcha    = false;
+    protected $file_upload      = false;
+    protected $handled          = false;   ///< is set to true when form data has been processed by callback function
+    protected $name;
+    protected $post_handler;               ///< function to call as POST callback
+    protected $objectinstance   = false;
+    protected $formData         = array();
+    protected $elems            = array();
+    protected $url_handler;                ///< sends form to a different url
+    protected $auto_code        = true;    ///< automatically encode/decode form data using urlencode
+    protected $using_captcha    = false;
+    protected $focus_element;
 
     function __construct($name = '', $url_handler = '')
     {
@@ -58,6 +59,20 @@ class XhtmlForm
             $this->objectinstance = $objectinstance;
 
         $this->handle();
+    }
+
+    /**
+     * Activates javascript that auto-focuses on specified input field
+     */
+    function setFocus($s)
+    {
+        foreach ($this->elems as $e)
+            if ($e['name'] == $s) {
+                $this->focus_element = $s;
+                return true;
+            }
+
+        throw new Exception ('element '.$s.' not defined');
     }
 
     /**
@@ -291,6 +306,14 @@ class XhtmlForm
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 
         $enctype = $this->file_upload ? 'multipart/form-data' : '';
+
+        if (!$this->name)
+            $this->name = 'frm'.mt_rand(1,999999);
+
+        if ($this->focus_element) {
+            $header = XhtmlHeader::getInstance();
+            $header->embedJs('document.'.$this->name.'.'.$this->focus_element.'.focus();');
+        }
 
         $res = xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
 
