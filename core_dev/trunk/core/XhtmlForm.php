@@ -17,6 +17,7 @@ require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
 require_once('YuiDate.php');
+require_once('YuiDatePopup.php');
 require_once('YuiDateinterval.php');
 require_once('YuiRichedit.php');
 
@@ -275,6 +276,14 @@ class XhtmlForm
     }
 
     /**
+     * Adds a date selector popup
+     */
+    function addDatePopup($name, $str = '', $init = '')
+    {
+        $this->elems[] = array('type' => 'DATEPOPUP', 'name' => $name, 'str' => $str, 'init' => $init);
+    }
+
+    /**
      * Adds a date interval selector
      */
     function addDateInterval($namefrom, $nameto, $str = '', $init_from = '', $init_to = '')
@@ -424,6 +433,20 @@ class XhtmlForm
                 $e['name_val'] = !empty($this->formData[$e['name']]) ? $this->formData[$e['name']] : $e['init'];
 
                 $dateselect->setSelection($e['name_val']);
+                $res .= $dateselect->render();
+
+                $res .= '</td>';
+                break;
+
+            case 'DATEPOPUP':
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
+
+                $res .= xhtmlInput($e['name'], $e['init'], 8).' ';
+
+                $dateselect = new YuiDatePopup();
+                $dateselect->setName($e['name']);
+
+                $dateselect->setSelection($e['init']);
                 $res .= $dateselect->render();
 
                 $res .= '</td>';
