@@ -11,7 +11,7 @@
 
 //TODO: use jsArray-functions more
 
-class yui_chart
+class YuiChart
 {
     private $data_source = '';
     private $div_holder;

@@ -3,7 +3,7 @@
  * This is the defualt view for the UserList class
  */
 
-//TODO: use editable yui_datatable
+//TODO: use editable YuiDatatable
 
 if (!$session->isAdmin)
     return;

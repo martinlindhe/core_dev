@@ -17,7 +17,7 @@
 
 //TODO: attach some js snippet which reads db queries from xhr response and renders in the sql profiler widget
 
-class yui_datatable
+class YuiDatatable
 {
     private $columns         = array();
     private $response_fields = array();
@@ -135,7 +135,7 @@ class yui_datatable
     function setDataList($arr)
     {
         if (!is_array($arr))
-            throw new Exception ('yui_datatable->setDataList() needs an array');
+            throw new Exception ('YuiDatatable->setDataList() needs an array');
 
         $res = array();
 

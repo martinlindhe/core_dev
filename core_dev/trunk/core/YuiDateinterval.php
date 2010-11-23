@@ -15,7 +15,7 @@
 
 //FIXME: selection of a new time is buggy if the calendar was rendered with a selection
 
-class yui_dateinterval
+class YuiDateinterval
 {
     private $name_from     = 'yui_di_from';
     private $name_to       = 'yui_di_to';

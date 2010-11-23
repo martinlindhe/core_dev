@@ -14,7 +14,7 @@
 
 //TODO: integrate image upload
 
-class yui_richedit
+class YuiRichedit
 {
     private $width      = 500;
     private $height     = 200;

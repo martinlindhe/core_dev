@@ -16,9 +16,9 @@ require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
-require_once('yui_date.php');
-require_once('yui_dateinterval.php');
-require_once('yui_richedit.php');
+require_once('YuiDate.php');
+require_once('YuiDateinterval.php');
+require_once('YuiRichedit.php');
 
 class XhtmlForm
 {
@@ -168,7 +168,7 @@ class XhtmlForm
                 $this->handled = true;
 
         if ($error->getErrorCount()) {
-            echo $error->render().'<br/>';
+            echo $error->render(true).'<br/>';
             return false;
         }
 
@@ -361,7 +361,7 @@ class XhtmlForm
                 $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlTextarea($e['name'], $e['default'], 1, 1).'</td>';
 
-                $richedit = new yui_richedit();
+                $richedit = new YuiRichedit();
                 $richedit->setInputName($e['name']);
                 $richedit->setWidth($e['width']);
                 $richedit->setHeight($e['height']);
@@ -417,7 +417,7 @@ class XhtmlForm
 
                 $res .= xhtmlInput($e['name']).'<br/>';
 
-                $dateselect = new yui_date();
+                $dateselect = new YuiDate();
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setName($e['name']);
 
@@ -437,7 +437,7 @@ class XhtmlForm
 
                 $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
-                $dateselect = new yui_dateinterval();
+                $dateselect = new YuiDateinterval();
                 $dateselect->setDivName('cal2Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);

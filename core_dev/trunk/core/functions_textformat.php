@@ -114,7 +114,7 @@ function formatNumber($number)
     return number_format($number, 2, $decimal_mark, $thousand_mark);
 }
 
-function formatUserInputText($text, $convert_html = true)   //XXXX DEPRECATE, use yui_richedit instead
+function formatUserInputText($text, $convert_html = true)   //XXXX DEPRECATE, use YuiRichedit instead
 {
     $text = trim($text);
 

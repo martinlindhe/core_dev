@@ -4,7 +4,7 @@
  *
  * XmlHttpRequest (XHR) response generator
  *
- * Used by yui_datatable
+ * Used by YuiDatatable
  *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
@@ -43,8 +43,8 @@ class XhrResponse
     function renderJson()
     {
         $res = array(
-        'totalRecords' => $this->total_records, //total results available, mapped in yui_datatable
-        'records'      => $this->data,          //mapped in yui_datatable
+        'totalRecords' => $this->total_records, //total results available, mapped in YuiDatatable
+        'records'      => $this->data,          //mapped in YuiDatatable
         );
 
         //attaches sql debug in the response

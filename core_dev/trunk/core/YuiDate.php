@@ -13,7 +13,7 @@
 
 //STATUS: wip
 
-class yui_date
+class YuiDate
 {
     private $name          = 'yui_date';
     private $div_holder;
