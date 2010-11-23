@@ -30,19 +30,19 @@ class YuiRichedit
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.8.1/build/assets/skins/sam/skin.css');
+        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/assets/skins/sam/skin.css');
 
         //Utility Dependencies
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/element/element-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/element/element-min.js');
 
         //Needed for Menus, Buttons and Overlays used in the Toolbar
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/container/container_core-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/menu/menu-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/button/button-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/container/container_core-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/menu/menu-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/button/button-min.js');
 
         //Source file for Rich Text Editor
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/editor/editor-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/editor/editor-min.js');
 
         $res =
         'var myEditor = new YAHOO.widget.Editor("'.$this->input_name.'", {'.

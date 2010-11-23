@@ -38,10 +38,10 @@ class YuiDate
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.8.1/build/calendar/assets/skins/sam/calendar.css');
+        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/calendar/assets/skins/sam/calendar.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/calendar/calendar-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/calendar/calendar-min.js');
 
         $locale = LocaleHandler::getInstance();
 

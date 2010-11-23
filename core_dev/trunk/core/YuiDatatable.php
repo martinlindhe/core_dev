@@ -163,16 +163,16 @@ class YuiDatatable
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.8.1/build/paginator/assets/skins/sam/paginator.css');
-        $header->includeCss('http://yui.yahooapis.com/2.8.1/build/datatable/assets/skins/sam/datatable.css');
+        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/paginator/assets/skins/sam/paginator.css');
+        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/datatable/assets/skins/sam/datatable.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/connection/connection-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/datasource/datasource-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/element/element-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/paginator/paginator-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/datatable/datatable-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.1/build/json/json-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/connection/connection-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datasource/datasource-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/element/element-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/paginator/paginator-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datatable/datatable-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/json/json-min.js');
 
         $data_var = 'yui_dt_data'.mt_rand(0,99999);
 
