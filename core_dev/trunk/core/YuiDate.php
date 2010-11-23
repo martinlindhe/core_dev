@@ -13,6 +13,8 @@
 
 //STATUS: wip
 
+require_once('output_js.php');
+
 class YuiDate
 {
     private $name          = 'yui_date';
@@ -76,7 +78,7 @@ class YuiDate
         '}'."\n".
         'YAHOO.util.Event.onDOMReady(YAHOO.example.calendar.init);';
 
-        return '<script type="text/javascript">'.$res.'</script>';
+        return js_embed($res);
     }
 
 }

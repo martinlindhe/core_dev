@@ -15,6 +15,8 @@
 
 //FIXME: selection of a new time is buggy if the calendar was rendered with a selection
 
+require_once('output_js.php');
+
 class YuiDateinterval
 {
     private $name_from     = 'yui_di_from';
@@ -219,7 +221,7 @@ class YuiDateinterval
             'cal.render();'.
         '});';
 
-        return '<script type="text/javascript">'.$res.'</script>';
+        return js_embed($res);
     }
 
 }

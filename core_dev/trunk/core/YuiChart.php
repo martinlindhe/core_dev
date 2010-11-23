@@ -11,6 +11,8 @@
 
 //TODO: use jsArray-functions more
 
+require_once('output_js.php');
+
 class YuiChart
 {
     private $data_source = '';
@@ -56,13 +58,6 @@ class YuiChart
         $header->embedCss('#'.$this->div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
 
         $res =
-        '<div id="'.$this->div_holder.'">'.
-        'Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. '.
-        'You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.'.
-        '</div>';
-
-        $res .=
-        '<script type="text/javascript">'.
         'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.2r1/build/charts/assets/charts.swf";'.
 
         //--- data
@@ -120,9 +115,11 @@ class YuiChart
             'expressInstall: "assets/expressinstall.swf"'.
         '});';
 
-        $res .= '</script>';
-
-        return $res;
+        return
+        '<div id="'.$this->div_holder.'">'.
+        'Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. '.
+        'You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.'.
+        '</div>'.js_embed($res);
     }
 }
 

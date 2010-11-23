@@ -14,6 +14,8 @@
 
 //TODO: integrate image upload
 
+require_once('output_js.php');
+
 class YuiRichedit
 {
     private $width      = 500;
@@ -87,9 +89,10 @@ class YuiRichedit
             '}'.
         '}'.
         ');'.
+
         'myEditor.render();';
 
-        return '<script type="text/javascript">'.$res.'</script>';
+        return js_embed($res);
     }
 }
 

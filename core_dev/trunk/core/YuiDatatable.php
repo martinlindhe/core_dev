@@ -17,6 +17,8 @@
 
 //TODO: attach some js snippet which reads db queries from xhr response and renders in the sql profiler widget
 
+require_once('output_js.php');
+
 class YuiDatatable
 {
     private $columns         = array();
@@ -283,9 +285,7 @@ class YuiDatatable
             '}();'.
         '});';
 
-        return
-        '<div id="'.$this->div_holder.'"></div>'.
-        '<script type="text/javascript">'.$res.'</script>';
+        return '<div id="'.$this->div_holder.'"></div>'.js_embed($res);
     }
 
 }
