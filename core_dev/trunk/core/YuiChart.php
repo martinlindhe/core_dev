@@ -78,20 +78,20 @@ class YuiChart
         //--- chart
         $res .=
         'var seriesDef = ['.
-        '{ displayName: "'.$this->x_field_title.'", yField: "'.$this->x_field_name.'" }, ';
+        '{ displayName: "'.$this->x_field_title.'", yField: "'.$this->x_field_name.'" },';
 
         for ($i=0; $i < count($this->y_fields); $i++)
-            $res .= '{ displayName: "'.$this->y_fields[$i]['title'].'", yField: "'.$this->y_fields[$i]['name'].'" }, ';
+            $res .= '{ displayName: "'.$this->y_fields[$i]['title'].'", yField: "'.$this->y_fields[$i]['name'].'" },';
 
         $res .= ' ];';
 
         $res .=
-        'YAHOO.example.getDataTipText = function( item, index, series )
-        {
-            var toolTipText = series.displayName + " at " + item.'.$this->x_field_name.';
-            toolTipText += "\n" + item[series.yField];
-            return toolTipText;
-        };'.
+        'YAHOO.example.getDataTipText = function( item, index, series )'.
+        '{'.
+            'var toolTipText = series.displayName + " at " + item.'.$this->x_field_name.';'.
+            'toolTipText += "\n" + item[series.yField];'.
+            'return toolTipText;'.
+        '};'.
 
         //Style object for chart
         'var styleDef ='.
@@ -108,15 +108,16 @@ class YuiChart
         'xAxisWidget.minimum = 0;'.
         'xAxisWidget.title = "'.$this->x_field_title.'";'.
 
-        'var mychart = new YAHOO.widget.LineChart("'.$this->div_holder.'",myDataSource,{'.
-        'series: seriesDef,'.
-        'xField: "'.$this->x_field_name.'",'.
-        'yAxis: yAxisWidget,'.
-        'xAxis: xAxisWidget,'.
-        'style: styleDef,'.
-        'dataTipFunction: YAHOO.example.getDataTipText,'.
-        //only needed for flash player express install
-        'expressInstall: "assets/expressinstall.swf"'.
+        'var mychart = new YAHOO.widget.LineChart("'.$this->div_holder.'",myDataSource,'.
+        '{'.
+            'series: seriesDef,'.
+            'xField: "'.$this->x_field_name.'",'.
+            'yAxis: yAxisWidget,'.
+            'xAxis: xAxisWidget,'.
+            'style: styleDef,'.
+            'dataTipFunction: YAHOO.example.getDataTipText,'.
+            //only needed for flash player express install
+            'expressInstall: "assets/expressinstall.swf"'.
         '});';
 
         $res .= '</script>';
