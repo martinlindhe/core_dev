@@ -48,7 +48,11 @@ class SendMail extends CoreBase
 
     private $connected = false;
 
-    private function __construct() { }
+    private function __construct()
+    {
+        set_time_limit(0);
+    }
+
     private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
