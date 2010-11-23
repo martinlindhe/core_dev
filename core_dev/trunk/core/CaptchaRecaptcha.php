@@ -18,6 +18,7 @@
 require_once('ErrorHandler.php');
 require_once('Captcha.php');
 require_once('HttpClient.php');
+require_once('output_js.php');
 
 class CaptchaRecaptcha extends Captcha
 {
@@ -105,7 +106,7 @@ class CaptchaRecaptcha extends Captcha
         if (!$this->pub_key || !$this->priv_key)
             die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
 
-        $server = ($ssl ? $this->api_url_ssl : $this->api_url);
+        $server = $ssl ? $this->api_url_ssl : $this->api_url;
 
         $locale = LocaleHandler::getInstance();
 
@@ -132,9 +133,7 @@ class CaptchaRecaptcha extends Captcha
         }
 
         return
-        '<script type="text/javascript">'.
-        'var RecaptchaOptions = { '.$opts.' };'.
-        '</script>'.
+        embed_js('var RecaptchaOptions = { '.$opts.' };').
 
         '<script type="text/javascript" src="'.$server.'/challenge?k='.$this->pub_key.'"></script>'.
 
@@ -144,6 +143,7 @@ class CaptchaRecaptcha extends Captcha
             '<input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>'.
         '</noscript>';
     }
+
 }
 
 ?>
