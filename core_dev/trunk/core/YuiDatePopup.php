@@ -12,8 +12,7 @@
 
 //STATUS: wip
 
-//TODO: respect $start_weekday!!! and current locale
-//TODO: auto focus on $selected_date when popup is first displayed
+//TODO: hide useless "Reset" and "close" buttons in the bottom
 
 require_once('output_js.php');
 
@@ -22,12 +21,11 @@ class YuiDatePopup
     private $name          = 'yui_datepop';  // name of input field which stores selected date
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $selected_date;
-
-    private $show_button;
+    private $button_name;
 
     function __construct()
     {
-        $this->show_button = 'yui_dp_show_'.mt_rand(0,99999);
+        $this->button_name = 'yui_dp_show_'.mt_rand(0,99999);
     }
 
     function setName($s) { $this->name = $s; }
@@ -96,7 +94,7 @@ class YuiDatePopup
                 'dialog,'.
                 'calendar;'.
 
-            'var showBtn = Dom.get("'.$this->show_button.'");'.
+            'var showBtn = Dom.get("'.$this->button_name.'");'.
 
             'Event.on(showBtn, "click", function() {'.
 
@@ -133,7 +131,7 @@ class YuiDatePopup
 
                     'dialog = new YAHOO.widget.Dialog("container", {'.
                         'visible:false,'.
-                        'context:["'.$this->show_button.'", "tl", "bl"],'.
+                        'context:["'.$this->button_name.'", "tl", "bl"],'.
                         'buttons:[ {text:"Reset", handler: resetHandler, isDefault:true}, {text:"Close", handler: closeHandler}],'.
                         'draggable:false,'.
                         'close:true'.
@@ -156,7 +154,20 @@ class YuiDatePopup
 
                     'calendar = new YAHOO.widget.Calendar("cal", {'.
                         'iframe:false,'.          // Turn iframe off, since container has iframe support.
-                        'hide_blank_weeks:true'.  // Enable, to demonstrate how we handle changing height, using changeContent
+                        'hide_blank_weeks:true,'.  // Enable, to demonstrate how we handle changing height, using changeContent
+
+                        ($this->selected_date ?
+                            'selected:"'.js_date($this->selected_date).'",'.
+                            'pagedate:"'.date('n/Y', $this->selected_date).'",'
+                            : ''
+                        ).
+                        'start_weekday:'.  $this->start_weekday.','.
+                        'MONTHS_SHORT:['.   jsArrayFlat($locale->handle->month_short, false).'],'.
+                        'MONTHS_LONG:['.    jsArrayFlat($locale->handle->month_long, false).'],'.
+                        'WEEKDAYS_1CHAR:['. jsArrayFlat($locale->handle->weekday_1char, false).'],'.
+                        'WEEKDAYS_SHORT:['. jsArrayFlat($locale->handle->weekday_short, false).'],'.
+                        'WEEKDAYS_MEDIUM:['.jsArrayFlat($locale->handle->weekday_medium, false).'],'.
+                        'WEEKDAYS_LONG:['.  jsArrayFlat($locale->handle->weekday_long, false).'],'.
                     '});'.
                     'calendar.render();'.
 
@@ -190,7 +201,7 @@ class YuiDatePopup
         '});';
 
         return
-        '<button type="button" id="'.$this->show_button.'" title="Show Calendar">'.
+        '<button type="button" id="'.$this->button_name.'" title="Show Calendar">'.
             '<img src="'.relurl('core_dev/gfx/icon_calendar.png').'" alt="Calendar"/>'.
         '</button>'.
         js_embed($res);
