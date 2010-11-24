@@ -34,27 +34,18 @@ class Episode extends CoreProperty
         // S01E24, s1e24
         preg_match('/s(?<season>[0-9]+)e(?<episode>[0-9]+)/i', $s, $match);
         if (!empty($match['season']) && !empty($match['episode'])) {
-            $this->season = intval($match['season']);
+            $this->season  = intval($match['season']);
             $this->episode = intval($match['episode']);
             return;
         }
 
-        // "season 1, episode 24"          XXX use regexp
-        $s = strtolower($s);
-        $x = explode(', ', $s);
-        if (count($x) == 2) {
-            if (substr($x[0], 0, 6) == 'season')
-                $this->season = trim(substr($x[0], 6));
-            else
-                throw new Exception ('season prob: '.$s);
-
-            if (substr($x[1], 0, 7) == 'episode')
-                $this->episode = trim(substr($x[1], 7));
-            else
-                throw new Exception ('episode prob: '.$s);
-
-        } else
-            throw new Exception ('Unhandled episode format: '.$s);
+        // season 1, episode 24
+        preg_match('/season (?<season>[0-9]+), episode (?<episode>[0-9]+)/i', $s, $match);
+        if (!empty($match['season']) && !empty($match['episode'])) {
+            $this->season  = intval($match['season']);
+            $this->episode = intval($match['episode']);
+            return;
+        }
     }
 
     /**
