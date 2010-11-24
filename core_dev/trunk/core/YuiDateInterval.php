@@ -17,7 +17,7 @@
 
 require_once('output_js.php');
 
-class YuiDateinterval
+class YuiDateInterval
 {
     private $name_from     = 'yui_di_from';
     private $name_to       = 'yui_di_to';

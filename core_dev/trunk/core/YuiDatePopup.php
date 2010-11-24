@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Renders a Yahoo UI date selector (javascript)
+ * Renders a Yahoo UI date selector popup (javascript)
  *
  * Documentation:
  * http://developer.yahoo.com/yui/calendar/

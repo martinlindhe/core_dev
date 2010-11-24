@@ -18,7 +18,7 @@ require_once('output_xhtml.php');
 
 require_once('YuiDate.php');
 require_once('YuiDatePopup.php');
-require_once('YuiDateinterval.php');
+require_once('YuiDateInterval.php');
 require_once('YuiRichedit.php');
 
 class XhtmlForm
@@ -460,7 +460,7 @@ class XhtmlForm
 
                 $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
 
-                $dateselect = new YuiDateinterval();
+                $dateselect = new YuiDateInterval();
                 $dateselect->setDivName('cal2Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
