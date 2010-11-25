@@ -33,6 +33,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     private $meta_desc;
     private $meta_keywords = array();
     private $meta_robots;
+    private $meta_viewport;
     private $opensearch    = array();
 
     private $reload_time   = 0;         ///< time after page load to reload the page, in seconds
@@ -113,6 +114,9 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     /** Set META robots tag */
     function setMetaRobots($s) { $this->meta_robots = $s; }
 
+    /** Set META viewport tag */
+    function setMetaViewport($s) { $this->meta_viewport = $s; }
+
     /** Creates a complete XHTML header, showing rss feeds if available, etc */
     public function render()
     {
@@ -143,6 +147,9 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         if ($this->meta_robots)
             $res .= '<meta name="robots" content="'.$this->meta_robots.'"/>';
+
+        if ($this->meta_viewport)
+            $res .= '<meta name="viewport" content="'.$this->meta_viewport.'"/>';
 
 /*
         foreach ($this->include_feeds as $feed) {
