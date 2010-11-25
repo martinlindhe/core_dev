@@ -94,17 +94,17 @@ class XhtmlCalendar
             if ($weekday==0 || $weekday==6)
                 $style = 'background-color:#aaa"';
 
-            if ($i == date('j') && $this->current_month)
+            if ($i == date('j') && date('m', $this->date) == date('m') && date('Y', $this->date) == date('Y')) {
                 $style = 'background-color:#77ee77"';
+                if ($this->current_month && $this->auto_focus)
+                    $res .= '<a id="cal_current_day"></a>';
+            }
 
             $res .=
             '<tr style="'.$style.'">'.
             '<td valign="top" align="right">'.$i.'</td>'.
             '<td valign="top">'.$loc->getWeekdayLong( $weekday ).'</td>'.
             '<td>';
-
-            if ($i == date('j') && $this->current_month && $this->auto_focus)
-                $res .= '<a id="cal_current_day"></a>';
 
             foreach ($this->events as $e)
                 if ($e->getDate() == $ts)
