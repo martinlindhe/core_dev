@@ -43,7 +43,7 @@ class XhrResponse
     function renderJson()
     {
         $res = array(
-        'totalRecords' => $this->total_records, //total results available, mapped in YuiDatatable
+        'totalRecords' => $this->total_records, //total results available, mapped in YuiDatatable, YuiAutocomplete
         'records'      => $this->data,          //mapped in YuiDatatable
         );
 
@@ -57,6 +57,10 @@ class XhrResponse
             'errors'     => $db->query_error,
             );
         }
+
+        // creates a js snippet which adds the json code as a parameter to named callback function, used for YuiAutocomplete
+        if (!empty($_GET['callback']))  // example: YAHOO.util.ScriptNodeDataSource.callbacks[0]        XXX regexp validate string
+            return $_GET['callback'].'('.json_encode($res).');';
 
         return json_encode($res);
     }

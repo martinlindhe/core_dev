@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO soon: rewrite internal form field representation to use objects
+
 //TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
 //FIXME: dateinterval selection is not auto-filled on next request, see handle()
 
@@ -16,6 +18,7 @@ require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
+require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
 require_once('YuiDatePopup.php');
 require_once('YuiDateInterval.php');
@@ -291,6 +294,14 @@ class XhtmlForm
         $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str, 'init_from' => $init_from, 'init_to' => $init_to);
     }
 
+    function addAutocomplete($name, $str = '', $xhr_url)
+    {
+        $this->elems[] = array('type' => 'AUTOCOMPLETE', 'name' => $name, 'str' => $str, 'xhr_url' => $xhr_url);
+    }
+
+    /**
+     * Adds a captcha
+     */
     function addCaptcha()
     {
         $this->using_captcha = true;
@@ -471,6 +482,16 @@ class XhtmlForm
                 $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
                 $res .= $dateselect->render();
 
+                $res .= '</td>';
+                break;
+
+            case 'AUTOCOMPLETE':
+                $ac = new YuiAutocomplete();
+                $ac->setName($e['name']);
+                $ac->setXhrUrl($e['xhr_url']);
+
+                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
+                $res .= $ac->render();
                 $res .= '</td>';
                 break;
 

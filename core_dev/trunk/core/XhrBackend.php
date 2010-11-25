@@ -63,6 +63,8 @@ abstract class XhrBackend
         $this->sort_order = $s;
     }
 
+    abstract function getTotalCount();
+    abstract function get();
 }
 
 ?>
