@@ -17,18 +17,12 @@ require_once('output_js.php');
 
 class YuiDate
 {
-    private $name          = 'yui_date';
+    private $name;
     private $div_holder;
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $selected_date;
 
-    function __construct()
-    {
-        $this->div_holder = 'yui_date_hold'.mt_rand(0,99999);
-    }
-
     function setName($s) { $this->name = $s; }
-    function setDivName($s) { $this->div_holder = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
 
     function setSelection($date)
@@ -38,6 +32,9 @@ class YuiDate
 
     function render()
     {
+        if (!$this->name)
+            throw new Exception ('must set a name');
+
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/calendar/assets/skins/sam/calendar.css');
@@ -47,6 +44,8 @@ class YuiDate
 
         $locale = LocaleHandler::getInstance();
 
+        $div_holder = 'yui_date_hold'.mt_rand(0,99999);
+
         $res =
         'YAHOO.namespace("example.calendar");'.
         'YAHOO.example.calendar.init = function() {'.
@@ -54,7 +53,7 @@ class YuiDate
             'var inTxt = YAHOO.util.Dom.get("'.$this->name.'");'.
             ($this->selected_date ? 'inTxt.value  = "'.sql_date($this->selected_date).'";' : '').
 
-            'var cal = YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("'.$this->div_holder.'");'.
+            'var cal = YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("'.$div_holder.'");'.
             ($this->selected_date ?
                 'cal.cfg.setProperty("selected", "'.js_date($this->selected_date).'");'.
                 'cal.cfg.setProperty("pagedate", "'.date('n/Y', $this->selected_date).'");'

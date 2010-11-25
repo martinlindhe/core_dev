@@ -19,20 +19,13 @@ require_once('output_js.php');
 
 class YuiDateInterval
 {
-    private $name_from     = 'yui_di_from';
-    private $name_to       = 'yui_di_to';
-    private $div_holder;
+    private $name_from;
+    private $name_to;
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $select_from, $select_to;
 
-    function __construct()
-    {
-        $this->div_holder = 'yui_di_hold'.mt_rand(0,99999);
-    }
-
     function setNameFrom($s) { $this->name_from = $s; }
     function setNameTo($s) { $this->name_to = $s; }
-    function setDivName($s) { $this->div_holder = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
 
     function setSelection($date_from, $date_to)
@@ -43,6 +36,9 @@ class YuiDateInterval
 
     function render()
     {
+        if (!$this->name_from || !$this->name_to)
+            throw new Exception ('name_from and name_to must be configured');
+
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/calendar/assets/skins/sam/calendar.css');
@@ -175,6 +171,8 @@ class YuiDateInterval
 
         $locale = LocaleHandler::getInstance();
 
+        $div_holder = 'yui_di_hold'.mt_rand(0,99999);
+
         $res .=
         'YAHOO.util.Event.onDOMReady(function()'.
         '{'.
@@ -200,7 +198,7 @@ class YuiDateInterval
                 'WEEKDAYS_LONG:['.  jsArrayFlat($locale->handle->weekday_long, false).'],'.
             '};'.
 
-            'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$this->div_holder.'",myConfigs);'.
+            'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$div_holder.'",myConfigs);'.
 
             'cal.selectEvent.subscribe(function() {'.
                 'interval = this.getInterval();'.

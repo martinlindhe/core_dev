@@ -20,7 +20,7 @@ class YuiRichedit
 {
     private $width      = 500;
     private $height     = 200;
-    private $input_name = 'yui_richedit_input';  ///< name of <textarea> to decorate with rich editor
+    private $input_name;       ///< name of <textarea> to decorate with rich editor
     private $titlebar   = '';
     private $show_dompath = false; //Displays the DOM bar at the bottom
 
@@ -30,6 +30,9 @@ class YuiRichedit
 
     function render()
     {
+        if (!$this->input_name)
+            throw new Exception ('must set a name');
+
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/assets/skins/sam/skin.css');

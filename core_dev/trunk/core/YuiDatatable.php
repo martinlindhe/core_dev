@@ -24,18 +24,12 @@ class YuiDatatable
     private $columns         = array();
     private $response_fields = array();
     private $datalist        = array();
-    private $div_holder;           ///< name of div tag to hold the datatable
     private $caption         = ''; ///< caption for the datatable
     private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
     private $rows_per_page   = 20; ///< for the paginator
     private $sort_column     = 1;
     private $sort_order      = 'asc';
     private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
-
-    function __construct()
-    {
-        $this->div_holder = 'yui_dt'.mt_rand(0,9999);
-    }
 
     function setCaption($s) { $this->caption = $s; }
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
@@ -176,7 +170,8 @@ class YuiDatatable
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datatable/datatable-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/json/json-min.js');
 
-        $data_var = 'yui_dt_data'.mt_rand(0,99999);
+        $div_holder = 'yui_dt'.mt_rand(0,99999);
+        $data_var   = 'yui_dt_data'.mt_rand(0,99999);
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
@@ -270,7 +265,7 @@ class YuiDatatable
                     ).
                 '};'.
 
-                'myDataTable = new YAHOO.widget.DataTable("'.$this->div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
+                'myDataTable = new YAHOO.widget.DataTable("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
                 // Update totalRecords on the fly with value from server
                 'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
@@ -285,7 +280,7 @@ class YuiDatatable
             '}();'.
         '});';
 
-        return '<div id="'.$this->div_holder.'"></div>'.js_embed($res);
+        return '<div id="'.$div_holder.'"></div>'.js_embed($res);
     }
 
 }

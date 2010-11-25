@@ -16,17 +16,11 @@ require_once('output_js.php');
 class YuiChart
 {
     private $data_source = '';
-    private $div_holder;
     private $width  = 700;
     private $height = 400;
     private $x_field_name, $x_field_title;
     private $t_title; ///< display title for Y dimension
     private $y_fields = array();
-
-    function __construct()
-    {
-        $this->div_holder = 'yui_chart'.mt_rand(0,99999);
-    }
 
     function setDataSource($arr) { $this->data_source = $arr; }
 
@@ -55,7 +49,9 @@ class YuiChart
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/connection/connection-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/charts/charts-min.js');
 
-        $header->embedCss('#'.$this->div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
+        $div_holder = 'yui_chart'.mt_rand(0,99999);
+
+        $header->embedCss('#'.$div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
 
         $res =
         'YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.8.2r1/build/charts/assets/charts.swf";'.
@@ -103,7 +99,7 @@ class YuiChart
         'xAxisWidget.minimum = 0;'.
         'xAxisWidget.title = "'.$this->x_field_title.'";'.
 
-        'var mychart = new YAHOO.widget.LineChart("'.$this->div_holder.'",myDataSource,'.
+        'var mychart = new YAHOO.widget.LineChart("'.$div_holder.'",myDataSource,'.
         '{'.
             'series: seriesDef,'.
             'xField: "'.$this->x_field_name.'",'.
@@ -116,7 +112,7 @@ class YuiChart
         '});';
 
         return
-        '<div id="'.$this->div_holder.'">'.
+        '<div id="'.$div_holder.'">'.
         'Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. '.
         'You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.'.
         '</div>'.js_embed($res);

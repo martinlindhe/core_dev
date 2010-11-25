@@ -18,15 +18,9 @@ require_once('output_js.php');
 
 class YuiDatePopup
 {
-    private $name          = 'yui_datepop';  // name of input field which stores selected date
+    private $name;  // name of input field which stores selected date
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $selected_date;
-    private $button_name;
-
-    function __construct()
-    {
-        $this->button_name = 'yui_dp_show_'.mt_rand(0,99999);
-    }
 
     function setName($s) { $this->name = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
@@ -38,6 +32,9 @@ class YuiDatePopup
 
     function render()
     {
+        if (!$this->name)
+            throw new Exception ('must set a name');
+
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/fonts/fonts-min.css');
@@ -86,6 +83,8 @@ class YuiDatePopup
 
         $locale = LocaleHandler::getInstance();
 
+        $button_name = 'yui_dp_show_'.mt_rand(0,99999);
+
         $res =
         'YAHOO.util.Event.onDOMReady(function(){'.
 
@@ -94,7 +93,7 @@ class YuiDatePopup
                 'dialog,'.
                 'calendar;'.
 
-            'var showBtn = Dom.get("'.$this->button_name.'");'.
+            'var showBtn = Dom.get("'.$button_name.'");'.
 
             'Event.on(showBtn, "click", function() {'.
 
@@ -131,7 +130,7 @@ class YuiDatePopup
 
                     'dialog = new YAHOO.widget.Dialog("container", {'.
                         'visible:false,'.
-                        'context:["'.$this->button_name.'", "tl", "bl"],'.
+                        'context:["'.$button_name.'", "tl", "bl"],'.
                         'buttons:[ {text:"Reset", handler: resetHandler, isDefault:true}, {text:"Close", handler: closeHandler}],'.
                         'draggable:false,'.
                         'close:true'.
@@ -201,7 +200,7 @@ class YuiDatePopup
         '});';
 
         return
-        '<button type="button" id="'.$this->button_name.'" title="Show Calendar">'.
+        '<button type="button" id="'.$button_name.'" title="Show Calendar">'.
             '<img src="'.relurl('core_dev/gfx/icon_calendar.png').'" alt="Calendar"/>'.
         '</button>'.
         js_embed($res);
