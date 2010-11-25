@@ -12,6 +12,7 @@
 //FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
 require_once('User.php');
+require_once('class.CoreBase.php');
 
 class SessionHandler extends CoreBase
 {

@@ -14,6 +14,7 @@
 
 require_once('ViewModel.php');
 require_once('User.php');
+require_once('UserList.php');
 
 class AuthHandler extends CoreBase
 {
