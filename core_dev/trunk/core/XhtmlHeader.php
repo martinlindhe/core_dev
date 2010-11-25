@@ -30,10 +30,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     private $include_css   = array();
     //private $include_feed = array();
 
-    private $meta_desc;
-    private $meta_keywords = array();
-    private $meta_robots;
-    private $meta_viewport;
+    private $meta_tags = array();
     private $opensearch    = array();
 
     private $reload_time   = 0;         ///< time after page load to reload the page, in seconds
@@ -98,24 +95,8 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $this->opensearch[] = array('url' => $uri, 'name' => $name);
     }
 
-    /** Adds META keywords tags */
-    function addMetaKeyword($w)
-    {
-        if (is_array($w))
-            foreach ($w as $t)
-                $this->meta_keywords[] = $t;
-        else
-            $this->meta_keywords[] = $w;
-    }
-
-    /** Set META description tag */
-    function setMetaDescription($s) { $this->meta_desc = $s; }
-
-    /** Set META robots tag */
-    function setMetaRobots($s) { $this->meta_robots = $s; }
-
-    /** Set META viewport tag */
-    function setMetaViewport($s) { $this->meta_viewport = $s; }
+    /** Set META tag */
+    function setMeta($k, $s) { $this->meta_tags[ $k ] = $s; }
 
     /** Creates a complete XHTML header, showing rss feeds if available, etc */
     public function render()
@@ -139,17 +120,8 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         $res .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
 
-        if ($this->meta_keywords)
-            $res .= '<meta name="keywords" content="'.implode(',',$this->meta_keywords).'"/>';
-
-        if ($this->meta_desc)
-            $res .= '<meta name="description" content="'.$this->meta_desc.'"/>';
-
-        if ($this->meta_robots)
-            $res .= '<meta name="robots" content="'.$this->meta_robots.'"/>';
-
-        if ($this->meta_viewport)
-            $res .= '<meta name="viewport" content="'.$this->meta_viewport.'"/>';
+        foreach ($this->meta_tags as $name => $val)
+            $res .= '<meta name="'.$name.'" content="'.$val.'"/>';
 
 /*
         foreach ($this->include_feeds as $feed) {
