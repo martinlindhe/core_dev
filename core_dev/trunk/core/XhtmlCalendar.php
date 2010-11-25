@@ -24,7 +24,6 @@ class XhtmlCalendar
     protected $auto_focus = false;
 
     protected $date;
-    protected $current_month = false; ///< if true, the displayed month is current month
     protected $days_in_month;
 
     function __construct($name = '')
@@ -40,12 +39,6 @@ class XhtmlCalendar
         $this->date = ts(sql_date(ts($date))); ///XXX FIXME: helper function to round a timestamp to a datestamp
 
         $this->days_in_month = date('t', $this->date);
-
-        //are we showing current month?
-        $current_ts = mktime(0, 0, 0, date('n'), date('d'), date('Y'));
-
-        if ($this->date == $current_ts)
-            $this->current_month = true;
     }
 
     function addEvent($e)
@@ -61,7 +54,7 @@ class XhtmlCalendar
     {
         $this->auto_focus = $b;
 /*
-        if ($this->current_month && $this->auto_focus) {
+        if ($this->auto_focus) {
             $header = XhtmlHeader::getInstance();
             $header->embedJs("document.getElementById('cal_current_day').focus();");
         }
@@ -96,7 +89,7 @@ class XhtmlCalendar
 
             if ($i == date('j') && date('m', $this->date) == date('m') && date('Y', $this->date) == date('Y')) {
                 $style = 'background-color:#77ee77"';
-                if ($this->current_month && $this->auto_focus)
+                if ($this->auto_focus)
                     $res .= '<a id="cal_current_day"></a>';
             }
 
