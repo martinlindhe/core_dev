@@ -466,13 +466,10 @@ class XhtmlForm
             case 'DATEINTERVAL':
                 $res .= '<td colspan="2">';
                 if ($e['str']) $res .= $e['str'].'<br/><br/>';
-                $res .= '<div id="cal2Container"></div>';
-                $res .= '<div style="clear:both"></div>';
 
-                $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/>';
+                $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/><br/>';
 
                 $dateselect = new YuiDateInterval();
-                $dateselect->setDivName('cal2Container');
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
 

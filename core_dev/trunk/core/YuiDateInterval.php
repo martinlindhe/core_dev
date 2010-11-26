@@ -219,7 +219,10 @@ class YuiDateInterval
             'cal.render();'.
         '});';
 
-        return js_embed($res);
+        return
+        '<div id="'.$div_holder.'"></div>'.
+        '<div style="clear:both"></div>'.
+        js_embed($res);
     }
 
 }
