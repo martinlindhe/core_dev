@@ -33,6 +33,9 @@ class Locale_ENG extends CoreLocale
     var $country_3char = array(
     'SWE' => 'Sweden',
     'NOR' => 'Norway',
+    'USA' => 'United States of America',
+    'GBR' => 'United Kingdom',
+    'DEU' => 'Germany',
     );
 
     function formatCurrency($n)

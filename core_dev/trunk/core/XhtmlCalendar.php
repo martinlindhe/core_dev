@@ -79,23 +79,22 @@ class XhtmlCalendar
 
         $res = '<table border="1">';
 
-        for ($i=1; $i<=$this->days_in_month; $i++) {
+        for ($i=1; $i<=$this->days_in_month; $i++)
+        {
             $ts = mktime(0, 0, 0, date('m', $this->date), $i, date('Y', $this->date));
             $weekday = date('w', $ts);
 
-            $style = '';
-            if ($weekday==0 || $weekday==6)
-                $style = 'background-color:#aaa"';
+            $focus = false;
 
             if ($i == date('j') && date('m', $this->date) == date('m') && date('Y', $this->date) == date('Y')) {
-                $style = 'background-color:#77ee77"';
-                if ($this->auto_focus)
-                    $res .= '<a id="cal_current_day"></a>';
-            }
+                $res .= '<tr style="background-color:#77ee77">';
+                $focus = true;
+            } else if ($weekday==0 || $weekday==6)
+                $res .= '<tr style="background-color:#aaa">';
 
             $res .=
-            '<tr style="'.$style.'">'.
-            '<td valign="top" align="right">'.$i.'</td>'.
+            '<td valign="top" align="right">'.
+            ($focus ? '<a id="cal_current_day"></a>' : '').$i.'</td>'.
             '<td valign="top">'.$loc->getWeekdayLong( $weekday ).'</td>'.
             '<td>';
 

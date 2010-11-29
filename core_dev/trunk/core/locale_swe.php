@@ -37,6 +37,9 @@ class Locale_SWE extends CoreLocale
     var $country_3char = array(
     'SWE' => 'Sverige',
     'NOR' => 'Norge',
+    'USA' => 'Amerikas förenta stater',
+    'GBR' => 'Storbritannien',
+    'DEU' => 'Tyskland',
     );
 
     var $durations = array(

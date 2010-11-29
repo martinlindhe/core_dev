@@ -7,6 +7,7 @@
  * References
  * ----------
  * ISO 639-2 (language codes): http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+ * ISO 3166-1 (country codes): http://en.wikipedia.org/wiki/ISO_3166-1
  *
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
@@ -106,7 +107,19 @@ class LocaleHandler
 
 }
 
-
+/**
+ * Translates ISO 3166-1 (2 letter country code) to 3 letter country code
+ */
+function country_2_to_3_letters($s)
+{
+    switch (strtoupper($s)) {
+    case 'US': return 'USA';
+    case 'GB': case 'UK': return 'GBR';  // GB is official 2-letter code, altough UK is also used & reserved for other use in ISO
+    case 'SE': return 'SWE';
+    case 'NO': return 'NOR';
+    case 'DE': return 'DEU';
+    }
+}
 
 /**
  * Translates strings into other languages
@@ -116,9 +129,9 @@ function t($s)
     $locale = LocaleHandler::getInstance();
 
     switch ($locale->get()) {
-    case 'ger': return $s; //German (Deutsch)   - XXX not translated
-    case 'eng': return $s;      //English (System default)
-    case 'swe': $t = t_swe($s); break; //Swedish (Svenska)
+    case 'ger': return $s;             // German (Deutsch)   - XXX not translated
+    case 'eng': return $s;             // English (System default)
+    case 'swe': $t = t_swe($s); break; // Swedish (Svenska)
     default: die('Unhandled language: '.$locale->get());
     }
 
