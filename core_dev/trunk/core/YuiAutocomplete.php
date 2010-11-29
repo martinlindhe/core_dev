@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-//STATUS: draft
+//STATUS: wip
 
 require_once('output_js.php');
 
@@ -18,8 +18,26 @@ class YuiAutocomplete
     protected $name;
     protected $xhr_url;
 
+    protected $js_onclick       = '';
+    protected $js_format_result = '';
+    protected $result_fields    = array();
+
+    protected $query_delay      = 0.5;         // Bump up the query delay to reduce server load
+
     function setName($s) { $this->name = $s; }
     function setXhrUrl($s) { $this->xhr_url = $s; }
+
+    function setJsOnclick($s) { $this->js_onclick = $s; }
+    function setJsFormatResult($s) { $this->js_format_result = $s; }
+
+    function setResultFields($o)
+    {
+        if (is_array($o))
+            foreach ($o as $s)
+                $this->result_fields[] = $s;
+        else
+            $this->result_fields[] = $o;
+    }
 
     function render()
     {
@@ -28,6 +46,9 @@ class YuiAutocomplete
 
         if (!$this->xhr_url)
             throw new Exception ('must set xhr url');
+
+        if (!$this->js_onclick || !$this->js_format_result || !$this->result_fields)
+            throw new Exception ('need js code');
 
         $header = XhtmlHeader::getInstance();
 
@@ -40,20 +61,17 @@ class YuiAutocomplete
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datasource/datasource-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/autocomplete/autocomplete-min.js');
 
+        $div_holder = 'yui_ac'.mt_rand(0,99999);
+
         $header->embedCss(
         'label {'.
             'color:#E76300;'.
             'font-weight:bold;'.
         '}'.
-        '#myAutoComplete {'.
+        '#'.$div_holder.' {'.
             'width:30em;'. // set width here or else widget will expand to fit its container
             'padding-bottom:2em;'.
-        '}'.
-        '.yui-ac .result {position:relative;height:62px;}'.
-        '.yui-ac .name {position:absolute;bottom:0;left:64px;}'.
-        '.yui-ac .img {position:absolute;top:0;left:0;width:58px;height:58px;border:1px solid black;background-color:black;color:white;}'.
-        '.yui-ac .imgtext {position:absolute;width:58px;top:50%;text-align:center;}'.
-        '.yui-ac img {width:60px;height:60px;margin-right:4px;}'
+        '}'
         );
 
         $res =
@@ -62,14 +80,12 @@ class YuiAutocomplete
             'var oDS = new YAHOO.util.ScriptNodeDataSource("'.$this->xhr_url.'");'.
             'oDS.responseSchema = {'.
                 'resultsList: "records",'.
-                'fields: ["clickurl", "name", "id", "country", "status"]'.   //XXX configurable
+                'fields: ['.jsArrayFlat($this->result_fields, false).']'.
             '};'.
 
             // Instantiate AutoComplete
             'var oAC = new YAHOO.widget.AutoComplete("'.$this->name.'","myContainer", oDS);'.
-
-            // Bump up the query delay to reduce server load
-            'oAC.queryDelay = 1;'.
+            'oAC.queryDelay = '.$this->query_delay.';'.
 
             // The webservice needs custom parameters
             'oAC.generateRequest = function(sQuery) {'.
@@ -80,21 +96,11 @@ class YuiAutocomplete
             'oAC.resultTypeList = false;'.
             // Customize formatter to show thumbnail images
             'oAC.formatResult = function(oResultData, sQuery, sResultMatch) {'.
-//XXX make this a custom snippet
-                'if(oResultData.thumbnail_url) {'.
-                    'img = "<img src=\""+ oResultData.thumbnail_url + "\">";'.
-                '} else {'.
-                    'img = "<span class=\"img\"><span class=\"imgtext\">N/A</span></span>";'.
-                '}'.
-
-                //XXX show country flag instead
-                'return "<div class=\"result\">" + img + "&nbsp;<span class=\"name\">" + oResultData.name + " (" + oResultData.country + ") " + oResultData.status + "</span></div>";'.
+                $this->js_format_result.
             '};'.
             'oAC.itemSelectEvent.subscribe(function(sType, aArgs) {'.
                 'var oData = aArgs[2];'. // object literal of selected item's result data
-
-                // Redirect to the link
-                'window.location.href = "'.relurl('shows/add/').'" + oData.id;'.  //XXX configurable field name
+                $this->js_onclick.
             '});'.
 
             // Stub for form validation
@@ -111,7 +117,7 @@ class YuiAutocomplete
         '})();';
 
         return
-        '<div id="myAutoComplete">'.
+        '<div id="'.$div_holder.'">'.
             '<input type="text" id="'.$this->name.'" name="'.$this->name.'">'.
             '<div id="myContainer"></div>'.
         '</div>'.

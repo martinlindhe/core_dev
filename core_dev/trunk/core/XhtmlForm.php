@@ -330,10 +330,10 @@ class XhtmlForm
         if (!$this->name)
             $this->name = 'frm'.mt_rand(1,999999);
 
-        if ($this->focus_element) {
-            $header = XhtmlHeader::getInstance();
+        $header = XhtmlHeader::getInstance();
+
+        if ($this->focus_element)
             $header->embedJs('document.'.$this->name.'.'.$this->focus_element.'.focus();');
-        }
 
         $res = xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
 
@@ -486,6 +486,25 @@ class XhtmlForm
                 $ac = new YuiAutocomplete();
                 $ac->setName($e['name']);
                 $ac->setXhrUrl($e['xhr_url']);
+                $ac->setResultFields( array('clickurl', 'name', 'id', 'country', 'status','thumb_url') );
+                $ac->setJsFormatResult(
+                'if(oResultData.thumb_url) {'.
+                    'img = "<img src=\""+ oResultData.thumb_url + "\">";'.
+                '} else {'.
+                    'img = "<span class=\"img\"><span class=\"imgtext\">N/A</span></span>";'.
+                '}'.
+                //XXX show country flag instead
+                'return "<div class=\"result\">" + img + "&nbsp;<span class=\"name\">" + oResultData.name +'.
+                ' " (" + oResultData.country + ") " + oResultData.status + "</span></div>";'
+                );
+                $ac->setJsOnclick('window.location.href = "'.relurl('show/add/').'" + oData.id;');
+                $header->embedCss(
+                '.yui-ac .result {position:relative;height:62px;}'.
+                '.yui-ac .name {position:absolute;bottom:0;left:64px;}'.
+                '.yui-ac .img {position:absolute;top:0;left:0;width:58px;height:58px;border:1px solid black;background-color:black;color:white;}'.
+                '.yui-ac .imgtext {position:absolute;width:58px;top:50%;text-align:center;}'.
+                '.yui-ac img {width:60px;height:60px;margin-right:4px;}'
+                );
 
                 $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= $ac->render();
