@@ -490,7 +490,7 @@ function displayForumContentFlat($itemId)
         echo '<td align="center">';    //icon
 
         if ($row['locked']) {
-            echo '<img src="'.coredev_webroot()].'gfx/icon_locked.png" alt="Locked" title="Locked"/><br/>';
+            echo '<img src="'.coredev_webroot().'gfx/icon_locked.png" alt="Locked" title="Locked"/><br/>';
         }
         if ($row['sticky'] == 1) {
             echo '<img src="'.coredev_webroot().'gfx/icon_forum_sticky.png" alt="Sticky" title="Sticky"/>';

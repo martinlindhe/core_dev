@@ -467,8 +467,6 @@ class XhtmlForm
                 $res .= '<td colspan="2">';
                 if ($e['str']) $res .= $e['str'].'<br/><br/>';
 
-                $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']).'<br/><br/>';
-
                 $dateselect = new YuiDateInterval();
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
@@ -477,7 +475,9 @@ class XhtmlForm
                 $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : $e['init_to'];
 
                 $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
-                $res .= $dateselect->render();
+                $res .= $dateselect->render().'<br/>';
+
+                $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']);
 
                 $res .= '</td>';
                 break;
