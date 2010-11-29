@@ -4,6 +4,8 @@
  *
  * Renders a Yahoo UI autocomplete input field
  *
+ * http://developer.yahoo.com/yui/autocomplete/
+ *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
