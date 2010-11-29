@@ -95,7 +95,18 @@ if (is_client_localhost())
 }
 
 echo dm(); //memory usage
-echo 'Server time: '.date('r T');
+echo 'Server time: '.date('r T').'<br/>';
+
+if (function_exists('apc_cache_info')) {
+    //XXX move somewhere else
+    $conv = new ConvertDatasize();
+
+    $info = apc_cache_info('', true);
+//d($info);
+    echo '<b>APC:</b> using <b>'.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB</b> ('.$info['num_hits'].' hits, '.$info['num_misses'].' misses, '.$info['num_entries'].' entries)';
+
+//    d( apc_sma_info() );
+}
 
 echo '</div>';
 

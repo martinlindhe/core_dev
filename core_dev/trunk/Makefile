@@ -1,6 +1,6 @@
 # STATUS: wip
 
-DIRS = core tests api cron setup tools
+DIRS = core core/views tests api cron setup tools
 
 syntax:
 	@for DIR in $(DIRS); do \
