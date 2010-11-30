@@ -11,7 +11,6 @@ require_once('class.CoreBase.php');
 require_once('ISql.php');
 
 //STATUS: wip
-//TODO: update getNumArray()
 //TODO: add something like mysql's getThreadId()
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
@@ -278,18 +277,6 @@ class DatabaseMssql extends CoreBase implements IDB_SQL
 
 
         return $data;
-    }
-
-    /**
-     * Selects data
-     * Example: SELECT textRow FROM t
-     *
-     * @param $q is the query to execute
-     * @return an 1-dimensional array with a numeric index
-     */
-    function getNumArray($q)
-    {
-        die('fixme update getNumArray');
     }
 
     /**

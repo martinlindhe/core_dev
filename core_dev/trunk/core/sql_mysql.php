@@ -11,7 +11,6 @@ require_once('class.CoreBase.php');
 require_once('ISql.php');
 
 //STATUS: wip
-//TODO: update getNumArray()
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
@@ -217,6 +216,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     /**
      * Selects data, 1 column result
      * Example: SELECT val FROM t WHERE id=3
+     * *        SHOW TABLES FROM mysql
      */
     function get1dArray($q)
     {
@@ -255,27 +255,35 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $data;
     }
 
-    /**
-     * Selects data
-     * Example: SELECT textRow FROM t
-     * SHOW TABLES FROM mysql
-     *
-     * @param $q is the query to execute
-     * @return an 1-dimensional array with a numeric index
-     */
-    function getNumArray($q)
+    // STATUS: in development
+    // TODO: handle multiple parameters
+    function prepared($q, $fmt, $p1) //, $p2, $p3)
     {
-        if (!$result = $this->real_query($q))
-            return array();
+        if ($stmt = $this->db_handle->prepare($q))
+        {
+            $stmt->bind_param($fmt, $p1); /// , $p2, $p3);
+            $stmt->execute();
+    //        printf("%d Row affected.\n", $stmt->affected_rows);
 
-        $data = array();
+            $data = array();
 
-        while ($row = $result->fetch_row())
-            $data[] = $row[0];
+            switch ($stmt->field_count) {
+            case 1: //1d array
+                $stmt->bind_result($col1);
 
-        $result->free();
+                while ($stmt->fetch())
+                    $data[] = $col1;
 
-        return $data;
+                break;
+            default:
+                throw new Exception ('unhandled field count '.$stmt->field_count );
+            }
+
+            $stmt->close();
+            return $data;
+
+        } else
+            throw new Exception ('prepare failed');
     }
 
     /**

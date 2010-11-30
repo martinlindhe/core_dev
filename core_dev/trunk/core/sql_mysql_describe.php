@@ -21,7 +21,7 @@ class MysqlDescribe
         $db = SqlHandler::getInstance();
 
         $q = 'SHOW TABLES FROM '.$db->escape($this->database);
-        return $db->getNumArray($q);
+        return $db->get1dArray($q);
     }
 
     function getTableDetails($tblname)
