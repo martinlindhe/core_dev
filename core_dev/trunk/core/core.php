@@ -24,6 +24,20 @@ if (!defined('PHP_VERSION_ID')) {
 }
 
 /**
+ * PHP version check
+ *
+ * @param $ver minimum version number
+ * @return true if we are running at least PHP $ver
+ */
+function php_min_ver($ver)
+{
+    if (strnatcmp(phpversion(), $ver) < 0)
+        return false;
+
+    return true;
+}
+
+/**
  * Debug function. Prints out variable $v
  *
  * @param $v variable of any type to display

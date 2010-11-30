@@ -52,8 +52,7 @@ function num_years($d1, $d2)
     $d1 = ts($d1);
     $d2 = ts($d2);
 
-    if (PHP_VERSION_ID >= 50300) {
-        //requires php 5.3
+    if (php_min_ver('5.3')) {
         $dt1 = new DateTime(sql_date($d1));
         $dt2 = new DateTime(sql_date($d2));
         $interval = $dt1->diff($dt2);
@@ -71,8 +70,7 @@ function num_days($d1, $d2)
     $d1 = ts($d1);
     $d2 = ts($d2);
 
-    if (PHP_VERSION_ID >= 50300) {
-        //requires php 5.3
+    if (php_min_ver('5.3')) {
         $dt1 = new DateTime(sql_date($d1));
         $dt2 = new DateTime(sql_date($d2));
         $interval = $dt1->diff($dt2);

@@ -26,6 +26,8 @@ interface IDB_SQL
     public function getMappedArray($q);
     public function getOneRow($q);
     public function getOneItem($q);
+
+//    public function pSelect($q, $fmt, $p1);
 }
 
 ?>
