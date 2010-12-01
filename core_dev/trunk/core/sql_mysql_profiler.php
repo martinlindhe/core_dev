@@ -32,6 +32,9 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     function __construct()
     {
         $this->ts_initial = microtime(true);
+
+        mysqli_report(MYSQLI_REPORT_ERROR); // fails on sql syntax errors (????)
+        //mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_STRICT); // all errors on, but disable exceptions (strict)
     }
 
     function getErrorCount() { return count($this->query_error); }

@@ -26,19 +26,35 @@ if ($session->isSuperAdmin && !empty($_POST))
 {
     if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']))
     {
-        $auth = AuthHandler::getInstance();
+//        $auth = AuthHandler::getInstance();
+//        $error = ErrorHandler::getInstance();
+        $username = trim($_POST['u_name']);
+        $pwd      = trim($_POST['u_pwd']);
 
-        $new_id = $auth->register($_POST['u_name'], $_POST['u_pwd'], $_POST['u_pwd']);
-        if (!is_numeric($new_id)) {
-            echo $error->render(true);
-        } else {
-            if (!empty($_POST['u_grp'])) {
-                $user = new User($new_id);
-                $user->addToGroup($_POST['u_grp']);
-            }
-
-            echo '<div class="good">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
+//        if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
+/*
+        //Checks if email was required, and if so if it was correctly entered
+        if ($this->userdata) {
+            $chk = verifyRequiredUserdataFields();
+            if ($chk !== true) return $chk;
         }
+*/
+        $user = new User();
+        $user->create($username);
+        if (!$user->id)
+            $error->add('Failed to create user');
+
+        if ($error->getErrorCount()) {
+            echo $error->render(true);
+            return;
+        }
+
+        $user->setPassword($pwd);
+
+        if (!empty($_POST['u_grp']))
+            $user->addToGroup($_POST['u_grp']);
+
+        echo '<div class="good">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
     }
 }
 

@@ -52,6 +52,14 @@ class User
         $this->time_last_active = $row['timeLastActive'];
     }
 
+    function reset()
+    {
+        $this->id = 0;
+        $this->name = '';
+        $this->time_created = '';
+        $this->time_last_active = '';
+    }
+
     function loadById($id)
     {
         if (!is_numeric($id)) return false;
@@ -80,15 +88,24 @@ class User
         return $this->id;
     }
 
+    /**
+     * Creates a new user
+     */
     function create($username)
     {
         $db = SqlHandler::getInstance();
+        $username = trim($username);
 
-        $q = 'INSERT INTO tblUsers SET userName="'.$db->escape($username).'",timeCreated=NOW()';
-        $this->id   = $db->insert($q);
+        if ($this->loadByName($username)) {
+            $this->reset();
+            return false;
+        }
+
+        $q = 'INSERT INTO tblUsers SET timeCreated=NOW(),userName = ?';
+        $this->id   = $db->pInsert($q, 's', $username);
         $this->name = $username;
 
-        dp('Created user '.$this->id);
+        dp('Created user '.$this->name.' ('.$this->id.')');
 
         return $this->id;
     }
@@ -174,9 +191,9 @@ class User
     function setPassword($_pwd)
     {
         $db = SqlHandler::getInstance();
-        $auth = AuthHandler::getInstance();
+        $session = SessionHandler::getInstance();
 
-        $q = 'UPDATE tblUsers SET userPass="'.sha1( $this->id.sha1( $auth->getEncryptKey() ).sha1($_pwd) ).'" WHERE userId='.$this->id;
+        $q = 'UPDATE tblUsers SET userPass="'.sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($_pwd) ).'" WHERE userId='.$this->id;
         $db->update($q);
 
         return true;

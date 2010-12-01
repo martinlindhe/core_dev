@@ -352,6 +352,9 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         if (count($res) > 1)
             throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
 
+        if (!$res)
+            return false;
+
         return $res[0];
     }
 
@@ -380,10 +383,15 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $data;
     }
 
+    // like pUpdate, but returns insert id
     function pInsert()
     {
         $args = func_get_args();
         $res = call_user_func_array(array($this, 'pUpdate'), $args);  // HACK to pass dynamic variables to parent method
+        if ($res == 1)
+            return $this->db_handle->insert_id;
+        else
+            throw new Exception ('insert fail');
     }
 
     private function refValues($arr)

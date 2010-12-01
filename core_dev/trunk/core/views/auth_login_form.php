@@ -75,7 +75,7 @@ if (isset($_POST['register_usr'])) {
 echo $error->render();
 
 echo '<div id="login_form_layer"'.($tab!='login'?' style="display: none;"':'').'>';
-if (!$auth->allow_logins) {
+if (!$session->allow_logins) {
     echo '<div class="critical">'.t('Logins are currently not allowed.').'<br/>'.t('Please try again later.').'</div>';
 }
 echo xhtmlForm('login_form');
@@ -96,7 +96,7 @@ echo '<tr>'.
 echo '</table>';
 echo '<br/>';
 echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
-if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg) {
+if (($session->allow_logins && $session->allow_registrations) || $allow_superadmin_reg) {
     echo xhtmlButton('Register', "hide_element('login_form_layer'); show_element('login_register_layer')");
 }
 /*
@@ -107,7 +107,7 @@ if ($forgot_pwd) {
 echo xhtmlFormClose();
 echo '</div>';
 
-if (($auth->allow_logins && $auth->allow_registrations) || $allow_superadmin_reg) {
+if (($session->allow_logins && $session->allow_registrations) || $allow_superadmin_reg) {
     echo '<div id="login_register_layer"'.($tab!='register'?' style="display: none;"':'').'>';
 /*
     if ($auth->activation_sent) {

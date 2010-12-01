@@ -11,6 +11,8 @@
 //TODO: is setActive() method even nessecary with the RequestHandler blacklist???
 //FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
+//TODO: reimplement user-block & ip-block
+
 require_once('User.php');
 require_once('class.CoreBase.php');
 
@@ -19,6 +21,7 @@ class SessionHandler extends CoreBase
     static $_instance;             ///< singleton
 
     var $id;
+    var $ip;                       /// current IP address
     var $username;
     var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
     var $referer = '';             ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
@@ -35,6 +38,11 @@ class SessionHandler extends CoreBase
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?
     var $isSuperAdmin;             ///< is user superadmin?
+
+    var       $allow_logins = true;        ///< do app currently allow logins?
+    var       $allow_registrations = true; ///< do app currently allow registrations?
+    protected $encrypt_key = '';
+    var       $check_ip = true;
 
     private function __construct() { }
 
@@ -53,6 +61,70 @@ class SessionHandler extends CoreBase
     function setStartPage($s) { $this->start_page = $s; }
 
     function setActive($b) { $this->active = $b; }
+
+    function setEncryptKey($key) { $this->encrypt_key = $key; }
+    function getEncryptKey() { return $this->encrypt_key; }
+
+    function allowLogins($b) { $this->allow_logins = $b; }
+    function allowRegistrations($b) { $this->allow_registrations = $b; }
+
+    /**
+     * Handles logins
+     *
+     * @param $username
+     * @param $pwd
+     * @return true on success
+     */
+    function login($username, $pwd)
+    {
+        $db      = SqlHandler::getInstance();
+        $error   = ErrorHandler::getInstance();
+
+        if (!$this->allow_logins) {
+            $error->add('Logins currently not allowed.');
+            return false;
+        }
+
+        $username = trim($username);
+        $pwd      = trim($pwd);
+
+        $user = new User($username);
+        if (!$user->getId()) {
+            $error->add('Login failed');
+            return false;
+        }
+
+        $x = $db->pSelect('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND timeDeleted IS NULL',
+        'iss',
+        $user->getId(),
+        $username,
+        sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) )  // encrypted password
+        );
+
+        if (!$x) {
+            dp('Failed login attempt: username '.$username);
+            $error->add('Login failed');
+            return false;
+        }
+
+        $this->start($user->getId(), $username);
+        dp($this->username.' logged in');
+
+        return true;
+    }
+
+    /**
+     * Logs out the user
+     */
+    function logout()
+    {
+        dp($this->username.' logged out');
+
+        $this->setLogoutTime();
+        $this->end();
+        $this->showLoggedOutStartPage();
+        die;
+    }
 
     /**
      * Resumes the session from previous request
@@ -73,6 +145,7 @@ class SessionHandler extends CoreBase
         $this->isAdmin      = &$_SESSION['isAdmin'];
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
         $this->referer      = &$_SESSION['referer'];
+        $this->ip           = &$_SESSION['ip'];
 
         if (empty($_COOKIE[$this->name]))
             $this->end();
@@ -95,8 +168,6 @@ class SessionHandler extends CoreBase
         }*/
 
         $this->updateActiveTime();
-
-//        if (!$this->ip && !empty($_SERVER['REMOTE_ADDR'])) $this->ip = IPv4_to_GeoIP(client_ip()); //FIXME map to $this->auth->ip
     }
 
     /**
@@ -105,6 +176,7 @@ class SessionHandler extends CoreBase
     function end()
     {
         $this->id           = 0;
+        $this->ip           = '';
         $this->username     = '';
         $this->usermode     = 0;
         $this->referer      = '';
@@ -122,6 +194,7 @@ class SessionHandler extends CoreBase
     function start($id, $username)
     {
         $this->id = $id;
+        $this->ip = client_ip();
         $this->username = $username;
 
         $user = new User($id);
@@ -138,10 +211,8 @@ class SessionHandler extends CoreBase
         $error = ErrorHandler::getInstance();
         $error->reset(); /// remove previous errors
 
-        $geoip = IPv4_to_GeoIP(client_ip());
-        $db->insert('INSERT INTO tblLogins SET timeCreated=NOW(), userId='.$this->id.', IP='.$geoip.', userAgent="'.$db->escape($_SERVER['HTTP_USER_AGENT']).'"');
-
-        //addEvent(EVENT_USER_LOGIN, 0, $this->id);
+        $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
+        $db->pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
     }
 
     function getUserLevelName()
@@ -208,19 +279,19 @@ class SessionHandler extends CoreBase
         if (!$this->id || !$this->active) return;
 
         $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId=?', 'i', $this->id);
+        $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
     private function updateLoginTime()
     {
         $db = SqlHandler::getInstance();
-        $db->update('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId='.$this->id);
+        $db->pUpdate('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
     function setLogoutTime()
     {
         $db = SqlHandler::getInstance();
-        $db->update('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId='.$this->id);
+        $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
     /**
@@ -287,7 +358,7 @@ class SessionHandler extends CoreBase
      */
     function requireLocalhost()
     {
-        if (GeoIP_to_IPv4($this->ip) == '127.0.0.1') return;
+        if ($this->ip == '127.0.0.1') return;
         die;
     }
 
@@ -323,6 +394,12 @@ class SessionHandler extends CoreBase
     function showLoggedOutStartPage()
     {
        js_redirect($this->logged_out_start_page);
+    }
+
+    function renderLoginForm()
+    {
+        $view = new ViewModel('views/auth_login_form.php');
+        return $view->render();
     }
 
 }

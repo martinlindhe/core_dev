@@ -13,10 +13,11 @@
 //STATUS: wip
 
 //TODO: parse $_GET params into $_params ?
-//TODO: special view for login/logout events
 
 require_once('core.php'); //for is_alphanumeric()
 require_once('ViewModel.php');
+
+//TODO: cleanup/rewrite handleEvents()
 
 class RequestHandler
 {
@@ -115,11 +116,8 @@ class RequestHandler
             $session->resume();
         }
 
-        if (class_exists('AuthHandler')) {
-            //XXX handle login/logout requests to any page. FIXME: use a special view for these
-            $auth = AuthHandler::getInstance();
-            $auth->handleEvents();
-        }
+        // handle login/logout/register user requests to any page
+        $this->handle();
 
         //expose request params for the view
         $view = new ViewModel($file);
@@ -129,7 +127,21 @@ class RequestHandler
         //$view->params = $this->_params;
 
         $page = XmlDocumentHandler::getInstance();
+
+        $error = ErrorHandler::getInstance();
+        if ($error->getErrorCount())
+            $page->attach( $error->render(true) );
+
         $page->attach( $view->render() );
+    }
+
+    /**
+     * Handles login, logout & register user requests
+     */
+    private function handle()
+    {
+        $view = new ViewModel('views/handle_request.php');
+        return $view->render();
     }
 
 }
