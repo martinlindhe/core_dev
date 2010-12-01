@@ -7,7 +7,7 @@
 
 //STATUS: WIP
 
-//TODO: maybe rename to LoginHandler (?)
+//TODO: maybe rename to LoginHandler (?) or merge into SessionHandler ?
 //TODO: reimplement user-block & ip-block
 
 //TODO: cleanup/rewrite handleEvents()
@@ -67,7 +67,7 @@ class AuthHandler extends CoreBase
         }
 
         $username = trim($username);
-        $pwd = trim($pwd);
+        $pwd      = trim($pwd);
 
         $user = new User($username);
         if (!$user->getId()) {
@@ -75,10 +75,14 @@ class AuthHandler extends CoreBase
             return false;
         }
 
-        $enc_pwd = sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) );
+        $x = $db->pSelect('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND timeDeleted IS NULL',
+        'iss',
+        $user->getId(),
+        $username,
+        sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) )  // encrypted password
+        );
 
-        $q = 'SELECT COUNT(*) FROM tblUsers WHERE userId='.$user->getId().' AND userName="'.$db->escape($username).'" AND userPass="'.$db->escape($enc_pwd).'" AND timeDeleted IS NULL';
-        if (!$db->getOneItem($q)) {
+        if (!$x) {
             dp('Failed login attempt: username '.$username);
             $error->add('Login failed');
             return false;

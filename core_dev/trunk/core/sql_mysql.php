@@ -255,36 +255,67 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $data;
     }
 
-    // STATUS: in development
-    // TODO: handle multiple parameters
-    function prepared($q, $fmt, $p1) //, $p2, $p3)
+    /**
+     * Prepared select
+     * STATUS: in development
+     * XXX SEE http://devzone.zend.com/article/686 for bind prepare statements
+     * TODO: override in profiler.. how to handle parameters?
+     */
+    function pSelect()
     {
-        if ($stmt = $this->db_handle->prepare($q))
-        {
-            $stmt->bind_param($fmt, $p1); /// , $p2, $p3);
-            $stmt->execute();
-    //        printf("%d Row affected.\n", $stmt->affected_rows);
+        $args = func_get_args();
 
-            $data = array();
+        $q   = $args[0];
 
-            switch ($stmt->field_count) {
-            case 1: //1d array
-                $stmt->bind_result($col1);
+        $stmt = $this->db_handle->prepare($q) or die('failed to prepare');
 
-                while ($stmt->fetch())
-                    $data[] = $col1;
+        if (count($args) <= 2)
+            throw new Exception ('pSelect: missing args, '.count($args) );
 
-                break;
-            default:
-                throw new Exception ('unhandled field count '.$stmt->field_count );
-            }
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
 
-            $stmt->close();
-            return $data;
+        call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
 
-        } else
-            throw new Exception ('prepare failed');
+        $stmt->execute();
+//        printf("%d Row affected.\n", $stmt->affected_rows);
+
+        $data = array();
+
+        switch ($stmt->field_count) {
+        case 1: //1d array
+            $stmt->bind_result($col1);
+
+            while ($stmt->fetch())
+                $data[] = $col1;
+
+            // select 1 item
+            if (count($data) == 1)
+                $data = $data[0];
+            break;
+
+        default:
+            throw new Exception ('unhandled field count '.$stmt->field_count );
+        }
+
+        $stmt->close();
+        return $data;
     }
+
+    private function refValues($arr)
+    {
+        if (!php_min_ver('5.3'))
+            return $arr;
+
+        // reference is required for PHP 5.3+
+        $refs = array();
+        foreach ($arr as $key => $val)
+            $refs[$key] = &$arr[$key];
+
+        return $refs;
+    }
+
 
     /**
      * Shows the config view

@@ -165,6 +165,19 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
         return $res;
     }
+/*
+    function pSelect()
+    {
+        $this->measureStart();
+        $res = parent::pSelect(); //XXX how this works with extra params?
+        $this->measureQuery($q);
+
+        if ($res === false)
+            $this->addError($q, $this->db_handle->error);
+
+        return $res;
+    }
+*/
 
 }
 ?>
