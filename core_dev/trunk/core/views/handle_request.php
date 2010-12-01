@@ -53,8 +53,8 @@ if (!$session->id && $session->allow_registrations && isset($_POST['register_usr
 }
 
 //Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
-if ($session->id && $session->check_ip && $session->ip && ($session->ip != client_ip()) ) {
-    $msg = t('Client IP changed.').'Client IP changed! Old IP: '.$session->ip.', current: '.client_ip();
+if ($session->id && $session->ip && ($session->ip != client_ip()) ) {
+    $msg = 'ERROR: Client IP changed! Old: '.$session->ip.', current: '.client_ip();
     $error->add($msg);
 //die($msg);
     dp($msg);

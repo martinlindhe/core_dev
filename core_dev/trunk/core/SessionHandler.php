@@ -39,13 +39,11 @@ class SessionHandler extends CoreBase
     var $isAdmin;                  ///< is user admin?
     var $isSuperAdmin;             ///< is user superadmin?
 
-    var       $allow_logins = true;        ///< do app currently allow logins?
-    var       $allow_registrations = true; ///< do app currently allow registrations?
-    protected $encrypt_key = '';
-    var       $check_ip = true;
+    var $allow_logins        = true; ///< do app currently allow logins?
+    var $allow_registrations = true; ///< do app currently allow registrations?
+    protected $encrypt_key   = '';
 
     private function __construct() { }
-
     private function __clone() {}      //singleton: prevent cloning of class
 
     public static function getInstance()
