@@ -11,6 +11,7 @@ require_once('class.CoreBase.php');
 require_once('ISql.php');
 
 //STATUS: wip
+//TODO soon: factorize some code from prepared-statements functions
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
@@ -20,22 +21,46 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     var $host            = 'localhost'; ///< Hostname or numeric IP address of the db server
     var $port            = 3306;        ///< Port number
     var $username        = 'root';      ///< Username to use to connect to the database
-    var $password        = '';          ///< Password to use to connect to the database
-    var $database        = '';          ///< Name of the database to connect to
+    var $password;                      ///< Password to use to connect to the database
+    var $database;                      ///< Name of the database to connect to
     var $charset         = 'utf8';      ///< What character set to use
     protected $connected = false;       ///< Are we connected to the db?
+
+    function __construct()
+    {
+        mysqli_report(MYSQLI_REPORT_OFF);
+    }
 
     function setConfig($conf)
     {
         if (!is_array($conf))
             return;
 
-        if (!empty($conf['host']))     $this->host     = $conf['host'];
-        if (!empty($conf['port']))     $this->port     = $conf['port'];
+        if (!empty($conf['host']))     $this->setHost($conf['host']);
+        if (!empty($conf['port']))     $this->setPort($conf['port']);
         if (!empty($conf['username'])) $this->username = $conf['username'];
         if (!empty($conf['password'])) $this->password = $conf['password'];
         if (!empty($conf['database'])) $this->database = $conf['database'];
         if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
+    }
+
+    function setHost($s)
+    {
+        // parse "hostname:port" format
+        preg_match('/([0-9a-zA-Z.]+):([0-9]+)/u', $s, $match);
+        if (!empty($match[1]) && !empty($match[2])) {
+            $this->host = $match[1];
+            $this->port = $match[2];
+        } else
+            $this->host = $s;
+    }
+
+    function setPort($n)
+    {
+        if (!is_numeric($n))
+            throw new Exception ('non-numeric port: '.$n);
+
+        $this->port = $n;
     }
 
     function disconnect()
@@ -296,7 +321,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
             if (count($data) == 1)
                 $data = $data[0];
         } else {
-//            throw new Exception ('unhandled field count '.$stmt->field_count );
 
             $meta = $stmt->result_metadata();
 
@@ -354,6 +378,12 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
         $stmt->close();
         return $data;
+    }
+
+    function pInsert()
+    {
+        $args = func_get_args();
+        $res = call_user_func_array(array($this, 'pUpdate'), $args);  // HACK to pass dynamic variables to parent method
     }
 
     private function refValues($arr)
