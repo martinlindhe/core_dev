@@ -306,6 +306,31 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $data;
     }
 
+    // like pSelect, but returns affected rows
+    function pUpdate()
+    {
+        if (!$this->connected)
+            $this->connect();
+
+        $args = func_get_args();
+
+        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
+
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
+
+        if ($params)
+            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
+
+        $stmt->execute();
+
+        $data = $stmt->affected_rows;
+
+        $stmt->close();
+        return $data;
+    }
+
     private function refValues($arr)
     {
         if (!php_min_ver('5.3'))

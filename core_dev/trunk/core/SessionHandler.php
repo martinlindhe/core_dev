@@ -208,7 +208,7 @@ class SessionHandler extends CoreBase
         if (!$this->id || !$this->active) return;
 
         $db = SqlHandler::getInstance();
-        $db->update('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId='.$this->id);
+        $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId=?', 'i', $this->id);
     }
 
     private function updateLoginTime()
