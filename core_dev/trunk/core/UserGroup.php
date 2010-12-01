@@ -53,8 +53,8 @@ class UserGroup
 
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT * FROM tblUserGroups WHERE groupId='.$n;
-        $row = $db->getOneRow($q);
+        $q = 'SELECT * FROM tblUserGroups WHERE groupId = ?';
+        $row = $db->pSelectRow($q, 'i', $n);
         $this->loadFromSql($row);
     }
 

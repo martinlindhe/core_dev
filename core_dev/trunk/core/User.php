@@ -58,10 +58,9 @@ class User
 
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT * FROM tblUsers WHERE userId='.$id;
-        $q .= ' AND timeDeleted IS NULL';
+        $q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND userId = ?';
+        $row = $db->pSelectRow($q, 'i', $id);
 
-        $row = $db->getOneRow($q);
         if (!$row) return false;
         $this->loadFromSql($row);
 
@@ -72,10 +71,9 @@ class User
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT * FROM tblUsers WHERE userName="'.$db->escape($name).'"';
-        $q .= ' AND timeDeleted IS NULL';
+        $q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND userName = ?';
+        $row = $db->pSelectRow($q, 's', $name);
 
-        $row = $db->getOneRow($q);
         if (!$row) return false;
         $this->loadFromSql($row);
 
@@ -138,10 +136,10 @@ class User
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT groupId FROM tblGroupMembers WHERE userId='.$this->id;
+        $q = 'SELECT groupId FROM tblGroupMembers WHERE userId = ?';
 
         $groups = array();
-        foreach ($db->get1dArray($q) as $grp_id)
+        foreach ($db->pSelect($q, 'i', $this->id) as $grp_id)
             $groups[] = new UserGroup($grp_id);
 
         return $groups;
@@ -154,10 +152,10 @@ class User
 
         $q = 'SELECT t2.level FROM tblGroupMembers AS t1'.
         ' INNER JOIN tblUserGroups AS t2 ON (t1.groupId=t2.groupId)'.
-        ' WHERE t1.userId='.$this->id.
+        ' WHERE t1.userId = ?'.
         ' ORDER BY t2.level DESC LIMIT 1';
 
-        $l = $db->getOneItem($q);
+        $l = $db->pSelect($q, 'i', $this->id);
         return $l ? $l : 0;
     }
 

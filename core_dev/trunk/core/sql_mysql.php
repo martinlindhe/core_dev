@@ -282,28 +282,53 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
             call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
 
         $stmt->execute();
-//        printf("%d Row affected.\n", $stmt->affected_rows);
 
         $data = array();
 
-        switch ($stmt->field_count) {
-        case 1: //1d array
+        if ($stmt->field_count == 1) {
+            //1d array
             $stmt->bind_result($col1);
 
             while ($stmt->fetch())
                 $data[] = $col1;
 
-            // select 1 item
+            // 1 item in result
             if (count($data) == 1)
                 $data = $data[0];
-            break;
+        } else {
+//            throw new Exception ('unhandled field count '.$stmt->field_count );
 
-        default:
-            throw new Exception ('unhandled field count '.$stmt->field_count );
+            $meta = $stmt->result_metadata();
+
+            while ($field = $meta->fetch_field())
+                $parameters[] = &$row[$field->name];
+
+            call_user_func_array(array($stmt, 'bind_result'), $this->refValues($parameters));
+
+            while ( $stmt->fetch() ) {
+                $x = array();
+                foreach ($row as $key => $val )
+                    $x[$key] = $val;
+
+                $data[] = $x;
+            }
+            $meta->close();
         }
 
         $stmt->close();
         return $data;
+    }
+
+    function pSelectRow()
+    {
+        $args = func_get_args();
+
+        $res = call_user_func_array(array($this, 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+
+        if (count($res) > 1)
+            throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
+
+        return $res[0];
     }
 
     // like pSelect, but returns affected rows
