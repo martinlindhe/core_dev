@@ -12,15 +12,22 @@
 
 require_once('sql_mysql.php');
 
+class ProfiledSqlQuery
+{
+    var $query;
+    var $error;
+    var $time;
+    var $prepared = false;
+    var $format; //for prepared statements
+    var $params; //for prepared statements
+}
+
 class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 {
-    var $ts_initial   = 0;       ///< microtime for db instance
-    var $time_measure = 0;       ///< time when profiling started
-    var $time_connect = 0;       ///< time it took to connect to db
-    var $time_spent   = array(); ///< time spent for each query
-    var $queries_cnt  = 0;       ///< number of queries executed
-    var $queries      = array(); ///< queries executed
-    var $query_error  = array(); ///< query error messages
+    var $ts_initial    = 0;       ///< microtime for db instance
+    var $measure_start = 0;       ///< time when profiling started
+    var $time_connect  = 0;       ///< time it took to connect to db
+    var $queries       = array(); ///< array of ProfiledSqlQuery (queries executed)
 
     function __construct()
     {
@@ -34,7 +41,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
      */
     private function measureStart()
     {
-        $this->time_measure = microtime(true);
+        $this->measure_start = microtime(true);
     }
 
     /**
@@ -42,28 +49,20 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
      */
     private function measureConnect()
     {
-        $this->time_connect = microtime(true) - $this->time_measure;
+        $this->time_connect = microtime(true) - $this->measure_start;
     }
 
     /**
      * Calculates the time it took to execute a query
      */
-    private function measureQuery($q)
+    private function &measureQuery($q)
     {
-        $this->time_spent[ $this->queries_cnt ] = microtime(true) - $this->time_measure;
-        $this->queries[ $this->queries_cnt ] = $q;
-        $this->queries_cnt++;
-    }
+        $prof = new ProfiledSqlQuery();
+        $prof->query = $q;
+        $prof->time = microtime(true) - $this->measure_start;
 
-    /**
-     * Stores profiling information about a failed query execution
-     *
-     * @param $q is the query being profiled
-     * @param $err is the error message returned by the db driver in use
-     */
-    private function addError($q, $err)
-    {
-        $this->query_error[ $this->queries_cnt-1 ] = $err;
+        $this->queries[] = $prof;
+        return $prof;
     }
 
     /**
@@ -86,10 +85,10 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $this->measureStart();
         $res = parent::insert($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
@@ -98,10 +97,10 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $this->measureStart();
         $res = parent::delete($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
@@ -110,10 +109,10 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $this->measureStart();
         $res = parent::getOneItem($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
@@ -122,10 +121,10 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $this->measureStart();
         $res = parent::getOneRow($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
@@ -134,22 +133,22 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $this->measureStart();
         $res = parent::getArray($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
 
-    function getMappedArray($q)
+    function getMappedArray($q) //XXX = get2dArray
     {
         $this->measureStart();
         $res = parent::getMappedArray($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
@@ -158,26 +157,40 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $this->measureStart();
         $res = parent::get1dArray($q);
-        $this->measureQuery($q);
+        $prof = $this->measureQuery($q);
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
-/*
+
     function pSelect()
     {
+        $args = func_get_args();
+
         $this->measureStart();
-        $res = parent::pSelect(); //XXX how this works with extra params?
-        $this->measureQuery($q);
+
+        $res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+
+        $prof = &$this->measureQuery($args[0]);
+        $prof->prepared = true;
+
+        if (isset($args[1]))
+            $prof->format = $args[1];
+
+        if (isset($args[2])) {
+            $params = array();
+            for ($i = 2; $i < count($args); $i++)
+                $prof->params[] = $args[$i];
+        }
 
         if ($res === false)
-            $this->addError($q, $this->db_handle->error);
+            $prof->error = $this->db_handle->error;
 
         return $res;
     }
-*/
 
 }
+
 ?>

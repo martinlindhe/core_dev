@@ -19,21 +19,21 @@ echo js_embed(
 );
 
 echo '<br/><br/>';
-echo '<a href="#" onclick="return toggle_sql_profiler();">'.$db->queries_cnt.' sql</a>';
+echo '<a href="#" onclick="return toggle_sql_profiler();">'.count($db->queries).' sql</a>';
 
-$sql_height = ($db->queries_cnt*60)+70;
-if ($sql_height > 200) $sql_height = 200;
-
-$css_display = count($db->query_error) ? '' : ' display:none;';
-
-echo '<div id="sql_prof_'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+$sql_height = (count($db->queries) * 60) + 70;
+if ($sql_height > 200)
+    $sql_height = 200;
 
 $sql_time = 0;
-for ($i=0; $i < $db->queries_cnt; $i++)
-{
-    $sql_time += $db->time_spent[$i];
+$error = false;
+$res = '';
 
-    $query = htmlentities(nl2br($db->queries[$i]), ENT_COMPAT, 'UTF-8');
+foreach ($db->queries as $prof)
+{
+    $sql_time += $prof->time;
+
+    $query = htmlentities(nl2br($prof->query), ENT_COMPAT, 'UTF-8');
 
     $keywords = array(
     'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ',
@@ -57,21 +57,39 @@ for ($i=0; $i < $db->queries_cnt; $i++)
 
     $query = str_replace($keywords, $decorated, $query);
 
-    echo '<table summary=""><tr><td width="40">';
-    if (!empty($db->query_error[$i])) {
-        echo coreButton('Error', '', 'SQL Error');
-    } else {
-        echo round($db->time_spent[$i], 2).'s';
+    if ($prof->prepared)
+        $res .= '<table style="background-color: #B2A23D" summary="">';
+    else
+        $res .= '<table summary="">';
+
+    $res .= '<tr><td width="40">';
+
+    if ($prof->error)
+        $res .= coreButton('Error', '', 'SQL Error');
+    else
+        $res .= round($prof->time, 2).'s';
+
+    $res .=  '</td><td>';
+
+    if ($prof->error) {
+        $error = true;
+        $res .=  'Error: <b>'.$prof->error.'</b><br/><br/>';
     }
-    echo '</td><td>';
 
-    if (!empty($db->query_error[$i]))
-        echo 'Error: <b>'.$db->query_error[$i].'</b><br/><br/>';
+    $res .= $query;
 
-    echo $query;
-    echo '</td></tr></table>';
-    echo '<hr/>';
+    if ($prof->format) $res .= ' ('.$prof->format.')';
+    if ($prof->params) $res .= ': '.implode(', ', $prof->params);
+
+    $res .= '</td></tr></table>';
+    $res .= '<hr/>';
 }
+
+$css_display = $error ? '' : ' display:none;';
+
+echo '<div id="sql_prof_'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+
+echo $res;
 
 $total_time = microtime(true) - $db->ts_initial;
 $php_time   = $total_time - $sql_time - $db->time_connect;

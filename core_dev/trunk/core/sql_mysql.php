@@ -263,8 +263,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      * @param $args[2,3,..] variables
      *
      * STATUS: in development
-     * XXX SEE http://devzone.zend.com/article/686 for bind prepare statements
-     * TODO: override in profiler.. how to handle parameters?
+     * SEE http://devzone.zend.com/article/686 for bind prepare statements
      */
     function pSelect()
     {
