@@ -257,26 +257,30 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
     /**
      * Prepared select
+     *
+     * @param $args[0] query
+     * @param $args[1] prepare format (isdb), integer, string, double/float, binary
+     * @param $args[2,3,..] variables
+     *
      * STATUS: in development
      * XXX SEE http://devzone.zend.com/article/686 for bind prepare statements
      * TODO: override in profiler.. how to handle parameters?
      */
     function pSelect()
     {
+        if (!$this->connected)
+            $this->connect();
+
         $args = func_get_args();
 
-        $q   = $args[0];
-
-        $stmt = $this->db_handle->prepare($q) or die('failed to prepare');
-
-        if (count($args) <= 2)
-            throw new Exception ('pSelect: missing args, '.count($args) );
+        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
 
         $params = array();
         for ($i = 1; $i < count($args); $i++)
             $params[] = $args[$i];
 
-        call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
+        if ($params)
+            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
 
         $stmt->execute();
 //        printf("%d Row affected.\n", $stmt->affected_rows);

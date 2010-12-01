@@ -7,6 +7,10 @@
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
 
+//STATUS: wip
+
+//TODO: use yahoo for stock qoutes instead
+
 require_once('StockClientWebservicex.php'); //NASDAQ only (?)
 
 require_once('Cache.php');
