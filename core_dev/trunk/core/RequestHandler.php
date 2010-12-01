@@ -116,8 +116,14 @@ class RequestHandler
             $session->resume();
         }
 
+        $page = XmlDocumentHandler::getInstance();
+
         // handle login/logout/register user requests to any page
-        $this->handle();
+        $page->attach( $this->render() );
+
+        $error = ErrorHandler::getInstance();
+        if ($error->getErrorCount())
+            $page->attach( $error->render(true) );
 
         //expose request params for the view
         $view = new ViewModel($file);
@@ -126,19 +132,13 @@ class RequestHandler
         $view->child  = $this->_child;
         //$view->params = $this->_params;
 
-        $page = XmlDocumentHandler::getInstance();
-
-        $error = ErrorHandler::getInstance();
-        if ($error->getErrorCount())
-            $page->attach( $error->render(true) );
-
         $page->attach( $view->render() );
     }
 
     /**
      * Handles login, logout & register user requests
      */
-    private function handle()
+    private function render()
     {
         $view = new ViewModel('views/handle_request.php');
         return $view->render();
