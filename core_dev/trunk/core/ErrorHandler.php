@@ -47,8 +47,7 @@ class ErrorHandler
 
     private function init()
     {
-        $callback = array($this, 'internalErrorHandler');
-        set_error_handler($callback);
+        set_error_handler( array($this, 'internalErrorHandler') );
     }
 
     function internalErrorHandler($errno, $errstr, $errfile, $errline, $errcontext)
@@ -76,6 +75,10 @@ class ErrorHandler
             echo "<b>Notice</b> $errstr on $errfile:$errline<br/>\n";
             break;
 
+        case E_STRICT:
+            echo "<b>Strict warning</b> $errstr on $errfile:$errline<br/>\n";
+            break;
+
         default:
             echo "Unknown error type: [$errno] $errstr on $errfile:$errline<br/>\n";
             break;
@@ -90,10 +93,23 @@ class ErrorHandler
         if (!isset($_SESSION['e']))
             return '';
 
+        $div_class = 'error_'.mt_rand(0,99999);
+
+        $header = XhtmlHeader::getInstance();
+
+        $header->embedCss(
+        '.'.$div_class.' {'.
+            'border: 1px dashed;'.
+            'color: #000;'.
+            'padding: 5px;'.
+            'line-height: 20px;'.
+            'background-color: #FB9B9B;'.
+        '}');
+
         $res = '';
 
         foreach ($_SESSION['e'] as $e)
-            $res .= '<div class="bad">'.$e.'</div><br/>';
+            $res .= '<div class="'.$div_class.'">'.$e.'</div><br/>';
 
         if ($clear_errors)
             $this->reset();

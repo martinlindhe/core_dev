@@ -52,14 +52,6 @@ class User
         $this->time_last_active = $row['timeLastActive'];
     }
 
-    function reset()
-    {
-        $this->id = 0;
-        $this->name = '';
-        $this->time_created = '';
-        $this->time_last_active = '';
-    }
-
     function loadById($id)
     {
         if (!is_numeric($id)) return false;
@@ -96,10 +88,9 @@ class User
         $db = SqlHandler::getInstance();
         $username = trim($username);
 
-        if ($this->loadByName($username)) {
-            $this->reset();
+        $user = new User();
+        if ($user->loadByName($username))
             return false;
-        }
 
         $q = 'INSERT INTO tblUsers SET timeCreated=NOW(),userName = ?';
         $this->id   = $db->pInsert($q, 's', $username);
