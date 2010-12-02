@@ -26,19 +26,9 @@ if ($session->isSuperAdmin && !empty($_POST))
 {
     if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']))
     {
-//        $auth = AuthHandler::getInstance();
-//        $error = ErrorHandler::getInstance();
         $username = trim($_POST['u_name']);
         $pwd      = trim($_POST['u_pwd']);
 
-//        if ($this->reserved_usercheck && isReservedUsername($username)) return t('Username is not allowed');
-/*
-        //Checks if email was required, and if so if it was correctly entered
-        if ($this->userdata) {
-            $chk = verifyRequiredUserdataFields();
-            if ($chk !== true) return $chk;
-        }
-*/
         $user = new User();
         $user->create($username);
         if (!$user->id)

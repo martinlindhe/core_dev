@@ -5,7 +5,7 @@
  * Default functions for auth drivers
  */
 
-//STATUS: drop all code! refactor into views rendered from AuthHandler.php
+//STATUS: drop all code! refactor into views rendered from RequestHandler
 
 require_once('output_xhtml.php');
 require_once('User.php');
