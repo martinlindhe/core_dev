@@ -44,7 +44,7 @@ if ($session->isSuperAdmin && !empty($_POST))
         if (!empty($_POST['u_grp']))
             $user->addToGroup($_POST['u_grp']);
 
-        echo '<div class="good">New user created. <a href="/admin/core/useredit/'.$new_id.'">'.$_POST['u_name'].'</a></div>';
+        echo '<div class="good">New user created. <a href="/admin/core/useredit/'.$user->getId().'">'.$username.'</a></div>';
     }
 }
 

@@ -194,6 +194,32 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         return $res;
     }
 
+    function pSelectItem()
+    {
+        $args = func_get_args();
+
+        $this->measureStart();
+
+        $res = call_user_func_array(array('parent', 'pSelectItem'), $args);  // HACK to pass dynamic variables to parent method
+
+        $prof = &$this->measureQuery($args[0]);
+        $prof->prepared = true;
+
+        if (isset($args[1]))
+            $prof->format = $args[1];
+
+        if (isset($args[2])) {
+            $params = array();
+            for ($i = 2; $i < count($args); $i++)
+                $prof->params[] = $args[$i];
+        }
+
+        if ($res === false)
+            $prof->error = $this->db_handle->error;
+
+        return $res;
+    }
+
     function pSelectMapped()
     {
         $args = func_get_args();
@@ -201,6 +227,32 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         $this->measureStart();
 
         $res = call_user_func_array(array('parent', 'pSelectMapped'), $args);  // HACK to pass dynamic variables to parent method
+
+        $prof = &$this->measureQuery($args[0]);
+        $prof->prepared = true;
+
+        if (isset($args[1]))
+            $prof->format = $args[1];
+
+        if (isset($args[2])) {
+            $params = array();
+            for ($i = 2; $i < count($args); $i++)
+                $prof->params[] = $args[$i];
+        }
+
+        if ($res === false)
+            $prof->error = $this->db_handle->error;
+
+        return $res;
+    }
+
+    function pSelect1d()
+    {
+        $args = func_get_args();
+
+        $this->measureStart();
+
+        $res = call_user_func_array(array('parent', 'pSelect1d'), $args);  // HACK to pass dynamic variables to parent method
 
         $prof = &$this->measureQuery($args[0]);
         $prof->prepared = true;

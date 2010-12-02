@@ -111,7 +111,7 @@ class AtomReader extends CoreBase
 
             case 'updated':
                 $this->reader->read();
-                $item->setTime( $this->reader->value );
+                $item->setTimestamp( $this->reader->value );
                 break;
 
             case 'id':

@@ -310,31 +310,21 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
         $data = array();
 
-        if ($stmt->field_count == 1) {
-            //1d array
-            $stmt->bind_result($col1);
+        $meta = $stmt->result_metadata();
 
-            while ($stmt->fetch())
-                $data[] = $col1;
+        while ($field = $meta->fetch_field())
+            $parameters[] = &$row[$field->name];
 
-        } else {
+        call_user_func_array(array($stmt, 'bind_result'), $this->refValues($parameters));
 
-            $meta = $stmt->result_metadata();
+        while ( $stmt->fetch() ) {
+            $x = array();
+            foreach ($row as $key => $val )
+                $x[$key] = $val;
 
-            while ($field = $meta->fetch_field())
-                $parameters[] = &$row[$field->name];
-
-            call_user_func_array(array($stmt, 'bind_result'), $this->refValues($parameters));
-
-            while ( $stmt->fetch() ) {
-                $x = array();
-                foreach ($row as $key => $val )
-                    $x[$key] = $val;
-
-                $data[] = $x;
-            }
-            $meta->close();
+            $data[] = $x;
         }
+        $meta->close();
 
         $stmt->close();
         return $data;
@@ -357,17 +347,70 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
     function pSelectItem()
     {
+        if (!$this->connected)
+            $this->connect();
+
         $args = func_get_args();
 
-        $res = call_user_func_array(array($this, 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
 
-        if (count($res) != 1)
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
+
+        if ($params)
+            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
+
+        $stmt->execute();
+
+        if ($stmt->field_count != 1)
+            throw new Exception ('not 1 column result');
+
+        $stmt->bind_result($col1);
+
+        $data = array();
+        while ($stmt->fetch())
+            $data[] = $col1;
+
+        $stmt->close();
+
+        if (count($data) != 1)
             throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($res).' rows');
 
-        if (!$res)
-            return false;
+        return $data[0];
+    }
 
-        return $res[0];
+    // selects 1d array
+    function pSelect1d()
+    {
+        if (!$this->connected)
+            $this->connect();
+
+        $args = func_get_args();
+
+        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
+
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
+
+        if ($params)
+            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
+
+        $stmt->execute();
+
+        $data = array();
+
+        if ($stmt->field_count != 1)
+            throw new Exception ('not 1d result');
+
+        $stmt->bind_result($col1);
+
+        while ($stmt->fetch())
+            $data[] = $col1;
+
+        $stmt->close();
+        return $data;
     }
 
     /**

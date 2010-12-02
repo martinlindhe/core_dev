@@ -108,8 +108,8 @@ class User
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId='.$this->id;
-        $db->update($q);
+        $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId = ?';
+        $db->pUpdate($q, 'i', $this->id);
     }
 
     /** Adds the user to a user group */
@@ -145,7 +145,7 @@ class User
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT groupId FROM tblGroupMembers WHERE userId = ?';
-        $res = $db->pSelect($q, 'i', $this->id);
+        $res = $db->pSelect1d($q, 'i', $this->id);
 
         $groups = array();
         foreach ($res as $grp_id)
@@ -171,6 +171,7 @@ class User
     function getUserLevelName()
     {
         $x = User::getUserLevels();
+
         return $x[ $this->getUserLevel() ];
     }
 
