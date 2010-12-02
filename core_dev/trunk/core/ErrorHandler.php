@@ -32,17 +32,17 @@ class ErrorHandler
 
     function getErrorCount()
     {
-        return isset($_SESSION['e']) ? count($_SESSION['e']) : 0;
+        return isset($_SESSION['cd_errors']) ? count($_SESSION['cd_errors']) : 0;
     }
 
     function add($s)
     {
-        $_SESSION['e'][] = $s;
+        $_SESSION['cd_errors'][] = $s;
     }
 
     function reset()
     {
-        $_SESSION['e'] = array();
+        $_SESSION['cd_errors'] = array();
     }
 
     private function init()
@@ -97,7 +97,7 @@ class ErrorHandler
 
     function render($clear_errors = false)
     {
-        if (empty($_SESSION['e']))
+        if (empty($_SESSION['cd_errors']))
             return '';
 
         $div_class = 'error_'.mt_rand(0,99999);
@@ -115,7 +115,7 @@ class ErrorHandler
 
         $res = '';
 
-        foreach ($_SESSION['e'] as $e)
+        foreach ($_SESSION['cd_errors'] as $e)
             $res .= '<div class="'.$div_class.'">'.$e.'</div><br/>';
 
         if ($clear_errors)
