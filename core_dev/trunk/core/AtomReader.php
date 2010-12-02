@@ -17,6 +17,7 @@
 require_once('class.CoreBase.php');
 require_once('HttpClient.php');
 require_once('NewsItem.php');
+require_once('MediaResource.php');
 
 class AtomReader extends CoreBase
 {
@@ -146,8 +147,10 @@ class AtomReader extends CoreBase
                 case 'image':
                     switch ($this->reader->getAttribute('type')) {
                     case 'image/png':
-                        $item->image_url  = $this->reader->getAttribute('href');
-                        $item->image_mime = $this->reader->getAttribute('type');
+                        $img = new ImageResource();
+                        $img->setUrl(  $this->reader->getAttribute('href'));
+                        $img->setMimetype( $this->reader->getAttribute('type') );
+                        $item->addMedia($img);
                         break;
 
                     default:

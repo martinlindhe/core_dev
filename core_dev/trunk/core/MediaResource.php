@@ -20,6 +20,7 @@ abstract class MediaResource extends CoreBase
 
     function setUrl($n) { $this->Url = new Url($n); }
     function getUrl() { return $this->Url->get(); }
+    function setMimetype($s) { $this->mimetype = $s; }
 }
 
 class AudioResource extends MediaResource
