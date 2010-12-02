@@ -77,7 +77,7 @@ class ErrorHandler
             break;
 
         default:
-            echo "Unknown error type: [$errno] $errstr<br />\n";
+            echo "Unknown error type: [$errno] $errstr on $errfile:$errline<br/>\n";
             break;
         }
 
