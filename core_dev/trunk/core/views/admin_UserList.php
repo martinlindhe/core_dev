@@ -31,7 +31,7 @@ if ($session->isSuperAdmin && !empty($_POST))
 
         $user = new User();
         $user->create($username);
-        if (!$user->id)
+        if (!$user->getId())
             $error->add('Failed to create user');
 
         if ($error->getErrorCount()) {
