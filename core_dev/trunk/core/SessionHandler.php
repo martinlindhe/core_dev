@@ -367,7 +367,7 @@ class SessionHandler extends CoreBase
     {
         $db = SqlHandler::getInstance();
 
-        if ($db->getErrorCount()) {
+        if ($db instanceof DatabaseMysqlProfiler && $db->getErrorCount()) {
             echo "DEBUG: session->redirect aborted due to error".ln();
             return;
         }
