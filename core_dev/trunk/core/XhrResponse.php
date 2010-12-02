@@ -53,8 +53,6 @@ class XhrResponse
         if ($db instanceof DatabaseMysqlProfiler) {
             $res['db'] = array(
             'queries'    => $db->queries,
-            'time_spent' => $db->time_spent,
-            'errors'     => $db->query_error,
             );
         }
 
