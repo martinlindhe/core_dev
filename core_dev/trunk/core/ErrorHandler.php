@@ -97,7 +97,7 @@ class ErrorHandler
 
     function render($clear_errors = false)
     {
-        if (!isset($_SESSION['e']))
+        if (empty($_SESSION['e']))
             return '';
 
         $div_class = 'error_'.mt_rand(0,99999);
