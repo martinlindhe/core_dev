@@ -358,6 +358,42 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $res[0];
     }
 
+    /**
+     * like getMappedArray(). query selects a list of key->value pairs
+     */
+    function pSelectMapped()
+    {
+        if (!$this->connected)
+            $this->connect();
+
+        $args = func_get_args();
+
+        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
+
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
+
+        if ($params)
+            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
+
+        $stmt->execute();
+
+        $data = array();
+
+        if ($stmt->field_count != 2)
+            throw new Exception ('pSelectMapped requires a key->val result set');
+
+        //2d array
+        $stmt->bind_result($col1, $col2);
+
+        while ($stmt->fetch())
+            $data[ $col1 ] = $col2;
+
+        $stmt->close();
+        return $data;
+    }
+
     // like pSelect, but returns affected rows
     function pUpdate()
     {
