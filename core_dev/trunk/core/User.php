@@ -145,9 +145,10 @@ class User
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT groupId FROM tblGroupMembers WHERE userId = ?';
+        $res = $db->pSelect($q, 'i', $this->id);
 
         $groups = array();
-        foreach ($db->pSelect($q, 'i', $this->id) as $grp_id)
+        foreach ($res as $grp_id)
             $groups[] = new UserGroup($grp_id);
 
         return $groups;
@@ -163,7 +164,7 @@ class User
         ' WHERE t1.userId = ?'.
         ' ORDER BY t2.level DESC LIMIT 1';
 
-        $l = $db->pSelect($q, 'i', $this->id);
+        $l = $db->pSelectItem($q, 'i', $this->id);
         return $l ? $l : 0;
     }
 

@@ -317,9 +317,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
             while ($stmt->fetch())
                 $data[] = $col1;
 
-            // 1 item in result
-            if (count($data) == 1)
-                $data = $data[0];
         } else {
 
             $meta = $stmt->result_metadata();
@@ -351,6 +348,21 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
         if (count($res) > 1)
             throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
+
+        if (!$res)
+            return false;
+
+        return $res[0];
+    }
+
+    function pSelectItem()
+    {
+        $args = func_get_args();
+
+        $res = call_user_func_array(array($this, 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+
+        if (count($res) != 1)
+            throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($res).' rows');
 
         if (!$res)
             return false;

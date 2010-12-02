@@ -21,7 +21,7 @@ class UserList
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
-        return $db->pSelect($q);
+        return $db->pSelectItem($q);
     }
 
     /**

@@ -92,7 +92,7 @@ class SessionHandler extends CoreBase
             return false;
         }
 
-        $x = $db->pSelect('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND timeDeleted IS NULL',
+        $x = $db->pSelectItem('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND timeDeleted IS NULL',
         'iss',
         $user->getId(),
         $username,
