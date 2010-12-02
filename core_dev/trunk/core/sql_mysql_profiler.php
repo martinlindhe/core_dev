@@ -174,7 +174,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
         $this->measureStart();
 
-        $res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+        //$res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+        $res = call_user_func_array('parent::pSelect', $args);  // HACK to pass dynamic variables to parent method
 
         $prof = &$this->measureQuery($args[0]);
         $prof->prepared = true;
@@ -201,7 +202,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
         $this->measureStart();
 
-        $res = call_user_func_array(array('parent', 'pUpdate'), $args);  // HACK to pass dynamic variables to parent method
+        $res = call_user_func_array('parent::pUpdate', $args);  // HACK to pass dynamic variables to parent method
 
         $prof = &$this->measureQuery($args[0]);
         $prof->prepared = true;
