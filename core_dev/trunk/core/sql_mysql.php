@@ -395,7 +395,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     }
 
     // like pSelect, but returns affected rows
-    function pUpdate()
+    function pDelete()
     {
         if (!$this->connected)
             $this->connect();
@@ -419,11 +419,18 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $data;
     }
 
-    // like pUpdate, but returns insert id
+    // like pDelete
+    function pUpdate()
+    {
+        $args = func_get_args();
+        return call_user_func_array(array($this, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+    }
+
+    // like pDelete, but returns insert id
     function pInsert()
     {
         $args = func_get_args();
-        $res = call_user_func_array(array($this, 'pUpdate'), $args);  // HACK to pass dynamic variables to parent method
+        $res = call_user_func_array(array($this, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
         if ($res == 1)
             return $this->db_handle->insert_id;
         else
