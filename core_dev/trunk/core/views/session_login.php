@@ -62,7 +62,7 @@ echo '</div>';
 $userlist = new UserList();
 
 if (!$userlist->getCount() || ($session->allow_logins && $session->allow_registrations)) {
-    echo ahref('core/view/session_register', 'Register');
+    echo ahref('coredev/view/session_register', 'Register');
 }
 
 echo '</div>';

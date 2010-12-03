@@ -105,18 +105,13 @@ class RequestHandler
      */
     public function route()
     {
-        $file = 'views/'.$this->_controller.'.php';
-
-        if (!file_exists($file))
-            throw new Exception('No file named '.$file );
+        $page = XmlDocumentHandler::getInstance();
 
         if (!in_array($this->_controller, $this->exclude_session) && class_exists('SessionHandler') ) {
             //automatically resumes session unless it is blacklisted
             $session = SessionHandler::getInstance();
             $session->resume();
         }
-
-        $page = XmlDocumentHandler::getInstance();
 
         // handle login/logout/register user requests to any page
         $page->attach( $this->render() );
@@ -125,8 +120,19 @@ class RequestHandler
         if ($error->getErrorCount())
             $page->attach( $error->render(true) );
 
+        if ($this->_controller == 'coredev') {
+            $file = $page->getCoreDevInclude().'views/coredev.php';
+            $view = new ViewModel($file);
+        } else {
+            $file = 'views/'.$this->_controller.'.php';
+
+            if (!file_exists($file))
+                throw new Exception('No file named '.$file );
+
+            $view = new ViewModel($file);
+        }
+
         //expose request params for the view
-        $view = new ViewModel($file);
         $view->view   = $this->_view;
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;
