@@ -7,14 +7,6 @@
 
 //STATUS: wip
 
-//TODO remove these and make more userdata field types instead:
-/*
-define('SETTING_APPDATA',      1); ///< setting global to the whole application
-define('SETTING_USERDATA',     2); ///< settings used to store personal userdata
-define('SETTING_CALLERDATA',   3); ///< settings used to store data of a caller
-define('SETTING_EXTERNALDATA', 4); ///< settings used to store data with external ownerid (such as a Facebook id)
-*/
-
 class Settings
 {
     //default types - use id's from 50 and up for application specified types
@@ -38,13 +30,11 @@ class Settings
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT settingValue FROM tblSettings';
-        $q .= ' WHERE settingType='.$this->type;
-        $q .= ' AND categoryId='.$this->category;
-        if ($this->owner) $q .= ' AND ownerId='.$this->owner;
-        $q .= ' AND settingName="'.$db->escape($name).'"';
+        $q =
+        'SELECT settingValue FROM tblSettings'.
+        ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
+        $res = $db->pSelectRow($q, 'iiis', $this->owner, $this->category, $this->type, $name);
 
-        $res = $db->getOneRow($q);
         if ($res) return $res['settingValue'];
         return $default;
     }
@@ -53,25 +43,19 @@ class Settings
     {
         $db = SqlHandler::getInstance();
 
-        $name = $db->escape($name);
-        $val = $db->escape($val);
-
-        $q = 'SELECT settingId FROM tblSettings WHERE ownerId='.$this->owner;
-        $q .= ' AND categoryId='.$this->category;
-        $q .= ' AND settingType='.$this->type;
-        $q .= ' AND settingName="'.$name.'"';
-        if ($db->getOneItem($q)) {
-            $q = 'UPDATE tblSettings SET settingValue="'.$val.'",timeSaved=NOW() WHERE ownerId='.$this->owner;
-            $q .= ' AND categoryId='.$this->category;
-            $q .= ' AND settingType='.$this->type;
-            $q .= ' AND settingName="'.$name.'"';
-            $db->update($q);
+        $q =
+        'SELECT settingId FROM tblSettings'.
+        ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
+        if ($db->pSelectItem($q, 'iiis', $this->owner, $this->category, $this->type, $name)) {
+            $q =
+            'UPDATE tblSettings SET timeSaved=NOW(), settingValue = ?'.
+            ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
+            $db->pUpdate($q, 'si', $val, $this->owner, $this->category, $this->type, $name);
         } else {
-            $q = 'INSERT INTO tblSettings SET ownerId='.$this->owner.',';
-            $q .= 'categoryId='.$this->category.',';
-            $q .= 'settingType='.$this->type.',settingName="'.$name.'",';
-            $q .= 'settingValue="'.$val.'",timeSaved=NOW()';
-            $db->insert($q);
+            $q =
+            'INSERT INTO tblSettings SET timeSaved=NOW(),'.
+            'ownerId = ?, categoryId = ?, settingType = ?, settingName = ?, settingValue = ?';
+            $db->pInsert($q, 'iiiss', $this->owner, $this->category, $this->type, $name, $val);
         }
         return true;
     }

@@ -396,7 +396,7 @@ class SessionHandler extends CoreBase
 
     function renderLoginForm()
     {
-        $view = new ViewModel('views/auth_login_form.php');
+        $view = new ViewModel('views/session_login.php');
         return $view->render();
     }
 

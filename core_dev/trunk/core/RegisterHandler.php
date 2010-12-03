@@ -18,6 +18,8 @@ class RegisterHandler
 {
     static $_instance; ///< singleton
 
+    protected $post_reg_callback; ///< function to execute when user registration was complete
+
     private function __clone() {}      //singleton: prevent cloning of class
     private function __construct() { }
 
@@ -28,6 +30,8 @@ class RegisterHandler
 
         return self::$_instance;
     }
+
+    function setPostRegistrationCallback($s) { $this->post_reg_callback = $s; }
 
     function register($username, $pwd1, $pwd2)
     {
@@ -72,6 +76,10 @@ class RegisterHandler
         }
 
         $user->setPassword($pwd1);
+
+        if ($this->post_reg_callback)
+            call_user_func($this->post_reg_callback, $user->getId());
+
         return true;
     }
 
