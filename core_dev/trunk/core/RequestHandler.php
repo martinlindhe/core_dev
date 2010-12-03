@@ -140,6 +140,9 @@ class RequestHandler
      */
     private function render()
     {
+        if (!class_exists('SessionHandler'))
+            return;
+
         $view = new ViewModel('views/handle_request.php');
         return $view->render();
     }
