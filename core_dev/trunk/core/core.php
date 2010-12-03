@@ -273,7 +273,7 @@ function round_decimals($val, $precision = 0, $separator = '.', $combinator = '.
     $ex = explode($separator, round($val, $precision));
 
     if (empty($ex[1]) || strlen($ex[1]) < $precision)
-        $ex[1] = str_pad(@$ex[1], $precision, '0');
+        $ex[1] = str_pad( !empty($ex[1]) ? $ex[1] : 0, $precision, '0');
 
     if (!$precision)
         return $ex[0];
