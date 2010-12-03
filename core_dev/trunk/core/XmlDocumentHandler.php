@@ -43,6 +43,16 @@ class XmlDocumentHandler extends CoreBase
         return self::$_instance;
     }
 
+    /** @return relative URL for current website */
+    function getRelativeUrl() { return $this->Url->getPath(); }
+
+    /** @return full base/root URL to website */
+    function getUrl() { return $this->Url->get(); }
+
+    function getCoreDevInclude() { return $this->coredev_inc; }
+    function getUploadRoot() { return $this->upload_root; }
+    function getMimeType() { return $this->mimetype; }
+
     function setUploadRoot($s)
     {
         if (!file_exists($s))
@@ -53,20 +63,6 @@ class XmlDocumentHandler extends CoreBase
 
     function setMimeType($s) { $this->mimetype = $s; }
 
-    /**
-     * Sets base/root URL for current website
-     * @param $s base url, e.g. http://www.example.com/  (with ending / )
-     */
-    function setUrl($s) { $this->Url = new Url($s); }
-
-    /**
-     * @return relative URL for current website
-     */
-    function getRelativeUrl() { return $this->Url->getPath(); }
-
-    /** @return full base/root URL to website */
-    function getUrl() { return $this->Url->get(); }
-
     function setCoreDevInclude($path)
     {
         ///XXX peka på "/path/to/core_dev/core/" katalogen, hör egentligen inte till page handlern men den hör inte till något bra objekt... separat core-dev handler????
@@ -76,8 +72,11 @@ class XmlDocumentHandler extends CoreBase
         $this->coredev_inc = $path;
     }
 
-    function getCoreDevInclude() { return $this->coredev_inc; }
-    function getUploadRoot() { return $this->upload_root; }
+    /**
+     * Sets base/root URL for current website
+     * @param $s base url, e.g. http://www.example.com/  (with ending / )
+     */
+    function setUrl($s) { $this->Url = new Url($s); }
 
     /**
      * Sends HTTP headers that prompts the client browser to download the page content with given name

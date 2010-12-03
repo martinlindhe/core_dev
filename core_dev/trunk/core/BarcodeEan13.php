@@ -31,7 +31,7 @@
 
 //STATUS: wip
 
-class Ean13Barcode
+class BarcodeEan13
 {
     protected $code;
     protected $gs1, $rest, $check;
