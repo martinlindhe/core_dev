@@ -186,8 +186,12 @@ class User
         $db = SqlHandler::getInstance();
         $session = SessionHandler::getInstance();
 
-        $q = 'UPDATE tblUsers SET userPass="'.sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($_pwd) ).'" WHERE userId='.$this->id;
-        $db->update($q);
+        $db->pUpdate(
+        'UPDATE tblUsers SET userPass = ? WHERE userId = ?',
+        'si',
+        sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($_pwd) ),
+        $this->id
+        );
 
         return true;
     }

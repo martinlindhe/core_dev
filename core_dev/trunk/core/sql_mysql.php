@@ -374,8 +374,11 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
         $stmt->close();
 
-        if (count($data) != 1)
-            throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($res).' rows');
+        if (count($data) > 1)
+            throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($data).' rows');
+
+        if (!$data)
+            return false;
 
         return $data[0];
     }
