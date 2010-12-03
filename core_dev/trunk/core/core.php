@@ -45,7 +45,9 @@ function php_min_ver($ver)
  */
 function d($v)
 {
-    $cli = php_sapi_name() == 'cli';
+    $page = XmlDocumentHandler::getInstance();
+
+    $cli = php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain';
 
     if (is_string($v)) {
         //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
