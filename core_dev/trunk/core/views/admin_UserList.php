@@ -4,6 +4,7 @@
  */
 
 //TODO: use editable YuiDatatable
+//XXX TODO: lista användare online
 
 if (!$session->isAdmin)
     return;
@@ -14,9 +15,8 @@ if ($session->isSuperAdmin && !empty($_GET['del'])) {
 }
 
 echo '<h1>Manage users</h1>';
-echo 'All users: <a href="/admin/core/userlist/">'.$caller->getCount().'</a><br/>';
-//XXX TODO: lista användare online
-echo 'Users online: <a href="/admin/core/userlist/0/online">'.$caller->onlineCount().'</a><br/>';
+echo 'All users: '.ahref('coredev/admin/userlist', $caller->getCount()).'<br/>';
+echo 'Users online: '.ahref('coredev/admin/userlist/0/online', $caller->onlineCount()).'<br/>';
 
 $filter = '';
 if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
@@ -44,7 +44,7 @@ if ($session->isSuperAdmin && !empty($_POST))
         if (!empty($_POST['u_grp']))
             $user->addToGroup($_POST['u_grp']);
 
-        echo '<div class="good">New user created. <a href="/admin/core/useredit/'.$user->getId().'">'.$username.'</a></div>';
+        echo '<div class="good">New user created. '.ahref('coredev/admin/useredit/'.$user->getId(), $username).'</div>';
     }
 }
 
@@ -70,7 +70,7 @@ echo '</tr>';
 foreach ($caller->getUsers($filter) as $user)
 {
     echo '<tr>';
-    echo '<td><a href="/admin/core/useredit/'.$user->getId().'">'.$user->getName().'</a></td>';
+    echo '<td>'.ahref('coredev/admin/useredit/'.$user->getId(), $user->getName()).'</a></td>';
     echo '<td>'.$user->getTimeLastActive().'</td>';
     echo '<td>'.$user->getTimeCreated().'</td>';
     echo '<td>'.$user->getUserLevelName().'</td>';

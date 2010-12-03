@@ -37,7 +37,7 @@ echo '<table>';
 echo '<tr><th>Name</th><th>Level</th><th>Info</th><th>Created</th></tr>';
 foreach ( $caller->getItems() as $grp) {
     echo '<tr>';
-    echo '<td>'.ahref('admin/core/usergroup_details/'.$grp->getId(), $grp->getName()).'</td>';
+    echo '<td>'.ahref('coredev/admin/usergroup_details/'.$grp->getId(), $grp->getName()).'</td>';
     echo '<td>'.$grp->getLevelDesc().'</td>';
     echo '<td>'.$grp->getInfo().'</td>';
     echo '<td>'.sql_datetime( $grp->getTimeCreated() ).'</td>';

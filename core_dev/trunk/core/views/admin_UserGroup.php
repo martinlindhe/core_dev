@@ -36,7 +36,7 @@ echo '<br/><br/>';
 echo '<h1>Group members</h1>';
 
 foreach ($caller->getMembers() as $user) {
-    echo ahref('admin/core/useredit/'.$user->getId(), $user->getName() ).'<br/>';
+    echo ahref('coredev/admin/useredit/'.$user->getId(), $user->getName() ).'<br/>';
 }
 
 ?>
