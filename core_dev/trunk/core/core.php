@@ -140,7 +140,7 @@ function bt()
 
     foreach ($bt as $idx => $l)
     {
-        echo $l['line'].': '.$l['function'].'(';
+        echo $l['function'].'(';
 
         //echo count($l['args']).' args'.ln();
         $i = 0;
@@ -149,10 +149,10 @@ function bt()
             echo $arg;
             if ($i < count($l['args'])) echo ', ';
         }
-        echo ') from '.$l['file'].ln();
+        echo ') from '.$l['file'].':'.$l['line'].ln();
 
         if (!empty($l['class'])) echo 'XXX class '.$l['class'].ln();
-        if (!empty($l['object'])) echo 'XXX object '.d($l['object']).ln();
+        if (!empty($l['object'])) echo 'XXX object '.get_class($l['object']).ln();
         if (!empty($l['type'])) echo 'XXX type '.$l['type'].ln();
     }
 
