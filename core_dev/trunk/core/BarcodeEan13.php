@@ -27,9 +27,10 @@
  * check digit = computed modulo 10, where the weights in the checksum calculation alternate 3 and 1.
  */
 
-//TODO: isolerad sqlite databas som innehåller GS1-country codes... sen gör en likadan för geoip (?)
-
 //STATUS: wip
+
+//TODO: isolerad sqlite databas som innehåller GS1-country codes... sen gör en likadan för geoip (?)
+ //XXX: calcCheck() also works with EAN-8 numbers.. fix by extending EAN-8 class when it is written
 
 class BarcodeEan13
 {
@@ -57,7 +58,6 @@ class BarcodeEan13
         $this->gs1   = substr($this->code, 0, 3);
         $this->rest  = substr($this->code, 3, 9);
         $this->check = substr($this->code, -1, 1);
-
     }
 
     function getCountry()
@@ -76,17 +76,29 @@ class BarcodeEan13
         }
     }
 
-    private function calcCheck() //XXX: also works with EAN-8 numbers
+    function isValid()
     {
+        if ($this->calcCheck() == $this->check)
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Calculate checksum for EAN-13 or EAN-8 barcode numbers
+     */
+    private function calcCheck()
+    {
+        if (!is_numeric($this->code))
+            throw new Exception ('invalid barcode');
+
         $sum = 0;
 
-        // make string 18 digits long, prefix with 0:s
-        $code = strpre_exact($this->code, 18, '0');
-
-        for ($i = 0; $i < strlen($code)-1; $i++)
+        for ($i = strlen($this->code)-2; $i >= 0; $i--)
         {
-            $s = substr($code, $i, 1);
-            $sum += ($i % 2) ? $s : $s * 3;
+            $s = substr($this->code, $i, 1);
+//            echo $i.": ".$s." * ". (($i % 2) ? '3' : '1') ."\n";
+            $sum += ($i % 2) ? $s * 3 : $s;
         }
 
         // round upwards to next ten-digit (eg: 47 => 50)
