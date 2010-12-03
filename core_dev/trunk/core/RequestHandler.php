@@ -12,12 +12,8 @@
 
 //STATUS: wip
 
-//TODO: parse $_GET params into $_params ?
-
 require_once('core.php'); //for is_alphanumeric()
 require_once('ViewModel.php');
-
-//TODO: cleanup/rewrite handleEvents()
 
 class RequestHandler
 {
@@ -27,13 +23,11 @@ class RequestHandler
     protected $_view = 'default';     ///< /controller/VIEW/owner/        XXX view parameter for the "controller", or later will be the method to run on the controller
     protected $_owner = '';           ///< /controller/view/OWNER/        alphanumeric id
     protected $_child = '';           ///< /controller/view/owner/CHILD/  alphanumeric id
-    protected $_params;
     protected $exclude_session = array();
 
     private function __clone() {}      //singleton: prevent cloning of class
 
     public function getView() { return $this->_view; }
-    //public function getParams() { return $this->_params; }
 
     /**
      * Registers a list of controllers that should not invoke $session->resume()
@@ -58,7 +52,7 @@ class RequestHandler
         else
             $request = $_SERVER['REQUEST_URI'];
 
-        //exclude application root from parsed request
+        // exclude application root from parsed request
         $page = XmlDocumentHandler::getInstance();
 
         $parsed = parse_url($page->getUrl());
@@ -90,14 +84,6 @@ class RequestHandler
                 $this->_child = $arr[3];
             }
         }
-
-/*
-        //XXX FIXME parse params properly
-        for ($idx=2, $cnt = count($arr); $idx < $cnt; $idx += 2)
-            $res[ $arr[$idx] ] = isset($arr[$idx+1]) ? $arr[$idx+1] : true;
-
-        $this->_params = $res;
-*/
     }
 
     /**
@@ -108,7 +94,7 @@ class RequestHandler
         $page = XmlDocumentHandler::getInstance();
 
         if (!in_array($this->_controller, $this->exclude_session) && class_exists('SessionHandler') ) {
-            //automatically resumes session unless it is blacklisted
+            // automatically resumes session unless it is blacklisted
             $session = SessionHandler::getInstance();
             $session->resume();
         }
@@ -132,11 +118,10 @@ class RequestHandler
             $view = new ViewModel($file);
         }
 
-        //expose request params for the view
+        // expose request params for the view
         $view->view   = $this->_view;
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;
-        //$view->params = $this->_params;
 
         $page->attach( $view->render() );
     }
