@@ -106,19 +106,16 @@ class RequestHandler
         if ($error->getErrorCount())
             $page->attach( $error->render(true) );
 
-        if ($this->_controller == 'coredev') {
+        if ($this->_controller == 'coredev')
             $file = $page->getCoreDevInclude().'views/coredev.php';
-            $view = new ViewModel($file);
-        } else {
+        else
             $file = 'views/'.$this->_controller.'.php';
 
-            if (!file_exists($file))
-                throw new Exception('No file named '.$file );
-
-            $view = new ViewModel($file);
-        }
+        if (!file_exists($file))
+            throw new Exception('No file named '.$file);
 
         // expose request params for the view
+        $view = new ViewModel($file);
         $view->view   = $this->_view;
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;
