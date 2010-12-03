@@ -10,59 +10,34 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-class Token
+//STATUS: wip
+
+require_once('Settings.php');
+
+class Token extends Settings
 {
-    private $owner;
     private $token_prefix = 'pOwplopw';
     private $token_suffix = 'LAZER!!';
 
-    function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
-
-    function get($name)
+    function __construct()
     {
-        $db = SqlHandler::getInstance();
-
-        $q =
-        'SELECT value FROM tblTokens'.
-        ' WHERE name="'.$db->escape($name).'"';
-        if ($this->owner) $q .= ' AND ownerId='.$this->owner;
-
-        $res = $db->getOneItem($q);
-        if ($res) return $res;
-        return false;
+        $this->type = Settings::TOKEN;
     }
 
     /**
      * Creates a new token for specified $name
+     * @return newly created token
      */
     function generate($name)
     {
         if (!$this->owner)
             return false;
 
-        $db = SqlHandler::getInstance();
-
-        $name = $db->escape($name);
-
         $val = $this->findFreeToken($name);
 
-        //remove users previous token with this name
-        $q =
-        'DELETE FROM tblTokens'.
-        ' WHERE ownerId='.$this->owner.
-        ' AND name="'.$name.'"';
-        $db->delete($q);
+        $this->set($name, $val);
 
-        //write new token
-        $q =
-        'INSERT INTO tblTokens'.
-        ' SET ownerId='.$this->owner.','.
-        'name="'.$name.'",'.
-        'value="'.$val.'",'.
-        'timeSaved=NOW()';
-        $db->insert($q);
-
-        return true;
+        return $val;
     }
 
     /**
@@ -70,36 +45,15 @@ class Token
      */
     private function findFreeToken($name)
     {
-        $db = SqlHandler::getInstance();
         $session = SessionHandler::getInstance();
-        $page = XmlDocumentHandler::getInstance();
 
         do {
-            $val = sha1($this->token_prefix.mt_rand().$page->getUrl().$session->id.$this->token_suffix);
+            $val = sha1($this->token_prefix . mt_rand() . $session->id . mt_rand() . $this->token_suffix);
 
-            $q =
-            'SELECT tokenId FROM tblTokens'.
-            ' WHERE name="'.$name.'"'.
-            ' AND value="'.$val.'"';
-            if (!$db->getOneItem($q))
+            if (!$this->getOwner($name, $val))
                 return $val;
+
         } while (1);
-    }
-
-    /**
-     * Returns ownerId of the setting with the unique value $val
-     *
-     */
-    function getOwner($name, $val)
-    {
-        $db = SqlHandler::getInstance();
-
-        $q =
-        'SELECT ownerId FROM tblTokens'.
-        ' WHERE name="'.$db->escape($name).'"'.
-        ' AND value="'.$db->escape($val).'"';
-
-        return $db->getOneItem($q);
     }
 
 }
