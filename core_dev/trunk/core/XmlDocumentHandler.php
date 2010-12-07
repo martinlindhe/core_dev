@@ -164,6 +164,9 @@ class XmlDocumentHandler extends CoreBase
                 continue;
             }
 
+            if (!is_object($obj))
+                throw new Exception ('not an object: '.$obj);
+
             $rc = new ReflectionClass($obj);
             /*
             if (!$rc->implementsInterface('IXMLComponent'))
