@@ -158,6 +158,9 @@ class XmlDocumentHandler extends CoreBase
 */
         foreach ($this->objs as $obj)
         {
+            if (!$obj)
+                continue;
+
             if (is_string($obj)) {
                 //XXX hack to allow any text to be attached
                 echo $obj;
