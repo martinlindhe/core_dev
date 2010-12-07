@@ -85,6 +85,13 @@ case 'view':
     echo $view->render();
     break;
 
+case 'robots':
+    $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
+    $page->setMimeType('text/plain');
+    echo "User-agent: *\n";
+    echo "Disallow: /\n";
+    break;
+
 default:
     throw new Exception ('DEBUG: no such view '.$this->view);
 }
