@@ -5,22 +5,23 @@ img {
  background: url('../gfx/icon_error.png') no-repeat;
  background-position: 8px 50%;
  border: 1px dashed;
+ padding: 5px;
+ padding-left: 32px;
 }
 .okay {
  background: url('../gfx/icon_good.png') no-repeat;
  background-position: 8px 50%;
  border: 1px dashed;
+ padding: 5px;
+ padding-left: 32px;
 }
 .bad, .critical {
- border: 1px dashed;
  color: #000;
- padding: 5px;
  line-height: 20px;
  background-color: #FB9B9B;
 }
 .good, .okay {
  color: #000;
- padding: 5px;
  line-height: 20px;
  background-color: #B1F9AA;
 }
