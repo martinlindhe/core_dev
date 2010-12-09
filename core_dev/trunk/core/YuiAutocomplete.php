@@ -12,6 +12,7 @@
 //STATUS: wip
 
 require_once('output_js.php');
+require_once('output_xhtml.php');
 
 class YuiAutocomplete
 {
@@ -69,7 +70,7 @@ class YuiAutocomplete
             'font-weight:bold;'.
         '}'.
         '#'.$div_holder.' {'.
-            'width:30em;'. // set width here or else widget will expand to fit its container
+            'width:20em;'. // set width here or else widget will expand to fit its container
             'padding-bottom:2em;'.
         '}'
         );
@@ -118,7 +119,7 @@ class YuiAutocomplete
 
         return
         '<div id="'.$div_holder.'">'.
-            '<input type="text" id="'.$this->name.'" name="'.$this->name.'">'.
+            xhtmlInput($this->name).
             '<div id="myContainer"></div>'.
         '</div>'.
         js_embed($res);
