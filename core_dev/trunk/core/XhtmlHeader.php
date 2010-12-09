@@ -85,10 +85,10 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     /** CSS snippets to be added inside <head> */
     function embedCss($s) { $this->embed_css .= $s; }
 
-    /**JavaScript snippets to be added to the <body onload=""> tag */
+    /** JavaScript snippets to be added inside <head> (js functions is available before page load event is completed) */
     function embedJs($s) { $this->embed_js[] = $s; }
 
-    /**JavaScript snippets to be added to the <body onload=""> tag */
+    /** JavaScript snippets to be added to the <body onload=""> tag (js code will execute when page loads) */
     function embedJsOnload($s) { $this->embed_js_onload[] = $s; }
 
     function addOpenSearch($uri, $name)
@@ -125,7 +125,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         $res .= '<title>'.$this->title.'</title>';
 
-        $res .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
+        $res .= '<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>';
 
         foreach ($this->meta_tags as $name => $val)
             $res .= '<meta name="'.$name.'" content="'.$val.'"/>';
