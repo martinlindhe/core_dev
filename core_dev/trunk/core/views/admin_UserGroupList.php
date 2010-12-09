@@ -3,7 +3,7 @@
  * This is the defualt view for the UserGroupList class
  */
 
-function addUserGroupSubmit($p, $caller)
+function addUserGroupSubmit($p)
 {
     $grp = new UserGroup();
     $grp->setName($p['name']);

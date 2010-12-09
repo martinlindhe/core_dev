@@ -54,6 +54,7 @@ case 'admin':
 
         echo '<h2>Extensions</h2>';
         echo 'Curl: '.(function_exists('curl_init') ? 'OK' : 'NOT FOUND').'<br/>';
+        echo 'GD2: '.(function_exists('imagegd2') ? 'OK' : 'NOT FOUND').'<br/>';
         echo 'APC: '.(function_exists('apc_cache_info') ? 'OK' : 'NOT FOUND').'<br/>';  // useful for cassandra + general speedups
         echo '<br/>';
 

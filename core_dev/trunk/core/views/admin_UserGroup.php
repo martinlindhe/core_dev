@@ -11,7 +11,7 @@ echo '<h1>Edit user group: '.$caller->getName().'</h1>';
 
 echo 'Created at '.sql_datetime($caller->getTimeCreated()).' by '.$caller->getCreatorName().'<br/><br/>';
 
-function saveUserGroupSubmit($p, $caller)
+function saveUserGroupSubmit($p)
 {
     $grp = new UserGroup($p['g_id']);
     $grp->setName($p['name']);

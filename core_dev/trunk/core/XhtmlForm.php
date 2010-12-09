@@ -483,6 +483,7 @@ class XhtmlForm
                 break;
 
             case 'AUTOCOMPLETE':
+///XXXX MOVE OUT THIS FROM THE CLASS- NEED REWRITE OF XHTMLFORM TO ALLOW ATTACHING FULL OBJECTS, SO CALLER CAN CUSTOMIZE THE OBJECT AS WANTED
                 $ac = new YuiAutocomplete();
                 $ac->setName($e['name']);
                 $ac->setXhrUrl($e['xhr_url']);

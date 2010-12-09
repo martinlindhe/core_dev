@@ -155,11 +155,14 @@ class CommentList extends CoreList
     /**
      * Handles form POST
      */
-    function handleSubmit($p, $caller)
+    function handleSubmit($p)
     {
         global $h;
+
+        $error = ErrorHandler::getInstance();
+
         if (empty($p['comment_'.$this->type])) {
-            $caller->setError('No text entered.');
+            $error->add('No text entered.');
             return false;
         }
 
@@ -178,18 +181,18 @@ class CommentList extends CoreList
 
             $id = $comment->store();
 
-            if (!$id) $caller->setError( $comment->getError() );
+            if (!$id) $error->add( $comment->getError() );
 
             unset($p['comment_'.$this->type]);
             return $id;
         }
 
         if (!$h->session->id && $this->anon_access && !$this->Captcha->verify()) {
-            $caller->setError( $this->Captcha->getError() );
+            $error->add( $this->Captcha->getError() );
             return false;
         }
 
-        $caller->setError('Unauthorized submit');
+        $error->add('Unauthorized submit');
         return false;
     }
 

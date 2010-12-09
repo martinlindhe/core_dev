@@ -49,15 +49,16 @@ class CommentList
     /**
      * Handles form POST
      */
-    function handleSubmit($p, $caller)
+    function handleSubmit($p)
     {
         $session = SessionHandler::getInstance();
+        $error = ErrorHandler::getInstance();
 
         if (empty($p['comment_'.$this->type]))
             return false;
 
         if (!$session->id) {
-            $caller->setError('Unauthorized submit');
+            $error->add('Unauthorized submit');
             return false;
         }
 
