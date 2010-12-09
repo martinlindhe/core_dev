@@ -20,22 +20,22 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 {
     static $_instance;                  ///< singleton class
 
-    private $title;
-    private $favicon;
+    protected $title;
+    protected $favicon;
 
-    private $embed_js        = array();
-    private $embed_js_onload = array();
-    private $embed_css;
+    protected $embed_js        = array();
+    protected $embed_js_onload = array();
+    protected $embed_css;
 
-    private $include_js      = array();
-    private $include_css     = array();
-    //private $include_feed = array();
+    protected $include_js      = array();
+    protected $include_css     = array();
+    //protected $include_feed = array();
 
-    private $meta_tags       = array();
-    private $opensearch      = array();
+    protected $meta_tags       = array();
+    protected $opensearch      = array();
 
-    private $reload_time     = 0;         ///< time after page load to reload the page, in seconds
-    private $core_dev_root   = '';        ///< web path to core_dev for ajax api calls
+    protected $reload_time     = 0;         ///< time after page load to reload the page, in seconds
+    protected $core_dev_root   = '';        ///< web path to core_dev for ajax api calls
 
     private function __construct() { }
 
