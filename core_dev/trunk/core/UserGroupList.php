@@ -17,17 +17,24 @@ class UserGroupList
 
     function __construct()
     {
+        $this->load();
+    }
+
+    private function load()
+    {
         $db = SqlHandler::getInstance();
 
-        $this->items = array();
+        $arr = array();
 
-        $q = 'SELECT * FROM tblUserGroups';
-        foreach ($db->getArray($q) as $row) {
+        foreach ($db->pSelect('SELECT * FROM tblUserGroups') as $row)
+        {
             $item = new UserGroup();
             $item->loadFromSql($row);
 
-            $this->items[] = $item;
+            $arr[] = $item;
         }
+
+        $this->items = $arr;
     }
 
     function getItems() { return $this->items; }

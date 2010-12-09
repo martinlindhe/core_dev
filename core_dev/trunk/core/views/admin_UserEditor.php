@@ -15,8 +15,10 @@ if (!$user->getId()) {
 echo '<h1>User admin for '.$user->getName().'</h1>';
 
 if ($session->id != $caller->getId() && isset($_GET['remove'])) {
-    $user->remove();
-    echo '<div class="item">User removed</div>';
+    //if (confirmed('Are you sure you want to remove this user?')) {  //XXX fix so confirmation works here
+        $user->remove();
+        echo '<div class="item">User removed</div>';
+    //}
     return;
 }
 
@@ -60,9 +62,9 @@ echo xhtmlPassword('change_pwd').' ';
 echo xhtmlSubmit('Change');
 echo xhtmlFormClose().'<br/><br/>';
 
-if ($session->id != $caller->getId() ) {
+if ($session->id != $caller->getId() )
     echo '&raquo; <a href="'.relurl_add( array('remove'=>1) ).'">Remove user</a><br/><br/>';
-}
+
 
 
 /*
