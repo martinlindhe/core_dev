@@ -23,18 +23,19 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     private $title;
     private $favicon;
 
-    private $embed_js = array();
+    private $embed_js        = array();
+    private $embed_js_onload = array();
     private $embed_css;
 
-    private $include_js    = array();
-    private $include_css   = array();
+    private $include_js      = array();
+    private $include_css     = array();
     //private $include_feed = array();
 
-    private $meta_tags = array();
-    private $opensearch    = array();
+    private $meta_tags       = array();
+    private $opensearch      = array();
 
-    private $reload_time   = 0;         ///< time after page load to reload the page, in seconds
-    private $core_dev_root = '';        ///< web path to core_dev for ajax api calls
+    private $reload_time     = 0;         ///< time after page load to reload the page, in seconds
+    private $core_dev_root   = '';        ///< web path to core_dev for ajax api calls
 
     private function __construct() { }
 
@@ -87,6 +88,9 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     /**JavaScript snippets to be added to the <body onload=""> tag */
     function embedJs($s) { $this->embed_js[] = $s; }
 
+    /**JavaScript snippets to be added to the <body onload=""> tag */
+    function embedJsOnload($s) { $this->embed_js_onload[] = $s; }
+
     function addOpenSearch($uri, $name)
     {
         if (substr($uri, 0, 1) != '/')
@@ -116,6 +120,9 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         $res .= '</style>';
 
+        if ($this->embed_js)
+            $res .= '<script type="text/javascript">'.implode('', $this->embed_js).'</script>';
+
         $res .= '<title>'.$this->title.'</title>';
 
         $res .= '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>';
@@ -143,8 +150,8 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $res .= '</head>';
 
         $res .= '<body class="yui-skin-sam"'; // required for YUI
-        if ($this->embed_js)
-            $res .= ' onload="'.implode('', $this->embed_js).'"';
+        if ($this->embed_js_onload)
+            $res .= ' onload="'.implode('', $this->embed_js_onload).'"';
         $res .= '>';
 
         if ($this->reload_time)

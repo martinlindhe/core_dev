@@ -339,7 +339,7 @@ class XhtmlForm
         $header = XhtmlHeader::getInstance();
 
         if ($this->focus_element)
-            $header->embedJs('document.'.$this->name.'.'.$this->focus_element.'.focus();');
+            $header->embedJsOnload('document.'.$this->name.'.'.$this->focus_element.'.focus();');
 
         $res = xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
 
