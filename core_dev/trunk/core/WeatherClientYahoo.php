@@ -92,7 +92,6 @@ class WeatherClientYahoo extends RssReader
             echo 'xxxxx '.$key."\n";
             break;
         }
-
     }
 
     function getWeather($city, $country = '')
@@ -111,6 +110,11 @@ class WeatherClientYahoo extends RssReader
         if (count($items) != 1)
             throw new Exception ('unexpected number of results');
 
+        return $this->getWeatherResult();
+    }
+
+    function getWeatherResult()
+    {
         $res = new WeatherResult();
         $res->city            = $this->city;
         $res->region          = $this->region;
@@ -130,6 +134,7 @@ class WeatherClientYahoo extends RssReader
 
         return $res;
     }
+
 }
 
 ?>
