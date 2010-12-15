@@ -9,7 +9,7 @@
 
 require_once('class.CoreList.php');
 
-require_once('prop_Duration.php');
+require_once('Duration.php');
 require_once('prop_Url.php');
 require_once('prop_Timestamp.php');
 

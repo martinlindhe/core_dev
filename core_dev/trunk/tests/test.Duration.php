@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('prop_Duration.php');
+require('Duration.php');
 
 $dur = new Duration(3600 + 46);
 if ($dur->render() != '1:00:46') echo "FAIL 1\n";

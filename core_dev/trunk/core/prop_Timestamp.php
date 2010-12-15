@@ -10,7 +10,7 @@
 //STATUS: good
 
 require_once('class.CoreProperty.php');
-require_once('prop_Duration.php');
+require_once('Duration.php');
 
 class Timestamp extends CoreProperty
 {
