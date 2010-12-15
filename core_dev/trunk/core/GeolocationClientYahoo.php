@@ -7,11 +7,14 @@
 
 //STATUS: wip
 
+//TODO 1: make a "GeoLocation" baseclass, make it use "GeolocationClientYahoo"
+
+//TODO 2: refactor code from service_googlemaps.php to a "GeolocationClientGoogle" class, see http://code.google.com/intl/sv-SE/apis/maps/documentation/geocoding/index.html#GeocodingResponses
+//        - google also dont return timezone
+
 //TODO: cache lookups
 
-//TODO: update to parse all data such as location
-
-//TODO LATER: when/if yahoo adds timezone to result, stop using GeonamesClient for that
+//TODO LATER: when/if yahoo or google adds timezone to result, stop using GeonamesClient for that
 
 require_once('JSON.php');
 require_once('Coordinate.php');
