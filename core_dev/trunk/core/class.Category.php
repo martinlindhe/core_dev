@@ -13,7 +13,7 @@
 
 require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
-require_once('prop_Timestamp.php');
+require_once('Timestamp.php');
 
 class CategoryItem extends CoreItem
 {

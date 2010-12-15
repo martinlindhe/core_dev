@@ -13,7 +13,7 @@ require_once('class.CoreItem.php');
 require_once('class.CoreList.php');
 require_once('class.User.php');
 require_once('client_captcha.php');
-require_once('prop_Timestamp.php');
+require_once('Timestamp.php');
 require_once('XhtmlForm.php');
 
 die('DONT USE Comments_borked.php');

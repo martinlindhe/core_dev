@@ -10,7 +10,7 @@
 require_once('LocaleHandler.php');        //for translations
 require_once('output_xhtml.php');         //for XHTML output helper functions
 require_once('functions_textformat.php'); //for decodeDataSize()
-require_once('prop_Timestamp.php');
+require_once('Timestamp.php');
 require_once('network.php');
 require_once('files.php');
 require_once('class.CoreBase.php'); //for CoreBase class

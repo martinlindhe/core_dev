@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-require_once('prop_Timestamp.php');
+require_once('Timestamp.php');
 
 class BlogEntry
 {
