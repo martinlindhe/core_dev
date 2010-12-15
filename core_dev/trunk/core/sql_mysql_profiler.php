@@ -37,7 +37,16 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         //mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_STRICT); // all errors on, but disable exceptions (strict)
     }
 
-    function getErrorCount() { return count($this->query_error); }
+    function getErrorCount()
+    {
+        $cnt = 0;
+
+        foreach ($this->queries as $q)
+            if ($q->error)
+                $cnt++;
+
+        return $cnt;
+    }
 
     /**
      * Saves time for profiling current action (connect, execute query, ...)

@@ -16,6 +16,13 @@ class ApiCustomerList
 
     function __construct($owner = 0)
     {
+        $this->load($owner);
+    }
+
+    function getCustomers() { return $this->customers; }
+
+    function load($owner = 0)
+    {
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblApiCustomers';
@@ -31,7 +38,6 @@ class ApiCustomerList
         }
     }
 
-    function getCustomers() { return $this->customers; }
 }
 
 ?>
