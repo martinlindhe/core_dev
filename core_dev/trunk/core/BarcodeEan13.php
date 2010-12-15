@@ -61,7 +61,10 @@ class BarcodeEan13
         $this->gs1   = substr($this->code, 0, 3);
         $this->check = substr($this->code, -1, 1);
 
+        //XXX lookup meaning: http://en.wikipedia.org/wiki/List_of_GS1_country_codes
         $c2 = substr($this->gs1, 0, 2);
+        if ($c2 == 50)
+            return $this->parseUK();
 
         if ($c2 >= 40 && $c2 <= 44)
             return $this->parseGermany();
@@ -69,11 +72,10 @@ class BarcodeEan13
         if ($c2 == '73')
             return $this->parseSweden();
 
-        //XXX lookup meaning: http://en.wikipedia.org/wiki/List_of_GS1_country_codes
         switch ($this->gs1) {
         case '729': $this->country = 'Israel'; break;
         default:
-            throw new Exception ('unknown country code '.$this->gs1);
+            $this->country = 'unknown country code '.$this->gs1;
         }
     }
 
@@ -149,6 +151,12 @@ class BarcodeEan13
         }
 
         $this->company_name = $name;
+    }
+
+    private function parseUK()
+    {
+        $this->gs1_name = 'United Kingdom';
+        $this->unknown = substr($this->code, 3, -1);
     }
 
     function render()

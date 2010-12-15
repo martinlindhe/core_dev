@@ -15,47 +15,7 @@ require_once('RssReader.php');
 
 require_once('GeolocationClientYahoo.php');
 
-class WeatherClientYahoo
-{
-    function getWeather($city, $country = '')
-    {
-        $loc_lookup = new GeolocationClientYahoo();
-        $x = $loc_lookup->get($city, $country);
-
-        if (!$x->woeid)
-            throw new Exception ('location not found');
-
-        $url = 'http://weather.yahooapis.com/forecastrss?w='.$x->woeid.'&u=c';
-
-        $client = new YahooWeatherReader($url);
-        $items = $client->getItems();
-
-        if (count($items) != 1)
-            throw new Exception ('unexpected number of results');
-
-        $res = new WeatherResult();
-        $res->city            = $client->city;
-        $res->region          = $client->region;
-        $res->country         = $client->country;
-
-        //XXXX what is the unit types?
-        $res->wind_chill      = $client->wind_chill;
-        $res->wind_direction  = $client->wind_direction;
-        $res->wind_speed      = $client->wind_speed;
-
-        $res->coord_lat       = $client->coord_lat;
-        $res->coord_long      = $client->coord_long;
-        $res->time            = $client->time;
-        $res->visibility      = $client->visibility;
-        $res->skycond         = $client->skycond;
-        $res->celcius         = $client->celcius;
-
-        return $res;
-    }
-
-}
-
-class YahooWeatherReader extends RssReader
+class WeatherClientYahoo extends RssReader
 {
     var $city, $region, $country;
     var $wind_chill, $wind_direction, $wind_speed;
@@ -133,6 +93,42 @@ class YahooWeatherReader extends RssReader
             break;
         }
 
+    }
+
+    function getWeather($city, $country = '')
+    {
+        $loc_lookup = new GeolocationClientYahoo();
+        $x = $loc_lookup->get($city, $country);
+
+        if (!$x->woeid)
+            throw new Exception ('location not found');
+
+        $url = 'http://weather.yahooapis.com/forecastrss?w='.$x->woeid.'&u=c';
+
+        $this->parse($url);
+        $items = $this->getItems();
+
+        if (count($items) != 1)
+            throw new Exception ('unexpected number of results');
+
+        $res = new WeatherResult();
+        $res->city            = $this->city;
+        $res->region          = $this->region;
+        $res->country         = $this->country;
+
+        //XXXX what is the unit types?
+        $res->wind_chill      = $this->wind_chill;
+        $res->wind_direction  = $this->wind_direction;
+        $res->wind_speed      = $this->wind_speed;
+
+        $res->coord_lat       = $this->coord_lat;
+        $res->coord_long      = $this->coord_long;
+        $res->time            = $this->time;
+        $res->visibility      = $this->visibility;
+        $res->skycond         = $this->skycond;
+        $res->celcius         = $this->celcius;
+
+        return $res;
     }
 }
 
