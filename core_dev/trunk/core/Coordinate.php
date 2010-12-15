@@ -20,6 +20,7 @@ class Coordinate
         $this->latitude  = $lat;
         $this->longitude = $long;
     }
+
 }
 
 ?>
