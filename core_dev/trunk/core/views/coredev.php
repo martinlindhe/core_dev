@@ -12,8 +12,7 @@ switch ($this->view) {
 case 'admin':
     $session->requireSuperAdmin();
 
-    switch ($this->owner)
-    {
+    switch ($this->owner) {
     case 'userlist':
         $userlist = new UserList();
         echo $userlist->render();
@@ -35,6 +34,30 @@ case 'admin':
         // XXX link to here is hardcoded in admin_UserGroupList.php
         $details = new UserGroup($this->child);
         echo $details->render();
+        break;
+
+    case 'timezones':
+        //XXX put this into a view
+        echo '<h1>Time zones</h1>';
+
+        echo 'Server time: '.date('r').'<br/>';
+        echo 'Server timezone: '.date_default_timezone_get().' ('.date('T').')<br/>';
+        echo '<br/>';
+
+        //XXX ability to show some common timezones
+
+        echo 'Browser time: <span id="js_time"></span><br/>';
+        echo 'Browser timezone offset: <span id="js_timezone"></span><br/>';
+
+        $header->embedJs(
+        'function get_js_time() {'.
+            'var d = new Date();'.
+            'e = document.getElementById("js_time");'.
+            'e.innerHTML = d.toUTCString();'.
+            'e = document.getElementById("js_timezone");'.
+            'e.innerHTML = d.getTimezoneOffset();'.
+        '}');
+        $header->embedJsOnload('get_js_time();');
         break;
 
     case 'phpinfo':
@@ -71,6 +94,7 @@ case 'admin':
         echo '<br/>';
         echo ahref('coredev/admin/phpinfo', 'phpinfo()').'<br/>';
         echo ahref('coredev/admin/compatiblity', 'Compatibility check').'<br/>';
+        echo ahref('coredev/admin/timezones', 'Time zones').'<br/>';
         break;
     }
     break;
