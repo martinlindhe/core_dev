@@ -18,6 +18,7 @@ class Version extends CoreProperty
     private $raw; ///< raw input
 
     private $type  = 0;
+
     const VERSION  = 1; //v1.5.390a
     const REVISION = 2; //r1234
 
@@ -60,9 +61,4 @@ class Version extends CoreProperty
 
 }
 
-/*
-$x = new Version('4.0.32.233');
-echo $x->get().ln();
-
-*/
 ?>
