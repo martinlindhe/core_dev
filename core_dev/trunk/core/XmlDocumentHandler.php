@@ -14,7 +14,7 @@
 //XXX: extend from Url ?
 
 require_once('class.CoreBase.php');
-require_once('prop_Url.php');
+require_once('Url.php');
 
 class XmlDocumentHandler extends CoreBase
 {

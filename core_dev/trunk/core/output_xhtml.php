@@ -384,49 +384,6 @@ function xhtmlOpenSearch($url, $name, $icon = '')
 }
 
 /**
- * Creates a full url to the currently executed script, only usable in browser sessions
- *
- * @param $script (optional) if unset, returns currently executing script including GET parameters
- */
-function xhtmlGetUrl_DEPRECATED($script = '') //XXX see prop_Url.php for more advanced url manipluation
-{
-    $default_port = 0;
-    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-        $scheme = 'https';
-        $default_port = 443;
-    } else {
-        $scheme = 'http';
-        $default_port = 80;
-    }
-
-    $port = '';
-    if ($_SERVER['SERVER_PORT'] != $default_port)
-        $port = ':'.$_SERVER['SERVER_PORT'];
-
-    if (substr($script, 0, 4) == 'http')
-        return $script;
-
-    if (strpos($script, '/') !== false)
-        $path = $script;
-    else if (substr($script, 0, 1) == '?')
-        $path = $_SERVER['PHP_SELF'].$script; // append parameters
-    else if ($script) {
-        if (dirname($_SERVER['PHP_SELF']) == '/')
-            $path = '/'.$script;
-        else
-            $path = dirname($_SERVER['PHP_SELF']).'/'.$script;
-    }
-    else {
-        $path = $_SERVER['PHP_SELF'];
-        if (!empty($_SERVER['QUERY_STRING']))
-            $path .= '?'.$_SERVER['QUERY_STRING'];
-    }
-
-    $extern_url = $scheme.'://'.$_SERVER['SERVER_NAME'].$port.$path;
-    return $extern_url;
-}
-
-/**
  * Generates XML tags from an array of values
  *
  * @param $params array with params (Name=>Value) for each tag

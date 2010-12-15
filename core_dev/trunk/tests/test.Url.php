@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('prop_Url.php');
+require_once('Url.php');
 require_once('XmlDocumentHandler.php');
 
 // test url manipulation
