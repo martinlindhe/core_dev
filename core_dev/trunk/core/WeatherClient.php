@@ -9,8 +9,8 @@
 
 require_once('Cache.php');
 
-require_once('WeatherClientWebservicex.php'); // currently not working, 2010-11-02
 require_once('WeatherClientYahoo.php');
+// require_once('WeatherClientWebservicex.php'); // currently not working, 2010-11-02
 
 class WeatherResult
 {

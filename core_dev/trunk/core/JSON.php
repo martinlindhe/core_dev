@@ -3,6 +3,10 @@
  * $Id$
  */
 
+//STATUS: ok
+
+require_once('HttpClient.php');
+
 class JSON
 {
     public static function Encode($obj)
@@ -10,9 +14,15 @@ class JSON
         return json_encode($obj);
     }
 
-    public static function Decode($json, $assoc = false)
+    public static function Decode($data, $assoc = false)
     {
-        $res = json_decode($json, $assoc);
+        if (is_url($data)) {
+            $http = new HttpClient($data);
+            $http->setCacheTime(60 * 60); //1h
+            $data = $http->getBody();
+        }
+
+        $res = json_decode($data, $assoc);
 
         $e = '';
         switch (json_last_error()) {

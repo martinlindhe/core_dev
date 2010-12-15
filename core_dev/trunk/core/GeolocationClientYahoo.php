@@ -7,9 +7,13 @@
 
 //STATUS: only returns woeid
 
+//SIMPLIFY: use simplexml
+
+//TODO: cache lookups
+
 //TODO: update to parse all data such as location
 
-require_once('XmlReader.php');
+require_once('JSON.php');
 
 class GeolocationClientYahooResult
 {
@@ -24,69 +28,13 @@ class GeolocationClientYahoo
     function get($city, $country)
     {
         $q = urlencode('select * from geo.places where text="'.$city.','.$country.'"');
-        $url = 'http://query.yahooapis.com/v1/public/yql?q='.$q.'&format=xml';
+        $url = 'http://query.yahooapis.com/v1/public/yql?q='.$q.'&format=json';
 
-        $this->reader = new CoreXmlReader();
-        $this->reader->parse($url);
+        $x = JSON::Decode($url);
 
-        while ($this->reader->read())
-        {
-            if ($this->reader->nodeType != XMLReader::ELEMENT)
-                continue;
-
-            switch ($this->reader->name) {
-            case 'query':
-                while ($this->reader->read()) {
-                    if ($this->reader->nodeType != XMLReader::ELEMENT)
-                        continue;
-
-                    switch ($this->reader->name) {
-                    case 'results':
-                        $this->parseResults();
-                        break;
-
-                    default:
-                        // echo "GeolocationClientYahoo bad entry " .$reader->name.ln();
-                    }
-                }
-                break;
-            default:
-                echo "unknown ".$this->reader->name.ln();
-                break;
-            }
-        }
-
-        if (count($this->items) != 1)
-            throw new Exception (count($this->items).' location results');
-
-        return $this->items[0];
-    }
-
-    private function parseResults()
-    {
-        $item = new GeolocationClientYahooResult();
-
-        while ($this->reader->read()) {
-            if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'place') {
-                $this->items[] = $item;
-                return;
-            }
-
-            if ($this->reader->nodeType != XMLReader::ELEMENT)
-                continue;
-
-            $key = strtolower($this->reader->name);
-
-            switch ($key) {
-            case 'woeid':
-                $item->woeid = $this->reader->readValue();
-                break;
-
-            default:
-                //echo 'unknown item entry ' .$this->reader->name.ln();
-                break;
-            }
-        }
+        $res = new GeolocationClientYahooResult();
+        $res->woeid = $x->query->results->place[0]->woeid;
+        return $res;
 
     }
 }
