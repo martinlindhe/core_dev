@@ -4,7 +4,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('GeolocationClientYahoo.php');
 
-$city = 'Los Angeles';
+$city = 'Los Angeles ';
 $country = 'USA';
 
 $loc_lookup = new GeolocationClientYahoo();
