@@ -13,6 +13,9 @@
  */
 function sql_datetime($ts)
 {
+    if (!$ts)
+        return '';
+
     if (!is_numeric($ts))
         $ts = strtotime($ts);
 
@@ -25,6 +28,9 @@ function sql_datetime($ts)
  */
 function sql_date($ts)
 {
+    if (!$ts)
+        return '';
+
     if (!is_numeric($ts))
         $ts = strtotime($ts);
 
@@ -37,6 +43,9 @@ function sql_date($ts)
  */
 function sql_time($ts)
 {
+    if (!$ts)
+        return '';
+
     if (!is_numeric($ts))
         $ts = strtotime($ts);
 
