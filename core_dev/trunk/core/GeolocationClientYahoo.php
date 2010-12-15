@@ -30,7 +30,7 @@ class GeolocationClientYahoo
         $q = urlencode('select * from geo.places where text="'.$city.','.$country.'"');
         $url = 'http://query.yahooapis.com/v1/public/yql?q='.$q.'&format=json';
 
-        $x = JSON::Decode($url);
+        $x = JSON::decode($url);
 
         $res = new GeolocationClientYahooResult();
         $res->woeid = $x->query->results->place[0]->woeid;

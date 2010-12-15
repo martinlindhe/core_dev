@@ -9,12 +9,12 @@ require_once('HttpClient.php');
 
 class JSON
 {
-    public static function Encode($obj)
+    public static function encode($obj)
     {
         return json_encode($obj);
     }
 
-    public static function Decode($data, $assoc = false)
+    public static function decode($data, $assoc = false)
     {
         if (is_url($data)) {
             $http = new HttpClient($data);
@@ -49,7 +49,7 @@ class JSON
         }
 
         if ($e && !$res)
-            throw new Exception('JSON::Decode: '.$e);
+            throw new Exception('JSON::decode: '.$e);
 
         return $res;
     }
