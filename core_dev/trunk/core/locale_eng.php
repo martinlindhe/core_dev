@@ -38,6 +38,16 @@ class Locale_ENG extends CoreLocale
     'DEU' => 'Germany',
     );
 
+    var $durations = array( //XXX this array can be removed if translateDuration in LocaleHandler can be overridden, need LocaleHandler class nesting fixed first
+    'second' =>'second',    'seconds'=>'seconds',
+    'minute' =>'minute',    'minutes'=>'minutes',
+    'hour'   =>'hour',      'hours'  =>'hours',
+    'day'    =>'day',       'days'   =>'days',
+    'week'   =>'week',      'weeks'  =>'weeks',
+    'month'  =>'month',     'months' =>'months',
+    'year'   =>'year',      'years'  =>'years'
+    );
+
     function formatCurrency($n)
     {
         die('formatCurrency ENG TODO');
