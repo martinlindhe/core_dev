@@ -12,6 +12,9 @@
 
 //STATUS: wip
 
+//XXX TODO 1: refactor into a "GeoLookup" class that uses "GeonamesClient"
+//XXX TODO 2: refactor parts from service_googlemaps to do a google geocoding api lookup class
+
 require_once('Cache.php');
 
 class GeonamesResult
