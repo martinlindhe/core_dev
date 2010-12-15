@@ -7,6 +7,7 @@
 
 //STATUS: hmm
 
+require_once('core.php'); // for php_min_ver()
 require_once('sql_misc.php');
 
 /**
@@ -170,6 +171,7 @@ function datetime_to_timestamp($datetime) //XXX deprecate! use ts() instead
  */
 function ts($d)
 {
+    if (!$d) return 0;
     if (is_numeric($d)) return $d;
     return strtotime($d);
 }
