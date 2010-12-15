@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('prop_Episode.php');
+require('Episode.php');
 
 $e = new Episode('season 1, episode 24');
 if ($e->get() != '1x24') echo "FAIL 1\n";
