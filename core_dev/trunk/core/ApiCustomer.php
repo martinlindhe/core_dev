@@ -18,10 +18,10 @@ class ApiCustomer
     private $owner; ///< UserGroup owner
     private $password;
 
-    function __construct($n = 0)
+    function __construct($name = '', $password = '')
     {
-        if ($n)
-            $this->loadCustomer($n);
+        if ($name)
+            $this->loadCustomer($name, $password);
     }
 
     function getId() { return $this->id; }
@@ -38,24 +38,22 @@ class ApiCustomer
         $this->owner = $row['ownerId'];
     }
 
-    function loadCustomer($n)
+    function loadCustomer($name, $password = '')
     {
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblApiCustomers WHERE';
-        if (is_numeric($n))
-            $q .= ' customerId='.$n;
+        if (is_numeric($name))
+            $q .= ' customerId='.$name;
         else
-            $q .= ' customerName="'.$db->escape($n).'"';
+            $q .= ' customerName="'.$db->escape($name).'"';
 
-        if ($this->password)
-            $q .= ' AND customerPass="'.$db->escape($this->password).'"';
+        if ($password)
+            $q .= ' AND customerPass="'.$db->escape($password).'"';
 
         $res = $db->getOneRow($q);
-        if (!$res)
-            throw new Exception ('cant load customer '.$n);
-
-        $this->loadFromSql($res);
+        if ($res)
+            $this->loadFromSql($res);
     }
 
     function getSetting($key, $default = '')

@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-//TODO: rewrite "include feeds" functionality
+//TODO: rewrite "include feeds" functionality (use textfeed app as test?)
 
 require_once('IXMLComponent.php');
 require_once('class.CoreBase.php');
