@@ -119,7 +119,8 @@ class XmlDocumentHandler extends CoreBase
 
         // see http://www.mnot.net/cache_docs/
         header('Cache-Control: '.
-            ($this->cache_duration ? 'max-age='.$this->cache_duration : 'no-cache').', must-revalidate');
+            ($this->cache_duration ? 'max-age='.$this->cache_duration : 'no-cache').
+            ', must-revalidate');
     }
 
     /**
