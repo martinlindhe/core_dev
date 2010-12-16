@@ -14,47 +14,6 @@ $predef_color['white'] = array(255,255,255);
 $predef_color['black'] = array(0,0,0);
 
 /**
- * Resizes selected image to $pct percent of orginal image dimensions
- *
- * @param $in_file filename of input image
- * @param $out_file filename of output image
- * @param $_pct percent to resize, relative to orginal image dimensions
- * @return true on success
- */
-function resizeImage($in_file, $out_file, $_pct)
-{
-    global $h, $config;
-    if (!is_numeric($_pct)) return false;
-
-    $mime = $h->files->lookupMimeType($in_file);
-
-    if (!$h->files->image_convert) return false;
-
-    //Resize with imagemagick
-    switch ($mime) {
-        case 'image/jpeg':
-            $c = 'convert -resize '.$_pct. '% -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/png':
-            $c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/gif':
-            $c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
-            break;
-
-        default:
-            echo 'resizeImage(): Unhandled mimetype "'.$mime.'"<br/>';
-            return false;
-    }
-    //echo 'Executing: '.$c.'<br/>';
-    exec($c);
-    if (!file_exists($out_file)) return false;
-    return true;
-}
-
-/**
  * Crops selected image to the requested dimensions
  *
  * @param $in_file filename of input image
@@ -91,7 +50,7 @@ function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
             break;
 
         default:
-            echo 'resizeImage(): Unhandled mimetype "'.$mime.'"<br/>';
+            echo 'cropImage(): Unhandled mimetype "'.$mime.'"<br/>';
             return false;
     }
     //echo 'Executing: '.$c.'<br/>';

@@ -24,6 +24,7 @@ class XmlDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design = true;
     private $enable_headers = true;  ///< send http headers?
+    private $cache_expires = 0;      ///< number of seconds to allow browser client to cache this result
     private $mimetype = 'text/html';
     private $Url;                    ///< Url object
     private $attachment_name;        ///< name of file attachment (force user to save file)
@@ -98,8 +99,10 @@ class XmlDocumentHandler extends CoreBase
 
     function disableHeaders() { $this->enable_headers = false; }
 
+    function setCacheExpires($n) { $this->cache_expires = $n; }
+
     /**
-     * Send http headers to disable browser cache
+     * Send http headers
      */
     private function sendHeaders()
     {
@@ -109,20 +112,15 @@ class XmlDocumentHandler extends CoreBase
         if ($this->mimetype)
             header('Content-Type: '.$this->mimetype);
 
-        if ($this->attachment_name) {
-            $this->noCache();
+        if ($this->attachment_name)
             header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
-        } else if ($this->inline_name)
+        else if ($this->inline_name)
             header('Content-Disposition: inline; filename="'.$this->inline_name.'"');
 
-    }
-    private function noCache()
-    {
-        //FIXME: are these all needed for modern browsers?
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-        header('Last-Modified: '.gmdate('D,d M YH:i:s').' GMT');
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Pragma: no-cache');
+        if ($this->cache_expires)
+            header('Cache-Control: max-age='.$this->cache_expires.', must-revalidate');
+        else
+            header('Cache-Control: no-cache, must-revalidate');
     }
 
     /**

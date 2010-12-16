@@ -32,6 +32,13 @@ class ImageResizer extends Image
         list($tn_width, $tn_height) = $this->calc($to_width, $to_height);
 //        echo 'Resizing from '.$this->width.'x'.$this->height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
+        $key = 'resized-'.$this->sha1.'-'.$tn_width.'x'.$tn_height;
+        $tmp_file = '/home/ml/dev/fmf/pics/tmp/'.$key;
+        if (file_exists($tmp_file)) {
+            $this->load($tmp_file);
+            return true;
+        }
+
         $i = imagecreatetruecolor($tn_width, $tn_height);
 
         if ($this->resample)
@@ -42,6 +49,8 @@ class ImageResizer extends Image
         $this->resource = $i;
         $this->width  = $tn_width;
         $this->height = $tn_height;
+
+        imagejpeg($i, $tmp_file, $this->jpeg_quality);
     }
 
     /** calculates the max width & height, while keeping aspect ratio */
@@ -57,5 +66,49 @@ class ImageResizer extends Image
     }
 
 }
+
+
+/**
+ * Resizes selected image to $pct percent of orginal image dimensions
+ *
+ * @param $in_file filename of input image
+ * @param $out_file filename of output image
+ * @param $_pct percent to resize, relative to orginal image dimensions
+ */
+
+/*
+function resizeImage($in_file, $out_file, $_pct)
+{
+    global $h, $config;
+    if (!is_numeric($_pct)) return false;
+
+    $mime = $h->files->lookupMimeType($in_file);
+
+    if (!$h->files->image_convert) return false;
+
+    //Resize with imagemagick
+    switch ($mime) {
+        case 'image/jpeg':
+            $c = 'convert -resize '.$_pct. '% -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
+            break;
+
+        case 'image/png':
+            $c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
+            break;
+
+        case 'image/gif':
+            $c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
+            break;
+
+        default:
+            echo 'resizeImage(): Unhandled mimetype "'.$mime.'"<br/>';
+            return false;
+    }
+    //echo 'Executing: '.$c.'<br/>';
+    exec($c);
+    if (!file_exists($out_file)) return false;
+    return true;
+}
+*/
 
 ?>

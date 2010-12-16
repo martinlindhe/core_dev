@@ -16,6 +16,7 @@ class Image
     protected $jpeg_quality = 80;
     protected $width, $height;
     protected $mimetype;
+    protected $sha1;
 
     /**
      * @param $r GD resource, or full path to image file
@@ -28,9 +29,11 @@ class Image
 
     function load(&$r)
     {
-        if (file_exists($r)) {
+        if (file_exists($r))
+        {
+            $info = getimagesize($r);
 
-            switch (file_get_mime_by_suffix($r)) { //XXX use c-util
+            switch ($info['mime']) {
             case 'image/jpeg': $im = imagecreatefromjpeg($r); break;
             case 'image/png':  $im = imagecreatefrompng($r); break;
             case 'image/gif':  $im = imagecreatefromgif($r); break;
@@ -39,10 +42,10 @@ class Image
 
             $this->resource = $im;
 
-            $info = getimagesize($r);
             $this->width    = $info[0];
             $this->height   = $info[1];
             $this->mimetype = $info['mime'];
+            $this->sha1     = sha1_file($r);
             return;
         }
 
@@ -79,7 +82,7 @@ bt();
     {
         $page = XmlDocumentHandler::getInstance();
         $page->disableDesign();
-//        $page->setMimeType('image/png');
+        $page->setMimeType('image/png');
 
         imagepng($this->resource);
         imagedestroy($this->resource);
