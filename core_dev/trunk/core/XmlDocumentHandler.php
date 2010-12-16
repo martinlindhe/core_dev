@@ -26,7 +26,8 @@ class XmlDocumentHandler extends CoreBase
     private $enable_headers = true;  ///< send http headers?
     private $mimetype = 'text/html';
     private $Url;                    ///< Url object
-    private $attachment_name;
+    private $attachment_name;        ///< name of file attachment (force user to save file)
+    private $inline_name;            ///< name of inlined file (will set correct name if user chooses to save file)
     private $coredev_inc = '';       ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
 
     private $upload_root = '';       ///< root directory for file uploads
@@ -81,7 +82,8 @@ class XmlDocumentHandler extends CoreBase
     /**
      * Sends HTTP headers that prompts the client browser to download the page content with given name
      */
-    function sendAttachment($s) { $this->attachment_name = $s; }
+    function setAttachmentName($s) { $this->attachment_name = basename($s); }
+    function setInlineName($s) { $this->inline_name = basename($s); }
 
     /**
      * Specifies php scripts to include for additional design
@@ -107,11 +109,12 @@ class XmlDocumentHandler extends CoreBase
         if ($this->mimetype)
             header('Content-Type: '.$this->mimetype);
 
-        //prompts the user to save the file
         if ($this->attachment_name) {
             $this->noCache();
             header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
-        }
+        } else if ($this->inline_name)
+            header('Content-Disposition: inline; filename="'.$this->inline_name.'"');
+
     }
     private function noCache()
     {

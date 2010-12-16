@@ -67,7 +67,7 @@ class XhrResponse
     {
         $page = XmlDocumentHandler::getInstance();
         $page->setMimeType('text/csv');
-        $page->sendAttachment('export.csv');
+        $page->setAttachmentName('export.csv');
 
         $writer = new CsvWriter();
         $writer->setData($this->data);
@@ -78,7 +78,7 @@ class XhrResponse
     {
         $page = XmlDocumentHandler::getInstance();
         $page->setMimeType('application/vnd.ms-excel');
-        $page->sendAttachment('export.xls');
+        $page->setAttachmentName('export.xls');
 
         $writer = new XlsWriter();
         $writer->setData($this->data);
