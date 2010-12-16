@@ -15,6 +15,8 @@
 require_once('Coordinate.php');
 require_once('Cache.php');
 
+require_once('GeoLookupClient.php'); // for GeoLookupResult
+
 class GeoLookupClientGeonames extends Coordinate
 {
     function get()
