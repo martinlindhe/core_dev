@@ -114,7 +114,7 @@ function googleMapsGeocode($address)
  * @param $long Longitude
  * @return name & accuracy of specified location or false
  */
-function googleMapsReverseGeocode($lat, $long)
+function googleMapsReverseGeocode($lat, $long)  //XXX DELETE FUNCTION, use GeoLookupClient instead
 {
     global $config;
 

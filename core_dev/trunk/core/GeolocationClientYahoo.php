@@ -19,7 +19,7 @@
 require_once('JSON.php');
 require_once('Coordinate.php');
 
-require_once('GeonamesClient.php'); // to lookup timezone for location
+require_once('GeoLookupClientGeonames.php'); // to lookup timezone for location
 
 class GeolocationClientYahooResult
 {
@@ -72,7 +72,7 @@ admin2: {
 
 
         //XXX this is a ugly hack until yahoo returns timezone with their response
-        $c = new GeonamesClient($item->centroid->latitude, $item->centroid->longitude);
+        $c = new GeoLookupClientGeonames($item->centroid->latitude, $item->centroid->longitude);
         $geoname = $c->get();
         $res->timezone = $geoname->timezone;
 

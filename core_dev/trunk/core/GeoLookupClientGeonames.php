@@ -12,49 +12,30 @@
 
 //STATUS: wip
 
-//XXX TODO 1: refactor into a "GeoLookup" class that uses "GeonamesClient"
-//XXX TODO 2: refactor parts from service_googlemaps to do a google geocoding api lookup class
-
+require_once('Coordinate.php');
 require_once('Cache.php');
 
-class GeonamesResult
+class GeoLookupClientGeonames extends Coordinate
 {
-    var $country_code;
-    var $country_name;
-    var $timezone;
-    var $sunrise;
-    var $sunset;
-}
-
-class GeonamesClient ///< XXX extend from Coordinate ?
-{
-    private $lat, $long;
-
-    function __construct($lat, $long)
-    {
-        $this->lat  = $lat;
-        $this->long = $long;
-    }
-
     function get()
     {
-        if (!$this->lat || !$this->long)
+        if (!$this->latitude || !$this->longitude)
             throw new Exception ('no coords set');
 
         $cache = new Cache();
         $cache->setCacheTime(60*60*24); //24h
 
-        $key = 'geonames.org//'.$this->lat.'/'.$this->long;
+        $key = 'geonames.org//'.$this->latitude.'/'.$this->longitude;
 
         $data = $cache->get($key);
         if ($data)
             return unserialize($data);
 
-        $url = 'http://ws.geonames.org/timezone?lat='.$this->lat.'&lng='.$this->long;
+        $url = 'http://ws.geonames.org/timezone?lat='.$this->latitude.'&lng='.$this->longitude;
         $data = file_get_contents($url);
         $xml = simplexml_load_string($data);
 
-        $res = new GeonamesResult();
+        $res = new GeoLookupResult();
         $res->country_code = strval($xml->timezone->countryCode);
         $res->country_name = strval($xml->timezone->countryName);
         $res->timezone     = strval($xml->timezone->timezoneId);
