@@ -24,7 +24,7 @@ class XmlDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design = true;
     private $enable_headers = true;  ///< send http headers?
-    private $cache_expires = 0;      ///< number of seconds to allow browser client to cache this result
+    private $cache_duration = 0;     ///< number of seconds to allow browser client to cache this result
     private $mimetype = 'text/html';
     private $Url;                    ///< Url object
     private $attachment_name;        ///< name of file attachment (force user to save file)
@@ -99,7 +99,7 @@ class XmlDocumentHandler extends CoreBase
 
     function disableHeaders() { $this->enable_headers = false; }
 
-    function setCacheExpires($n) { $this->cache_expires = $n; }
+    function setCacheDuration($n) { $this->cache_duration = $n; }
 
     /**
      * Send http headers
@@ -117,8 +117,9 @@ class XmlDocumentHandler extends CoreBase
         else if ($this->inline_name)
             header('Content-Disposition: inline; filename="'.$this->inline_name.'"');
 
-        if ($this->cache_expires)
-            header('Cache-Control: max-age='.$this->cache_expires.', must-revalidate');
+        // see http://www.mnot.net/cache_docs/
+        if ($this->cache_duration)
+            header('Cache-Control: max-age='.$this->cache_duration.', must-revalidate');
         else
             header('Cache-Control: no-cache, must-revalidate');
     }
