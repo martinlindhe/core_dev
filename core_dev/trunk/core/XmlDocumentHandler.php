@@ -92,13 +92,13 @@ class XmlDocumentHandler extends CoreBase
     function designHead($n) { $this->design_head = $n; }
     function designFoot($n) { $this->design_foot = $n; }
 
-    /**
-     * Removes XhtmlHeader, designHead & designFoot for this request
-     */
+    /** Disables automatic render of XhtmlHeader, designHead & designFoot */
     function disableDesign() { $this->enable_design = false; }
 
+    /** Disables headers being set automatically */
     function disableHeaders() { $this->enable_headers = false; }
 
+    /** How long (in seconds) should the browser client cache this page? */
     function setCacheDuration($n) { $this->cache_duration = $n; }
 
     /**
@@ -118,10 +118,8 @@ class XmlDocumentHandler extends CoreBase
             header('Content-Disposition: inline; filename="'.$this->inline_name.'"');
 
         // see http://www.mnot.net/cache_docs/
-        if ($this->cache_duration)
-            header('Cache-Control: max-age='.$this->cache_duration.', must-revalidate');
-        else
-            header('Cache-Control: no-cache, must-revalidate');
+        header('Cache-Control: '.
+            ($this->cache_duration ? 'max-age='.$this->cache_duration : 'no-cache').', must-revalidate');
     }
 
     /**

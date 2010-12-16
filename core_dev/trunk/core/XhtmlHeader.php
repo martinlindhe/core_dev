@@ -102,7 +102,6 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
     /** Set META tag */
     function setMeta($k, $s) { $this->meta_tags[ $k ] = $s; }
 
-    /** Creates a complete XHTML header, showing rss feeds if available, etc */
     public function render()
     {
         $locale = LocaleHandler::getInstance();
