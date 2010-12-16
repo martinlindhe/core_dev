@@ -29,6 +29,7 @@ $valid_urls = array(
 'ftp://username:password@example.com:21/file.zip',
 'http://www.esa.int',
 'http://at.activation.com/track/me;1442:PPS35:tta/',
+'http://maps.google.com/maps/geo?ll=59.332169,18.062429&output=json&key=ABQIAAAAZb_xLTALhJppDDNbAvv61RTTk3jw-XtFtPS4v2-kipB51_4ySRQsE9iSridKaiJXVTQ5msdyWyuhRw',
 );
 
 foreach ($valid_urls as $url)
