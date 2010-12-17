@@ -43,6 +43,7 @@ class SvgColor
     {
         return 'rgb('.$this->r.','.$this->g.','.$this->b.')';
     }
+
 }
 
 ?>

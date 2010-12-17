@@ -5,18 +5,22 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: NOT WORKING
+//STATUS: wip
 
-/**
- * each array element contains:
- * ['coords'] a set of X,Y coordinates
- * ['color'] fill color RGBA
- * ['border'] border color RGBA
- */
-class SvgPolygon
+class SvgPolygon implements ISvgComponent
 {
+    var $color;             ///< XXXX fill color RGBA
+    var $border;            ///< XXXXX border color RGBA
+    var $coords = array();  ///< array of x,y coordinates
+
+    function addPoint($x, $y)
+    {
+        $this->coords[] = array($x, $y);
+    }
+
     function render()
     {
+/*
         $fill_a = ($poly['color'] >> 24) & 0xFF;
         $fill_a = round($fill_a/127, 2);        //XXX loss of precision
         if (!$fill_a) $fill_a = 1;    //set missing alpha as 100% alpha
@@ -28,26 +32,27 @@ class SvgPolygon
             if (!$stroke_a) $stroke_a = 1;
             $poly['border'] = $poly['border'] & 0xFFFFFF;
         }
+*/
 
-        $res .=
-        '<polygon'.
-            ' fill="#'.sprintf('%06x', $poly['color']).'"'.
+        $res = '<polygon fill="#eeaa99" fill-opacity="4" stroke-width="1" stroke="#88aa11" stroke-opacity="4"';
+/*
             ($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
             if ($poly['border'] !== false) {
                 $res .=
                 ' stroke-width="1" stroke="#'.sprintf('%06x', $poly['border']).'"'.
                 ($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
             }
-
+*/
         $res .= ' points="';
-        for ($i=0; $i<count($poly['coords']); $i+=2) {
-            $res .= $poly['coords'][$i].','.$poly['coords'][$i+1];
-            if ($i < count($poly['coords'])-2) $res .= ',';
+        for ($i=0; $i<count($this->coords); $i++) {
+            $res .= $this->coords[$i][0].','.$this->coords[$i][1];
+            if ($i < count($this->coords)-1) $res .= ',';
         }
         $res .= '"/>';
 
         return $res;
     }
+
 }
 
 ?>

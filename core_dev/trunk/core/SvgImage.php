@@ -20,6 +20,7 @@
 
 //FIXME: opacity is not quite correct
 
+require_once('ISvgComponent.php');
 require_once('SvgColor.php');
 require_once('SvgLine.php');
 require_once('SvgPolygon.php');
@@ -39,7 +40,7 @@ class SvgImage
 
     function add($o)
     {
-        if (!($o instanceof SvgLine))
+        if (!($o instanceof ISvgComponent))
             throw new Exception ('only want SvgLine');
 
         $this->objs[] = $o;
@@ -86,6 +87,7 @@ class SvgImage
     {
         file_put_contents($filename, $this->render());
     }
+
 }
 
 ?>

@@ -5,20 +5,19 @@
  * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
  */
 
-//STATUS: NOT WORKING
+//STATUS: wip
 
-/**
- * each array element contains:
- * ['x'] x-axis coordinate of the center of the circle
- * ['y'] y-axis coordinate of the center of the circle
- * ['r'] the radius of the circle
- * ['color'] fill color RGBA
- * ['border'] border color RGBA
- */
-class SvgCircle
+class SvgCircle implements ISvgComponent
 {
+    var $color;   /// XXXX fill color RGBA
+    var $border;  /// XXXX border color RGBA
+    var $x;       ///< x-axis coordinate of the center of the circle
+    var $y;       ///< y-axis coordinate of the center of the circle
+    var $radius;  ///< the radius of the circle
+
     function render()
     {
+/*
         $fill_a = ($circ['color'] >> 24) & 0xFF;
         $fill_a = round($fill_a/127, 2);        //XXX loss of precision
         if (!$fill_a) $fill_a = 1;    //set missing alpha as 100% alpha
@@ -30,9 +29,10 @@ class SvgCircle
             if (!$stroke_a) $stroke_a = 1;
             $circ['border'] = $circ['border'] & 0xFFFFFF;
         }
-
-        $res .=
-        '<circle'.
+*/
+        $res =
+        '<circle fill="#aaeeaa" fill-opacity="4" stroke-width="1" stroke="#888888" stroke-opacity="4"';
+/*
             ' fill="#'.sprintf('%06x', $circ['color']).'"'.
             ($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
             if ($circ['border'] !== false) {
@@ -40,11 +40,12 @@ class SvgCircle
                 ' stroke-width="1" stroke="#'.sprintf('%06x', $circ['border']).'"'.
                 ($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
             }
-
-        $res .= ' cx="'.$circ['x'].'" cy="'.$circ['y'].'" r="'.$circ['r'].'"/>';
+*/
+        $res .= ' cx="'.$this->x.'" cy="'.$this->y.'" r="'.$this->radius.'"/>';
 
         return $res;
     }
+
 }
 
 ?>
