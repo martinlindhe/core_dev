@@ -2,6 +2,8 @@
 /**
  * $Id$
  *
+ * http://www.w3.org/TR/SVG/types.html#DataTypeColor
+ *
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
@@ -33,12 +35,24 @@ class SvgColor
         if (substr($s, 0, 1) == '#')
             $s = substr($s, 1);
 
-        if (strlen($s) != 6)
+        if (strlen($s) == 6) {
+            $r = substr($s, 0, 2);
+            $g = substr($s, 2, 2);
+            $b = substr($s, 4, 2);
+        } else if (strlen($s) == 3) {
+            // #abc = #aabbcc (replicate each digit)
+            $r = substr($s, 0, 1);
+            $g = substr($s, 1, 1);
+            $b = substr($s, 2, 1);
+            $r = $r.$r;
+            $g = $g.$g;
+            $b = $b.$b;
+        } else
             throw new Exception ('wierd length of color '.strlen($s));
 
-        $this->r = hexdec(substr($s, 0, 2));
-        $this->g = hexdec(substr($s, 2, 2));
-        $this->b = hexdec(substr($s, 4, 2));
+        $this->r = hexdec($r);
+        $this->g = hexdec($g);
+        $this->b = hexdec($b);
     }
 
     function render()

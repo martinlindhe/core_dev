@@ -11,7 +11,11 @@ if ($c->render() != 'rgb(170,238,170)') echo "FAIL 1\n";
 $c = new SvgColor(180, 240, 190);
 if ($c->render() != 'rgb(180,240,190)') echo "FAIL 2\n";
 
+$c = new SvgColor('#fff');
+if ($c->render() != 'rgb(255,255,255)') echo "FAIL 3\n";
 
+$c = new SvgColor('#000');
+if ($c->render() != 'rgb(0,0,0)') echo "FAIL 4\n";
 
 
 $chart = new SvgImage(500, 500);
