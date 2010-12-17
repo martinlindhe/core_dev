@@ -2,11 +2,18 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('output_svg.php');
-
-die('XXX: cant really autotest');
+require_once('SvgImage.php');
 
 
+$c = new SvgColor('#aaeeaa');
+if ($c->render() != 'rgb(170,238,170)') echo "FAIL 1\n";
+
+$c = new SvgColor(180, 240, 190);
+if ($c->render() != 'rgb(180,240,190)') echo "FAIL 2\n";
+
+
+
+/*
 $polys[0]['coords'] = array(10, 10, 20, 20, 30, 30, 40, 40);    //4 points
 $polys[0]['color'] = 0xffff00;
 $polys[0]['border'] = 0x00ffff;
@@ -20,5 +27,6 @@ $svg = new svg(100, 300);
 $svg->addPolys($polys);
 
 echo $svg->render();
+*/
 
 ?>

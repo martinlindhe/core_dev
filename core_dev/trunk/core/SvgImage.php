@@ -20,16 +20,16 @@
 
 //FIXME: opacity is not quite correct
 
+require_once('SvgColor.php');
 require_once('SvgLine.php');
 require_once('SvgPolygon.php');
 require_once('SvgCircle.php');
 
 class SvgImage
 {
-    var $objs = array();
-
     var $width, $height;
-    var $bgcolor = false;    ///< background color, XXX REWORK TO USE SvgColor
+    var $bgcolor;          ///< SvgColor background color
+    var $objs = array();
 
     function __construct($width = 100, $height = 100)
     {
@@ -45,7 +45,15 @@ class SvgImage
         $this->objs[] = $o;
     }
 
-    function setBackground($col) { $this->bgcolor = $col; }
+    function setBackground($col)
+    {
+        if ($col instanceof SvgColor) {
+            $this->bgcolor = $col;
+            return;
+        }
+
+        $this->bgcolor = new SvgColor($col);
+    }
 
     function render()
     {
@@ -56,17 +64,13 @@ class SvgImage
             ' version="1.1" width="'.$this->width.'px" height="'.$this->height.'px" viewBox="0 0 '.$this->width.' '.$this->height.'">';
 
         //SVG has a transparent background by default. simulate background color with a filled rectangle
-        if ($this->bgcolor !== false) {
-            $res .=
-            '<rect x="0" y="0" width="'.$this->width.'" height="'.$this->height.'" fill="#'.sprintf('%06x', $this->bgcolor).'"/>';
-        }
+        if ($this->bgcolor)
+            $res .= '<rect x="0" y="0" width="'.$this->width.'" height="'.$this->height.'" fill="'.$this->bgcolor->render().'"/>';
 
-        foreach ($this->objs as $o) {
+        foreach ($this->objs as $o)
             $res .= $o->render();
-        }
 
-        $res .=
-        '</svg>';
+        $res .= '</svg>';
 
         return $res;
     }

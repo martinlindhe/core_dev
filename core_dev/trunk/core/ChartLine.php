@@ -12,7 +12,7 @@
 
 //XXX TODO: png render ability
 
-require_once('output_svg.php');
+require_once('SvgImage.php');
 
 class ChartLine extends SvgImage
 {
