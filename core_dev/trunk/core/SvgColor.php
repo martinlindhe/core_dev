@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+//FIXME: opacity is not quite correct ????
+
 class SvgColor
 {
     var $r, $g, $b;

@@ -7,7 +7,6 @@
  *
  * Documentation:
  * http://www.w3.org/TR/SVG11/
- * http://www.w3.org/Graphics/SVG/
  * http://www.w3.org/TR/SVG/shapes.html
  *
  * SVG test suite:
@@ -18,13 +17,15 @@
 
 //STATUS: wip
 
-//FIXME: opacity is not quite correct
+//TODO: fix SvgColor to support alpha-channel
+//TODO: add SvgText
 
 require_once('ISvgComponent.php');
+require_once('SvgCircle.php');
 require_once('SvgColor.php');
 require_once('SvgLine.php');
 require_once('SvgPolygon.php');
-require_once('SvgCircle.php');
+require_once('SvgRectangle.php');
 
 class SvgImage
 {
@@ -46,15 +47,7 @@ class SvgImage
         $this->objs[] = $o;
     }
 
-    function setBackground($col)
-    {
-        if ($col instanceof SvgColor) {
-            $this->bgcolor = $col;
-            return;
-        }
-
-        $this->bgcolor = new SvgColor($col);
-    }
+    function setBackground($col) { $this->bgcolor = new SvgColor($col); }
 
     function render()
     {
@@ -64,9 +57,14 @@ class SvgImage
         '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"'.
             ' version="1.1" width="'.$this->width.'px" height="'.$this->height.'px" viewBox="0 0 '.$this->width.' '.$this->height.'">';
 
-        //SVG has a transparent background by default. simulate background color with a filled rectangle
-        if ($this->bgcolor)
-            $res .= '<rect x="0" y="0" width="'.$this->width.'" height="'.$this->height.'" fill="'.$this->bgcolor->render().'"/>';
+        // SVG has a transparent background by default, set background color with a filled rectangle
+        if ($this->bgcolor) {
+            $bg = new SvgRectangle();
+            $bg->width  = $this->width;
+            $bg->height = $this->height;
+            $bg->fill_color  = $this->bgcolor;
+            $res .= $bg->render();
+        }
 
         foreach ($this->objs as $o)
             $res .= $o->render();

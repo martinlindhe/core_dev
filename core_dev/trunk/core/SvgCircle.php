@@ -7,13 +7,15 @@
 
 //STATUS: wip
 
+//XXX TODO: handle alpha channel in colors
+
 class SvgCircle implements ISvgComponent
 {
-    var $color;   /// XXXX fill color RGBA
-    var $border;  /// XXXX border color RGBA
-    var $x;       ///< x-axis coordinate of the center of the circle
-    var $y;       ///< y-axis coordinate of the center of the circle
-    var $radius;  ///< the radius of the circle
+    var $color;             ///< XXX fill color RGBA
+    var $border;            ///< XXX border color RGBA
+    var $x, $y;             ///< coordinates of the center of the circle
+    var $radius;            ///< radius of the circle
+    var $border_width = 1;
 
     function render()
     {
@@ -30,8 +32,13 @@ class SvgCircle implements ISvgComponent
             $circ['border'] = $circ['border'] & 0xFFFFFF;
         }
 */
-        $res =
-        '<circle fill="#aaeeaa" fill-opacity="4" stroke-width="1" stroke="#888888" stroke-opacity="4"';
+
+        if (!$this->color)
+            $this->color = new SvgColor('#aaeeaa');
+
+        if (!$this->border)
+            $this->border = new SvgColor('#888888');
+
 /*
             ' fill="#'.sprintf('%06x', $circ['color']).'"'.
             ($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
@@ -41,7 +48,11 @@ class SvgCircle implements ISvgComponent
                 ($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
             }
 */
-        $res .= ' cx="'.$this->x.'" cy="'.$this->y.'" r="'.$this->radius.'"/>';
+
+        $res =
+        '<circle fill="'.$this->color->render().'" fill-opacity="4"'.
+        ' stroke-width="'.$this->border_width.'" stroke="'.$this->border->render().'" stroke-opacity="4"'.
+        ' cx="'.$this->x.'" cy="'.$this->y.'" r="'.$this->radius.'"/>';
 
         return $res;
     }

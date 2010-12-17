@@ -7,18 +7,18 @@
 
 //STATUS: wip
 
-//XXXX TODO use a SvgColor class
-
 class SvgLine implements ISvgComponent
 {
     var $x1, $x2, $y1, $y2;
-    var $rgb;
+    var $color;                ///< SvgColor object
     var $stroke_width = 2;
 
     function render()
     {
-        //XXX handle RGB
-        $res = '<line x1="'.$this->x1.'" y1="'.$this->y1.'" x2="'.$this->x2.'" y2="'.$this->y2.'" style="stroke:rgb(99,99,99);stroke-width:'.$this->stroke_width.'"/>';
+        if (!$this->color)
+            $this->color = new SvgColor('#888888');
+
+        $res = '<line x1="'.$this->x1.'" y1="'.$this->y1.'" x2="'.$this->x2.'" y2="'.$this->y2.'" stroke-width="'.$this->stroke_width.'" stroke="'.$this->color->render().'"/>';
         return $res;
     }
 

@@ -9,13 +9,15 @@
 
 class SvgPolygon implements ISvgComponent
 {
-    var $color;             ///< XXXX fill color RGBA
-    var $border;            ///< XXXXX border color RGBA
-    var $coords = array();  ///< array of x,y coordinates
+    var $color;                   ///< XXXX fill color RGBA
+    var $border;                  ///< XXXXX border color RGBA
+    var $coords       = array();  ///< array of x,y coordinates
+    var $border_width = 1;
 
     function addPoint($x, $y)
     {
-        $this->coords[] = array($x, $y);
+        $this->coords[] = $x;
+        $this->coords[] = $y;
     }
 
     function render()
@@ -33,8 +35,12 @@ class SvgPolygon implements ISvgComponent
             $poly['border'] = $poly['border'] & 0xFFFFFF;
         }
 */
+        if (!$this->color)
+            $this->color = new SvgColor('#eeaa99');
 
-        $res = '<polygon fill="#eeaa99" fill-opacity="4" stroke-width="1" stroke="#88aa11" stroke-opacity="4"';
+        if (!$this->border)
+            $this->border = new SvgColor('#88aa11');
+
 /*
             ($fill_a < 1 ? ' fill-opacity="'.$fill_a.'"' : '');
             if ($poly['border'] !== false) {
@@ -43,12 +49,10 @@ class SvgPolygon implements ISvgComponent
                 ($stroke_a < 1 ? ' stroke-opacity="'.$stroke_a.'"': '');
             }
 */
-        $res .= ' points="';
-        for ($i=0; $i<count($this->coords); $i++) {
-            $res .= $this->coords[$i][0].','.$this->coords[$i][1];
-            if ($i < count($this->coords)-1) $res .= ',';
-        }
-        $res .= '"/>';
+        $res =
+        '<polygon fill="'.$this->color->render().'" fill-opacity="4"'.
+        ' stroke-width="'.$this->border_width.'" stroke="'.$this->border->render().'" stroke-opacity="4"'.
+        ' points="'.implode(',', $this->coords).'"/>';
 
         return $res;
     }
