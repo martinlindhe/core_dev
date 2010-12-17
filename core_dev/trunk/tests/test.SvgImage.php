@@ -14,7 +14,6 @@ if ($c->render() != 'rgb(180,240,190)') echo "FAIL 2\n";
 
 
 
-
 $chart = new SvgImage(500, 500);
 $chart->setBackground('#aaff00');
 
@@ -48,6 +47,13 @@ $rect->y = 150;
 $rect->width = 120;
 $rect->height = 90;
 $chart->add($rect);
+
+
+$txt = new SvgText('hello world');
+$txt->x = 100;
+$txt->y = 350;
+$txt->size = 55;
+$chart->add($txt);
 
 $chart->output();
 
