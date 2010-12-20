@@ -16,7 +16,7 @@ class SvgLine implements ISvgComponent
     function render()
     {
         if (!$this->color)
-            $this->color = new SvgColor('#888888');
+            $this->color = new SvgColor('#888');
 
         $res = '<line x1="'.$this->x1.'" y1="'.$this->y1.'" x2="'.$this->x2.'" y2="'.$this->y2.'" stroke-width="'.$this->border_width.'" stroke="'.$this->color->render().'"/>';
         return $res;

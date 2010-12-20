@@ -37,7 +37,7 @@ class SvgCircle implements ISvgComponent
             $this->color = new SvgColor('#aaeeaa');
 
         if (!$this->border)
-            $this->border = new SvgColor('#888888');
+            $this->border = new SvgColor('#888');
 
 /*
             ' fill="#'.sprintf('%06x', $circ['color']).'"'.
