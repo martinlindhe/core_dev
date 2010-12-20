@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Generates a XHTML 1.x compilant header (served as XML)
+ * Generates a XHTML 1.x compilant header
  *
  * Regarding declaring character encoding, see
  * http://www.w3.org/International/questions/qa-html-encoding-declarations#quicklookup
@@ -36,6 +36,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
     protected $meta_tags       = array();
     protected $opensearch      = array();
+    protected $xml_ns          = array();
 
     protected $reload_time     = 0;         ///< time after page load to reload the page, in seconds
     protected $core_dev_root   = '';        ///< web path to core_dev for ajax api calls
@@ -102,6 +103,8 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $this->opensearch[] = array('url' => $uri, 'name' => $name);
     }
 
+    function addXmlNamespace($ns, $uri) { $this->xml_ns[$ns] = $uri; }
+
     /** Set META tag */
     function setMeta($k, $s) { $this->meta_tags[ $k ] = $s; }
 
@@ -111,11 +114,15 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         $res =
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
-        '<html'.
-            ' xmlns="http://www.w3.org/1999/xhtml"'.
-            ' xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'">'."\n".
-        '<head>'."\n";
+        '<html xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'"'.
+            ' xmlns="http://www.w3.org/1999/xhtml"';
 
+        foreach ($this->xml_ns as $ns => $uri)
+            $res .= ' xmlns:'.$ns.'="'.$uri.'"';
+
+        $res .= '>'."\n";
+
+        $res .= '<head>'."\n";
 
         if ($this->include_css || $this->embed_css) {
             $res .= '<style type="text/css">';
