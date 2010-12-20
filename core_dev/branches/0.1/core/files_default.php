@@ -204,7 +204,13 @@ class files_default
 			return exec($c);
 		}
 
-		return $result;
+// TODO: FIXME THIS MIGHT BREAK SOMETHING
+// example: (ubuntu 9.10)
+// ljw@ljw-unicorn-desktop:/var/data/sexannons-uploads/org/0$ file -bi 2
+// video/x-flv; charset=binary
+        $result = explode(';', $result);
+
+		return $result[0];
 	}
 
 	/**
@@ -416,7 +422,7 @@ class files_default
 		$fileMime = '';
 		$fileName = basename(strip_tags($fileName));
 
-		if ($h && $h->session) {
+		if (isset($h) && isset($h->session)) {
 			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId='.$h->session->id.',uploaderIP='.$h->session->ip.',timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
 		} else {
 			$q = 'INSERT INTO tblFiles SET fileName="'.$db->escape($fileName).'",ownerId='.$ownerId.',uploaderId=0,uploaderIP=0,timeUploaded=NOW(),fileType='.$fileType.',categoryId='.$categoryId;
@@ -889,7 +895,7 @@ class files_default
 			}
 		}
 
-		if ($h && filemtime($out_filename) < $h->session->started) {
+		if (isset($h) && isset($h->session) && filemtime($out_filename) < $h->session->started) {
 			$this->setCachedHeaders();
 		} else {
 			$this->setNoCacheHeaders();
