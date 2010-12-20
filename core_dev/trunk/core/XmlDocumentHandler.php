@@ -18,22 +18,21 @@ require_once('Url.php');
 
 class XmlDocumentHandler extends CoreBase
 {
-    static $_instance;               ///< singleton
+    static $_instance;                       ///< singleton
 
     private $design_head;
     private $design_foot;
-    private $enable_design = true;
-    private $enable_headers = true;  ///< send http headers?
-    private $cache_duration = 0;     ///< number of seconds to allow browser client to cache this result
-    private $mimetype        = 'application/xhtml+xml';
-    private $Url;                    ///< Url object
-    private $attachment_name;        ///< name of file attachment (force user to save file)
-    private $inline_name;            ///< name of inlined file (will set correct name if user chooses to save file)
-    private $coredev_inc = '';       ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
+    private $enable_design   = true;
+    private $enable_headers  = true;         ///< send http headers?
+    private $cache_duration  = 0;            ///< number of seconds to allow browser client to cache this result
+    private $mimetype        = 'text/html';  ///< should be "application/xhtml+xml" but IE8 still cant even understand such a page
+    private $Url;                            ///< Url object
+    private $attachment_name;                ///< name of file attachment (force user to save file)
+    private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
+    private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
+    private $upload_root;                    ///< root directory for file uploads
 
-    private $upload_root = '';       ///< root directory for file uploads
-
-    var $objs = array();  ///< IXMLComponent objects
+    private $objs = array();                 ///< IXMLComponent objects
 
     private function __clone() {}      //singleton: prevent cloning of class
 

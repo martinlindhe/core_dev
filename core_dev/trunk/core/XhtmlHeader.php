@@ -113,7 +113,6 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $locale = LocaleHandler::getInstance();
 
         $res =
-        '<?xml version="1.0" encoding="UTF-8"?>'."\n".
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
         '<html xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'"'.
             ' xmlns="http://www.w3.org/1999/xhtml"';
@@ -138,6 +137,8 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
 
         if ($this->title)
             $res .= '<title>'.$this->title.'</title>';
+
+        $res .= '<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>';
 
         foreach ($this->meta_tags as $name => $val)
             $res .= '<meta name="'.$name.'" content="'.$val.'"/>';
