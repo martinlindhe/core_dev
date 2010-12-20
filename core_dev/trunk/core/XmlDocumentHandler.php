@@ -25,7 +25,7 @@ class XmlDocumentHandler extends CoreBase
     private $enable_design = true;
     private $enable_headers = true;  ///< send http headers?
     private $cache_duration = 0;     ///< number of seconds to allow browser client to cache this result
-    private $mimetype = 'text/html';
+    private $mimetype        = 'application/xhtml+xml';
     private $Url;                    ///< Url object
     private $attachment_name;        ///< name of file attachment (force user to save file)
     private $inline_name;            ///< name of inlined file (will set correct name if user chooses to save file)
