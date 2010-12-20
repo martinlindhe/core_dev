@@ -2,7 +2,10 @@
 /**
  * $Id$
  *
- * Generates a XHTML compilant header
+ * Generates a XHTML 1.x compilant header (served as XML)
+ *
+ * Regarding declaring character encoding, see
+ * http://www.w3.org/International/questions/qa-html-encoding-declarations#quicklookup
  *
  * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
  */
@@ -107,22 +110,26 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         $locale = LocaleHandler::getInstance();
 
         $res =
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'.
-        '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'">'.
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
+        '<html'.
+            ' xmlns="http://www.w3.org/1999/xhtml"'.
+            ' xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'">'."\n".
         '<head>'."\n";
 
-        $res .= '<style type="text/css">';
 
-        foreach ($this->include_css as $css)
-            $res .= '@import url('.$css.');';
-        $res .= $this->embed_css;
-
-        $res .= '</style>';
+        if ($this->include_css || $this->embed_css) {
+            $res .= '<style type="text/css">';
+            foreach ($this->include_css as $css)
+                $res .= '@import url('.$css.');';
+            $res .= $this->embed_css;
+            $res .= '</style>';
+        }
 
         if ($this->embed_js)
             $res .= '<script type="text/javascript">'.implode('', $this->embed_js).'</script>';
 
-        $res .= '<title>'.$this->title.'</title>';
+        if ($this->title)
+            $res .= '<title>'.$this->title.'</title>';
 
         $res .= '<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>';
 
@@ -146,7 +153,7 @@ class XhtmlHeader extends CoreBase implements IXMLComponent
         foreach ($this->include_js as $uri)
             $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
 
-        $res .= '</head>';
+        $res .= '</head>'."\n";
 
         $res .= '<body class="yui-skin-sam"'; // required for YUI
         if ($this->embed_js_onload)
