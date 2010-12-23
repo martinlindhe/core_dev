@@ -7,7 +7,10 @@
 
 //STATUS: draft, should replace YuiChart (flash)
 
-//XXX TODO: png render ability
+// ... OR base this on http://www.liquidx.net/plotkit/ (BSD license)
+
+//TODO: render using html canvas (for IE9 compatibility)
+//TODO: render using png (for IE6,7 compatibility)
 
 require_once('SvgImage.php');
 
@@ -42,6 +45,23 @@ class ChartLine extends SvgImage
         $txt->x = -35;
         $txt->y = -80; //XXX not scalable
         $this->add($txt);
+
+        $h_line = new SvgLine();
+        $h_line->color = new SvgColor('#b00');
+        $h_line->x1 = "2%";
+        $h_line->x2 = "98%";
+        $h_line->y1 = "93%";
+        $h_line->y2 = "93%";
+        $this->add($h_line);
+
+        $v_line = new SvgLine();
+        $v_line->color = new SvgColor('#b00');
+        $v_line->x1 = "2%";
+        $v_line->x2 = "2%";
+        $v_line->y1 = "2%";
+        $v_line->y2 = "93%";
+        $this->add($v_line);
+
 
         return parent::render();
     }
