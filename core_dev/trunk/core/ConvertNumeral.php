@@ -12,7 +12,9 @@
 
 //STATUS: ok
 
+require_once('core.php'); // for is_alphanumeric()
 require_once('ConvertBase.php');
+require_once('ConvertRomanNumber.php');
 
 class ConvertNumeral extends ConvertBase
 {
@@ -32,6 +34,11 @@ class ConvertNumeral extends ConvertBase
 
     function conv($from, $to, $val)
     {
+        if ($from == 'auto' && ConvertRomanNumber::isValid($val)) {
+            $roman = new ConvertRomanNumber($val);
+            return $roman->getAsInteger();
+        }
+
         if (substr($val, 0, 1) == 'b') {
             $val = substr($val, 1);
             $from = 'bin';
