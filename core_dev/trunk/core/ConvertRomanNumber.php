@@ -17,7 +17,14 @@ class ConvertRomanNumber
         $this->set($s);
     }
 
-    static function isValid($s) { return preg_match('/[MDCLXVI]/i', $s); }
+    static function isValid($s)
+    {
+        preg_match('/(?<roman>[MDCLXVI]+)/i', $s, $x);
+        if (isset($x['roman']) && $x['roman'] == $s)
+            return true;
+
+        return false;
+    }
 
     function set($s)
     {
