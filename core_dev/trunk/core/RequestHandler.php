@@ -62,12 +62,19 @@ class RequestHandler
 
         $arr = explode('/', trim($request, '/'));
 
-        if ($arr && substr($arr[0],0,1) != '?') {
-            if (!empty($arr[0]))
+        if ($arr && substr($arr[0],0,1) != '?')
+        {
+            if (!empty($arr[0])) {
+                if (!is_alphanumeric($arr[0]))
+                    die('XXX controller');
                 $this->_controller = $arr[0];
+            }
 
-            if (!empty($arr[1]))
+            if (!empty($arr[1])) {
+                if (!is_alphanumeric($arr[1]))
+                    die('XXX view');
                 $this->_view = $arr[1];
+            }
 
             if (count($arr) <= 2)
                 return;
