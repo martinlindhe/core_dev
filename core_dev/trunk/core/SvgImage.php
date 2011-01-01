@@ -50,7 +50,7 @@ class SvgImage
 
         $res = "\n".
         '<svg xmlns="http://www.w3.org/2000/svg"'.
-            ' version="1.1" width="'.$this->width.'" height="'.$this->height.'">'."\n";
+            ' version="1.1">'."\n";
             // viewBox="0 0 '.$this->width.' '.$this->height.'">'; // style="position:absolute; top:0; left:0; z-index:-1;">';
 
         // SVG has a transparent background by default, set background color with a filled rectangle

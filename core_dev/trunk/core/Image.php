@@ -95,11 +95,6 @@ bt();
         imagedestroy($this->resource);
     }
 
-    function write($type, $dst_file)
-    {
-        return $this->render($type, $dst_file);
-    }
-
 }
 
 ?>
