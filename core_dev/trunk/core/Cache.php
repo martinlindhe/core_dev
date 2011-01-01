@@ -13,41 +13,18 @@
 
 //TODO: remove isActive(), add isConnected() ??
 //TODO: rename setCacheTime -> setTimeout
+//TODO later: drop 'memcache' extension support
 
 require_once('core.php');
 require_once('class.CoreBase.php');
 
 class Cache extends CoreBase
 {
-    private $handle      = false;
-    private $persistent  = true;   ///< use persistent connections?
-    private $expire_time = 0;      ///< expiration time, in seconds
-    private $driver      = 'memcache';
-    private $server_pool = array();
-    private $connected   = false;  ///< memcache server connection open?
-
-    /**
-     * @param $server_pool array of "host[:port]" addresses to memcache servers
-     */
-    function addServer($host, $port = 11211)
-    {
-        $this->server_pool[] = array('host' => $host, 'port' => intval($port) );
-    }
-
-    /**
-     * @param $server_pool array of "host[:port]" addresses to memcache servers
-     */
-    function addServerPool($pool)
-    {
-        foreach ($pool as $server)
-        {
-            $ex = explode(':', $server);
-            if (empty($ex[1])) $ex[1] = 11211;
-            list($host, $port) = $ex;
-
-            $this->addServer($host, $port);
-        }
-    }
+    protected $handle      = false;
+    protected $persistent  = true;   ///< use persistent connections?
+    protected $expire_time = 0;      ///< expiration time, in seconds
+    protected $driver_name;
+    protected $connected   = false;  ///< memcache server connection open?
 
     private function connect()
     {
@@ -59,20 +36,16 @@ class Cache extends CoreBase
 
         if (extension_loaded('memcached')) {
             //php5-memcached for php 5.3 or newer
-            $this->driver = 'memcached';
+            $this->driver_name = 'memcached';
             $this->handle = new Memcached;
         } else if (extension_loaded('memcache')) {
             //php5-memcache for php 5.2 or older
-            $this->driver = 'memcache';
+            $this->driver_name = 'memcache';
             $this->handle = new Memcache;
         } else
             throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
 
-        if (!$this->server_pool)
-            $this->addServer('127.0.0.1');
-
-        foreach ($this->server_pool as $server)
-            $this->handle->addServer($server['host'], $server['port'], $this->persistent);
+        $this->handle->addServer('127.0.0.1', 11211);
 
         $this->connected = true;
 
@@ -89,8 +62,6 @@ class Cache extends CoreBase
      */
     function setTimeout($s) { $this->expire_time = $s; }
     function setCacheTime($s) { $this->setTimeout($s); } ///XXX DEPRECATE
-
-    function getServerPool() { return $this->server_pool; }
 
     function get($key)
     {
@@ -124,7 +95,7 @@ class Cache extends CoreBase
         if (!$val)
             return $this->delete($key);
 
-        if ($this->driver == 'memcache') {
+        if ($this->driver_name == 'memcache') {
             //XXX HACK force quiet bogus warnings from memcache in 2009
             $ret = @$this->handle->set($key, $val, false, $this->expire_time);
         } else {
@@ -150,6 +121,7 @@ class Cache extends CoreBase
 
         return $ret;
     }
+
 }
 
 ?>
