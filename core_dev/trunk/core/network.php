@@ -49,35 +49,6 @@ function GeoIP_to_IPv4($geoip)
 }
 
 /**
- * Data taken from http://en.wikipedia.org/wiki/Ipv4 (Reserved address blocks)
- *
- * @param $ip IPv4 address in GeoIP or human readable format
- * @return true if specified IPv4 address is in a reserved block
- */
-function reserved_ip($ip)
-{
-    if (!is_numeric($ip)) $ip = IPv4_to_GeoIP($ip);
-
-    if ($ip <=   16777215) return true;                         //0.0.0.0/8         Current network (only valid as source address)
-    if ($ip >=  167772160 && $ip <=  184549375) return true;    //10.0.0.0/8        Private network
-    if ($ip >= 2130706432 && $ip <= 2147483647) return true;    //127.0.0.0/8       Loopback
-    if ($ip >= 2147483648 && $ip <= 2147549183) return true;    //128.0.0.0/16      Reserved (IANA)
-    if ($ip >= 2851995648 && $ip <= 2852061183) return true;    //169.254.0.0/16    Link-Local
-    if ($ip >= 2886729728 && $ip <= 2887778303) return true;    //172.16.0.0/12     Private network
-    if ($ip >= 3221159936 && $ip <= 3221225471) return true;    //191.255.0.0/16    Reserved (IANA)
-    if ($ip >= 3221225472 && $ip <= 3221225727) return true;    //192.0.0.0/24      Reserved (IANA)
-    if ($ip >= 3221225984 && $ip <= 3221226239) return true;    //192.0.2.0/24      Documentation and example code
-    if ($ip >= 3227017984 && $ip <= 3227018239) return true;    //192.88.99.0/24    IPv6 to IPv4 relay
-    if ($ip >= 3232235520 && $ip <= 3232301055) return true;    //192.168.0.0/16    Private network
-    if ($ip >= 3323068416 && $ip <= 3323199487) return true;    //198.18.0.0/15     Network benchmark tests
-    if ($ip >= 3758096128 && $ip <= 3758096383) return true;    //223.255.255.0/24  Reserved (IANA)
-    if ($ip >= 3758096384 && $ip <= 4026531839) return true;    //224.0.0.0/4       Multicasts (former Class D network)
-    if ($ip >= 4026531840 && $ip <= 4294967295) return true;    //240.0.0.0/4       Reserved (former Class E network)
-                                                                //255.255.255.255   Broadcast
-    return false;
-}
-
-/**
  * Checks if client IP address is in the whitelist
  * Useful to create simple IP access rules
  *

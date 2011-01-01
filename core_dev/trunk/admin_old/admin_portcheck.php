@@ -17,10 +17,6 @@ if (!empty($_GET['i'])) $ip = strip_tags($_GET['i']);
 if (!empty($_POST['i'])) $ip = strip_tags($_POST['i']);
 $geoip = IPv4_to_GeoIP($ip);
 
-if (reserved_ip($geoip)) {
-    //$error = '<span class="msg_error">Error:</span> '.$ip.' is an invalid IP!';
-}
-
 $timeout = 5;
 
 require('design_admin_head.php');

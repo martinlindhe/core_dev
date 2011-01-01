@@ -182,14 +182,19 @@ class XmlDocumentHandler extends CoreBase
             echo $obj->render();
         }
 
-        if ($this->enable_design && class_exists('SqlHandler')) { //&& $session->isAdmin) {
-            $db = SqlHandler::getInstance();
-
-            if ($db instanceof DatabaseMySQLProfiler)
-                echo $db->renderProfiler();
-        }
-
         if ($this->enable_design) {
+            if (class_exists('SqlHandler')) { //&& $session->isAdmin) {
+                $db = SqlHandler::getInstance();
+
+                if ($db instanceof DatabaseMySQLProfiler)
+                    echo $db->renderProfiler();
+            }
+
+            if (class_exists('TempStore')) {
+                $store = TempStore::getInstance();
+                echo $store->renderStatus();
+            }
+
             if ($this->design_foot) {
                 $view = new ViewModel($this->design_foot);
                 echo $view->render();

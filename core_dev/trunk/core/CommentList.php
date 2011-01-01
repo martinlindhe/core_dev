@@ -64,7 +64,7 @@ class CommentList
 
         $db = SqlHandler::getInstance();
 
-        $ip_num = IPv4_to_GeoIP(client_ip());
+        $ip_num = IPv4_to_GeoIP(client_ip());  //XXX store raw IP instead
 
         $q = 'INSERT INTO tblComments SET ownerId='.$this->owner;
         $q .= ',commentType='.$this->type.',commentText="'.$db->escape($p['comment_'.$this->type]).'"';

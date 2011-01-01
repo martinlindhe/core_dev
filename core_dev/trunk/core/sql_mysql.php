@@ -508,7 +508,6 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         return $refs;
     }
 
-
     /**
      * Shows the config view
      */
