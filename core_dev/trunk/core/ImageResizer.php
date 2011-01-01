@@ -29,7 +29,7 @@ class ImageResizer extends Image
         if (!$to_width && !$to_height)
             return false;
 
-        list($tn_width, $tn_height) = $this->calc($to_width, $to_height);
+        list($tn_width, $tn_height) = $this->calcAspect($to_width, $to_height);
 //        echo 'Resizing from '.$this->width.'x'.$this->height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
         $key = 'resized-'.$this->sha1.'-'.$tn_width.'x'.$tn_height;
@@ -54,7 +54,7 @@ class ImageResizer extends Image
     }
 
     /** calculates the max width & height, while keeping aspect ratio */
-    private function calc($to_width, $to_height)
+    private function calcAspect($to_width, $to_height)
     {
         $x_ratio = $to_width  / $this->width;
         $y_ratio = $to_height / $this->height;

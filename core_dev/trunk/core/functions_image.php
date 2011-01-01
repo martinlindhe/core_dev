@@ -280,28 +280,4 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
     return $im;
 }
 
-/**
- * Wrapper for GD imagecreatefrom*() functions
- */
-function loadImage($in_file)
-{
-    $info = getimagesize($in_file);
-    if (!$info) return false;
-
-    switch ($info['mime']) {
-        case 'image/jpeg':
-            return imagecreatefromjpeg($in_file);
-
-        case 'image/png':
-            return imagecreatefrompng($in_file);
-
-        case 'image/gif':
-            return imagecreatefromgif($in_file);
-
-        default:
-            echo "Unknown image type: ".$info['mime']."\n";
-            return false;
-    }
-}
-
 ?>

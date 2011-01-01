@@ -4,7 +4,7 @@
  *
  * Renders a GD image resource to PNG/GIF/JPEG
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -21,11 +21,17 @@ class Image
     /**
      * @param $r GD resource, or full path to image file
      */
-    function __construct(&$r = false)
+    function __construct($r = false)
     {
+        if (!function_exists('gd_info'))
+            throw new Exception ('sudo apt-get install php5-gd');
+
         if ($r)
             $this->load($r);
     }
+
+    function getWidth() { return $this->width; }
+    function getHeight() { return $this->height; }
 
     function load(&$r)
     {
@@ -55,57 +61,36 @@ bt();
         throw new Exception  ('init class with width&height from resource!!! '. $r);
     }
 
-    function render()
+    function render($type = 'png', $dst_file = '')
     {
-        return $this->renderType('png');
-    }
+        $page = XmlDocumentHandler::getInstance();
+        $page->disableDesign();
 
-    function renderType($s)
-    {
-        switch ($s) {
+        switch ($type) {
         case 'gif':
-        default:
-            return $this->renderGif();
+            $page->setMimeType('image/gif');
+            imagegif($this->resource, $dst_file);
+            break;
 
         case 'jpg':
         case 'jpeg':
-        default:
-            return $this->renderJpeg();
+            $page->setMimeType('image/jpeg');
+            imagejpeg($this->resource, $dst_file, $this->jpeg_quality);
+            break;
 
         case 'png':
         default:
-            return $this->renderPng();
+            $page->setMimeType('image/png');
+            imagepng($this->resource, $dst_file);
+            break;
         }
-    }
 
-    function renderPng()
-    {
-        $page = XmlDocumentHandler::getInstance();
-        $page->disableDesign();
-        $page->setMimeType('image/png');
-
-        imagepng($this->resource);
         imagedestroy($this->resource);
     }
 
-    function renderGif()
+    function write($type, $dst_file)
     {
-        $page = XmlDocumentHandler::getInstance();
-        $page->disableDesign();
-        $page->setMimeType('image/gif');
-
-        imagegif($this->resource);
-        imagedestroy($this->resource);
-    }
-
-    function renderJpeg()
-    {
-        $page = XmlDocumentHandler::getInstance();
-        $page->disableDesign();
-        $page->setMimeType('image/jpeg');
-
-        imagejpeg($this->resource, '', $this->jpeg_quality);
-        imagedestroy($this->resource);
+        return $this->render($type, $dst_file);
     }
 
 }
