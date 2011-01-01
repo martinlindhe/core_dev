@@ -10,8 +10,6 @@
 //STATUS: wip
 //PLAN: stabilise impl, move current Cache users to here, eventually deprecate Cache class
 
-//TODO: getServerStats, getServerVersions not functional 2011-01-01
-
 class MemcacheServer
 {
     var $host;
@@ -60,7 +58,6 @@ class TempStore
         $this->server_pool[] = $serv;
 
         $this->handle->addServer($host, $port, $this->persistent);
-
     }
 
     /**
@@ -96,19 +93,7 @@ class TempStore
     function getServerStats()
     {
         $this->connect();
-
-        //XXX Memcached->getStats() dont seem to work, 2011-01-01
-        //return $this->handle->getStats();
-        return false;
-    }
-
-    function getServerVersions()
-    {
-        $this->connect();
-
-        //XXX Memcached->getVersion() dont seem to work, 2011-01-01
-        //return $this->handle->getVersion();
-        return false;
+        return $this->handle->getStats();
     }
 
     function get($key)

@@ -10,6 +10,7 @@
  */
 
 //STATUS: wip
+//PLAN. migrate users over to TempStore, eventually drop Cache class
 
 //TODO: remove isActive(), add isConnected() ??
 //TODO: rename setCacheTime -> setTimeout
