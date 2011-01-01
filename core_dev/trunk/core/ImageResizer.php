@@ -14,6 +14,7 @@ require_once('Image.php');
 class ImageResizer extends Image
 {
     protected $resample = true;
+    protected $tmp_dir  = '/tmp/core_dev-images/';
 
     /**
      * Resizes specified image file to specified dimensions
@@ -27,34 +28,37 @@ class ImageResizer extends Image
             throw new Exception ('can happen?');
 
         if (!$to_width && !$to_height)
-            return false;
+            throw new Exception ('need dst size');
 
         list($tn_width, $tn_height) = $this->calcAspect($to_width, $to_height);
 //        echo 'Resizing from '.$this->width.'x'.$this->height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
         $key = 'resized-'.$this->sha1.'-'.$tn_width.'x'.$tn_height;
-        $tmp_file = '/home/ml/dev/fmf/pics/tmp/'.$key;
+        $tmp_file = $this->tmp_dir.$key;
         if (file_exists($tmp_file)) {
             $this->load($tmp_file);
             return true;
         }
 
-        $i = imagecreatetruecolor($tn_width, $tn_height);
+        $org = $this->resource;
+        $this->resource = imagecreatetruecolor($tn_width, $tn_height);
 
         if ($this->resample)
-            imagecopyresampled($i, $this->resource, 0,0,0,0, $tn_width, $tn_height, $this->width, $this->height);
+            imagecopyresampled($this->resource, $org, 0,0,0,0, $tn_width, $tn_height, $this->width, $this->height);
         else
-            imagecopyresized($i, $this->resource, 0,0,0,0, $tn_width, $tn_height, $this->width, $this->height);
+            imagecopyresized($this->resource, $org, 0,0,0,0, $tn_width, $tn_height, $this->width, $this->height);
 
-        $this->resource = $i;
         $this->width  = $tn_width;
         $this->height = $tn_height;
 
-        imagejpeg($i, $tmp_file, $this->jpeg_quality);
+        if (!file_exists($this->tmp_dir))
+            mkdir($this->tmp_dir);
+
+        imagejpeg($this->resource, $tmp_file, $this->jpeg_quality);
     }
 
     /** calculates the max width & height, while keeping aspect ratio */
-    private function calcAspect($to_width, $to_height)
+    protected function calcAspect($to_width, $to_height)
     {
         $x_ratio = $to_width  / $this->width;
         $y_ratio = $to_height / $this->height;

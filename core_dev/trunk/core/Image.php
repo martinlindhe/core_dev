@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//XXX: drop automatic sha1 generation, add a calcSha1() method
+
 class Image
 {
     protected $resource;   ///< holds gd image resource
@@ -32,6 +34,11 @@ class Image
 
     function getWidth() { return $this->width; }
     function getHeight() { return $this->height; }
+
+    function getPixel($x, $y)
+    {
+        return imagecolorat($this->resource, $x, $y);
+    }
 
     function load(&$r)
     {
