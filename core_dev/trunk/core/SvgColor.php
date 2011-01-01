@@ -20,7 +20,14 @@ class SvgColor
         if (!$r && !$g && !$b)
             return;
 
+        if ($r && is_numeric($r) && !$g && !$b) {
+            // tread numbers as decimal representation of hex color code
+            $this->set( dechex($r) );
+            return;
+        }
+
         if ($r && substr($r, 0, 1) == '#' && !$g && !$b) {
+            //#ff00ff  = rr,gg,bb in hex
             $this->set($r);
             return;
         }

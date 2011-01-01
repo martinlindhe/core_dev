@@ -17,6 +17,10 @@ if ($c->render() != 'rgb(255,255,255)') echo "FAIL 3\n";
 $c = new SvgColor('#000');
 if ($c->render() != 'rgb(0,0,0)') echo "FAIL 4\n";
 
+$c = new SvgColor(16711680);
+if ($c->render() != 'rgb(255,0,0)') echo "FAIL 5\n";
+
+
 
 $chart = new SvgImage(500, 500);
 $chart->setBackground('#aaff00');
