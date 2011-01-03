@@ -118,7 +118,9 @@ class SessionHandler extends CoreBase
     {
         dp($this->username.' logged out');
 
-        $this->setLogoutTime();
+        $db = SqlHandler::getInstance();
+        $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
+
         $this->end();
         $this->showLoggedOutStartPage();
         die;
@@ -165,7 +167,8 @@ class SessionHandler extends CoreBase
             $this->showErrorPage();
         }*/
 
-        $this->updateActiveTime();
+        $db = SqlHandler::getInstance();
+        $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
     /**
@@ -202,9 +205,8 @@ class SessionHandler extends CoreBase
         if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
         if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
-        $this->updateLoginTime();
-
         $db = SqlHandler::getInstance();
+        $db->pUpdate('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW(), lastIp = ? WHERE userId = ?', 'si', client_ip(), $this->id);
 
         $error = ErrorHandler::getInstance();
         $error->reset(); /// remove previous errors
@@ -270,26 +272,6 @@ class SessionHandler extends CoreBase
                 return true;
 
         return false;
-    }
-
-    private function updateActiveTime()
-    {
-        if (!$this->id || !$this->active) return;
-
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
-    }
-
-    private function updateLoginTime()
-    {
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
-    }
-
-    function setLogoutTime()
-    {
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
     /**
