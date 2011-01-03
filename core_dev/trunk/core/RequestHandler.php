@@ -119,7 +119,7 @@ class RequestHandler
             $file = 'views/'.$this->_controller.'.php';
 
         if (!file_exists($file))
-            throw new Exception('No file named '.$file);
+            $file = 'views/error_404.php';
 
         // expose request params for the view
         $view = new ViewModel($file);
