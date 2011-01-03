@@ -62,6 +62,7 @@ echo '<table border="1">';
 echo '<tr>';
 echo '<th>Username</th>';
 echo '<th>Last active</th>';
+echo '<th>Last Ip</th>';
 echo '<th>Created</th>';
 echo '<th>User level</th>';
 echo '<th>Groups</th>';
@@ -72,6 +73,7 @@ foreach ($caller->getUsers($filter) as $user)
     echo '<tr>';
     echo '<td>'.ahref('coredev/admin/useredit/'.$user->getId(), $user->getName()).'</a></td>';
     echo '<td>'.$user->getTimeLastActive().'</td>';
+    echo '<td>'.$user->getLastIp().'</td>';
     echo '<td>'.$user->getTimeCreated().'</td>';
     echo '<td>'.$user->getUserLevelName().'</td>';
 
@@ -84,7 +86,7 @@ foreach ($caller->getUsers($filter) as $user)
     echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="5">';
+echo '<td colspan="6">';
 echo 'Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd');
 
 $grp = new UserGroupList();

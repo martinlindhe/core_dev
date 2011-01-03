@@ -14,6 +14,9 @@ if (!$user->getId()) {
 
 echo '<h1>User admin for '.$user->getName().'</h1>';
 
+echo 'Last IP: '.$user->getLastIp().'<br/>';
+echo '<br/>';
+
 if ($session->id != $caller->getId() && isset($_GET['remove'])) {
     //if (confirmed('Are you sure you want to remove this user?')) {  //XXX fix so confirmation works here
         $user->remove();

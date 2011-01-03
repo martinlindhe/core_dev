@@ -20,6 +20,7 @@ class User
     private $name;
     private $time_created;
     private $time_last_active;
+    private $last_ip;            ///< the IP address used for the most recent login
 
     function __construct($s = 0)
     {
@@ -43,6 +44,7 @@ class User
     function getName() { return $this->name; }
     function getTimeCreated() { return $this->time_created; }
     function getTimeLastActive() { return $this->time_last_active; }
+    function getLastIp() { return $this->last_ip; }
 
     function loadFromSql($row)
     {
@@ -50,6 +52,7 @@ class User
         $this->name             = $row['userName'];
         $this->time_created     = $row['timeCreated'];
         $this->time_last_active = $row['timeLastActive'];
+        $this->last_ip          = $row['lastIp'];
     }
 
     function loadById($id)
