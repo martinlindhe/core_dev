@@ -11,6 +11,8 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
+//STATUS: unused, rework into a PdfWriter class
+
 /**
  * Beginning of file marker
  */
