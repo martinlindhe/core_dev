@@ -16,9 +16,9 @@
 
 //TODO: fix class nesting crap, LocaleHandler should just be the current locale, no $this->handle crap
 
-require_once('locale_swe.php');
-require_once('locale_eng.php');
-require_once('locale_ger.php');
+require_once('LocaleInSwe.php');
+require_once('LocaleInEng.php');
+require_once('localeInGer.php');
 
 abstract class CoreLocale
 {
@@ -58,9 +58,9 @@ class LocaleHandler
         $this->locale = strtolower($s);
 
         switch ($s) {
-        case 'swe': $this->handle = new Locale_SWE(); break;
-        case 'eng': $this->handle = new Locale_ENG(); break;
-        case 'ger': $this->handle = new Locale_GER(); break;
+        case 'eng': $this->handle = new LocaleInEng(); break;
+        case 'swe': $this->handle = new LocaleInSwe(); break;
+        case 'ger': $this->handle = new LocaleInGer(); break;
         default: throw new Exception('Unknown locale '.$s);
         }
     }

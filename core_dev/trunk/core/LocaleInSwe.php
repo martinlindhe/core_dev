@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-class Locale_SWE extends CoreLocale
+class LocaleInSwe extends CoreLocale
 {
     var $month_long = array(
         'Januari', 'Februari', 'Mars',

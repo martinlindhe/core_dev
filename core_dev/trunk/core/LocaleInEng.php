@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-class Locale_ENG extends CoreLocale
+class LocaleInEng extends CoreLocale
 {
     var $month_long = array(
         'January', 'February', 'March',
