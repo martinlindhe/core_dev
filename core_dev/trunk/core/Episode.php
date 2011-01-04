@@ -11,7 +11,7 @@
 
 //XXX: rename to EpisodeNumber
 
-require_once('class.CoreProperty.php');
+require_once('CoreProperty.php');
 
 class Episode extends CoreProperty
 {

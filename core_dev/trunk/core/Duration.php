@@ -10,7 +10,7 @@
 //STATUS: good
 
 require_once('core.php');
-require_once('class.CoreProperty.php');
+require_once('CoreProperty.php');
 
 class Duration extends CoreProperty
 {

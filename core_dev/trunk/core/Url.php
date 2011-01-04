@@ -9,7 +9,7 @@
 
 //STATUS: good
 
-require_once('class.CoreProperty.php');
+require_once('CoreProperty.php');
 require_once('network.php'); //for is_url(), scheme_default_port(), url_query()
 
 class Url extends CoreProperty

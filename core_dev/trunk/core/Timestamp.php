@@ -9,7 +9,7 @@
 
 //STATUS: good
 
-require_once('class.CoreProperty.php');
+require_once('CoreProperty.php');
 require_once('Duration.php');
 
 class Timestamp extends CoreProperty
