@@ -8,7 +8,7 @@
 
 //STATUS: wip
 
-class MysqlDescribe
+class DatabaseDescribeMysql
 {
     private $database;
     function setDatabase($s) { $this->database = $s; }
