@@ -75,11 +75,17 @@ class XhtmlForm
      */
     function setFocus($s)
     {
-        foreach ($this->elems as $e)
-            if ($e['name'] == $s) {
+        foreach ($this->elems as $e) {
+            if (isset($e['obj']) && is_object($e['obj'])) {
+                if ($e['obj']->name = $s) {
+                    $this->focus_element = $s;
+                    return true;
+                }
+            } else if ($e['name'] == $s) {
                 $this->focus_element = $s;
                 return true;
             }
+        }
 
         throw new Exception ('element '.$s.' not defined');
     }
