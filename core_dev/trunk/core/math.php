@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
+//STATUS: unused???
+
 /**
  * Finds the closest approximation of a division resulting in a float
  *
