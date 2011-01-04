@@ -192,46 +192,6 @@ class files_default
     }
 
     /**
-     * Returns mimetype of file
-     *
-     * @param $filename fileId or name of file to check
-     */
-    function lookupMimeType($filename)
-    {
-        if (is_numeric($filename))
-            $filename = $this->findUploadPath($filename);
-
-        //TODO: add a lookup cache
-        $result = file_get_mime($filename);
-
-        return $result;
-    }
-
-    /**
-     * Checks what kind of media this is (video, document etc)
-     *
-     * @param $filename fileId or name of file to check
-     * @return media type id (0 for unknown media types)
-     */
-    function lookupMediaType($filename)
-    {
-        if (is_numeric($filename))
-            $filename = $this->findUploadPath($filename);
-
-        if (!file_exists($filename))
-            return false;
-
-        $mime = $this->lookupMimeType($filename);
-
-        foreach ($this->media_types as $type_id => $row)
-            foreach ($row as $subtype)
-                if ($subtype[0] == $mime)
-                    return $type_id;
-
-        return 0;
-    }
-
-    /**
      * Moves a file to a different file category
      *
      * @param $_category category to move to

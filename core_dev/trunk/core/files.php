@@ -46,7 +46,7 @@ function file_set_suffix($filename, $suffix) //XXX rename function to not indica
  */
 function file_get_mime_by_suffix($name)
 {
-    if (!$name) return;
+    if (!$name) return false;
 
     $ext = file_suffix($name);
     switch ($ext)
@@ -61,6 +61,30 @@ function file_get_mime_by_suffix($name)
         echo 'WARNING: file_get_mime_by_suffix unhandled ext: '.$name."\n";
         return 'application/octet-stream'; //unknown type
     }
+}
+
+/**
+ * @return mimetype of filename
+ */
+function file_get_mime_by_content($filename)
+{
+    if (!file_exists($filename))
+        return false;
+
+    $c = 'file --brief --mime-type '.escapeshellarg($filename);
+    $res = exec($c);
+
+    //XXX: use mediaprobe to distinguish between wmv/wma files.
+    //FIXME: enhance mediaprobe to handle all media detection and stop use "file"
+    if ($res == 'video/x-ms-wmv' || $res == 'video/x-ms-asf') {
+        $c = 'mediaprobe '.escapeshellarg($filename);
+        $res = exec($c);
+    }
+
+    if (!$res)
+        throw new Exception ('file_get_mime FAIL on '.$filename);
+
+    return $res;
 }
 
 /**
