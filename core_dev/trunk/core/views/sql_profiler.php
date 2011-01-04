@@ -108,9 +108,9 @@ if (is_client_localhost())
     else
         echo ' <b>(CONNECTION NOT INITIALIZED)</b>';
     echo '<br/>';
-    echo 'Webserver <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> with <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
-    echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
 }
+echo 'Webserver <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> with <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
+echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
 
 echo dm(); //memory usage
 echo 'Server time: '.date('r T').'<br/>';
