@@ -18,7 +18,7 @@
 
 require_once('LocaleInSwe.php');
 require_once('LocaleInEng.php');
-require_once('localeInGer.php');
+require_once('LocaleInGer.php');
 
 abstract class CoreLocale
 {
