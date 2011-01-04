@@ -10,7 +10,7 @@
 //TODO: integrate captcha from Comments_borked.php
 //TODO: pagination? or auto-hide some comments
 
-//TODO LATER: delete atom_comments.php, Comments_borked.php
+//TODO LATER: delete Comments_borked.php
 
 require_once('User.php');
 
