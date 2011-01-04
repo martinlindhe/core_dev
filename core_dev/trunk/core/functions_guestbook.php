@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//STATUS: unused, rewrite to a Guestbook class extended from Comment class
+
 require_once('atom_moderation.php');    //for moderation functionality
 
 /**

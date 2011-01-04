@@ -19,6 +19,8 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
+//STATUS: ???
+
 /**
  * Converts WGS84 degrees, minutes and seconds (D'M'S)
  * or degrees, minutes
@@ -142,15 +144,15 @@ function grid_to_geodetic($x, $y)
     $xi  = ($x - $coords['false_northing']) / ($coords['scale'] * $a_roof);
     $eta = ($y - $coords['false_easting'])  / ($coords['scale'] * $a_roof);
     $xi_prim = $xi -
-        $delta1*sin(2.0*$xi) * cosh(2.0*$eta) -
-        $delta2*sin(4.0*$xi) * cosh(4.0*$eta) -
-        $delta3*sin(6.0*$xi) * cosh(6.0*$eta) -
-        $delta4*sin(8.0*$xi) * cosh(8.0*$eta);
+        $delta1 * sin(2.0*$xi) * cosh(2.0*$eta) -
+        $delta2 * sin(4.0*$xi) * cosh(4.0*$eta) -
+        $delta3 * sin(6.0*$xi) * cosh(6.0*$eta) -
+        $delta4 * sin(8.0*$xi) * cosh(8.0*$eta);
     $eta_prim = $eta -
-        $delta1*cos(2.0*$xi) * sinh(2.0*$eta) -
-        $delta2*cos(4.0*$xi) * sinh(4.0*$eta) -
-        $delta3*cos(6.0*$xi) * sinh(6.0*$eta) -
-        $delta4*cos(8.0*$xi) * sinh(8.0*$eta);
+        $delta1 * cos(2.0*$xi) * sinh(2.0*$eta) -
+        $delta2 * cos(4.0*$xi) * sinh(4.0*$eta) -
+        $delta3 * cos(6.0*$xi) * sinh(6.0*$eta) -
+        $delta4 * cos(8.0*$xi) * sinh(8.0*$eta);
 
     $phi_star     = asin(sin($xi_prim)   / cosh($eta_prim));
     $delta_lambda = atan(sinh($eta_prim) / cos($xi_prim));
@@ -159,9 +161,9 @@ function grid_to_geodetic($x, $y)
     $lat_radian =
         $phi_star + sin($phi_star) * cos($phi_star) *
         ($Astar +
-         $Bstar*pow(sin($phi_star), 2) +
-         $Cstar*pow(sin($phi_star), 4) +
-         $Dstar*pow(sin($phi_star), 6));
+         $Bstar * pow(sin($phi_star), 2) +
+         $Cstar * pow(sin($phi_star), 4) +
+         $Dstar * pow(sin($phi_star), 6));
 
     $lat = $lat_radian * 180.0 / M_PI;
     $lon = $lon_radian * 180.0 / M_PI;

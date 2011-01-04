@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//STATUS: reworking snippets into classes, see ImageResizer
+
 $config['image']['resample_resized']    = true;        ///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
 $config['image']['jpeg_quality']        = 75;        ///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
 

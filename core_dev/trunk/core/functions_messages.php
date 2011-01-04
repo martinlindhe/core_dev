@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: unused???
+//STATUS: unused, write a oo implementation instead
 
 require_once('functions_textformat.php'); //for formatting messages
 

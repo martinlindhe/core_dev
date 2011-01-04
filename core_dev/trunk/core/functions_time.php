@@ -2,10 +2,13 @@
 /**
  * $Id$
  *
+ * Random time-related functions
+ *
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: hmm
+//STATUS: some parts is used all over core_dev internals,
+//        maybe rework into a time object extended from php's internal object?
 
 require_once('core.php'); // for php_min_ver()
 require_once('sql_misc.php');
