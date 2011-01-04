@@ -98,6 +98,31 @@ class XhtmlForm
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
                 foreach ($this->elems as $e) {
+                    if (isset($e['obj']) && is_object($e['obj'])) {
+
+                        if ($e['obj']->name == $key) {
+                            if (is_array($val)) {
+                                foreach ($val as $idx => $v)
+                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                $p[ $key ] = $val;
+                            }
+                            else
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                        }
+
+                        // handle input arrays
+                        if ($e['obj']->name == $key.'[]') {
+                            if (is_array($val)) {
+                                foreach ($val as $idx => $v)
+                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                $p[ $key ] = $val;
+                            }
+                            else
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                        }
+                        continue;
+                    }
+
                     switch ($e['type']) {
                     case 'DATEINTERVAL':
                         if (!empty($e['namefrom']) && $e['namefrom'] == $key ||
@@ -106,7 +131,21 @@ class XhtmlForm
                         break;
 
                     default:
-                        if (!empty($e['name']) && $e['name'] == $key) {
+                        if (empty($e['name']))
+                            break;
+
+                        if ($e['name'] == $key) {
+                            if (is_array($val)) {
+                                foreach ($val as $idx => $v)
+                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                $p[ $key ] = $val;
+                            }
+                            else
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                        }
+
+                        // handle input arrays
+                        if ($e['name'] == $key.'[]') {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
@@ -192,6 +231,9 @@ class XhtmlForm
      */
     function add($o, $str = '')
     {
+        if (!is_object($o))
+            throw new Exception ('not an object');
+
         $this->elems[] = array('obj' => $o, 'str' => $str);
     }
 
@@ -208,8 +250,13 @@ class XhtmlForm
      */
     function addInput($name, $str, $val = '', $size = 0)
     {
-        $this->elems[] = array('type' => 'INPUT', 'name' => $name, 'str' => $str, 'default' => $val, 'size' => $size);
-    }
+        $o = new XhtmlInput();
+        $o->name  = $name;
+        $o->value = $val;
+        $o->size  = $size;
+
+        $this->elems[] = array('obj' => $o, 'str' => $str);
+   }
 
     /**
      * Adds a checkbox field to the form
@@ -349,9 +396,12 @@ class XhtmlForm
 
         foreach ($this->elems as $e)
         {
+            $res .= '<tr>';
+
             if (isset($e['obj']) && is_object($e['obj'])) {
                 $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= $e['obj']->render().'</td>';
+                $res .= '</tr>';
                 continue;
             }
 
@@ -371,7 +421,6 @@ class XhtmlForm
             if ($this->auto_code && isset($e['value']))
                 $e['value'] = urlencode($e['value']);
 
-            $res .= '<tr>';
             switch ($e['type']) {
             case 'HIDDEN':
                 $res .= xhtmlHidden($e['name'], $e['value']);
@@ -379,16 +428,6 @@ class XhtmlForm
 
             case 'CHECKBOX':
                 $res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default'], $e['checked']).'</td>';
-                break;
-
-            case 'INPUT':
-                $input = new XhtmlInput();
-                $input->name  = $e['name'];
-                $input->value = $e['default'];
-                $input->size  = $e['size'];
-
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= $input->render().'</td>';
                 break;
 
             case 'TEXTAREA':
