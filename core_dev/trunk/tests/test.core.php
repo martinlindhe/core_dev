@@ -24,5 +24,6 @@ if (!is_alphanumeric('日本語'))     echo "FAIL 13\n"; // utf8 is ok
 if (!is_alphanumeric('한국어'))      echo "FAIL 14\n"; // utf8 is ok
 if (!is_alphanumeric('لقمة'))      echo "FAIL 15\n"; // utf8 is ok
 
+if (!is_alphanumeric(''))          echo "FAIL 16\n";
 
 ?>

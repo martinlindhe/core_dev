@@ -223,6 +223,9 @@ function var_name(&$var, $scope = false)
  */
 function is_alphanumeric($s)
 {
+    if (!$s)
+        return true;
+
     if (!is_string($s))
         return false;
 
