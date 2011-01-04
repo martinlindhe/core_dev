@@ -11,7 +11,7 @@
  * @author Martin Lindhe, 2007-2011
  */
 
-//STATUS: needs updating to work with new MimeReader class
+//STATUS: unused ???, needs updating to work with new MimeReader class
 
 //TODO: debug output: show sip messages
 //TODO: return correct error codes on failures
@@ -34,7 +34,7 @@ define('SIP_RINGING',      11);
 define('SIP_OK',           12);
 define('SIP_UNAUTHORIZED', 13);
 
-class sip_server
+class SipServer
 {
     var $interface, $port;
     var $handle          = false;
@@ -43,7 +43,7 @@ class sip_server
     var $allocated_ports = array();  ///< array of currently allocated ports for A/V RTP streams
 
     var $auth_realm   = 'core_dev SIP server'; ///< MUST be globally unique
-    var $auth_opaque  = 'iam opaque!';         ///< the content of this string is irrelevant
+    var $auth_opaque  = 'iam opaque!';         ///< the content of this text is irrelevant
     var $auth_handler = false;                 ///< defines custom authentication handler
 
     /**
