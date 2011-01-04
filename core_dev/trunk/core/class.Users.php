@@ -274,10 +274,6 @@ class UsersXXX_DEPRECATE_KILL_KILL
             $userId = $_GET[$_userid_name];
             echo 'User overview:'.Users::getName($userId).'<br/>';
 
-            if ($config['user']['log_visitors']) {
-                logVisit(VISIT_USERPAGE, $userId);
-            }
-
         } else {
             $userId = $session->id;
             echo 'Your overview:<br/>';

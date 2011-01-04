@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: rewrite as a class. used by Wiki.php
+//STATUS: needs to be rewritten as a class, is used by Wiki class
 
 //revision types:
 define('REVISIONS_WIKI', 1);
