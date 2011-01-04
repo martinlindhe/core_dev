@@ -2,6 +2,8 @@
 /**
  * $Id$
  *
+ * XHTML text input field
+ *
  * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
  */
 

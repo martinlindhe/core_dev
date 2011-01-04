@@ -22,6 +22,7 @@ require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
 require_once('XhtmlInput.php');
+require_once('XhtmlSubmit.php');
 
 require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
@@ -299,9 +300,12 @@ class XhtmlForm
     /**
      * Adds a submit button to the form
      */
-    function addSubmit($str)
+    function addSubmit($title)
     {
-        $this->elems[] = array('type' => 'SUBMIT', 'str' => $str);
+        $o = new XhtmlSubmit();
+        $o->title = $title;
+
+        $this->elems[] = array('obj' => $o, 'str' => '');
     }
 
     /**
@@ -472,10 +476,6 @@ class XhtmlForm
             case 'LISTBOX':
                 $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
                 $res .= xhtmlSelectMultiple($e['name'], $e['arr'], $e['default']).'</td>';
-                break;
-
-            case 'SUBMIT':
-                $res .= '<td colspan="2">'.xhtmlSubmit($e['str']).'</td>';
                 break;
 
             case 'CATEGORY':
