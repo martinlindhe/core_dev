@@ -11,13 +11,32 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: ???
+//STATUS: ok
 
 //FIXME: replace strrev2 with some built-in PHP function
 
 class UUID
 {
-    /** Returns a v3 UUID (randomized value) */
+    public static function isValid($uuid)
+    {
+        return preg_match(
+        '/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
+        '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i',
+        $uuid) === 1;
+    }
+
+    /**
+     * @param $ns namespace
+     * @param $name name
+     * @return a v3 UUID (md5 of $name)
+     */
+    public static function v3($ns, $name)
+    {
+        $hash = md5( self::toBinary($ns).$name );
+        return self::build($hash, 0x3000);
+    }
+
+    /** @return a v4 UUID (randomized value) */
     public static function v4()
     {
         return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -30,20 +49,9 @@ class UUID
     }
 
     /**
-     * Returns a v3 UUID (md5 of $name)
      * @param $ns namespace
      * @param $name name
-     */
-    public static function v3($ns, $name)
-    {
-        $hash = md5( self::toBinary($ns).$name );
-        return self::build($hash, 0x3000);
-    }
-
-    /**
-     * Returns a v5 UUID (sha1 of $name)
-     * @param $ns namespace
-     * @param $name name
+     * @return a v5 UUID (sha1 of $name)
      */
     public static function v5($ns, $name)
     {
@@ -80,7 +88,7 @@ class UUID
     /**
      * Converts a UUID-formatted string to a hex value
      * @param $guid UUID as a string "3F2504E0-4F89-11D3-9A0C-0305E82C3301"
-     * $return UUID as a string "E004253F894FD3119A0C0305E82C3301" (RAW 16)
+     * @return UUID as a string "E004253F894FD3119A0C0305E82C3301" (RAW 16)
      */
     static function toHex($uuid)
     {
@@ -102,14 +110,6 @@ class UUID
         //Data4 stores the bytes in the same order as displayed in the GUID text encoding,
         //but other three fields are reversed on little-endian systems (e.g. Intel CPUs).
         return self::strrev2($parts[0]).self::strrev2($parts[1]).self::strrev2($parts[2]).$parts[3].$parts[4];
-    }
-
-    public static function isValid($uuid)
-    {
-        return preg_match(
-        '/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
-        '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i',
-        $uuid) === 1;
     }
 
     /**
