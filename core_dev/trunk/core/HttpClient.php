@@ -86,6 +86,7 @@ class HttpClient extends CoreBase
      */
     function getHead()
     {
+        return $this->get(array(), true);
     }
 
     function getBody()
@@ -207,14 +208,13 @@ class HttpClient extends CoreBase
      *
      * @param $post_params array of key->val pairs of POST parameters to send
      */
-    private function get($post_params = array())
+    private function get($post_params = array(), $head_only = false)
     {
         $cache = new Cache();
         $cache->setCacheTime($this->cache_time);
 
-        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive())
+        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive() && !$head_only)
         {
-            if ($this->getDebug()) $cache->setDebug();
             $key_head = 'url_head//'.sha1( $this->Url->get() );
             $key_full = 'url//'.     sha1( $this->Url->get() );
 
@@ -243,8 +243,10 @@ class HttpClient extends CoreBase
 
         curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, 0);
         curl_setopt($this->ch, CURLOPT_MAXREDIRS, 0);
+
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
-        curl_setopt($this->ch, CURLOPT_NOBODY, 0);
+        curl_setopt($this->ch, CURLOPT_NOBODY, $head_only);
+
         curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
 
@@ -297,7 +299,7 @@ class HttpClient extends CoreBase
 
         $this->parseResponse($res);
 
-        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive()) {
+        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive() && !$head_only) {
             $cache->set($key_head, serialize($this->headers));
             $cache->set($key_full, $res);
         }
