@@ -14,12 +14,12 @@
 
 //TODO: rewrite "include feeds" functionality (use textfeed app as test?)
 
-require_once('IXMLComponent.php');
+require_once('IXmlComponent.php');
 require_once('class.CoreBase.php');
 require_once('LocaleHandler.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
 
-class XhtmlHeader extends CoreBase implements IXMLComponent
+class XhtmlHeader extends CoreBase implements IXmlComponent
 {
     static $_instance;                  ///< singleton class
 

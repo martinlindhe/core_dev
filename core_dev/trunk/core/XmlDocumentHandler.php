@@ -32,7 +32,7 @@ class XmlDocumentHandler extends CoreBase
     private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
     private $upload_root;                    ///< root directory for file uploads
 
-    private $objs = array();                 ///< IXMLComponent objects
+    private $objs = array();                 ///< IXmlComponent objects
 
     private function __clone() {}      //singleton: prevent cloning of class
 
@@ -172,8 +172,8 @@ class XmlDocumentHandler extends CoreBase
 
             $rc = new ReflectionClass($obj);
             /*
-            if (!$rc->implementsInterface('IXMLComponent'))
-                throw new exception('Attached object '.get_class($obj).' dont implement IXMLComponent');
+            if (!$rc->implementsInterface('IXmlComponent'))
+                throw new exception('Attached object '.get_class($obj).' dont implement IXmlComponent');
             */
 
             if (!$rc->hasMethod('render'))

@@ -1,4 +1,9 @@
 <?php
+/**
+ * $Id$
+ *
+ * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
+ */
 
 //STATUS: wip
 

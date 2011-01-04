@@ -10,7 +10,7 @@
 //STATUS: wip
 
 
-//XXX TODO require that all objects added with add() method implements/extends some "IXhtmlComponent" interface or similar  (see/rewrite IXMLComponent)
+//XXX TODO require that all objects added with add() method implements/extends some "IXhtmlComponent" interface or similar  (see/rewrite IXmlComponent)
 //TODO soon: rewrite internal form field representation to use objects passed to add() method
 
 
@@ -20,6 +20,8 @@
 require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
+
+require_once('XhtmlInput.php');
 
 require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
@@ -380,8 +382,13 @@ class XhtmlForm
                 break;
 
             case 'INPUT':
+                $input = new XhtmlInput();
+                $input->name  = $e['name'];
+                $input->value = $e['default'];
+                $input->size  = $e['size'];
+
                 $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlInput($e['name'], $e['default'], $e['size']).'</td>';
+                $res .= $input->render().'</td>';
                 break;
 
             case 'TEXTAREA':

@@ -142,7 +142,7 @@ function xhtmlRadioArray($_name, $_arr, $_default = '')
 /**
  * Creates a input field
  */
-function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled = false)
+function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled = false)  //XXX deprecate, see XhtmlInput.php
 {
     if (!is_numeric($_size) || !is_numeric($_maxlen)) return false;
     return '<input type="text" name="'.$_name.'" id="'.$_name.'"'.

@@ -6,7 +6,7 @@
  * @author Martin Lindhe, 2010 <martin@startwars.org>
  */
 
-interface IXMLComponent
+interface IXmlComponent
 {
     /**
      * Returns XML data from the object
