@@ -4,7 +4,7 @@
  *
  * Users class
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: drop all this code-user class needs to be rethought from scratch

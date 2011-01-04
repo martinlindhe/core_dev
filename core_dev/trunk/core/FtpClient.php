@@ -12,7 +12,7 @@
  *
  * http://en.wikipedia.org/wiki/FTPS
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: ok

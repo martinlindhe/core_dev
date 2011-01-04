@@ -7,7 +7,7 @@
  * http://www.atomenabled.org/developers/syndication/
  * http://en.wikipedia.org/wiki/Atom_(standard)
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: good

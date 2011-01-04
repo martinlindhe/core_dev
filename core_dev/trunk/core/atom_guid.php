@@ -8,7 +8,7 @@
  *
  * http://en.wikipedia.org/wiki/GUID
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 /**

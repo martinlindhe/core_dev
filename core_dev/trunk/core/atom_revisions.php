@@ -4,7 +4,7 @@
  *
  * Set of functions to implement revisioned backups of data, used by various modules
  *
- * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: rewrite as a class. used by Wiki.php

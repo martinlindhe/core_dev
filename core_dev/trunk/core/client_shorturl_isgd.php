@@ -6,7 +6,7 @@
  *
  * API documentation: http://is.gd/api_info.php
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('client_shorturl.php');

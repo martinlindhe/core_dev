@@ -4,7 +4,7 @@
  *
  * Base class, all objects should extend from this class
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 class CoreBase

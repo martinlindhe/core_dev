@@ -19,7 +19,7 @@
  * $db  = SqlHandler::getInstance();  //will always return the first registered instance
  * $db2 = SqlHandler::getInstance(1); //will always return the 2:nd registered instance
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

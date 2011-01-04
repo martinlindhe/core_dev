@@ -4,7 +4,7 @@
  *
  * MSSQL db driver using the php_mssql extension
  *
- * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 require_once('class.CoreBase.php');

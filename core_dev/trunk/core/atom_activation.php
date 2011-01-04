@@ -7,10 +7,10 @@
  * Utility script: cron\cleanup_activations.php
  *         This script deletes all > 30 day old entries from tblActivation
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: deprecated! rewrite to use tblSettings class to store activation data
+//STATUS: deprecated! need to rewrite to use tblSettings class to store activation data
 
 //FIXME: tblActivation.answer was only used for CAPTCHA's. safe to drop?
 //TODO: create a cleanup script that deletes un-activated users entirely

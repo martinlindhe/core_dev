@@ -9,12 +9,13 @@
  *
  * Output mostly comply with http://feedvalidator.org/
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * MIME: application/rss+xml
+ *
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
-//MIME: application/rss+xml
-
 //STATUS: wip
+
 //TODO: extend this class for specific video feeds
 //TODO: verify $item is of right class (NewsItem)
 

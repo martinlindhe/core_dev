@@ -5,7 +5,7 @@
  * Get Stock quote for a company symbol
  * http://www.webservicex.net/WCF/ServiceDetails.aspx?SID=19
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 // require_once('input_xml.php');

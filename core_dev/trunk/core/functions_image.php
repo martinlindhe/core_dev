@@ -4,7 +4,7 @@
  *
  * Image handling helper functions
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 $config['image']['resample_resized']    = true;        ///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails

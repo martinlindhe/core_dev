@@ -6,7 +6,7 @@
  *
  * Currently used by the following modules: News
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 define('RATE_NEWS',  1);

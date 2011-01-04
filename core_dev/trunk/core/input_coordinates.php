@@ -16,7 +16,7 @@
  * http://latlong.mellifica.se/ (SWEREF 99, RT 90 to WGS84)
  * http://franson.com/coordtrans/ (commerical product)
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 /**

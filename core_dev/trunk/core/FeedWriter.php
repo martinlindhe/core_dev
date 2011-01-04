@@ -4,7 +4,7 @@
  *
  * Simple newsfeed (RSS, Atom) reader/writer with support for RSS 2.0 and Atom 1.0
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 require_once('class.CoreList.php');

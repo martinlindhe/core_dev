@@ -8,7 +8,7 @@
  * ----------
  * http://en.wikipedia.org/wiki/Units_of_information
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('ConvertBase.php');

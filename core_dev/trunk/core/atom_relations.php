@@ -7,7 +7,7 @@
  * For relations between two values / names / numbers or something.
  * see functions_contacts.php for user friends/blocklist functions
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 define('RELATION_1TO1CHAT', 10);

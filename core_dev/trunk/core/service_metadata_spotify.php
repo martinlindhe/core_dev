@@ -5,7 +5,7 @@
  * Spotify metadata api
  * http://developer.spotify.com/en/metadata-api/overview/
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('class.CoreBase.php');

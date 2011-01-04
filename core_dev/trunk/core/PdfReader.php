@@ -10,7 +10,7 @@
  * + Errata to Sixth Edition:
  * http://www.adobe.com/devnet/pdf/pdfs/pdf_17_errata.pdf
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: very much WIP

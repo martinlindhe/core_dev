@@ -6,7 +6,7 @@
  * ----------
  * http://developer.yahoo.com/weather/
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

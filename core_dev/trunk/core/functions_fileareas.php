@@ -4,7 +4,7 @@
  *
  * File area implementation
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 require_once('atom_rating.php');    //for file rating

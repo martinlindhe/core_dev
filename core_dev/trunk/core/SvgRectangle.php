@@ -4,7 +4,7 @@
  *
  * http://www.w3.org/TR/SVG/shapes.html#RectElement
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

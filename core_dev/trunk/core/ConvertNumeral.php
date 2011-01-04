@@ -7,7 +7,7 @@
  * http://en.wikipedia.org/wiki/Radix
  * http://en.wikipedia.org/wiki/Numeral_system
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: ok

@@ -5,7 +5,7 @@
  * Singleton class to perform user registration.
  * Allows for additonal registration steps to be attached to base class
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

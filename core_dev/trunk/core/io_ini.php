@@ -1,8 +1,12 @@
 <?php
 /**
+ * $Id$
+ *
  * INI file input/output class
  *
  * http://en.wikipedia.org/wiki/INI_file
+ *
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //TODO handle ""-escaped values

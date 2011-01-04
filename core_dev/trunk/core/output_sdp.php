@@ -4,7 +4,7 @@
  *
  * Helper functions to generate SDP packets
  *
- * @author Martin Lindhe, 2007-2009
+ * @author Martin Lindhe, 2007-2011
  */
 
 require_once('input_sdp.php');

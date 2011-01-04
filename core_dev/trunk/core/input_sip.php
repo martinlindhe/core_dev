@@ -8,7 +8,7 @@
  * HTTP Authentication RFC: http://www.faqs.org/rfcs/rfc2617.html
  * http://tools.ietf.org/id/draft-ietf-sip-call-flows-05.txt
  *
- * @author Martin Lindhe, 2007-2009
+ * @author Martin Lindhe, 2007-2011
  */
 
 //STATUS: needs updating to work with new MimeReader class

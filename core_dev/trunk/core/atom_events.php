@@ -4,7 +4,7 @@
  *
  * Generic event logging functions
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //FIXME cleanup some constant naming. for example use EVENT_APPROVED_xxx

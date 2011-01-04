@@ -4,8 +4,10 @@
  *
  * Requires zend framework installed and php.ini paths configured!!!
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
+
+//STATUS: unused, need rewrite!
 
 /**
  * Uploads video to youtube

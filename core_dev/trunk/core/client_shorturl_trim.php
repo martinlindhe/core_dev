@@ -6,7 +6,7 @@
  *
  * API documentation: http://api.tr.im/website/api
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('client_shorturl.php');

@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 require_once('atom_categories.php');    //for multi-choise userdata types

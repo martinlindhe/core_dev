@@ -4,7 +4,7 @@
  *
  * Logging functions
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 define('LOGLEVEL_NOTICE',    1);

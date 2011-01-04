@@ -5,6 +5,8 @@
  * http://geolite.maxmind.com/download/geoip/database/LICENSE.txt
  *
  * Use tools/update_geoip.sh to update local database
+ *
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
 //STATUS: wip

@@ -7,6 +7,8 @@
  * http://en.wikipedia.org/wiki/Vcard
  *
  * See also iCalWriter.php
+ *
+ * @author Martin Lindhe, 2007-2011
  */
 
 //STATUS: UNUSED, INCOMPLETE DRAFT

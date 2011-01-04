@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //XXX gzdecode() dont exist in php 5.3, where is it?

@@ -9,7 +9,7 @@
  *
  * Output mostly comply with http://feedvalidator.org/
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //MIME: application/atom+xml

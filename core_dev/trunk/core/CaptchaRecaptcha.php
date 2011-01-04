@@ -10,7 +10,7 @@
  * In order to use this web service, you need to register a API key
  * at the following location: http://recaptcha.net/api/getkey
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

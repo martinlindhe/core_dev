@@ -3,6 +3,8 @@
  * $Id$
  *
  * The view model creates a scope for variables and include the file returning the parsed output
+ *
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 class ViewModel extends ArrayObject

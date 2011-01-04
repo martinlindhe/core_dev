@@ -4,7 +4,7 @@
  *
  * Client library to query web services about weather reports
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('Cache.php');

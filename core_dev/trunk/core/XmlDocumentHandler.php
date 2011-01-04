@@ -4,7 +4,7 @@
  *
  * Renders a set of views into a XML document (XML, XHTML, VoiceXML)
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

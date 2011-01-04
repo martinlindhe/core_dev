@@ -10,7 +10,7 @@
  * http://tools.ietf.org/html/rfc2447 - iCalendar Message-Based Interoperability Protocol (iMIP)
  * http://en.wikipedia.org/wiki/ICalendar
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

@@ -4,7 +4,7 @@
  *
  * Forum functions
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 require_once('atom_subscriptions.php');    //for subscription functionality

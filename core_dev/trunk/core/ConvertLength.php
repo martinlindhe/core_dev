@@ -8,7 +8,7 @@
  * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Length
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('ConvertBase.php');

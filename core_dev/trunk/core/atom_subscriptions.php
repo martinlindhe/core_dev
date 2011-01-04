@@ -8,7 +8,7 @@
  *  ownerId            owner of the subscription (userId)
  *  itemId            id of the item we are subscribing to (tblForums.forumId, tblUsers.userId etc)
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //TODO Implement forum "bookmarks", personal favorite list using this module

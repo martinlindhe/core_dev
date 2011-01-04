@@ -6,8 +6,10 @@
  *
  * The blocking rules are stored as textual strings to allow for great flexibility.
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
+
+//STATUS: ???
 
 define('BLOCK_IP',        1);        //block by IP address. should be able to transparently support IPv6
 define('BLOCK_ANR',        2);        //block by a-number

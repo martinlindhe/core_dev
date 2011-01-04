@@ -5,7 +5,7 @@
  * Generic module to have users submit questions / suggestions to the site admins
  * Admins can then choose to comment on the feedback and have it published on the website.
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 $config['feedback']['enabled'] = true;

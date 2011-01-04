@@ -7,7 +7,7 @@
  * Uses tblFiles
  * Uses php_id3.dll if enabled, to show more details of mp3s in the file module
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: drop this code when rewrite is finished in class.Files.php, drop files module from session handler

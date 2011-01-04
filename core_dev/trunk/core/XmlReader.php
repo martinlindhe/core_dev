@@ -4,7 +4,7 @@
  *
  * Wrapper for built in XMLReader with helper methods
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -37,6 +37,7 @@ class CoreXmlReader extends XMLReader
         $this->read();
         return $this->value;
     }
+
 }
 
 ?>

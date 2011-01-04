@@ -4,7 +4,7 @@
  *
  * Used by admin module to display statistics
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 define('STAT_NEW_USERS',            1);        ///< number of new users created during this timeperiod    FIXME IMPLEMENT

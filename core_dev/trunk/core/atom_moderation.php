@@ -14,7 +14,7 @@
  *
  * Admin: this atom module has two admin pages: "moderation queue" and "edit stopwords"
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: need rewrite: make the moderation queue an object

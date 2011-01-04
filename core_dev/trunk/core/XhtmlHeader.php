@@ -7,7 +7,7 @@
  * Regarding declaring character encoding, see
  * http://www.w3.org/International/questions/qa-html-encoding-declarations#quicklookup
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

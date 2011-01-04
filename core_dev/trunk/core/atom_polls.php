@@ -5,7 +5,7 @@
  * Implements a couple of different types of polling functionality
  * used by "site polls" and "polls attached to news articles"
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 define('POLL_SITE',        1);    //"Question of the week"-style polls on the site's front page (for example)

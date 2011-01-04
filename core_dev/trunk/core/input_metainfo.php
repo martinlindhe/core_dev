@@ -1,7 +1,13 @@
 <?php
 /**
+ * $Id$
+ *
  * Functions to get metainfo about media files
+ *
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
+
+//XXX: move to files.php ???
 
 /**
  * @return mimetype of filename

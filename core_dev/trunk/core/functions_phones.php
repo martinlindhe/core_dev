@@ -4,8 +4,10 @@
  *
  * Utility functions for working with phone numbers
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
+
+//STATUS: used by savak, could be reworked to a sqlite database that can be versioned as a binary file, then reworked to a php object
 
 /**
  * All country codes from:

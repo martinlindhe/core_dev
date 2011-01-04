@@ -6,12 +6,12 @@
  *
  * http://www.rssboard.org/rss-specification
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: good
 
-//TODO: extend from CoreXmlReader ??
+//TODO: rewrite to use easyxml ?
 
 require_once('class.CoreBase.php');
 require_once('NewsItem.php');

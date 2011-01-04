@@ -4,7 +4,7 @@
  *
  * Helper functions to parse SDP packets
  *
- * @author Martin Lindhe, 2007-2008
+ * @author Martin Lindhe, 2007-2011
  */
 
 

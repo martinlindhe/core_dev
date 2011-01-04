@@ -7,7 +7,7 @@
  * All tokens are 40 byte hex string repserentation of sha1 sums (160 bit)
  * See Settings.php for general key->val storage
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

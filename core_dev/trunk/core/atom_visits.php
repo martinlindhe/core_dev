@@ -4,7 +4,7 @@
  *
  * Simple functions to enable visit logs for various objects
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 define('VISIT_USERPAGE',    1);

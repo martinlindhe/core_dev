@@ -6,7 +6,7 @@
  *
  * Implements the required sorting & selection methods for a data list
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

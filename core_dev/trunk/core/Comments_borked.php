@@ -4,7 +4,7 @@
  *
  * CommentList is a list of CommentItem objects
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: drop & redo :P into CommentList

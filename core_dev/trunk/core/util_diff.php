@@ -6,7 +6,7 @@
  *
  * Tested with gnu diff 2.8.1
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: ok, needs testing

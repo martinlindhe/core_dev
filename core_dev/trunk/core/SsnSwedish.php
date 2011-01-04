@@ -17,7 +17,7 @@
  * Documentation:
  * http://sv.wikipedia.org/wiki/Personnummer_i_Sverige
  *
- * @author Martin Lindhe, 2007-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

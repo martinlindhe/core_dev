@@ -4,7 +4,7 @@
  *
  * Episode parser, handles input formats such as "Season 1, Episode 24", "S01E24", "1x24", "s1e24"
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: WIP

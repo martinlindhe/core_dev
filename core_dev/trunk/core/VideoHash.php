@@ -11,7 +11,7 @@
  * The algorithm is based on video hash algoritm from Media Player Classic
  * (Licenced under GPL)
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: ok

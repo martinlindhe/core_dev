@@ -4,7 +4,7 @@
  *
  * XML reading helper
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: unused??? see XmlReader.php instead

@@ -4,7 +4,7 @@
  *
  * Implements friend lists. also implements blocked contacts
  *
- * @author Martin Lindhe, 2007-2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: working but oo-rewrite is planned

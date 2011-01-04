@@ -7,7 +7,7 @@
  * References:
  * http://tools.ietf.org/html/rfc3501
  *
- * @author Martin Lindhe, 2008-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: wip - expose in GetMail interface. move getMail() logic from here to GetMail class

@@ -10,8 +10,10 @@
  * Google Maps API wiki:
  * http://mapki.com/
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
+
+//STATUS: unused, rewrite
 
 require_once('input_coordinates.php');
 require_once('input_csv.php');

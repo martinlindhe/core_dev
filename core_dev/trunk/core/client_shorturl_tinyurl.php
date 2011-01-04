@@ -6,7 +6,7 @@
  *
  * API documentation: http://fyneworks.blogspot.com/2008/08/tiny-url-api.html
  *
- * @author Martin Lindhe, 2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 require_once('client_shorturl.php');

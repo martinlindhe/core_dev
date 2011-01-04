@@ -7,7 +7,7 @@
  * Documentation:
  * http://developer.yahoo.com/yui/calendar/
  *
- * @author Martin Lindhe, 2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

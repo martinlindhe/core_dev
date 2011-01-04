@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
+//STATUS: ???
+
 //tblCategory.categoryType: System categories. Reserved 1-50. Use a number above 50 for your own category types
 define('CATEGORY_USERFILE', 1);   ///< normal, public userfile
 define('CATEGORY_WIKIFILE', 4);   ///< category for wiki file attachments, to allow better organization if needed

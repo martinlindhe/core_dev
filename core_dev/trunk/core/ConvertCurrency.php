@@ -9,7 +9,7 @@
  * http://en.wikipedia.org/wiki/List_of_circulating_currencies
  * http://en.wikipedia.org/wiki/ISO_4217 (Standard currency codes)
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: ok

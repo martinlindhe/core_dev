@@ -7,7 +7,7 @@
  * Custom toolbar example:
  * http://developer.yahoo.com/yui/examples/editor/toolbar_editor.html
  *
- * @author Martin Lindhe, 2009-2010 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
 //STATUS: wip

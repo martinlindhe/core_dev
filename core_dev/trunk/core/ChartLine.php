@@ -3,6 +3,8 @@
  * Displays a line chart using SVG graphics
  *
  * https://secure.wikimedia.org/wikipedia/en/wiki/Line_chart
+ *
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
 //STATUS: draft, should replace YuiChart (flash)
@@ -65,6 +67,7 @@ class ChartLine extends SvgImage
 
         return parent::render();
     }
+
 }
 
 ?>

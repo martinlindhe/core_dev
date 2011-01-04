@@ -21,7 +21,7 @@
  * http://openid.net/specs/openid-authentication-2_0.html
  * http://openid.net/specs/openid-attribute-exchange-1_0.html
  *
- * @author Martin Lindhe, 2008 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 /**
@@ -42,7 +42,7 @@
  * TODO: do AOL have openid too?
  */
 
-//STATUS: this code is working but needs a cleanup
+//STATUS: unused, this code is working but needs a cleanup
 
 require_once('output_xhtml.php');
 

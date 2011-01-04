@@ -4,7 +4,7 @@
  *
  * Store user/server or other custom types of settings in database
  *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: deprecated, use Setting.php
