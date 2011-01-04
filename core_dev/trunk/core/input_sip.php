@@ -305,7 +305,7 @@ class sip_server
                 }
 
                 //RFC 2617: "3.2.2.1 Request-Digest"
-                $chal = parseAuthRequest($auth_response);
+                $chal = MimeReader::parseAuthRequest($auth_response);
 
                 if ($chal['algorithm'] != "MD5" ||
                     $chal['realm'] != $this->auth_realm ||

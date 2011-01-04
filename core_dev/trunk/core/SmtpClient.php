@@ -4,7 +4,7 @@
  *
  * Sends mail through a SMTP email server
  *
- * Use class.Sendmail.php for a easy to use "send mail" API
+ * !!! Use SendMail.php for a easy to use "send mail" API
  *
  * References
  * http://tools.ietf.org/html/rfc5321
@@ -27,9 +27,9 @@
  * TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
  */
 
-require_once('MimeReader.php');    //for parseAuthRequest()
+require_once('MimeReader.php');
 
-class smtp
+class SmtpClient
 {
     var     $debug  = false;
     private $handle = false;
@@ -192,7 +192,7 @@ class smtp
             }
             //echo "challenge: ".base64_decode($this->lastreply)."\n";
 
-            $chal = parseAuthRequest(base64_decode($this->lastreply));
+            $chal = MimeReader::parseAuthRequest(base64_decode($this->lastreply));
             if (empty($chal['qop'])) $chal['qop'] = 'auth';    //default
 
             if ($chal['algorithm'] != 'md5-sess') {

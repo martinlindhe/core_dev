@@ -229,28 +229,25 @@ class MimeReader
         return $att;
     }
 
-}
+    /** Parses a MIME Authenticate response */
+    static function parseAuthRequest($s)
+    {
+        $chal_str = explode(',', $s);
 
-
-/**
- * Parses a MIME Authenticate response, used in client_smtp.php, input_sip.php
- */
-function parseAuthRequest($s)   //XXX move into MimeReader class???, or see if some network.php functions do the same thing
-{
-    $chal_str = explode(',', $s);
-
-    foreach ($chal_str as $row) {
-        $pos = strpos($row, '=');
-        if (!$pos) continue;
-        $name = trim(substr($row, 0, $pos));
-        $val = substr($row, $pos+1);
-        if (substr($val, 0, 1) == '"' && substr($val, -1) == '"') {
-            $val = substr($val, 1, -1);
+        foreach ($chal_str as $row) {
+            $pos = strpos($row, '=');
+            if (!$pos) continue;
+            $name = trim(substr($row, 0, $pos));
+            $val = substr($row, $pos+1);
+            if (substr($val, 0, 1) == '"' && substr($val, -1) == '"') {
+                $val = substr($val, 1, -1);
+            }
+            $chal[ $name ] = $val;
         }
-        $chal[ $name ] = $val;
+
+        return $chal;
     }
 
-    return $chal;
 }
 
 ?>

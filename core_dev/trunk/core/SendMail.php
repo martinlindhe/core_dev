@@ -18,7 +18,7 @@
 //TODO: untangle smtp class, create a new connect() method
 
 require_once('class.CoreBase.php');
-require_once('client_smtp.php');
+require_once('SmtpClient.php');
 require_once('network.php'); //for is_email()
 require_once('files.php'); //for file_get_mime_by_suffix()
 
@@ -67,7 +67,7 @@ class SendMail extends CoreBase
     {
         mb_internal_encoding('UTF-8');    //XXX: required for utf8-encoded text (php 5.2)
 
-        $this->smtp = new smtp($server, $username, $password, $port);
+        $this->smtp = new SmtpClient($server, $username, $password, $port);
         $this->from_adr = $username;
     }
 
