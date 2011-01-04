@@ -23,7 +23,7 @@
 
 require_once('MimeReader.php');
 
-class pop3 extends CoreBase
+class Pop3Client extends CoreBase
 {
     var $handle = false;
 
