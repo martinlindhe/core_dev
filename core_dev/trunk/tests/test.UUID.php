@@ -19,4 +19,10 @@ echo "UUID v3 (md5):  ".$v3."\n";
 echo "UUID v5 (sha1): ".$v5."\n";
 echo "UUID v4 (rand): ".$v4."\n";
 
+
+
+$hex = UUID::toHex('3F2504E0-4F89-11D3-9A0C-0305E82C3301');
+if ($hex != 'E004253F894FD3119A0C0305E82C3301') echo "FAIL 3\n";
+
+
 ?>

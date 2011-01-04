@@ -2,8 +2,18 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * http://en.wikipedia.org/wiki/UUID
+ *
+ * 128-bit (16 byte) number
+ *
+ * The most widespread use of this standard is in Microsoft's Globally Unique Identifiers (GUIDs)
+ *
+ * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
+
+//STATUS: ???
+
+//FIXME: replace strrev2 with some built-in PHP function
 
 class UUID
 {
@@ -67,15 +77,56 @@ class UUID
         return $res;
     }
 
-    public static function isValid($uuid) { return is_valid_uuid($uuid); }
-}
+    /**
+     * Converts a UUID-formatted string to a hex value
+     * @param $guid UUID as a string "3F2504E0-4F89-11D3-9A0C-0305E82C3301"
+     * $return UUID as a string "E004253F894FD3119A0C0305E82C3301" (RAW 16)
+     */
+    static function toHex($uuid)
+    {
+        if (!self::isValid($uuid)) return false;
 
-function is_valid_uuid($uuid)
-{
-    return preg_match(
-    '/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
-    '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i',
-    $uuid) === 1;
+        $uuid = str_replace(array('{','}'), '', $uuid);
+
+        if (strlen($uuid) != 36) return false;
+
+        $parts = explode('-', $uuid);
+        if (count($parts) != 5) return false;
+
+        if (strlen($parts[0]) != 8) return false;    //Data1
+        if (strlen($parts[1]) != 4) return false;    //Data2
+        if (strlen($parts[2]) != 4) return false;    //Data3
+        if (strlen($parts[3]) != 4) return false;    //Data4
+        if (strlen($parts[4]) != 12) return false;   //Data4
+
+        //Data4 stores the bytes in the same order as displayed in the GUID text encoding,
+        //but other three fields are reversed on little-endian systems (e.g. Intel CPUs).
+        return self::strrev2($parts[0]).self::strrev2($parts[1]).self::strrev2($parts[2]).$parts[3].$parts[4];
+    }
+
+    public static function isValid($uuid)
+    {
+        return preg_match(
+        '/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
+        '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i',
+        $uuid) === 1;
+    }
+
+    /**
+     * Like built in strrev() but on character pairs
+     * @param $str input string, must have even length
+     */
+    private static function strrev2($str)
+    {
+        if (strlen($str) % 2) return false;
+
+        $ret = '';
+        for ($i = strlen($str); $i >= 0; $i -= 2) {
+            $ret .= substr($str, $i, 2);
+        }
+        return $ret;
+    }
+
 }
 
 ?>
