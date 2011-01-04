@@ -11,6 +11,8 @@
 
 //STATUS: ???
 
+die('blocks unmaintained');
+
 define('BLOCK_IP',        1);        //block by IP address. should be able to transparently support IPv6
 define('BLOCK_ANR',        2);        //block by a-number
 define('BLOCK_USERID',    3);        //block by userid

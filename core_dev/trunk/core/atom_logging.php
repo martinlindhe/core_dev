@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
+//STATUS: used by kost only, should be reworked to a class
+
 define('LOGLEVEL_NOTICE',    1);
 define('LOGLEVEL_WARNING',    2);
 define('LOGLEVEL_ERROR',    3);
