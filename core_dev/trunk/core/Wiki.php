@@ -111,7 +111,7 @@ class Wiki
     /**
      * Formats text for wiki output
      */
-    private function formatWiki()
+    protected function formatWiki()
     {
         $session = SessionHandler::getInstance();
 
