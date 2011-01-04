@@ -26,7 +26,7 @@
 require_once('UUID.php');
 
 require_once('CalendarEvent.php');
-require_once('functions_time.php'); // for ts()
+require_once('time.php'); // for ts()
 
 class iCalendarWriter
 {

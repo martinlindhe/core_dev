@@ -12,7 +12,7 @@
 //TODO: add a render2D() method that gives a normal calendar
 //TODO: configurable starting day of week
 
-require_once('functions_time.php');
+require_once('time.php');
 require_once('LocaleHandler.php');
 require_once('iCalendarWriter.php');
 require_once('CalendarEvent.php');

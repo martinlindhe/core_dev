@@ -13,6 +13,7 @@ require_once('functions_textformat.php'); //for decodeDataSize()
 require_once('Timestamp.php');
 require_once('network.php');
 require_once('files.php');
+require_once('time.php');
 require_once('class.CoreBase.php'); //for CoreBase class
 require_once('ConvertDatasize.php');
 

@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('functions_time.php');
+require_once('time.php');
 
 if (num_days('2010-03-04', '2010-03-04') !=  1) echo "FAIL 1\n";
 if (num_days('2010-03-04', '2010-03-06') !=  3) echo "FAIL 2\n";
