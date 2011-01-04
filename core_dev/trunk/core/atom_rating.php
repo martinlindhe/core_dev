@@ -9,6 +9,10 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//STATUS: unused
+
+die('XXX UNUSED atom_rating');
+
 define('RATE_NEWS',  1);
 define('RATE_BLOG',  2);
 define('RATE_FILE',  3);

@@ -21,10 +21,6 @@ echo js_embed(
 echo '<br/><br/>';
 echo '<a href="#" onclick="return toggle_sql_profiler();">'.count($db->queries).' sql</a>';
 
-$sql_height = (count($db->queries) * 60) + 70;
-if ($sql_height > 200)
-    $sql_height = 200;
-
 $sql_time = 0;
 $error = false;
 $res = '';
@@ -87,18 +83,22 @@ foreach ($db->queries as $prof)
 
 $css_display = $error ? '' : ' display:none;';
 
-echo '<div id="sql_prof_'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+$sql_height = (count($db->queries) * 60) + 70;
+if ($sql_height > 200)
+    $sql_height = 200;
 
-echo $res;
+echo '<div id="sql_prof_'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
 $total_time = microtime(true) - $db->ts_initial;
 $php_time   = $total_time - $sql_time - $db->time_connect;
 
 echo
-'Time spent: <b>'.round($total_time, 2).'s</b> '.
+'Load: <b>'.round($total_time, 2).'s</b> '.
 ' (DB connect: '.round($db->time_connect, 2).'s, '.
-count($db->queries).' SQL queries: '.round($sql_time, 2).'s, '.
+'SQL: '.round($sql_time, 2).'s, '.
 'PHP: '.round($php_time, 2).'s)<br/>';
+
+echo $res;
 
 if (is_client_localhost())
 {
@@ -109,6 +109,9 @@ if (is_client_localhost())
         echo ' <b>(CONNECTION NOT INITIALIZED)</b>';
     echo '<br/>';
 }
+
+
+// XXXXXXX --- BEGIN XXXXXXXX   - move this code block to a separate view, add as a view for one of the singeltons ???? create a page load time calculator, like the one in mysql_profiler
 echo 'Webserver <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> with <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
 echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
 
@@ -125,6 +128,9 @@ if (function_exists('apc_cache_info')) {
 
 //    d( apc_sma_info() );
 }
+// XXXXXXX --- END XXXXXXXX
+
+
 
 echo '</div>';
 
