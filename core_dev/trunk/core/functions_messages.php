@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//STATUS: unused???
+
 require_once('functions_textformat.php'); //for formatting messages
 
 define('MESSAGE_GROUP_INBOX',    1);
