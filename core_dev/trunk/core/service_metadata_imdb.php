@@ -7,17 +7,23 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-/**
- * @param $id imdb id
- * @return true if $id is a imdb ib
- */
-function is_imdb_id($id)
+class Imdb
 {
-    if (strpos($id, ' ')) return false;
-    $pattern = "((tt|ch|nm|co)([0-9]){7})";
 
-    if (preg_match($pattern, $id))
-        return true;
+    /**
+     * @param $id imdb id
+     * @return true if $id is a imdb ib
+     */
+    static function isValidId($id)
+    {
+        if (strpos($id, ' ')) return false;
+        $pattern = "((tt|ch|nm|co)([0-9]){7})";
 
-    return false;
+        if (preg_match($pattern, $id))
+            return true;
+
+        return false;
+    }
 }
+
+?>
