@@ -99,7 +99,9 @@ class User
         $this->id   = $db->pInsert($q, 's', $username);
         $this->name = $username;
 
-        dp('Created user '.$this->name.' ('.$this->id.')');
+        $session = SessionHandler::getInstance();
+
+        dp($session->getName().' created user '.$this->name.' ('.$this->id.')');
 
         return $this->id;
     }
