@@ -107,6 +107,9 @@ class XhtmlForm
                 foreach ($this->elems as $e) {
                     if (isset($e['obj']) && is_object($e['obj'])) {
 
+                        if (!isset($e['obj']->name))
+                            continue;
+
                         if ($e['obj']->name == $key) {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
