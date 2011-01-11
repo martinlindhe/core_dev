@@ -200,8 +200,8 @@ class YuiDatePopup
         '});';
 
         return
-        '<button type="button" id="'.$button_name.'" title="Show Calendar">'.
-            '<img src="'.relurl('core_dev/gfx/icon_date-picker.png').'" alt="Calendar"/>'.
+        '<button type="button" id="'.$button_name.'" title="Pick a date">'.
+            '<img src="'.relurl('core_dev/gfx/icon_date-picker.png').'" alt="Pick a date"/>'.
         '</button>'.
         js_embed($res);
     }
