@@ -201,7 +201,7 @@ class YuiDatePopup
 
         return
         '<button type="button" id="'.$button_name.'" title="Show Calendar">'.
-            '<img src="'.relurl('core_dev/gfx/icon_calendar.png').'" alt="Calendar"/>'.
+            '<img src="'.relurl('core_dev/gfx/icon_date-picker.png').'" alt="Calendar"/>'.
         '</button>'.
         js_embed($res);
     }
