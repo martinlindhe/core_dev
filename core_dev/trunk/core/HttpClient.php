@@ -54,7 +54,7 @@ class HttpClient extends CoreBase
     private $referer            = '';      ///< if set, send Referer header
     private $cookies            = array(); ///< holds cookies to be sent to the server in the following request
     private $connection_timeout = 120;     ///< 2 minutes
-    private $content_type       = '';
+    private $content_type       = '';      ///< request content by mime type
 
     private $username;
     private $password;

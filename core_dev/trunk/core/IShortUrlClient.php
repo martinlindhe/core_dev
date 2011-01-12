@@ -7,9 +7,8 @@
 
 //STATUS: wip
 
-//TODO: goo.gl client
-
 require_once('ShortUrlClientBitLy.php');
+require_once('ShortUrlClientGooGl.php');
 require_once('ShortUrlClientIsGd.php');
 require_once('ShortUrlClientTinyUrl.php');
 
