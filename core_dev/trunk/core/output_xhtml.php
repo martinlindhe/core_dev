@@ -85,7 +85,7 @@ function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')
  * Creates a hidden input field
  * @param $_val field value, or array of multiple values
  */
-function xhtmlHidden($_name, $_val = 1)   //XXXX DEPRECATE, use XhtmlComponentHidden
+function xhtmlHidden($_name, $_val = 1)   //XXXX DEPRECATE later (used by phonecafe.se and xhtmlCheckbox(), use XhtmlComponentHidden instead
 {
     $out = '';
     if (is_array($_val))

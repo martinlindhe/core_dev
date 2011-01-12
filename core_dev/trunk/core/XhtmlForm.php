@@ -9,9 +9,7 @@
 
 //STATUS: wip
 
-
-//TODO soon: rewrite internal form field representation to use objects passed to add() method
-
+//TODO soon: rewrite internal form field representation to use objects passed to add() method- 591 lines of code when ~20% done, 2011-01-12
 
 //TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
 //FIXME: dateinterval selection is not auto-filled on next request, see handle() ???
@@ -35,7 +33,7 @@ class XhtmlForm
     protected $name;
     protected $post_handler;               ///< function to call as POST callback
     protected $objectinstance   = false;
-    protected $formData         = array();
+    protected $form_data        = array();
     protected $elems            = array();
     protected $url_handler;                ///< sends form to a different url
     protected $auto_code        = true;    ///< automatically encode/decode form data using urlencode
@@ -65,8 +63,6 @@ class XhtmlForm
 
         if (is_object($objectinstance))
             $this->objectinstance = $objectinstance;
-
-        $this->handle();
     }
 
     /**
@@ -89,10 +85,8 @@ class XhtmlForm
         throw new Exception ('element '.$s.' not defined');
     }
 
-    /**
-     * Processes the form
-     */
-    function handle()
+    /** Processes the form submit */
+    protected function handle()
     {
         if ($this->using_captcha) {
             $captcha = CaptchaRecaptcha::getInstance();
@@ -113,9 +107,9 @@ class XhtmlForm
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
                                 $p[ $key ] = $val;
-                            }
-                            else
-                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                            } else
+                                $p[ $key ] = $this->auto_code ? $val : $val;
+
                         }
 
                         // handle input arrays
@@ -124,12 +118,13 @@ class XhtmlForm
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
                                 $p[ $key ] = $val;
-                            }
-                            else
+                            } else
                                 $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         }
                         continue;
                     }
+
+                    throw new Exception ('blergh');  //XXX drop following code
 
                     switch ($e['type']) {
                     case 'DATEINTERVAL':
@@ -147,8 +142,7 @@ class XhtmlForm
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
                                 $p[ $key ] = $val;
-                            }
-                            else
+                            } else
                                 $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         }
 
@@ -158,8 +152,7 @@ class XhtmlForm
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
                                 $p[ $key ] = $val;
-                            }
-                            else
+                            } else
                                 $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         }
                         break;
@@ -174,7 +167,7 @@ class XhtmlForm
                     if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
 
-                    if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)
+                    if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                 }
 
@@ -214,7 +207,7 @@ class XhtmlForm
 
         if (!$p) return false;
 
-        $this->formData = $p;
+        $this->form_data = $p;
 
         if ($this->objectinstance)
             $call = array($this->objectinstance, $this->post_handler);
@@ -224,7 +217,7 @@ class XhtmlForm
         $error = ErrorHandler::getInstance();
 
         if (!$error->getErrorCount())
-            if (call_user_func($call, $this->formData, $this))
+            if (call_user_func($call, $this->form_data, $this))
                 $this->handled = true;
 
         if ($error->getErrorCount()) {
@@ -402,6 +395,8 @@ class XhtmlForm
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 
+        $this->handle();
+
         $enctype = $this->file_upload ? 'multipart/form-data' : '';
 
         if (!$this->name)
@@ -436,13 +431,13 @@ class XhtmlForm
             switch ($e['type']) {
             case 'CHECKBOX':
                 //dont set a unset checkbox to value 0, it breaks the form
-                if (!empty($e['name']) && !empty($this->formData[$e['name']]))
+                if (!empty($e['name']) && !empty($this->form_data[$e['name']]))
                     $e['checked'] = true;
                 break;
 
             default:
-                if (!empty($e['name']) && isset($this->formData[$e['name']]))
-                    $e['default'] = $this->formData[$e['name']];
+                if (!empty($e['name']) && isset($this->form_data[$e['name']]))
+                    $e['default'] = $this->form_data[$e['name']];
             }
 
             if ($this->auto_code && isset($e['value']))
@@ -518,7 +513,7 @@ class XhtmlForm
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setName($e['name']);
 
-                $e['name_val'] = !empty($this->formData[$e['name']]) ? $this->formData[$e['name']] : $e['init'];
+                $e['name_val'] = !empty($this->form_data[$e['name']]) ? $this->form_data[$e['name']] : $e['init'];
 
                 $dateselect->setSelection($e['name_val']);
                 $res .= $dateselect->render();
@@ -548,8 +543,8 @@ class XhtmlForm
                 $dateselect->setNameFrom($e['namefrom']);
                 $dateselect->setNameTo($e['nameto']);
 
-                $e['namefrom_val'] = !empty($this->formData[$e['namefrom']]) ? $this->formData[$e['namefrom']] : $e['init_from'];
-                $e['nameto_val']   = !empty($this->formData[$e['nameto']])   ? $this->formData[$e['nameto']]   : $e['init_to'];
+                $e['namefrom_val'] = !empty($this->form_data[$e['namefrom']]) ? $this->form_data[$e['namefrom']] : $e['init_from'];
+                $e['nameto_val']   = !empty($this->form_data[$e['nameto']])   ? $this->form_data[$e['nameto']]   : $e['init_to'];
 
                 $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
                 $res .= $dateselect->render().'<br/>';
