@@ -9,24 +9,25 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-require_once('client_shorturl.php');
+require_once('IShortUrlClient.php');
 
-class Shorturl_Tinyurl extends ShorturlBase
+require_once('HttpClient.php');
+
+class ShortUrlClientTinyUrl implements IShortUrlClient
 {
-    function __construct()
-    {
-        $this->api_url = 'http://tinyurl.com/api-create.php';
-    }
-
     /**
      * Creates a short URL from input URL
      *
      * @param $url input URL
      * @return short URL or false on error
      */
-    function getShortUrl($url)
+    static function getShortUrl($url)
     {
-        $res = $this->getUrl($this->api_url.'?url='.urlencode($url));
+        $url = 'http://tinyurl.com/api-create.php?url='.urlencode($url);
+        $http = new HttpClient($url);
+        $http->setCacheTime(86400); //24 hours
+
+        $res = $http->getBody();
 
         if (substr($res, 0, 4) == 'http') return trim($res);
 

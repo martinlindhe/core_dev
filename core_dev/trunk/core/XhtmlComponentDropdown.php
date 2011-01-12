@@ -14,7 +14,7 @@ require_once('XhtmlComponent.php');
 class XhtmlComponentDropdown extends XhtmlComponent
 {
     var $selected;                 ///<  selected item
-    protected $js_onchange = '';   ///< XXXX unused
+    protected $js_onchange = '';
 
     function setJsOnChange($s) { $this->js_onchange = $s; }
 
