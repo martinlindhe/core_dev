@@ -9,11 +9,9 @@
 
 //STATUS: wip
 
-//TODO: implement IXmlComponent
-
 require_once('XhtmlComponent.php');
 
-class XhtmlComponentSubmit extends XhtmlComponent // implements IXmlComponent
+class XhtmlComponentSubmit extends XhtmlComponent
 {
     var $title = 'Submit';
     var $class = 'button';

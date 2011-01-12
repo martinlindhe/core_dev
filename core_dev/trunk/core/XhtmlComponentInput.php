@@ -9,11 +9,9 @@
 
 //STATUS: wip
 
-//TODO: implement IXmlComponent
-
 require_once('XhtmlComponent.php');
 
-class XhtmlComponentInput extends XhtmlComponent // implements IXmlComponent
+class XhtmlComponentInput extends XhtmlComponent
 {
     var $id;                ///< xhtml component id
     var $value;             ///< default value
