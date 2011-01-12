@@ -215,7 +215,7 @@ function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
 /**
  * Creates a submit button
  */
-function xhtmlSubmit($_title = 'Submit', $class = 'button', $style = '')  //XXX DEPRECATE, use XhtmlSubmit.php
+function xhtmlSubmit($_title = 'Submit', $class = 'button', $style = '')  //XXX DEPRECATE, use XhtmlComponentSubmit.php
 {
     return '<input type="submit" value="'.t($_title).'"'.($class ? ' class="'.$class.'"' : '').($style ? ' style="'.$style.'"' : '').'/>';
 }

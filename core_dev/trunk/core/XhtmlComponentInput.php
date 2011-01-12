@@ -11,9 +11,10 @@
 
 //TODO: implement IXmlComponent
 
-class XhtmlInput
+require_once('XhtmlComponent.php');
+
+class XhtmlComponentInput extends XhtmlComponent // implements IXmlComponent
 {
-    var $name;
     var $id;                ///< xhtml component id
     var $value;             ///< default value
     var $size;

@@ -21,8 +21,8 @@ require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
-require_once('XhtmlInput.php');
-require_once('XhtmlSubmit.php');
+require_once('XhtmlComponentInput.php');
+require_once('XhtmlComponentSubmit.php');
 
 require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
@@ -172,9 +172,14 @@ class XhtmlForm
 
         if (!empty($_GET))
             foreach ($_GET as $key => $val)
-                foreach ($this->elems as $e)
+                foreach ($this->elems as $e) {
+                    d($e);
+                    if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key) {
+
+                    }
                     if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                }
 
         $page = XmlDocumentHandler::getInstance();
 
@@ -260,7 +265,7 @@ class XhtmlForm
      */
     function addInput($name, $str, $val = '', $size = 0)
     {
-        $o = new XhtmlInput();
+        $o = new XhtmlComponentInput();
         $o->name  = $name;
         $o->value = $val;
         $o->size  = $size;
@@ -305,7 +310,7 @@ class XhtmlForm
      */
     function addSubmit($title)
     {
-        $o = new XhtmlSubmit();
+        $o = new XhtmlComponentSubmit();
         $o->title = $title;
 
         $this->elems[] = array('obj' => $o, 'str' => '');

@@ -11,7 +11,9 @@
 
 //TODO: implement IXmlComponent
 
-class XhtmlSubmit
+require_once('XhtmlComponent.php');
+
+class XhtmlComponentSubmit extends XhtmlComponent // implements IXmlComponent
 {
     var $title = 'Submit';
     var $class = 'button';
