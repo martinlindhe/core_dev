@@ -4,10 +4,13 @@
  *
  * API for http://is.gd/ URL shortening service
  *
- * API documentation: http://is.gd/api_info.php
+ * API documentation:
+ * http://is.gd/api_info.php
  *
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
+
+//STATUS: works 2011-01-13
 
 require_once('IShortUrlClient.php');
 
@@ -15,13 +18,7 @@ require_once('HttpClient.php');
 
 class ShortUrlClientIsGd implements IShortUrlClient
 {
-    /**
-     * Creates a short URL from input URL
-     *
-     * @param $input_url input URL
-     * @return short URL or false on error
-     */
-    static function getShortUrl($input_url)
+    static function shorten($input_url)
     {
         $url = 'http://is.gd/api.php?longurl='.urlencode($input_url);
         $http = new HttpClient($url);
@@ -29,14 +26,10 @@ class ShortUrlClientIsGd implements IShortUrlClient
 
         $res = $http->getBody();
 
-        if (substr($res, 0, 4) == 'http') return trim($res);
-        echo 'Error: '.$res;
-        return false;
-    }
+        if (substr($res, 0, 4) == 'http')
+            return trim($res);
 
-    function getUrl($url)
-    {
-
+        throw new Exception ('Error: '.$res);
     }
 
 }

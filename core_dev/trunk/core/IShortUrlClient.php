@@ -8,14 +8,20 @@
 //STATUS: wip
 
 //TODO: goo.gl client
-//TODO: bit.ly client
 
+require_once('ShortUrlClientBitLy.php');
 require_once('ShortUrlClientIsGd.php');
 require_once('ShortUrlClientTinyUrl.php');
 
 interface IShortUrlClient
 {
-    static function getShortUrl($input_url);
+    /**
+     * Creates a short URL from input URL
+     *
+     * @param $input_url input URL
+     * @return short URL or false on error
+     */
+    static function shorten($input_url);
 }
 
 ?>
