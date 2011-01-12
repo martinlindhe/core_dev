@@ -13,14 +13,16 @@ require_once('XhtmlComponent.php');
 
 class XhtmlComponentDropdown extends XhtmlComponent
 {
-    var $selected;            ///<  selected item
-    var $onchange = '';       ///< XXXX unused
+    var $selected;                 ///<  selected item
+    protected $js_onchange = '';   ///< XXXX unused
+
+    function setJsOnChange($s) { $this->js_onchange = $s; }
 
     function render()
     {
         $out =
         '<select name="'.strip_tags($this->name).'"'.
-        ($this->onchange ? ' onchange="'.$this->onchange.'"' : '').
+        ($this->js_onchange ? ' onchange="'.$this->js_onchange.'"' : '').
         '>';
 
         $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
