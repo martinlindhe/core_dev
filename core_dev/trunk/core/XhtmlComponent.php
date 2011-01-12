@@ -7,6 +7,7 @@
 
 ///XXXX: make interface IXhtmlComponent instead?
 
+require_once('XhtmlComponentHidden.php');
 require_once('XhtmlComponentInput.php');
 require_once('XhtmlComponentSubmit.php');
 require_once('XhtmlComponentOpenSearch.php');

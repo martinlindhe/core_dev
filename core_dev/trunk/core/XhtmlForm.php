@@ -257,7 +257,11 @@ class XhtmlForm
      */
     function addHidden($name, $val)
     {
-        $this->elems[] = array('type' => 'HIDDEN', 'name' => $name, 'value' => $val);
+        $o = new XhtmlComponentHidden();
+        $o->name  = $name;
+        $o->value = $val;
+
+        $this->add($o);
     }
 
     /**
@@ -414,14 +418,19 @@ class XhtmlForm
 
         foreach ($this->elems as $e)
         {
-            $res .= '<tr>';
-
             if (isset($e['obj']) && is_object($e['obj'])) {
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= $e['obj']->render().'</td>';
-                $res .= '</tr>';
+                if ($e['obj'] instanceof XhtmlComponentHidden) {
+                    $res .= $e['obj']->render();
+                } else {
+                    $res .= '<tr>';
+                    $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
+                    $res .= $e['obj']->render().'</td>';
+                    $res .= '</tr>';
+                }
                 continue;
             }
+
+            $res .= '<tr>';
 
             //fills in form with previous entered data
             switch ($e['type']) {
@@ -440,10 +449,6 @@ class XhtmlForm
                 $e['value'] = urlencode($e['value']);
 
             switch ($e['type']) {
-            case 'HIDDEN':
-                $res .= xhtmlHidden($e['name'], $e['value']);
-                break;
-
             case 'CHECKBOX':
                 $res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default'], $e['checked']).'</td>';
                 break;
