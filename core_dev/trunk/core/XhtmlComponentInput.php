@@ -43,19 +43,4 @@ class XhtmlComponentInput extends XhtmlComponent
 
 }
 
-/*
-/// USEFUL SOMEWHERE ELSE?
-
-    static $ids = array();  ///< remember id's used for dynamic allocation of input array id's
-
-        if (substr($id, -2) == '[]') {
-            // if name is "price[]", translate it to price1, price2 ...
-            if (!isset(self::$ids[ $id ]))
-                self::$ids[ $id ] = 0;
-
-            self::$ids[ $id ]++;
-            $id = substr($id, 0, -2).self::$ids[ $id ];
-        }
-*/
-
 ?>

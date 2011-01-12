@@ -16,6 +16,9 @@ abstract class XhtmlComponent
     var $name;
 
     abstract function render();
+
+    function setName($s) { $this->name = $s; }
+    function getName() { return $this->name; }
 }
 
 ?>

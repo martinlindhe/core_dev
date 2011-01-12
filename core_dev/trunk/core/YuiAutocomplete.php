@@ -12,11 +12,11 @@
 //STATUS: wip
 
 require_once('output_js.php');
-require_once('output_xhtml.php');
 
-class YuiAutocomplete
+require_once('XhtmlComponent.php');
+
+class YuiAutocomplete extends XhtmlComponent
 {
-    protected $name;
     protected $xhr_url;
 
     protected $js_onclick       = '';
@@ -25,7 +25,6 @@ class YuiAutocomplete
 
     protected $query_delay      = 0.5;         // Bump up the query delay to reduce server load
 
-    function setName($s) { $this->name = $s; }
     function setXhrUrl($s) { $this->xhr_url = $s; }
 
     function setJsOnclick($s) { $this->js_onclick = $s; }
@@ -117,9 +116,12 @@ class YuiAutocomplete
             '}'.
         '})();';
 
+        $in = new XhtmlComponentInput();
+        $in->name = $this->name;
+
         return
         '<div id="'.$div_holder.'">'.
-            xhtmlInput($this->name).
+            $in->render().
             '<div id="myContainer"></div>'.
         '</div>'.
         js_embed($res);
