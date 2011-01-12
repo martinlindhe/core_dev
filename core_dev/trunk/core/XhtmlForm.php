@@ -124,7 +124,7 @@ class XhtmlForm
                         continue;
                     }
 
-                    throw new Exception ('blergh');  //XXX drop following code
+////                    throw new Exception ('blergh');  //XXX drop following code
 
                     switch ($e['type']) {
                     case 'DATEINTERVAL':

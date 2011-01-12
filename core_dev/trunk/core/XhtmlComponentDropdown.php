@@ -13,10 +13,8 @@ require_once('XhtmlComponent.php');
 
 class XhtmlComponentDropdown extends XhtmlComponent
 {
-    var $selected;  ///<  selected item
-
-    private $empty_default = true; ///< XXX drop?
-    private $onchange = ''; ///> XXXX drop?
+    var $selected;            ///<  selected item
+    var $onchange = '';       ///< XXXX unused
 
     function render()
     {
@@ -25,8 +23,7 @@ class XhtmlComponentDropdown extends XhtmlComponent
         ($this->onchange ? ' onchange="'.$this->onchange.'"' : '').
         '>';
 
-        if ($this->empty_default)
-            $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
+        $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
 
         foreach ($this->value as $id => $title)
             $out .= '<option value="'.$id.'"'.($this->selected == $id ? ' selected="selected"':'').'>'.$title.'</option>';
