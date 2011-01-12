@@ -299,7 +299,10 @@ class XhtmlForm
      */
     function addText($str, $str2 = '')
     {
-        $this->elems[] = array('type' => 'TEXT', 'str' => $str, 'str2' => $str2);
+        $o = new XhtmlComponentText();
+        $o->value = $str;
+
+        $this->add($o, $str2);
     }
 
     /**
@@ -465,13 +468,6 @@ class XhtmlForm
                 $richedit->setWidth($e['width']);
                 $richedit->setHeight($e['height']);
                 $res .= $richedit->render();
-                break;
-
-            case 'TEXT':
-                if ($e['str2'])
-                    $res .= '<td>'.$e['str'].'</td><td>'.$e['str2'].'</td>';
-                else
-                    $res .= '<td colspan="2">'.$e['str'].'</td>';
                 break;
 
             case 'DROPDOWN':

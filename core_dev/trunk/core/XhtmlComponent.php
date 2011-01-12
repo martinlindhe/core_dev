@@ -9,8 +9,9 @@
 
 require_once('XhtmlComponentHidden.php');
 require_once('XhtmlComponentInput.php');
-require_once('XhtmlComponentSubmit.php');
 require_once('XhtmlComponentOpenSearch.php');
+require_once('XhtmlComponentSubmit.php');
+require_once('XhtmlComponentText.php');
 
 abstract class XhtmlComponent
 {
