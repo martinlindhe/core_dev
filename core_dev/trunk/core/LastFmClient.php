@@ -43,9 +43,6 @@ class LastFmClient
         $data = $http->getBody();
         $x = simplexml_load_string($data);
 
-        if (isset($x->err))
-            throw new Exception ( $x->err['msg'] );
-
         return $x;
     }
 
@@ -61,6 +58,9 @@ class LastFmClient
     function getAlbumCover($artist, $album, $quality = '')
     {
         $xml = $this->albumGetInfo($artist, $album);
+
+        if (isset($xml->error)) // eg: "Album not found"
+            return false;
 
         $scoring = array(
         'small'      => 1,
