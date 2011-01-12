@@ -52,7 +52,12 @@ echo '<br/>';
 $grp = new UserGroupList();
 
 echo xhtmlForm('grp');
-echo xhtmlSelectArray('grp_id', $grp->getIndexedList() ).' ';
+
+$x = new XhtmlComponentDropdown();
+$x->name = 'grp_id';
+$x->value = $grp->getIndexedList();
+echo $x->render().' ';
+
 echo xhtmlSubmit('Add');
 echo xhtmlFormClose().'<br/><br/>';
 

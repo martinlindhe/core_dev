@@ -90,7 +90,13 @@ echo '<td colspan="6">';
 echo 'Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd');
 
 $grp = new UserGroupList();
-echo xhtmlSelectArray('u_grp', $grp->getIndexedList() ).' ';
+
+$x = new XhtmlComponentDropdown();
+$x->name = 'u_grp';
+$x->value = $grp->getIndexedList();
+echo $x->render();
+
+
 echo '</td>';
 echo '</tr>';
 echo '</table>';

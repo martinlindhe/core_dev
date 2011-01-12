@@ -29,24 +29,6 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 }
 
 /**
- * Creates a select-dropdown from a indexed array
- */
-function xhtmlSelectArray($_name, $_arr, $_default = '', $_onchange = '', $empty_default = true)   //XXXX: deprecate! use XhtmlComponentDropdown
-{
-    $out = '<select name="'.strip_tags($_name).'"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
-
-    if ($empty_default)
-        $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
-
-    foreach ($_arr as $id => $title)
-        $out .= '<option value="'.$id.'"'.($_default == $id ? ' selected="selected"':'').'>'.$title.'</option>';
-
-    $out .= '</select>';
-
-    return $out;
-}
-
-/**
  * @param $_size number of fields shown
  */
 function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')
