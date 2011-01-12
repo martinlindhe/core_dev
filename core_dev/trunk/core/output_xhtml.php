@@ -352,38 +352,6 @@ function countryFlag($code)
 }
 
 /**
- * Implements a OpenSearch compatible search engine
- *
- * @param $url relative link to the script handling searches on the server including search parameter
- *             example: "search.php?s="
- * @param $name name of search engine
- * @param $icon (optional) url to icon resource
- */
-function xhtmlOpenSearch($url, $name, $icon = '')
-{
-    $page = XmlDocumentHandler::getInstance();
-    $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
-    $page->setMimeType('application/xml');       // or "application/opensearchdescription+xml"
-
-    if ($icon && substr($icon, 0, 4) != 'http')
-        $icon = $page->getUrl().$icon;
-
-    if (substr($url, 0, 4) != 'http')
-        $url = $page->getUrl().$url;
-
-    $res =
-    '<?xml version="1.0" encoding="UTF-8"?>'.
-        '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">'.
-        '<ShortName>'.$name.'</ShortName>'.
-        '<Description>'.$name.'</Description>'.
-        ($icon ? '<Image height="16" width="16" type="image/x-icon">'.$icon.'</Image>' : '').
-        '<Url type="text/html" template="'.$url.'{searchTerms}"/>'.
-    '</OpenSearchDescription>';
-
-    return $res;
-}
-
-/**
  * Generates XML tags from an array of values
  *
  * @param $params array with params (Name=>Value) for each tag

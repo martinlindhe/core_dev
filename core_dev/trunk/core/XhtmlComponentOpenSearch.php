@@ -28,10 +28,10 @@ class XhtmlComponentOpenSearch extends XhtmlComponent
         $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
         $page->setMimeType('application/xml');       // or "application/opensearchdescription+xml"
 
-        if (!is_url($this->icon)) // && substr($this->icon, 0, 4) != 'http')  //XXXXX is_url()
+        if (!is_url($this->icon))
             $this->icon = $page->getUrl().$this->icon;
 
-        if (!is_url($this->url)) //substr($this->url, 0, 4) != 'http')   //XXXXX is_url()
+        if (!is_url($this->url))
             $this->url = $page->getUrl().$this->url;
 
         return

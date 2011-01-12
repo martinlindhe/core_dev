@@ -20,8 +20,7 @@ require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
-require_once('XhtmlComponentInput.php');
-require_once('XhtmlComponentSubmit.php');
+require_once('XhtmlComponent.php');
 
 require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
