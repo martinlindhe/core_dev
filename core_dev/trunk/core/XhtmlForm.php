@@ -10,7 +10,6 @@
 //STATUS: wip
 
 
-//XXX TODO require that all objects added with add() method implements/extends some "IXhtmlComponent" interface or similar  (see/rewrite IXmlComponent)
 //TODO soon: rewrite internal form field representation to use objects passed to add() method
 
 
@@ -173,10 +172,9 @@ class XhtmlForm
         if (!empty($_GET))
             foreach ($_GET as $key => $val)
                 foreach ($this->elems as $e) {
-                    d($e);
-                    if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key) {
+                    if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
+                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
 
-                    }
                     if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                 }
@@ -249,6 +247,9 @@ class XhtmlForm
         if (!is_object($o))
             throw new Exception ('not an object');
 
+        if (!$o instanceof XhtmlComponent)
+            throw new exception ('obj must extend from XhtmlComponent');
+
         $this->elems[] = array('obj' => $o, 'str' => $str);
     }
 
@@ -270,7 +271,7 @@ class XhtmlForm
         $o->value = $val;
         $o->size  = $size;
 
-        $this->elems[] = array('obj' => $o, 'str' => $str);
+        $this->add($o, $str);
    }
 
     /**
@@ -313,7 +314,7 @@ class XhtmlForm
         $o = new XhtmlComponentSubmit();
         $o->title = $title;
 
-        $this->elems[] = array('obj' => $o, 'str' => '');
+        $this->add($o);
     }
 
     /**
