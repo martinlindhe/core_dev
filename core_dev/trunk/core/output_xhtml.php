@@ -201,18 +201,6 @@ function xhtmlPassword($_name, $_value = '', $_size = 0, $_maxlen = 0)
 }
 
 /**
- * Creates a xhtml textarea
- */
-function xhtmlTextarea($_name, $_value = '', $_width = 0, $_height = 0)
-{
-    if (!is_numeric($_width) || !is_numeric($_height)) return false;
-    return '<textarea name="'.$_name.'" id="'.$_name.'"'.
-        ($_width ? ' cols="'.$_width.'"' : '').
-        ($_height ? ' rows="'.$_height.'"' : '').
-        '>'.$_value.'</textarea>';
-}
-
-/**
  * Creates a submit button
  */
 function xhtmlSubmit($_title = 'Submit', $class = 'button', $style = '')  //XXX DEPRECATE, use XhtmlComponentSubmit.php

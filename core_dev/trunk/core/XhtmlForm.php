@@ -283,7 +283,15 @@ class XhtmlForm
      */
     function addTextarea($name, $str, $val = '', $width = 0, $height = 0)
     {
-        $this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
+//        $this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
+
+        $o = new XhtmlComponentTextarea();
+        $o->name  = $name;
+        $o->value = $val;
+        $o->width  = $width;
+        $o->height = $height;
+
+        $this->add($o, $str);
     }
 
     /**
@@ -300,9 +308,9 @@ class XhtmlForm
     function addText($str, $str2 = '')
     {
         $o = new XhtmlComponentText();
-        $o->value = $str;
+        $o->value = $str2;
 
-        $this->add($o, $str2);
+        $this->add($o, $str);
     }
 
     /**
@@ -454,14 +462,15 @@ class XhtmlForm
                 $res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default'], $e['checked']).'</td>';
                 break;
 
-            case 'TEXTAREA':
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlTextarea($e['name'], $e['default'], $e['width'], $e['height']).'</td>';
-                break;
-
             case 'RICHEDIT':
+                $hold = new XhtmlComponentTextarea();
+                $hold->name = $e['name'];
+                $hold->value = $e['default'];
+                $hold->width = 1;
+                $hold->height = 1;
+
                 $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlTextarea($e['name'], $e['default'], 1, 1).'</td>';
+                $res .= $hold->render().'</td>';
 
                 $richedit = new YuiRichedit();
                 $richedit->setInputName($e['name']);

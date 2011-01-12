@@ -12,6 +12,7 @@ require_once('XhtmlComponentInput.php');
 require_once('XhtmlComponentOpenSearch.php');
 require_once('XhtmlComponentSubmit.php');
 require_once('XhtmlComponentText.php');
+require_once('XhtmlComponentTextarea.php');
 
 abstract class XhtmlComponent
 {
