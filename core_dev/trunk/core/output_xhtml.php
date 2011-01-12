@@ -31,7 +31,7 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 /**
  * Creates a select-dropdown from a indexed array
  */
-function xhtmlSelectArray($_name, $_arr, $_default = '', $_onchange = '', $empty_default = true)
+function xhtmlSelectArray($_name, $_arr, $_default = '', $_onchange = '', $empty_default = true)   //XXXX: deprecate! use XhtmlComponentDropdown
 {
     $out = '<select name="'.strip_tags($_name).'"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
 

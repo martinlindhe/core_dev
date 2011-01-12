@@ -283,8 +283,6 @@ class XhtmlForm
      */
     function addTextarea($name, $str, $val = '', $width = 0, $height = 0)
     {
-//        $this->elems[] = array('type' => 'TEXTAREA', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
-
         $o = new XhtmlComponentTextarea();
         $o->name  = $name;
         $o->value = $val;
@@ -328,9 +326,14 @@ class XhtmlForm
      * Adds a select dropdown list to the form
      * @param $arr array with id=>name pairs
      */
-    function addDropdown($name, $str, $arr, $default = '')
+    function addDropdown($name, $str, $arr, $selected = '')
     {
-        $this->elems[] = array('type' => 'DROPDOWN', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
+        $o = new XhtmlComponentDropdown();
+        $o->name    = $name;
+        $o->value   = $arr;
+        $o->selected = $selected;
+
+        $this->add($o, $str);
     }
 
     function addRadio($name, $str, $arr, $default = '')
@@ -477,11 +480,6 @@ class XhtmlForm
                 $richedit->setWidth($e['width']);
                 $richedit->setHeight($e['height']);
                 $res .= $richedit->render();
-                break;
-
-            case 'DROPDOWN':
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlSelectArray($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'RADIO':
