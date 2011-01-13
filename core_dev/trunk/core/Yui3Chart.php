@@ -32,11 +32,14 @@ class Yui3Chart
 
         $this->data_source = array();
 
-        foreach ($arr as $idx => $vals) {
-
+        foreach ($arr as $idx => $vals)
+        {
             $x = array($this->x_field => $idx);
-            foreach ($vals as $idx => $val)
-                $x[ $idx] = $val;
+            if (is_array($vals))
+                foreach ($vals as $idx => $val)
+                    $x[$idx] = $val;
+            else
+                $x['value'] = $vals;
 
             $this->data_source[] = $x;
         }
