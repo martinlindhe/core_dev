@@ -17,7 +17,7 @@ function jsArrayFlat($list, $with_keys)
     {
         $res = '';
         if ($with_keys) {
-            if (is_numeric($key))
+            if (is_numeric($key) && substr($key, 0, 1) != 0)
                 $res .= $key.':';
             else
                 $res .= '"'.$key.'":';
