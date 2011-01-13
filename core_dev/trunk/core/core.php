@@ -319,4 +319,27 @@ function strpre_exact($s, $len, $pad_s = ' ')
     return substr( str_pad($s, $len, $pad_s, STR_PAD_LEFT), -$len);
 }
 
+function array_last_entry($arr)
+{
+    if (!is_array($arr))
+        return;
+
+    if (empty($arr))
+        return;
+
+    return end($arr);
+}
+
+function array_first_entry($arr)
+{
+    if (!is_array($arr))
+        return;
+
+    if (empty($arr))
+        return;
+
+    reset($arr);
+    return current($arr);
+}
+
 ?>
