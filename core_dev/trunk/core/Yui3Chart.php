@@ -13,8 +13,6 @@
 
 //TODO (MISSING FROM YUI2-chart): visa label för x & y led: setYTitle(), setXTitle()
 
-//TODO: use jsArray-functions more
-
 require_once('output_js.php');
 
 class Yui3Chart
@@ -22,11 +20,16 @@ class Yui3Chart
     private $data_source = '';   ///< array of data to display
     private $width  = 700;
     private $height = 400;
-    private $x_field;           ///< group by this field (usually a datestamp)
+    private $x_field;           ///< group by this field (usually a timestamp)
     private $x_title, $y_title; ///< display titles
+
+    private $x_type = ''; ///< is the X-axis a timestamp?
 
     function setDataSource($arr)
     {
+        if (!$this->x_field)
+            throw new Exception ('x field must be set before data source');
+
         $this->data_source = array();
 
         foreach ($arr as $idx => $vals) {
@@ -37,6 +40,14 @@ class Yui3Chart
 
             $this->data_source[] = $x;
         }
+    }
+
+    function setXType($t)
+    {
+        if ($t != 'time')
+            throw new Exception ('unknown x type');
+
+        $this->x_type = $t;
     }
 
     function setXField($name) { $this->x_field = $name; }
@@ -108,7 +119,7 @@ class Yui3Chart
             '{'.
                 'dataProvider:myDataValues,'.
                 'categoryKey:"'.$this->x_field.'",'.
-                'categoryType:"time",'.
+                ($this->x_type ? 'categoryType:"'.$this->x_type.'",' : '').
 
                 'render: "#'.$div_holder.'",'.
                 'tooltip: myTooltip,'.
