@@ -75,7 +75,7 @@ class TempStore
         }
     }
 
-    function connect()
+    private function connect()
     {
         if (!$this->server_pool)
             $this->addServer('127.0.0.1', 11211);

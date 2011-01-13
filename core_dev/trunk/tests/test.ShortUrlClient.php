@@ -11,4 +11,3 @@ echo 'bit.ly: '.ShortUrlClientBitLy::shorten($url)."\n";
 echo 'goo.gl: '.ShortUrlClientGooGl::shorten($url)."\n";
 
 ?>
-

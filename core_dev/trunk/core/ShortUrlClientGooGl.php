@@ -12,32 +12,36 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: not finished. their api return "500 internal error" at 2011-01-13
-
-//TODO: implement cache of result, because httpclient dont cache a POST request
+//STATUS: works 2011-01-13
 
 require_once('IShortUrlClient.php');
 
 require_once('HttpClient.php');
 require_once('JSON.php');
+require_once('TempStore.php');
 
 class ShortUrlClientGooGl implements IShortUrlClient
 {
     static function shorten($input_url)
     {
+        $temp = TempStore::getInstance();
+        $res = $temp->get('goo.gl/'.$input_url);
+        if ($res)
+            return $res;
+
         $http = new HttpClient('https://www.googleapis.com/urlshortener/v1/url');
+
         $http->setContentType('application/json');
-        $res = $http->post( array('longUrl' => $input_url) );
+        $res = $http->post( JSON::encode( array('longUrl' => $input_url)) );
 
         $res = JSON::decode($res);
 
-        if ($res->error->code != 200)
+        if (isset($res->error))
             throw new Exception ('Error code '.$res->error->code.': '.$res->error->message);
 
-d($res);
-die;
+        $temp->set('goo.gl/'.$input_url, $res->id);
 
-        return $res->data->url;
+        return $res->id;
     }
 
 }
