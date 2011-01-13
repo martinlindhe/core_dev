@@ -101,7 +101,7 @@ class User
 
         $session = SessionHandler::getInstance();
 
-        dp($session->getName().' created user '.$this->name.' ('.$this->id.')');
+        dp($session->getUsername().' created user '.$this->name.' ('.$this->id.')');
 
         return $this->id;
     }

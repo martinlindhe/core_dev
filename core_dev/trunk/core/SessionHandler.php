@@ -63,6 +63,8 @@ class SessionHandler extends CoreBase
     function setEncryptKey($key) { $this->encrypt_key = $key; }
     function getEncryptKey() { return $this->encrypt_key; }
 
+    function getUsername() { return $this->username; }
+
     function allowLogins($b) { $this->allow_logins = $b; }
     function allowRegistrations($b) { $this->allow_registrations = $b; }
 
@@ -153,10 +155,6 @@ class SessionHandler extends CoreBase
         if (!$this->id)
             return;
 
-        //sets httponly param to mitigate XSS attacks
-        $domain = ''; //XXX read domain name from XmlDocumentHandler->getUrl()
-        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
-
         //Logged in: Check user activity - log out inactive user
         //FIXME: redo this- check lastactive timestamp from db when session is resumed instead
         /*
@@ -213,6 +211,10 @@ class SessionHandler extends CoreBase
 
         $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
         $db->pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
+
+        // sets httponly param to mitigate XSS attacks
+        $domain = ''; //XXX read domain name from XmlDocumentHandler->getUrl()
+        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
     }
 
     function getUserLevelName()
