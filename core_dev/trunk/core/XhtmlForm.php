@@ -330,8 +330,8 @@ class XhtmlForm
     {
         $o = new XhtmlComponentDropdown();
         $o->name    = $name;
-        $o->value   = $arr;
-        $o->selected = $selected;
+        $o->value   = $selected;
+        $o->options = $arr;
 
         $this->add($o, $str);
     }
