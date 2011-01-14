@@ -7,9 +7,7 @@
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
-//STATUS: drop this when Yui3Chart is finished (doesn't use flash)
-
-//TODO: use jsArray-functions more
+//STATUS: unused, drop this when Yui3Chart is finished (doesn't use flash)
 
 require_once('output_js.php');
 

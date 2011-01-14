@@ -16,16 +16,15 @@ function jsArrayFlat($list, $with_keys)
     foreach ($list as $key => $val)
     {
         $res = '';
-        if ($with_keys) {
+        if ($with_keys)
             if (is_numeric($key) && substr($key, 0, 1) != '0')
                 $res .= $key.':';
             else
                 $res .= '"'.$key.'":';
-        }
 
         if (is_bool($val))
             $res .= ($val ? '1' : '0');
-        else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0') || strpos($val, '.') !== false)
+        else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0' || strpos($val, '.') !== false))
             $res .= $val;
         else {
             $val = str_replace('"', '&quot;', $val); // "

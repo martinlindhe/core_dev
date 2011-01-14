@@ -11,5 +11,7 @@ if (jsArray1D(array('0123' => 0.5)) != '{"0123":0.5}')         echo "FAIL 3\n";
 if (jsArray1D(array('0123' => 0)) != '{"0123":0}')             echo "FAIL 4\n";
 if (jsArray1D(array('0123' => 1)) != '{"0123":1}')             echo "FAIL 5\n";
 if (jsArray1D(array('123' => '0123')) != '{123:"0123"}')       echo "FAIL 6\n";
+if (jsArray1D(array('123' => 'a.b')) != '{123:"a.b"}')         echo "FAIL 7\n";
+if (jsArray1D(array('a.b' => '123')) != '{"a.b":123}')         echo "FAIL 8\n";
 
 ?>
