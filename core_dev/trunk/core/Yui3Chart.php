@@ -17,13 +17,16 @@ require_once('output_js.php');
 
 class Yui3Chart
 {
-    private $data_source = '';   ///< array of data to display
-    private $width  = 700;
-    private $height = 400;
-    private $x_field;           ///< group by this field (usually a timestamp)
-    private $x_title, $y_title; ///< display titles
+    protected $data_source = '';   ///< array of data to display
+    protected $width  = 700;
+    protected $height = 400;
+    protected $x_field;           ///< group by this field (usually a timestamp)
+    protected $x_title, $y_title; ///< display titles
 
-    private $x_type = ''; ///< is the X-axis a timestamp?
+    protected $color_grid  = '#dad8c9';
+    protected $color_label = '#808080';
+
+    protected $x_type = ''; ///< is the X-axis a timestamp?
 
     function setDataSource($arr)
     {
@@ -57,6 +60,9 @@ class Yui3Chart
 
     function setXTitle($title) { $this->x_title = $title; }
     function setYTitle($title) { $this->y_title = $title; }
+
+    function setGridColor($s) { $this->color_grid = $s; }
+    function setLabelColor($s) { $this->color_label = $s; }
 
     function render()
     {
@@ -98,19 +104,18 @@ class Yui3Chart
                 '}'.
             '};'.
 
-            'var styleDef ='.
-            '{'.
+            'var styleDef = {'.
                 'axes:{'.
                     'values:{'.
                         'label:{'.
                             //'rotation:-45,'.
-                            //'color:"#ff0000"'.
+                            'color:"'.$this->color_label.'"'.
                         '}'.
                     '},'.
                     $this->x_field.':{'.
                         'label:{'.
                             'rotation:-45,'.
-                            //'color: "#ff0000"'.
+                            'color: "'.$this->color_label.'"'.
                         '}'.
                     '}'.
                 '}'.
@@ -129,10 +134,10 @@ class Yui3Chart
                 'styles: styleDef,'.
 
                 'horizontalGridlines: {'.
-                    'styles: { line: { color: "#dad8c9" } }'.
+                    'styles: { line: { color: "'.$this->color_grid.'" } }'.
                 '},'.
                 'verticalGridlines: {'.
-                    'styles: { line: { color: "#dad8c9" } }'.
+                    'styles: { line: { color: "'.$this->color_grid.'" } }'.
                 '}'.
 
 //                'yAxis: yAxisWidget,'.
