@@ -94,6 +94,18 @@ class XhtmlForm
         }
 
         $p = array();
+
+        // fetch GET parameters before processing POST
+        if (!empty($_GET))
+            foreach ($_GET as $key => $val)
+                foreach ($this->elems as $e) {
+                    if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
+                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+
+                    if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
+                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                }
+
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
                 foreach ($this->elems as $e) {
@@ -124,7 +136,7 @@ class XhtmlForm
                         continue;
                     }
 
-////                    throw new Exception ('blergh');  //XXX drop following code
+//                    throw new Exception ('blergh '.$e['type']);  //XXX drop following code
 
                     switch ($e['type']) {
                     case 'DATEINTERVAL':
@@ -157,18 +169,6 @@ class XhtmlForm
                         }
                         break;
                     }
-                }
-
-        //catch named GET parameters if no POST parameters are found
-
-        if (!empty($_GET))
-            foreach ($_GET as $key => $val)
-                foreach ($this->elems as $e) {
-                    if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
-                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
-
-                    if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
-                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                 }
 
         $page = XmlDocumentHandler::getInstance();
