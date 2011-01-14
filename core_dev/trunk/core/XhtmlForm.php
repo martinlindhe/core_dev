@@ -120,7 +120,7 @@ class XhtmlForm
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $this->auto_code ? $val : $val;
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
 
                         }
 
