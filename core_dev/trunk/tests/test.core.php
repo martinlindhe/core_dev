@@ -26,4 +26,9 @@ if (!is_alphanumeric('لقمة'))      echo "FAIL 15\n"; // utf8 is ok
 
 if (!is_alphanumeric(''))          echo "FAIL 16\n";
 
+if (byte_count(1024 * 2) != '2 KiB')                      echo "FAIL 17\n";
+if (byte_count(1024 * 1024 * 2) != '2 MiB')               echo "FAIL 18\n";
+if (byte_count(1024 * 1024 * 1024 * 2) != '2 GiB')        echo "FAIL 19\n";
+if (byte_count(1024 * 1024 * 1024 * 1024 * 2) != '2 TiB') echo "FAIL 20\n";
+
 ?>

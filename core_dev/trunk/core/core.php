@@ -342,4 +342,28 @@ function array_first_entry($arr)
     return current($arr);
 }
 
+
+/**
+ * Renders number of bytes in a easily readable format, such as "2.5 KiB" or "3 MiB"
+ */
+function byte_count($s)  //TODO: render TiB also
+{
+    if (!is_numeric($s))
+        throw new Exception ('not a number '.$s);
+
+    if ($s < 1024)
+        return $s.' bytes';
+
+    if ($s < (1024 * 1024))
+        return round($s / 1024, 1).' KiB';
+
+    if ($s < (1024 * 1024 * 1024))
+        return round($s / 1024 / 1024, 1).' MiB';
+
+    if ($s < (1024 * 1024 * 1024 * 1024))
+        return round($s / 1024 / 1024 / 1024, 1).' GiB';
+
+    return round($s / 1024 / 1024 / 1024 / 1024).' TiB';
+}
+
 ?>

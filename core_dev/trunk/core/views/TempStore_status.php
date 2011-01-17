@@ -27,19 +27,19 @@ foreach ($store->getServerStats() as $host => $stat)
 
     echo 'Curr items: '.$stat['curr_items'].'<br/>';
     echo 'Total items: '.$stat['total_items'].'<br/>';
-    echo 'Max bytes: '.$stat['limit_maxbytes'].'<br/>';
+    echo 'Max bytes: '.byte_count($stat['limit_maxbytes']).'<br/>';
 
     echo 'Curr connections: '.$stat['curr_connections'].'<br/>';
     echo 'Total connections: '.$stat['total_connections'].'<br/>';
 
-    echo 'Bytes: '.$stat['bytes'].'<br/>';  // ????
+    echo 'Bytes: '.byte_count($stat['bytes']).'<br/>';  // ????
     echo 'Cmd get: '.$stat['cmd_get'].'<br/>';
     echo 'Cmd set: '.$stat['cmd_set'].'<br/>';
     echo 'Get hits: '.$stat['get_hits'].'<br/>';
     echo 'Get misses: '.$stat['get_misses'].'<br/>';
     echo 'Evictions: '.$stat['evictions'].'<br/>';  // ????
-    echo 'Bytes read: '.$stat['bytes_read'].'<br/>';
-    echo 'Bytes written: '.$stat['bytes_written'].'<br/>';
+    echo 'Bytes read: '.byte_count($stat['bytes_read']).'<br/>';
+    echo 'Bytes written: '.byte_count($stat['bytes_written']).'<br/>';
     echo 'Memcached version '.$stat['version'].'<br/>';
 }
 
