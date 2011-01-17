@@ -33,6 +33,7 @@ class LocaleInGer extends CoreLocale
         'S', 'M', 'D', 'M', 'D', 'F', 'S');
 
     var $country_3char = array(
+    'EUR' => 'Europäische Union',
     'SWE' => 'Schweden',
     'NOR' => 'Norwegen',
     'USA' => 'Vereinigte Staaten von Amerika',

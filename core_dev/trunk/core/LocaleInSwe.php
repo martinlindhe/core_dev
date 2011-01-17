@@ -35,6 +35,7 @@ class LocaleInSwe extends CoreLocale
         'S', 'M', 'T', 'O', 'T', 'F', 'S');
 
     var $country_3char = array(
+    'EUR' => 'Europeiska Unionen',
     'SWE' => 'Sverige',
     'NOR' => 'Norge',
     'USA' => 'Amerikas förenta stater',

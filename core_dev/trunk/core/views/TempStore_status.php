@@ -1,10 +1,8 @@
 <?php
-//TODO: present uptime better than in seconds, use a "rought" estimate
 
 $rand_id = mt_rand(0,99999);
 
 echo js_embed(
-//Toggles element with name "n" between visible and hidden
 'function toggle_tempstore()'.
 '{'.
     'var e = document.getElementById("tss_'.$rand_id.'");'.
@@ -14,19 +12,17 @@ echo js_embed(
 
 echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a>';
 
-
 $store = TempStore::getInstance();
 
 $height = 250;
 
 echo '<div id="tss_'.$rand_id.'" style="height:'.$height.'px;display:none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
-
-foreach ($store->getServerStats() as $host => $stat) {
+foreach ($store->getServerStats() as $host => $stat)
+{
     echo '<h3>TempStore server '.$host.'</h3>';
-    echo 'Memcached version '.$stat['version'].'<br/>';
-    echo 'Server time: '.sql_datetime($stat['time']).'<br/>';
     echo 'Uptime: '.elapsed_seconds($stat['uptime']).'<br/>';
+    echo 'Server time: '.sql_datetime($stat['time']).'<br/>';
     echo 'Threads: '.$stat['threads'].'<br/>';
 
     echo 'Curr items: '.$stat['curr_items'].'<br/>';
@@ -44,6 +40,7 @@ foreach ($store->getServerStats() as $host => $stat) {
     echo 'Evictions: '.$stat['evictions'].'<br/>';  // ????
     echo 'Bytes read: '.$stat['bytes_read'].'<br/>';
     echo 'Bytes written: '.$stat['bytes_written'].'<br/>';
+    echo 'Memcached version '.$stat['version'].'<br/>';
 }
 
 echo '</div>';

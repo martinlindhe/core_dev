@@ -85,6 +85,10 @@ class LocaleHandler
     function getCountryName($s)
     {
         $s = strtoupper($s);
+
+        if (strlen($s) == 2)
+            $s = country_2_to_3_letters($s);
+
         if (!isset($this->handle->country_3char[$s]))
             throw new Exception ('Unknown country name '.$s);
 
@@ -113,12 +117,14 @@ class LocaleHandler
 function country_2_to_3_letters($s)
 {
     switch (strtoupper($s)) {
+    case 'EU': return 'EUR';
     case 'US': return 'USA';
     case 'GB': case 'UK': return 'GBR';  // GB is official 2-letter code, altough UK is also used & reserved for other use in ISO
     case 'SE': return 'SWE';
     case 'NO': return 'NOR';
     case 'DE': return 'DEU';
     }
+    return $s;
 }
 
 /**
