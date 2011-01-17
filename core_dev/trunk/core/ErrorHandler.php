@@ -57,39 +57,39 @@ class ErrorHandler
         case E_ERROR:
         case E_USER_ERROR:
             $type = 'ERROR';
-            $s = "$errstr on $errfile:$errline";
+            $s = $errstr;
             break;
 
         case E_WARNING:
         case E_USER_WARNING:
             $type = 'WARNING';
-            $s = "$errstr on $errfile:$errline";
+            $s = $errstr;
             break;
 
         case E_NOTICE:
         case E_USER_NOTICE:
             $type = 'NOTICE';
-            $s = "$errstr on $errfile:$errline";
+            $s = $errstr;
             break;
 
         case E_STRICT:
             $type = 'STRICT';
-            $s = "$errstr on $errfile:$errline";
+            $s = $errstr;
             break;
 
         default:
             $type = 'UNKNOWN';
-            $s = "Unknown error type: [$errno] $errstr on $errfile:$errline";
+            $s = "Unknown error type: [$errno] $errstr";
             break;
         }
 
-        dp('PHP ERROR: '.$type.' '.$s);
+        dp('PHP ERROR: '.$type.' '.$s.' on '.$errfile.':'.$errline);
 
         // Dont display errors that is hidden by error_reporting setting
         if (!(error_reporting() & $errno))
             return;
 
-        echo '<b>'.$type.':</b> '.$s."<br/>\n";
+        echo '<b>'.$type.':</b> '.$s." on $errfile:$errline<br/>\n";
 
         // Don't execute PHP internal error handler
         return true;

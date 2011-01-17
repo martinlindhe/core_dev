@@ -13,6 +13,7 @@ require_once('XhtmlComponent.php');
 
 class XhtmlComponentDropdown extends XhtmlComponent
 {
+    var $value;                   ///< default value
     var $options;                 ///<  array of available options
     protected $js_onchange = '';
 
@@ -20,6 +21,9 @@ class XhtmlComponentDropdown extends XhtmlComponent
 
     function render()
     {
+        if (!is_array($this->options))
+            throw new Exception ('options not set');
+
         $out =
         '<select name="'.strip_tags($this->name).'"'.
         ($this->js_onchange ? ' onchange="'.$this->js_onchange.'"' : '').

@@ -55,7 +55,8 @@ echo xhtmlForm('grp');
 
 $x = new XhtmlComponentDropdown();
 $x->name = 'grp_id';
-$x->value = $grp->getIndexedList();
+$x->options = $grp->getIndexedList();
+
 echo $x->render().' ';
 
 echo xhtmlSubmit('Add');
