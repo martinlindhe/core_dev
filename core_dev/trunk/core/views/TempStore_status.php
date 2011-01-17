@@ -26,7 +26,7 @@ foreach ($store->getServerStats() as $host => $stat) {
     echo '<h3>TempStore server '.$host.'</h3>';
     echo 'Memcached version '.$stat['version'].'<br/>';
     echo 'Server time: '.sql_datetime($stat['time']).'<br/>';
-    echo 'Uptime: '.$stat['uptime'].' sec<br/>';
+    echo 'Uptime: '.elapsed_seconds($stat['uptime']).'<br/>';
     echo 'Threads: '.$stat['threads'].'<br/>';
 
     echo 'Curr items: '.$stat['curr_items'].'<br/>';

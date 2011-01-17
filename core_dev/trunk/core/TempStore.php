@@ -107,8 +107,7 @@ class TempStore
 
         $val = $this->handle->get($key);
 
-//        if ($this->getDebug())
-            echo "CACHE READ ".$key.($val ? ' HIT' : ' MISS').ln();
+//        echo 'CACHE READ "'.$key.'"'.($val ? ' HIT' : ' MISS').ln();
 
         return $val;
     }
@@ -130,8 +129,7 @@ class TempStore
 
         $ret = $this->handle->set($key, $val, $expire_time);
 
-//        if ($this->getDebug())
-            echo "CACHE WRITE ".$key." = ".substr($val, 0, 200)."... (".$expire_time." sec)".ln();
+//        echo 'CACHE WRITE "'.$key.'" = "'.substr($val, 0, 200).'"... ('.$expire_time.' sec)'.ln();
 
         return $ret;
     }

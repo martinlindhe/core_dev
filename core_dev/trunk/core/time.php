@@ -99,7 +99,7 @@ function num_days($d1, $d2)
  * @param $secs number of seconds to present
  * @return returns a sting like: 4h10m3s
  */
-function shortTimePeriod($secs) //XXX rename to something with duration. also see Duration class
+function shortTimePeriod($secs) //XXX rename to something with duration. also see Duration class .. DROP for elapsed_seconds() ?
 {
     if (is_float($secs)) $secs = ceil($secs);
     $retval = '';
@@ -140,6 +140,35 @@ function shortTimePeriod($secs) //XXX rename to something with duration. also se
     if ($retval == '') $retval = '0s';
 
     return $retval;
+}
+
+/**
+ * Formats number of elapsed seconds in a readable way, such as "2.5 hours" or "4 weeks"
+ */
+function elapsed_seconds($s)
+{
+    if (!is_numeric($s))
+        throw new Exception ('not a number '.$s);
+
+    if ($s < 60)
+        return $s.' seconds';
+
+    if ($s < (60 * 60))
+        return round($s / 60, 1).' minutes';
+
+    if ($s < (60 * 60 * 24))
+        return round($s / 60 / 60, 1).' hours';
+
+    if ($s < (60 * 60 * 24 * 7))
+        return round($s / 60 / 60 / 24, 1).' days';
+
+    if ($s < (60 * 60 * 24 * 28))
+        return round($s / 60 / 60 / 24 / 7, 1).' weeks';
+
+    if ($s < (60 * 60 * 24 * 30 * 12))
+        return round($s / 60 / 60 / 24 / 30, 1).' months';
+
+    return round($s / 60 / 60 / 24 / 365, 1).' years';
 }
 
 /**

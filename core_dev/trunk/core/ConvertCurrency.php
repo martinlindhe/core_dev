@@ -15,7 +15,7 @@
 //STATUS: ok
 
 require_once('ConvertBase.php');
-require_once('Cache.php');
+require_once('TempStore.php');
 
 require_once('CurrencyFetcherFoxRate.php');
 require_once('CurrencyFetcherExchangeRate.php');
@@ -23,8 +23,6 @@ require_once('CurrencyFetcherWebservicex.php');
 
 class ConvertCurrency extends ConvertBase
 {
-    private $cache_expire = 1200; ///< (20m) expire time in seconds for local cache (in seconds)
-
     protected $lookup = array(      ///< all supported currencies as of 2009.07.23
     'AFA'=>'Afghanistan Afghani',
     'ALL'=>'Albanian Lek',
@@ -185,8 +183,6 @@ class ConvertCurrency extends ConvertBase
 
     function getShortcode($s, $lcase = false) { return parent::getShortcode( strtoupper($s), $lcase); }
 
-    function setCacheTime($s) { $this->cache_expire = $s; }
-
     /**
      * Returns the current currency conversion for specified currencies
      * @param $from ISO 4217 currency code (USD, GBP, SEK)
@@ -200,9 +196,9 @@ class ConvertCurrency extends ConvertBase
             return false;
 
         $key = 'currency/'.$from.'/'.$to;
-        $cache = new Cache();
-        $cache->setCacheTime($this->cache_expire);
-        $rate = $cache->get($key);
+        $temp = TempStore::getInstance();
+
+        $rate = $temp->get($key);
         if ($rate)
             return $rate;
 
@@ -214,7 +210,7 @@ class ConvertCurrency extends ConvertBase
 
         $rate = $fetcher->getRate($from, $to);
 
-        $cache->set($key, $rate);
+        $temp->set($key, $rate);
         return $rate;
     }
 
