@@ -342,11 +342,10 @@ function array_first_entry($arr)
     return current($arr);
 }
 
-
 /**
  * Renders number of bytes in a easily readable format, such as "2.5 KiB" or "3 MiB"
  */
-function byte_count($s)  //TODO: render TiB also
+function byte_count($s)
 {
     if (!is_numeric($s))
         throw new Exception ('not a number '.$s);
