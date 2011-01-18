@@ -93,7 +93,7 @@ $grp = new UserGroupList();
 
 $x = new XhtmlComponentDropdown();
 $x->name = 'u_grp';
-$x->value = $grp->getIndexedList();
+$x->options = $grp->getIndexedList();
 echo $x->render();
 
 

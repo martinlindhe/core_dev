@@ -7,6 +7,8 @@
 
 ///XXXX: make interface IXhtmlComponent instead?
 
+require_once('class.CoreBase.php');
+
 require_once('XhtmlComponentDropdown.php');
 require_once('XhtmlComponentHidden.php');
 require_once('XhtmlComponentInput.php');
@@ -15,7 +17,7 @@ require_once('XhtmlComponentSubmit.php');
 require_once('XhtmlComponentText.php');
 require_once('XhtmlComponentTextarea.php');
 
-abstract class XhtmlComponent
+abstract class XhtmlComponent extends CoreBase
 {
     var $name;
 
