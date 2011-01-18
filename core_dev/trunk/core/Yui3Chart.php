@@ -12,6 +12,7 @@
 //STATUS: wip
 
 //TODO (MISSING FROM YUI2-chart): visa label för x & y led: setYTitle(), setXTitle()
+//   - ticket open due to missing functionality: http://yuilibrary.com/projects/yui3/ticket/2529841
 
 require_once('output_js.php');
 
@@ -34,6 +35,9 @@ class Yui3Chart
             throw new Exception ('x field must be set before data source');
 
         $this->data_source = array();
+
+        if (!is_array($arr))
+            throw new Exception ('data source is not a array: '.$arr);
 
         foreach ($arr as $idx => $vals)
         {
