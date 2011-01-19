@@ -220,10 +220,8 @@ class XhtmlForm
             if (call_user_func($call, $this->form_data, $this))
                 $this->handled = true;
 
-        if ($error->getErrorCount()) {
-            echo $error->render(true).'<br/>';
+        if ($error->getErrorCount())
             return false;
-        }
 
         if ($this->handled)
             return true;
@@ -411,6 +409,13 @@ class XhtmlForm
 
         $this->handle();
 
+        $res = '';
+
+        $error = ErrorHandler::getInstance();
+
+        if ($error->getErrorCount())    
+            $res .= $error->render(true);
+
         $enctype = $this->file_upload ? 'multipart/form-data' : '';
 
         if (!$this->name)
@@ -421,7 +426,7 @@ class XhtmlForm
         if ($this->focus_element)
             $header->embedJsOnload('document.'.$this->name.'.'.$this->focus_element.'.focus();');
 
-        $res = xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
+        $res .= xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
 
         $res .= '<table cellpadding="10" cellspacing="0" border="1">';
 
@@ -518,7 +523,6 @@ class XhtmlForm
                 $dateselect = new YuiDate();
                 $dateselect->setDivName('cal1Container');
                 $dateselect->setName($e['name']);
-
                 $e['name_val'] = !empty($this->form_data[$e['name']]) ? $this->form_data[$e['name']] : $e['init'];
 
                 $dateselect->setSelection($e['name_val']);
