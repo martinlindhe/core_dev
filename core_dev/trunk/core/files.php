@@ -130,12 +130,12 @@ function dir_get_tree($outerDir)
  * Returns array with files filtered on extension
  *
  * @param $path path to directory to look in
- * @param $filter_ext array of extensions including dot, example: array(".avi", ".mkv")
+ * @param $haystack array describing allowed strings, eg: test*.php, *.jpg, test*, *test
  * @param $prefix require prefix in filenames
  * @param $full_path true to return full paths in matches
  * @param $include_dirs should we return directories?
  */
-function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_path = false, $include_dirs = true)
+function dir_get_matches($path, $haystack = array(), $prefix = '', $full_path = false, $include_dirs = true)
 {
     $e = scandir($path);
 
@@ -145,15 +145,15 @@ function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_
         if ($name == '.' || $name == '..')
             continue;
 
+        $path = realpath($path);
+
         if (!$include_dirs && is_dir($path.'/'.$name))
             continue;
 
         if ($prefix && strpos($name, $prefix) !== 0)
             continue;
 
-        $suffix = file_suffix($name);
-
-        if (!$filter_ext || in_array($suffix, $filter_ext))
+        if (!$haystack || arg_match($name, $haystack))
             $out[] = ($full_path ? $path.'/'.$name : $name);
     }
 
@@ -161,38 +161,76 @@ function dir_get_by_extension($path, $filter_ext = array(), $prefix = '', $full_
 }
 
 /**
- * Expands a input argument to a file of lists matching certain extensions
+ * Matches input argument towards multiple allowed input string using markup tags
  *
- * @param $in input argument
- * @param $filter_ext array of extensions including dot, example: array(".avi", ".mkv")
- * @return array with filenames
+ * @param $needle string eg. test-filename.jpg
+ * @param $haystack array describing allowed strings, eg: test*.php, *.jpg, test*, *test
+ * @return true if $needle is allowed according to one of the rules in $haystack
  */
-function expand_arg_files($in, $filter_ext = array() )
+function arg_match($needle, $haystack)
 {
-    if (is_array($in)) {
-        $res = array();
-        foreach ($in as $f)
-            if (in_array( file_suffix($f), $filter_ext))
-                $res[] = $f;
+    if (!is_array($haystack))
+        throw new Exception ('haystack must be array: '.$haystack);
 
-        return $res;
+    foreach ($haystack as $h)
+    {
+        $p1 = strpos($h, '*');
+
+        if ($p1 === false)
+            throw new Exception ('arg_match() haystack filters require wildcards, change ".avi" TO "*.avi"');
+
+        $i1 = substr($h, 0, $p1);
+        $i2 = substr($h, $p1 +  1);
+
+        $o1 = substr($needle, 0, strlen($i1));
+        $o2 = strlen($i2) ? substr($needle, -strlen($i2) ) : '';
+
+//d('i1: '.$i1); d('i2: '.$i2); d('o1: '.$o1); d('o2: '.$o2);
+
+        if ($i1 == $o1 && $i2 == $o2)
+            return true;
     }
 
-    if (is_file($in))
-        if (in_array(file_suffix($in), $filter_ext))
-            return array($in);        //XXX: expand to full path
+    return false;
+}
+
+/**
+ * Expands a input argument to a file of lists matching certain extensions
+ *
+ * @param $in input argument (full path to file/directory, array with multiple entries)
+ * @param $haystack array describing allowed strings, eg: test*.php, *.jpg, test*, *test
+ * @return array with filenames
+ */
+function expand_arg_files($in, $haystack = array() )
+{
+    if (is_array($in)) {
+        throw new Exception ('FIXME be recursive');
+/*        $res = array();
+        foreach ($in as $f)
+            if (in_array( file_suffix($f), $haystack))
+                $res[] = $f;
+
+        return $res;*/
+    }
+
+    if (is_file($in)) {
+        if (arg_match($in, $haystack))
+            return array( realpath($in) );  // expands to full file path
+        else
+            return array();
+    }
 
     if (is_dir($in))
-        return dir_get_by_extension($in, $filter_ext, '', true, false);
-
+        return dir_get_matches($in, $haystack, '', true, false);
+/*
     if (strpos($in, "\n") !== false) {
-        if ($filter_ext)
-            throw new Exception ('XXX respect $filter_ext');
+        if ($haystack)
+            throw new Exception ('XXX respect $haystack');
 
         return explode("\n", trim($in)); // newline-separated list of filenames with full path
     }
-
-    throw new Exception ('Unknown input');
+*/
+    throw new Exception ('Unknown input: '.$in);
 }
 
 ?>
