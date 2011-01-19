@@ -36,6 +36,9 @@ class Url extends CoreProperty
      */
     function get($safe = false)
     {
+        if (!$this->scheme || !$this->host)
+            return false;
+
         $port = '';
         if ($this->port && scheme_default_port($this->scheme) != $this->port)
             $port = ':'.$this->port;

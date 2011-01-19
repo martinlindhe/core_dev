@@ -68,6 +68,11 @@ function d($v)
         return;
     }
 
+    if (!$v) {
+        echo "NULL";
+        return;
+    }
+
     //xdebug's var_dump is awesome
     if (extension_loaded('xdebug')) {
         var_dump($v);

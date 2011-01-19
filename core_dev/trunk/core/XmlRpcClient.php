@@ -23,7 +23,7 @@ class XmlRpcClient extends HttpClient
         parent::__construct($s);
     }
 
-    function call($method, $params)
+    function call($method, $params, $debug = false)
     {
         if (!$this->Url->get() )
             throw new Exception ('No XML-RPC server URL set');
@@ -38,9 +38,17 @@ class XmlRpcClient extends HttpClient
         'encoding'    => 'UTF-8',
         );
         $req = xmlrpc_encode_request($method, $params, $opts);
+
+        if ($debug)
+            echo "CLIENT REQUEST: ".$req."\n";
+
         $res = $this->post($req);
 
-        //echo "SERVER RESPONSE\n"; d( xmlrpc_decode($res) );
+        if ($debug) {
+            echo "SERVER RESPONSE: ";
+            d( xmlrpc_decode($res) );
+        }
+
         return xmlrpc_decode($res);
     }
 }
