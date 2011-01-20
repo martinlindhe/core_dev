@@ -148,26 +148,28 @@ function bt()
 
     foreach ($bt as $idx => $l)
     {
+//        if (!empty($l['class'])) echo '(class '.$l['class'].') ';
+        if (!empty($l['object'])) echo get_class($l['object']).$l['type'];
         echo $l['function'].'(';
 
-        //echo count($l['args']).' args'.ln();
         $i = 0;
         foreach ($l['args'] as $arg) {
             $i++;
-            echo $arg;
+            if (is_object($arg)) {
+                echo gettype($arg).' '.get_class($arg);
+            } else {
+                echo $arg;
+            }
             if ($i < count($l['args'])) echo ', ';
         }
-        echo ') from '.$l['file'].':'.$l['line'].ln();
-
-        if (!empty($l['class'])) echo 'XXX class '.$l['class'].ln();
-        if (!empty($l['object'])) echo 'XXX object '.get_class($l['object']).ln();
-        if (!empty($l['type'])) echo 'XXX type '.$l['type'].ln();
+        echo ')';
+        if (!empty($l['file']))
+            echo ' from '.$l['file'].':'.$l['line'];
+        echo ln();
     }
 
     if (php_sapi_name() != 'cli') echo '</pre>';
 }
-
-function dtrace() { return bt(); }
 
 /**
  * Debug function. Prints $m as hex + ascii values

@@ -100,7 +100,7 @@ class XhtmlForm
             foreach ($_GET as $key => $val)
                 foreach ($this->elems as $e) {
                     if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
-                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                        $p[ $key ] = $this->auto_code && is_string($val) ? urldecode($val) : $val;
 
                     if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
                         $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
