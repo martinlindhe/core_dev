@@ -60,13 +60,16 @@ class Yui3Chart
         $this->x_type = $t;
     }
 
-    function setCategoryKey($name) { $this->category_key = $name; } //XXX rename to "category_key"
+    function setCategoryKey($name) { $this->category_key = $name; }
 
     function setXTitle($title) { $this->x_title = $title; }
     function setYTitle($title) { $this->y_title = $title; }
 
     function setGridColor($s) { $this->color_grid = $s; }
     function setLabelColor($s) { $this->color_label = $s; }
+
+    function setWidth($n) { if (is_numeric($n)) $this->width = $n; }
+    function setHeight($n) { if (is_numeric($n)) $this->height = $n; }
 
     function render()
     {
