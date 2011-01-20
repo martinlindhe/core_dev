@@ -21,7 +21,7 @@ class Yui3Chart
     protected $data_source = '';   ///< array of data to display
     protected $width  = 700;
     protected $height = 400;
-    protected $x_field;           ///< group by this field (usually a timestamp)
+    protected $category_key;      ///< group by this field (usually a timestamp)
     protected $x_title, $y_title; ///< display titles
 
     protected $color_grid  = '#dad8c9';
@@ -31,8 +31,8 @@ class Yui3Chart
 
     function setDataSource($arr)
     {
-        if (!$this->x_field)
-            throw new Exception ('x field must be set before data source');
+        if (!$this->category_key)
+            throw new Exception ('category_key must be set before data source');
 
         $this->data_source = array();
 
@@ -41,7 +41,7 @@ class Yui3Chart
 
         foreach ($arr as $idx => $vals)
         {
-            $x = array($this->x_field => $idx);
+            $x = array($this->category_key => $idx);
             if (is_array($vals))
                 foreach ($vals as $idx => $val)
                     $x[$idx] = $val;
@@ -60,7 +60,7 @@ class Yui3Chart
         $this->x_type = $t;
     }
 
-    function setXField($name) { $this->x_field = $name; }
+    function setCategoryKey($name) { $this->category_key = $name; } //XXX rename to "category_key"
 
     function setXTitle($title) { $this->x_title = $title; }
     function setYTitle($title) { $this->y_title = $title; }
@@ -116,7 +116,7 @@ class Yui3Chart
                             'color:"'.$this->color_label.'"'.
                         '}'.
                     '},'.
-                    $this->x_field.':{'.
+                    $this->category_key.':{'.
                         'label:{'.
                             'rotation:-45,'.
                             'color: "'.$this->color_label.'"'.
@@ -130,7 +130,7 @@ class Yui3Chart
             'var mychart = new Y.Chart('.
             '{'.
                 'dataProvider:myDataValues,'.
-                'categoryKey:"'.$this->x_field.'",'.
+                'categoryKey:"'.$this->category_key.'",'.
                 ($this->x_type ? 'categoryType:"'.$this->x_type.'",' : '').
 
                 'render: "#'.$div_holder.'",'.
