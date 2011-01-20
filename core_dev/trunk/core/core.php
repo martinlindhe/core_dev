@@ -372,4 +372,17 @@ function byte_count($s)
     return round($s / 1024 / 1024 / 1024 / 1024).' TiB';
 }
 
+/**
+ * Needed (in PHP 5.3) to correctly lowercase swedish words, like "Östen"->"östen"
+ */
+function strtolower_utf8($s)
+{
+    return mb_convert_case($s, MB_CASE_LOWER, 'UTF-8');
+}
+
+function ucfirst_utf8($s)
+{
+    return mb_convert_case($s, MB_CASE_TITLE, 'UTF-8');
+}
+
 ?>
