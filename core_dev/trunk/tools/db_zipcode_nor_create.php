@@ -2,15 +2,16 @@
 /**
  * Creates a SQLite3 database of Swedish post numbers & addresses
  *
- * Creation of the db file takes ~2m20s and results in a 22 MiB big file
+ * Creation of the db file takes ~15s and results in a 1.1 MiB big file
  *
  * The input file is created by db_postnr_export.ahk
  */
 
-$in_file = 'zipcodes_swe.txt';
-$db_file = 'zipcodes_swe.db';
+$in_file = 'norway_zipcodes-2011.01.21.csv';
+$db_file = 'zipcodes_nor.db';
 
 require_once('/devel/core_dev/trunk/core/core.php');
+require_once('/devel/core_dev/trunk/core/input_csv.php');
 
 if (!class_exists('SQLite3'))
     throw new Exception ('sudo apt-get install php5-sqlite');
@@ -36,37 +37,37 @@ $communes = array('');
 
 while (($buf = fgets($handle, 4096)) !== false)
 {
-    // BERGHOLMEN;;;10005;STOCKHOLM;018601;STOCKHOLM;LIDINGÖ;LIDINGÖ;;01;
-    $r = explode(';', $buf);
+    // "1003 OSLO","Lindebergåsen Postboks 1-29","Postboksadresse","Oslo","Oslo"
+    $r = csvParseRow($buf);
 
-    // 0: Street
-    // 1: Street number (from)
-    // 2: Street number (to)
-    // 3: Zipcode
-    // 4: City
-    // 5: LKF   --- ??? numerisk
-    // 6: Län
-    // 7: Commune (Kommun)
-    // 8: Parish (Församling)
-    // 9: Kommundel
-    // 10: A-Region
+    // 0: Postnr / Postort
+    // 1: Namn
+    // 2: Addresstyp (gatuaddress, postbox)
+    // 3: Kommune
+    // 4: Fylke
 
-    if (!in_array($r[4], $cities))
-        $cities[] = $r[4];
+    $postnr = substr($r[0], 0, 4);
+    $postort = substr($r[0], 5);
 
-    $city = array_search($r[4], $cities);
+    if (!is_numeric($postnr) || strlen($postnr) != 4)
+        throw new Exception ('bad data');
 
-    if (!in_array($r[6], $lans))
-        $lans[] = $r[6];
+    if (!in_array($postort, $cities))
+        $cities[] = $postort;
 
-    $lan = array_search($r[6], $lans);
+    $city = array_search($postort, $cities);
 
-    if (!in_array($r[7], $communes))
-        $communes[] = $r[7];
+    if (!in_array($r[4], $lans))
+        $lans[] = $r[4];
 
-    $commune = array_search($r[7], $communes);
+    $lan = array_search($r[4], $lans);
 
-    $q = 'INSERT INTO postnr (street,zipcode,city,lan,commune) VALUES ("'.$r[0].'",'.$r[3].','.$city.','.$lan.','.$commune.')';
+    if (!in_array($r[3], $communes))
+        $communes[] = $r[3];
+
+    $commune = array_search($r[3], $communes);
+
+    $q = 'INSERT INTO postnr (street,zipcode,city,lan,commune) VALUES ("'.$r[1].'",'.$postnr.','.$city.','.$lan.','.$commune.')';
 
     $db->exec($q);
     $cnt++;
@@ -91,6 +92,7 @@ $db->exec('CREATE TABLE lans (id INTEGER PRIMARY KEY, name STRING)');
 $db->exec('BEGIN');
 foreach ($lans as $id => $name) {
     $q = 'INSERT INTO lans (id,name) VALUES ('.$id.',"'.$name.'")';
+    echo $q."\n";
     $db->exec($q);
 }
 $db->exec('COMMIT');
