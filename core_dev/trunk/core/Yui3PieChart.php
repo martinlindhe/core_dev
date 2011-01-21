@@ -11,7 +11,8 @@
 
 //STATUS: wip
 
-//TODO: also calculate & show percentage in tooltip
+//XXX: change default set of colors, dark purple is bad contrast
+// XXX: drop total_items calculation, since YUI chart needs it internally it should be available in the scope of the js for the tooltip
 
 require_once('output_js.php');
 
@@ -59,6 +60,10 @@ class Yui3PieChart
 
         $header->embedCss('#'.$div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
 
+        $total_items = 0;
+        foreach ($this->data_source as $i)
+            $total_items += $i['value'];
+
         $res =
         'YUI().use("charts", function (Y)'.
         '{'.
@@ -74,10 +79,8 @@ class Yui3PieChart
                 'markerLabelFunction: function(categoryItem, valueItem, itemIndex, series, seriesIndex)'.
                 '{'.
                     'return '.
-                    '"<span style=\"text-decoration:underline\">" + '.
-                    'categoryItem.axis.get("labelFunction").apply(this, [categoryItem.value, categoryItem.axis.get("labelFormat")]) + '.
-                    '"</span><br/>'.
-                    '<div style=\"margin-top:5px;font-weight:bold\">" + valueItem.axis.get("labelFunction").apply(this, [valueItem.value, {prefix:"", decimalPlaces:2}]) + "</div>";'.
+                    '"<span style=\"text-decoration:underline\">" + categoryItem.value + "</span><br/>'.
+                    '<div style=\"margin-top:5px;font-weight:bold\">" + valueItem.value + " (" + Math.round(valueItem.value / '.$total_items.' * 100) + " %)</div>";'.
                 '}'.
             '};'.
 

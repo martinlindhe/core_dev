@@ -31,6 +31,9 @@ function sql_date($ts)
     if (!$ts)
         return '';
 
+    if ($ts == '0000-00-00')
+        return $ts;
+
     if (!is_numeric($ts))
         $ts = strtotime($ts);
 
