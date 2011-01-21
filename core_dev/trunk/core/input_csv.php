@@ -92,11 +92,8 @@ function csvParseRow($row, $delimiter = ',')
     }
 
     //Clean up escaped fields
-    for ($i=0; $i<count($res); $i++) {
+    for ($i=0; $i<count($res); $i++)
         $res[$i] = csvUnescape($res[$i]);
-        if ($i == count($res)-1)
-            $res[$i] = rtrim($res[$i]); //strip lf
-    }
 
     return $res;
 }
@@ -108,11 +105,15 @@ function csvParseRow($row, $delimiter = ',')
  */
 function csvUnescape($str)
 {
+    if (substr($str, -1) == "\r" || substr($str, -1) == "\n")
+        $str = rtrim($str); //strip lf
+
     if (substr($str, 0, 1) == '"' && substr($str, -1) == '"')
         $str = substr($str, 1, -1);
 
     //embedded double-quote characters must be represented by a pair of double-quote characters.
     $str = str_replace('""', '"', $str);
+
     return $str;
 }
 
