@@ -92,7 +92,6 @@ $db->exec('CREATE TABLE lans (id INTEGER PRIMARY KEY, name STRING)');
 $db->exec('BEGIN');
 foreach ($lans as $id => $name) {
     $q = 'INSERT INTO lans (id,name) VALUES ('.$id.',"'.$name.'")';
-    echo $q."\n";
     $db->exec($q);
 }
 $db->exec('COMMIT');

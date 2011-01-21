@@ -5,7 +5,7 @@
  *
  */
 
-// script ran 2011.01.21 and took ~ 10 minutes
+// script ran 2011.01.21 and took ~ 11 minutes
 
 require_once('/devel/core_dev/trunk/core/HttpClient.php');
 
@@ -17,11 +17,15 @@ $out_file = 'out.csv';
 
 $fp = fopen($out_file, 'w');
 
-for ($digit = 10; $digit < 100; $digit++) {
-
+for ($digit = 0; $digit < 100; $digit++)
+{
     $http = new HttpClient($url);
 
-    $res = $http->post( array('SearchCriteria' => 1, 'SearchType' => 2, 'SearchWord' => $digit, 'btnSearch' => '	Søk') );
+    $query = $digit;
+    if ($query < 10)
+        $query = '0'.$query;
+
+    $res = $http->post( array('SearchCriteria' => 1, 'SearchType' => 2, 'SearchWord' => $query, 'btnSearch' => '	Søk') );
 
     $x = strip_tags($res);
 
