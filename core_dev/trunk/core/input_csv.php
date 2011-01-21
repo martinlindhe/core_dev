@@ -26,17 +26,23 @@ function csvParse($filename, $callback, $start_line = 0, $delimiter = ',')
 
     $cols = 0;
     $i = 0;
-    while (!feof($fp)) {
+    while (!feof($fp))
+    {
         $buf = fgets($fp, 4096);
-        if ($i >= $start_line) {
+        if ($i >= $start_line)
+        {
             if (!$buf) break;
+
             $row = csvParseRow($buf, $delimiter);
-            if (!$cols) $cols = count($row);
+            if (!$cols)
+                $cols = count($row);
+
             if ($cols != count($row)) {
                 echo "FATAL: CSV format error in $filename at line ".($i+1).": ".count($row)." columns found, $cols expected\n";
                 return false;
             }
-            if ($row) call_user_func($callback, $row);
+            if ($row)
+                call_user_func($callback, $row);
         }
         $i++;
     }
@@ -62,29 +68,34 @@ function csvParseRow($row, $delimiter = ',')
     $res = array();
     $in_esc = false;
 
-    for ($i=0; $i<strlen($row); $i++) {
-        if (!isset($res[$el])) $res[$el] = '';
+    for ($i=0; $i<strlen($row); $i++)
+    {
+        if (!isset($res[$el]))
+            $res[$el] = '';
+
         $c = substr($row, $i, 1);
+
         switch ($c) {
-            case $delimiter:
-                if (!$in_esc) $el++;
-                else $res[$el] .= $c;
-                break;
+        case $delimiter:
+            if (!$in_esc) $el++;
+            else $res[$el] .= $c;
+            break;
 
-            case '"':
-                $in_esc = !$in_esc;
-                $res[$el] .= $c;
-                break;
+        case '"':
+            $in_esc = !$in_esc;
+            $res[$el] .= $c;
+            break;
 
-            default:
-                $res[$el] .= $c;
+        default:
+            $res[$el] .= $c;
         }
     }
 
     //Clean up escaped fields
     for ($i=0; $i<count($res); $i++) {
         $res[$i] = csvUnescape($res[$i]);
-        if ($i == count($res)-1) $res[$i] = rtrim($res[$i]); //strip lf
+        if ($i == count($res)-1)
+            $res[$i] = rtrim($res[$i]); //strip lf
     }
 
     return $res;
@@ -97,9 +108,8 @@ function csvParseRow($row, $delimiter = ',')
  */
 function csvUnescape($str)
 {
-    if (substr($str, 0, 1) == '"' && substr($str, -1) == '"') {
+    if (substr($str, 0, 1) == '"' && substr($str, -1) == '"')
         $str = substr($str, 1, -1);
-    }
 
     //embedded double-quote characters must be represented by a pair of double-quote characters.
     $str = str_replace('""', '"', $str);
