@@ -6,6 +6,8 @@ require_once('core.php');
 require_once('files.php');
 
 
+
+
 if (arg_match( 'file123.jpg', array('file*.jpg') ) !== true)         echo "FAIL 1\n";
 if (arg_match( 'test-filename.jpg', array('test-*') ) !== true)      echo "FAIL 2\n";
 if (arg_match( 'test-filename.jpg', array('test-*.jpg') ) !== true)  echo "FAIL 3\n";
@@ -17,24 +19,23 @@ if (arg_match( 'file.bmp', array('*.gif', '*.jpg') ) === true)       echo "FAIL 
 
 
 
-
-
 $x = expand_arg_files('/var/log/boot.log', array('*.log') );
 if (count($x) != 1 || $x[0] != '/var/log/boot.log') echo "FAIL x\n";
 
-$x = expand_arg_files('test.core.php', array('*.php') );
-if (count($x) != 1 || $x[0] != '/devel/web/core_dev/trunk/tests/test.core.php') echo "FAIL x\n";
+$x = expand_arg_files('/home/ml/dev/core_dev/tests/test.files.php', array('*.php') );
+if (count($x) != 1 || $x[0] != '/home/ml/dev/core_dev/tests/test.files.php') echo "FAIL x\n";
 
 
 
 $tests = dir_get_matches('.', array('test*.php') );
 
+
+
+
 /*
-$x = expand_arg_files('/media/media-server/downloads/dump', array('*.mkv', '*.avi') );
+$x = expand_arg_files('/media/downloads/dump/V.2009.S02E0*.avi');
 d($x);
 */
-
-
 
 
 /*

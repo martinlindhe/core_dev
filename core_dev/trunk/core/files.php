@@ -222,14 +222,18 @@ function expand_arg_files($in, $haystack = array() )
 
     if (is_dir($in))
         return dir_get_matches($in, $haystack, '', true, false);
-/*
-    if (strpos($in, "\n") !== false) {
+
+    /* if (strpos($in, "\n") !== false) {
         if ($haystack)
             throw new Exception ('XXX respect $haystack');
 
         return explode("\n", trim($in)); // newline-separated list of filenames with full path
-    }
-*/
+    }*/
+
+    // expand from $in = "/media/downloads/part-of-name*.avi"
+    if (is_string($in) && !$haystack)
+        return dir_get_matches( dirname($in), array(basename($in)) );
+
     throw new Exception ('Unknown input: '.$in);
 }
 
