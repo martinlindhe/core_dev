@@ -11,7 +11,7 @@
 
 class ApiCustomerList
 {
-    private $customers = array();
+    private $customers = array(); ///< array of ApiCustomer objects
     private $owner; ///< UserGroup owner
 
     function __construct($owner = 0)
@@ -36,6 +36,20 @@ class ApiCustomerList
             $c->loadFromSql($row);
             $this->customers[] = $c;
         }
+    }
+
+    /** returns array with id=>name pairs */
+    static function getList()
+    {
+        $db = SqlHandler::getInstance();
+
+        $list = array();
+
+        $q = 'SELECT * FROM tblApiCustomers';
+        foreach ($db->getArray($q) as $row)
+            $list[ $row['customerId'] ] = $row['customerName'];
+
+        return $list;
     }
 
 }
