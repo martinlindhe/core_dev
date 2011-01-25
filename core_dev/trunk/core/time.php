@@ -171,9 +171,7 @@ function elapsed_seconds($s)
     return round($s / 60 / 60 / 24 / 365, 1).' years';
 }
 
-/**
- * Translates a timestamp such as "18:40:22" into number of seconds (integer)
- */
+/** Translates a timestamp such as "18:40:22" into number of seconds (integer) */
 function in_seconds($s)
 {
     //XXX regexp validate format "nn:nn:nn"
@@ -183,6 +181,12 @@ function in_seconds($s)
         throw new Exception ('bad format');
 
     return ($x[0] * 3600) + ($x[1] * 60) + $x[2];
+}
+
+/** Returns current time of day as a formatted 24-hour timestamp "HH:MM:SS" */
+function time_of_day()
+{
+    return date('H:i:s');
 }
 
 /**
