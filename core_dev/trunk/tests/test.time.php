@@ -12,4 +12,8 @@ if (elapsed_seconds(60 * 60 * 24 * 14) != '2 weeks')      echo "FAIL 5\n";
 if (elapsed_seconds(60 * 60 * 24 * 30 * 3) != '3 months') echo "FAIL 6\n";
 if (elapsed_seconds(60 * 60 * 24 * 365 * 2) != '2 years') echo "FAIL 7\n";
 
+if (in_seconds('00:00:00') != 0)                          echo "FAIL 8\n";
+if (in_seconds('18:13:45') != 65625)                      echo "FAIL 9\n";
+if (in_seconds('23:59:59') != 86399)                      echo "FAIL 10\n";
+
 ?>

@@ -172,6 +172,20 @@ function elapsed_seconds($s)
 }
 
 /**
+ * Translates a timestamp such as "18:40:22" into number of seconds (integer)
+ */
+function in_seconds($s)
+{
+    //XXX regexp validate format "nn:nn:nn"
+
+    $x = explode(':', $s);
+    if (count($x) != 3)
+        throw new Exception ('bad format');
+
+    return ($x[0] * 3600) + ($x[1] * 60) + $x[2];
+}
+
+/**
  * Executes $c and returns the time it took
  *
  * @param $c command to execute
