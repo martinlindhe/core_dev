@@ -319,6 +319,7 @@ function loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh)
  * @param $ttf_size optional size of ttf font, defaults to 12
  * @return image resource
  */
+
 function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 12)
 {
 	$ttf_angle = 0;
@@ -331,7 +332,7 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
 		$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
 	}
 
-	$font = loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh);
+	$font = loadFont($str, $font, $ttf_size, $ttf_angle, $ttf, $fh);
 
 	$i = 0;
 
@@ -359,6 +360,8 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
 	return $im;
 }
 
+
+
 function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12, $px = 10, $py = 10)
 {
 	$ttf_angle = 0;
@@ -371,7 +374,7 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
 		$color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
 	}
 
-	$font = loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh);
+	$font = loadFont($str, $font, $ttf_size, $ttf_angle, $ttf, $fh);
 
 	//Prints the text in $str array centered vertically & horizontally over the image
 	foreach ($str as $txt) {
@@ -399,6 +402,7 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
 	}
 	return $im;
 }
+
 
 /**
  * Wrapper for GD imagecreatefrom*() functions
