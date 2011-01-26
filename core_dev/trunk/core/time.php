@@ -178,7 +178,7 @@ function in_seconds($s)
 
     $x = explode(':', $s);
     if (count($x) != 3)
-        throw new Exception ('bad format');
+        throw new Exception ('bad format: '.$s);
 
     return ($x[0] * 3600) + ($x[1] * 60) + $x[2];
 }

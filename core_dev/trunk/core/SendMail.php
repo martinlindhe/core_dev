@@ -60,7 +60,22 @@ class SendMail extends CoreBase
         if (!(self::$_instance instanceof self))
             self::$_instance = new self();
 
+        self::resetInstance();
+
         return self::$_instance;
+    }
+
+    protected function resetInstance()  //XXX stupid idea?? maybe its stupid to have this class as Singleton
+    {
+        self::from_adr = '';
+        self::from_name = '';
+        self::rply_adr = '';
+        self::rply_name = '';
+        self::subject = '';
+        self::to_adr = array();
+        self::cc_adr = array();
+        self::bcc_adr = array();;
+        self::attachments = array();
     }
 
     function setServer($server = '', $username = '', $password = '', $port = 25)
