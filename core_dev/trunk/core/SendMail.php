@@ -66,10 +66,10 @@ class SendMail extends CoreBase
 
     protected static function resetInstance()
     {
-        self::$from_adr = '';
-        self::$from_name = '';
-        self::$rply_adr = '';
-        self::$rply_name = '';
+//        self::$from_adr = '';
+//        self::$from_name = '';
+//        self::$rply_adr = '';
+//        self::$rply_name = '';
         self::$subject = '';
         self::$to_adr = array();
         self::$cc_adr = array();
