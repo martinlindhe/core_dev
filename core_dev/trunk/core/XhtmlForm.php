@@ -174,34 +174,33 @@ class XhtmlForm
         $page = XmlDocumentHandler::getInstance();
 
         // include FILES uploads
-        if ($this->file_upload) {
-            foreach ($this->elems as $e) {
-                if ($e['type'] == 'FILE' && !empty($_FILES[ $e['name'] ]) ) {
+        foreach ($this->elems as $e)
+        {
+            if (isset($e['obj']) && is_object($e['obj']) && $e['obj'] instanceof XhtmlComponentFile && !empty($_FILES[ $e['obj']->name ]))
+            {
+                $key = $_FILES[ $e['obj']->name ];
 
-                    $key = $_FILES[ $e['name'] ];
+                // ignore empty file uploads
+                if (!$key['name'])
+                    continue;
 
-                    // ignore empty file uploads
-                    if (!$key['name'])
-                        continue;
-
-                    if (!is_uploaded_file($key['tmp_name'])) {
-                        $error->add('Upload failed for file '.$key['name'] );
-                        continue;
-                    }
-
-                    $dst_file = $page->getUploadRoot().$key['name'];
-
-                    if (move_uploaded_file($key['tmp_name'], $dst_file))
-                        chmod($dst_file, 0777);
-                    else
-                        throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
-
-                    $key['name'] = $dst_file;
-
-                    $p[ $e['name'] ] = $key;
-
-                    unset($_FILES[ $e['name'] ]);    //to avoid further processing of this file upload elsewhere
+                if (!is_uploaded_file($key['tmp_name'])) {
+                    $error->add('Upload failed for file '.$key['name'] );
+                    continue;
                 }
+
+                $dst_file = $page->getUploadRoot().$key['name'];
+
+                if (move_uploaded_file($key['tmp_name'], $dst_file))
+                    chmod($dst_file, 0777);
+                else
+                    throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
+
+                $key['name'] = $dst_file;
+
+                $p[ $e['obj']->name ] = $key;
+
+                unset($_FILES[ $e['obj']->name ]);    //to avoid further processing of this file upload elsewhere
             }
         }
 
@@ -395,8 +394,12 @@ class XhtmlForm
      */
     function addFile($name, $str = '')
     {
-         $this->file_upload = true;
-        $this->elems[] = array('type' => 'FILE', 'name' => $name, 'str' => $str);
+        $this->file_upload = true;
+
+        $o = new XhtmlComponentFile();
+        $o->name = $name;
+
+        $this->add($o, $str);
     }
 
     /**
@@ -413,7 +416,7 @@ class XhtmlForm
 
         $error = ErrorHandler::getInstance();
 
-        if ($error->getErrorCount())    
+        if ($error->getErrorCount())
             $res .= $error->render(true);
 
         $enctype = $this->file_upload ? 'multipart/form-data' : '';
@@ -569,12 +572,6 @@ class XhtmlForm
 
                 $res .= '<td colspan="2">';
                 $res .= $captcha->render();
-                $res .= '</td>';
-                break;
-
-            case 'FILE':
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlFile($e['name']);
                 $res .= '</td>';
                 break;
 

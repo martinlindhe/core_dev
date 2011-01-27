@@ -10,6 +10,7 @@
 require_once('class.CoreBase.php');
 
 require_once('XhtmlComponentDropdown.php');
+require_once('XhtmlComponentFile.php');
 require_once('XhtmlComponentHidden.php');
 require_once('XhtmlComponentInput.php');
 require_once('XhtmlComponentOpenSearch.php');

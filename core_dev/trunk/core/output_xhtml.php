@@ -136,14 +136,6 @@ function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled =
 }
 
 /**
- * Creates a file upload field
- */
-function xhtmlFile($_name)
-{
-    return '<input type="file" name="'.$_name.'"/>';
-}
-
-/**
  * Creates image tags
  */
 function xhtmlImage($_src, $_alt = '')
