@@ -13,6 +13,7 @@
 
 //XXX: change default set of colors, dark purple is bad contrast
 // XXX: drop total_items calculation, since YUI chart needs it internally it should be available in the scope of the js for the tooltip
+//      ticket for feature request here: http://yuilibrary.com/projects/yui3/ticket/2529878
 
 require_once('output_js.php');
 
