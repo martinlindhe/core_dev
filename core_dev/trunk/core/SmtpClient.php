@@ -4,8 +4,6 @@
  *
  * Sends mail through a SMTP email server
  *
- * !!! Use SendMail.php for a easy to use "send mail" API
- *
  * References
  * http://tools.ietf.org/html/rfc5321
  * http://tools.ietf.org/html/rfc821
@@ -19,13 +17,15 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
-/**
- * VERIFY: different AUTH methods against different SMTP servers
- * VERIFY: do all AUTH methods work with non-latin1 letters in username & password?
- * VERIFY: do HELO work on a non-ESMTP capable server?
- * FIXME: figure out why "AUTH DIGEST-MD5" needs an extra NOOP at the end
- * TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
- */
+//STATUS: wip
+
+//Use SendMail class for a easy to use "send mail" API
+
+//VERIFY: different AUTH methods against different SMTP servers
+//VERIFY: do all AUTH methods work with non-latin1 letters in username & password?
+//VERIFY: do HELO work on a non-ESMTP capable server?
+//FIXME: figure out why "AUTH DIGEST-MD5" needs an extra NOOP at the end
+//TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
 
 require_once('MimeReader.php');
 

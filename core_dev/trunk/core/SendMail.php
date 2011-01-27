@@ -13,7 +13,7 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
-//STATUS: good
+//STATUS: wip
 
 //TODO: untangle smtp class, create a new connect() method
 
@@ -32,21 +32,20 @@ class MailAttachment
 
 class SendMail extends CoreBase
 {
-    static $_instance; ///< singleton
+    protected static $_instance; ///< singleton
 
-    private $smtp;
-    private $version     = 'core_dev Sendmail 0.9';
+    protected $smtp;
+    protected $version            = 'core_dev Sendmail 0.9';
+    protected $connected          = false;
 
-    private $from_adr, $from_name;
-    private $rply_adr, $rply_name;
-    protected $subject;
-    private $to_adr      = array();
-    private $cc_adr      = array();
-    private $bcc_adr     = array();
-    private $html        = false;
-    private $attachments = array();  ///< MailAttachment objects
-
-    private $connected = false;
+    protected static $from_adr, $from_name;
+    protected static $rply_adr, $rply_name;
+    protected static $subject;
+    protected static $to_adr      = array();
+    protected static $cc_adr      = array();
+    protected static $bcc_adr     = array();
+    protected static $html        = false;
+    protected static $attachments = array();  ///< MailAttachment objects
 
     private function __construct()
     {
@@ -65,17 +64,17 @@ class SendMail extends CoreBase
         return self::$_instance;
     }
 
-    protected function resetInstance()  //XXX stupid idea?? maybe its stupid to have this class as Singleton
+    protected static function resetInstance()
     {
-        self::from_adr = '';
-        self::from_name = '';
-        self::rply_adr = '';
-        self::rply_name = '';
-        self::subject = '';
-        self::to_adr = array();
-        self::cc_adr = array();
-        self::bcc_adr = array();;
-        self::attachments = array();
+        self::$from_adr = '';
+        self::$from_name = '';
+        self::$rply_adr = '';
+        self::$rply_name = '';
+        self::$subject = '';
+        self::$to_adr = array();
+        self::$cc_adr = array();
+        self::$bcc_adr = array();;
+        self::$attachments = array();
     }
 
     function setServer($server = '', $username = '', $password = '', $port = 25)
@@ -83,7 +82,7 @@ class SendMail extends CoreBase
         mb_internal_encoding('UTF-8');    //XXX: required for utf8-encoded text (php 5.2)
 
         $this->smtp = new SmtpClient($server, $username, $password, $port);
-        $this->from_adr = $username;
+        self::$from_adr = $username;
     }
 
     private function connect()
@@ -105,9 +104,9 @@ class SendMail extends CoreBase
         $this->connected = false;
     }
 
-    function setSubject($s) { $this->subject = $s; }
+    function setSubject($s) { self::$subject = $s; }
 
-    function setHtml($bool = true) { $this->html = $bool; }
+    function setHtml($bool = true) { self::$html = $bool; }
 
     function setFrom($s, $n = '')
     {
@@ -115,8 +114,8 @@ class SendMail extends CoreBase
         if (!is_email($s))
             throw new Exception ('Cant set invalid from address '.$s);
 
-        $this->from_adr  = $s;
-        $this->from_name = $n;
+        self::$from_adr  = $s;
+        self::$from_name = $n;
     }
 
     function setReplyTo($s, $n = '')
@@ -125,8 +124,8 @@ class SendMail extends CoreBase
         if (!is_email($s))
             throw new Exception ('Cant set reply-to to invalid address '.$s);
 
-        $this->rply_adr  = $s;
-        $this->rply_name = $n;
+        self::$rply_adr  = $s;
+        self::$rply_name = $n;
     }
 
     function addRecipient($s)
@@ -138,7 +137,7 @@ class SendMail extends CoreBase
         if (!is_email($s))
             throw new Exception ('Cant add invalid recipient '.$s);
 
-        $this->to_adr[] = $s;
+        self::$to_adr[] = $s;
     }
 
     function addCc($s)
@@ -147,7 +146,7 @@ class SendMail extends CoreBase
         if (!is_email($s))
             throw new Exception ('Cant add invalid cc '.$s);
 
-        $this->cc_adr[] = $s;
+        self::$cc_adr[] = $s;
     }
 
     function addBcc($s)
@@ -156,7 +155,7 @@ class SendMail extends CoreBase
         if (!is_email($s))
             throw new Exception ('Cant add invalid bcc '.$s);
 
-        $this->bcc_adr[] = $s;
+        self::$bcc_adr[] = $s;
     }
 
     /**
@@ -186,7 +185,7 @@ class SendMail extends CoreBase
         $a->filename = basename($filename);
         $a->mimetype = $mimetype ? $mimetype : file_get_mime_by_suffix($filename);
 
-        $this->attachments[] = $a;
+        self::$attachments[] = $a;
     }
 
     function attachFile($filename)
@@ -205,7 +204,7 @@ class SendMail extends CoreBase
         $a->mimetype   = file_get_mime_by_suffix($filename);
         $a->content_id = $cid;                  //<img src="cid:pic_name">
 
-        $this->attachments[] = $a;
+        self::$attachments[] = $a;
     }
 
     /**
@@ -215,33 +214,33 @@ class SendMail extends CoreBase
     {
         $this->connect();
 
-        if (!$this->smtp->_MAIL_FROM($this->from_adr))
+        if (!$this->smtp->_MAIL_FROM(self::$from_adr))
             throw new Exception ('Failed to set from address');
 
         $header =
         "Date: ".date('r')."\r\n".
-        "From: ".(mb_encode_mimeheader($this->from_name, 'UTF-8') ? mb_encode_mimeheader($this->from_name, 'UTF-8')." <".$this->from_adr.">" : $this->from_adr)."\r\n".
-        "Subject: ".mb_encode_mimeheader($this->subject, 'UTF-8')."\r\n".
+        "From: ".(mb_encode_mimeheader(self::$from_name, 'UTF-8') ? mb_encode_mimeheader(self::$from_name, 'UTF-8')." <".self::$from_adr.">" : self::$from_adr)."\r\n".
+        "Subject: ".mb_encode_mimeheader(self::$subject, 'UTF-8')."\r\n".
         "User-Agent: ".$this->version."\r\n".
         "MIME-Version: 1.0\r\n";
 
-        if ($this->rply_adr)
-            $header .= "Reply-To: ".(mb_encode_mimeheader($this->rply_name, 'UTF-8') ? mb_encode_mimeheader($this->rply_name, 'UTF-8')." <".$this->rply_adr.">" : $this->rply_adr)."\r\n";
+        if (self::$rply_adr)
+            $header .= "Reply-To: ".(mb_encode_mimeheader(self::$rply_name, 'UTF-8') ? mb_encode_mimeheader(self::$rply_name, 'UTF-8')." <".self::$rply_adr.">" : self::$rply_adr)."\r\n";
 
-        foreach ($this->to_adr as $to) {
+        foreach (self::$to_adr as $to) {
             if (!$this->smtp->_RCPT_TO($to)) continue;
             $header .= "To: ".$to."\r\n";
         }
-        foreach ($this->cc_adr as $cc) {
+        foreach (self::$cc_adr as $cc) {
             if (!$this->smtp->_RCPT_TO($cc)) continue;
             $header .= "Cc: ".$cc."\r\n";
         }
-        foreach ($this->bcc_adr as $bcc) {
+        foreach (self::$bcc_adr as $bcc) {
             if (!$this->smtp->_RCPT_TO($bcc)) continue;
             $header .= "Bcc: ".$bcc."\r\n";
         }
 
-        if (count($this->attachments)) {
+        if (count(self::$attachments)) {
             $rnd = md5( mt_rand(0, 999999999999).'))<>(('.microtime() );
             $boundary = '------------0'.substr($rnd, 0, 23);
             $header .=
@@ -254,13 +253,13 @@ class SendMail extends CoreBase
         }
 
         $header .=
-        "Content-Type: ".($this->html ? "text/html" : "text/plain")."; charset=utf-8\r\n".
+        "Content-Type: ".(self::$html ? "text/html" : "text/plain")."; charset=utf-8\r\n".
         "Content-Transfer-Encoding: 7bit\r\n".
         "\r\n".
         $msg."\r\n";
 
         $attachment_data = '';
-        foreach ($this->attachments as $a)
+        foreach (self::$attachments as $a)
         {
             $attachment_data .=
             "\r\n".
@@ -275,7 +274,7 @@ class SendMail extends CoreBase
             chunk_split(base64_encode($a->data));
         }
 
-        if (count($this->attachments))
+        if (count(self::$attachments))
             $attachment_data .= "--".$boundary."--";
 
         return $this->smtp->_DATA($header.$attachment_data);
