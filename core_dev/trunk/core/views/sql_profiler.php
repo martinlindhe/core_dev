@@ -118,6 +118,9 @@ echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AG
 echo dm(); //memory usage
 echo 'Server time: '.date('r T').'<br/>';
 
+echo 'Server uptime: '.elapsed_seconds( uptime() ).'<br/>';
+
+
 if (function_exists('apc_cache_info')) {
     //XXX move somewhere else
     $conv = new ConvertDatasize();

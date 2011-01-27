@@ -385,4 +385,12 @@ function ucfirst_utf8($s)
     return mb_convert_case($s, MB_CASE_TITLE, 'UTF-8');
 }
 
+/** @return system uptime, in seconds **/
+function uptime()
+{
+    // XXX Linux only
+    $raw = explode(' ', file_get_contents('/proc/uptime') );
+    return $raw[0];
+}
+
 ?>
