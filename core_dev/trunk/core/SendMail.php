@@ -108,23 +108,23 @@ class SendMail extends CoreBase
 
     function setHtml($bool = true) { self::$html = $bool; }
 
-    function setFrom($s, $n = '')
+    function setFrom($adr, $n = '')
     {
-        $s = trim($s);
-        if (!is_email($s))
-            throw new Exception ('Cant set invalid from address '.$s);
+        $adr = trim($adr);
+        if (!is_email($adr))
+            throw new Exception ('Cant set invalid from address '.$adr);
 
-        self::$from_adr  = $s;
+        self::$from_adr  = $adr;
         self::$from_name = $n;
     }
 
-    function setReplyTo($s, $n = '')
+    function setReplyTo($adr, $n = '')
     {
-        $s = trim($s);
-        if (!is_email($s))
-            throw new Exception ('Cant set reply-to to invalid address '.$s);
+        $adr = trim($adr);
+        if (!is_email($adr))
+            throw new Exception ('Cant set reply-to to invalid address '.$adr);
 
-        self::$rply_adr  = $s;
+        self::$rply_adr  = $adr;
         self::$rply_name = $n;
     }
 
