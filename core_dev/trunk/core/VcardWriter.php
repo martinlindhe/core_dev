@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Functions for reading and writing of vCard's
+ * vCard writer class
  *
  * http://en.wikipedia.org/wiki/Vcard
  *
@@ -13,8 +13,6 @@
 
 //STATUS: UNUSED, INCOMPLETE DRAFT
 
-
-//TODO: parse vcard from the web, example http://www.agigen.se/agigen.vcf
 
 //TODO: support multiple input & output formats for contact information
 

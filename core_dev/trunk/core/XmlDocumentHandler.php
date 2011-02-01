@@ -11,8 +11,6 @@
 
 //TODO: move setCoreDevInclude to a "core_dev handler" ? or "setup handler", or "config handler" ?
 
-//XXX: extend from Url ?
-
 require_once('class.CoreBase.php');
 require_once('Url.php');
 
@@ -125,7 +123,6 @@ class XmlDocumentHandler extends CoreBase
         // XSS prevention, forbids this document to be embedded in a frame from an
         // external source, see https://developer.mozilla.org/en/the_x-frame-options_response_header
         header('X-Frame-Options: '.($this->allow_frames ? 'SAMEORIGIN' : 'DENY') );
-
 
         // XSS prevention, specifies valid sources for inclusion of javascript files,
         // see https://developer.mozilla.org/en/Introducing_Content_Security_Policy
