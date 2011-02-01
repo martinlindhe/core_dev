@@ -24,6 +24,7 @@ class XmlDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design   = true;
     private $enable_headers  = true;         ///< send http headers?
+    private $allow_frames    = false;        ///< allow this document to be framed using <frame> or <iframe> ?
     private $cache_duration  = 0;            ///< number of seconds to allow browser client to cache this result
     private $mimetype        = 'text/html';  ///< should be "application/xhtml+xml" but IE8 still cant even understand such a page
     private $Url;                            ///< Url object
@@ -120,6 +121,15 @@ class XmlDocumentHandler extends CoreBase
         header('Cache-Control: '.
             ($this->cache_duration ? 'max-age='.$this->cache_duration : 'no-cache').
             ', must-revalidate');
+
+        // XSS prevention, forbids this document to be embedded in a frame from an
+        // external source, see https://developer.mozilla.org/en/the_x-frame-options_response_header
+        header('X-Frame-Options: '.($this->allow_frames ? 'SAMEORIGIN' : 'DENY') );
+
+
+        // XSS prevention, specifies valid sources for inclusion of javascript files,
+        // see https://developer.mozilla.org/en/Introducing_Content_Security_Policy
+        header("X-Content-Security-Policy: allow 'self' yui.yahooapis.com");
     }
 
     /**
