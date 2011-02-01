@@ -56,6 +56,8 @@ class VcardReader
      */
     static private function parseVcard($data)
     {
+        $data = str_replace("\r\n", "\n", $data);
+        $data = str_replace("\r", "\n", $data);
         $rows = explode("\n", $data);
 
         $adr = new VcardAddress();
