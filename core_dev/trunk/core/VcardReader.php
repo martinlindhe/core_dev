@@ -105,7 +105,7 @@ class VcardReader
                     break;
                 case 'PREF':
                     break; /// XXX FIXME parse
-                default: throw new Exception ('unhandled telephone type: '.$params[0]);
+//                default: throw new Exception ('unhandled telephone type: '.$params[0]);
                 }
                 break;
 
@@ -116,7 +116,7 @@ class VcardReader
                     $adr->city    = $val[3];
                     $adr->zipcode = $val[5];
                     break;
-                default: throw new Exception ('unhandled address type: '.$params[0]);
+//                default: throw new Exception ('unhandled address type: '.$params[0]);
                 }
                 break;
 
