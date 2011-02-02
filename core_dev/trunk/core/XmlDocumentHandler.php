@@ -58,7 +58,7 @@ class XmlDocumentHandler extends CoreBase
 
     function setUploadRoot($s)
     {
-        if (!file_exists($s))
+        if (!is_dir($s))
             throw new Exception ('setUploadRoot: directory dont exist: '.$s);
 
         $this->upload_root = $s;
