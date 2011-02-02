@@ -103,6 +103,8 @@ class VcardReader
                 case 'CELL':
                     $adr->cellphone = formatMSID($val[0]);
                     break;
+                case 'PREF':
+                    break; /// XXX FIXME parse
                 default: throw new Exception ('unhandled telephone type: '.$params[0]);
                 }
                 break;
