@@ -8,7 +8,6 @@
 //STATUS: wip
 
 //TODO: remember client ip between requests in order to mitigate session hijacking
-//TODO: is setActive() method even nessecary with the RequestHandler blacklist???
 //FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
 
 //TODO: reimplement user-block & ip-block
@@ -33,11 +32,11 @@ class SessionHandler extends CoreBase
     var $logged_out_start_page;
     var $error_page = 'error';     ///< redirects the user to this page to show errors
 
-    var $active = true;            ///< is session active (update user last active?)
-
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?
     var $isSuperAdmin;             ///< is user superadmin?
+    protected $started = false;    ///< has session been started for this request?
+    protected $last_active;        ///< timestamp of last activity
 
     var $allow_logins        = true; ///< do app currently allow logins?
     var $allow_registrations = true; ///< do app currently allow registrations?
@@ -57,8 +56,6 @@ class SessionHandler extends CoreBase
     function setName($s) { $this->name = $s; }
     function setTimeout($n) { $this->timeout = $n; }
     function setStartPage($s) { $this->start_page = $s; }
-
-    function setActive($b) { $this->active = $b; }
 
     function setEncryptKey($key) { $this->encrypt_key = $key; }
     function getEncryptKey() { return $this->encrypt_key; }
@@ -107,15 +104,42 @@ class SessionHandler extends CoreBase
             return false;
         }
 
-        $this->start($user->getId(), $username);
+        $this->id = $user->getId();
+        $this->ip = client_ip();
+        $this->username = $username;
+
+        $this->usermode = $user->getUserLevel();
+
+        if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
+        if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
+        if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
+
+        $db->pUpdate('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW(), lastIp = ? WHERE userId = ?', 'si', client_ip(), $this->id);
+
+        $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
+        $db->pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
+
+        $this->start();
+
+        $_SESSION['id']           = $this->id;
+        $_SESSION['username']     = $this->username;
+        $_SESSION['usermode']     = $this->usermode;
+        $_SESSION['isWebmaster']  = $this->isWebmaster;
+        $_SESSION['isAdmin']      = $this->isAdmin;
+        $_SESSION['isSuperAdmin'] = $this->isSuperAdmin;
+        $_SESSION['referer']      = $this->referer;
+        $_SESSION['ip']           = $this->ip;
+        $_SESSION['last_active']  = time();
+        session_write_close();
+
         dp($this->username.' logged in');
+
+        $error->reset(); /// remove previous errors
 
         return true;
     }
 
-    /**
-     * Logs out the user
-     */
+    /** Logs out the user */
     function logout()
     {
         dp($this->username.' logged out');
@@ -124,23 +148,34 @@ class SessionHandler extends CoreBase
         $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
 
         $this->end();
+
         $this->showLoggedOutStartPage();
         die;
     }
 
-    /**
-     * Resumes the session from previous request
-     */
-    function resume()
+    /** Start / resume session using a magic cookie */
+    function start()
     {
-        if (!$this->active) return;
+        if ($this->started)
+            return;
 
         ini_set('session.gc_maxlifetime', $this->timeout);
 
         session_name($this->name);
         session_start();
 
-        $this->id           = &$_SESSION['id'];    //if id is set, also means that the user is logged in
+        $this->started = true;
+    }
+
+    /** Resumes the session from previous request */
+    function resume()
+    {
+        $this->start();
+
+        if (empty($_COOKIE[$this->name]))
+            return;
+
+        $this->id           = &$_SESSION['id'];
         $this->username     = &$_SESSION['username'];
         $this->usermode     = &$_SESSION['usermode'];
         $this->isWebmaster  = &$_SESSION['isWebmaster'];
@@ -148,22 +183,22 @@ class SessionHandler extends CoreBase
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
         $this->referer      = &$_SESSION['referer'];
         $this->ip           = &$_SESSION['ip'];
-
-        if (empty($_COOKIE[$this->name]))
-            $this->end();
+        $this->last_active  = &$_SESSION['last_active'];
 
         if (!$this->id)
             return;
 
-        //Logged in: Check user activity - log out inactive user
-        //FIXME: redo this- check lastactive timestamp from db when session is resumed instead
-        /*
-        if ($this->lastActive < (time()-$this->timeout)) {
-            $this->log('Session timed out after '.(time()-$this->session->lastActive).' (timeout is '.($this->session->timeout).')', LOGLEVEL_NOTICE);
+        $error = ErrorHandler::getInstance();
+
+        // Check user activity - log out inactive user
+        if ($this->last_active < (time()-$this->timeout)) {
+            dp('Session timed out for '.$this->username.' after '.(time()-$this->last_active).'s (timeout is '.($this->timeout).'s)');
             $this->end();
             $error->add('Session timed out');
             $this->showErrorPage();
-        }*/
+        }
+
+        $this->last_active = time();
 
         $db = SqlHandler::getInstance();
         $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
@@ -182,39 +217,19 @@ class SessionHandler extends CoreBase
         $this->isWebmaster  = false;
         $this->isAdmin      = false;
         $this->isSuperAdmin = false;
-    }
 
-    /**
-     * Sets up a session. Called from the auth class
-     *
-     * @param $id user id
-     * @param $username user name
-     */
-    function start($id, $username)
-    {
-        $this->id = $id;
-        $this->ip = client_ip();
-        $this->username = $username;
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
 
-        $user = new User($id);
-        $this->usermode = $user->getUserLevel();
-
-        if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
-        if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
-        if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
-
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW(), lastIp = ? WHERE userId = ?', 'si', client_ip(), $this->id);
-
-        $error = ErrorHandler::getInstance();
-        $error->reset(); /// remove previous errors
-
-        $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
-        $db->pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
-
-        // sets httponly param to mitigate XSS attacks
-        $domain = ''; //XXX read domain name from XmlDocumentHandler->getUrl()
-        setcookie($this->name, $_COOKIE[$this->name], time()+$this->timeout, '/', $domain, false, true);
+        if (!empty($_SESSION)) {
+            $_SESSION = array();  //XXXX FIXME: dont destroy $_SESSION['cd_errors'] (error handler messages)
+            session_destroy();
+        }
     }
 
     function getUserLevelName()

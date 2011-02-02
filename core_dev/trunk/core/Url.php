@@ -48,6 +48,8 @@ class Url extends CoreProperty
         return $res;
     }
 
+    function getHost() { return $this->host; }
+
     /** @return url path excluding hostname */
     function getPath($safe = false)
     {

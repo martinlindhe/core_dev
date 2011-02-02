@@ -98,18 +98,17 @@ class RequestHandler
      */
     public function route()
     {
-        $page = XmlDocumentHandler::getInstance();
+        $page    = XmlDocumentHandler::getInstance();
+        $session = SessionHandler::getInstance();
+        $error   = ErrorHandler::getInstance();
 
-        if (!in_array($this->_controller, $this->exclude_session) && class_exists('SessionHandler') ) {
-            // automatically resumes session unless it is blacklisted
-            $session = SessionHandler::getInstance();
+        // automatically resumes session unless it is blacklisted
+        if (!in_array($this->_controller, $this->exclude_session) && class_exists('SessionHandler') )
             $session->resume();
-        }
 
         // handle login/logout/register user requests to any page
         $page->attach( $this->render() );
 
-        $error = ErrorHandler::getInstance();
         if ($error->getErrorCount())
             $page->attach( $error->render(true) );
 

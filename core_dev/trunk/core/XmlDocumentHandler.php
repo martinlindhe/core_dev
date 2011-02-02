@@ -49,6 +49,9 @@ class XmlDocumentHandler extends CoreBase
     /** @return full base/root URL to website */
     function getUrl() { return $this->Url->get(); }
 
+    /** @return domain name part of base URL to website */
+    function getHostName() { return $this->Url->getHost(); }
+
     function getCoreDevInclude() { return $this->coredev_inc; }
     function getUploadRoot() { return $this->upload_root; }
     function getMimeType() { return $this->mimetype; }
