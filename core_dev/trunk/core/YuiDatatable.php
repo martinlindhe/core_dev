@@ -11,10 +11,13 @@
 
 //FIXME: setSortOrder dont update sort order properly when used with a static data source
 
-//TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
 //TODO: Conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
+//TODO: add max X & Y sizes and scrolling: http://developer.yahoo.com/yui/examples/datatable/dt_fixedscroll.html
+//TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
+
+//TODO: enable default row highlightning: http://developer.yahoo.com/yui/examples/datatable/dt_highlighting.html
 
 require_once('output_js.php');
 
