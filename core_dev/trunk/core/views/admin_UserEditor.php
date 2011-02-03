@@ -3,6 +3,10 @@
  * This is the defualt view for the UserEditor class
  */
 
+//TODO: use XhtmlForm
+
+require_once('YuiDatatable.php');
+
 if (!$session->isSuperAdmin)
     return;
 
@@ -70,6 +74,22 @@ echo xhtmlForm('pwd');
 echo xhtmlPassword('change_pwd').' ';
 echo xhtmlSubmit('Change');
 echo xhtmlFormClose().'<br/><br/>';
+
+
+
+echo '<h2>Login history</h2>';
+
+$dt = new YuiDatatable();
+$dt->addColumn('timeCreated',     'Timestamp');
+$dt->addColumn('IP',              'IP');
+$dt->addColumn('userAgent',       'User agent');
+$dt->setSortOrder('timeCreated', 'desc');
+$dt->setDataList( $user->getLoginHistory() );
+$dt->setRowsPerPage( 10 );
+echo $dt->render();
+
+
+
 
 if ($session->id != $caller->getId() )
     echo '&raquo; <a href="'.relurl_add( array('remove'=>1) ).'">Remove user</a><br/><br/>';

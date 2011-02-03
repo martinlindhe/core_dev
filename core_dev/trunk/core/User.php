@@ -201,6 +201,14 @@ class User
         return true;
     }
 
+    function getLoginHistory()
+    {
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT * FROM tblLogins WHERE userId = ? ORDER BY timeCreated DESC';
+        return $db->pSelect($q, 'i', $this->id);
+    }
+
     function render()
     {
         if (!$this->id)
