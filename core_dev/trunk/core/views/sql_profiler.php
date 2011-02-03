@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-$rand_id = mt_rand(0,99999);
+$rand_id = mt_rand();
 
 echo js_embed(
 //Toggles element with name "n" between visible and hidden

@@ -422,7 +422,7 @@ class XhtmlForm
         $enctype = $this->file_upload ? 'multipart/form-data' : '';
 
         if (!$this->name)
-            $this->name = 'frm'.mt_rand(1,999999);
+            $this->name = 'frm'.mt_rand();
 
         $header = XhtmlHeader::getInstance();
 

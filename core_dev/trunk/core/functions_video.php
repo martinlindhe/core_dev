@@ -135,7 +135,7 @@ function embedQuickTimeVideo($url, $mute = false)
  */
 function embedSwf($url, $w = 0, $h = 0, $div_id = '', $autostart = true)    //XXX deprecate!! ???
 {
-    if (!$div_id) $div_id = 'swf_'.mt_rand(1,999999);
+    if (!$div_id) $div_id = 'swf_'.mt_rand();
     if (!$w) $w = 176 * 1.5;
     if (!$h) $h = 144 * 1.5;
 
@@ -163,7 +163,7 @@ function embedSwf($url, $w = 0, $h = 0, $div_id = '', $autostart = true)    //XX
  */
 function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = true)
 {
-    if (!$div_id) $div_id = 'flv_'.mt_rand(1,999999);
+    if (!$div_id) $div_id = 'flv_'.mt_rand();
     if (!$w) $w = 176 * 1.5;
     if (!$h) $h = 144 * 1.5;
 
@@ -193,7 +193,7 @@ function embedFlashVideo($video_url, $w = 0, $h = 0, $div_id = '', $autostart = 
 
 function embedFlashAudio($audio_url, $w = 176, $h = 60, $div_id = '', $img = '/core_dev/gfx/voice_play.png', $autostart = true)
 {
-    if (!$div_id) $div_id = 'flv_'.mt_rand(1,999999);
+    if (!$div_id) $div_id = 'flv_'.mt_rand();
     if (!$w) $w = 176;
     if (!$h) $h = 60;
 

@@ -171,7 +171,7 @@ class YuiDateInterval
 
         $locale = LocaleHandler::getInstance();
 
-        $div_holder = 'yui_di_hold'.mt_rand(0,99999);
+        $div_holder = 'yui_di_hold'.mt_rand();
 
         $res .=
         'YAHOO.util.Event.onDOMReady(function()'.

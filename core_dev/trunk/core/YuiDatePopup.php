@@ -83,7 +83,7 @@ class YuiDatePopup
 
         $locale = LocaleHandler::getInstance();
 
-        $button_name = 'yui_dp_show_'.mt_rand(0,99999);
+        $button_name = 'yui_dp_show_'.mt_rand();
 
         $res =
         'YAHOO.util.Event.onDOMReady(function(){'.

@@ -15,6 +15,8 @@
 //TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
+//TODO: Conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
+
 require_once('output_js.php');
 
 class YuiDatatable
@@ -168,8 +170,8 @@ class YuiDatatable
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datatable/datatable-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/json/json-min.js');
 
-        $div_holder = 'yui_dt'.mt_rand(0,99999);
-        $data_var   = 'yui_dt_data'.mt_rand(0,99999);
+        $div_holder = 'yui_dt'.mt_rand();
+        $data_var   = 'yui_dt_data'.mt_rand();
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.

@@ -57,7 +57,7 @@ class Yui3PieChart
 
         $header->includeJs('http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js');
 
-        $div_holder = 'yui_chart'.mt_rand(0,99999);
+        $div_holder = 'yui_chart'.mt_rand();
 
         $header->embedCss('#'.$div_holder.' { width: '.$this->width.'px; height: '.$this->height.'px; }');
 

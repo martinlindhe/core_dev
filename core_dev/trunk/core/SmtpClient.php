@@ -202,7 +202,7 @@ class SmtpClient
 
             //RFC 2831 @ 2.1.2.1
             $nc = '00000001';        //number of times same nonce has been used
-            $cnonce = md5(mt_rand(0, 9999999999999).microtime());
+            $cnonce = md5(mt_rand().microtime());
             $digest_uri = 'smtp/'.$this->servername;
 
             $a1 = md5($this->username.':'.$chal['realm'].':'.$this->password, true).

@@ -100,7 +100,7 @@ class ErrorHandler
         if (empty($_SESSION['cd_errors']))
             return '';
 
-        $div_class = 'error_'.mt_rand(0,99999);
+        $div_class = 'error_'.mt_rand();
 
         $header = XhtmlHeader::getInstance();
 

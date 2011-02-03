@@ -1,6 +1,6 @@
 <?php
 
-$rand_id = mt_rand(0,99999);
+$rand_id = mt_rand();
 
 echo js_embed(
 'function toggle_tempstore()'.

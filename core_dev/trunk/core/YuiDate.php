@@ -44,7 +44,7 @@ class YuiDate
 
         $locale = LocaleHandler::getInstance();
 
-        $div_holder = 'yui_date_hold'.mt_rand(0,99999);
+        $div_holder = 'yui_date_hold'.mt_rand();
 
         $res =
         'YAHOO.namespace("example.calendar");'.

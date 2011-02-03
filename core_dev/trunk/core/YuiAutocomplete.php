@@ -61,7 +61,7 @@ class YuiAutocomplete extends XhtmlComponent
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datasource/datasource-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/autocomplete/autocomplete-min.js');
 
-        $div_holder = 'yui_ac'.mt_rand(0,99999);
+        $div_holder = 'yui_ac'.mt_rand();
 
         $header->embedCss(
         'label {'.

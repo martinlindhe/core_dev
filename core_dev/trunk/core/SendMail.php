@@ -241,7 +241,7 @@ class SendMail extends CoreBase
         }
 
         if (count(self::$attachments)) {
-            $rnd = md5( mt_rand(0, 999999999999).'))<>(('.microtime() );
+            $rnd = md5( mt_rand().'))<>(('.microtime() );
             $boundary = '------------0'.substr($rnd, 0, 23);
             $header .=
             "Content-Type: multipart/mixed;\r\n".

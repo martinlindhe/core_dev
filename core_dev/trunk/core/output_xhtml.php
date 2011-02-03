@@ -35,7 +35,7 @@ function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')
 {
     //TODO not ignore the default param
 
-    $rnd = mt_rand(0,99999);
+    $rnd = mt_rand();
 
     $out = js_embed(
     'function toggle_multi_'.$rnd.'() {'.
@@ -200,7 +200,7 @@ function xhtmlButton($_title, $onclick = '')
 function xhtmlMap($shapes, $name, $id = '')
 {
     $res =
-    '<map name="'.$name.'" id="'.(!empty($id)?$id:'xhtmlmap_'.mt_rand(1,9999999)).'">';
+    '<map name="'.$name.'" id="'.(!empty($id)?$id:'xhtmlmap_'.mt_rand()).'">';
     foreach ($shapes as $s) {
         $res .= '<area shape="'.$s['shape'].'" coords="'.implode($s['coords'], ',').'" href="'.$s['href'].'"'.(!empty($s['alt']) ? ' alt="'.$s['alt'].'" title="'.$s['alt'].'"' : '').'/>';
     }

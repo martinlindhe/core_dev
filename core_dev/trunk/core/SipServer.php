@@ -147,7 +147,7 @@ class SipServer
     function allocate_nonce($peer, $key)
     {
         for (;;) {
-            $nonce = md5(microtime().':'.$key.':'.mt_rand(0, 9999999999999));
+            $nonce = md5(microtime().':'.$key.':'.mt_rand());
             $conflict = false;
 
             //verifies that generated nonce is not already in use
