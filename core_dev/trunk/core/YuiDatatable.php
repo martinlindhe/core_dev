@@ -9,13 +9,11 @@
 
 //STATUS: wip
 
-//FIXME: setSortOrder dont update sort order proerly when used with a static data source
+//FIXME: setSortOrder dont update sort order properly when used with a static data source
 
 //TODO: attempt to hide the bottom paginator
 //TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
-
-//TODO: attach some js snippet which reads db queries from xhr response and renders in the sql profiler widget
 
 require_once('output_js.php');
 
@@ -27,8 +25,8 @@ class YuiDatatable
     private $caption         = ''; ///< caption for the datatable
     private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
     private $rows_per_page   = 20; ///< for the paginator
-    private $sort_column     = 1;
-    private $sort_order      = 'asc';
+    private $sort_column;
+    private $sort_order      = false;
     private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
 
     function setCaption($s) { $this->caption = $s; }
@@ -53,7 +51,7 @@ class YuiDatatable
     function setSortOrder($col, $order)
     {
         if (!in_array($order, array('asc', 'desc')))
-            return false;
+            throw new Exception ('bad sort order: '.$order);
 
         foreach ($this->columns as $idx => $c)
             if ($c['key'] == $col)
@@ -247,10 +245,12 @@ class YuiDatatable
 
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
-                    'sortedBy: {'.
-                        'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
-                        'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
-                    '},'.
+                    ($this->sort_order !== false ?
+                        'sortedBy: {'.
+                            'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
+                            'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
+                        '},' : ''
+                    ).
                     'paginator: new YAHOO.widget.Paginator({'.
                         'rowsPerPage:'.$this->rows_per_page.','.
                         // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
