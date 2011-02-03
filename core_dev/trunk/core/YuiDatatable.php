@@ -11,7 +11,6 @@
 
 //FIXME: setSortOrder dont update sort order properly when used with a static data source
 
-//TODO: attempt to hide the bottom paginator
 //TODO: enable inline cell editing
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
@@ -172,6 +171,7 @@ class YuiDatatable
 
         $div_holder = 'yui_dt'.mt_rand();
         $data_var   = 'yui_dt_data'.mt_rand();
+        $pag_holder = 'yui_pag'.mt_rand();
 
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
@@ -259,7 +259,9 @@ class YuiDatatable
                         (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
                         'rowsPerPage:'.$this->rows_per_page.','.
                         'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
+                        'containers:["'.$pag_holder.'"],'.
                         'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
+                        'pageReportTemplate:"Showing items {startIndex} - {endIndex} of {totalRecords}",'.
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
@@ -272,9 +274,9 @@ class YuiDatatable
                 'myDataTable = new YAHOO.widget.DataTable("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
                 ($this->xhr_source ?
-                    // Update totalRecords on the fly with value from server
+                    // Update totalRecords on the fly with value from the XHR request, needed for paginator
                     'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
-                        'oPayload.totalRecords = oResponse.meta.totalRecords;'. // Reads XhrResponse "totalRecords" field, needed for paginator
+                        'oPayload.totalRecords = oResponse.meta.totalRecords;'.
                         'return oPayload;'.
                     '};'
                 :
@@ -288,7 +290,9 @@ class YuiDatatable
             '}();'.
         '});';
 
-        return '<div id="'.$div_holder.'"></div>'.js_embed($res);
+        return
+        '<div id="'.$pag_holder.'"></div>'.
+        '<div id="'.$div_holder.'"></div>'.js_embed($res);
     }
 
 }
