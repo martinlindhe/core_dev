@@ -254,6 +254,7 @@ class YuiDatatable
                         '},' : ''
                     ).
                     'paginator: new YAHOO.widget.Paginator({'.
+                        (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
                         'rowsPerPage:'.$this->rows_per_page.','.
                         // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
                         'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
