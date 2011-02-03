@@ -237,7 +237,7 @@ class YuiDatatable
                         'fields: '.jsArray2D($this->response_fields).','.
                         'metaFields: { totalRecords:"totalRecords" }'. // mapped to XhrResponse "totalRecords" field, needed for paginator
                     '};'
-                    :
+                :
                     //embedded js-array
                     'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n".
                     'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
@@ -251,19 +251,20 @@ class YuiDatatable
                         'sortedBy: {'.
                             'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
                             'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
-                        '},' : ''
+                        '},'
+                    :
+                        ''
                     ).
                     'paginator: new YAHOO.widget.Paginator({'.
                         (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
                         'rowsPerPage:'.$this->rows_per_page.','.
-                        // use a custom layout for pagination controls "(1 of 131)" = {CurrentPageReport}
-                        'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
                         'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
+                        'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; Show {RowsPerPageDropdown} per page",'.
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
                         'initialRequest:"sort='.$this->columns[ $this->sort_column ]['key'].'&dir='.$this->sort_order.'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
-                        :
+                    :
                         ''
                     ).
                 '};'.
