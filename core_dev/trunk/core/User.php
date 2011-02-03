@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip, is replacing class.Users.php
+//STATUS: wip
 
 define('USERLEVEL_NORMAL',      0);
 define('USERLEVEL_WEBMASTER',   1);
