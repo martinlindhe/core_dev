@@ -99,13 +99,14 @@ class VcardReader
                 break;
 
             case 'TEL':
-                switch ($params[0]) {
+                switch ($params[ count($params) - 1]) {
                 case 'CELL':
                     $adr->cellphone = formatMSID($val[0]);
                     break;
-                case 'PREF':
-                    break; /// XXX FIXME parse
-//                default: throw new Exception ('unhandled telephone type: '.$params[0]);
+                case 'HOME':
+                    $adr->homephone = formatMSID($val[0]);
+                    break;
+                default: dp('XXX VcardReader unhandled telephone type: '.$params[0]);
                 }
                 break;
 
@@ -116,7 +117,7 @@ class VcardReader
                     $adr->city    = $val[3];
                     $adr->zipcode = $val[5];
                     break;
-//                default: throw new Exception ('unhandled address type: '.$params[0]);
+                default: dp('XXX VcardReader unhandled address type: '.$params[0]);
                 }
                 break;
 

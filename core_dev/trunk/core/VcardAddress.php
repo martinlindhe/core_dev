@@ -16,6 +16,7 @@ class VcardAddress
     var $gender;     ///< "M", or "F", or blank
     var $birthdate;  ///< in "YYYY-MM-DD" form
     var $cellphone;
+    var $homephone;
 }
 
 ?>
