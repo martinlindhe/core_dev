@@ -271,11 +271,15 @@ class YuiDatatable
 
                 'myDataTable = new YAHOO.widget.DataTable("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
-                // Update totalRecords on the fly with value from server
-                'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
-                    'oPayload.totalRecords = oResponse.meta.totalRecords;'. // Reads XhrResponse "totalRecords" field, needed for paginator
-                    'return oPayload;'.
-                '};'.
+                ($this->xhr_source ?
+                    // Update totalRecords on the fly with value from server
+                    'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
+                        'oPayload.totalRecords = oResponse.meta.totalRecords;'. // Reads XhrResponse "totalRecords" field, needed for paginator
+                        'return oPayload;'.
+                    '};'
+                :
+                    ''
+                ).
 
                 'return {'.
                     'oDS: myDataSource,'.
