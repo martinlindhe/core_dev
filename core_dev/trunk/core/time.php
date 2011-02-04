@@ -295,4 +295,39 @@ function is_us_date($s)
     return true;
 }
 
+/**
+ * @param $s string represenation of a duration, eg "4h"
+ * @return duration, in seconds
+ */
+function parse_duration($s)
+{
+    $delim = substr($s, -1);
+    $val   = substr($s, 0, -1);
+
+    if (!is_numeric($val))
+        throw new Exception ('vad val: '.$val);
+
+    switch ($delim) {
+    case 'w': return $val * 604800;
+    case 'd': return $val * 86400;
+    case 'h': return $val * 3600;
+    case 'm': return $val * 60;
+    case 's': return $val;
+    default: throw new Exception ('unknown delim:'.$delim);
+    }
+}
+
+/**
+ * Is $s a valid duration representation, such as "4h" ?
+ */
+function is_duration($s)
+{
+    $pattern = '/^[0-9]+[wdhms]+$/';
+
+    if (preg_match($pattern, $s))
+        return true;
+
+    return false;
+}
+
 ?>

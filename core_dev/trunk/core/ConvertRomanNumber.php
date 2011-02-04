@@ -19,7 +19,7 @@ class ConvertRomanNumber
 
     static function isValid($s)
     {
-        preg_match('/(?<roman>[MDCLXVI]+)/i', $s, $x);
+        preg_match('/(?<roman>[MDCLXVI]+)/i', $s, $x);  //XXX use ^ match from beginning and $ = match to end to simplify check
         if (isset($x['roman']) && $x['roman'] == $s)
             return true;
 

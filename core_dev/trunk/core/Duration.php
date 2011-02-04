@@ -47,6 +47,11 @@ class Duration extends CoreProperty
             return;
         }
 
+        if (is_duration($s)) {
+            $this->value = parse_duration($s);
+            return;
+        }
+
         $a = explode(':', $s);
         if (count($a) == 3) {
             //handle "00:03:39.00"
@@ -131,6 +136,12 @@ class Duration extends CoreProperty
         if ($a==1) $ret .= $a.' '.$locale->translateDuration('month').', ';
         else if($a>0) $ret .= $a.' '.$locale->translateDuration('months').', ';
         $secs -= ((($a*60)*60)*24)*30;
+
+        //weeks
+        $a = date('W',$secs)-1;
+        if ($a==1) $ret .= $a.' '.$locale->translateDuration('week').', ';
+        else if ($a>0) $ret .= $a.' '.$locale->translateDuration('weeks').', ';
+        $secs -= ((($a*60)*60)*24)*7;
 
         //days
         $a = date('j',$secs)-1;
