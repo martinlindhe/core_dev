@@ -40,7 +40,7 @@ require_once('core.php');
 require_once('network.php');
 
 require_once('Url.php');
-require_once('Cache.php');
+require_once('TempStore.php');
 
 class HttpClient extends CoreBase
 {
@@ -210,15 +210,14 @@ class HttpClient extends CoreBase
      */
     private function get($post_params = array(), $head_only = false)
     {
-        $cache = new Cache();
-        $cache->setCacheTime($this->cache_time);
+        $temp = TempStore::getInstance();
 
-        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive() && !$head_only)
+        if (!$this->username && empty($post_params) && $this->cache_time && !$head_only)
         {
-            $key_head = 'url_head//'.sha1( $this->Url->get() );
-            $key_full = 'url//'.     sha1( $this->Url->get() );
+            $key_head = 'HttpClient/head//'.sha1( $this->Url->get() );
+            $key_full = 'HttpClient/full//'.sha1( $this->Url->get() );
 
-            $full = $cache->get($key_full);
+            $full = $temp->get($key_full);
             if ($full) {
                 $this->parseResponse($full);
                 return $this->body;
@@ -299,9 +298,9 @@ class HttpClient extends CoreBase
 
         $this->parseResponse($res);
 
-        if (!$this->username && empty($post_params) && $this->cache_time && $cache->isActive() && !$head_only) {
-            $cache->set($key_head, serialize($this->headers));
-            $cache->set($key_full, $res);
+        if (!$this->username && empty($post_params) && $this->cache_time && !$head_only) {
+            $temp->set($key_head, serialize($this->headers), $this->cache_time);
+            $temp->set($key_full, $res, $this->cache_time);
         }
 
         return $this->body;

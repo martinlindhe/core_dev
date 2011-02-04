@@ -23,7 +23,7 @@ class Cache extends CoreBase
 {
     protected $handle      = false;
     protected $persistent  = true;   ///< use persistent connections?
-    protected $expire_time = 0;      ///< expiration time, in seconds
+    protected $expire_time;          ///< expiration time, in seconds
     protected $driver_name;
     protected $connected   = false;  ///< memcache server connection open?
 
@@ -61,8 +61,8 @@ class Cache extends CoreBase
     /**
      * @param $s cache time in seconds; max 2592000 (30 days)
      */
-    function setTimeout($s) { $this->expire_time = $s; }
-    function setCacheTime($s) { $this->setTimeout($s); } ///XXX DEPRECATE
+    function setTimeout($s) { $this->expire_time = parse_duration($s); }
+    function setCacheTime($s) { $this->setTimeout($s); }
 
     function get($key)
     {

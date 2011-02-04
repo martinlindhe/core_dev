@@ -301,11 +301,14 @@ function is_us_date($s)
  */
 function parse_duration($s)
 {
+    if (is_numeric($s))
+        return $s;
+
     $delim = substr($s, -1);
     $val   = substr($s, 0, -1);
 
     if (!is_numeric($val))
-        throw new Exception ('vad val: '.$val);
+        throw new Exception ('bad val: '.$val);
 
     switch ($delim) {
     case 'w': return $val * 604800;
@@ -322,6 +325,9 @@ function parse_duration($s)
  */
 function is_duration($s)
 {
+    if (is_numeric($s))
+        return true;
+
     $pattern = '/^[0-9]+[wdhms]+$/';
 
     if (preg_match($pattern, $s))

@@ -21,5 +21,6 @@ if (parse_duration('4h') != 14400)                        echo "FAIL 11\n";
 if (!is_duration('2d'))                                   echo "FAIL 12\n";
 if (is_duration('abc'))                                   echo "FAIL 13\n";
 if (is_duration('1a2d'))                                  echo "FAIL 13\n";
+if (!is_duration( 500 ))                                  echo "FAIL 14\n";
 
 ?>

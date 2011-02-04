@@ -28,6 +28,7 @@ class TempStore
     protected $handle;
     protected $persistent  = true;   ///< use persistent connections?
     protected $server_pool = array();
+    protected $debug       = false;
 
     private function __construct()
     {
@@ -83,6 +84,8 @@ class TempStore
         return true;
     }
 
+    function setDebug($b) { $this->debug = $b; }
+
     function getServerPool()
     {
         $this->connect();
@@ -107,7 +110,8 @@ class TempStore
 
         $val = $this->handle->get($key);
 
-//        echo 'CACHE READ "'.$key.'"'.($val ? ' HIT' : ' MISS').ln();
+        if ($this->debug)
+            echo 'CACHE READ "'.$key.'"'.($val ? ' HIT' : ' MISS').ln();
 
         return $val;
     }
@@ -115,10 +119,15 @@ class TempStore
     /**
      * @param $expire_time expiration time, in seconds
      */
-    function set($key, $val = '', $expire_time = 3600)
+    function set($key, $val = '', $expire_time = '1h')
     {
         if (strlen($key) > 250)
             throw new Exception ('Key length too long');
+
+        if (!is_duration($expire_time))
+            throw new Exception ('bad expire time');
+
+        $expire_time = parse_duration($expire_time);
 
         $this->connect();
 
@@ -129,7 +138,8 @@ class TempStore
 
         $ret = $this->handle->set($key, $val, $expire_time);
 
-//        echo 'CACHE WRITE "'.$key.'" = "'.substr($val, 0, 200).'"... ('.$expire_time.' sec)'.ln();
+        if ($this->debug)
+            echo 'CACHE WRITE "'.$key.'" = "'.substr($val, 0, 200).'"... ('.$expire_time.' sec)'.ln();
 
         return $ret;
     }
