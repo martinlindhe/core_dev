@@ -50,7 +50,8 @@ class GoogleMapsClient
 
         $url =
         'http://maps.google.com/maps/geo?ll='.$latitude.','.$longitude.
-        '&key='.self::$api_key.'&output=json'; //XXX "output=xml" returns prettified street address & more info if needed
+        '&key='.self::$api_key.
+        '&output=json'; //XXX "output=xml" returns prettified street address & more info if needed
 
         $json = JSON::decode($url);
 //d($json);
@@ -81,14 +82,17 @@ class GoogleMapsClient
      */
     static function geocode($address)
     {
-        $url = 'http://maps.google.com/maps/geo'.
-            '?q='.urlencode(trim($address)).
-            '&output=json'.    //XXX "output=xml" returns prettified street address & more info if needed
-            '&key='.self::$api_key;
-/*
-        $res = csvParseRow(file_get_contents($url));
-        if ($res[0] != 200 || $res[1] == 0) return false;
-*/
+        $temp = TempStore::getInstance();
+        $key = 'googlemaps/geocode//'.$address;
+
+        $data = $temp->get($key);
+        if ($data)
+            return unserialize($data);
+
+        $url =
+        'http://maps.google.com/maps/geo?q='.urlencode(trim($address)).
+        '&key='.self::$api_key.
+        '&output=json';    //XXX "output=xml" returns prettified street address & more info if needed
 
         $json = JSON::decode($url);
 //d($json);
@@ -101,11 +105,12 @@ class GoogleMapsClient
         $res->longitude = $item->Point->coordinates[0];
         $res->accuracy  = $item->AddressDetails->Accuracy; // 0 (worst) to 9 (best)
 
+        $temp->set($key, serialize($res));
         return $res;
     }
 
     /**
-     * Creates a valid link to a static map as a image resource
+     * Creates a link to a static map as a image resource
      *
      * @param $lat latitude (-90.0 to 90.0) horizontal
      * @param $long longitude (-180.0 to 180.0) vertical
@@ -130,13 +135,13 @@ class GoogleMapsClient
         if ((is_numeric($zoom) && ($zoom < 0 || $zoom > 19)) || is_string($zoom) && $zoom != 'auto')
             return false;
 
-        $url = 'http://maps.google.com/staticmap'.
-            '?center='.$lat.','.$long.
-            ($zoom == 'auto' ? '' : '&zoom='.$zoom).
-            '&size='.$width.'x'.$height.
-            '&format='.urlencode($format).
-            '&maptype='.urlencode($maptype).
-            '&key='.self::$api_key;
+        $url =
+        'http://maps.google.com/staticmap?center='.$lat.','.$long.
+        '&key='.self::$api_key.
+        ($zoom == 'auto' ? '' : '&zoom='.$zoom).
+        '&size='.$width.'x'.$height.
+        '&format='.urlencode($format).
+        '&maptype='.urlencode($maptype);
 
         $cols = array('red', 'green', 'blue', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
 
