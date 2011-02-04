@@ -13,29 +13,29 @@
 //STATUS: wip
 
 require_once('Coordinate.php');
-require_once('Cache.php');
+require_once('TempStore.php');
 
 require_once('GeoLookupClient.php'); // for GeoLookupResult
 
-class GeoLookupClientGeonames extends Coordinate
+class GeonamesClient
 {
-    function get()
+    static function reverse($latitude, $longitude)
     {
-        if (!$this->latitude || !$this->longitude)
+        if (!$latitude || !$longitude)
             throw new Exception ('no coords set');
 
-        $cache = new Cache();
-        $cache->setCacheTime(60*60*24); //24h
+        $temp = TempStore::getInstance();
 
-        $key = 'geonames.org//'.$this->latitude.'/'.$this->longitude;
+        $key = 'geonames.org//'.$latitude.'/'.$longitude;
 
-        $data = $cache->get($key);
+        $data = $temp->get($key);
         if ($data)
             return unserialize($data);
 
-        $url = 'http://ws.geonames.org/timezone?lat='.$this->latitude.'&lng='.$this->longitude;
+        $url = 'http://ws.geonames.org/timezone?lat='.$latitude.'&lng='.$longitude;
         $data = file_get_contents($url);
         $xml = simplexml_load_string($data);
+//d($xml);
 
         $res = new GeoLookupResult();
         $res->country_code = strval($xml->timezone->countryCode);
@@ -44,7 +44,7 @@ class GeoLookupClientGeonames extends Coordinate
         $res->sunrise      = strval($xml->timezone->sunrise);
         $res->sunset       = strval($xml->timezone->sunset);
 
-        $cache->set($key, serialize($res));
+        $temp->set($key, serialize($res));
 
         return $res;
     }

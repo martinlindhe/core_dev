@@ -15,11 +15,6 @@
 
 //STATUS: unused, rewrite
 
-require_once('input_coordinates.php');
-require_once('input_csv.php');
-
-//$config['google_maps']['api_key'] = '';
-
 /**
  * Displays a static map
  *
@@ -77,60 +72,6 @@ function googleMapsStaticMap($lat, $long, $markers = array(), $path = array(), $
     }
 
     return $url;
-}
-
-/**
- * Performs a Geocoding lookup from street address
- *
- * Google Geocoding HTTP API documentation:
- * http://code.google.com/apis/maps/documentation/services.html#Geocoding
- *
- * @param $address address to get coordinates for
- * @return coordinates & accuracy of specified location or false
- */
-function googleMapsGeocode($address)
-{
-    global $config;
-
-    $url = 'http://maps.google.com/maps/geo'.
-        '?q='.urlencode(trim($address)).
-        '&output=csv'.    //XXX "xml" output format returns prettified street address & more info if needed
-        '&key='.$config['google_maps']['api_key'];
-
-    $res = csvParseRow(file_get_contents($url));
-    if ($res[0] != 200 || $res[1] == 0) return false;
-
-    $out['x'] = $res[2];
-    $out['y'] = $res[3];
-    $out['accuracy'] = $res[1];    //0 (worst) to 9 (best)
-    return $out;
-}
-
-/**
- * Performs a reverse geocoding lookup from coordinates
- *
- * Google Reverse Geocoding API documentation:
- * http://code.google.com/apis/maps/documentation/services.html#ReverseGeocoding
- *
- * @param $lat Latitude
- * @param $long Longitude
- * @return name & accuracy of specified location or false
- */
-function googleMapsReverseGeocode($lat, $long)  //XXX DELETE FUNCTION, use GeoLookupClient instead
-{
-    global $config;
-
-    $url = 'http://maps.google.com/maps/geo'.
-        '?ll='.$lat.','.$long.
-        '&output=csv'.    //XXX "xml" output format returns prettified street address & more info if needed
-        '&key='.$config['google_maps']['api_key'];
-
-    $res = csvParseRow(file_get_contents($url));
-    if ($res[0] != 200 || $res[1] == 0) return false;
-
-    $out['name'] = utf8_encode($res[2]);
-    $out['accuracy'] = $res[1];    //0 (worst) to 9 (best)
-    return $out;
 }
 
 ?>

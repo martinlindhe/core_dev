@@ -13,7 +13,7 @@
 
 require_once('RssReader.php');
 
-require_once('GeolocationClientYahoo.php');
+require_once('YahooQueryClient.php');
 
 class WeatherClientYahoo extends RssReader
 {
@@ -96,8 +96,7 @@ class WeatherClientYahoo extends RssReader
 
     function getWeather($city, $country = '')
     {
-        $loc_lookup = new GeolocationClientYahoo();
-        $x = $loc_lookup->get($city, $country);
+        $x = YahooQueryClient::geocode($city, $country);
 
         if (!$x->woeid)
             throw new Exception ('location not found');

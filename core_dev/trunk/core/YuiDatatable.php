@@ -9,8 +9,6 @@
 
 //STATUS: wip
 
-//FIXME: setSortOrder dont update sort order properly when used with a static data source
-
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
 //TODO: Conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html

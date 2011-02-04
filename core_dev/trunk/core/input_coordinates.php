@@ -5,10 +5,6 @@
  * Helper functions to convert different coordinate systems
  * and syntaxes to the internal format: WGS84 in degrees
  *
- * WGS84 coordinates is also used in
- * service_mlp.php
- * service_googlemaps.php
- *
  * World Geodetic System (WGS84):
  * http://en.wikipedia.org/wiki/WGS84
  *
