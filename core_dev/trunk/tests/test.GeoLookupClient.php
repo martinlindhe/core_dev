@@ -9,9 +9,4 @@ $c = new GeoLookupClient(59.332169, 18.062429); //= sthlm
 $x = $c->get();
 var_dump( $x );
 
-
-
-$x = GoogleMapsClient::geocode('Stora Nygatan, Stockholm, Sweden');
-var_dump($x);
-
 ?>
