@@ -41,6 +41,9 @@ class GoogleMapsJs
     }
 
     function setZoomLevel($n) { $this->zoom = $n; }
+    function setWidth($n) { $this->width = $n; }
+    function setHeight($n) { $this->height = $n; }
+
 
     function addMarkers($arr)
     {
