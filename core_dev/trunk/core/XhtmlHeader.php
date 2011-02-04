@@ -124,13 +124,17 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         $res .= '<head>'."\n";
 
-        if ($this->include_css || $this->embed_css) {
-            $res .= '<style type="text/css">';
-            foreach ($this->include_css as $css)
-                $res .= '@import url('.$css.');';
-            $res .= $this->embed_css;
-            $res .= '</style>';
-        }
+        $res .= '<style type="text/css">';
+
+        foreach ($this->include_css as $css)
+            $res .= '@import url('.$css.');';
+
+        $res .=
+        // these are needed for exact precision in multiple browsers
+        'html { height: 100% }'.
+        'body { height: 100%; margin: 0px; padding: 0px }'.
+        $this->embed_css.
+        '</style>';
 
         if ($this->embed_js)
             $res .= '<script type="text/javascript">'.implode('', $this->embed_js).'</script>';

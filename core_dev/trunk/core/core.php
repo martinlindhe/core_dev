@@ -393,4 +393,10 @@ function uptime()
     return $raw[0];
 }
 
+/** returns a boolean representation of input value as a string */
+function sbool($b)
+{
+     return $b ? 'true' : 'false';
+}
+
 ?>
