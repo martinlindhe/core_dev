@@ -19,6 +19,7 @@
 //TODO: docs mentioned a version param to force a exact version of the api for production sites, use this to match a working implementation!
 
 require_once('output_js.php');
+require_once('output_css.php');
 
 class GoogleMapsJs
 {
@@ -30,8 +31,8 @@ class GoogleMapsJs
     protected $detect_location = false; ///< shall google maps try to detect location of the user? .. XXX WHY??? whats the benefit of setting this?
     protected $zoom = 1;                ///< 1 (whole world) to 20 (max zoom)
 
-    protected $width  = 600;
-    protected $height = 400;
+    protected $width;
+    protected $height;
     protected $markers = array();
 
     function __construct($lat = 0, $lng = 0)
@@ -66,6 +67,13 @@ class GoogleMapsJs
 
         $div_id = 'gm_map_'.mt_rand();
 
+         $header->embedCss(
+        '#'.$div_id.' {'.
+            ($this->width  ? 'width:'.css_size($this->width).';' : '' ).
+            ($this->height ? 'height:'.css_size($this->height).';' : '').
+        '}'
+        );
+
         $res =
         'var ll = new google.maps.LatLng('.$this->latitude.','.$this->longitude.');'.
         'var myOptions = {'.
@@ -93,7 +101,7 @@ class GoogleMapsJs
         }
 
         return
-        '<div id="'.$div_id.'" style="width:'.$this->width.'px; height:'.$this->height.'px"/>'.
+        '<div id="'.$div_id.'"/>'.
         js_embed($res);
     }
 
