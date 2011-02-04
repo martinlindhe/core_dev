@@ -14,7 +14,6 @@
 //TODO: see if yui has money rounding code & use that instead of my formatMoney()
 
 //TODO: Conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
-//TODO: add max X & Y sizes and scrolling: http://developer.yahoo.com/yui/examples/datatable/dt_fixedscroll.html
 //TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
 
 require_once('output_js.php');
@@ -31,8 +30,13 @@ class YuiDatatable
     private $sort_order      = false;
     private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
 
+    private $pixel_width;                 ///< if set, forces horizontal scrollbar on the datatable
+    private $pixel_height;                ///< if set, forces vertical scrollbar on the datatable
+
     function setCaption($s) { $this->caption = $s; }
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
+    function setWidth($n) { $this->pixel_width = $n; }
+    function setHeight($n) { $this->pixel_height = $n; }
 
     /**
      * Adds a hidden column to the dataset, needed to embed data in the table linked to other cells, see $col_label param for addColumn()
@@ -248,6 +252,8 @@ class YuiDatatable
 
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
+                    ($this->pixel_width  ? 'width:"'.$this->pixel_width.'px",' : '').
+                    ($this->pixel_height ? 'height:"'.$this->pixel_height.'px",' : '').
                     ($this->sort_order !== false ?
                         'sortedBy: {'.
                             'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
@@ -270,9 +276,12 @@ class YuiDatatable
                     :
                         ''
                     ).
-                '};'.
+                '};';
 
-                'myDataTable = new YAHOO.widget.DataTable("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
+                $tbl_type = ($this->pixel_width || $this->pixel_height) ? 'ScrollingDataTable' : 'DataTable';
+
+                $res .=
+                'myDataTable = new YAHOO.widget.'.$tbl_type.'("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
                 ($this->xhr_source ?
                     // Update totalRecords on the fly with value from the XHR request, needed for paginator
