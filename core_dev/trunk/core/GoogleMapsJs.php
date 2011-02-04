@@ -15,17 +15,22 @@ class GoogleMapsJs
 {
     protected $latitude;
     protected $longitude;
-    protected $lang;       ///< 2-letter language code, eg "en". if unset, it will autodetect
-    protected $region;     ///< ("US", or "SE") in order to force maps to assume it is viewed from this region, rather than detected region
+    protected $lang;           ///< 2-letter language code, eg "en". if unset, it will autodetect
+    protected $region;         ///< ("US", or "SE") in order to force maps to assume it is viewed from this region, rather than detected region
 
     protected $detect_location = false;
-    protected $zoom_level = 14; //8;
+    protected $zoom   = 1; ///< 1 (whole world) to 20 (max zoom)
+
+    protected $width  = 600;
+    protected $height = 400;
 
     function __construct($lat, $lon)
     {
         $this->latitude  = $lat;
         $this->longitude = $lon;
     }
+
+    function setZoomLevel($n) { $this->zoom = $n; }
 
     function render()
     {
@@ -37,17 +42,19 @@ class GoogleMapsJs
         $header = XhtmlHeader::getInstance();
         $header->includeJs($url);
 
+        $div_id = 'gm_map_'.mt_rand();
+
         $res =
-        'var latlng = new google.maps.LatLng('.$this->latitude.', '.$this->longitude.');'.
+        'var ll = new google.maps.LatLng('.$this->latitude.', '.$this->longitude.');'.
         'var myOptions = {'.
-            'center: latlng,'.
-            'zoom: '.$this->zoom_level.','.
+            'center: ll,'.
+            'zoom: '.$this->zoom.','.
             'mapTypeId: google.maps.MapTypeId.ROADMAP'. //XXX: configurable ROADMAP, SATELLITE, HYBRID, TERRAIN
         '};'.
-        'var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);';
+        'var map = new google.maps.Map(document.getElementById("'.$div_id.'"), myOptions);';
 
         return
-        '<div id="map_canvas" style="width:400px; height:400px"/>'.
+        '<div id="'.$div_id.'" style="width:'.$this->width.'px; height:'.$this->height.'px"/>'.
         js_embed($res);
     }
 
