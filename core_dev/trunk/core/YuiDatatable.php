@@ -17,8 +17,6 @@
 //TODO: add max X & Y sizes and scrolling: http://developer.yahoo.com/yui/examples/datatable/dt_fixedscroll.html
 //TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
 
-//TODO: enable default row highlightning: http://developer.yahoo.com/yui/examples/datatable/dt_highlighting.html
-
 require_once('output_js.php');
 
 class YuiDatatable
@@ -285,6 +283,10 @@ class YuiDatatable
                 :
                     ''
                 ).
+
+                // Enable row highlighting, more examples: http://developer.yahoo.com/yui/examples/datatable/dt_highlighting.html
+                'myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow);'.
+                'myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);'.
 
                 'return {'.
                     'oDS: myDataSource,'.
