@@ -264,7 +264,7 @@ class YuiDatatable
                         'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
                         'containers:["'.$pag_holder.'"],'.
                         'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; {CurrentPageReport} {RowsPerPageDropdown} per page",'.
-                        'pageReportTemplate:"Showing items {startIndex} - {endIndex} of {totalRecords}",'.
+                        'pageReportTemplate:"Showing items {startRecord} - {endRecord} of {totalRecords}",'.
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
