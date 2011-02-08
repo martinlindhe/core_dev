@@ -115,9 +115,9 @@ class DatabaseMssql extends CoreBase implements IDB_SQL
             $query = 'select SCOPE_IDENTITY() AS last_insert_id';
             $query_result = mssql_query($query, $this->db_handle) or die('Query failed, no insert id: '.$query);
 
-            $query_result = mssql_fetch_object($query_result);
+            $query_object = mssql_fetch_object($query_result);
 
-            $ret_id = $query_result->last_insert_id;
+            $ret_id = $query_object->last_insert_id;
             mssql_free_result($query_result);
         }
 
