@@ -20,18 +20,20 @@ echo '| <a href="#" onclick="return toggle_page_profiler();">load</a>';
 
 echo '<div id="page_prof_'.$rand_id.'" style="height:200px; display:none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
 
-$total_time = microtime(true) - $db->ts_initial;
-$sql_time = $db->getTotalQueryTime();
-$php_time   = $total_time - $sql_time - $db->time_connect;
+$total_time = microtime(true) - $page->getStartTime();
 
-echo
-'Load: <b>'.round($total_time, 2).'s</b> '.
-' (DB connect: '.round($db->time_connect, 2).'s, '.
-'SQL: '.round($sql_time, 2).'s, '.
-'PHP: '.round($php_time, 2).'s)<br/>';
+if (isset($db) && is_object($db)) {
+    $sql_time   = $db->getTotalQueryTime();
+    $php_time   = $total_time - $sql_time - $db->time_connect;
 
-
-
+    echo 'Load: <b>'.round($total_time, 2).'s</b> ';
+    echo ' (DB connect: '.round($db->time_connect, 2).'s, ';
+    echo 'SQL: '.round($sql_time, 2).'s, ';
+    echo 'PHP: '.round($php_time, 2).'s)';
+} else {
+    echo 'Load: <b>'.round($total_time, 2).'s</b>';
+}
+echo '<br/><br/>';
 
 echo 'Webserver <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> with <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
 echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';

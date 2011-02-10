@@ -24,15 +24,12 @@ class ProfiledSqlQuery
 
 class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 {
-    var $ts_initial    = 0;       ///< microtime for db instance
     var $measure_start = 0;       ///< time when profiling started
     var $time_connect  = 0;       ///< time it took to connect to db
     var $queries       = array(); ///< array of ProfiledSqlQuery (queries executed)
 
     function __construct()
     {
-        $this->ts_initial = microtime(true);
-
         mysqli_report(MYSQLI_REPORT_ERROR); // fails on sql syntax errors (????)
         //mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_STRICT); // all errors on, but disable exceptions (strict)
     }
@@ -55,22 +52,6 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
             $time += $q->time;
 
         return $time;
-    }
-
-    /**
-     * Saves time for profiling current action (connect, execute query, ...)
-     */
-    private function measureStart()
-    {
-        $this->measure_start = microtime(true);
-    }
-
-    /**
-     * Calculates the time it took to connect to database
-     */
-    private function measureConnect()
-    {
-        $this->time_connect = microtime(true) - $this->measure_start;
     }
 
     /**
@@ -97,14 +78,18 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function connect()
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         parent::connect();
-        $this->measureConnect();
+
+        // calculate the time it took to connect to database
+        $this->time_connect = microtime(true) - $this->measure_start;
     }
 
     function insert($q)
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::insert($q);
         $prof = &$this->measureQuery($q);
 
@@ -116,7 +101,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function delete($q)
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::delete($q);
         $prof = &$this->measureQuery($q);
 
@@ -128,7 +114,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function getOneItem($q)
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::getOneItem($q);
         $prof = &$this->measureQuery($q);
 
@@ -140,7 +127,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function getOneRow($q)
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::getOneRow($q);
         $prof = &$this->measureQuery($q);
 
@@ -152,7 +140,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function getArray($q)
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::getArray($q);
         $prof = &$this->measureQuery($q);
 
@@ -164,7 +153,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function getMappedArray($q) //XXX = get2dArray
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::getMappedArray($q);
         $prof = &$this->measureQuery($q);
 
@@ -176,7 +166,8 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
 
     function get1dArray($q)
     {
-        $this->measureStart();
+        $this->measure_start = microtime(true);
+
         $res = parent::get1dArray($q);
         $prof = &$this->measureQuery($q);
 
@@ -190,7 +181,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $args = func_get_args();
 
-        $this->measureStart();
+        $this->measure_start = microtime(true);
 
         $res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
 
@@ -216,7 +207,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $args = func_get_args();
 
-        $this->measureStart();
+        $this->measure_start = microtime(true);
 
         $res = call_user_func_array(array('parent', 'pSelectItem'), $args);  // HACK to pass dynamic variables to parent method
 
@@ -242,7 +233,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $args = func_get_args();
 
-        $this->measureStart();
+        $this->measure_start = microtime(true);
 
         $res = call_user_func_array(array('parent', 'pSelectMapped'), $args);  // HACK to pass dynamic variables to parent method
 
@@ -268,7 +259,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $args = func_get_args();
 
-        $this->measureStart();
+        $this->measure_start = microtime(true);
 
         $res = call_user_func_array(array('parent', 'pSelect1d'), $args);  // HACK to pass dynamic variables to parent method
 
@@ -294,7 +285,7 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
     {
         $args = func_get_args();
 
-        $this->measureStart();
+        $this->measure_start = microtime(true);
 
         $res = call_user_func_array(array('parent', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
 

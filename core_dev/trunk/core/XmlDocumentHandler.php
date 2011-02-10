@@ -30,10 +30,16 @@ class XmlDocumentHandler extends CoreBase
     private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
     private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
     private $upload_root;                    ///< root directory for file uploads
+    private $ts_initial;                     ///< used to measure page load time
 
     private $objs = array();                 ///< IXmlComponent objects
 
     private function __clone() {}      //singleton: prevent cloning of class
+
+    private function __construct()
+    {
+        $this->ts_initial = microtime(true);
+    }
 
     public static function getInstance()
     {
@@ -55,6 +61,8 @@ class XmlDocumentHandler extends CoreBase
     function getCoreDevInclude() { return $this->coredev_inc; }
     function getUploadRoot() { return $this->upload_root; }
     function getMimeType() { return $this->mimetype; }
+
+    function getStartTime() { return $this->ts_initial; }
 
     function setUploadRoot($s)
     {
