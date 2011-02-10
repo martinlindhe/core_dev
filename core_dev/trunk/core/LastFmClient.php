@@ -15,6 +15,7 @@
 
 require_once('HttpClient.php');
 require_once('MediaResource.php');
+require_once('TempStore.php');
 
 class LastFmClient
 {
@@ -58,11 +59,11 @@ class LastFmClient
 
         $data = $http->getBody();
         $x = simplexml_load_string($data);
-
+/*
         $attrs = $x->attributes();
         if ($attrs['status'] == 'failed')
             throw new Exception ('last.fm api error: '.$x->error);
-
+*/
         return $x;
     }
 
@@ -71,7 +72,17 @@ class LastFmClient
      */
     function getArtistInfo($artist)
     {
+        $temp = TempStore::getInstance();
+        $key = 'LastFmClient/artist//'.$artist;
+
+        $data = $temp->get($key);
+        if ($data)
+            return unserialize($data);
+
         $xml = $this->query('artist.getInfo', array('artist' => $artist, 'lang' => $this->language) );
+
+        if (isset($xml->error)) // eg: "Album not found"
+            return false;
 
         $artist = new ArtistResource();
         $artist->name           = strval($xml->artist->name);
@@ -93,11 +104,16 @@ class LastFmClient
         foreach ($xml->artist->tags->tag as $t)
             $artist->tags[] = strval($t->name);
 
+        $temp->set($key, serialize($artist));
+
         return $artist;
     }
 
     static function getBestImage($images, $quality = 'mega')
     {
+        if (!is_array($images))
+            throw new Exception ('no array given');
+
         $scoring = array(
         'small'      => 1,
         'medium'     => 2,
@@ -133,6 +149,13 @@ class LastFmClient
      */
     function getAlbumCovers($artist, $album)
     {
+        $temp = TempStore::getInstance();
+        $key = 'LastFmClient/covers//'.$artist.'/'.$album;
+
+        $data = $temp->get($key);
+        if ($data)
+            return unserialize($data);
+
         $xml = $this->query('album.getInfo', array('artist' => $artist, 'album' => $album, 'lang' => $this->language) );
 
         if (isset($xml->error)) // eg: "Album not found"
@@ -148,6 +171,8 @@ class LastFmClient
             $image->setUrl( strval($i) );
             $images[] = $image;
         }
+
+        $temp->set($key, serialize($images));
 
         return $images;
     }

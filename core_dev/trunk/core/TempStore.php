@@ -87,7 +87,7 @@ class TempStore
         return true;
     }
 
-    function setDebug($b) { $this->debug = $b; }
+    function setDebug($b = true) { $this->debug = $b; }
 
     function getServerPool()
     {

@@ -4,6 +4,9 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('LastFmClient.php');
 
+$temp = TempStore::getInstance();
+$temp->setDebug();
+
 $client = LastFmClient::getInstance();
 
 
@@ -13,10 +16,11 @@ d($res);
 */
 
 
+$res = $client->getArtistInfo('dsfkghsdgskhdfgkjsdhfkghsdfg');
+if ($res) echo "FAIL 1\n"; //XXX ska inte returnera någon artist-info
+
 
 $res = $client->getArtistInfo('Eminem');
-d($res);
-
 d( LastFmClient::getBestImage( $res->images ));
 
 ?>
