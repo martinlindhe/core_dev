@@ -13,17 +13,15 @@ $temp = TempStore::getInstance();
 
 $title = 'Avatar';
 
-$movie = new TheMovieDbClient();
-$movie->setApiKey('0c6598d3603824df9e50078942806320');
 
-$hit = $movie->search($title);
+$hit = TheMovieDbClient::search($title);
+d($hit[0]);die;
 
 
-//$details = $movie->getInfo( $hit->tmdb_id );
-$details = $movie->getInfo( $hit->imdb_id );
-
+/*
+$details = TheMovieDbClient::getInfo( 'tt0499549' );
 d( $details );
-
+*/
 
 
 ?>

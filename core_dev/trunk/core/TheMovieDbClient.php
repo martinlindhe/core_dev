@@ -35,17 +35,7 @@ class TheMovieDbMovie
 
 class TheMovieDbClient extends CoreBase
 {
-    private $api_key;
-
-    function __construct($api_key = '')
-    {
-        $this->setApiKey($api_key);
-    }
-
-    function setApiKey($key)
-    {
-        $this->api_key = $key;
-    }
+    static $api_key = '0c6598d3603824df9e50078942806320';
 
     /** Is $s a tmdb id? */
     static function probeId($s)
@@ -60,9 +50,9 @@ class TheMovieDbClient extends CoreBase
 
     /**
      * Search for a movie
-     * @return little info of each movie, use getInfo() to return more info
+     * @return array with little info of each movie, use getInfo() to return more info
      */
-    function search($name)
+    static function search($name)
     {
         if (!$name)
             return false;
@@ -74,7 +64,7 @@ class TheMovieDbClient extends CoreBase
         if ($data)
             return unserialize($data);
 
-        $url = 'http://api.themoviedb.org/2.1/Movie.search/en/xml/'.$this->api_key.'/'.urlencode($name);
+        $url = 'http://api.themoviedb.org/2.1/Movie.search/en/xml/'.self::$api_key.'/'.urlencode($name);
 
         $http = new HttpClient($url);
         $http->setCacheTime(60*60*24); //24 hours
@@ -87,10 +77,10 @@ class TheMovieDbClient extends CoreBase
             return false;
         }
 
-        $res = $this->parseResult($data);
-        $temp->set($key, serialize($res[0]));
+        $res = self::parseResult($data);
+        $temp->set($key, serialize($res));
 
-        return $res ? $res[0] : false;
+        return $res;
     }
 
     /**
@@ -98,7 +88,7 @@ class TheMovieDbClient extends CoreBase
      *
      * @param $movie_id TMDB id
      */
-    function getInfo($movie_id)
+    static function getInfo($movie_id)
     {
         if (!Imdb::isValidId($movie_id) && !self::probeId($movie_id))
             throw new Exception ('not a tmdb / imdb id');
@@ -111,9 +101,9 @@ class TheMovieDbClient extends CoreBase
             return unserialize($data);
 
         if (Imdb::isValidId($movie_id))
-            $url = 'http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/'.$this->api_key.'/'.$movie_id;
+            $url = 'http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/'.self::$api_key.'/'.$movie_id;
         else
-            $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$movie_id;
+            $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.self::$api_key.'/'.$movie_id;
 
         $http = new HttpClient($url);
         $data = $http->getBody();
@@ -124,14 +114,14 @@ class TheMovieDbClient extends CoreBase
             return false;
         }
 
-        $res = $this->parseResult($data);
+        $res = self::parseResult($data);
         $temp->set($key, serialize($res[0]));
 
         return $res ? $res[0] : false;
     }
 
     /** @return array of TheMovieDbMovie objects */
-    private function parseResult($data)
+    private static function parseResult($data)
     {
         $movies = array();
 
