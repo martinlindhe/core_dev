@@ -210,6 +210,9 @@ class HttpClient extends CoreBase
      */
     private function get($post_params = array(), $head_only = false)
     {
+        if (!$this->Url->get())
+            throw new Exception ('Must set url');
+
         $temp = TempStore::getInstance();
 
         if (!$this->username && empty($post_params) && $this->cache_time && !$head_only)
@@ -224,10 +227,10 @@ class HttpClient extends CoreBase
             }
         }
 
-        curl_setopt($this->ch, CURLOPT_URL, $this->Url->get() );
-
         if ($this->getDebug())
             curl_setopt($this->ch, CURLOPT_VERBOSE, true);
+
+        curl_setopt($this->ch, CURLOPT_URL, $this->Url->get() );
 
         if ($this->content_type)
             curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$this->content_type));
