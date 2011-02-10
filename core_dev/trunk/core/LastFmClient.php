@@ -21,6 +21,7 @@ class LastFmClient
     static $_instance; ///< singleton
 
     protected $api_key = 'b25b959554ed76058ac220b7b2e0a026'; // from last.fm api doc
+    protected $language = 'en';                              // The language to return the biography in, expressed as an ISO 639 alpha-2 code.
 
     private function __construct() { }
     private function __clone() {}      //singleton: prevent cloning of class
@@ -31,6 +32,14 @@ class LastFmClient
             self::$_instance = new self();
 
         return self::$_instance;
+    }
+
+    function setLanguage($s)
+    {
+        if (!in_array($s, array('en', 'sv')))
+            throw new Exception ('unknown lang: '.$s);
+
+        $this->language = $s;
     }
 
     function setApiKey($s) { $this->api_key = $s; }
@@ -62,7 +71,7 @@ class LastFmClient
      */
     function getArtistInfo($artist)
     {
-        $xml = $this->query('artist.getInfo', array('artist' => $artist) );
+        $xml = $this->query('artist.getInfo', array('artist' => $artist, 'lang' => $this->language) );
 
         $artist = new ArtistResource();
         $artist->name           = strval($xml->artist->name);
@@ -124,7 +133,7 @@ class LastFmClient
      */
     function getAlbumCovers($artist, $album)
     {
-        $xml = $this->query('album.getInfo', array('artist' => $artist, 'album' => $album) );
+        $xml = $this->query('album.getInfo', array('artist' => $artist, 'album' => $album, 'lang' => $this->language) );
 
         if (isset($xml->error)) // eg: "Album not found"
             return false;
