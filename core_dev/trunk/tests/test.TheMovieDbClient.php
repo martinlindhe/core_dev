@@ -19,7 +19,7 @@ d($hit[0]);die;
 
 
 /*
-$details = TheMovieDbClient::getInfo( 'tt0499549' );
+$details = TheMovieDbClient::getInfo( $hit[0]->tmdb_id );
 d( $details );
 */
 

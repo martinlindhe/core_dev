@@ -34,11 +34,15 @@ class LastFmClient
 
     private function query($method, $params)
     {
-        $http = new HttpClient('http://ws.audioscrobbler.com/2.0/?method='.$method.'&api_key='.$this->api_key);
-        $http->setCacheTime(60*60*12); //12 hours
+        $url = 'http://ws.audioscrobbler.com/2.0/?method='.$method.'&api_key='.$this->api_key;
+
+        $http = new HttpClient($url);
+        $http->setCacheTime('12h');
 
         foreach ($params as $key => $val)
             $http->Url->setParam($key, $val);
+
+        //d( $http->getUrl() );
 
         $data = $http->getBody();
         $x = simplexml_load_string($data);
@@ -67,6 +71,7 @@ class LastFmClient
         'medium'     => 2,
         'large'      => 3,
         'extralarge' => 4,
+        'mega'       => 5,
         );
 
         $score = 0;
