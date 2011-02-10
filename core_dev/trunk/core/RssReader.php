@@ -11,7 +11,7 @@
 
 //STATUS: good
 
-//TODO: rewrite to use easyxml ?
+//TODO: rewrite to use simplexml ?
 
 require_once('class.CoreBase.php');
 require_once('NewsItem.php');

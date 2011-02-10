@@ -50,6 +50,10 @@ class LastFmClient
         $data = $http->getBody();
         $x = simplexml_load_string($data);
 
+        $attrs = $x->attributes();
+        if ($attrs['status'] == 'failed')
+            throw new Exception ('last.fm api error: '.$x->error);
+
         return $x;
     }
 
