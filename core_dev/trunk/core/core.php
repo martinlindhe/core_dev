@@ -399,4 +399,16 @@ function sbool($b)
      return $b ? 'true' : 'false';
 }
 
+/** If string $needle is inside $haystack, then return true */
+function instr($haystack, $needle)
+{
+    if (!is_string($haystack) || !is_string($needle))
+        throw new Exception ('strings only');
+
+    if (strpos($haystack, $needle) === false)
+        return false;
+
+    return true;
+}
+
 ?>

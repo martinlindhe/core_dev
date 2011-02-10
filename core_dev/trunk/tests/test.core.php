@@ -31,4 +31,10 @@ if (byte_count(1024 * 1024 * 2) != '2 MiB')               echo "FAIL 18\n";
 if (byte_count(1024 * 1024 * 1024 * 2) != '2 GiB')        echo "FAIL 19\n";
 if (byte_count(1024 * 1024 * 1024 * 1024 * 2) != '2 TiB') echo "FAIL 20\n";
 
+if (!instr('abc 123', 'bc') )      echo "FAIL 21\n";
+if (instr('abc 123', 'cb') )       echo "FAIL 22\n";
+if (instr('abc', 'aa') )           echo "FAIL 23\n";
+if (instr('a', 'aa') )             echo "FAIL 24\n";
+if (!instr('aa', 'a') )            echo "FAIL 25\n";
+
 ?>
