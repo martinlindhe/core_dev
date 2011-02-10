@@ -37,6 +37,8 @@ class TheMovieDbClient extends CoreBase
 {
     static $api_key = '0c6598d3603824df9e50078942806320';
 
+    static $language = 'en'; // 2 or 3-letter ISO-639 language code
+
     /** Is $s a tmdb id? */
     static function probeId($s)
     {
@@ -64,10 +66,9 @@ class TheMovieDbClient extends CoreBase
         if ($data)
             return unserialize($data);
 
-        $url = 'http://api.themoviedb.org/2.1/Movie.search/en/xml/'.self::$api_key.'/'.urlencode($name);
+        $url = 'http://api.themoviedb.org/2.1/Movie.search/'.self::$language.'/xml/'.self::$api_key.'/'.urlencode($name);
 
         $http = new HttpClient($url);
-        $http->setCacheTime(60*60*24); //24 hours
 
         $data = $http->getBody();
 
@@ -101,9 +102,9 @@ class TheMovieDbClient extends CoreBase
             return unserialize($data);
 
         if (Imdb::isValidId($movie_id))
-            $url = 'http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/'.self::$api_key.'/'.$movie_id;
+            $url = 'http://api.themoviedb.org/2.1/Movie.imdbLookup/'.self::$language.'/xml/'.self::$api_key.'/'.$movie_id;
         else
-            $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.self::$api_key.'/'.$movie_id;
+            $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/'.self::$language.'/xml/'.self::$api_key.'/'.$movie_id;
 
         $http = new HttpClient($url);
         $data = $http->getBody();
