@@ -10,12 +10,8 @@
 
 //STATUS: wip
 
-
-//XXX: cache parsed result using TempStore
-
+//TODO: make getInfo() accept imdb id also
 //TODO: search by opensubtitles hash
-//TODO: search by imdb id
-//TODO: store movie title + imdb id in db
 
 //XXX export categories, no longer in the xml?
 
@@ -23,6 +19,7 @@ require_once('class.CoreBase.php');
 require_once('HttpClient.php');
 require_once('Imdb.php');
 require_once('MediaResource.php');
+require_once('TempStore.php');
 
 class TheMovieDbMovie
 {
@@ -33,9 +30,8 @@ class TheMovieDbMovie
     var $rating;
     var $overview;
     var $release_date;
-    var $last_modified; // how old is this data?
-
-    var $images = array(); // array of ImageResource objects
+    var $last_modified;            ///< how old is this data?
+    var $images         = array(); ///< array of ImageResource objects
 }
 
 class TheMovieDbClient extends CoreBase
@@ -68,7 +64,15 @@ class TheMovieDbClient extends CoreBase
      */
     function search($name)
     {
-        if (!$name) return false;
+        if (!$name)
+            return false;
+
+        $temp = TempStore::getInstance();
+        $key = 'TheMovieDbClient/search//'.$name;
+
+        $data = $temp->get($key);
+        if ($data)
+            return unserialize($data);
 
         $url = 'http://api.themoviedb.org/2.1/Movie.search/en/xml/'.$this->api_key.'/'.urlencode($name);
 
@@ -84,6 +88,7 @@ class TheMovieDbClient extends CoreBase
         }
 
         $res = $this->parseResult($data);
+        $temp->set($key, serialize($res[0]));
 
         return $res ? $res[0] : false;
     }
@@ -91,18 +96,23 @@ class TheMovieDbClient extends CoreBase
     /**
      * Returns details on a movie
      *
-     * @param $tmdb_id TMDB id
+     * @param $movie_id TMDB id
      */
-    function getInfo($tmdb_id)
+    function getInfo($movie_id)
     {
-        if (!self::probeId($tmdb_id))
+        if (!self::probeId($movie_id))
             throw new Exception ('not a tmdb id');
 
-        $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$tmdb_id;
+        $temp = TempStore::getInstance();
+        $key = 'TheMovieDbClient/info//'.$movie_id;
+
+        $data = $temp->get($key);
+        if ($data)
+            return unserialize($data);
+
+        $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$movie_id;
 
         $http = new HttpClient($url);
-        $http->setCacheTime(60*60*24); //24 hours
-
         $data = $http->getBody();
 
         if ($http->getStatus() != 200) {
@@ -112,6 +122,7 @@ class TheMovieDbClient extends CoreBase
         }
 
         $res = $this->parseResult($data);
+        $temp->set($key, serialize($res[0]));
 
         return $res ? $res[0] : false;
     }

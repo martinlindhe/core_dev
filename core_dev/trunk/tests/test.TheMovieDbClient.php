@@ -7,6 +7,10 @@ require_once('TheMovieDbClient.php');
 //die('XXX: cant easily autotest');
 
 
+$temp = TempStore::getInstance();
+//$temp->disable();
+
+
 $title = 'Avatar';
 
 $movie = new TheMovieDbClient();
@@ -15,7 +19,7 @@ $movie->setApiKey('0c6598d3603824df9e50078942806320');
 $hit = $movie->search($title);
 d( $hit );
 die;
-$details = $movie->getInfo( $hit['id'] );
+$details = $movie->getInfo( $hit->tmdb_id );
 
 d( $details );
 
