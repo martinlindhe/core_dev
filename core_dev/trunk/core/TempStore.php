@@ -28,6 +28,7 @@ class TempStore
     protected $handle;
     protected $persistent  = true;   ///< use persistent connections?
     protected $server_pool = array();
+    protected $enabled     = true;
     protected $debug       = false;
 
     private function __construct()
@@ -47,6 +48,8 @@ class TempStore
 
         return self::$_instance;
     }
+
+    function disable() { $this->enabled = false; }
 
     /**
      * Registers a server to the internal server pool
@@ -101,6 +104,9 @@ class TempStore
 
     function get($key)
     {
+        if (!$this->enabled)
+            return false;
+
         if (strlen($key) > 250)
             throw new Exception ('Key length too long '.$key);
 
