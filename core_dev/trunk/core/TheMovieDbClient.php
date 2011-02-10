@@ -10,7 +10,6 @@
 
 //STATUS: wip
 
-//TODO: make getInfo() accept imdb id also
 //TODO: search by opensubtitles hash
 
 //XXX export categories, no longer in the xml?
@@ -61,6 +60,7 @@ class TheMovieDbClient extends CoreBase
 
     /**
      * Search for a movie
+     * @return little info of each movie, use getInfo() to return more info
      */
     function search($name)
     {
@@ -100,8 +100,8 @@ class TheMovieDbClient extends CoreBase
      */
     function getInfo($movie_id)
     {
-        if (!self::probeId($movie_id))
-            throw new Exception ('not a tmdb id');
+        if (!Imdb::isValidId($movie_id) && !self::probeId($movie_id))
+            throw new Exception ('not a tmdb / imdb id');
 
         $temp = TempStore::getInstance();
         $key = 'TheMovieDbClient/info//'.$movie_id;
@@ -110,7 +110,10 @@ class TheMovieDbClient extends CoreBase
         if ($data)
             return unserialize($data);
 
-        $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$movie_id;
+        if (Imdb::isValidId($movie_id))
+            $url = 'http://api.themoviedb.org/2.1/Movie.imdbLookup/en/xml/'.$this->api_key.'/'.$movie_id;
+        else
+            $url = 'http://api.themoviedb.org/2.1/Movie.getInfo/en/xml/'.$this->api_key.'/'.$movie_id;
 
         $http = new HttpClient($url);
         $data = $http->getBody();

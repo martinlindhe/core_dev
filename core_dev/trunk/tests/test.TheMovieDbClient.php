@@ -17,9 +17,10 @@ $movie = new TheMovieDbClient();
 $movie->setApiKey('0c6598d3603824df9e50078942806320');
 
 $hit = $movie->search($title);
-d( $hit );
-die;
-$details = $movie->getInfo( $hit->tmdb_id );
+
+
+//$details = $movie->getInfo( $hit->tmdb_id );
+$details = $movie->getInfo( $hit->imdb_id );
 
 d( $details );
 
