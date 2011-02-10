@@ -49,7 +49,7 @@ class TempStore
     }
 
     /**
-     * @param $server_pool array of "host[:port]" addresses to memcache servers
+     * Registers a server to the internal server pool
      */
     function addServer($host, $port = 11211)
     {
@@ -64,7 +64,7 @@ class TempStore
     /**
      * @param $server_pool array of "host[:port]" addresses to memcache servers
      */
-    function addServerPool($pool)
+    function addServers($pool)
     {
         foreach ($pool as $server)
         {

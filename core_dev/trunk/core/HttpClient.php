@@ -19,8 +19,6 @@
 
 //STATUS: wip
 
-//TODO: add a separate "get only headers" function
-
 //TODO: extend from Url ???
 
 //FIXME header parsing should preserve all fields, ex:

@@ -9,14 +9,15 @@
 
 class Imdb
 {
-
     /**
      * @param $id imdb id
      * @return true if $id is a imdb ib
      */
     static function isValidId($id)
     {
-        if (strpos($id, ' ')) return false;
+        if (strpos($id, ' '))
+            return false;
+
         $pattern = "((tt|ch|nm|co)([0-9]){7})";
 
         if (preg_match($pattern, $id))
@@ -24,6 +25,7 @@ class Imdb
 
         return false;
     }
+
 }
 
 ?>

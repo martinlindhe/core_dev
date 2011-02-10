@@ -53,11 +53,17 @@ class VideoResource extends AudioResource
     }
 }
 
-class ImageResource extends MediaResource
+class ImageResource
 {
+    var $title;
+    var $desc;
+
     var $Url;
     var $width;
     var $height;
+
+    var $image_id;
+    var $type;  // example "poster", "cover"
 
     function setUrl($n) { $this->Url = new Url($n); }
     function getUrl() { return $this->Url->get(); }

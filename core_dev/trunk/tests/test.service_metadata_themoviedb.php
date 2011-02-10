@@ -4,17 +4,17 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('service_metadata_themoviedb.php');
 
-die('XXX: cant easily autotest');
+//die('XXX: cant easily autotest');
 
 
 $title = 'Avatar';
 
-$movie = new TheMovieDbMetadata();
+$movie = new TheMovieDbClient();
 $movie->setApiKey('0c6598d3603824df9e50078942806320');
 
 $hit = $movie->search($title);
-//d( $hit );
-
+d( $hit );
+die;
 $details = $movie->getInfo( $hit['id'] );
 
 d( $details );
