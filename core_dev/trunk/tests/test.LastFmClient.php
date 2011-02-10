@@ -6,7 +6,13 @@ require_once('LastFmClient.php');
 
 $client = LastFmClient::getInstance();
 
+/*
 $res = $client->getAlbumCover('Eminem', 'Encore');
 d($res);
+*/
+
+$res = $client->getArtistInfo('Eminem');
+d($res);
+
 
 ?>

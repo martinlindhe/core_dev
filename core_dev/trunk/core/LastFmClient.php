@@ -11,7 +11,20 @@
 
 //STATUS: wip
 
+//TODO: getArtistInfo() parse "similar" artists tag
+
 require_once('HttpClient.php');
+require_once('MediaResource.php');
+
+class ArtistResource
+{
+    var $name;
+    var $musicbrainz_id;
+    var $summary;          ///< quick summary of artist
+    var $detailed_info;    ///< more details of artist
+    var $images = array(); ///< array of ImageResource objects
+    var $tags   = array(); ///< array of strings, "tags" such as music genre
+}
 
 class LastFmClient
 {
@@ -42,7 +55,7 @@ class LastFmClient
         foreach ($params as $key => $val)
             $http->Url->setParam($key, $val);
 
-        //d( $http->getUrl() );
+//d( $http->getUrl() );
 
         $data = $http->getBody();
         $x = simplexml_load_string($data);
@@ -50,9 +63,34 @@ class LastFmClient
         return $x;
     }
 
-    function albumGetInfo($artist, $album)
+    /**
+     * @return info about the artist
+     */
+    function getArtistInfo($artist)
     {
-        return $this->query('album.getInfo', array('artist' => $artist, 'album' => $album) );
+        $xml = $this->query('artist.getInfo', array('artist' => $artist) );
+
+        $artist = new ArtistResource();
+        $artist->name           = strval($xml->artist->name);
+        $artist->musicbrainz_id = strval($xml->artist->mbid);
+        $artist->summary        = strval($xml->artist->bio->summary);
+        $artist->detailed_info  = strval($xml->artist->bio->content);
+
+        foreach ($xml->artist->image as $i) {
+            $image = new ImageResource();
+
+            $attr = $i->attributes();
+
+            $image->setUrl( strval($i) );
+            $image->type = strval($attr->size);
+
+            $artist->images[] = $image;
+        }
+
+        foreach ($xml->artist->tags->tag as $t)
+            $artist->tags[] = strval($t->name);
+
+        return $artist;
     }
 
     /**
@@ -61,7 +99,7 @@ class LastFmClient
      */
     function getAlbumCover($artist, $album, $quality = '')
     {
-        $xml = $this->albumGetInfo($artist, $album);
+        $xml = $this->query('album.getInfo', array('artist' => $artist, 'album' => $album) );
 
         if (isset($xml->error)) // eg: "Album not found"
             return false;
