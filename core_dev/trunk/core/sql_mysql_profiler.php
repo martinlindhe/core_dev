@@ -48,6 +48,15 @@ class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
         return $cnt;
     }
 
+    function getTotalQueryTime()
+    {
+        $time = 0;
+        foreach ($this->queries as $q)
+            $time += $q->time;
+
+        return $time;
+    }
+
     /**
      * Saves time for profiling current action (connect, execute query, ...)
      */

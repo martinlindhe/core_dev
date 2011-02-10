@@ -193,7 +193,7 @@ class XmlDocumentHandler extends CoreBase
         }
 
         if ($this->enable_design) {
-            if (class_exists('SqlHandler')) { //&& $session->isAdmin) {
+            if (class_exists('SqlHandler')) {
                 $db = SqlHandler::getInstance();
 
                 if ($db instanceof DatabaseMySQLProfiler)
@@ -204,6 +204,8 @@ class XmlDocumentHandler extends CoreBase
                 $store = TempStore::getInstance();
                 echo $store->renderStatus();
             }
+
+            echo $this->renderPageLoad();
 
             if ($this->design_foot) {
                 $view = new ViewModel($this->design_foot);
@@ -217,58 +219,12 @@ class XmlDocumentHandler extends CoreBase
         ob_end_flush();
     }
 
-}
+    function renderPageLoad()
+    {
+        $view = new ViewModel('views/page_profiler.php');
+        return $view->render();
+    }
 
-/** @param $dst redirects user to destination url relative to website base url */
-function redir($dst)
-{
-    $page = XmlDocumentHandler::getInstance();
-    header('Location: '.$page->getRelativeUrl().$dst);
-    die;
-}
-
-/** @param $url partial url to generate a url relative website base */
-function relurl($url)
-{
-    if (substr($url, 0, 4) == 'http' || substr($url, 0, 1) == '/')
-        return $url;
-
-    $page = XmlDocumentHandler::getInstance();
-    return $page->getRelativeUrl().$url;
-}
-
-/**
- * Modifies parameters to current request URI
- * @param $p array of key=>val pairs
- */
-function relurl_add($p)
-{
-    $page = XmlDocumentHandler::getInstance();
-
-    $u = new Url( $page->getUrl() );
-    $u->setPath($_SERVER['REDIRECT_URL']);
-    foreach ($p as $key => $val)
-        $u->setParam($key, $val);
-
-    return $u->getPath();
-}
-
-function ahref($url, $title, $target = '')
-{
-    return '<a href="'.relurl($url).'"'.($target ? ' target="'.$target.'"' : '').'>'.$title.'</a>';
-}
-
-/** Creates "are you sure?" pages */
-function confirmed($text)
-{
-    if (isset($_GET['cd_confirmed']))
-        return true;
-
-    echo $text.'<br/><br/>';
-
-    echo '<a href="'.relurl_add(array('cd_confirmed'=>1)).'">Yes, I am sure</a><br/><br/>';
-    echo '<a href="javascript:history.go(-1);">No, wrong button</a><br/>';
-    return false;
 }
 
 ?>

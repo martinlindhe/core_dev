@@ -4,6 +4,9 @@
  *
  * API client for http://isbndb.com/ (ISBN book search api)
  *
+ * API documentation:
+ * https://isbndb.com/docs/api/
+ *
  * Must register for an api key:
  * https://isbndb.com/account/create.html
  *
@@ -16,6 +19,7 @@
 require_once('HttpClient.php');
 require_once('ISBN.php');
 require_once('MediaResource.php'); // for BookResource
+require_once('TempStore.php');
 
 class IsbnDbClient
 {
@@ -27,6 +31,17 @@ class IsbnDbClient
     {
         if (!ISBN::isValid($isbn))
             throw new Exception ('invalid isbn');
+
+        if (!$this->api_key)
+            throw new Exception ('api key required');
+
+        $temp = TempStore::getInstance();
+
+        $key = 'IsbnDbClient/isbn/'.$isbn;
+        $res = $temp->get($key);
+
+        if ($res)
+            return unserialize($res);
 
         $url = 'http://isbndb.com/api/books.xml?access_key='.$this->api_key.'&index1=isbn&value1='.$isbn;
         $http = new HttpClient($url);
@@ -44,6 +59,8 @@ class IsbnDbClient
         $book->publisher = strval($d->PublisherText);
         $book->isbn10    = strval($attrs['isbn']);
         $book->isbn13    = strval($attrs['isbn13']);
+
+        $temp->set($key, serialize($book), '24h');
 
         return $book;
     }
