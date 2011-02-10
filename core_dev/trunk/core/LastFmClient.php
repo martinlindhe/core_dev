@@ -87,17 +87,8 @@ class LastFmClient
         return $artist;
     }
 
-    /**
-     * @param $quality force given quality if set
-     * @return url to best quality album cover for given album
-     */
-    function getAlbumCover($artist, $album, $quality = '')
+    static function getBestImage($images, $quality = 'mega')
     {
-        $xml = $this->query('album.getInfo', array('artist' => $artist, 'album' => $album) );
-
-        if (isset($xml->error)) // eg: "Album not found"
-            return false;
-
         $scoring = array(
         'small'      => 1,
         'medium'     => 2,
@@ -106,28 +97,61 @@ class LastFmClient
         'mega'       => 5,
         );
 
+        if (!array_key_exists($quality, $scoring))
+            throw new Exception ('unrecognized quality: '.$quality);
+
         $score = 0;
         $best_url = '';
 
-        foreach ($xml->album->image as $i)
-            foreach ($i->attributes() as $name => $val)
-                if ($name == 'size') {
-                    $val = strval($val);
+        foreach ($images as $i) {
+            if ($i->type == $quality)
+                return $i->getUrl();
 
-                    if ($quality && $val == $quality)
-                        return strval($i);
-
-                    if (isset($scoring[ $val ])) {
-                        if ($scoring[ $val ] > $score) {
-                            // echo $name. " = ".$val."\n";
-                            $score = $scoring[ $val ];
-                            $best_url = strval($i);
-                        }
-                    } else
-                        throw new Exception ('unknown image quality '.$val);
+            if (isset($scoring[ $i->type ])) {
+                if ($scoring[ $i->type ] > $score) {
+                    // echo $name. " = ".$val."\n";
+                    $score = $scoring[ $i->type ];
+                    $best_url = $i->getUrl();
                 }
+            } else
+                throw new Exception ('unknown image quality '.$i->type );
+        }
 
         return $best_url;
+    }
+
+    /**
+     */
+    function getAlbumCovers($artist, $album)
+    {
+        $xml = $this->query('album.getInfo', array('artist' => $artist, 'album' => $album) );
+
+        if (isset($xml->error)) // eg: "Album not found"
+            return false;
+
+        $images = array();
+        foreach ($xml->album->image as $i)
+        {
+            $attrs = $i->attributes();
+
+            $image = new ImageResource();
+            $image->type = strval($attrs['size']);
+            $image->setUrl( strval($i) );
+            $images[] = $image;
+        }
+
+        return $images;
+    }
+
+    /**
+     * @param $quality force given quality if set
+     * @return url to best quality album cover for given album
+     */
+    function getAlbumCover($artist, $album, $quality = '')
+    {
+        $images = $this->getAlbumCovers($artist, $album);
+
+        return self::getBestImage($images, $quality);
     }
 
 }
