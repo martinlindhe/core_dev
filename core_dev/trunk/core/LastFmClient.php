@@ -109,42 +109,6 @@ class LastFmClient
         return $artist;
     }
 
-    static function getBestImage($images, $quality = 'mega')
-    {
-        if (!is_array($images))
-            throw new Exception ('no array given');
-
-        $scoring = array(
-        'small'      => 1,
-        'medium'     => 2,
-        'large'      => 3,
-        'extralarge' => 4,
-        'mega'       => 5,
-        );
-
-        if (!array_key_exists($quality, $scoring))
-            throw new Exception ('unrecognized quality: '.$quality);
-
-        $score = 0;
-        $best_url = '';
-
-        foreach ($images as $i) {
-            if ($i->type == $quality)
-                return $i->getUrl();
-
-            if (isset($scoring[ $i->type ])) {
-                if ($scoring[ $i->type ] > $score) {
-                    // echo $name. " = ".$val."\n";
-                    $score = $scoring[ $i->type ];
-                    $best_url = $i->getUrl();
-                }
-            } else
-                throw new Exception ('unknown image quality '.$i->type );
-        }
-
-        return $best_url;
-    }
-
     /**
      */
     function getAlbumCovers($artist, $album)
@@ -186,6 +150,42 @@ class LastFmClient
         $images = $this->getAlbumCovers($artist, $album);
 
         return self::getBestImage($images, $quality);
+    }
+
+    static function getBestImage($images, $quality = 'mega')
+    {
+        if (!is_array($images))
+            throw new Exception ('no array given');
+
+        $scoring = array(
+        'small'      => 1,
+        'medium'     => 2,
+        'large'      => 3,
+        'extralarge' => 4,
+        'mega'       => 5,
+        );
+
+        if (!array_key_exists($quality, $scoring))
+            throw new Exception ('unrecognized quality: '.$quality);
+
+        $score = 0;
+        $best_url = '';
+
+        foreach ($images as $i) {
+            if ($i->type == $quality)
+                return $i->getUrl();
+
+            if (isset($scoring[ $i->type ])) {
+                if ($scoring[ $i->type ] > $score) {
+                    // echo $name. " = ".$val."\n";
+                    $score = $scoring[ $i->type ];
+                    $best_url = $i->getUrl();
+                }
+            } else
+                throw new Exception ('unknown image quality '.$i->type );
+        }
+
+        return $best_url;
     }
 
 }
