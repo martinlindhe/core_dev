@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('service_metadata_themoviedb.php');
+require_once('TheMovieDbClient.php');
 
 //die('XXX: cant easily autotest');
 
