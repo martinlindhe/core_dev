@@ -130,7 +130,11 @@ class TheMovieDbClient extends CoreBase
 
         foreach ($xml->movies->movie as $m) {
             $movie = new TheMovieDbMovie();
-            $movie->title         = $m->name.' ('.$m->alternative_name.')';
+            if (strval($m->alternative_name))
+                $movie->title     = strval($m->name).' ('.strval($m->alternative_name).')';
+            else
+                $movie->title     = strval($m->name);
+
             $movie->language      = strval($m->language);
             $movie->tmdb_id       = strval($m->id);
             $movie->imdb_id       = strval($m->imdb_id);

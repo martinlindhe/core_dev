@@ -50,6 +50,7 @@ class TempStore
     }
 
     function disable() { $this->enabled = false; }
+    function debug($b = true) { $this->debug = $b; }
 
     /**
      * Registers a server to the internal server pool
@@ -86,8 +87,6 @@ class TempStore
 
         return true;
     }
-
-    function setDebug($b = true) { $this->debug = $b; }
 
     function getServerPool()
     {

@@ -5,7 +5,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 require_once('LastFmClient.php');
 
 $temp = TempStore::getInstance();
-$temp->setDebug();
+$temp->debug();
 
 $client = LastFmClient::getInstance();
 

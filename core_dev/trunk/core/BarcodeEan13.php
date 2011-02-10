@@ -29,7 +29,9 @@
 
 //STATUS: wip
 
-//TODO: isolerad sqlite databas som innehåller GS1-country codes... sen gör en likadan för geoip (?)
+//XXX rework internals, make isValid() static!
+
+//TODO: isolerad sqlite databas som innehåller GS1-country codes
  //XXX: calcCheck() also works with EAN-8 numbers.. fix by extending EAN-8 class when it is written
 
 class BarcodeEan13
@@ -84,7 +86,7 @@ class BarcodeEan13
     function getCompanyName() { return $this->company_name; }
     function getProduct() { return $this->product; }
 
-    function isValid()
+    function isValid() //XXX: make static
     {
         if ($this->calcCheck() == $this->check)
             return true;
