@@ -16,16 +16,6 @@
 require_once('HttpClient.php');
 require_once('MediaResource.php');
 
-class ArtistResource
-{
-    var $name;
-    var $musicbrainz_id;
-    var $summary;          ///< quick summary of artist
-    var $detailed_info;    ///< more details of artist
-    var $images = array(); ///< array of ImageResource objects
-    var $tags   = array(); ///< array of strings, "tags" such as music genre
-}
-
 class LastFmClient
 {
     static $_instance; ///< singleton
