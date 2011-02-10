@@ -28,6 +28,7 @@ class ISBN
      */
     static function isValid($s)
     {
+        // XXX improve using regexp who matches on n-n-n-n-n  (always 5 numbers divided by -)
         $s = str_replace('-', '', $s);
         $s = trim($s);
 

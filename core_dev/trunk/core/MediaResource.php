@@ -79,4 +79,13 @@ class ArtistResource
     var $tags   = array(); ///< array of strings, "tags" such as music genre
 }
 
+class BookResource
+{
+    var $title;
+    var $authors;
+    var $publisher;
+    var $isbn10;
+    var $isbn13;
+}
+
 ?>
