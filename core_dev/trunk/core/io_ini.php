@@ -9,6 +9,10 @@
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
+//STATUS: wip
+
+//TODO: rename class & file: IniHandler
+
 //TODO handle ""-escaped values
 //TODO handle escape sequences  "\;", "\=" etc, see wiki article
 

@@ -10,7 +10,6 @@
 require_once('Cache.php');
 
 require_once('WeatherClientYahoo.php');
-// require_once('WeatherClientWebservicex.php'); // currently not working, 2010-11-02
 
 class WeatherResult
 {
@@ -52,7 +51,6 @@ class WeatherClient extends CoreBase
         if ($data)
             return unserialize($data);
 
-//        $client = new WeatherClientWebservicex();
         $client = new WeatherClientYahoo();
         $res = $client->getWeather($city, $country);
 
