@@ -8,9 +8,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-// require_once('input_xml.php');
-
-///XXX FIXME UPDATE to use XmlReader.php
+//STATUS: wip
 
 class StockClientWebservicex
 {
@@ -28,31 +26,31 @@ class StockClientWebservicex
         try {
             $params['symbol'] = $code;
             $val = $client->GetQuote($params);
-            $xml = $val->GetQuoteResult;
+            $data = $val->GetQuoteResult;
 
-            $x = new xml_input();
-            $p = $x->parse($xml);
+            $xml = simplexml_load_string($data);
 
             //FIXME adjust timezone of timestamp
-            $timestamp = strtotime($p['StockQuotes|Stock|Date'].' '.$p['StockQuotes|Stock|Time']);
+            $timestamp = strtotime($xml->Stock->Date.' '.$xml->Stock->Time);
 
             $res = array(
-            'Symbol'       => $p['StockQuotes|Stock|Symbol'],
-            'Name'         => $p['StockQuotes|Stock|Name'],
-            'Last'         => $p['StockQuotes|Stock|Last'],
-            'Timestamp'    => $timestamp,
-            'Change'       => $p['StockQuotes|Stock|Change'],
-            'Open'         => $p['StockQuotes|Stock|Open'],
-            'High'         => $p['StockQuotes|Stock|High'],
-            'Low'          => $p['StockQuotes|Stock|Low'],
-            'Volume'       => @$p['StockQuotes|Stock|Volume'],
-            'PreviousClose'=> $p['StockQuotes|Stock|PreviousClose'],
-            'PercentChange'=> $p['StockQuotes|Stock|PercentageChange'],
-            'Earns'        => $p['StockQuotes|Stock|Earns'],
-            'MktCap'       => $p['StockQuotes|Stock|MktCap'], //XXX ???
-            'AnnRange'     => $p['StockQuotes|Stock|AnnRange'],//XXX ???
-            'P-E'          => $p['StockQuotes|Stock|P-E']//XXX???
+            'Symbol'       => strval($xml->Stock->Symbol),
+            'Name'         => strval($xml->Stock->Name),
+            'Last'         => strval($xml->Stock->Last),
+            'Timestamp'    => sql_datetime($timestamp),
+            'Change'       => strval($xml->Stock->Change),
+            'Open'         => strval($xml->Stock->Open),
+            'High'         => strval($xml->Stock->High),
+            'Low'          => strval($xml->Stock->Low),
+            'Volume'       => strval($xml->Stock->Volume),
+            'PreviousClose'=> strval($xml->Stock->PreviousClose),
+            'PercentChange'=> strval($xml->Stock->PercentageChange),
+            'Earns'        => strval($xml->Stock->Earns),
+            'MktCap'       => strval($xml->Stock->MktCap),   //XXX ???
+            'AnnRange'     => strval($xml->Stock->AnnRange), //XXX ???
+            'PE'           => strval($xml->Stock->{'P-E'}),  //XXX ???
             );
+
             return $res;
 
         } catch (Exception $e) {
