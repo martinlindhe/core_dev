@@ -9,6 +9,39 @@
 
 require_once('class.CoreItem.php');
 
+
+class CoreItem extends CoreBase //XXX DROP THIS, merge with CategoryItem
+{
+    var $id;
+    var $type;         ///< type as defined in constants.php
+    var $owner;
+    var $title;
+
+    function setId($id)
+    {
+        if (!is_numeric($id)) return false;
+        $this->id = $id;
+    }
+
+    function setType($id)
+    {
+        if (!is_numeric($id)) return false;
+        $this->type = $id;
+    }
+
+    function setOwner($id)
+    {
+        if (!is_numeric($id)) return false;
+        $this->owner = $id;
+    }
+
+    function setTitle($s) { $this->title = $s; }
+
+    function getId() { return $this->id; }
+    function getTitle() { return $this->title; }
+}
+
+
 class CategoryItem extends CoreItem
 {
     private $creator;     ///< if set, stores creatorId when categories are created
