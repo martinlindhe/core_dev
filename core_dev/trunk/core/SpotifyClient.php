@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Spotify metadata api
+ * Spotify metadata API client
  * http://developer.spotify.com/en/metadata-api/overview/
  *
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
@@ -18,7 +18,7 @@ require_once('HttpClient.php');
 //XXX: memcache the parsed results too, for quicker artist id lookup at least
 //XXX: The rate limit is currently 10 request per second per ip. This may change.
 
-class SpotifyMetadata extends CoreBase
+class SpotifyClient extends CoreBase
 {
     /**
      * @param $name artist name

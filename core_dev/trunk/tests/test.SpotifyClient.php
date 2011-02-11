@@ -2,7 +2,7 @@
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('service_metadata_spotify.php');
+require_once('SpotifyClient.php');
 
 if (!is_spotify_uri('spotify:album:5fMriFQESKP2AWddR4jypS'))  echo "FAIL 1\n";
 if (!is_spotify_uri('spotify:artist:4YrKBkKSVeqDamzBPWVnSJ')) echo "FAIL 2\n";
@@ -28,7 +28,7 @@ $artist = 'Mohammed Ali';
 $album = 'Processen';
 
 
-$spot = new SpotifyMetadata();
+$spot = new SpotifyClient();
 $artist_id = $spot->getArtistId($artist);
 echo $artist." = ".$artist_id.ln();
 $album_id = $spot->getAlbumId($artist_id, $album);
