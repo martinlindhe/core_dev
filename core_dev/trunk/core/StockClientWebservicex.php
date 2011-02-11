@@ -12,12 +12,11 @@
 
 class StockClientWebservicex
 {
-    private $api_url = 'http://www.webservicex.net/stockquote.asmx?wsdl';
-
     function getQuote($code)
     {
         try {
-            $client = new SoapClient($this->api_url);
+            $url = 'http://www.webservicex.net/stockquote.asmx?wsdl';
+            $client = new SoapClient($url);
         } catch (SoapFault $e) {
             //echo 'exception: '.$e. "\n";
             return false;

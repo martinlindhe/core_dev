@@ -11,7 +11,7 @@ $in_file = 'norway_zipcodes-2011.01.21.csv';
 $db_file = 'zipcodes_nor.db';
 
 require_once('/devel/core_dev/trunk/core/core.php');
-require_once('/devel/core_dev/trunk/core/input_csv.php');
+require_once('/devel/core_dev/trunk/core/CsvReader.php');
 
 if (!class_exists('SQLite3'))
     throw new Exception ('sudo apt-get install php5-sqlite');
@@ -38,7 +38,7 @@ $communes = array('');
 while (($buf = fgets($handle, 4096)) !== false)
 {
     // "1003 OSLO","Lindebergåsen Postboks 1-29","Postboksadresse","Oslo","Oslo"
-    $r = csvParseRow($buf);
+    $r = CsvReader::parseRow($buf);
 
     // 0: Postnr / Postort
     // 1: Namn
