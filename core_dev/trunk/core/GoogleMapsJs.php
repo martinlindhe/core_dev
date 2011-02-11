@@ -26,7 +26,7 @@ require_once('Coordinate.php');
 
 class GoogleMapMarker extends Coordinate
 {
-    var $text;
+    var $tooltip;
     var $icon;
 }
 
@@ -107,7 +107,7 @@ class GoogleMapsJs
                 'var mk'.$idx.' = new google.maps.Marker({'.
                     'position: ll'.$idx.','.
                     ($m->icon ? 'icon: im'.$idx.',' : '').
-//                    ($m->text ? 'title: "'.$m->text.'",' : '').
+                    ($m->tooltip ? 'title: "'.$m->tooltip.'",' : '').
                     'map: myMap'.
                 '});'."\n";
             }
