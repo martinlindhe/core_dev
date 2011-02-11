@@ -8,7 +8,7 @@
 require_once('atom_categories.php');    //for multi-choise userdata types
 require_once('network.php');    //for is_email()
 require_once('validate_ssn.php');    //to validate swedish ssn's
-require_once('class.ZipLocation.php');    //for location datatyper
+require_once('ZipLocation.php');    //for location datatyper
 require_once('output_xhtml.php');
 
 

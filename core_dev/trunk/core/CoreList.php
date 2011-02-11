@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: drop this code & rework it into user classes: CategoryList, FeedWriter, Playlist
 
 //TODO: use list sort code from newsfeed & playlist
 
