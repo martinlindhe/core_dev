@@ -61,6 +61,7 @@ class LocaleInSwe extends CoreLocale
     'light rain'          => 'lite regnigt',
     'mostly cloudy/windy' => 'mestadels molningt och blåsigt',
     'snow grains'         => 'snöigt', //XXX bättre översättning ???
+    'light snow'          => 'lite snöigt',
 //    'clear'         => 'molnfritt',
 //    'mostly clear'  => 'mestadels molnfritt',
 //    'partly clear'  => 'delvis molnfritt',
@@ -70,7 +71,7 @@ class LocaleInSwe extends CoreLocale
     function getSkycondition($s)
     {
         $s = strtolower($s);
-        if (array_key_exists($s, $this->skyconditions))
+        if (isset($this->skyconditions[ $s ]))
             return $this->skyconditions[ $s ];
 
         return '___'.$s.'___';

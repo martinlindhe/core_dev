@@ -22,6 +22,13 @@
 
 require_once('output_js.php');
 require_once('output_css.php');
+require_once('Coordinate.php');
+
+class GoogleMapMarker extends Coordinate
+{
+    var $text;
+    var $icon;
+}
 
 class GoogleMapsJs
 {
@@ -53,9 +60,11 @@ class GoogleMapsJs
         if (!is_array($arr))
             throw new Exception ('not array');
 
-        foreach ($arr as $o) {
-            if (!is_array($o))
-                throw new Exception ('input must be an array of arrays with lat,long coords');
+        foreach ($arr as $o)
+        {
+            if (!($o instanceof GoogleMapMarker))
+                throw new Exception ('need GoogleMapMarker');
+
             $this->markers[] = $o;
         }
     }
@@ -89,20 +98,20 @@ class GoogleMapsJs
         'var myMap = new google.maps.Map(document.getElementById("'.$div_id.'"), myOptions);';
 
         if ($this->markers) {
-            $res .= 'var locationArray = [';
-            foreach ($this->markers as $m)
-                $res .= 'new google.maps.LatLng('.$m[0].','.$m[1].'),';
-            $res .= '];';
 
-            $res .=
-            'var coord;'.
-            'for (coord in locationArray) {'.
-                'new google.maps.Marker({'.
-                    'position: locationArray[coord],'.
-                    'map: myMap,'.
-    //                'title: locationNameArray[coord]'.
-                '});'.
-            '}';
+            foreach ($this->markers as $idx => $m) {
+
+                $res .=
+                ($m->icon ? 'var im'.$idx.' = "'.$m->icon.'";' : '').
+                'var ll'.$idx.' = new google.maps.LatLng('.$m->latitude.','.$m->longitude.');'.
+                'var mk'.$idx.' = new google.maps.Marker({'.
+                    'position: ll'.$idx.','.
+                    ($m->icon ? 'icon: im'.$idx.',' : '').
+//                    ($m->text ? 'title: "'.$m->text.'",' : '').
+                    'map: myMap'.
+                '});'."\n";
+            }
+
         }
 
         return
