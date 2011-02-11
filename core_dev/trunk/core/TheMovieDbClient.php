@@ -69,7 +69,6 @@ class TheMovieDbClient extends CoreBase
         $url = 'http://api.themoviedb.org/2.1/Movie.search/'.self::$language.'/xml/'.self::$api_key.'/'.urlencode($name);
 
         $http = new HttpClient($url);
-
         $data = $http->getBody();
 
         if ($http->getStatus() != 200) {
@@ -79,7 +78,7 @@ class TheMovieDbClient extends CoreBase
         }
 
         $res = self::parseResult($data);
-        $temp->set($key, serialize($res));
+        $temp->set($key, serialize($res), '24h');
 
         return $res;
     }
@@ -116,7 +115,7 @@ class TheMovieDbClient extends CoreBase
         }
 
         $res = self::parseResult($data);
-        $temp->set($key, serialize($res[0]));
+        $temp->set($key, serialize($res[0]), '24h');
 
         return $res ? $res[0] : false;
     }
