@@ -2,5 +2,21 @@ famfamfam world flag icon set, from:
 http://www.famfamfam.com/lab/icons/flags/
 
 Flags have been renamed to 3-letter country codes and optimized using pngcrush & optipng
+---
+
+
+
+The set is missing (probably among with more) flags for the following countries / regions:
+
+AQ    Antartica    has no official flag, see http://en.wikipedia.org/wiki/Flag_of_Antarctica
+                   instead we use a unofficial symbol, created from
+                   http://en.wikipedia.org/wiki/File:Flag_of_Antarctica.svg
+
+GLP   Guadeloupe   is not official country (belongs to France) but has its own flag.
+                   we use a icon created from
+                   http://en.wikipedia.org/wiki/File:Flag_of_Guadeloupe_(local).svg
+---
+
+
 
 Last updated 2011-02-11
