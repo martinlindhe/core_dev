@@ -16,7 +16,7 @@ if (is_spotify_uri('xxx:xxx:xxxx'))                           echo "FAIL 8\n";
 if (is_spotify_uri('xxx'))                                    echo "FAIL 9\n";
 if (is_spotify_uri('::'))                                     echo "FAIL 10\n";
 
-die("XXX: cant autotest the rest easily\n");
+//die("XXX: cant autotest the rest easily\n");
 
 
 //1. input: release namn & typ

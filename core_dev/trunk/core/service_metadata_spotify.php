@@ -36,7 +36,7 @@ class SpotifyMetadata extends CoreBase
         $data = $http->getBody();
 
         //TODO: use expire time for cached response
-        $expires = strtotime($http->getHeader('Expires')) - time();
+        $expires = strtotime($http->getResponseHeader('Expires')) - time();
 
         if ($http->getStatus() != 200) {
             d('SpotifyMetadata->getArtistId server error: '.$http->getStatus() );
@@ -143,7 +143,7 @@ class SpotifyMetadata extends CoreBase
         $artists = array();
 
         $reader = new XMLReader();
-        if ($this->debug) echo 'Parsing Artists: '.$data.ln();
+        if ($this->getDebug()) echo 'Parsing Artists: '.$data.ln();
         $reader->xml($data);
 
         while ($reader->read())
@@ -179,7 +179,7 @@ class SpotifyMetadata extends CoreBase
         $tracks = array();
 
         $reader = new XMLReader();
-        if ($this->debug) echo 'Parsing tracks: '.$data.ln();
+        if ($this->getDebug()) echo 'Parsing tracks: '.$data.ln();
         $reader->xml($data);
 
         while ($reader->read())
@@ -226,7 +226,7 @@ class SpotifyMetadata extends CoreBase
         $disco = array();
 
         $reader = new XMLReader();
-        if ($this->debug) echo 'Parsing disco: '.$data.ln();
+        if ($this->getDebug()) echo 'Parsing disco: '.$data.ln();
         $reader->xml($data);
 
         while ($reader->read())
