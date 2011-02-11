@@ -23,7 +23,7 @@
 </asx>
 */
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('HttpClient.php');
 require_once('MediaResource.php');
 

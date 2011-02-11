@@ -11,7 +11,7 @@
 
 //TODO: move setCoreDevInclude to a "core_dev handler" ? or "setup handler", or "config handler" ?
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('Url.php');
 
 class XmlDocumentHandler extends CoreBase

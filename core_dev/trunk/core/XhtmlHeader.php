@@ -14,8 +14,8 @@
 
 //TODO: rewrite "include feeds" functionality (use textfeed app as test?)
 
+require_once('CoreBase.php');
 require_once('IXmlComponent.php');
-require_once('class.CoreBase.php');
 require_once('LocaleHandler.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
 

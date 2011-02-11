@@ -17,7 +17,7 @@
 //TODO later: drop 'memcache' extension support
 
 require_once('core.php');
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 
 class Cache extends CoreBase
 {

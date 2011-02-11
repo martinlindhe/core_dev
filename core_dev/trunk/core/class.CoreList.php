@@ -9,7 +9,7 @@
 
 //TODO: use list sort code from newsfeed & playlist
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 
 class CoreList extends CoreBase
 {

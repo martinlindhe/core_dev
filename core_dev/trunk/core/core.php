@@ -7,6 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+require_once('CoreBase.php');
 require_once('LocaleHandler.php');        //for translations
 require_once('output_xhtml.php');         //for XHTML output helper functions
 require_once('functions_textformat.php'); //for decodeDataSize()
@@ -14,7 +15,6 @@ require_once('Timestamp.php');
 require_once('network.php');
 require_once('files.php');
 require_once('time.php');
-require_once('class.CoreBase.php'); //for CoreBase class
 require_once('ConvertDatasize.php');
 require_once('XmlDocumentHandler.php');
 

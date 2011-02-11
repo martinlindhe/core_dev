@@ -11,7 +11,7 @@
 
 //STATUS: ok, needs testing
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('core.php'); //for str_get_ending()
 
 class Diff extends CoreBase

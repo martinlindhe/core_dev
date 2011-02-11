@@ -14,7 +14,7 @@
 
 //TODO: extend from HttpClient
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('HttpClient.php');
 require_once('NewsItem.php');
 require_once('MediaResource.php');

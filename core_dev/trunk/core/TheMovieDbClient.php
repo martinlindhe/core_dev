@@ -14,7 +14,7 @@
 
 //XXX export categories, no longer in the xml?
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('HttpClient.php');
 require_once('Imdb.php');
 require_once('MediaResource.php');

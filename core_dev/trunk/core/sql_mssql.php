@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('ISql.php');
 
 //STATUS: wip

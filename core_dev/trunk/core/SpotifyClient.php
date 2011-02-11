@@ -8,7 +8,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('HttpClient.php');
 
 //STATUS: wip

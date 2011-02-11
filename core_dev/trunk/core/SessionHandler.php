@@ -12,8 +12,8 @@
 
 //TODO: reimplement user-block & ip-block
 
+require_once('CoreBase.php');
 require_once('User.php');
-require_once('class.CoreBase.php');
 
 class SessionHandler extends CoreBase
 {

@@ -8,7 +8,7 @@
 //STATUS: wip
 
 require_once('constants.php');
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 
 class CoreItem extends CoreBase
 {

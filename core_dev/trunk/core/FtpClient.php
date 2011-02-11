@@ -21,7 +21,7 @@
 
 //XXX: see curl_multi_exec() for performing multiple operations
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 
 class FtpClient extends CoreBase
 {

@@ -13,7 +13,7 @@
 
 //TODO: rewrite to use simplexml ?
 
-require_once('class.CoreBase.php');
+require_once('CoreBase.php');
 require_once('NewsItem.php');
 
 require_once('XmlReader.php');
