@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Simple CSV parser
+ * Simple CSV (Comma-separated values) data parser
  *
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
@@ -12,12 +12,33 @@
 class CsvReader
 {
     /**
+     * Parses string of CSV data into an array
+     */
+    static function parse($data, $start_line = 0, $delimiter = ',')
+    {
+        $res = array();
+
+        $rows = explode("\n", $data);
+
+        $line = 0;
+        foreach ($rows as $row)
+        {
+            if ($line >= $start_line && $row)
+                $res[] = self::parseRow($row, $delimiter);
+
+            $line++;
+        }
+
+        return $res;
+    }
+
+    /**
      * @param $filename string filename
      * @param $callback string callback function
      * @param $start_line int starting line number (counting from 0)
      * @param $delimiter character separating CSV cells (usually , or ;)
      */
-    static function parse($filename, $callback, $start_line = 0, $delimiter = ',')
+    static function parseFile($filename, $callback, $start_line = 0, $delimiter = ',')
     {
         $fp = fopen($filename, 'r');
         if (!$fp || !function_exists($callback)) {
@@ -26,11 +47,11 @@ class CsvReader
         }
 
         $cols = 0;
-        $i = 0;
+        $line = 0;
         while (!feof($fp))
         {
             $buf = fgets($fp, 4096);
-            if ($i >= $start_line)
+            if ($line >= $start_line)
             {
                 if (!$buf) break;
 
@@ -39,13 +60,13 @@ class CsvReader
                     $cols = count($row);
 
                 if ($cols != count($row)) {
-                    echo "FATAL: CSV format error in $filename at line ".($i+1).": ".count($row)." columns found, $cols expected\n";
+                    echo "FATAL: CSV format error in $filename at line ".($line+1).": ".count($row)." columns found, $cols expected\n";
                     return false;
                 }
                 if ($row)
                     call_user_func($callback, $row);
             }
-            $i++;
+            $line++;
         }
 
         fclose($fp);

@@ -9,72 +9,45 @@
 
 //STATUS: wip
 
-//XXX FIXME: TempStore
+//TODO later: also make a google finance api client: http://code.google.com/apis/finance/
 
-//TODO: use yahoo for stock qoutes instead
-
-//TODO: make a google finance api client: http://code.google.com/apis/finance/
-
-require_once('StockClientWebservicex.php'); //NASDAQ only (?)
-require_once('HttpClient.php');
+require_once('StockClientYahoo.php'); //NASDAQ only (?)
 require_once('TempStore.php');
+
+class StockQuoteResult
+{
+    var $name;
+    var $symbol;
+    var $ask_realtime;
+    var $bid_realtime;
+    var $low_52w;         ///< 52-week Low
+    var $hi_52w;          ///< 52-week High
+    var $open;
+    var $previous_close;
+    var $day_high;
+    var $day_low;
+}
 
 class StockClient
 {
-    function getNasdaq($code)
+    /** @return a StockQuoteResult object */
+    static function getNasdaq($symbol)
     {
-        $code = strtolower($code);
+        $code = strtolower($symbol);
 
         $temp = TempStore::getInstance();
-        $key = 'StockClient/nasdaq//'.$code;
+        $key = 'StockClient/nasdaq//'.$symbol;
 
         $data = $temp->get($key);
         if ($data)
             return unserialize($data);
 
-
-$stock = StockClientYahoo::getNasdaq($code);
-
-d($stock);die;
-
-die;
-        $client = new StockClientWebservicex();
-
-        $res = $client->getQuote($code);
+        $res = StockClientYahoo::getNasdaq($symbol);
 
         if ($res)
             $temp->set($key, serialize($res), '10m');
 
         return $res;
-    }
-}
-
-
-//Formatting explanation: http://www.gummy-stuff.org/Yahoo-data.htm
-//TODO: api can be extended to lookup multiple stock qoutes in one call
-class StockClientYahoo
-{
-    static function getNasdaq($code)
-    {
-        $format =  // result format string
-        's'.  // Symbol
-        'b2'. // Ask (real-time)
-        'b3'. // Bid (real-time)
-        'j'.  // 52-week Low
-        'k';  // 52-week High
-
-        $url = 'http://download.finance.yahoo.com/d/quotes.csv'.
-        '?s='.urlencode($code).
-        '&f='.$format;
-
-        $http = new HttpClient($url);
-
-        $data = $http->getBody();
-
-// "AAPL",357.05,357.01,194.06,360.00
-
-d( $data);
-
     }
 }
 
