@@ -15,7 +15,7 @@
  *
  * Reserved 1-50. Use a number above 50 for your own types
  *
- * USERS: class.Category.php, class.Comments.php
+ * USERS: CategoryItem.php, class.Comments.php
  */
 
 define('USER',       1);  ///< normal, public userfile
