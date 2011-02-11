@@ -11,9 +11,28 @@
 
 //STATUS: wip
 
+//XXX simplify by using simplexml instead of extending RssReader ?
+//CANTFIX: would have been awesome if results could be localized on server-side, but its not :( 2011-02-11
+
 require_once('RssReader.php');
 
 require_once('YahooQueryClient.php');
+
+class WeatherResult
+{
+    var $city, $region, $country;
+
+    var $wind_chill, $wind_direction, $wind_speed;
+
+    var $coord_lat, $coord_long;
+
+    var $time;
+
+    var $visibility;
+    var $skycond;
+    var $celcius;
+}
+
 
 class WeatherClientYahoo extends RssReader
 {
@@ -94,14 +113,45 @@ class WeatherClientYahoo extends RssReader
         }
     }
 
-    function getWeather($city, $country = '')
+    /**
+     * @return true if $s is a Yahoo WOEID
+     */
+    static function isWoeid($s)
     {
-        $x = YahooQueryClient::geocode($city, $country);
+        if (!is_numeric($s))
+            return false;
 
-        if (!$x->woeid)
-            throw new Exception ('location not found');
+        //XXX better checking?
 
-        $url = 'http://weather.yahooapis.com/forecastrss?w='.$x->woeid.'&u=c';
+        return true;
+    }
+
+    /**
+     * @param place, city or Yahoo WOEID of location
+     */
+    function getWeather($place, $country = '')
+    {
+        if (self::isWoeid($place)) {
+            $woeid = $place;
+        } else {
+            $x = YahooQueryClient::geocode($place, $country);
+
+            if (!$x->woeid)
+                throw new Exception ('location not found');
+
+            $woeid = $x->woeid;
+        }
+
+        $temp = TempStore::getInstance();
+        $key = 'WeatherClient//'.$woeid;
+        $data = $temp->get($key);
+        if ($data)
+            return unserialize($data);
+
+        $url =
+        'http://weather.yahooapis.com/forecastrss'.
+        '?w='.$woeid.
+        '&u=c'; // unit = celcius
 
         $this->parse($url);
         $items = $this->getItems();
@@ -109,11 +159,9 @@ class WeatherClientYahoo extends RssReader
         if (count($items) != 1)
             throw new Exception ('unexpected number of results');
 
-        return $this->getWeatherResult();
-    }
+        if (!$this->city)
+            return false;
 
-    function getWeatherResult()
-    {
         $res = new WeatherResult();
         $res->city            = $this->city;
         $res->region          = $this->region;
@@ -128,8 +176,12 @@ class WeatherClientYahoo extends RssReader
         $res->coord_long      = $this->coord_long;
         $res->time            = $this->time;
         $res->visibility      = $this->visibility;
-        $res->skycond         = $this->skycond;
         $res->celcius         = $this->celcius;
+
+        $locale = LocaleHandler::getInstance();
+        $res->skycond         = $locale->getSkycondition($this->skycond);
+
+        $temp->set($key, serialize($res), '1h');
 
         return $res;
     }

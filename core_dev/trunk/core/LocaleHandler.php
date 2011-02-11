@@ -26,6 +26,9 @@ abstract class CoreLocale
 
     /** @return 2-letter language code, as specified in ISO 639 */
     abstract function getLanguageCode();
+
+    /** translate skycondition from english to current language */
+    abstract function getSkycondition($s);
 }
 
 class LocaleHandler
@@ -80,6 +83,8 @@ class LocaleHandler
     function getWeekdayMedium($n) { return $this->handle->weekday_medium[$n]; }
     function getWeekdayShort($n) { return $this->handle->weekday_short[$n]; }
     function getWeekday1Char($n) { return $this->handle->weekday_1char[$n]; }
+
+    function getSkycondition($s) { return $this->handle->getSkycondition($s); }
 
     /** @param $s 3-letter country code (SWE, NOR) */
     function getCountryName($s)

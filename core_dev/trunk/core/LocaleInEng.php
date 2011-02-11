@@ -58,6 +58,8 @@ class LocaleInEng extends CoreLocale
 
     function getLanguageCode() { return 'en'; }
 
+    function getSkycondition($s) { return $s; }
+
 }
 
 ?>

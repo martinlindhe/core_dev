@@ -15,6 +15,8 @@
 
 //FIXME: add title text to map markers
 
+//XXXX: map div messes up page
+
 //TODO: make mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
 //TODO: docs mentioned a version param to force a exact version of the api for production sites, use this to match a working implementation!
 
@@ -51,8 +53,11 @@ class GoogleMapsJs
         if (!is_array($arr))
             throw new Exception ('not array');
 
-        foreach ($arr as $o)
+        foreach ($arr as $o) {
+            if (!is_array($o))
+                throw new Exception ('input must be an array of arrays with lat,long coords');
             $this->markers[] = $o;
+        }
     }
 
     function render()

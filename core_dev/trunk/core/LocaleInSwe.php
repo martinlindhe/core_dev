@@ -53,6 +53,29 @@ class LocaleInSwe extends CoreLocale
     'year'   =>'år',        'years'  =>'år'
     );
 
+    var $skyconditions = array(
+    'fair'                => 'molnfritt',  //XXX osäker om det är bra översättning? "fair" betyder typ "normalt väder för årstiden"
+    'cloudy'              => 'molnigt',
+    'partly cloudy'       => 'delvis molnigt',
+    'mostly cloudy'       => 'mestadels molnigt',
+    'light rain'          => 'lite regnigt',
+    'mostly cloudy/windy' => 'mestadels molningt och blåsigt',
+    'snow grains'         => 'snöigt', //XXX bättre översättning ???
+//    'clear'         => 'molnfritt',
+//    'mostly clear'  => 'mestadels molnfritt',
+//    'partly clear'  => 'delvis molnfritt',
+//    'overcast'      => 'molnigt'
+    );
+
+    function getSkycondition($s)
+    {
+        $s = strtolower($s);
+        if (array_key_exists($s, $this->skyconditions))
+            return $this->skyconditions[ $s ];
+
+        return '___'.$s.'___';
+    }
+
     /**
      * @n currency in lowest representation (cents, ören)
      * @return formatted currency value with space as thousands separator: "221012.87" -> "221 012.87"
@@ -71,15 +94,6 @@ $day_suff_swe = array(//den 1:a, 5:e osv...
 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
 'e', 'a', 'a', 'e', 'e', 'e', 'e', 'e', 'e', 'e',
 'e', 'a');
-
-$skyconditions_swe = array(
-'clear'         => 'molnfritt',
-'mostly clear'  => 'mestadels molnfritt',
-'mostly cloudy' => 'mestadels molnigt',
-//'partly clear'  => 'delvis molnfritt',
-'partly cloudy' => 'delvis molnigt',
-'overcast'      => 'molnigt'
-);
 
 $scales_swe = array(
 'pm' => 'picometer',

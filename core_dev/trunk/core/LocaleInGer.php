@@ -48,6 +48,11 @@ class LocaleInGer extends CoreLocale
 
     function getLanguageCode() { return 'de'; }
 
+    function getSkycondition($s)
+    {
+        throw new Exception ('FIXME translate skyconditon to german');
+    }
+
 }
 
 ?>
