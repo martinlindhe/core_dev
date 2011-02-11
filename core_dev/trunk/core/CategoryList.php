@@ -7,7 +7,7 @@
 
 //STATUS: xxx
 
-require_once('class.CoreList.php');
+require_once('CoreList.php');
 
 class CategoryList extends CoreList
 {

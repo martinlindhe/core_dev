@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
-require_once('class.CoreList.php');
+require_once('CoreList.php');
 
 require_once('Duration.php');
 require_once('Url.php');

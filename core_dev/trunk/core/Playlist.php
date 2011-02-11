@@ -31,7 +31,7 @@
 //XXX TODO ability to load playlist from PLS files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
-require_once('class.CoreList.php');
+require_once('CoreList.php');
 require_once('Duration.php');
 require_once('Url.php');
 require_once('Timestamp.php');
