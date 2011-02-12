@@ -16,7 +16,7 @@ class UserList
     /**
      * @return total number of users (excluding deleted ones)
      */
-    function getCount()
+    static function getCount()
     {
         $db = SqlHandler::getInstance();
 
@@ -27,7 +27,7 @@ class UserList
     /**
      * @return number of users online
      */
-    function onlineCount()
+    static function onlineCount()
     {
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
@@ -40,7 +40,7 @@ class UserList
     /**
      * @returns array of all users online
      */
-    function allOnline()
+    static function allOnline()
     {
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
@@ -55,7 +55,7 @@ class UserList
      * @param $filter partial username matching
      * @return array of User objects
      */
-    function getUsers($filter = '')
+    static function getUsers($filter = '')
     {
         $db = SqlHandler::getInstance();
 
@@ -79,7 +79,7 @@ class UserList
     /**
      * Returns a id->name array
      */
-    function getFlat($filter = '')
+    static function getFlat($filter = '')
     {
         $db = SqlHandler::getInstance();
 
@@ -92,7 +92,7 @@ class UserList
         return $db->getMappedArray($q);
     }
 
-    function render()
+    static function render()
     {
         $view = new ViewModel('views/admin_UserList.php', $this);
         return $view->render();

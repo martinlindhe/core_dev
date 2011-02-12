@@ -14,6 +14,7 @@
 
 require_once('CoreBase.php');
 require_once('User.php');
+require_once('ErrorHandler.php');
 
 class SessionHandler extends CoreBase
 {
@@ -30,7 +31,7 @@ class SessionHandler extends CoreBase
     var $name = 'core_dev_sid';    ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
     var $logged_out_start_page;
-    var $error_page = 'error';     ///< redirects the user to this page to show errors
+    var $error_page = 'coredev/error';     ///< redirects the user to this page to show errors
 
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?
@@ -54,7 +55,13 @@ class SessionHandler extends CoreBase
     }
 
     function setName($s) { $this->name = $s; }
-    function setTimeout($n) { $this->timeout = $n; }
+    function setTimeout($n)
+    {
+        if (!is_duration($n))
+            throw new Exception ('bad timeout: '.$n);
+
+        $this->timeout = parse_duration($n);
+    }
     function setStartPage($s) { $this->start_page = $s; }
 
     function setEncryptKey($key) { $this->encrypt_key = $key; }

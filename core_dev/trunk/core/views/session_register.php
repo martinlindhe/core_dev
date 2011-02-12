@@ -7,24 +7,38 @@
 
 //TODO: send account activation mail
 
-$allow_superadmin_reg = 0; //XXX
+require_once('UserList.php');
 
-$header->embedCss('
-.register_box {
- font-size: 14px;
- border: 1px solid #aaa;
- min-width: 280px;
- color: #000;
- background-color: #DDD;
- padding: 10px;
- border-radius:15px 15px 15px 15px; /*css3*/
- -moz-border-radius:15px 15px 15px 15px; /*ff*/
-}');
+$allow_superadmin_reg = !UserList::getCount();
 
-echo '<div class="register_box">';
-
-if (($session->allow_logins && $session->allow_registrations) || $allow_superadmin_reg)
+if ($allow_superadmin_reg || ($session->allow_logins && $session->allow_registrations))
 {
+
+    $header->embedCss('
+    .register_box {
+     font-size: 14px;
+     border: 1px solid #aaa;
+     min-width: 280px;
+     color: #000;
+     background-color: #DDD;
+     padding: 10px;
+     border-radius:15px 15px 15px 15px; /*css3*/
+     -moz-border-radius:15px 15px 15px 15px; /*ff*/
+    }');
+
+    // Handle new user registrations
+    if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2']))
+    {
+        $reg = RegisterHandler::getInstance();
+
+        if (!$reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']))
+            return;
+
+        $session->login($_POST['register_usr'], $_POST['register_pwd']);
+    }
+
+    echo '<div class="register_box">';
+
     echo '<div id="login_register_layer">';
 
     echo '<b>'.t('Register new account').'</b><br/><br/>';
@@ -56,8 +70,8 @@ if (($session->allow_logins && $session->allow_registrations) || $allow_superadm
 
     echo xhtmlFormClose();
     echo '</div>';
-}
 
-echo '</div>';
+    echo '</div>';
+}
 
 ?>

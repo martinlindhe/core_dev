@@ -12,7 +12,6 @@
 //TODO: fix & link to "forgot password", in core/views/session_forgot_pwd.php
 //TODO: use XhtmlForm (?)
 
-
 require_once('UserList.php');
 
 $header->embedCss('
@@ -59,9 +58,7 @@ echo xhtmlFormClose();
 echo '</div>';
 
 
-$userlist = new UserList();
-
-if (!$userlist->getCount() || ($session->allow_logins && $session->allow_registrations)) {
+if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations)) {
     echo ahref('coredev/view/session_register', 'Register');
 }
 

@@ -6,6 +6,8 @@
 //TODO: use editable YuiDatatable
 //XXX TODO: lista användare online
 
+require_once('UserList.php');
+
 if (!$session->isAdmin)
     return;
 
@@ -15,8 +17,8 @@ if ($session->isSuperAdmin && !empty($_GET['del'])) {
 }
 
 echo '<h1>Manage users</h1>';
-echo 'All users: '.ahref('coredev/admin/userlist', $caller->getCount()).'<br/>';
-echo 'Users online: '.ahref('coredev/admin/userlist/0/online', $caller->onlineCount()).'<br/>';
+echo 'All users: '.ahref('coredev/admin/userlist', UserList::getCount()).'<br/>';
+echo 'Users online: '.ahref('coredev/admin/userlist/0/online', UserList::onlineCount()).'<br/>';
 
 $filter = '';
 if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
@@ -68,7 +70,7 @@ echo '<th>User level</th>';
 echo '<th>Groups</th>';
 echo '</tr>';
 
-foreach ($caller->getUsers($filter) as $user)
+foreach (UserList::getUsers($filter) as $user)
 {
     echo '<tr>';
     echo '<td>'.ahref('coredev/admin/useredit/'.$user->getId(), $user->getName()).'</a></td>';

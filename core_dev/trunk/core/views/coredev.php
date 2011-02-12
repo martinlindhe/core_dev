@@ -4,18 +4,24 @@
 
 //TODO: ability to attach project-specific admin pages here
 
+require_once('UserList.php');
 require_once('UserEditor.php');
 require_once('UserGroupList.php');
 require_once('FtpClient.php'); // for curl_check_protocol_support()
 
 switch ($this->view) {
+case 'error':
+    $header->setTitle( t('Error message') );
+    echo $error->render(true);
+    echo ahref('./', t('Continue') );
+    break;
+
 case 'admin':
     $session->requireSuperAdmin();
 
     switch ($this->owner) {
     case 'userlist':
-        $userlist = new UserList();
-        echo $userlist->render();
+        echo UserList::render();
         break;
 
     case 'useredit': //child=user id
