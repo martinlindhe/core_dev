@@ -97,22 +97,15 @@ class GoogleMapsJs
         '};'.
         'var myMap = new google.maps.Map(document.getElementById("'.$div_id.'"), myOptions);';
 
-        if ($this->markers) {
-
-            foreach ($this->markers as $idx => $m) {
-
+        if ($this->markers)
+            foreach ($this->markers as $idx => $m)
                 $res .=
-                ($m->icon ? 'var im'.$idx.' = "'.$m->icon.'";' : '').
-                'var ll'.$idx.' = new google.maps.LatLng('.$m->latitude.','.$m->longitude.');'.
                 'var mk'.$idx.' = new google.maps.Marker({'.
-                    'position: ll'.$idx.','.
-                    ($m->icon ? 'icon: im'.$idx.',' : '').
+                    'position: new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
+                    ($m->icon ? 'icon: "'.$m->icon.'",' : '').
                     ($m->tooltip ? 'title: "'.$m->tooltip.'",' : '').
                     'map: myMap'.
                 '});'."\n";
-            }
-
-        }
 
         return
         '<div id="'.$div_id.'"/>'.

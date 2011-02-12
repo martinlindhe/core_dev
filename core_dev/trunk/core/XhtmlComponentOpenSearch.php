@@ -38,7 +38,7 @@ class XhtmlComponentOpenSearch extends XhtmlComponent
         '<?xml version="1.0" encoding="UTF-8"?>'.
             '<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">'.
             '<ShortName>'.$this->name.'</ShortName>'.
-            '<Description>'.$this->name.'</Description>'.
+//            '<Description>'.$this->name.'</Description>'.
             ($this->icon ? '<Image height="16" width="16" type="image/x-icon">'.$this->icon.'</Image>' : '').
             '<Url type="text/html" template="'.$this->url.'{searchTerms}"/>'.
         '</OpenSearchDescription>';
