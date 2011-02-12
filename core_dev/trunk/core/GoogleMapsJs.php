@@ -2,6 +2,11 @@
 /**
  * $Id$
  *
+ * Google Maps Javascript API
+ *
+ * Currently based on version 3.2 of the API, which is
+ * the latest release version as of 2011-02-12
+ *
  * Tutorial:
  * http://code.google.com/apis/maps/documentation/javascript/tutorial.html
  *
@@ -18,7 +23,6 @@
 //XXXX: map div messes up page
 
 //TODO: make mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
-//TODO: docs mentioned a version param to force a exact version of the api for production sites, use this to match a working implementation!
 
 require_once('output_js.php');
 require_once('output_css.php');
@@ -44,11 +48,16 @@ class GoogleMapsJs
     protected $height;
     protected $markers = array();
 
+    protected $api_version = '3.2';
+
     function __construct($lat = 0, $lng = 0)
     {
         $this->latitude  = $lat;
         $this->longitude = $lng;
     }
+
+    /** set to "3" for current "V3 trunk" api */
+    function setApiVersion($s) { $this->api_version = $s; }
 
     function setZoomLevel($n) { $this->zoom = $n; }
     function setWidth($n) { $this->width = $n; }
@@ -72,7 +81,9 @@ class GoogleMapsJs
     function render()
     {
         $url =
-        'http://maps.google.com/maps/api/js?sensor='.sbool($this->detect_location).
+        'http://maps.google.com/maps/api/js'.
+        '?sensor='.sbool($this->detect_location).
+        '&v='.$this->api_version.
         ($this->lang   ? '&language='.$this->lang : '').
         ($this->region ? '&region='.$this->region : '');
 
@@ -101,10 +112,10 @@ class GoogleMapsJs
             foreach ($this->markers as $idx => $m)
                 $res .=
                 'var mk'.$idx.' = new google.maps.Marker({'.
-                    'position: new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
-                    ($m->icon ? 'icon: "'.$m->icon.'",' : '').
-                    ($m->tooltip ? 'title: "'.$m->tooltip.'",' : '').
-                    'map: myMap'.
+                    'position:new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
+                    ($m->icon ? 'icon:"'.$m->icon.'",' : '').
+                    ($m->tooltip ? 'title:"'.$m->tooltip.'",' : '').
+                    'map:myMap'.
                 '});'."\n";
 
         return
