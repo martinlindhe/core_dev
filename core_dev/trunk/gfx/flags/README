@@ -1,7 +1,10 @@
 famfamfam world flag icon set, from:
 http://www.famfamfam.com/lab/icons/flags/
 
-Flags have been renamed to 3-letter country codes and optimized using pngcrush & optipng
+Flags have been renamed to 3-letter country codes (ISO 3166-1 alpha-3)
+and optimized using pngcrush & optipng
+
+http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 ---
 
 
@@ -16,4 +19,4 @@ AQ      Antartica    has no official flag, see http://en.wikipedia.org/wiki/Flag
 
 
 
-Last updated 2011-02-11
+Last updated 2011-02-12
