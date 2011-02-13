@@ -187,6 +187,7 @@ class YuiDatatable
                  * oData is the cell data
                  */
                 'this.formatLink = function(elLiner, oRecord, oColumn, oData) {'.
+                    'if (!oData) return;'.
                     'var prefix = oColumn["extra_data"];'.
                     'var col_label_name = oColumn["col_label"];'.
                     'var col_label = oRecord._oData[col_label_name];'.

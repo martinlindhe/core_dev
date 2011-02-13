@@ -22,7 +22,7 @@ class XhtmlComponentDropdown extends XhtmlComponent
     function render()
     {
         if (!is_array($this->options))
-            throw new Exception ('options not set');
+            throw new Exception ('options not an array: '.$this->options);
 
         $out =
         '<select name="'.strip_tags($this->name).'"'.

@@ -307,6 +307,8 @@ function countryFlag($code)
     if (strlen($code) == 2)
         $code = country_2_to_3_letters($code);
 
+    $code = strtoupper($code);
+
     $locale = LocaleHandler::getInstance();
 
     $title = $locale->getCountryName($code);

@@ -303,9 +303,9 @@ class XhtmlForm
     function addText($str, $str2 = '')
     {
         $o = new XhtmlComponentText();
-        $o->value = $str2;
+        $o->value = $str;
 
-        $this->add($o, $str);
+        $this->add($o, $str2);
     }
 
     /**

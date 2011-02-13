@@ -297,7 +297,10 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
         $args = func_get_args();
 
-        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
+        if (! ($stmt = $this->db_handle->prepare($args[0])) ) {
+            bt();
+            throw new Exception ('FAIL prepare: '.$args[0]);
+        }
 
         $params = array();
         for ($i = 1; $i < count($args); $i++)
