@@ -33,13 +33,13 @@ class XhtmlMenu extends CoreBase
 
     public function render()
     {
-        $cur = $_SERVER['REQUEST_URI'];
+        $cur = urldecode($_SERVER['REQUEST_URI']);
+
         $res = '<ul class="'.$this->css_all.'">';
 
         foreach ($this->items as $item)
         {
-            $l = strlen($item['link']);
-            if ($this->css_current && $item['link'] == $cur || ($l > 1 && substr($cur, 0, $l) == $item['link']))
+            if ($this->css_current && $item['link'] == $cur)
                 $res .= '<li class="'.$this->css_current.'">';
             else
                 $res .= '<li>';

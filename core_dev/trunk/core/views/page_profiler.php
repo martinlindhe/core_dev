@@ -14,6 +14,7 @@ $css =
 'padding-top:0px;'.
 'border:1px dashed #aaa;'.
 'color:#000;'.
+'background-color:#fafafa;'.
 'font:9px verdana;'.
 'text-align:left;';
 
@@ -50,7 +51,6 @@ $css =
 'display:none;'.
 'overflow:auto;'.
 'padding:4px;'.
-'background-color:#eee;'.
 'border:#000 1px solid;';
 
 echo '<div id="'.$pager_id.'" style="'.$css.'">';

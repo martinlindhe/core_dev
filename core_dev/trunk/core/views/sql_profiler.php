@@ -87,7 +87,6 @@ $css =
 'min-width: 300px;'.
 ($error ? '' : ' display:none;').
 'overflow:auto;'.
-'background-color:#eee;'.
 'border:#000 1px solid;';
 
 echo '<div id="sql_prof_'.$rand_id.'" style="'.$css.'">';

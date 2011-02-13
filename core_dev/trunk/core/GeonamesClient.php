@@ -13,6 +13,7 @@
 //STATUS: wip
 
 require_once('Coordinate.php');
+require_once('HttpClient.php');
 require_once('TempStore.php');
 
 require_once('GeoLookupClient.php'); // for GeoLookupResult
@@ -33,7 +34,9 @@ class GeonamesClient
             return unserialize($data);
 
         $url = 'http://ws.geonames.org/timezone?lat='.$latitude.'&lng='.$longitude;
-        $data = file_get_contents($url);
+        $http = new HttpClient($url);
+        $data = $http->get();
+
         $xml = simplexml_load_string($data);
 //d($xml);
 

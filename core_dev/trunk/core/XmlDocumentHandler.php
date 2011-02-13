@@ -196,10 +196,9 @@ class XmlDocumentHandler extends CoreBase
                 throw new Exception ('not an object: '.$obj);
 
             $rc = new ReflectionClass($obj);
-            /*
+
             if (!$rc->implementsInterface('IXmlComponent'))
                 throw new exception('Attached object '.get_class($obj).' dont implement IXmlComponent');
-            */
 
             if (!$rc->hasMethod('render'))
                 throw new Exception('Attached object '.get_class($obj).' dont implement render()');

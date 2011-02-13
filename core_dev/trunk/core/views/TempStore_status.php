@@ -19,7 +19,6 @@ $css =
 'display:none;'.
 'overflow:auto;'.
 'padding:4px;'.
-'background-color:#eee;'.
 'border:#000 1px solid;';
 
 echo '<div id="tss_'.$rand_id.'" style="'.$css.'">';
