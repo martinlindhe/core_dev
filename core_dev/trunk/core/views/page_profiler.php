@@ -47,7 +47,6 @@ echo js_embed(
 echo '| <a href="#" onclick="return toggle_page_profiler();">load</a>';
 
 $css =
-'height:200px;'.
 'display:none;'.
 'overflow:auto;'.
 'padding:4px;'.
@@ -68,27 +67,15 @@ if (isset($db) && is_object($db)) {
 } else {
     echo 'Load: <b>'.round($total_time, 2).'s</b>';
 }
-echo '<br/><br/>';
-
-echo 'Webserver <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> with <b>PHP '.phpversion().'</b> from <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with '.$_SERVER['GATEWAY_INTERFACE'].'<br/>';
-echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> with <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
-
+echo '<br/>';
 echo dm(); //memory usage
+echo '<br/>';
+
+echo 'Server <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
+echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> using <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
+
 echo 'Server time: '.date('r T').'<br/>';
-
 echo 'Server uptime: '.elapsed_seconds( uptime() ).'<br/>';
-
-
-if (function_exists('apc_cache_info')) {
-    //XXX move somewhere else
-    $conv = new ConvertDatasize();
-
-    $info = apc_cache_info('', true);
-//d($info);
-    echo '<b>APC:</b> using <b>'.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB</b> ('.$info['num_hits'].' hits, '.$info['num_misses'].' misses, '.$info['num_entries'].' entries)';
-
-//    d( apc_sma_info() );
-}
 
 echo '</div>'; // closing $pager_id
 

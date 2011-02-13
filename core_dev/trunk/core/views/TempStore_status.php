@@ -15,7 +15,6 @@ echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a>';
 $store = TempStore::getInstance();
 
 $css =
-'height:250px;'.
 'display:none;'.
 'overflow:auto;'.
 'padding:4px;'.
@@ -25,30 +24,27 @@ echo '<div id="tss_'.$rand_id.'" style="'.$css.'">';
 
 foreach ($store->getServerStats() as $host => $stat)
 {
-    echo '<h3>TempStore server '.$host.'</h3>';
-    echo 'Uptime: '.elapsed_seconds($stat['uptime']).'<br/>';
-    echo 'Server time: '.sql_datetime($stat['time']).'<br/>';
-    echo 'Threads: '.$stat['threads'].'<br/>';
+    echo '<b>memcached server '.$host.'</b><br/>';
 
-    echo 'Curr items: '.$stat['curr_items'].'<br/>';
-    echo 'Total items: '.$stat['total_items'].'<br/>';
-    echo 'Max bytes: '.byte_count($stat['limit_maxbytes']).'<br/>';
-
-    echo 'Curr connections: '.$stat['curr_connections'].'<br/>';
-    echo 'Total connections: '.$stat['total_connections'].'<br/>';
-
-    echo 'Bytes: '.byte_count($stat['bytes']).'<br/>';  // ????
-    echo 'Cmd get: '.$stat['cmd_get'].'<br/>';
-    echo 'Cmd set: '.$stat['cmd_set'].'<br/>';
-    echo 'Get hits: '.$stat['get_hits'].'<br/>';
-    echo 'Get misses: '.$stat['get_misses'].'<br/>';
-    echo 'Evictions: '.$stat['evictions'].'<br/>';  // ????
+    echo 'Used memory: '.byte_count($stat['bytes']).' (of '.byte_count($stat['limit_maxbytes']).')<br/>';
     echo 'Bytes read: '.byte_count($stat['bytes_read']).'<br/>';
     echo 'Bytes written: '.byte_count($stat['bytes_written']).'<br/>';
-    echo 'Memcached version '.$stat['version'].'<br/>';
+
+    echo '<br/>';
+    echo 'Curr '.$stat['curr_items'].' items, '.$stat['curr_connections'].' connections<br/>';
+    echo 'Total '.$stat['total_items'].' items, '.$stat['total_connections'].' connections<br/>';
+    echo '<br/>';
+
+    echo 'Cmd: '.$stat['cmd_get'].' get, '.$stat['cmd_set'].' set<br/>';
+    echo 'Get: '.$stat['get_hits'].' hits, '.$stat['get_misses'].' misses<br/>';
+    echo 'Evictions: '.$stat['evictions'].'<br/>';  // ????
+
+//    echo 'Threads: '.$stat['threads'].'<br/>';
+    echo 'Uptime: '.elapsed_seconds($stat['uptime']).'<br/>';
+    echo 'Server time: '.sql_datetime($stat['time']).'<br/>';
+    echo 'Version '.$stat['version'];
 }
 
 echo '</div>';
 
 ?>
-

@@ -23,11 +23,7 @@ class FeedDescription
     var $url;
 }
 
-class OpenSearchDescription
-{
-    var $title;
-    var $url;
-}
+class OpenSearchDescription extends FeedDescription { }
 
 class MetaDescription
 {

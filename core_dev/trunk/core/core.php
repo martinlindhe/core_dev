@@ -127,18 +127,28 @@ function dm()
 {
     $conv = new ConvertDatasize();
 
-    $res = 'Memory usage: '.round($conv->convLiteral(memory_get_peak_usage(false), 'MiB', 'byte'), 1).' MiB';
+    $res = 'Memory: using '.round($conv->convLiteral(memory_get_peak_usage(false), 'MiB', 'byte'), 1).' MiB';
 
     // "-1" means "no memory limit"
     if (ini_get('memory_limit') != '-1') {
         //XXX simplify datasize conversion
         $limit = $conv->convLiteral(ini_get('memory_limit'), 'byte'); //convert from "128M", or "4G" to bytes
-        $res .= ' ('.round(memory_get_peak_usage(false) / $limit * 100, 1).'% of '.$conv->convLiteral($limit, 'MiB').' MiB)';
+        $res .= ' ('.round(memory_get_peak_usage(false) / $limit * 100, 1).'% of '.$conv->convLiteral($limit, 'MiB').' MiB)'.ln();
     } else {
-        $res .= ' (no limit)';
+        $res .= ' (no limit)'.ln();
     }
 
-    return $res.ln();
+    if (function_exists('apc_cache_info')) {
+        $conv = new ConvertDatasize();
+
+        $info = apc_cache_info('', true);
+//d($info);
+        $res .=
+        'APC: using '.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB'.
+        ', '.$info['num_hits'].' hits, '.$info['num_misses'].' misses, '.$info['num_entries'].' entries (max '.$info['num_slots'].')'.ln();
+    }
+
+    return $res;
 }
 
 /** Debug function. Prints backtrace */
