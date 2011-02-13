@@ -10,18 +10,34 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
-
-//TODO: rewrite "include feeds" functionality (use textfeed app as test?)
+//STATUS: ok
 
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('LocaleHandler.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
 
+class FeedDescription
+{
+    var $title;
+    var $url;
+}
+
+class OpenSearchDescription
+{
+    var $title;
+    var $url;
+}
+
+class MetaDescription
+{
+    var $name;
+    var $val;
+}
+
 class XhtmlHeader extends CoreBase implements IXmlComponent
 {
-    static $_instance;                  ///< singleton class
+    static $_instance;                     ///< singleton class
 
     protected $title;
     protected $favicon;
@@ -32,14 +48,13 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     protected $include_js      = array();
     protected $include_css     = array();
-    //protected $include_feed = array();
+    protected $include_feed    = array();
 
     protected $meta_tags       = array();
     protected $opensearch      = array();
-    protected $xml_ns          = array();
 
-    protected $reload_time     = 0;         ///< time after page load to reload the page, in seconds
-    protected $core_dev_root   = '';        ///< web path to core_dev for ajax api calls
+    protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
+    protected $core_dev_root   = '';       ///< web path to core_dev for ajax api calls
 
     private function __construct() { }
 
@@ -68,8 +83,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     function setReloadTime($secs) { $this->reload_time = $secs; }
 
-    //function includeFeed($uri) { $this->include_feed[] = $uri; }
-
     function includeJs($uri)
     {
         if (substr($uri, 0, 1) != '/')
@@ -86,6 +99,27 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             $this->include_css[] = relurl($uri);
     }
 
+    function includeFeed($url, $title = '')
+    {
+        $o = new FeedDescription();
+        $o->title = $title;
+        $o->url   = $url;
+
+        $this->include_feed[] = $o;
+    }
+
+    function includeOpenSearch($url, $title)
+    {
+        if (substr($url, 0, 1) != '/')
+            $uri = relurl($url);
+
+        $o = new OpenSearchDescription();
+        $o->title = $title;
+        $o->url   = $url;
+
+        $this->opensearch[] = $o;
+    }
+
     /** CSS snippets to be added inside <head> */
     function embedCss($s) { $this->embed_css .= $s; }
 
@@ -95,18 +129,14 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     /** JavaScript snippets to be added to the <body onload=""> tag (js code will execute when page loads) */
     function embedJsOnload($s) { $this->embed_js_onload[] = $s; }
 
-    function addOpenSearch($uri, $name)
-    {
-        if (substr($uri, 0, 1) != '/')
-            $uri = relurl($uri);
-
-        $this->opensearch[] = array('url' => $uri, 'name' => $name);
-    }
-
-    function addXmlNamespace($ns, $uri) { $this->xml_ns[$ns] = $uri; }
-
     /** Set META tag */
-    function setMeta($k, $s) { $this->meta_tags[ $k ] = $s; }
+    function setMeta($name, $val)
+    {
+        $o = new MetaDescription();
+        $o->name = $name;
+        $o->val  = $val;
+        $this->meta_tags[] = $o;
+    }
 
     public function render()
     {
@@ -115,13 +145,10 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $res =
         '<?xml version="1.0" encoding="UTF-8"?>'."\n".
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
-        '<html xml:lang="'.$locale->getLanguageCode().'" lang="'.$locale->getLanguageCode().'"'.
-            ' xmlns="http://www.w3.org/1999/xhtml"';
-
-        foreach ($this->xml_ns as $ns => $uri)
-            $res .= ' xmlns:'.$ns.'="'.$uri.'"';
-
-        $res .= '>'."\n";
+        '<html'.
+            ' xml:lang="'.$locale->getLanguageCode().'"'.
+            ' lang="'.$locale->getLanguageCode().'"'.
+            ' xmlns="http://www.w3.org/1999/xhtml">'."\n";
 
         $res .= '<head>'."\n";
 
@@ -143,21 +170,16 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if ($this->title)
             $res .= '<title>'.$this->title.'</title>';
 
-        $res .= '<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>';
+        $res .= '<meta http-equiv="content-type" content="text/html"/>';
 
-        foreach ($this->meta_tags as $name => $val)
-            $res .= '<meta name="'.$name.'" content="'.$val.'"/>';
+        foreach ($this->meta_tags as $o)
+            $res .= '<meta name="'.$o->name.'" content="'.$o->val.'"/>';
 
-/*
-        foreach ($this->include_feeds as $feed) {
-            //XXX: clean up feed URI's etc, make it more general
-            if (!empty($feed['category']) && is_numeric($feed['category'])) $extra = '?c='.$feed['category'];
-            else $extra = '';
-            $res .= "\t".'<link rel="alternate" type="application/rss+xml" title="'.$feed['title'].'" href="'.$this->core_dev_root.'api/rss_'.$feed['name'].'.php'.$extra.'"/>'."\n";
-        }
-*/
-        foreach ($this->opensearch as $os)
-            $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$os['url'].'" title="'.$os['name'].'"/>';
+        foreach ($this->include_feed as $o)
+            $res .= '<link rel="alternate" type="application/rss+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
+
+        foreach ($this->opensearch as $o)
+            $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
 
         if ($this->favicon)
             $res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
