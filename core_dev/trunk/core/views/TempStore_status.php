@@ -14,9 +14,15 @@ echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a>';
 
 $store = TempStore::getInstance();
 
-$height = 250;
+$css =
+'height:250px;'.
+'display:none;'.
+'overflow:auto;'.
+'padding:4px;'.
+'background-color:#eee;'.
+'border:#000 1px solid;';
 
-echo '<div id="tss_'.$rand_id.'" style="height:'.$height.'px;display:none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+echo '<div id="tss_'.$rand_id.'" style="'.$css.'">';
 
 foreach ($store->getServerStats() as $host => $stat)
 {

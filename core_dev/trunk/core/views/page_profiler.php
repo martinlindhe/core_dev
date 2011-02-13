@@ -18,7 +18,15 @@ echo js_embed(
 
 echo '| <a href="#" onclick="return toggle_page_profiler();">load</a>';
 
-echo '<div id="page_prof_'.$rand_id.'" style="height:200px; display:none; overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+$css =
+'height:200px;'.
+'display:none;'.
+'overflow:auto;'.
+'padding:4px;'.
+'background-color:#eee;'.
+'border:#000 1px solid;';
+
+echo '<div id="page_prof_'.$rand_id.'" style="'.$css.'">';
 
 $total_time = microtime(true) - $page->getStartTime();
 

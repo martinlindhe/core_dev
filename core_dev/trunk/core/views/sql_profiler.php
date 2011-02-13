@@ -51,7 +51,7 @@ foreach ($db->queries as $prof)
     $query = str_replace($keywords, $decorated, $query);
 
     if ($prof->prepared)
-        $res .= '<table style="background-color: #B2A23D" summary="">';
+        $res .= '<table style="background-color: #B2A23D" summary="" width="100%">';
     else
         $res .= '<table summary="">';
 
@@ -78,13 +78,19 @@ foreach ($db->queries as $prof)
     $res .= '<hr/>';
 }
 
-$css_display = $error ? '' : ' display:none;';
-
 $sql_height = (count($db->queries) * 60) + 70;
-if ($sql_height > 200)
-    $sql_height = 200;
+if ($sql_height > 250)
+    $sql_height = 250;
 
-echo '<div id="sql_prof_'.$rand_id.'" style="height:'.$sql_height.'px;'.$css_display.' overflow: auto; padding: 4px; color: #000; background-color:#E0E0E0; border: #000 1px solid; font: 9px verdana; text-align: left;">';
+$css =
+'height:'.$sql_height.'px;'.
+'min-width: 300px;'.
+($error ? '' : ' display:none;').
+'overflow:auto;'.
+'background-color:#eee;'.
+'border:#000 1px solid;';
+
+echo '<div id="sql_prof_'.$rand_id.'" style="'.$css.'">';
 
 echo $res;
 
@@ -98,7 +104,9 @@ if (is_client_localhost())
     echo '<br/>';
 }
 
-echo count($db->queries).' queries in '.round($db->getTotalQueryTime(), 2).'s<br/>';
+echo
+count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
+' in '.round($db->getTotalQueryTime(), 2).'s<br/>';
 
 echo '</div>';
 

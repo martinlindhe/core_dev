@@ -208,6 +208,28 @@ class XmlDocumentHandler extends CoreBase
         }
 
         if ($this->enable_design) {
+            if ($this->design_foot) {
+                $view = new ViewModel($this->design_foot);
+                echo $view->render();
+            }
+
+            $version = 'core_dev 0.2-svn';
+
+            $css =
+            'position:absolute;'.
+            'right:0;'.
+            'bottom:0;'.
+            'text-align:right;'.
+            'padding: 2px;'.
+            'padding-top: 0px;'.
+            'border: 1px dashed #888;';
+            echo '<div id="x2x2xx" style="'.$css.'">';
+
+            $css_text =
+            'color: #000;'.
+            'font: 9px verdana;'.
+            'text-align:left;';
+            echo '<span style="'.$css_text.'">'.$version.' ';
             if (class_exists('SqlHandler')) {
                 $db = SqlHandler::getInstance();
 
@@ -221,11 +243,8 @@ class XmlDocumentHandler extends CoreBase
             }
 
             echo $this->renderPageLoad();
-
-            if ($this->design_foot) {
-                $view = new ViewModel($this->design_foot);
-                echo $view->render();
-            }
+            echo '</span>';
+            echo '</div>';
 
             //XXX <body> and <html> tags is opened in XhtmlHeader->render()
             echo "\n".'</body></html>';
