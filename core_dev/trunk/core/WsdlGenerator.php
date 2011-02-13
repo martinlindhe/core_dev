@@ -35,7 +35,7 @@ class WsdlGenerator
     function render()
     {
         header('Content-type: text/xml');
-        $res = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        $res = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 
         $res .=
         '<definitions name="'.$this->interface_name.'"

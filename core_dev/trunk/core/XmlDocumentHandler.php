@@ -229,7 +229,7 @@ class XmlDocumentHandler extends CoreBase
             'color: #000;'.
             'font: 9px verdana;'.
             'text-align:left;';
-            echo '<span style="'.$css_text.'">'.$version.' ';
+            echo '<div style="'.$css_text.'">'.$version.' ';
             if (class_exists('SqlHandler')) {
                 $db = SqlHandler::getInstance();
 
@@ -243,7 +243,7 @@ class XmlDocumentHandler extends CoreBase
             }
 
             echo $this->renderPageLoad();
-            echo '</span>';
+            echo '</div>';
             echo '</div>';
 
             //XXX <body> and <html> tags is opened in XhtmlHeader->render()

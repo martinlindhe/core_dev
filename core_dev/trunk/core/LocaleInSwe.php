@@ -328,6 +328,7 @@ function t_swe($s)
     case 'Client user agent string changed.': return 'Klientens user agent har ändrats.';
     case 'Invalid email address or username': return 'Felaktigt alias eller e-post';
     case 'Problems sending mail': return 'Problem att skicka ut mail';
+    case 'Error message': return 'Felmeddelande';
 
     // Login
     case 'Login failed': return 'Inloggning misslyckades';
