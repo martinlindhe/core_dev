@@ -213,50 +213,14 @@ class XmlDocumentHandler extends CoreBase
                 echo $view->render();
             }
 
-            $version = 'core_dev 0.2-svn';
-
-            $css =
-            'position:absolute;'.
-            'right:0;'.
-            'bottom:0;'.
-            'text-align:right;'.
-            'padding: 2px;'.
-            'padding-top: 0px;'.
-            'border: 1px dashed #888;';
-            echo '<div id="x2x2xx" style="'.$css.'">';
-
-            $css_text =
-            'color: #000;'.
-            'font: 9px verdana;'.
-            'text-align:left;';
-            echo '<div style="'.$css_text.'">'.$version.' ';
-            if (class_exists('SqlHandler')) {
-                $db = SqlHandler::getInstance();
-
-                if ($db instanceof DatabaseMySQLProfiler)
-                    echo $db->renderProfiler();
-            }
-
-            if (class_exists('TempStore')) {
-                $store = TempStore::getInstance();
-                echo $store->renderStatus();
-            }
-
-            echo $this->renderPageLoad();
-            echo '</div>';
-            echo '</div>';
+            $view = new ViewModel('views/page_profiler.php');
+            echo $view->render();
 
             //XXX <body> and <html> tags is opened in XhtmlHeader->render()
             echo "\n".'</body></html>';
         }
 
         ob_end_flush();
-    }
-
-    function renderPageLoad()
-    {
-        $view = new ViewModel('views/page_profiler.php');
-        return $view->render();
     }
 
 }

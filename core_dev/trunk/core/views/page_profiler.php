@@ -5,13 +5,40 @@
  * Shows page load time & other information
  */
 
-$rand_id = mt_rand();
+$css =
+'position:absolute;'.
+'right:0;'.
+'bottom:0;'.
+'text-align:right;'.
+'padding:2px;'.
+'padding-top:0px;'.
+'border:1px dashed #aaa;'.
+'color:#000;'.
+'font:9px verdana;'.
+'text-align:left;';
+
+echo '<div id="x2x2xx" style="'.$css.'">';
+echo 'core_dev 0.2-svn ';
+
+if (class_exists('SqlHandler')) {
+    $db = SqlHandler::getInstance();
+
+    if ($db instanceof DatabaseMySQLProfiler)
+        echo $db->renderProfiler();
+}
+
+if (class_exists('TempStore')) {
+    $store = TempStore::getInstance();
+    echo $store->renderStatus();
+}
+
+$pager_id = 'page_prof_'.mt_rand();
 
 echo js_embed(
 //Toggles element with name "n" between visible and hidden
 'function toggle_page_profiler()'.
 '{'.
-    'var e = document.getElementById("page_prof_'.$rand_id.'");'.
+    'var e = document.getElementById("'.$pager_id.'");'.
     'e.style.display = (e.style.display ? "" : "none");'.
 '}'
 );
@@ -26,7 +53,7 @@ $css =
 'background-color:#eee;'.
 'border:#000 1px solid;';
 
-echo '<div id="page_prof_'.$rand_id.'" style="'.$css.'">';
+echo '<div id="'.$pager_id.'" style="'.$css.'">';
 
 $total_time = microtime(true) - $page->getStartTime();
 
@@ -62,6 +89,10 @@ if (function_exists('apc_cache_info')) {
 
 //    d( apc_sma_info() );
 }
+
+echo '</div>'; // closing $pager_id
+
+
 
 echo '</div>';
 
