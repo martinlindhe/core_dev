@@ -55,9 +55,9 @@ foreach ($db->queries as $prof)
     $query = str_replace($keywords, $decorated, $query);
 
     if ($prof->prepared)
-        $res .= '<table summary="" class="hover" style="background-color: #B2A23D" width="100%">';
+        $res .= '<table summary="" class="hover" cellpadding="0" style="background-color: #B2A23D" width="100%">';
     else
-        $res .= '<table summary="" class="hover">';
+        $res .= '<table summary="" class="hover" cellpadding="0">';
 
     $res .= '<tr><td width="30">';
 

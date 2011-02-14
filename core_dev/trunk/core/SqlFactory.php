@@ -20,19 +20,25 @@ class SqlFactory
      */
     public static function factory($driver = 'mysql', $profiler = false)
     {
-        if (!require_once('sql_'.$driver.($profiler ? '_profiler': '').'.php'))
-            throw new Exception('DatabaseFactory: Unknown driver '.$driver);
+        switch ($driver) {
+        case 'mysql': $class = 'DatabaseMysql'; break;
+        case 'mssql': $class = 'DatabaseMssql'; break;
+        default: throw new Exception ('Unknown driver '.$driver);
+        }
 
-        $targetClass = 'Database'.strtolower($driver).($profiler ? 'Profiler' : '');
+        $class = $class.($profiler ? 'Profiler': '');
 
-        if (!class_exists($targetClass))
-            throw new Exception ('Database driver not found '.$targetClass);
+        require_once($class.'.php');
 
-        $rc = new ReflectionClass($targetClass);
-        if (!$rc->implementsInterface('IDB_SQL'))
+        if (!class_exists($class))
+            throw new Exception ('Database driver not found '.$class);
+
+        $db = new $class();
+
+        if (!($db instanceof  IDB_SQL))
             throw new Exception('Database driver must implement IDB_SQL');
 
-        return new $targetClass();
+        return $db;
     }
 }
 

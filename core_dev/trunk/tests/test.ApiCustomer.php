@@ -3,7 +3,7 @@
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
 require_once('SqlHandler.php');
-require_once('sql_mysql.php');
+require_once('DatabaseMysql.php');
 
 require_once('ApiCustomer.php');
 require_once('ApiCustomerList.php');

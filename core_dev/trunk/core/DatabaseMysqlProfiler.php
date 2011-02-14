@@ -10,7 +10,7 @@
 //STATUS: wip
 //TODO: make it a general sql profiler (reuse for ms-sql)
 
-require_once('sql_mysql.php');
+require_once('DatabaseMysql.php');
 
 class ProfiledSqlQuery
 {
@@ -22,7 +22,7 @@ class ProfiledSqlQuery
     var $params; //for prepared statements
 }
 
-class DatabaseMysqlProfiler extends DatabaseMySQL implements IDB_SQL
+class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 {
     var $measure_start = 0;       ///< time when profiling started
     var $time_connect  = 0;       ///< time it took to connect to db
