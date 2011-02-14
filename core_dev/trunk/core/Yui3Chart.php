@@ -11,6 +11,8 @@
 
 //STATUS: wip
 
+//XXX also see jqPlot (needs jQuery): http://www.jqplot.com/
+
 //TODO (MISSING FROM YUI2-chart): visa label för x & y led: setYTitle(), setXTitle()
 //   - ticket open due to missing functionality: http://yuilibrary.com/projects/yui3/ticket/2529841
 

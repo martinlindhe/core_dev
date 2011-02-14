@@ -19,6 +19,8 @@
 
 //STATUS: wip
 
+//TODO: send gzip compression headers & auto-decompress response
+
 //TODO: extend from Url ???
 
 //FIXME header parsing should preserve all fields, ex:

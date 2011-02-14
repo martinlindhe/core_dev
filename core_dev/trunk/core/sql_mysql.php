@@ -281,21 +281,12 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     }
 
     /**
-     * Prepared select
-     *
-     * @param $args[0] query
-     * @param $args[1] prepare format (isdb), integer, string, double/float, binary
-     * @param $args[2,3,..] variables
-     *
-     * STATUS: in development
-     * SEE http://devzone.zend.com/article/686 for bind prepare statements
+     * Executes a prepared statement and binds parameters
      */
-    function pSelect()
+    private function pExecStmt($args)
     {
         if (!$this->connected)
             $this->connect();
-
-        $args = func_get_args();
 
         if (! ($stmt = $this->db_handle->prepare($args[0])) ) {
             bt();
@@ -310,6 +301,23 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
             call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
 
         $stmt->execute();
+
+        return $stmt;
+    }
+
+    /**
+     * Prepared select
+     *
+     * @param $args[0] query
+     * @param $args[1] prepare format (isdb), integer, string, double/float, binary
+     * @param $args[2,3,..] variables
+     *
+     * STATUS: in development
+     * SEE http://devzone.zend.com/article/686 for bind prepare statements
+     */
+    function pSelect()
+    {
+        $stmt = $this->pExecStmt( func_get_args() );
 
         $data = array();
 
@@ -335,9 +343,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
     function pSelectRow()
     {
-        $args = func_get_args();
-
-        $res = call_user_func_array(array($this, 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+        $res = call_user_func_array(array($this, 'pSelect'), func_get_args() );  // HACK to pass dynamic variables to parent method
 
         if (count($res) > 1)
             throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
@@ -350,21 +356,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
 
     function pSelectItem()
     {
-        if (!$this->connected)
-            $this->connect();
-
-        $args = func_get_args();
-
-        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
-
-        $params = array();
-        for ($i = 1; $i < count($args); $i++)
-            $params[] = $args[$i];
-
-        if ($params)
-            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
-
-        $stmt->execute();
+        $stmt = $this->pExecStmt( func_get_args() );
 
         if ($stmt->field_count != 1)
             throw new Exception ('not 1 column result');
@@ -389,21 +381,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     // selects 1d array
     function pSelect1d()
     {
-        if (!$this->connected)
-            $this->connect();
-
-        $args = func_get_args();
-
-        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
-
-        $params = array();
-        for ($i = 1; $i < count($args); $i++)
-            $params[] = $args[$i];
-
-        if ($params)
-            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
-
-        $stmt->execute();
+        $stmt = $this->pExecStmt( func_get_args() );
 
         $data = array();
 
@@ -424,21 +402,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     function pSelectMapped()
     {
-        if (!$this->connected)
-            $this->connect();
-
-        $args = func_get_args();
-
-        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
-
-        $params = array();
-        for ($i = 1; $i < count($args); $i++)
-            $params[] = $args[$i];
-
-        if ($params)
-            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
-
-        $stmt->execute();
+        $stmt = $this->pExecStmt( func_get_args() );
 
         $data = array();
 
@@ -458,21 +422,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
     // like pSelect, but returns affected rows
     function pDelete()
     {
-        if (!$this->connected)
-            $this->connect();
-
-        $args = func_get_args();
-
-        $stmt = $this->db_handle->prepare($args[0]) or die('failed to prepare');
-
-        $params = array();
-        for ($i = 1; $i < count($args); $i++)
-            $params[] = $args[$i];
-
-        if ($params)
-            call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
-
-        $stmt->execute();
+        $stmt = $this->pExecStmt( func_get_args() );
 
         $data = $stmt->affected_rows;
 
@@ -495,7 +445,7 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
         if ($res == 1)
             return $this->db_handle->insert_id;
         else
-            throw new Exception ('insert fail');
+            throw new Exception ('insert fail: '.$args[0]);
     }
 
     private function refValues($arr)

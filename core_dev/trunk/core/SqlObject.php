@@ -85,7 +85,7 @@ class SqlObject
         if (self::idExists($obj->$id_field, $tblname, $id_field))
             return false;
 
-        self::create($obj, $tblname);
+        return self::create($obj, $tblname);
     }
 
     static function updateId($obj, $tblname, $id_field = 'id')

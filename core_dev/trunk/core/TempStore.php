@@ -138,9 +138,6 @@ class TempStore
 
         $key = str_replace(' ', '_', $key);
 
-        if (!$val)
-            return $this->delete($key);
-
         $ret = $this->handle->set($key, $val, $expire_time);
 
         if ($this->debug)

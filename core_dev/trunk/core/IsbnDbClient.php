@@ -50,8 +50,14 @@ class IsbnDbClient
 
         $xml = simplexml_load_string($data);
 
+        $attrs = $xml->BookList;
+        if ($attrs['total_results'] == 0)
+            return false;
+
         $d = $xml->BookList->BookData;
         $attrs = $d->attributes();
+        if (!$attrs)
+            throw new Exception ('no attrs');
 
         $book = new BookResource();
         $book->title     = strval($d->Title);
