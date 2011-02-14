@@ -17,7 +17,7 @@ class SqlObject
         $row = is_array($q) ? $q : $db->pSelect($q);
 
         $reflect = new ReflectionClass($classname);
-        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED);
+        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
 
         $res = array();
 
@@ -103,7 +103,7 @@ class SqlObject
         $db = SqlHandler::getInstance();
 
         $reflect = new ReflectionClass($obj);
-        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED);
+        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
 
         $bad_names = array('desc', 'asc');
 

@@ -47,14 +47,12 @@ function php_min_ver($ver)
  */
 function d($v)
 {
-    $page = XmlDocumentHandler::getInstance();
-
-    $cli = (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
+    $cli = is_cli();
 
     if (is_string($v)) {
         //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
 
-        if ($cli) {
+        if (is_cli()) {
             var_dump($v);
         } else {
             $out = htmlentities($v, ENT_QUOTES, 'UTF-8');
@@ -82,8 +80,8 @@ function d($v)
 
     if (!$cli) echo '<pre>';
     print_r($v);
-    if ($cli) echo "\n";
-    else echo '</pre>';
+    echo ln();
+    if (!$cli) echo '</pre>';
 }
 
 /**
@@ -97,12 +95,19 @@ function ds($s)
         return htmlentities($s);
 }
 
+function is_cli()
+{
+    $page = XmlDocumentHandler::getInstance();
+
+    return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
+}
+
 /**
  * Returns appropriate line feed character
  */
 function ln()
 {
-    return php_sapi_name() == 'cli' ? PHP_EOL : '<br/>';
+    return is_cli() ? PHP_EOL : '<br/>';
 }
 
 /**
