@@ -49,7 +49,7 @@ function d($v)
 {
     $page = XmlDocumentHandler::getInstance();
 
-    $cli = php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain';
+    $cli = (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
 
     if (is_string($v)) {
         //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
@@ -70,7 +70,7 @@ function d($v)
     }
 
     if (!$v) {
-        echo "NULL";
+        echo "NULL".ln();
         return;
     }
 
@@ -82,7 +82,8 @@ function d($v)
 
     if (!$cli) echo '<pre>';
     print_r($v);
-    if (!$cli) echo '</pre>';
+    if ($cli) echo "\n";
+    else echo '</pre>';
 }
 
 /**

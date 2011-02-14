@@ -24,7 +24,7 @@ class XmlDocumentHandler extends CoreBase
     private $enable_headers  = true;         ///< send http headers?
     private $allow_frames    = false;        ///< allow this document to be framed using <frame> or <iframe> ?
     private $cache_duration  = 0;            ///< number of seconds to allow browser client to cache this result
-    private $mimetype        = 'text/html';  ///< should be "application/xhtml+xml" but IE8 still cant even understand such a page
+    private $mimetype        = '';           ///< "text/html" should be "application/xhtml+xml" but IE8 still cant even understand such a page
     private $Url;                            ///< Url object
     private $attachment_name;                ///< name of file attachment (force user to save file)
     private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
@@ -125,8 +125,10 @@ class XmlDocumentHandler extends CoreBase
         if (!$this->enable_headers)
             return;
 
-        if ($this->mimetype)
-            header('Content-Type: '.$this->mimetype);
+        if (!$this->mimetype)
+            $this->mimetype = 'text/html';
+
+        header('Content-Type: '.$this->mimetype);
 
         if ($this->attachment_name)
             header('Content-Disposition: attachment; filename="'.$this->attachment_name.'"');
@@ -160,27 +162,18 @@ class XmlDocumentHandler extends CoreBase
         ob_start();
 
 /*
-        if (!empty($_POST))
-            foreach ($this->objs as $obj)
-                $obj->handlePost($_POST);
-*/
-
-        $this->sendHeaders();
-
-        if ($this->enable_design) {
-            $header = XhtmlHeader::getInstance();
-            echo $header->render();
-
-            if ($this->design_head) {
-                $view = new ViewModel($this->design_head);
-                echo $view->render();
-            }
-        }
-/*
         //XXX should we really show errors on top of every page?
         $error = ErrorHandler::getInstance();
         echo $error->render();
 */
+
+        $out = '';
+
+        if ($this->enable_design && $this->design_head) {
+            $view = new ViewModel($this->design_head);
+            $out .= $view->render();
+        }
+
         foreach ($this->objs as $obj)
         {
             if (!$obj)
@@ -188,7 +181,7 @@ class XmlDocumentHandler extends CoreBase
 
             if (is_string($obj)) {
                 //XXX hack to allow any text to be attached
-                echo $obj;
+                $out .= $obj;
                 continue;
             }
 
@@ -203,23 +196,35 @@ class XmlDocumentHandler extends CoreBase
             if (!$rc->hasMethod('render'))
                 throw new Exception('Attached object '.get_class($obj).' dont implement render()');
 
-            echo $obj->render();
+            $out .= $obj->render();
         }
 
         if ($this->enable_design) {
             if ($this->design_foot) {
                 $view = new ViewModel($this->design_foot);
-                echo $view->render();
+                $out .= $view->render();
             }
 
             $view = new ViewModel('views/page_profiler.php');
-            echo $view->render();
+            $out .= $view->render();
 
             //XXX <body> and <html> tags is opened in XhtmlHeader->render()
-            echo "\n".'</body></html>';
+            $out .= "\n".'</body></html>';
         }
 
-        ob_end_flush();
+        $this->sendHeaders();
+
+
+        $x = ob_get_contents();
+        if ($x)
+            throw new Exception ('meh '.$x);
+        //        ob_end_flush();
+
+        if ($this->enable_design)
+            echo XhtmlHeader::getInstance()->render();
+
+        echo $out;
+
     }
 
 }

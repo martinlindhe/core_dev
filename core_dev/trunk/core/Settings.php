@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+//XXX: rework into a static class
+
 class Settings
 {
     //default types - use id's from 50 and up for application specified types

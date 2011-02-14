@@ -35,7 +35,7 @@ if (class_exists('TempStore')) {
 
 $pager_id = 'page_prof_'.mt_rand();
 
-echo js_embed(
+$header->embedJs(
 //Toggles element with name "n" between visible and hidden
 'function toggle_page_profiler()'.
 '{'.
@@ -48,7 +48,7 @@ echo '| <a href="#" onclick="return toggle_page_profiler();">load</a>';
 
 $css =
 'display:none;'.
-'overflow:auto;'.
+'width:370px;'.
 'padding:4px;'.
 'border:#000 1px solid;';
 
@@ -71,11 +71,11 @@ echo '<br/>';
 echo dm(); //memory usage
 echo '<br/>';
 
-echo 'Server <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 echo 'Client <b>'.$_SERVER['REMOTE_ADDR'].'</b> using <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
+echo 'Server <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 
-echo 'Server time: '.date('r T').'<br/>';
-echo 'Server uptime: '.elapsed_seconds( uptime() ).'<br/>';
+echo 'Server time: '.sql_datetime( time() ).' '.date('T').'<br/>';
+echo 'Uptime: '.elapsed_seconds( uptime() ).'<br/>';
 
 echo '</div>'; // closing $pager_id
 

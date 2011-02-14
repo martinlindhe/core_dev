@@ -2,7 +2,7 @@
 
 $rand_id = mt_rand();
 
-echo js_embed(
+$header->embedJs(
 'function toggle_tempstore()'.
 '{'.
     'var e = document.getElementById("tss_'.$rand_id.'");'.
@@ -24,8 +24,6 @@ echo '<div id="tss_'.$rand_id.'" style="'.$css.'">';
 
 foreach ($store->getServerStats() as $host => $stat)
 {
-    echo '<b>memcached server '.$host.'</b><br/>';
-
     echo 'Used memory: '.byte_count($stat['bytes']).' (of '.byte_count($stat['limit_maxbytes']).')<br/>';
     echo 'Bytes read: '.byte_count($stat['bytes_read']).'<br/>';
     echo 'Bytes written: '.byte_count($stat['bytes_written']).'<br/>';
@@ -40,9 +38,9 @@ foreach ($store->getServerStats() as $host => $stat)
     echo 'Evictions: '.$stat['evictions'].'<br/>';  // ????
 
 //    echo 'Threads: '.$stat['threads'].'<br/>';
-    echo 'Uptime: '.elapsed_seconds($stat['uptime']).'<br/>';
+    echo 'Server: <b>'.$host.'</b> running <b>memcached '.$stat['version'].'</b><br/>';
     echo 'Server time: '.sql_datetime($stat['time']).'<br/>';
-    echo 'Version '.$stat['version'];
+    echo 'Uptime: '.elapsed_seconds($stat['uptime']).'<br/>';
 }
 
 echo '</div>';

@@ -12,16 +12,22 @@
 
 //STATUS: wip
 
+//XXX: rework into a static class, when Settings is done
+
 require_once('Settings.php');
 
 class Token extends Settings
 {
-    private $token_prefix = 'pOwplopw';
-    private $token_suffix = 'LAZER!!';
-
-    function __construct()
+    function getOwner($name, $val)
     {
         $this->type = Settings::TOKEN;
+        return parent::getOwner($name, $val);
+    }
+
+    function get($name, $default = '')
+    {
+        $this->type = Settings::TOKEN;
+        return parent::get($name, $default);
     }
 
     /**
@@ -33,27 +39,22 @@ class Token extends Settings
         if (!$this->owner)
             return false;
 
-        $val = $this->findFreeToken($name);
+        $session = SessionHandler::getInstance();
+
+        $this->type = Settings::TOKEN;
+
+        // rainbow table proof: session id adjust outcome per user
+        do {
+            $val = sha1('pOwplopw' . $session->id . mt_rand() . $session->name . 'LAZER!!');
+
+            if (!$this->getOwner($name, $val))
+                break;
+
+        } while (1);
 
         $this->set($name, $val);
 
         return $val;
-    }
-
-    /**
-     * rainbow table proof: session id adjust outcome per user and base url of the site adjust outcome per installation
-     */
-    private function findFreeToken($name)
-    {
-        $session = SessionHandler::getInstance();
-
-        do {
-            $val = sha1($this->token_prefix . mt_rand() . $session->id . mt_rand() . $this->token_suffix);
-
-            if (!$this->getOwner($name, $val))
-                return $val;
-
-        } while (1);
     }
 
 }

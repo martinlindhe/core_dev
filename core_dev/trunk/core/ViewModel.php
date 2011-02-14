@@ -39,6 +39,7 @@ class ViewModel extends ArrayObject
         if (class_exists('XhtmlHeader'))        $header  = XhtmlHeader::getInstance();
         if (class_exists('XmlDocumentHandler')) $page    = XmlDocumentHandler::getInstance();
         if (class_exists('LocaleHandler'))      $locale  = LocaleHandler::getInstance();
+        if (class_exists('TempStore'))          $temp    = TempStore::getInstance();
 
         // make reference to calling object available in the namespace of the view
         $caller = $this->caller;

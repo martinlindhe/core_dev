@@ -27,7 +27,7 @@ class GeonamesClient
 
         $temp = TempStore::getInstance();
 
-        $key = 'geonames.org//'.$latitude.'/'.$longitude;
+        $key = 'GeonamesClient//'.$latitude.'/'.$longitude;
 
         $data = $temp->get($key);
         if ($data)
@@ -35,7 +35,7 @@ class GeonamesClient
 
         $url = 'http://ws.geonames.org/timezone?lat='.$latitude.'&lng='.$longitude;
         $http = new HttpClient($url);
-        $data = $http->get();
+        $data = $http->getBody();
 
         $xml = simplexml_load_string($data);
 //d($xml);
@@ -47,7 +47,7 @@ class GeonamesClient
         $res->sunrise      = strval($xml->timezone->sunrise);
         $res->sunset       = strval($xml->timezone->sunset);
 
-        $temp->set($key, serialize($res));
+        $temp->set($key, serialize($res), '30d');
 
         return $res;
     }

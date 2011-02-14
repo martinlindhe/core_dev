@@ -9,13 +9,17 @@
 
 $rand_id = mt_rand();
 
-echo js_embed(
+$header->embedJs(
 //Toggles element with name "n" between visible and hidden
 'function toggle_sql_profiler()'.
 '{'.
     'var e = document.getElementById("sql_prof_'.$rand_id.'");'.
     'e.style.display = (e.style.display ? "" : "none");'.
 '}'
+);
+
+$header->embedCss(
+'.hover:hover{ background-color: #ccc; }'
 );
 
 echo '<a href="#" onclick="return toggle_sql_profiler();">'.count($db->queries).' sql</a>';
@@ -40,7 +44,7 @@ foreach ($db->queries as $prof)
 
     $decorated = array(
     '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ',
-    '<br/><b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ', '<br/><b>LEFT JOIN</b> ', '<br/><b>INNER JOIN</b> ', '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
+    ' <b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ', '<br/><b>LEFT JOIN</b> ', '<br/><b>INNER JOIN</b> ', '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
     ' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ', ' <b>BETWEEN</b> ',
     ' <b>IS NULL</b>', ' <b>IS NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
     ' <b>!=</b> ',
@@ -51,11 +55,11 @@ foreach ($db->queries as $prof)
     $query = str_replace($keywords, $decorated, $query);
 
     if ($prof->prepared)
-        $res .= '<table style="background-color: #B2A23D" summary="" width="100%">';
+        $res .= '<table summary="" class="hover" style="background-color: #B2A23D" width="100%">';
     else
-        $res .= '<table summary="">';
+        $res .= '<table summary="" class="hover">';
 
-    $res .= '<tr><td width="40">';
+    $res .= '<tr><td width="30">';
 
     if ($prof->error)
         $res .= coreButton('Error', '', 'SQL Error');
@@ -75,16 +79,10 @@ foreach ($db->queries as $prof)
     if ($prof->params) $res .= ': '.implode(', ', $prof->params);
 
     $res .= '</td></tr></table>';
-    $res .= '<hr/>';
+//    $res .= '<hr/>';
 }
 
-$sql_height = (count($db->queries) * 60) + 70;
-if ($sql_height > 250)
-    $sql_height = 250;
-
 $css =
-'height:'.$sql_height.'px;'.
-'min-width: 300px;'.
 ($error ? '' : ' display:none;').
 'overflow:auto;'.
 'border:#000 1px solid;';
