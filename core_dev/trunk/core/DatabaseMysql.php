@@ -7,15 +7,13 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-require_once('CoreBase.php');
 require_once('ISql.php');
 
 //STATUS: wip
-//TODO soon: factorize some code from prepared-statements functions
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
-class DatabaseMysql extends CoreBase implements IDB_SQL
+class DatabaseMysql implements IDB_SQL
 {
     var $db_handle       = false;       ///< Internal db handle
     var $host            = 'localhost'; ///< Hostname or numeric IP address of the db server
@@ -285,6 +283,9 @@ class DatabaseMysql extends CoreBase implements IDB_SQL
      */
     private function pExecStmt($args)
     {
+        if (!$args[0])
+            throw new Exception ('no query');
+
         if (!$this->connected)
             $this->connect();
 

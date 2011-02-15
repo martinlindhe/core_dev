@@ -14,6 +14,11 @@ class SqlObject
     {
         $db = SqlHandler::getInstance();
 
+        if (!$q) {
+            throw new Exception ('no query');
+            return new $classname();
+        }
+
         $row = is_array($q) ? $q : $db->pSelect($q);
 
         $reflect = new ReflectionClass($classname);

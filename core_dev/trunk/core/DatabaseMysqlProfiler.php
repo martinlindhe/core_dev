@@ -11,28 +11,22 @@
 //TODO: make it a general sql profiler (reuse for ms-sql)
 
 require_once('DatabaseMysql.php');
-
-class ProfiledSqlQuery
-{
-    var $query;
-    var $error;
-    var $time;
-    var $prepared = false;
-    var $format; //for prepared statements
-    var $params; //for prepared statements
-}
+require_once('ProfiledSqlQuery.php');
 
 class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 {
     var $measure_start = 0;       ///< time when profiling started
     var $time_connect  = 0;       ///< time it took to connect to db
     var $queries       = array(); ///< array of ProfiledSqlQuery (queries executed)
+    protected $debug     = false;
 
     function __construct()
     {
         mysqli_report(MYSQLI_REPORT_ERROR); // fails on sql syntax errors (????)
         //mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_STRICT); // all errors on, but disable exceptions (strict)
     }
+
+    function debug($b = true) { $this->debug = $b; }
 
     function getErrorCount()
     {
@@ -62,8 +56,9 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         $prof = new ProfiledSqlQuery();
         $prof->query = $q;
         $prof->time = microtime(true) - $this->measure_start;
-
         $this->queries[] = $prof;
+        if ($this->debug)
+            echo $prof->render();
         return $prof;
     }
 

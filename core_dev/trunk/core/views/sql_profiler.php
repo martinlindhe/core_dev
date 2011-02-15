@@ -29,58 +29,7 @@ $error = false;
 $res = '';
 
 foreach ($db->queries as $prof)
-{
-    $query = htmlentities(nl2br($prof->query), ENT_COMPAT, 'UTF-8');
-
-    $keywords = array(
-    'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ',
-    ' FROM ', ' SET ', ' WHERE ', ' LEFT JOIN ', ' INNER JOIN ', ' GROUP BY ', ' ORDER BY ',
-    ' ON ', ' AS ', ' AND ', ' OR ', ' LIMIT ', ' BETWEEN ',
-    ' IS NULL', ' IS NOT NULL', ' DESC', ' ASC',
-    ' != ',
-    'NOW()', ' DATE(',
-    ' COUNT(', ' SUM(',
-    );
-
-    $decorated = array(
-    '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ',
-    ' <b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ', '<br/><b>LEFT JOIN</b> ', '<br/><b>INNER JOIN</b> ', '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
-    ' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ', ' <b>BETWEEN</b> ',
-    ' <b>IS NULL</b>', ' <b>IS NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
-    ' <b>!=</b> ',
-    '<b>NOW()</b>', ' <b>DATE</b>(',
-    ' <b>COUNT</b>(', ' <b>SUM</b>(',
-    );
-
-    $query = str_replace($keywords, $decorated, $query);
-
-    if ($prof->prepared)
-        $res .= '<table summary="" class="hover" cellpadding="0" style="background-color: #B2A23D" width="100%">';
-    else
-        $res .= '<table summary="" class="hover" cellpadding="0">';
-
-    $res .= '<tr><td width="30">';
-
-    if ($prof->error)
-        $res .= coreButton('Error', '', 'SQL Error');
-    else
-        $res .= round($prof->time, 2).'s';
-
-    $res .=  '</td><td>';
-
-    if ($prof->error) {
-        $error = true;
-        $res .=  'Error: <b>'.$prof->error.'</b><br/><br/>';
-    }
-
-    $res .= $query;
-
-    if ($prof->format) $res .= ' ('.$prof->format.')';
-    if ($prof->params) $res .= ': '.implode(', ', $prof->params);
-
-    $res .= '</td></tr></table>';
-//    $res .= '<hr/>';
-}
+    $res .= $prof->render();
 
 $css =
 ($error ? '' : ' display:none;').
