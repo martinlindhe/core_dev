@@ -1,4 +1,9 @@
 <?php
+/**
+ * $Id$
+ *
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
+ */
 
 //STATUS: wip
 
@@ -126,7 +131,7 @@ class SqlObject
         }
         return $vals;
     }
-}
 
+}
 
 ?>

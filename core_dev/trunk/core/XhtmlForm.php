@@ -257,12 +257,13 @@ class XhtmlForm
     /**
      * Adds a input field to the form
      */
-    function addInput($name, $str, $val = '', $size = 0)
+    function addInput($name, $str, $val = '', $size = 0, $maxlen = 0)
     {
         $o = new XhtmlComponentInput();
         $o->name  = $name;
         $o->value = $val;
         $o->size  = $size;
+        $o->maxlen = $maxlen;
 
         $this->add($o, $str);
    }

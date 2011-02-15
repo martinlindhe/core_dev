@@ -9,6 +9,7 @@
 
 //STATUS: wip
 //TODO: make it a general sql profiler (reuse for ms-sql)
+//XXX: somehow show return values if debug is enabled
 
 require_once('DatabaseMysql.php');
 require_once('ProfiledSqlQuery.php');
@@ -18,7 +19,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
     var $measure_start = 0;       ///< time when profiling started
     var $time_connect  = 0;       ///< time it took to connect to db
     var $queries       = array(); ///< array of ProfiledSqlQuery (queries executed)
-    protected $debug     = false;
+    protected $debug   = false;
 
     function __construct()
     {
