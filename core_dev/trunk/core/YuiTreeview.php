@@ -16,10 +16,12 @@ require_once('output_js.php');
 
 class YuiTreeview
 {
-    protected $xhr_url = '';
-    protected $root_nodes = array();
+    protected $xhr_url          = '';
+    protected $root_nodes       = array();
+    protected $ms_timeout       = 7000;    ///< (in ms), duration before giving up XHR request
 
-    protected $leaf_mode = true;     ///< shows childless nodes. disable to use Expand/Collapse icons
+    protected $allow_expand_all = false;   ///< allow multiple nodes open at once?
+    protected $leaf_mode        = true;    ///< shows childless nodes. disable to use Expand/Collapse icons
 
     function setRootNodes($arr) { $this->root_nodes = $arr; }
 
@@ -50,11 +52,38 @@ class YuiTreeview
 
         $div_holder = 'yui_tree_hold'.mt_rand();
 
+        if ($this->allow_expand_all)
+            $node_type = 'TextNode';
+        else
+            $node_type = 'MenuNode';
+
         $res =
 
         '(function() {'.
 
             'var tree;'.
+
+            'function buildTree() {'.
+                //create a new tree:
+                'tree = new YAHOO.widget.TreeView("'.$div_holder.'");'.
+
+                //turn dynamic loading on for entire tree:
+                'tree.setDynamicLoad(loadNodeData, '.($this->leaf_mode ? '1' : '0').');'.
+
+                //get root node for tree:
+                'var root = tree.getRoot();'.
+
+                //add child nodes for tree:
+                'var aChilds = ['.jsArrayFlat($this->root_nodes, false).'];'.
+
+                'for (var i=0, j=aChilds.length; i<j; i++) {'.
+                    'var tempNode = new YAHOO.widget.'.$node_type.'(aChilds[i], root, false);'.
+                '}'.
+
+                //render tree with these toplevel nodes; all descendants of these nodes
+                //will be generated as needed by the dynamic loader.
+                'tree.draw();'.
+            '}'.
 
             'function loadNodeData(node, fnLoadComplete)  {'.
 
@@ -70,7 +99,6 @@ class YuiTreeview
                 //on which we'll search for related words:
                 'var nodeLabel = encodeURI(node.label);'.
 
-                //prepare URL for XHR request:
                 'var sUrl = "'.$this->xhr_url.'" + nodeLabel;'.
 
                 //prepare our callback object
@@ -79,18 +107,18 @@ class YuiTreeview
                     //if our XHR call is successful, we want to make use
                     //of the returned data and create child nodes.
                     'success: function(oResponse) {'.
-                        'YAHOO.log("XHR transaction was successful.", "info", "example");'.
+//                        'YAHOO.log("XHR transaction was successful.", "info", "example");'.
                         //YAHOO.log(oResponse.responseText);
                         'var oResults = eval("(" + oResponse.responseText + ")");'.
                         'if((oResults.records) && (oResults.records.length)) {'.
                             //Result is an array if more than one result, string otherwise
                             'if(YAHOO.lang.isArray(oResults.records)) {'.
                                 'for (var i=0, j=oResults.records.length; i<j; i++) {'.
-                                    'var tempNode = new YAHOO.widget.TextNode(oResults.records[i], node, false);'.
+                                    'var tempNode = new YAHOO.widget.'.$node_type.'(oResults.records[i], node, false);'.
                                 '}'.
                             '} else {'.
                                 //there is only one result; comes as string:
-                                'var tempNode = new YAHOO.widget.TextNode(oResults.records, node, false);'.
+                                'var tempNode = new YAHOO.widget.'.$node_type.'(oResults.records, node, false);'.
                             '}'.
                         '}'.
 
@@ -117,42 +145,10 @@ class YuiTreeview
                         '"fnLoadComplete": fnLoadComplete'.
                     '},'.
 
-                    //timeout -- if more than 7 seconds go by, we'll abort
-                    //the transaction and assume there are no children:
-                    'timeout: 7000'.
+                    'timeout:'.$this->ms_timeout.
                 '};'.
 
-                //With our callback object ready, it's now time to
-                //make our XHR call using Connection Manager's
-                //asyncRequest method:
                 'YAHOO.util.Connect.asyncRequest("GET", sUrl, callback);'.
-            '}'.
-
-            'function buildTree() {'.
-                //create a new tree:
-                'tree = new YAHOO.widget.TreeView("'.$div_holder.'");'.
-
-                //turn dynamic loading on for entire tree:
-                'tree.setDynamicLoad(loadNodeData, '.($this->leaf_mode ? '1' : '0').');'.
-
-                //get root node for tree:
-                'var root = tree.getRoot();'.
-
-                //add child nodes for tree:
-                'var aChilds = ['.jsArrayFlat($this->root_nodes, false).'];'.
-
-                'for (var i=0, j=aChilds.length; i<j; i++) {'.
-                    'var tempNode = new YAHOO.widget.TextNode(aChilds[i], root, false);'.
-                '}'.
-
-                // Use the isLeaf property to force the leaf node presentation for a given node.
-                // This disables dynamic loading for the node.
-                'var tempNode = new YAHOO.widget.TextNode("This is a leaf node", root, false);'.
-                'tempNode.isLeaf = true;'.
-
-                //render tree with these toplevel nodes; all descendants of these nodes
-                //will be generated as needed by the dynamic loader.
-                'tree.draw();'.
             '}'.
 
             //once the DOM has loaded, we can go ahead and set up our tree:
