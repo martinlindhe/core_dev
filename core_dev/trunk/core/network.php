@@ -110,7 +110,7 @@ define('URL_REGEXP',
     "(:\d+)?".       //optional port number
     "(/".            //optional url parameters must begin with /
         "(".
-            "[\w/_\-\?\=\&\;\+\*\#\%\.\,\:\(\)]*".  //0 or more alphanumeric and/or _-?=&;+*#%.,:()
+            "[\w/_\-\?\|\=\&\;\+\*\#\%\.\,\:\(\)]*".  //0 or more alphanumeric and/or _-?=&;+*#%.,:()
         ")?".
     ")?".
 ")"
