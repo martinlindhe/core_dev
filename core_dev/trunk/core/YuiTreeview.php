@@ -19,6 +19,8 @@ class YuiTreeview
     protected $xhr_url = '';
     protected $root_nodes = array();
 
+    protected $leaf_mode = true;     ///< shows childless nodes. disable to use Expand/Collapse icons
+
     function setRootNodes($arr) { $this->root_nodes = $arr; }
 
     function setXhrUrl($s) { $this->xhr_url = $s; }
@@ -52,15 +54,7 @@ class YuiTreeview
 
         'YAHOO.example.treeExample = function() {'.
 
-            'var tree, currentIconMode;'.
-
-            'function changeIconMode() {'.
-                'var newVal = parseInt(this.value);'.
-                'if (newVal != currentIconMode) {'.
-                    'currentIconMode = newVal;'.
-                '}'.
-                'buildTree();'.
-            '}'.
+            'var tree;'.
 
             'function loadNodeData(node, fnLoadComplete)  {'.
 
@@ -139,7 +133,7 @@ class YuiTreeview
                 'tree = new YAHOO.widget.TreeView("'.$div_holder.'");'.
 
                 //turn dynamic loading on for entire tree:
-                'tree.setDynamicLoad(loadNodeData, currentIconMode);'.
+                'tree.setDynamicLoad(loadNodeData, '.($this->leaf_mode ? '1' : '0').');'.
 
                 //get root node for tree:
                 'var root = tree.getRoot();'.
@@ -163,14 +157,6 @@ class YuiTreeview
 
             'return {'.
                 'init: function() {'.
-                    'YAHOO.util.Event.on(["mode0", "mode1"], "click", changeIconMode);'.
-                    'var el = document.getElementById("mode1");'.
-                    'if (el && el.checked) {'.
-                        'currentIconMode = parseInt(el.value);'.
-                    '} else {'.
-                        'currentIconMode = 0;'.
-                    '}'.
-
                     'buildTree();'.
                 '}'.
             '}'.
