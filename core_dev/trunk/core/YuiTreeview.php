@@ -16,16 +16,25 @@ require_once('output_js.php');
 
 class YuiTreeview
 {
-    protected $xhr_url          = '';
+    protected $xhr_url;
     protected $root_nodes       = array();
     protected $ms_timeout       = 7000;    ///< (in ms), duration before giving up XHR request
 
     protected $allow_expand_all = false;   ///< allow multiple nodes open at once?
     protected $leaf_mode        = true;    ///< shows childless nodes. disable to use Expand/Collapse icons
+    protected $js_dblclick;                ///< code to execute on double click
 
-    function setRootNodes($arr) { $this->root_nodes = $arr; }
+    function setRootNodes($arr)
+    {
+        foreach ($arr as $o) {
+            //XXX reflect & see that property "id" and "name" exists
+            $this->root_nodes[] = $o;
+        }
+    }
 
     function setXhrUrl($s) { $this->xhr_url = $s; }
+
+    function setJsDblClick($s) { $this->js_dblclick = $s; }
 
     function render()
     {
@@ -38,7 +47,6 @@ class YuiTreeview
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/treeview/assets/skins/sam/treeview.css');
-        // Optional CSS for for date editing with Calendar
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/calendar/assets/skins/sam/calendar.css');
 
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
@@ -58,7 +66,7 @@ class YuiTreeview
             $node_type = 'MenuNode';
 
         $res =
-        'function loadNodeData(node, fnLoadComplete)  {'.
+        'function loadNodeData(node, fnLoadComplete) {'.
 
             //We'll load node data based on what we get back when we
             //use Connection Manager topass the text label of the
@@ -68,11 +76,7 @@ class YuiTreeview
             //server.  In our success handler, we'll build our new children
             //and then return fnLoadComplete back to the tree.
 
-            //Get the node's label and urlencode it; this is the word/s
-            //on which we'll search for related words:
-            'var nodeLabel = encodeURI(node.label);'.
-
-            'var sUrl = "'.$this->xhr_url.'" + nodeLabel;'.
+            'var sUrl = "'.$this->xhr_url.'" + encodeURI(node.data.id);'.
 
             //prepare our callback object
             'var callback = {'.
@@ -82,16 +86,10 @@ class YuiTreeview
                     'success: function(oResponse) {'.
 //                  'YAHOO.log("XHR transaction was successful.", "info", "example");'.
                     //YAHOO.log(oResponse.responseText);
-                    'var oResults = eval("(" + oResponse.responseText + ")");'.
+                    'var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);'.
                     'if((oResults.records) && (oResults.records.length)) {'.
-                        //Result is an array if more than one result, string otherwise
-                        'if(YAHOO.lang.isArray(oResults.records)) {'.
-                            'for (var i=0, j=oResults.records.length; i<j; i++) {'.
-                                'var tempNode = new YAHOO.widget.'.$node_type.'(oResults.records[i], node, false);'.
-                            '}'.
-                        '} else {'.
-                            //there is only one result; comes as string:
-                            'var tempNode = new YAHOO.widget.'.$node_type.'(oResults.records, node, false);'.
+                        'for (var i=0, j=oResults.records.length; i<j; i++) {'.
+                            'var newNode = new YAHOO.widget.'.$node_type.'({label:oResults.records[i].name,id:oResults.records[i].id}, node, false);'.
                         '}'.
                     '}'.
 
@@ -133,19 +131,24 @@ class YuiTreeview
         'var root = tree.getRoot();'.
 
         //add child nodes for tree:
-        'var aChilds = ['.jsArrayFlat($this->root_nodes, false).'];'.
+        'var aChilds = '.json_encode($this->root_nodes).';'.
 
         'for (var i=0, j=aChilds.length; i<j; i++) {'.
-            'var tempNode = new YAHOO.widget.'.$node_type.'(aChilds[i], root, false);'.
+            'var tempNode = new YAHOO.widget.'.$node_type.'({label:aChilds[i].name,id:aChilds[i].id}, root, false);'.
         '}'.
 
         //render tree with these toplevel nodes; all descendants of these nodes
         //will be generated as needed by the dynamic loader.
-        'tree.draw();'.
+        'tree.render();'.
 
-        'tree.subscribe("dblClickEvent",function(oArgs) {'.
-            'alert("Double click on node: " + oArgs.node.label);'.
-        '});';
+        ($this->js_dblclick ?
+            'tree.subscribe("dblClickEvent",function(oArgs) {'.
+                //'alert("Double click on node: " + oArgs.node.label);'.
+                $this->js_dblclick.
+            '});'
+        :
+            ''
+        );
 
         return
         '<div id="'.$div_holder.'"></div>'.

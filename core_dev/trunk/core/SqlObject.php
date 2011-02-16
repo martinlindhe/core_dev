@@ -20,7 +20,7 @@ class SqlObject
         $db = SqlHandler::getInstance();
 
         if (!$q) {
-            throw new Exception ('no query');
+//            throw new Exception ('no query');
             return new $classname();
         }
 
