@@ -52,7 +52,7 @@ class YuiTreeview
 
         $res =
 
-        'YAHOO.example.treeExample = function() {'.
+        '(function() {'.
 
             'var tree;'.
 
@@ -155,15 +155,10 @@ class YuiTreeview
                 'tree.draw();'.
             '}'.
 
-            'return {'.
-                'init: function() {'.
-                    'buildTree();'.
-                '}'.
-            '}'.
-        '} ();'.
+            //once the DOM has loaded, we can go ahead and set up our tree:
+            'YAHOO.util.Event.onDOMReady(buildTree);'.
 
-        //once the DOM has loaded, we can go ahead and set up our tree:
-        'YAHOO.util.Event.onDOMReady(YAHOO.example.treeExample.init, YAHOO.example.treeExample,true);';
+        '}) ();';
 
         return
         '<div id="'.$div_holder.'"></div>'.
