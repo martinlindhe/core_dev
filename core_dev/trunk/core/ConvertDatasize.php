@@ -30,10 +30,10 @@ class ConvertDatasize extends ConvertBase
     );
 
     protected $lookup = array(
-    'bit'      => 'bit',
-    'kilobit'  => 'kbit',
-    'megabit'  => 'mbit',
-    'gigabit'  => 'gbit',
+    'bit'      => 'bit',  'bits'     => 'bit',
+    'kilobit'  => 'kbit', 'kilobits' => 'kbit',
+    'megabit'  => 'mbit', 'megabits' => 'mbit',
+    'gigabit'  => 'gbit', 'gigabits' => 'gbit',
 
     'byte'     => 'b',
     'kilobyte' => 'kb', 'kbyte' => 'kb', 'kib' => 'kb', 'k' => 'kb',

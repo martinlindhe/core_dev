@@ -59,7 +59,7 @@ function d($v)
             $out = str_replace("\n", "<br/>", $out);
 
             if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
-                echo '<pre>'.$out.'</pre>';
+                echo '<pre>'."\n".$out.'</pre>';
             else
                 var_dump($out);
         }
@@ -78,7 +78,7 @@ function d($v)
         return;
     }
 
-    if (!$cli) echo '<pre>';
+    if (!$cli) echo '<pre>'."\n";
     print_r($v);
     echo ln();
     if (!$cli) echo '</pre>';
@@ -99,7 +99,8 @@ function is_cli()
 {
     $page = XmlDocumentHandler::getInstance();
 
-    return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
+    return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain');
+//    return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
 }
 
 /**

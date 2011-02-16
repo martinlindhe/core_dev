@@ -18,7 +18,6 @@ require_once('output_js.php');
 class YuiDate
 {
     private $name;
-    private $div_holder;
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $selected_date;
 

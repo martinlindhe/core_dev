@@ -12,6 +12,13 @@
 
 //TODO: reimplement user-block & ip-block
 
+//TODO: rework tblUsers.userPass to store value as "sha1:xxxxx", "sha512:xxx" in order to simplify future hash change
+//      XXX also increase tblUsers.userPass size to 64(512 bits) + 10 (algorithm name) characters
+
+//TODO: calculate password hash by feeding first generated hash to hash algorithm for a number of times (10?)
+//      XXX will break all currently used passwords
+
+
 require_once('CoreBase.php');
 require_once('User.php');
 require_once('ErrorHandler.php');

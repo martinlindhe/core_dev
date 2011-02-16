@@ -191,10 +191,10 @@ class XmlDocumentHandler extends CoreBase
             $rc = new ReflectionClass($obj);
 
             if (!$rc->implementsInterface('IXmlComponent'))
-                throw new exception('Attached object '.get_class($obj).' dont implement IXmlComponent');
+                throw new exception('Attached '.get_class($obj).' dont implement IXmlComponent');
 
             if (!$rc->hasMethod('render'))
-                throw new Exception('Attached object '.get_class($obj).' dont implement render()');
+                throw new Exception('Attached '.get_class($obj).' dont implement render()');
 
             $out .= $obj->render();
         }
@@ -213,7 +213,6 @@ class XmlDocumentHandler extends CoreBase
         }
 
         $this->sendHeaders();
-
 
         $x = ob_get_contents();
         if ($x)
