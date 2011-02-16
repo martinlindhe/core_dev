@@ -5,10 +5,17 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip - not finished. only returns json-result as a object
+//STATUS: wip - not finished
 
 require_once('HttpClient.php');
 require_once('JSON.php');
+
+class MediaWikiPage
+{
+    var $title;
+    var $pageid; // id in mediawiki database
+    var $content;
+}
 
 class MediaWikiClient extends HttpClient
 {
@@ -24,8 +31,8 @@ class MediaWikiClient extends HttpClient
         '&format=json'.
         '&prop=revisions'.
         '&rvlimit=1'.
-        '&rvprop=content|timestamp'.
-        '&titles='.$name;
+        '&rvprop=content'.
+        '&titles='.urlencode($name);
 
         $key = 'MediaWikiClient/'.sha1( $url );
 
@@ -41,17 +48,20 @@ class MediaWikiClient extends HttpClient
         $raw = $this->getBody();
         $json = JSON::decode($raw);
 
-        $temp->set($key, serialize($json), '4h');
-        return $json;
+        $pages = array();
+        foreach ( $json->query->pages as $id => $p) {
+            $o = new MediaWikiPage();
+            $o->title   = $p->title;
+            $o->pageid  = $p->pageid;
+            $o->content = $p->revisions[0]->{'*'};
+            $pages[] = $o;
+        }
+        $res = $pages[0]; // XXX only exports one article
+
+        $temp->set($key, serialize($res), '24h');
+        return $res;
     }
 
 }
-
-/*
-$x = new MediaWikiClient('http://sv.wikipedia.org/');
-
-$res = $x->getArticle('sten');
-d($res);
-*/
 
 ?>
