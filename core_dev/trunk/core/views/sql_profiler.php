@@ -18,6 +18,7 @@ $header->embedJs(
 '}'
 );
 
+// XXX this should be done in SqlQuery->render() or so, but
 $header->embedCss(
 '.hover:hover{ background-color: #ccc; }'
 );

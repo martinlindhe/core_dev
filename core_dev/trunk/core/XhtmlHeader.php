@@ -117,7 +117,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** CSS snippets to be added inside <head> */
-    function embedCss($s) { $this->embed_css .= $s; }
+    function embedCss($s = '') { $this->embed_css .= $s; }
 
     /** JavaScript snippets to be added inside <head> (js functions is available before page load event is completed) */
     function embedJs($s) { $this->embed_js[] = $s; }

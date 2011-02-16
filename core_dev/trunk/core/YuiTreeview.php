@@ -34,6 +34,7 @@ class YuiTreeview
 
     function setXhrUrl($s) { $this->xhr_url = $s; }
 
+    /** node id is in oArgs.node.data.id */
     function setJsDblClick($s) { $this->js_dblclick = $s; }
 
     function render()

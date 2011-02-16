@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-class ProfiledSqlQuery
+class SqlQuery
 {
     var $query;
     var $error;
@@ -42,9 +42,9 @@ class ProfiledSqlQuery
 
         $query = str_replace($keywords, $decorated, $query);
 
-        $res = '<table summary="" class="hover" width="100%" cellpadding="0"'.($this->prepared ? ' style="background-color: #B2A23D"': '').'>';
+        $res = '<table summary="" class="hover" width="100%" cellpadding="0">';
 
-        $res .= '<tr><td width="30">';
+        $res .= '<tr><td width="30"'.($this->prepared ? ' style="background-color: #B2A23D"': '').'>';
 
         if ($this->error)
             $res .= coreButton('Error', '', 'SQL Error');

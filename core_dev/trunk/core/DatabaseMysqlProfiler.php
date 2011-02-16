@@ -12,13 +12,13 @@
 //XXX: somehow show return values if debug is enabled
 
 require_once('DatabaseMysql.php');
-require_once('ProfiledSqlQuery.php');
+require_once('SqlQuery.php');
 
 class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 {
     var $measure_start = 0;       ///< time when profiling started
     var $time_connect  = 0;       ///< time it took to connect to db
-    var $queries       = array(); ///< array of ProfiledSqlQuery (queries executed)
+    var $queries       = array(); ///< array of SqlQuery (queries executed)
     protected $debug   = false;
 
     function __construct()
@@ -54,7 +54,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
      */
     private function &measureQuery($q)
     {
-        $prof = new ProfiledSqlQuery();
+        $prof = new SqlQuery();
         $prof->query = $q;
         $prof->time = microtime(true) - $this->measure_start;
         $this->queries[] = $prof;
