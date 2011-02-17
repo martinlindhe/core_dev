@@ -40,8 +40,15 @@ class Image
         return imagecolorat($this->resource, $x, $y);
     }
 
-    function load(&$r)
+    function load($r)
     {
+        if (is_resource($r) && get_resource_type($r) == 'gd') {
+            $this->resource = $r;
+            $this->width  = imagesx($r);
+            $this->height = imagesy($r);
+            return;
+        }
+
         if (file_exists($r))
         {
             $info = getimagesize($r);
@@ -62,9 +69,7 @@ class Image
             return;
         }
 
-        if ($r) //XXX check class name
-            $this->resource = &$r;
-bt();
+        bt();
         throw new Exception  ('init class with width&height from resource!!! '. $r);
     }
 

@@ -34,7 +34,9 @@
 //TODO: isolerad sqlite databas som innehåller GS1-country codes
  //XXX: calcCheck() also works with EAN-8 numbers.. fix by extending EAN-8 class when it is written
 
-class BarcodeEan13
+require_once('Image.php');
+
+class BarcodeEan13 extends Image
 {
     protected $code;
     protected $gs1, $company, $product, $check;
@@ -86,7 +88,7 @@ class BarcodeEan13
     function getCompanyName() { return $this->company_name; }
     function getProduct() { return $this->product; }
 
-    function isValid() //XXX: make static
+    function isValid()
     {
         if ($this->calcCheck() == $this->check)
             return true;
@@ -161,7 +163,7 @@ class BarcodeEan13
         $this->unknown = substr($this->code, 3, -1);
     }
 
-    function render()
+    function renderDetails()
     {
         if (!$this->code)
             throw new Exception ('no code loaded');
@@ -187,6 +189,137 @@ class BarcodeEan13
             $res .= ', INVALID!!!! should be '.$calc.ln();
 
         return $res;
+    }
+
+    protected $_barcodeheight = 36; ///< barcode height
+    protected $_barwidth      = 1;  ///< Bar width
+    protected $_font          = 2;  ///< GD internal font id
+
+    protected $_number_set = array(
+    '0' => array('A' => array(0,0,0,1,1,0,1), 'B' => array(0,1,0,0,1,1,1), 'C' => array(1,1,1,0,0,1,0)),
+    '1' => array('A' => array(0,0,1,1,0,0,1), 'B' => array(0,1,1,0,0,1,1), 'C' => array(1,1,0,0,1,1,0)),
+    '2' => array('A' => array(0,0,1,0,0,1,1), 'B' => array(0,0,1,1,0,1,1), 'C' => array(1,1,0,1,1,0,0)),
+    '3' => array('A' => array(0,1,1,1,1,0,1), 'B' => array(0,1,0,0,0,0,1), 'C' => array(1,0,0,0,0,1,0)),
+    '4' => array('A' => array(0,1,0,0,0,1,1), 'B' => array(0,0,1,1,1,0,1), 'C' => array(1,0,1,1,1,0,0)),
+    '5' => array('A' => array(0,1,1,0,0,0,1), 'B' => array(0,1,1,1,0,0,1), 'C' => array(1,0,0,1,1,1,0)),
+    '6' => array('A' => array(0,1,0,1,1,1,1), 'B' => array(0,0,0,0,1,0,1), 'C' => array(1,0,1,0,0,0,0)),
+    '7' => array('A' => array(0,1,1,1,0,1,1), 'B' => array(0,0,1,0,0,0,1), 'C' => array(1,0,0,0,1,0,0)),
+    '8' => array('A' => array(0,1,1,0,1,1,1), 'B' => array(0,0,0,1,0,0,1), 'C' => array(1,0,0,1,0,0,0)),
+    '9' => array('A' => array(0,0,0,1,0,1,1), 'B' => array(0,0,1,0,1,1,1), 'C' => array(1,1,1,0,1,0,0))
+    );
+
+    protected $_left_coding = array(
+    '0' => array('A','A','A','A','A','A'),
+    '1' => array('A','A','B','A','B','B'),
+    '2' => array('A','A','B','B','A','B'),
+    '3' => array('A','A','B','B','B','A'),
+    '4' => array('A','B','A','A','B','B'),
+    '5' => array('A','B','B','A','A','B'),
+    '6' => array('A','B','B','B','A','A'),
+    '7' => array('A','B','A','B','A','B'),
+    '8' => array('A','B','A','B','B','A'),
+    '9' => array('A','B','B','A','B','A')
+    );
+
+    function render($type = 'png', $dst_file = '')
+    {
+        if (strlen($this->code) != 13 || !is_numeric($this->code))
+            throw new Exception ('invalid input: '.$this->code);
+
+        if (!$this->isValid())
+            throw new Exception ('invalid code');
+
+        // Calculate the barcode width
+        $barcodewidth = (strlen($this->code)) * (7 * $this->_barwidth)
+            + 3 // left
+            + 5 // center
+            + 3 // right
+            + imagefontwidth($this->_font)+1;
+
+        $barcodelongheight = (int) (imagefontheight($this->_font) / 2) + $this->_barcodeheight;
+
+        $img = imagecreate($barcodewidth, $barcodelongheight + imagefontheight($this->_font) + 1);
+
+        $black = imagecolorallocate($img, 0, 0, 0);
+        $white = imagecolorallocate($img, 255, 255, 255);
+
+        imagefill($img, 0, 0, $white);
+
+        // get the first digit which is the key for creating the first 6 bars
+        $key = substr($this->code, 0, 1);
+
+        $xpos = 0;
+
+        // print first digit
+        imagestring($img, $this->_font, $xpos, $this->_barcodeheight, $key, $black);
+        $xpos = imagefontwidth($this->_font) + 1;
+
+        // Draws the left guard pattern (bar-space-bar)
+        // bar
+        imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $barcodelongheight, $black);
+        $xpos += $this->_barwidth;
+        // space
+        $xpos += $this->_barwidth;
+        // bar
+        imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $barcodelongheight, $black);
+        $xpos += $this->_barwidth;
+
+        // Draw left $text contents
+        $set_array = $this->_left_coding[$key];
+        for ($idx = 1; $idx < 7; $idx++)
+        {
+            $value = substr($this->code, $idx, 1);
+            imagestring($img, $this->_font, $xpos+1, $this->_barcodeheight, $value, $black);
+
+            foreach ($this->_number_set[$value][$set_array[$idx-1]] as $bar)
+            {
+                if ($bar)
+                    imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $this->_barcodeheight, $black);
+
+                $xpos += $this->_barwidth;
+            }
+        }
+
+        // Draws the center pattern (space-bar-space-bar-space)
+        // space
+        $xpos += $this->_barwidth;
+        // bar
+        imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $barcodelongheight, $black);
+        $xpos += $this->_barwidth;
+        // space
+        $xpos += $this->_barwidth;
+        // bar
+        imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $barcodelongheight, $black);
+        $xpos += $this->_barwidth;
+        // space
+        $xpos += $this->_barwidth;
+
+        // Draw right $text contents
+        for ($idx = 7; $idx < 13; $idx ++)
+        {
+            $value = substr($this->code, $idx, 1);
+            imagestring($img, $this->_font, $xpos+1, $this->_barcodeheight, $value, $black);
+            foreach ($this->_number_set[$value]['C'] as $bar) {
+                if ($bar)
+                    imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $this->_barcodeheight, $black);
+
+                $xpos += $this->_barwidth;
+            }
+        }
+
+        // Draws the right guard pattern (bar-space-bar)
+        // bar
+        imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $barcodelongheight, $black);
+        $xpos += $this->_barwidth;
+        // space
+        $xpos += $this->_barwidth;
+        // bar
+        imagefilledrectangle($img, $xpos, 0, $xpos + $this->_barwidth - 1, $barcodelongheight, $black);
+        $xpos += $this->_barwidth;
+
+        $this->resource = $img;
+
+        return parent::render($type, $dst_file);
     }
 
 }
