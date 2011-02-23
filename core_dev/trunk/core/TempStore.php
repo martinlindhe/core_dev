@@ -33,7 +33,16 @@ class TempStore
 
     private function __construct()
     {
-        $this->handle = new Memcached();
+        if (extension_loaded('memcached')) {
+            //php5-memcached for php 5.3 or newer
+            $this->driver_name = 'memcached';
+            $this->handle = new Memcached;
+        } else if (extension_loaded('memcache')) {
+            //php5-memcache for php 5.2 or older
+            $this->driver_name = 'memcache';
+            $this->handle = new Memcache;
+        } else
+            throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
     }
 
     private function __clone() {}      //singleton: prevent cloning of class
