@@ -52,7 +52,7 @@ class TempStore
         if (!(self::$_instance instanceof self))
             self::$_instance = new self();
 
-        if (!extension_loaded('memcached'))
+        if (!extension_loaded('memcached') && !extension_loaded('memcache'))
             throw new Exception ('sudo apt-get install php5-memcached');
 
         return self::$_instance;
