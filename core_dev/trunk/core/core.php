@@ -406,7 +406,8 @@ function ucfirst_utf8($s)
 /** @return system uptime, in seconds **/
 function uptime()
 {
-    // XXX Linux only
+    // XXX Linux only, windows code available in phpshsinfo, http://phpsysinfo.sourceforge.net/ in class.WINNT.inc.php 
+    // XXX2 make simple OS-specific classes wrapping these kind of features
     $raw = explode(' ', file_get_contents('/proc/uptime') );
     return $raw[0];
 }
