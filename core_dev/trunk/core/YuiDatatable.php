@@ -112,6 +112,10 @@ class YuiDatatable
             $arr['formatter']  = 'formatMoney';
             break;
 
+        case 'bool':
+            $arr['formatter']  = 'formatBool';
+            break;
+
         case 'array':
             //"extra" contains an array of string representations of this column's values
             $arr['formatter'] = 'formatArray'.count($this->embed_arrays);
@@ -215,6 +219,11 @@ class YuiDatatable
                 'this.formatMoney = function(elLiner, oRecord, oColumn, oData) {'.
                     'var val = Number(oData) / 100;'.
                     'elLiner.innerHTML = val.toFixed(2);'.
+                '};'.
+
+                // draws a gray (false) or green (true) checkmark
+                'this.formatBool = function(elLiner, oRecord, oColumn, oData) {'.
+                    'elLiner.innerHTML = \'<img src="'.relurl('core_dev/gfx/icon_ok').'\' + ( oData ? "" : "_gray") + \'.png"/>\';'.
                 '};';
 
                 for ($i=0; $i<count($this->embed_arrays); $i++) {
@@ -232,6 +241,7 @@ class YuiDatatable
                 'YAHOO.widget.DataTable.Formatter.formatDate = this.formatDate;'.
                 'YAHOO.widget.DataTable.Formatter.formatTime = this.formatTime;'.
                 'YAHOO.widget.DataTable.Formatter.formatMoney = this.formatMoney;'.
+                'YAHOO.widget.DataTable.Formatter.formatBool = this.formatBool;'.
 
                 'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
                 ($this->xhr_source ?

@@ -61,7 +61,7 @@ class XmlDocumentHandler extends CoreBase
     function getCoreDevInclude()
     {
         if (!$this->coredev_inc)
-            throw new Exception ('core_dev include not set');
+            throw new Exception ('setCoreDevInclude not configured');
 
         return $this->coredev_inc;
     }

@@ -2,6 +2,8 @@
 /**
  * $Id$
  *
+ * !!! For simpler usage, see GeoLookupClient
+ *
  * Allows simple searching of data for a coordinate,
  * such as local time, name of current timezone, country.
  *

@@ -271,7 +271,7 @@ class XhtmlForm
     /**
      * Adds a checkbox field to the form
      */
-    function addCheckbox($name, $str, $val = '1', $checked = false)
+    function addCheckbox($name, $str, $val = '1', $checked = false)  //XXX TODO will break all users! move $val to 4th parameter as its least used
     {
         $this->elems[] = array('type' => 'CHECKBOX', 'name' => $name, 'str' => $str, 'default' => $val, 'checked' => $checked);
     }
