@@ -159,6 +159,9 @@ class YuiDatatable
 
     function render()
     {
+        if (!$this->columns)
+            throw new Exception ('no columns');
+
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/paginator/assets/skins/sam/paginator.css');
