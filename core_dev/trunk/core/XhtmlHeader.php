@@ -178,7 +178,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
 
         if ($this->favicon)
-            $res .= '<link rel="icon" type="image/png" href="'.$this->favicon.'"/>';
+            $res .= '<link rel="icon" type="'.file_get_mime_by_suffix($this->favicon).'" href="'.$this->favicon.'"/>';
 
         foreach ($this->include_js as $uri)
             $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
