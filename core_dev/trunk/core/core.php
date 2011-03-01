@@ -195,7 +195,11 @@ function bt()
 function dh($m, $row_len = 16)
 {
     $len = strlen($m);
-    echo '[['.$len.'/0x'.dechex($len).' bytes:]]'.ln();
+
+    if ($len >= 10)
+        $len = $len.'/0x'.dechex($len);
+
+    echo '[['.$len.' bytes:]]'.ln();
     $j = 0;
     $bytes = '';
     $hex = '';
@@ -406,7 +410,7 @@ function ucfirst_utf8($s)
 /** @return system uptime, in seconds **/
 function uptime()
 {
-    // XXX Linux only, windows code available in phpshsinfo, http://phpsysinfo.sourceforge.net/ in class.WINNT.inc.php 
+    // XXX Linux only, windows code available in phpshsinfo, http://phpsysinfo.sourceforge.net/ in class.WINNT.inc.php
     // XXX2 make simple OS-specific classes wrapping these kind of features
     $raw = explode(' ', file_get_contents('/proc/uptime') );
     return $raw[0];
