@@ -14,7 +14,7 @@ require_once('Settings.php');
 class ApiCustomer
 {
     private $id;
-    private $name;
+    private $name;  ///< api account "username"
     private $owner; ///< UserGroup owner
     private $password;
 
@@ -28,7 +28,9 @@ class ApiCustomer
     function getName() { return $this->name; }
     function getOwner() { return $this->owner; }
 
+    function setName($s) { $this->name = $s; }
     function setPassword($s) { $this->password = $s; }
+
     function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
 
     function loadFromSql($row)
@@ -72,13 +74,15 @@ class ApiCustomer
 
     function save()
     {
-        if (!$this->id)
-            throw new exception ('XXX save new customer');
-
         $db = SqlHandler::getInstance();
 
-        $q = 'UPDATE tblApiCustomers SET customerName="'.$this->name.'",ownerId='.$this->owner.' WHERE customerId='.$this->id;
-        $db->update($q);
+        if (!$this->id) {
+            $q = 'INSERT INTO tblApiCustomers SET customerName = ?, customerPass = ?, ownerId = ?';
+            $this->id = $db->pInsert($q, 'ssi', $this->name, $this->password, $this->owner);
+        }
+
+        $q = 'UPDATE tblApiCustomers SET customerName = ?, ownerId = ? WHERE customerId = ?';
+        $db->pUpdate($q, 'sii', $this->name, $this->owner, $this->id);
     }
 }
 
