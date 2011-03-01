@@ -79,6 +79,7 @@ class ApiCustomer
         if (!$this->id) {
             $q = 'INSERT INTO tblApiCustomers SET customerName = ?, customerPass = ?, ownerId = ?';
             $this->id = $db->pInsert($q, 'ssi', $this->name, $this->password, $this->owner);
+            return;
         }
 
         $q = 'UPDATE tblApiCustomers SET customerName = ?, ownerId = ? WHERE customerId = ?';
