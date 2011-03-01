@@ -12,7 +12,7 @@ $header->embedJs(
 
 echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a>';
 
-$store = TempStore::getInstance();
+$temp = TempStore::getInstance();
 
 $css =
 'display:none;'.
@@ -22,7 +22,7 @@ $css =
 
 echo '<div id="tss_'.$rand_id.'" style="'.$css.'">';
 
-foreach ($store->getServerStats() as $host => $stat)
+foreach ($temp->getServerStats() as $host => $stat)
 {
     echo 'Used memory: '.byte_count($stat['bytes']).' (of '.byte_count($stat['limit_maxbytes']).')<br/>';
     echo 'Bytes read: '.byte_count($stat['bytes_read']).'<br/>';

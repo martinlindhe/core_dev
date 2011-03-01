@@ -30,19 +30,10 @@ class TempStore
     protected $server_pool = array();
     protected $enabled     = true;
     protected $debug       = false;
+    protected $connected   = false;
 
     private function __construct()
     {
-        if (extension_loaded('memcached')) {
-            //php5-memcached for php 5.3 or newer
-            $this->driver_name = 'memcached';
-            $this->handle = new Memcached;
-        } else if (extension_loaded('memcache')) {
-            //php5-memcache for php 5.2 or older
-            $this->driver_name = 'memcache';
-            $this->handle = new Memcache;
-        } else
-            throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
     }
 
     private function __clone() {}      //singleton: prevent cloning of class
@@ -91,8 +82,18 @@ class TempStore
 
     private function connect()
     {
+        if ($this->connected)
+            return;
+
+        if (!extension_loaded('memcached'))
+            throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
+
+        $this->handle = new Memcached;
+
         if (!$this->server_pool)
             $this->addServer('127.0.0.1', 11211);
+
+        $this->connected = true;
 
         return true;
     }
@@ -104,9 +105,11 @@ class TempStore
         return $this->server_pool;
     }
 
+    /** @return array of server statistics, one entry per server */
     function getServerStats()
     {
         $this->connect();
+
         return $this->handle->getStats();
     }
 
