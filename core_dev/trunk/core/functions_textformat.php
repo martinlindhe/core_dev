@@ -424,38 +424,4 @@ function normalizeString($s, $tokens = array("\r", "\n", "\t"))
     return $s;
 }
 
-/**
- * Removes all spaces from input string
- */
-function strip_spaces($s)
-{
-    return str_replace(' ', '', $s);
-}
-
-/**
- * reduce excessive whitespace to a single space
- */
-function reduce_whitespace($s)
-{
-    $s = str_replace('&#160;', ' ', $s); //nbsp in hex
-    $s = str_replace('&nbsp;', ' ', $s);
-    $s = str_replace("\t",     ' ', $s); //tabs -> spaces
-    do {
-        $tmp = $s;
-        $s = str_replace('  ', ' ', $s);
-    } while ($s != $tmp);
-    return $s;
-}
-
-/**
- * Strips BOM marker from UTF-8 text
- */
-function utf8_strip_bom($s)
-{
-    if (substr($s, 0, 3) == "\xEF\xBB\xBF")
-        return substr($s, 3);
-
-    return $s;
-}
-
 ?>
