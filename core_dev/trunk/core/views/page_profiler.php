@@ -56,7 +56,7 @@ echo '<div id="'.$pager_id.'" style="'.$css.'">';
 
 $total_time = microtime(true) - $page->getStartTime();
 
-if (isset($db) && is_object($db)) {
+if (isset($db) && $db instanceof DatabaseMySQLProfiler) {
     $sql_time   = $db->getTotalQueryTime();
     $php_time   = $total_time - $sql_time - $db->time_connect;
 
