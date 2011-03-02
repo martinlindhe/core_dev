@@ -8,12 +8,17 @@
 /** Returns hi and low 4 bit pairs of a byte */
 function byte_split($b)
 {
-    if (!intval($b) || $b > 255 || $b < 0)
-        throw new Exception ('bad input');
+    if (is_string($b))
+        $b = ord($b);
 
-    $lo = $b & 0xF;
-    $hi = $b >> 4;
-    return array($hi, $lo);
+    if (!is_numeric($b) || $b > 255 || $b < 0)
+        throw new Exception ('bad input: '.$b);
+
+    return
+        array(
+        $b >> 4,  // hi bits
+        $b & 0xF  // low bits
+        );
 }
 
 ?>
