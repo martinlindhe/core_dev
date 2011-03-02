@@ -6,7 +6,7 @@
  *
  * Extracts images from a .ico file to GD2 resources
  *
- * http://www.daubnet.com/en/file-format-ico
+ * http://msdn.microsoft.com/en-us/library/ms997538.aspx
  */
 
 //STATUS: wip, works with all tested files
@@ -36,10 +36,10 @@ class IconReader
         $fp = fopen($in, 'rb');
 
         // read ICONFILE
-        $header = unpack('vReserved/vResourceType/vIconCount', fread($fp, 6));
+        $header = unpack('vReserved/vType/vCount', fread($fp, 6));
 
         $images = array();
-        $cnt = $header['IconCount']; //XXX using temp variable fixes a bug.. in php? 2011-03-02
+        $cnt = $header['Count']; //XXX using temp variable fixes a bug.. in php? 2011-03-02
 
         for ($i = 0; $i < $cnt; $i++) {
 
@@ -79,15 +79,15 @@ class IconReader
         $fp = fopen($in, 'rb');
 
         // read ICONFILE
-        $header = unpack('vReserved/vResourceType/vIconCount', fread($fp, 6));
+        $header = unpack('vReserved/vType/vCount', fread($fp, 6));
 
         if ($header['Reserved'] != 0)
             throw new Exception ('Reserved is not 0');
 
-        if ($header['ResourceType'] != 1)
-            throw new Exception ('ResourceType is not 1');
+        if ($header['Type'] != 1)
+            throw new Exception ('Type is not 1');
 
-        for ($i = 0; $i < $header['IconCount']; $i++)
+        for ($i = 0; $i < $header['Count']; $i++)
             $images[] = self::_readIconResource($fp, $i);
 
         fclose($fp);
