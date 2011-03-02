@@ -9,7 +9,10 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: ok, needs testing
+//STATUS: wip
+
+//TODO: use http://code.google.com/p/google-diff-match-patch/ instead when its ported to a php plugin
+
 
 require_once('CoreBase.php');
 require_once('core.php'); //for str_get_ending()
@@ -41,6 +44,7 @@ class Diff extends CoreBase
     {
         $c = 'diff --unified '.escapeshellarg($file1).' '.escapeshellarg($file2);
         exec($c, $this->diff);
+        usleep(500); ///XXX stupid try to avoid suspected leakage of diff tool to textfeed
 
         //remove the first 2 lines of diff output (tmp filenames)
         array_shift($this->diff);
