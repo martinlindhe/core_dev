@@ -4,11 +4,13 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('IconReader.php');
 
-$in = '/devel/core_dev/trunk/tests/ICO_files/32x32x4-2.ico';
-
+$in = '/devel/web/core_dev/trunk/tests/ICO_files/unsupported-3.ico';
 
 foreach (IconReader::getImages($in) as $idx => $i)
-    imagepng($i, 'out4'.$idx.'.png');
+    imagepng($i, basename($in).'-'.$idx.'.png');
+
+
+
 
 
 ?>
