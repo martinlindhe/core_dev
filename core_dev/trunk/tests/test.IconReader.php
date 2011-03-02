@@ -7,6 +7,8 @@ require_once('IconReader.php');
 $base_dir = '/devel/web/core_dev/trunk/tests/ICO_files/';
 
 $files = array(
+'16x16x1-1.ico',  //XXXX 1 bpp unsupported
+/*
 '16x16x4-1.ico',
 '32x32x4-1.ico',
 '32x32x4-2.ico',
@@ -15,6 +17,7 @@ $files = array(
 'multi-3.ico',
 'multi-4.ico',  // has PNG resource
 'minor-bug-1.ico',  //first 2 images have green borders where it should be transparency (???) "icotool" from icoutils package does the same
+*/
 );
 
 $out_dir = 'ico_png/';

@@ -9,11 +9,11 @@
  * http://www.daubnet.com/en/file-format-ico
  */
 
-//STATUS: wip. cant find any unsupported files
+//STATUS: wip, works with all tested files
 
-//XXX: need a 2 bpp sample
-//XXX: need a 16 bpp sample
-//XXX: do all 32-bpp pics have an alpha map????
+//TODO: support 16x16x1-1.ico (1 bpp)
+
+//XXX: how to handle AndMap for 24 & 32-bpp ?
 
 require_once('core.php');
 require_once('bits.php');
@@ -25,7 +25,7 @@ class IconReader
     {
         fseek($fp, 6 + ($i * 16));
 
-        return unpack('CWidth/CHeight/CNumColors/CReserved/vNumPlanes/vBitsPerPixel/VDataSize/VDataOffset', fread($fp, 16) );
+        return unpack('CWidth/CHeight/CColorCount/CReserved/vPlanes/vBitCount/VBytesInRes/VImageOffset', fread($fp, 16) );
     }
 
     static function listLmages($in)
@@ -45,20 +45,20 @@ class IconReader
 
             $entry = self::_readIconEntry($fp, $i);
 
-            fseek($fp, $entry['DataOffset']);
+            fseek($fp, $entry['ImageOffset']);
 
             // read icon data
             $data = fread($fp, 40);
 
             if (substr($data, 0, 4) == chr(0x89).'PNG') {
-                $images[] = '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($i+1).' PNG image'."\n";
+                $images[] = '0x'.dechex($entry['BytesInRes']).' ('.$entry['BytesInRes'].') bytes starting at 0x'.dechex($entry['ImageOffset'])."\t".'--index='.($i+1).' PNG image'."\n";
                 continue;
             }
 
-            // read WIN3XBITMAPHEADER
+            // read BITMAPINFOHEADER
             $header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', substr($data, 0, 40) );
 
-            $images[] = '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($i+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'];
+            $images[] = '0x'.dechex($entry['BytesInRes']).' ('.$entry['BytesInRes'].') bytes starting at 0x'.dechex($entry['ImageOffset'])."\t".'--index='.($i+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'];
         }
 
         fclose($fp);
@@ -102,17 +102,16 @@ class IconReader
     private static function _readIconResource($fp, $idx)
     {
         $entry = self::_readIconEntry($fp, $idx);
-//d($entry);
-        fseek($fp, $entry['DataOffset']);
+        fseek($fp, $entry['ImageOffset']);
 
         if ($entry['Reserved'] != 0)
             throw new Exception ('Reserved is not 0');
 
-        if ($entry['NumPlanes'] > 1)
-            throw new Exception ('odd numplanes: '.$entry['NumPlanes']);
+        if ($entry['Planes'] > 1)
+            throw new Exception ('odd planes: '.$entry['Planes']);
 
         // read icon data
-        $data = fread($fp, $entry['DataSize']);
+        $data = fread($fp, $entry['BytesInRes']);
 //file_put_contents('dump-'.$idx.'.raw', $data);
 
         if (substr($data, 0, 4) == chr(0x89).'PNG') {
@@ -123,9 +122,8 @@ class IconReader
             return $im;
         }
 
-        // read WIN3XBITMAPHEADER
+        // read BITMAPINFOHEADER
         $header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', substr($data, 0, 40) );
-//d($header);
 
         if ($header['Size'] != 40) {
             print_r($header);
@@ -145,15 +143,15 @@ class IconReader
         imagesavealpha($im, true);
         imagealphablending($im, false);
 
-        $pos = 0x28; // 40 byte header
+        $pos = 40;
         $palette = array();
 
         $no_alpha = false;
 
         if ($header['BitCount'] < 24) {
             // Read Palette for low bitcounts
-            $pal_entries = $entry['NumColors'];
-            if (!$entry['NumColors'] && $header['BitCount'] == 8)
+            $pal_entries = $entry['ColorCount'];
+            if (!$entry['ColorCount'] && $header['BitCount'] == 8)
                 $pal_entries = 256;
 
             for ($i = 0; $i < $pal_entries; $i++) {
@@ -163,7 +161,7 @@ class IconReader
                 $pos++; // skip empty alpha channel
                 $col = imagecolorexactalpha($im, $r, $g, $b, 0);
 
-//                echo '0x'.dechex($entry['DataOffset'] + 40 + $pos-4).': Color '.$i.' '.dechex($r).','.dechex($g).','.dechex($b)."\n";
+//                echo '0x'.dechex($entry['ImageOffset'] + 40 + $pos-4).': Color '.$i.' '.dechex($r).','.dechex($g).','.dechex($b)."\n";
 
                 if ($col >= 0)
                     $palette[] = $col;
@@ -185,7 +183,7 @@ class IconReader
                         break;
 
                     case 8:
-                        if ($entry['NumColors'])
+                        if ($entry['ColorCount'])
                             throw new Exception ('xxx use available palette for 8bit??');
 
                         $byte = ord($data[$pos++]);
@@ -199,8 +197,7 @@ class IconReader
                 }
                 // All rows end on the 32 bit
                 if ($pos % 4)
-                    throw new Exception ('eh1: '.dechex($pos) );
-                    //$pos += 4 - ($pos % 4);
+                    $pos += 4 - ($pos % 4);
             }
 
         } else {
