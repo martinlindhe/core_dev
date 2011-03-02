@@ -13,8 +13,6 @@
 
 //XXX: need a 16 bpp sample
 //XXX: do 32-bpp pics have an alpha map????
-//TODO later: read vista icons (contains PNG:s)
-
 
 require_once('core.php');
 require_once('bits.php');
@@ -71,16 +69,35 @@ class IconReader
         if ($entry['Reserved'] != 0)
             throw new Exception ('Reserved is not 0');
 
-        if ($entry['NumPlanes'] != 1)
+        if ($entry['NumPlanes'] > 1)
             throw new Exception ('odd numplanes: '.$entry['NumPlanes']);
 
         // read icon data
         $data = fread($fp, $entry['DataSize']);
 //file_put_contents('dump-'.$idx.'.raw', $data);
 
+        if (substr($data, 0, 4) == chr(0x89).'PNG') {
+
+            $im = imagecreatefromstring($data);
+            imagesavealpha($im, true);
+            imagealphablending($im, false);
+
+            echo '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($idx+1).' --size='.imagesx($im).'x'.imagesy($im).' PNG image'."\n";
+
+            return $im;
+        }
+
         // read WIN3XBITMAPHEADER
         $header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', substr($data, 0, 40) );
 //d($header);
+
+        $colors = $header['ColorsUsed'] ? $header['ColorsUsed'] : $entry['NumColors'];
+        if (!$colors && $header['BitCount'] == 8) $colors = 256;
+        if (!$colors && $header['BitCount'] == 16) $colors = 65536;
+        if (!$colors && $header['BitCount'] == 24) $colors = 16777216;
+        if (!$colors && $header['BitCount'] == 32) $colors = 4294967296;
+
+        echo '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($idx+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'].' --colors='.$colors."\n";
 
         if ($header['Size'] != 40) {
             print_r($header);
@@ -96,14 +113,6 @@ class IconReader
         if ($entry['Height'] > 1024 || $entry['Width'] > 1024)
             throw new Exception ('xxx too big');
 
-        $colors = $header['ColorsUsed'] ? $header['ColorsUsed'] : $entry['NumColors'];
-        if (!$colors && $header['BitCount'] == 8) $colors = 256;
-        if (!$colors && $header['BitCount'] == 16) $colors = 65536;
-        if (!$colors && $header['BitCount'] == 24) $colors = 16777216;
-        if (!$colors && $header['BitCount'] == 32) $colors = 4294967296;
-
-        echo '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($idx+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'].' --colors='.$colors."\n";
-
         $im = imagecreatetruecolor($entry['Width'], $entry['Height']);
         imagesavealpha($im, true);
         imagealphablending($im, false);
@@ -111,7 +120,7 @@ class IconReader
         $pos = 0x28; // 40 byte header
         $palette = array();
 
-        $ignoreAlpha = false;
+        $no_alpha = false;
 
         if ($header['BitCount'] < 24) {
             // Read Palette for low bitcounts
@@ -168,7 +177,7 @@ class IconReader
             // marking position because some icons mark all pixels transparent when using an AND map.
             $markPosition = $pos;
             $retry = true;
-
+//XXXX: clean up code
             while ($retry) {
                 $alphas = array();
                 $retry = false;
@@ -179,7 +188,7 @@ class IconReader
                         $r = ord($data[$pos++]);
                         if ($header['BitCount'] < 32) {
                             $alpha = 0;
-                        } elseif($ignoreAlpha) {
+                        } elseif($no_alpha) {
                             $alpha = 0;
                             $pos++;
                         } else {
@@ -200,16 +209,16 @@ class IconReader
                 if ($header['BitCount'] == 32 && isset($alphas[0]) && count($alphas) == 1) {
                     $retry = true;
                     $pos = $markPosition;
-                    $ignoreAlpha = true;
+                    $no_alpha = true;
                 }
             }
         }
 
         // AndMap (background bit mask) 1-bit-per-pixel mask that is the same size (in pixels) as the XorMap
         // Bitcount == 32, No AND (if using alpha) ?????
-//        if ($header['BitCount'] < 32 || $ignoreAlpha) {
+//        if ($header['BitCount'] < 32 || $no_alpha) {
 
-            if ($ignoreAlpha)
+            if ($no_alpha)
                 throw new Exception ('XXXX: skip AndMap? ofs at 0x'.dechex($pos)."\n");
 
             if ($header['BitCount'] == 4 || $header['BitCount'] == 8 || $header['BitCount'] == 24 || $header['BitCount'] == 32) {
