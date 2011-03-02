@@ -11,7 +11,8 @@
 
 //STATUS: early WIP, only a few files supported
 
-//TODO: handle different bit depths
+//XXX: need a 16 bpp sample
+//XXX: do 32-bpp pics have an alpha map????
 //TODO later: read vista icons (contains PNG:s)
 
 
@@ -100,7 +101,8 @@ class IconReader
         if (!$colors && $header['BitCount'] == 16) $colors = 65536;
         if (!$colors && $header['BitCount'] == 24) $colors = 16777216;
         if (!$colors && $header['BitCount'] == 32) $colors = 4294967296;
-        echo $entry['DataSize'].' bytes starting at 0x'.dechex($entry['DataOffset']).' --index='.($idx+1).' --width='.$entry['Width'].' --height='.$entry['Height'].' --bit-depth='.$header['BitCount'].' --colors='.$colors."\n";
+
+        echo '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($idx+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'].' --colors='.$colors."\n";
 
         $im = imagecreatetruecolor($entry['Width'], $entry['Height']);
         imagesavealpha($im, true);
@@ -108,6 +110,8 @@ class IconReader
 
         $pos = 0x28; // 40 byte header
         $palette = array();
+
+        $ignoreAlpha = false;
 
         if ($header['BitCount'] < 24) {
             // Read Palette for low bitcounts
@@ -139,10 +143,9 @@ class IconReader
                         list($hi, $lo) = byte_split( $data[$pos++] );
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[ $hi ]) or die('cant set pixel');
                         imagesetpixel($im, $x+1, $entry['Height'] - $y - 1, $palette[ $lo ]) or die('cant set pixel');
-
+                        $x++;
 //                        echo '0x'.dechex($pos-1).': XorMap '.$hi.', '.$lo."\n";
 
-                        $x++;
                     } else if ($header['BitCount'] == 8) {
                         if ($entry['NumColors'])
                             throw new Exception ('xxx use available palette for 8bit??');
@@ -151,48 +154,21 @@ class IconReader
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[ $byte ]) or die('cant set pixel');
 
 //                        echo '0x'.dechex($pos-1).': XorMap 0x'.dechex($byte)."\n";
-//die;
-                    } else {
+                    } else
                         throw new Exception ('unhandled bitcount '.$header['BitCount']);
-
-                        /*
-                        if ($header['BitCount'] < 8) {
-                            $col = array_shift($colors);
-                            if (!is_null($col))
-                                continue;
-
-                            $byte = ord($data[$pos++]);
-                            $tmp_color = 0;
-                            for ($i = 7; $i >= 0; $i--) {
-                                $bit_value = pow(2, $i);
-                                $bit = floor($byte / $bit_value);
-                                $byte = $byte - ($bit * $bit_value);
-                                $tmp_color += $bit * pow(2, $i % $header['BitCount']);
-                                if ($i % $header['BitCount'] == 0) {
-                                    array_push($colors, $tmp_color);
-                                    $tmp_color = 0;
-                                }
-                            }
-                            $col = array_shift($colors);
-
-                        } else
-                            $col = ord($data[$pos++]);
-
-                        imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[$col]) or die('cant set pixel');
-                        */
-                    }
                 }
                 // All rows end on the 32 bit
-                if ($pos % 4) $pos += 4 - ($pos % 4);
+                if ($pos % 4)
+                    throw new Exception ('eh1: '.dechex($pos) );
+                    //$pos += 4 - ($pos % 4);
             }
 
         } else {
-//            throw new Exception ('true color not tested');
             // BitCount >= 24, No Palette
             // marking position because some icons mark all pixels transparent when using an AND map.
             $markPosition = $pos;
             $retry = true;
-            $ignoreAlpha = false;
+
             while ($retry) {
                 $alphas = array();
                 $retry = false;
@@ -217,7 +193,9 @@ class IconReader
 
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $col) or die('cant set pixel');
                     }
-                    if ($pos % 4) $pos += 4 - ($pos % 4);
+                    if ($pos % 4)
+                        throw new Exception ('eh2: '.dechex($pos) );
+                        //$pos += 4 - ($pos % 4);
                 }
                 if ($header['BitCount'] == 32 && isset($alphas[0]) && count($alphas) == 1) {
                     $retry = true;
@@ -228,14 +206,17 @@ class IconReader
         }
 
         // AndMap (background bit mask) 1-bit-per-pixel mask that is the same size (in pixels) as the XorMap
+        // Bitcount == 32, No AND (if using alpha) ?????
 //        if ($header['BitCount'] < 32 || $ignoreAlpha) {
 
-            if ($header['BitCount'] == 4 || $header['BitCount'] == 8 || $header['BitCount'] == 24) {
+            if ($ignoreAlpha)
+                throw new Exception ('XXXX: skip AndMap? ofs at 0x'.dechex($pos)."\n");
+
+            if ($header['BitCount'] == 4 || $header['BitCount'] == 8 || $header['BitCount'] == 24 || $header['BitCount'] == 32) {
 
                 $palette[-1] = imagecolorallocatealpha($im, 0, 0, 0, 127);
                 imagecolortransparent($im, $palette[-1]);
                 for ($y = 0; $y < $entry['Height']; $y++) {
-
                     for ($x = 0; $x < $entry['Width']; $x += 8) {
 
                         $byte = ord($data[$pos++]);
@@ -250,42 +231,13 @@ class IconReader
                                 imagesetpixel($im, $x + $i, $entry['Height'] - $y - 1, $palette[-1]) or die('cant set pixel');
                         }
                     }
-                    // All rows end on the 32 bit.
-                    if ($pos % 4) $pos +=  4 - ($pos % 4);
+                    // All rows end on the 32 bit
+                    if ($pos % 4)
+                        $pos += 4 - ($pos % 4);
                 }
-            } else if ($header['BitCount'] == 32) {
-                // Bitcount == 32, No AND (if using alpha)
-            } else {
+            } else
                 throw new Exception ('unhandled bit count: '.$header['BitCount']);
-/*
 
-                $palette[-1] = imagecolorallocatealpha($im, 0, 0, 0, 127);
-                imagecolortransparent($im, $palette[-1]);
-                for ($y = 0; $y < $entry['Height']; $y++) {
-                    $colors = array();
-                    for ($x = 0; $x < $entry['Width']; $x++) {
-                        $color = array_shift($colors);
-                        if (!is_null($color))
-                            continue;
-
-                        $byte = ord($data[$pos++]);
-                        $tmp_color = 0;
-                        for ($i = 7; $i >= 0; $i--) {
-                            $bit_value = pow(2, $i);
-                            $bit = floor($byte / $bit_value);
-                            $byte = $byte - ($bit * $bit_value);
-                            array_push($colors, $bit);
-                        }
-                        $color = array_shift($colors);
-
-                        if ($color)
-                            imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[-1]) or die('cant set pixel');
-                    }
-                    // All rows end on the 32 bit.
-                    if ($pos % 4) $pos +=  4 - ($pos % 4);
-                }
-*/
-            }
 //        }
 
         if ($header['BitCount'] < 24)
