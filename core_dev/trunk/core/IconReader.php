@@ -10,7 +10,6 @@
 //STATUS: early WIP, only a few files supported
 
 //TODO: handle different bit depths
-//TODO later: handle icons with multiple images (need samples
 //TODO later: read vista icons (contains PNG:s)
 
 
@@ -40,10 +39,10 @@ class IconReader
 
         if ($header['ResourceType'] != 1)
             throw new Exception ('ResourceType is not 1');
-
+/*
         if ($header['IconCount'] != 1)
             throw new Exception ('can only handle icons with 1 image, found '.$header['IconCount']);
-
+*/
         for ($i = 0; $i < $header['IconCount']; $i++)
             $images[] = self::readIconResource($fp, $i);
 
@@ -59,18 +58,20 @@ class IconReader
      */
     private function readIconResource($fp, $idx)
     {
-		fseek($fp, 6 + ($idx * 16));
+        fseek($fp, 6 + ($idx * 16));
 
         // read ICONENTRY
-		$entry = unpack('CWidth/CHeight/CNumColors/CReserved/vNumPlanes/vBitsPerPixel/VDataSize/VDataOffset', fread($fp, 16) );
+        $entry = unpack('CWidth/CHeight/CNumColors/CReserved/vNumPlanes/vBitsPerPixel/VDataSize/VDataOffset', fread($fp, 16) );
 //d($entry);
-		fseek($fp, $entry['DataOffset']);
+        fseek($fp, $entry['DataOffset']);
 
         // read WIN3XBITMAPHEADER
-		$header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', fread($fp, 40) );
+        $header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', fread($fp, 40) );
 //d($header);
-        if ($header['Size'] != 40)
-            throw new Exception ('odd header size');
+        if ($header['Size'] != 40) {
+            print_r($header);
+            throw new Exception ('odd header size: '.$header['Size']);
+        }
 
         if ($header['Compression'])
             throw new Exception ('compression not supported');
@@ -80,21 +81,23 @@ class IconReader
 
         echo $entry['DataSize'].' bytes starting at 0x'.dechex($entry['DataOffset']).' --index='.($idx+1).' --width='.$entry['Width'].' --height='.$entry['Height'].' --bit-depth='.$header['BitCount'].' --palette-size='.$entry['NumColors']."\n";
 
+        $colors = $header['ColorsUsed'] ? $header['ColorsUsed'] : $entry['NumColors'];
+        if (!$colors && $entry['BitsPerPixel'] == 8) $colors = 256;
+        echo 'colors: '.$colors."\n";
+
         $im = imagecreatetruecolor($entry['Width'], $entry['Height']);
         imagesavealpha($im, true);
         imagealphablending($im, false);
 
         // read icon data
-		$data = fread($fp, $entry['DataSize'] - 40);
+        $data = fread($fp, $entry['DataSize'] - 40);
 
         $pos = 0;
         $palette = array();
 
         if ($entry['BitsPerPixel'] < 24) {
             // Read Palette for low bitcounts
-            // $colorsInPalette = $header['ColorsUsed'] ? $header['ColorsUsed'] : $entry['NumColors'];
             for ($i = 0; $i < $entry['NumColors']; $i++) {
-
                 $b = ord($data[$pos++]);
                 $g = ord($data[$pos++]);
                 $r = ord($data[$pos++]);
@@ -122,6 +125,12 @@ class IconReader
                         echo '0x'.dechex($entry['DataOffset'] + 40 + $pos-1).': XorMap '.$hi.', '.$lo."\n";
 
                         $x++;
+                    } else if ($header['BitCount'] == 8) {
+                        $col = ord($data[$pos++]);
+                        $pal = $col; //XXX translate 8 bit value to RGB
+//                        echo '0x'.dechex($entry['DataOffset'] + 40 + $pos-1).': XorMap 0x'.dechex($col)."\n";
+                        imagesetpixel($im, $x, $entry['Height'] - $y - 1, $pal) or die('cant set pixel');
+//die;
                     } else {
                         throw new Exception ('unhandled bitcount '.$header['BitCount']);
 
@@ -157,7 +166,7 @@ class IconReader
             }
 
         } else {
-            throw new Exception ('true color not tested');
+//            throw new Exception ('true color not tested');
             // BitCount >= 24, No Palette
             // marking position because some icons mark all pixels transparent when using an AND map.
             $markPosition = $pos;
@@ -200,7 +209,7 @@ class IconReader
         // AndMap (background bit mask) 1-bit-per-pixel mask that is the same size (in pixels) as the XorMap
         if ($header['BitCount'] < 32 || $ignoreAlpha) {
 
-            if ($header['BitCount'] == 4) {
+            if ($header['BitCount'] == 4 || $header['BitCount'] == 8) {
 
                 $palette[-1] = imagecolorallocatealpha($im, 0, 0, 0, 127);
                 imagecolortransparent($im, $palette[-1]);
@@ -211,7 +220,7 @@ class IconReader
                         $byte = ord($data[$pos++]);
                         $bits = byte_to_bits($byte);
 
-                        echo '0x'.dechex($entry['DataOffset'] + 40 + $pos-1).': AndMap 0x'.dechex($byte)."\n";
+//                        echo '0x'.dechex($entry['DataOffset'] + 40 + $pos-1).': AndMap 0x'.dechex($byte)."\n";
 
                         for ($i = 0; $i <= 7; $i++) {
                             $color = array_shift($bits);
@@ -223,7 +232,6 @@ class IconReader
                     // All rows end on the 32 bit.
                     if ($pos % 4) $pos +=  4 - ($pos % 4);
                 }
-
             } else {
                 throw new Exception ('unhandled bit count: '.$header['BitCount']);
 /*
@@ -261,7 +269,7 @@ class IconReader
             imagetruecolortopalette($im, true, pow(2, $header['BitCount']));
 
         return $im;
-	}
+    }
 
 }
 
