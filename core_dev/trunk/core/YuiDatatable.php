@@ -15,6 +15,7 @@
 //TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
 
 require_once('output_js.php');
+require_once('JSON.php');
 
 class YuiDatatable
 {
@@ -25,7 +26,7 @@ class YuiDatatable
     private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
     private $rows_per_page   = 20; ///< for the paginator
     private $sort_column;
-    private $sort_order      = false;
+    private $sort_order;
     private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
 
     private $pixel_width;                 ///< if set, forces horizontal scrollbar on the datatable
@@ -43,7 +44,7 @@ class YuiDatatable
     {
         if (!$key) return;
         $this->columns[] = array('key' => $key, 'hidden' => true);
-        $this->response_fields[] = array('key' => $key);
+        $this->response_fields[] = $key;
     }
 
     /**
@@ -125,7 +126,7 @@ class YuiDatatable
         default: throw new Exception('Unknown column type '.$type);
         }
 
-        $this->response_fields[] = $response;
+        $this->response_fields[] = $key;
         $this->columns[] = $arr;
     }
 
@@ -251,7 +252,7 @@ class YuiDatatable
                     //'myDataSource.connXhrMode = "queueRequests";'. //XXX ???
                     'myDataSource.responseSchema = {'.
                         'resultsList: "records",'.
-                        'fields: '.jsArray2D($this->response_fields).','.
+                        'fields: '.JSON::encode($this->response_fields, false).','.
                         'metaFields: { totalRecords:"totalRecords" }'. // mapped to XhrResponse "totalRecords" field, needed for paginator
                     '};'
                 :
@@ -259,14 +260,14 @@ class YuiDatatable
                     'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n".
                     'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
-                    'myDataSource.responseSchema = { fields:'.jsArray2D($this->response_fields).'};'
+                    'myDataSource.responseSchema = { fields:'.JSON::encode($this->response_fields, false).'};'
                 ).
 
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
                     ($this->pixel_width  ? 'width:"'.$this->pixel_width.'px",' : '').
                     ($this->pixel_height ? 'height:"'.$this->pixel_height.'px",' : '').
-                    ($this->sort_order !== false ?
+                    ($this->sort_order ?
                         'sortedBy: {'.
                             'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
                             'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
@@ -284,7 +285,7 @@ class YuiDatatable
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
-                        'initialRequest:"sort='.$this->columns[ $this->sort_column ]['key'].'&dir='.$this->sort_order.'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
+                        'initialRequest:"sort='.$this->columns[ $this->sort_column ]['key'].($this->sort_order ? '&dir='.$this->sort_order : '').'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
                     :
                         ''
                     ).
