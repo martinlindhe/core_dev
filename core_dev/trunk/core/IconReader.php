@@ -64,7 +64,7 @@ class IconReader
 
         // read ICONENTRY
         $entry = unpack('CWidth/CHeight/CNumColors/CReserved/vNumPlanes/vBitsPerPixel/VDataSize/VDataOffset', fread($fp, 16) );
-//d($entry);
+//d($entry);die;
         fseek($fp, $entry['DataOffset']);
 
         if ($entry['Reserved'] != 0)
@@ -96,10 +96,11 @@ class IconReader
             throw new Exception ('xxx too big');
 
         $colors = $header['ColorsUsed'] ? $header['ColorsUsed'] : $entry['NumColors'];
-        if (!$colors && $entry['BitsPerPixel'] == 8) $colors = 256;
-        if (!$colors && $entry['BitsPerPixel'] == 16) $colors = 65536;
-        if (!$colors && $entry['BitsPerPixel'] == 32) $colors = 16777216;
-        echo $entry['DataSize'].' bytes starting at 0x'.dechex($entry['DataOffset']).' --index='.($idx+1).' --width='.$entry['Width'].' --height='.$entry['Height'].' --bit-depth='.$header['BitCount'].' --palette-size='.$entry['NumColors'].' --colors='.$colors."\n";
+        if (!$colors && $header['BitCount'] == 8) $colors = 256;
+        if (!$colors && $header['BitCount'] == 16) $colors = 65536;
+        if (!$colors && $header['BitCount'] == 24) $colors = 16777216;
+        if (!$colors && $header['BitCount'] == 32) $colors = 4294967296;
+        echo $entry['DataSize'].' bytes starting at 0x'.dechex($entry['DataOffset']).' --index='.($idx+1).' --width='.$entry['Width'].' --height='.$entry['Height'].' --bit-depth='.$header['BitCount'].' --colors='.$colors."\n";
 
         $im = imagecreatetruecolor($entry['Width'], $entry['Height']);
         imagesavealpha($im, true);
@@ -108,10 +109,10 @@ class IconReader
         $pos = 0x28; // 40 byte header
         $palette = array();
 
-        if ($entry['BitsPerPixel'] < 24) {
+        if ($header['BitCount'] < 24) {
             // Read Palette for low bitcounts
             $pal_entries = $entry['NumColors'];
-            if (!$entry['NumColors'] && $entry['BitsPerPixel'] == 8)
+            if (!$entry['NumColors'] && $header['BitCount'] == 8)
                 $pal_entries = 256;
 
             for ($i = 0; $i < $pal_entries; $i++) {
@@ -139,7 +140,7 @@ class IconReader
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[ $hi ]) or die('cant set pixel');
                         imagesetpixel($im, $x+1, $entry['Height'] - $y - 1, $palette[ $lo ]) or die('cant set pixel');
 
-                        echo '0x'.dechex($pos-1).': XorMap '.$hi.', '.$lo."\n";
+//                        echo '0x'.dechex($pos-1).': XorMap '.$hi.', '.$lo."\n";
 
                         $x++;
                     } else if ($header['BitCount'] == 8) {
@@ -229,7 +230,7 @@ class IconReader
         // AndMap (background bit mask) 1-bit-per-pixel mask that is the same size (in pixels) as the XorMap
 //        if ($header['BitCount'] < 32 || $ignoreAlpha) {
 
-            if ($header['BitCount'] == 4 || $header['BitCount'] == 8) {
+            if ($header['BitCount'] == 4 || $header['BitCount'] == 8 || $header['BitCount'] == 24) {
 
                 $palette[-1] = imagecolorallocatealpha($im, 0, 0, 0, 127);
                 imagecolortransparent($im, $palette[-1]);

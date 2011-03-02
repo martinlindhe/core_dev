@@ -1,0 +1,4 @@
+unsupported-1.ico: fails to parse. unknown if format is even valid?
+unsupported-2.ico: first 2 images have green borders where it should be transparency (???)
+unsupported-3.ico: fails to parse. from spotify.exe so should be valid!
+unsupported-4.ico: fails to parse. from a uninstaller so should be valid
