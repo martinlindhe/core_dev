@@ -30,6 +30,7 @@ $valid_urls = array(
 'http://at.activation.com/track/me;1442:PPS35:tta/',
 'http://maps.google.com/maps/geo?ll=11.11,11.11&output=json&key=2sddf-d3d3-d3d3d',
 'http://url.com/path|path2',
+'http://url.net/What\'s%20new%20in%20V4.9a.txt',
 );
 
 foreach ($valid_urls as $url)
