@@ -7,35 +7,7 @@
   * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-/**
- * used internally by jsArray1D, jsArray2D
- */
-function jsArrayFlat($list, $with_keys)
-{
-    $all = array();
-    foreach ($list as $key => $val)
-    {
-        $res = '';
-        if ($with_keys)
-            if (is_numeric($key) && (strlen($key) == 1 || substr($key, 0, 1) != '0'))
-                $res .= $key.':';
-            else
-                $res .= '"'.$key.'":';
-
-        if (is_bool($val))
-            $res .= ($val ? '1' : '0');
-        else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0' || strpos($val, '.') !== false))
-            $res .= $val;
-        else {
-            $val = str_replace('"', '&quot;', $val); // "
-            $val = str_replace("\r", '&#13;', $val); // carriage return
-            $val = str_replace("\n", '&#10;', $val); // line feed
-            $res .= '"'.$val.'"';
-        }
-        $all[] = $res;
-    }
-    return implode(',', $all);
-}
+require_once('JSON.php');
 
 /**
  * @param $list    array(key1=>val1, key2=>val2)
@@ -43,7 +15,7 @@ function jsArrayFlat($list, $with_keys)
  */
 function jsArray1D($list, $with_keys = true)
 {
-    return '{'.jsArrayFlat($list, $with_keys).'}';
+    return '{'.JSON::encodeObject($list, $with_keys).'}';
 }
 
 /**
@@ -55,7 +27,7 @@ function jsArray2D($list)
     $res = '[';
 
     foreach ($list as $l)
-        $res .= jsArray1D($l, true).',';
+        $res .= '{'.JSON::encodeObject($l, true).'},';
 
     $res .= ']';
 

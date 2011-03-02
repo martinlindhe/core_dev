@@ -2,6 +2,14 @@
 /**
  * $Id$
  *
+ * JSON's basic types are:
+ * Number (double precision floating-point format)
+ * String (double-quoted Unicode with backslash escaping)
+ * Boolean (true or false)
+ * Array (an ordered sequence of values, comma-separated and enclosed in square brackets)
+ * Object (a collection of key:value pairs, comma-separated and enclosed in curly braces; the key must be a string)
+ * null
+ *
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
@@ -11,9 +19,46 @@ require_once('HttpClient.php');
 
 class JSON
 {
-    public static function encode($obj)
+    public static function encode($obj, $with_keys = true)
     {
+        if (is_array($obj))
+            return '['.self::encodeObject($obj, false).']';
+
+        if (is_object($obj))
+            return '{'.self::encodeObject($obj, true).'}';
+
+        throw new Exception ('ewwp');
+
         return json_encode($obj);
+    }
+
+    /** encodes an objects and arrays */
+    public static function encodeObject($list, $with_keys = false)
+    {
+        $all = array();
+
+        foreach ($list as $key => $val)
+        {
+            $res = '';
+            if ($with_keys)
+                if (is_numeric($key) && (strlen($key) == 1 || substr($key, 0, 1) != '0'))
+                    $res .= $key.':';
+                else
+                    $res .= '"'.$key.'":';
+            if (is_bool($val))
+                $res .= ($val ? '1' : '0');
+            else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0' || strpos($val, '.') !== false))
+                $res .= $val;
+            else {
+                $val = str_replace('"', '&quot;', $val); // "
+                $val = str_replace("\r", '&#13;', $val); // carriage return
+                $val = str_replace("\n", '&#10;', $val); // line feed
+                $res .= '"'.$val.'"';
+            }
+            $all[] = $res;
+        }
+
+        return implode(',', $all);
     }
 
     public static function decode($data, $assoc = false)
