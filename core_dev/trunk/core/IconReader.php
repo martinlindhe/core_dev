@@ -51,7 +51,7 @@ class IconReader
             $data = fread($fp, 40);
 
             if (substr($data, 0, 4) == chr(0x89).'PNG') {
-                $images[] = '0x'.dechex($entry['BytesInRes']).' ('.$entry['BytesInRes'].') bytes starting at 0x'.dechex($entry['ImageOffset'])."\t".'--index='.($i+1).' PNG image'."\n";
+                $images[] = '0x'.dechex($entry['BytesInRes']).' ('.$entry['BytesInRes'].') bytes starting at 0x'.dechex($entry['ImageOffset'])."\t".'--index='.($i+1).' PNG image';
                 continue;
             }
 
@@ -112,7 +112,7 @@ class IconReader
 
         // read icon data
         $data = fread($fp, $entry['BytesInRes']);
-//file_put_contents('dump-'.$idx.'.raw', $data);
+file_put_contents('dump-'.($idx+1).'.raw', $data);
 
         if (substr($data, 0, 4) == chr(0x89).'PNG') {
 
