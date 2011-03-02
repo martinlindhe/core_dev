@@ -9,8 +9,9 @@
  * http://www.daubnet.com/en/file-format-ico
  */
 
-//STATUS: early WIP, only a few files supported
+//STATUS: wip. cant find any unsupported files
 
+//XXX: need a 2 bpp sample
 //XXX: need a 16 bpp sample
 //XXX: do all 32-bpp pics have an alpha map????
 
@@ -19,6 +20,52 @@ require_once('bits.php');
 
 class IconReader
 {
+    /** read ICONENTRY */
+    private static function _readIconEntry($fp, $i)
+    {
+        fseek($fp, 6 + ($i * 16));
+
+        return unpack('CWidth/CHeight/CNumColors/CReserved/vNumPlanes/vBitsPerPixel/VDataSize/VDataOffset', fread($fp, 16) );
+    }
+
+    static function listLmages($in)
+    {
+        if (!file_exists($in))
+            throw new Exception ('file not found');
+
+        $fp = fopen($in, 'rb');
+
+        // read ICONFILE
+        $header = unpack('vReserved/vResourceType/vIconCount', fread($fp, 6));
+
+        $images = array();
+        $cnt = $header['IconCount']; //XXX using temp variable fixes a bug.. in php? 2011-03-02
+
+        for ($i = 0; $i < $cnt; $i++) {
+
+            $entry = self::_readIconEntry($fp, $i);
+
+            fseek($fp, $entry['DataOffset']);
+
+            // read icon data
+            $data = fread($fp, 40);
+
+            if (substr($data, 0, 4) == chr(0x89).'PNG') {
+                $images[] = '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($i+1).' PNG image'."\n";
+                continue;
+            }
+
+            // read WIN3XBITMAPHEADER
+            $header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', substr($data, 0, 40) );
+
+            $images[] = '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($i+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'];
+        }
+
+        fclose($fp);
+
+        return $images;
+    }
+
     /**
      * @return array of GD2 resources
      */
@@ -32,7 +79,6 @@ class IconReader
         $fp = fopen($in, 'rb');
 
         // read ICONFILE
-
         $header = unpack('vReserved/vResourceType/vIconCount', fread($fp, 6));
 
         if ($header['Reserved'] != 0)
@@ -40,12 +86,9 @@ class IconReader
 
         if ($header['ResourceType'] != 1)
             throw new Exception ('ResourceType is not 1');
-/*
-        if ($header['IconCount'] != 1)
-            throw new Exception ('can only handle icons with 1 image, found '.$header['IconCount']);
-*/
+
         for ($i = 0; $i < $header['IconCount']; $i++)
-            $images[] = self::readIconResource($fp, $i);
+            $images[] = self::_readIconResource($fp, $i);
 
         fclose($fp);
 
@@ -53,17 +96,13 @@ class IconReader
     }
 
     /**
-     * Extracts icon resource into a GD resource
-     * @param $entry ICONENTRY
-     * @param $data raw ICON data (header, palette, XOR map, AND map)
+     * Extracts icon resource
+     * @return GD2 resource
      */
-    private function readIconResource($fp, $idx)
+    private static function _readIconResource($fp, $idx)
     {
-        fseek($fp, 6 + ($idx * 16));
-
-        // read ICONENTRY
-        $entry = unpack('CWidth/CHeight/CNumColors/CReserved/vNumPlanes/vBitsPerPixel/VDataSize/VDataOffset', fread($fp, 16) );
-//d($entry);die;
+        $entry = self::_readIconEntry($fp, $idx);
+//d($entry);
         fseek($fp, $entry['DataOffset']);
 
         if ($entry['Reserved'] != 0)
@@ -81,23 +120,12 @@ class IconReader
             $im = imagecreatefromstring($data);
             imagesavealpha($im, true);
             imagealphablending($im, false);
-
-            echo '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($idx+1).' --size='.imagesx($im).'x'.imagesy($im).' PNG image'."\n";
-
             return $im;
         }
 
         // read WIN3XBITMAPHEADER
         $header = unpack('VSize/VWidth/VHeight/vPlanes/vBitCount/VCompression/VImageSize/VXpixelsPerM/VYpixelsPerM/VColorsUsed/VColorsImportant', substr($data, 0, 40) );
 //d($header);
-
-        $colors = $header['ColorsUsed'] ? $header['ColorsUsed'] : $entry['NumColors'];
-        if (!$colors && $header['BitCount'] == 8) $colors = 256;
-        if (!$colors && $header['BitCount'] == 16) $colors = 65536;
-        if (!$colors && $header['BitCount'] == 24) $colors = 16777216;
-        if (!$colors && $header['BitCount'] == 32) $colors = 4294967296;
-
-        echo '0x'.dechex($entry['DataSize']).' ('.$entry['DataSize'].') bytes starting at 0x'.dechex($entry['DataOffset'])."\t".'--index='.($idx+1).' --size='.$entry['Width'].'x'.$entry['Height'].' --bit-depth='.$header['BitCount'].' --colors='.$colors."\n";
 
         if ($header['Size'] != 40) {
             print_r($header);
@@ -147,24 +175,27 @@ class IconReader
             for ($y = 0; $y < $entry['Height']; $y++) {
                 $colors = array();
                 for ($x = 0; $x < $entry['Width']; $x++) {
-                    if ($header['BitCount'] == 4) { // 8- and 16-color bitmap data is stored as 4 bits per pixel
-
+                    switch ($header['BitCount']) {
+                    case 4: // 8- and 16-color bitmap data is stored as 4 bits per pixel
                         list($hi, $lo) = byte_split( $data[$pos++] );
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[ $hi ]);
                         imagesetpixel($im, $x+1, $entry['Height'] - $y - 1, $palette[ $lo ]);
                         $x++;
 //                        echo '0x'.dechex($pos-1).': XorMap '.$hi.', '.$lo."\n";
+                        break;
 
-                    } else if ($header['BitCount'] == 8) {
+                    case 8:
                         if ($entry['NumColors'])
                             throw new Exception ('xxx use available palette for 8bit??');
 
                         $byte = ord($data[$pos++]);
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[ $byte ]);
-
 //                        echo '0x'.dechex($pos-1).': XorMap 0x'.dechex($byte)."\n";
-                    } else
+                        break;
+
+                    default:
                         throw new Exception ('unhandled bitcount '.$header['BitCount']);
+                    }
                 }
                 // All rows end on the 32 bit
                 if ($pos % 4)
