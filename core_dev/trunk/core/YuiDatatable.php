@@ -14,8 +14,19 @@
 //TODO: Conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
 //TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
 
-require_once('output_js.php');
 require_once('JSON.php');
+
+class YuiColumnDef
+{
+    var $key;
+    var $label;
+    var $sortable;
+    var $formatter;
+    var $extra_data;
+    var $col_label;
+    var $maxAutoWidth;
+    var $resizable;
+}
 
 class YuiDatatable
 {
@@ -43,7 +54,10 @@ class YuiDatatable
     private function addHiddenColumn($key)
     {
         if (!$key) return;
-        $this->columns[] = array('key' => $key, 'hidden' => true);
+        $col = new YuiColumnDef();
+        $col->key = $key;
+        $col->hidden = true;
+        $this->columns[] = $col;
         $this->response_fields[] = $key;
     }
 
@@ -59,7 +73,7 @@ class YuiDatatable
             throw new Exception ('bad sort order: '.$order);
 
         foreach ($this->columns as $idx => $c)
-            if ($c['key'] == $col)
+            if ($c->key == $col)
                 $this->sort_column = $idx;
 
         $this->sort_order = $order;
@@ -74,9 +88,13 @@ class YuiDatatable
      */
     function addColumn($key, $label, $type = '', $extra = '', $col_label = '')
     {
-        $arr = array('key' => $key, 'label' => $label, 'sortable' => true);
         $response = array('key' => $key);
-        //$arr['resizable'] = true;   //disabled by default
+
+        $col = new YuiColumnDef();
+        $col->key = $key;
+        $col->label = $label;
+        $col->sortable = true;
+        //$col->resizable = true;   //disabled by default
 
         if (!$type && substr($key, 0, 4) == 'time')
             $type = 'time';
@@ -89,37 +107,37 @@ class YuiDatatable
 
         switch ($type) {
         case 'text':
-            $arr['maxAutoWidth'] = 600;
+            $col->maxAutoWidth = 600;
             break;
 
         case 'link':
-            $arr['formatter']  = 'formatLink';
-            $arr['extra_data'] = $extra;
-            $arr['col_label']  = $col_label;
+            $col->formatter  = 'formatLink';
+            $col->extra_data = $extra;
+            $col->col_label  = $col_label;
             $this->addHiddenColumn($col_label);
             break;
 
         case 'date':
-            $arr['formatter']  = 'formatDate';
+            $col->formatter  = 'formatDate';
             //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
             break;
 
         case 'time':
-            $arr['formatter']  = 'formatTime';
+            $col->formatter  = 'formatTime';
             //$response['parser'] = 'date';  //XXX js-date dont like mysql date format???
             break;
 
         case 'money':
-            $arr['formatter']  = 'formatMoney';
+            $col->formatter  = 'formatMoney';
             break;
 
         case 'bool':
-            $arr['formatter']  = 'formatBool';
+            $col->formatter  = 'formatBool';
             break;
 
         case 'array':
             //"extra" contains an array of string representations of this column's values
-            $arr['formatter'] = 'formatArray'.count($this->embed_arrays);
+            $col->formatter = 'formatArray'.count($this->embed_arrays);
             $this->embed_arrays[] = $extra;
             break;
 
@@ -127,7 +145,7 @@ class YuiDatatable
         }
 
         $this->response_fields[] = $key;
-        $this->columns[] = $arr;
+        $this->columns[] = $col;
     }
 
     /**
@@ -147,7 +165,7 @@ class YuiDatatable
             $inc_row = array();
             foreach ($row as $key => $val)
                 foreach ($this->columns as $inc_col)
-                    if ($inc_col['key'] == $key)
+                    if ($inc_col->key == $key)
                         $inc_row[$key] = $val;
 
             $res[] = $inc_row;
@@ -230,7 +248,7 @@ class YuiDatatable
                 for ($i=0; $i<count($this->embed_arrays); $i++) {
                     $res .=
                     'this.formatArray'.$i.' = function(elLiner, oRecord, oColumn, oData) {'.
-                        'var a='.jsArray1D($this->embed_arrays[$i]).';'."\n".
+                        'var a='.JSON::encode($this->embed_arrays[$i],false).';'.
                         'elLiner.innerHTML = a[oData];'.
                     '};'.
                     'YAHOO.widget.DataTable.Formatter.formatArray'.$i.' = this.formatArray'.$i.';';
@@ -244,7 +262,7 @@ class YuiDatatable
                 'YAHOO.widget.DataTable.Formatter.formatMoney = this.formatMoney;'.
                 'YAHOO.widget.DataTable.Formatter.formatBool = this.formatBool;'.
 
-                'myColumnDefs = '.jsArray2D($this->columns).';'."\n".
+                'myColumnDefs = '.JSON::encode($this->columns).';'."\n".
                 ($this->xhr_source ?
                     //rpc
                     'var myDataSource = new YAHOO.util.DataSource("'.$this->xhr_source.'");'.
@@ -257,7 +275,7 @@ class YuiDatatable
                     '};'
                 :
                     //embedded js-array
-                    'var '.$data_var.' = '.jsArray2D($this->datalist).';'."\n".
+                    'var '.$data_var.' = '.JSON::encode($this->datalist).';'."\n".
                     'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
                     'myDataSource.responseSchema = { fields:'.JSON::encode($this->response_fields, false).'};'
@@ -269,7 +287,7 @@ class YuiDatatable
                     ($this->pixel_height ? 'height:"'.$this->pixel_height.'px",' : '').
                     ($this->sort_order ?
                         'sortedBy: {'.
-                            'key:"'.$this->columns[ $this->sort_column ]['key'].'",'.
+                            'key:"'.$this->columns[ $this->sort_column ]->key.'",'.
                             'dir:YAHOO.widget.DataTable.'.($this->sort_order == 'asc' ? 'CLASS_ASC' : 'CLASS_DESC').
                         '},'
                     :
@@ -285,7 +303,7 @@ class YuiDatatable
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
-                        'initialRequest:"sort='.$this->columns[ $this->sort_column ]['key'].($this->sort_order ? '&dir='.$this->sort_order : '').'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
+                        'initialRequest:"sort='.$this->columns[ $this->sort_column ]->key.($this->sort_order ? '&dir='.$this->sort_order : '').'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
                     :
                         ''
                     ).

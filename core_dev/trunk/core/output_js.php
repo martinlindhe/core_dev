@@ -9,25 +9,30 @@
 
 require_once('JSON.php');
 
+/*function jsArrayFlat($list, $with_keys)  ///XXX DEPRECATE, use JSON class instead
+{
+    return JSON::encodeObject($list, $with_keys);
+}*/
+
 /**
  * @param $list    array(key1=>val1, key2=>val2)
  * @return ["val1","val2",]   or  [key1:"val1",key2:"val2",]
  */
-function jsArray1D($list, $with_keys = true)
+function jsArray1D($list, $with_keys = true)///XXX DEPRECATE, use JSON class instead
 {
-    return '{'.JSON::encodeObject($list, $with_keys).'}';
+    return JSON::encode($list, $with_keys);
 }
 
 /**
  * Generates Javascript arrays
  * @param $list 2d array
  */
-function jsArray2D($list)
+function jsArray2D($list)///XXX DEPRECATE, use JSON class instead
 {
     $res = '[';
 
     foreach ($list as $l)
-        $res .= '{'.JSON::encodeObject($l, true).'},';
+        $res .= '{'.jsArray1D($l, true).'},';
 
     $res .= ']';
 

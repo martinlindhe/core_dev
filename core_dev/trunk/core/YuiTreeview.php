@@ -12,7 +12,7 @@
 
 //STATUS: wip
 
-require_once('output_js.php');
+require_once('JSON.php');
 
 class YuiTreeview
 {
@@ -132,7 +132,7 @@ class YuiTreeview
         'var root = tree.getRoot();'.
 
         //add child nodes for tree:
-        'var aChilds = '.json_encode($this->root_nodes).';'.
+        'var aChilds = '.JSON::encode($this->root_nodes).';'.
 
         'for (var i=0, j=aChilds.length; i<j; i++) {'.
             'var tempNode = new YAHOO.widget.'.$node_type.'({label:aChilds[i].name,id:aChilds[i].id}, root, false);'.

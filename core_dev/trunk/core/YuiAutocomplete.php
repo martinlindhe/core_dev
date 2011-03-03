@@ -11,8 +11,7 @@
 
 //STATUS: wip
 
-require_once('output_js.php');
-
+require_once('JSON.php');
 require_once('XhtmlComponent.php');
 
 class YuiAutocomplete extends XhtmlComponent
@@ -80,7 +79,7 @@ class YuiAutocomplete extends XhtmlComponent
             'var oDS = new YAHOO.util.ScriptNodeDataSource("'.$this->xhr_url.'");'.
             'oDS.responseSchema = {'.
                 'resultsList: "records",'.
-                'fields: ['.jsArrayFlat($this->result_fields, false).']'.
+                'fields: '.JSON::encode($this->result_fields, false).
             '};'.
 
             // Instantiate AutoComplete

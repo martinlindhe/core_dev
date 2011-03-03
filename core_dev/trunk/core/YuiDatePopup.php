@@ -14,7 +14,7 @@
 
 //TODO: hide useless "Reset" and "close" buttons in the bottom
 
-require_once('output_js.php');
+require_once('JSON.php');
 
 class YuiDatePopup
 {
@@ -161,12 +161,12 @@ class YuiDatePopup
                             : ''
                         ).
                         'start_weekday:'.  $this->start_weekday.','.
-                        'MONTHS_SHORT:['.   jsArrayFlat($locale->handle->month_short, false).'],'.
-                        'MONTHS_LONG:['.    jsArrayFlat($locale->handle->month_long, false).'],'.
-                        'WEEKDAYS_1CHAR:['. jsArrayFlat($locale->handle->weekday_1char, false).'],'.
-                        'WEEKDAYS_SHORT:['. jsArrayFlat($locale->handle->weekday_short, false).'],'.
-                        'WEEKDAYS_MEDIUM:['.jsArrayFlat($locale->handle->weekday_medium, false).'],'.
-                        'WEEKDAYS_LONG:['.  jsArrayFlat($locale->handle->weekday_long, false).'],'.
+                        'MONTHS_SHORT:'.   JSON::encode($locale->handle->month_short, false).','.
+                        'MONTHS_LONG:'.    JSON::encode($locale->handle->month_long, false).','.
+                        'WEEKDAYS_1CHAR:'. JSON::encode($locale->handle->weekday_1char, false).','.
+                        'WEEKDAYS_SHORT:'. JSON::encode($locale->handle->weekday_short, false).','.
+                        'WEEKDAYS_MEDIUM:'.JSON::encode($locale->handle->weekday_medium, false).','.
+                        'WEEKDAYS_LONG:'.  JSON::encode($locale->handle->weekday_long, false).','.
                     '});'.
                     'calendar.render();'.
 

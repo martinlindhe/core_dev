@@ -16,11 +16,11 @@
 //TODO (MISSING FROM YUI2-chart): visa label för x & y led: setYTitle(), setXTitle()
 //   - ticket open due to missing functionality: http://yuilibrary.com/projects/yui3/ticket/2529841
 
-require_once('output_js.php');
+require_once('JSON.php');
 
 class Yui3Chart
 {
-    protected $data_source = '';   ///< array of data to display
+    protected $data_source;   ///< array of data to display
     protected $width  = 700;
     protected $height = 400;
     protected $category_key;      ///< group by this field (usually a timestamp)
@@ -75,6 +75,9 @@ class Yui3Chart
 
     function render()
     {
+        /*if (!$this->data_source)
+            throw new Exception ('no data source set');
+*/
         $header = XhtmlHeader::getInstance();
 
         $header->includeJs('http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js');
@@ -128,7 +131,7 @@ class Yui3Chart
                 '}'.
             '};'.
 
-            'var myDataValues = '.jsArray2D($this->data_source).';'.
+            'var myDataValues = '.JSON::encode($this->data_source).';'.
 
             'var mychart = new Y.Chart('.
             '{'.

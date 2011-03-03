@@ -14,7 +14,7 @@
 
 //TODO: integrate image upload
 
-require_once('output_js.php');
+require_once('JSON.php');
 
 class YuiRichedit
 {

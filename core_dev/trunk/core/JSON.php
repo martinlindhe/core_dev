@@ -6,39 +6,43 @@
  * Number (double precision floating-point format)
  * String (double-quoted Unicode with backslash escaping)
  * Boolean (true or false)
- * Array (an ordered sequence of values, comma-separated and enclosed in square brackets)
- * Object (a collection of key:value pairs, comma-separated and enclosed in curly braces; the key must be a string)
+ * Array (an ordered sequence of values, comma-separated and enclosed in square brackets)   [1,2,3]     or array of objs:    [ {name:"o1"},{name:"o2"} ]
+ * Object (a collection of key:value pairs, comma-separated and enclosed in curly braces; the key must be a string)  {name:"foo",val:"bar"}
  * null
  *
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
-//STATUS: ok
+//STATUS: wip
 
 require_once('HttpClient.php');
+require_once('output_js.php');
 
 class JSON
 {
     public static function encode($obj, $with_keys = true)
     {
         if (is_array($obj))
-            return '['.self::encodeObject($obj, false).']';
+            return '['.self::encodeObject($obj, $with_keys).']';
 
         if (is_object($obj))
-            return '{'.self::encodeObject($obj, true).'}';
+            return '{'.self::encodeObject($obj, $with_keys).'}';
 
         throw new Exception ('ewwp');
-
-        return json_encode($obj);
+//        return json_encode($obj);
     }
 
-    /** encodes an objects and arrays */
-    public static function encodeObject($list, $with_keys = false)
+    private static function encodeObject($list, $with_keys = false)
     {
         $all = array();
 
         foreach ($list as $key => $val)
         {
+            if (is_object($val) || is_array($val)) {
+                $all[] = json_encode($val);
+                continue;
+            }
+//throw new Exception ('eh '.$key.' = '.$val);
             $res = '';
             if ($with_keys)
                 if (is_numeric($key) && (strlen($key) == 1 || substr($key, 0, 1) != '0'))

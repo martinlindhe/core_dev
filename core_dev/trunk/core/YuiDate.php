@@ -13,7 +13,7 @@
 
 //STATUS: wip
 
-require_once('output_js.php');
+require_once('JSON.php');
 
 class YuiDate
 {
@@ -59,12 +59,12 @@ class YuiDate
                 : ''
             ).
             'cal.cfg.setProperty("start_weekday",'.$this->start_weekday.');'.
-            'cal.cfg.setProperty("MONTHS_SHORT",['.   jsArrayFlat($locale->handle->month_short, false).']);'.
-            'cal.cfg.setProperty("MONTHS_LONG",['.    jsArrayFlat($locale->handle->month_long, false).']);'.
-            'cal.cfg.setProperty("WEEKDAYS_1CHAR",['. jsArrayFlat($locale->handle->weekday_1char, false).']);'.
-            'cal.cfg.setProperty("WEEKDAYS_SHORT",['. jsArrayFlat($locale->handle->weekday_short, false).']);'.
-            'cal.cfg.setProperty("WEEKDAYS_MEDIUM",['.jsArrayFlat($locale->handle->weekday_medium, false).']);'.
-            'cal.cfg.setProperty("WEEKDAYS_LONG",['.  jsArrayFlat($locale->handle->weekday_long, false).']);'.
+            'cal.cfg.setProperty("MONTHS_SHORT",'.   JSON::encode($locale->handle->month_short, false).');'.
+            'cal.cfg.setProperty("MONTHS_LONG",'.    JSON::encode($locale->handle->month_long, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_1CHAR",'. JSON::encode($locale->handle->weekday_1char, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_SHORT",'. JSON::encode($locale->handle->weekday_short, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_MEDIUM",'.JSON::encode($locale->handle->weekday_medium, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_LONG",'.  JSON::encode($locale->handle->weekday_long, false).');'.
 
             'cal.selectEvent.subscribe(function() {'.
                 'var dates = this.getSelectedDates();'.
