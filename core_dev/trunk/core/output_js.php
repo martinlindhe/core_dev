@@ -9,36 +9,6 @@
 
 require_once('JSON.php');
 
-/*function jsArrayFlat($list, $with_keys)  ///XXX DEPRECATE, use JSON class instead
-{
-    return JSON::encodeObject($list, $with_keys);
-}*/
-
-/**
- * @param $list    array(key1=>val1, key2=>val2)
- * @return ["val1","val2",]   or  [key1:"val1",key2:"val2",]
- */
-function jsArray1D($list, $with_keys = true)///XXX DEPRECATE, use JSON class instead
-{
-    return JSON::encode($list, $with_keys);
-}
-
-/**
- * Generates Javascript arrays
- * @param $list 2d array
- */
-function jsArray2D($list)///XXX DEPRECATE, use JSON class instead
-{
-    $res = '[';
-
-    foreach ($list as $l)
-        $res .= '{'.jsArray1D($l, true).'},';
-
-    $res .= ']';
-
-    return $res;
-}
-
 /**
  * Reload current page after specified period of time
  *
@@ -49,7 +19,6 @@ function js_reload($ms)
     if (!is_numeric($ms)) return false;
 
     return js_embed('setTimeout("location.reload();", '.$ms.');');
-
 }
 
 /**
@@ -75,13 +44,14 @@ function js_redirect($url)
 }
 
 /**
- * Renders a date in Javascript format (american): MM/DD/YYYY
+ * Renders a Unix timestamp in Javascript format (american): MM/DD/YYYY
  */
 function js_date($ts)
 {
     return date('m/d/Y', $ts);
 }
 
+/** Embeds javascript snippet */
 function js_embed($s)
 {
     return '<script type="text/javascript">'.$s.'</script>';

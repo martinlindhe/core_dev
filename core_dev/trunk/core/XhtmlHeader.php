@@ -16,6 +16,7 @@ require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('LocaleHandler.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
+require_once('output_js.php');
 
 class FeedDescription
 {
@@ -161,7 +162,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         '</style>';
 
         if ($this->embed_js)
-            $res .= '<script type="text/javascript">'.implode('', $this->embed_js).'</script>';
+            $res .= js_embed( implode('', $this->embed_js) );
 
         if ($this->title)
             $res .= '<title>'.$this->title.'</title>';
