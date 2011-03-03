@@ -12,7 +12,6 @@ $files = array(
 '32x32x4-1.ico',
 '32x32x4-2.ico',
 'multi-1.ico',
-'multi-2.ico',
 'multi-3.ico',*/
 'vista_icon.ico',  // from Spotify.exe, has PNG resource. XXX nautilus 2.32 dont show thumbnail but should be fixed
 //'minor-bug-1.ico',  //first 2 images have green borders where it should be transparency (???) "icotool" from icoutils package does the same
