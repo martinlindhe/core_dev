@@ -18,7 +18,9 @@ $css =
 'font:9px verdana;'.
 'text-align:left;';
 
-echo '<div id="x2x2xx" style="'.$css.'">';
+$container_id = 'cd_c_'.mt_rand();
+
+echo '<div id="'.$container_id .'" style="'.$css.'">';
 echo 'core_dev 0.2-svn ';
 
 if (class_exists('SqlHandler')) {
@@ -41,6 +43,11 @@ $header->embedJs(
 '{'.
     'var e = document.getElementById("'.$pager_id.'");'.
     'e.style.display = (e.style.display ? "" : "none");'.
+'}'.
+'function close_profiler()'.
+'{'.
+    'var e = document.getElementById("'.$container_id.'");'.
+    'e.style.display = "none";'.
 '}'
 );
 
@@ -79,7 +86,7 @@ echo 'Uptime: '.elapsed_seconds( uptime() ).'<br/>';
 
 echo '</div>'; // closing $pager_id
 
-
+echo ' <a href="#" onclick="close_profiler();"><b>X</b></a>';
 
 echo '</div>';
 
