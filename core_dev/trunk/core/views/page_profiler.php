@@ -6,10 +6,11 @@
  */
 
 $css =
-'position:absolute;'.
+'position:fixed;'.
 'right:0;'.
 'bottom:0;'.
 'text-align:right;'.
+'margin:2px;'.
 'padding:2px;'.
 'padding-top:0px;'.
 'border:1px dashed #aaa;'.
@@ -86,7 +87,7 @@ echo 'Uptime: '.elapsed_seconds( uptime() ).'<br/>';
 
 echo '</div>'; // closing $pager_id
 
-echo ' <a href="#" onclick="close_profiler();"><b>X</b></a>';
+echo ' | <a href="#" onclick="close_profiler();"><b>X</b></a>';
 
 echo '</div>';
 

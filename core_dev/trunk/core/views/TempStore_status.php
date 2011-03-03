@@ -10,7 +10,7 @@ $header->embedJs(
 '}'
 );
 
-echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a>';
+echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a> ';
 
 $temp = TempStore::getInstance();
 
