@@ -15,8 +15,8 @@ class Image
 {
     protected $resource;   ///< holds gd image resource
 
+    var $width, $height;
     protected $jpeg_quality = 80;
-    protected $width, $height;
     protected $mimetype;
     protected $sha1;
 
