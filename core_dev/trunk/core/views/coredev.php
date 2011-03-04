@@ -8,6 +8,7 @@ require_once('UserList.php');
 require_once('UserEditor.php');
 require_once('UserGroupList.php');
 require_once('FtpClient.php'); // for curl_check_protocol_support()
+require_once('IconWriter.php');
 
 switch ($this->view) {
 case 'error':
@@ -121,6 +122,32 @@ case 'robots':
     $page->setMimeType('text/plain');
     echo "User-agent: *\n";
     echo "Disallow: /\n";
+    break;
+
+case 'favicon':
+    //XXX TODO only force Microsoft Icon render for IE browsers
+
+    $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
+    $page->setMimeType('image/vnd.microsoft.icon');
+
+    $f = $page->getApplicationRoot().$header->getFavicon();
+    if (!file_exists($f))
+        throw new Exception ('favicon.ico generation failed, file not found '.$f);
+
+    $temp = TempStore::getInstance();
+    $key = 'favicon//'.$f;
+
+    $data = $temp->get($key);
+    if ($data) {
+        echo $data;
+        break;
+    }
+
+    $im = new IconWriter();
+    $im->addImage($f);
+    echo $im->create();
+
+    $temp->set($key, $data, '24h');
     break;
 
 default:

@@ -65,8 +65,10 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function handlePost($p) {}
 
-    function setCoreDevRoot($s) { $this->core_dev_root = $s; }
+    function getFavicon() { return $this->favicon; }
     function getCoreDevRoot() { return $this->core_dev_root; }
+
+    function setCoreDevRoot($s) { $this->core_dev_root = $s; }
 
     function setTitle($t) { $this->title = $t; }
 

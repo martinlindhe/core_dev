@@ -30,6 +30,7 @@ class XmlDocumentHandler extends CoreBase
     private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
     private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
     private $upload_root;                    ///< root directory for file uploads
+    private $app_root;                       ///< application root directory, currently only used to locate favicon.png for auto conversion to favicon.ico
     private $ts_initial;                     ///< used to measure page load time
 
     private $objs = array();                 ///< IXmlComponent objects
@@ -66,6 +67,7 @@ class XmlDocumentHandler extends CoreBase
         return $this->coredev_inc;
     }
 
+    function getApplicationRoot() { return $this->app_root; }
     function getUploadRoot() { return $this->upload_root; }
     function getMimeType() { return $this->mimetype; }
 
@@ -76,7 +78,15 @@ class XmlDocumentHandler extends CoreBase
         if (!is_dir($s))
             throw new Exception ('setUploadRoot: directory dont exist: '.$s);
 
-        $this->upload_root = $s;
+        $this->upload_root = realpath($s);
+    }
+
+    function setApplicationRoot($s = './')
+    {
+        if (!is_dir($s))
+            throw new Exception ('setApplicationRoot: directory dont exist: '.$s);
+
+        $this->app_root = realpath($s);
     }
 
     function setMimeType($s) { $this->mimetype = $s; }

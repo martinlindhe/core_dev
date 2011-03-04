@@ -228,6 +228,9 @@ function dh($m, $row_len = 16)
         echo str_repeat(' ', ($row_len - strlen($bytes)) * 3);
         echo $bytes.PHP_EOL;
     }
+
+    if ($m)
+        echo 'md5: '.md5($m).PHP_EOL;
 }
 
 /**
