@@ -31,7 +31,7 @@ class IconReader
     static function listLmages($in)
     {
         if (!file_exists($in))
-            throw new Exception ('file not found');
+            throw new Exception ('file not found: '.$in);
 
         $fp = fopen($in, 'rb');
 
@@ -112,7 +112,7 @@ class IconReader
 
         // read icon data
         $data = fread($fp, $entry['BytesInRes']);
-file_put_contents('dump-'.($idx+1).'.raw', $data);
+//file_put_contents('dump-'.($idx+1).'.raw', $data);
 
         if (substr($data, 0, 4) == chr(0x89).'PNG') {
 

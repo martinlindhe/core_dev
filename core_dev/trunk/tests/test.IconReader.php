@@ -4,7 +4,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('IconReader.php');
 
-$base_dir = '/devel/web/core_dev/trunk/tests/ICO_files/';
+$base_dir = '/devel/core_dev/trunk/tests/ICO_files/';
 
 $files = array(
 //'16x16x1-1.ico',  //XXXX 1 bpp unsupported

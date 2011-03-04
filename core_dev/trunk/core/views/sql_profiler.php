@@ -35,6 +35,7 @@ foreach ($db->queries as $prof)
 $css =
 ($error ? '' : ' display:none;').
 'overflow:auto;'.
+'max-width:400px;'.
 'border:#000 1px solid;';
 
 echo '<div id="sql_prof_'.$rand_id.'" style="'.$css.'">';
