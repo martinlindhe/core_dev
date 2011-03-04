@@ -40,6 +40,8 @@ class Image
         return imagecolorat($this->resource, $x, $y);
     }
 
+    function getResource() { return $this->resource; }
+
     function load($r)
     {
         if (is_resource($r) && get_resource_type($r) == 'gd') {
