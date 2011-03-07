@@ -84,7 +84,9 @@ class YuiAutocomplete extends XhtmlComponent
 
             // Instantiate AutoComplete
             'var oAC = new YAHOO.widget.AutoComplete("'.$this->name.'","myContainer", oDS);'.
+            'oAC.minQueryLength = 2;'. // minimum length to start search
             'oAC.queryDelay = '.$this->query_delay.';'.
+            'oAC.delimChar = [",",";"];'.
 
             // The webservice needs custom parameters
             'oAC.generateRequest = function(sQuery) {'.

@@ -22,6 +22,9 @@ $css =
 $container_id = 'cd_c_'.mt_rand();
 
 echo '<div id="'.$container_id .'" style="'.$css.'">';
+
+echo '<a class="closebtn" href="#" onclick="close_profiler();"></a>';
+
 echo 'core_dev 0.2-svn ';
 
 if (class_exists('SqlHandler')) {
@@ -49,6 +52,19 @@ $header->embedJs(
 '{'.
     'var e = document.getElementById("'.$container_id.'");'.
     'e.style.display = "none";'.
+'}'
+);
+
+$header->embedCss(
+'a.closebtn'.
+'{'.
+    'display:block;'.
+    'float:right;'.
+    'width:7px;'.
+    'height:7px;'.
+    'margin-left: 4px;'.
+    'margin-top: 3px;'.
+    'background:url("'.relurl('core_dev/gfx/close.gif').'") no-repeat;'.
 '}'
 );
 
@@ -86,8 +102,6 @@ echo 'Server time: '.sql_datetime( time() ).' '.date('T').'<br/>';
 echo 'Uptime: '.elapsed_seconds( uptime() ).'<br/>';
 
 echo '</div>'; // closing $pager_id
-
-echo ' | <a href="#" onclick="close_profiler();"><b>X</b></a>';
 
 echo '</div>';
 
