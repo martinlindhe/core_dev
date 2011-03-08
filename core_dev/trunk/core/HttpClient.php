@@ -42,8 +42,6 @@ require_once('network.php');
 require_once('Url.php');
 require_once('TempStore.php');
 
-require_once('input_gzip.php');
-
 class HttpClient extends CoreBase
 {
     public  $Url;                          ///< Url property
@@ -355,7 +353,10 @@ class HttpClient extends CoreBase
         $encoding = $this->getResponseHeader('content-encoding');
         switch ($encoding) {
         case 'gzip':
-            $body = gzdecode($body);
+            // strip 10-byte gzip header  XXXX always 10 byte headers???
+            $gzhead = substr($body, 0, 10); // 1f8b 0800 0000 0000 0003 ... gzip start with ED FD sequence (???)
+            $body = substr($body, 10);
+            $body = gzinflate($body);
             break;
 
         case '':

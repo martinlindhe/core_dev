@@ -17,7 +17,6 @@ if (!match_ip('240.212.11.42', $valid)) echo "FAIL 3\n";
 if (match_ip('241.212.11.42', $valid)) echo "FAIL 4\n";
 
 
-
 $valid_urls = array(
 'http://www.google.se/search?hl=sv&source=hp&q=&btnI=Jag+har+tur&meta=&aq=f&aqi=&aql=&oq=&gs_rfai=',
 'https://some-url.com/?query=&name=joe?filter=*.*#some_anchor',
@@ -31,15 +30,31 @@ $valid_urls = array(
 'http://maps.google.com/maps/geo?ll=11.11,11.11&output=json&key=2sddf-d3d3-d3d3d',
 'http://url.com/path|path2',
 'http://url.net/What\'s%20new%20in%20V4.9a.txt',
+'http://server.com/file.php',
+'https://server.com/file.php',
+'http://server.com:1000/file.php',
+'http://server.com:80/file.php',
+'http://server.com/',
+'http://server.com/path?arg=value',
+'http://server.com/path?arg=value#anchor',
+'http://server.com/path?arg=value&arg2=4',
+'http://server.com/path?arg=value&amp;arg2=4',
+'http://username@server.com/path?arg=value',   //XXX fails but is valid
+'http://username:password@server.com/path?arg=value'
+'http://digg.com/submit?phase=2&url=http&#37;3A&#37;2F&#37;2Fexample.com%2Fpath%2F2on%2F%3Fdomain%3Dp1&p2=text%3A+string',
 );
 
 foreach ($valid_urls as $url)
     if (!is_url($url)) echo "URL FAIL BUT IS VALID ".$url."\n";
 
 $invalid_urls = array(
+'x',
+'x.com',
+'x.x',
 'http://-invalid.leading-char.com',
 'http:// invalid with spaces.com',
 'http://invalid.url-with a.space.com',
+'http://space in url.com/path.php',
 'http://good-domain.com/bad url with space',
 'https://ssl.',   //XXX is detected as valid
 );
