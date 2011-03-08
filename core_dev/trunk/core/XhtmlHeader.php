@@ -2,10 +2,7 @@
 /**
  * $Id$
  *
- * Generates a XHTML 1.x compilant header (served as a XML document)
- *
- * Regarding declaring character encoding, see
- * http://www.w3.org/International/questions/qa-html-encoding-declarations#quicklookup
+ * Generates a XHTML 1.x compilant header
  *
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
