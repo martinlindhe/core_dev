@@ -10,7 +10,7 @@
 /**
  * Decompresses gzip compressed data
  */
-function gzdecode($data)
+function gzdecode($data)   //XXXX why is this needed??? why wont gzuncompress() or gzinflate() work?
 {
     //check for gzip header
     if (strlen($data) < 18 || strcmp(substr($data, 0, 2),"\x1f\x8b"))

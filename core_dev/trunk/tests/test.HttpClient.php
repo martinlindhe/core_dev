@@ -9,6 +9,7 @@ require_once('HttpClient.php');
 $http = new HttpClient('http://www.google.com/');
 $http->setCacheTime(0);
 $body = $http->getBody();
+
 if ($http->getHeader('content-type') != 'text/html; charset=UTF-8') echo "FAIL 1\n";
 if ($http->getStatus() != 302)                                      echo "FAIL 2: ".$http->getStatus()."\n";
 

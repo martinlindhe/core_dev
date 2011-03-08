@@ -42,6 +42,8 @@ require_once('network.php');
 require_once('Url.php');
 require_once('TempStore.php');
 
+require_once('input_gzip.php');
+
 class HttpClient extends CoreBase
 {
     public  $Url;                          ///< Url property
@@ -232,8 +234,12 @@ class HttpClient extends CoreBase
 
         curl_setopt($this->ch, CURLOPT_URL, $this->Url->get() );
 
-        if ($this->content_type)
-            curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Content-Type: '.$this->content_type));
+        $headers = array(
+        ($this->content_type ? 'Content-Type: '.$this->content_type : ''),
+        'Accept-Encoding: gzip'
+        );
+
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
 
         if ($this->Url->getScheme() == 'https') {
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -322,10 +328,10 @@ class HttpClient extends CoreBase
         $pos = strpos($res, "\r\n\r\n");
         if ($pos !== false) {
             $head = substr($res, 0, $pos);
-            $this->body = substr($res, $pos + strlen("\r\n\r\n"));
+            $body = substr($res, $pos + strlen("\r\n\r\n"));
             $headers = explode("\r\n", $head);
         } else {
-            $this->body = '';
+            $body = '';
             $headers = explode("\r\n", $res);
         }
 
@@ -345,6 +351,22 @@ class HttpClient extends CoreBase
             $col = explode(': ', $h, 2);
             $this->headers[ strtolower($col[0]) ] = $col[1];
         }
+
+        $encoding = $this->getResponseHeader('content-encoding');
+        switch ($encoding) {
+        case 'gzip':
+            $body = gzdecode($body);
+            break;
+
+        case '':
+            break;
+
+        default:
+            d( $this->headers);
+            throw new Exception ('unhandled content-encoding: '.$encoding);
+        }
+
+        $this->body = $body;
 
         // store cookies sent from the server in our cookie pool for possible manipulation
         $raw_cookies = $this->getResponseHeader('set-cookie');
