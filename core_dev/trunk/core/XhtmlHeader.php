@@ -165,14 +165,14 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         foreach ($this->meta_tags as $o)
             $res .= '<meta name="'.$o->name.'" content="'.$o->val.'"/>';
 
-        foreach ($this->include_js as $uri)
-            $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
-
         foreach ($this->include_css as $css)
             $res .= '<link rel="stylesheet" href="'.$css.'"/>';
 
         if ($this->favicon)
             $res .= '<link rel="icon" type="'.file_get_mime_by_suffix($this->favicon).'" href="'.$this->favicon.'"/>';
+
+        foreach ($this->include_js as $uri)
+            $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
 
         foreach ($this->include_feed as $o)
             $res .= '<link rel="alternate" type="application/rss+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
