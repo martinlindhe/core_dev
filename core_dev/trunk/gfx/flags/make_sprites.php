@@ -10,6 +10,10 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../..
 require_once('core.php');
 
 
+$out_sprite = 'sprite.png';
+if (file_exists($out_sprite))
+    unlink($out_sprite);
+
 $sprites = dir_get_matches('./', array('*.png') );
 
 $use_width = 16;
@@ -24,17 +28,25 @@ foreach ($sprites as $f) {
         throw new Exception ('wrong height: '.$height.' in '.$f);
 }
 
-$out = imagecreatetruecolor($use_width, $use_height * count($sprites) );
+$im = imagecreatetruecolor($use_width, $use_height * count($sprites) );
+
+//XXXX how to enable transparent pixel without using full alpha channel of png? this adds 3K of size to test png
+imagesavealpha($im, true);
+imagealphablending($im, false);
+
+// make background transparent
+$back = imagecolorallocatealpha($im, 255, 255, 255, 127);
+imagefilledrectangle($im, 0, 0, imagesx($im) - 1, imagesy($im)- 1, $back);
 
 
 $idx = 0;
 foreach ($sprites as $f) {
     $tmp = imagecreatefrompng($f);
 
-    imagecopy($out, $tmp, 0, $idx * 11, 0, 0, imagesx($tmp), imagesy($tmp) );
+    imagecopy($im, $tmp, 0, $idx * 11, 0, 0, imagesx($tmp), imagesy($tmp) );
     $idx++;
 }
 
-imagepng($out, 'sprite.png');
+imagepng($im, $out_sprite);
 
 ?>

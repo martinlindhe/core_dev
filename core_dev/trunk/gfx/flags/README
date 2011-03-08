@@ -48,6 +48,8 @@ Test results from 2011-03-08:
     Out: 9.7 KiB
 
 
+  XXX: after these tests, I enabled alpha channel and out image grew to 29.4 KiB XXXX should not need full alpha channel for transparent pixels?!??!
+
 
 TODO
 ---
