@@ -48,7 +48,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
     protected $core_dev_root   = '';       ///< web path to core_dev for ajax api calls
-    protected $firebug         = false;    ///< embed "Firebug Lite Beta" in page? see http://getfirebug.com/firebuglite
 
     private function __construct() { }
 
@@ -61,8 +60,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     public function handlePost($p) {}
-
-    function firebug($b = true) { $this->firebug = $b; }
 
     function getFavicon() { return $this->favicon; }
     function getCoreDevRoot() { return $this->core_dev_root; }
@@ -138,9 +135,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function render()
     {
-        if ($this->firebug)
-            $this->includeJs('https://getfirebug.com/firebug-lite-beta.js');
-
         $res = '<head>';
 
         if ($this->title)
