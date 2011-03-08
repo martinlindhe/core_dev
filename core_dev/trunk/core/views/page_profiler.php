@@ -45,13 +45,13 @@ $header->embedJs(
 //Toggles element with name "n" between visible and hidden
 'function toggle_page_profiler()'.
 '{'.
-    'var e = document.getElementById("'.$pager_id.'");'.
-    'e.style.display = (e.style.display ? "" : "none");'.
+    'var e=document.getElementById("'.$pager_id.'");'.
+    'e.style.display=(e.style.display?"":"none");'.
 '}'.
 'function close_profiler()'.
 '{'.
-    'var e = document.getElementById("'.$container_id.'");'.
-    'e.style.display = "none";'.
+    'var e=document.getElementById("'.$container_id.'");'.
+    'e.style.display="none";'.
 '}'
 );
 
@@ -62,8 +62,8 @@ $header->embedCss(
     'float:right;'.
     'width:7px;'.
     'height:7px;'.
-    'margin-left: 4px;'.
-    'margin-top: 4px;'.
+    'margin-left:4px;'.
+    'margin-top:4px;'.
     'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
 '}'.
 'a.closebtn:hover'.

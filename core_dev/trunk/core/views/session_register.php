@@ -14,17 +14,18 @@ $allow_superadmin_reg = !UserList::getCount();
 if ($allow_superadmin_reg || ($session->allow_logins && $session->allow_registrations))
 {
 
-    $header->embedCss('
-    .register_box {
-     font-size: 14px;
-     border: 1px solid #aaa;
-     min-width: 280px;
-     color: #000;
-     background-color: #DDD;
-     padding: 10px;
-     border-radius:15px 15px 15px 15px; /*css3*/
-     -moz-border-radius:15px 15px 15px 15px; /*ff*/
-    }');
+    $header->embedCss(
+    '.register_box{'.
+        'font-size:14px;'.
+        'border:1px solid #aaa;'.
+        'min-width:280px;'.
+        'color:#000;'.
+        'background-color:#ddd;'.
+        'padding:10px;'.
+        'border-radius:15px 15px 15px 15px;'.      //css3
+        '-moz-border-radius:15px 15px 15px 15px;'. //ff
+    '}'
+    );
 
     // Handle new user registrations
     if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2']))

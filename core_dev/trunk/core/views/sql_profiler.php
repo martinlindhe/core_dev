@@ -13,14 +13,16 @@ $header->embedJs(
 //Toggles element with name "n" between visible and hidden
 'function toggle_sql_profiler()'.
 '{'.
-    'var e = document.getElementById("sql_prof_'.$rand_id.'");'.
-    'e.style.display = (e.style.display ? "" : "none");'.
+    'var e=document.getElementById("sql_prof_'.$rand_id.'");'.
+    'e.style.display=(e.style.display?"":"none");'.
 '}'
 );
 
 // XXX this should be done in SqlQuery->render() or so, but
 $header->embedCss(
-'.hover:hover{ background-color: #ccc; }'
+'.hover:hover{'.
+    'background-color:#ccc;'.
+'}'
 );
 
 echo '<a href="#" onclick="return toggle_sql_profiler();">'.count($db->queries).' sql</a>';
@@ -33,7 +35,7 @@ foreach ($db->queries as $prof)
     $res .= $prof->render();
 
 $css =
-($error ? '' : ' display:none;').
+($error ? '' : 'display:none;').
 'overflow:auto;'.
 'max-width:400px;'.
 'border:#000 1px solid;';

@@ -5,8 +5,8 @@ $rand_id = mt_rand();
 $header->embedJs(
 'function toggle_tempstore()'.
 '{'.
-    'var e = document.getElementById("tss_'.$rand_id.'");'.
-    'e.style.display = (e.style.display ? "" : "none");'.
+    'var e=document.getElementById("tss_'.$rand_id.'");'.
+    'e.style.display=(e.style.display?"":"none");'.
 '}'
 );
 

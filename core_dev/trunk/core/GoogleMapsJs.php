@@ -24,6 +24,8 @@
 
 //TODO: make mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
 
+//TODO: ability to use "css sprite" images somehow
+
 require_once('output_js.php');
 require_once('output_css.php');
 require_once('Coordinate.php');

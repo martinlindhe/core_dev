@@ -52,6 +52,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
     protected $core_dev_root   = '';       ///< web path to core_dev for ajax api calls
+    protected $firebug         = false;    ///< embed "Firebug Lite Beta" in page? see http://getfirebug.com/firebuglite
 
     private function __construct() { }
 
@@ -64,6 +65,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     public function handlePost($p) {}
+
+    function firebug($b = true) { $this->firebug = $b; }
 
     function getFavicon() { return $this->favicon; }
     function getCoreDevRoot() { return $this->core_dev_root; }
@@ -141,6 +144,9 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     {
         $locale = LocaleHandler::getInstance();
 
+        if ($this->firebug)
+            $this->includeJs('https://getfirebug.com/firebug-lite-beta.js');
+
         $res =
         '<?xml version="1.0" encoding="UTF-8"?>'."\n".
         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
@@ -151,28 +157,22 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         $res .= '<head>'."\n";
 
-        $res .= '<style type="text/css">';
-
-        foreach ($this->include_css as $css)
-            $res .= '@import url('.$css.');';
-
-        $res .=
-        // these are needed for exact precision in multiple browsers
-        'html { height: 100% }'.
-        'body { height: 100%; margin: 0px; padding: 0px }'.
-        $this->embed_css.
-        '</style>';
-
-        if ($this->embed_js)
-            $res .= js_embed( implode('', $this->embed_js) );
-
         if ($this->title)
             $res .= '<title>'.$this->title.'</title>';
 
-        $res .= '<meta http-equiv="content-type" content="text/html"/>';
+        $res .= '<meta http-equiv="content-type" content="text/html;charset=utf-8"/>';
 
         foreach ($this->meta_tags as $o)
             $res .= '<meta name="'.$o->name.'" content="'.$o->val.'"/>';
+
+        foreach ($this->include_js as $uri)
+            $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
+
+        foreach ($this->include_css as $css)
+            $res .= '<link rel="stylesheet" href="'.$css.'"/>';
+
+        if ($this->favicon)
+            $res .= '<link rel="icon" type="'.file_get_mime_by_suffix($this->favicon).'" href="'.$this->favicon.'"/>';
 
         foreach ($this->include_feed as $o)
             $res .= '<link rel="alternate" type="application/rss+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
@@ -180,11 +180,21 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         foreach ($this->opensearch as $o)
             $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
 
-        if ($this->favicon)
-            $res .= '<link rel="icon" type="'.file_get_mime_by_suffix($this->favicon).'" href="'.$this->favicon.'"/>';
+        // these are needed for exact precision in multiple browsers
+        $res .= '<style type="text/css">'.
+        'html{'.
+            'height:100%'.
+        '}'.
+        'body{'.
+            'height:100%;'.
+            'margin:0px;'.
+            'padding:0px'.
+        '}'.
+        $this->embed_css.
+        '</style>';
 
-        foreach ($this->include_js as $uri)
-            $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
+        if ($this->embed_js)
+            $res .= js_embed( implode('', $this->embed_js) );
 
         $res .= '</head>'."\n";
 
