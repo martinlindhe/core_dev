@@ -64,7 +64,11 @@ $header->embedCss(
     'height:7px;'.
     'margin-left: 4px;'.
     'margin-top: 3px;'.
-    'background:url("'.relurl('core_dev/gfx/close.gif').'") no-repeat;'.
+    'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
+'}'.
+'a.closebtn:hover'.
+'{'.
+    'background-position:0px -7px;'.
 '}'
 );
 
