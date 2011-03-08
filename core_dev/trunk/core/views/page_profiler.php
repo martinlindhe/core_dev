@@ -63,7 +63,7 @@ $header->embedCss(
     'width:7px;'.
     'height:7px;'.
     'margin-left: 4px;'.
-    'margin-top: 3px;'.
+    'margin-top: 4px;'.
     'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
 '}'.
 'a.closebtn:hover'.
