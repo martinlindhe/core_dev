@@ -1,6 +1,5 @@
-Ideas planned for the future:
-
-* Make a static "users" class:
-	users::getCount(), users::getList(), users::searchByName(), ...
-
-
+BEFORE 1.0 (201?):
+    * make a script that updates tables to current structure by adding / renaming columns & changing datatypes from a description
+    * delete deprecated code
+    * identify core modules, write some docs
+    * rewrite/finish/cleanup core modules: blog / news, comments, users, forum, file uploading

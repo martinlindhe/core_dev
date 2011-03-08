@@ -14,7 +14,6 @@
 
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
-require_once('LocaleHandler.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
 require_once('output_js.php');
 
@@ -142,20 +141,10 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function render()
     {
-        $locale = LocaleHandler::getInstance();
-
         if ($this->firebug)
             $this->includeJs('https://getfirebug.com/firebug-lite-beta.js');
 
-        $res =
-        '<?xml version="1.0" encoding="UTF-8"?>'."\n".
-        '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
-        '<html'.
-            ' xml:lang="'.$locale->getLanguageCode().'"'.
-            ' lang="'.$locale->getLanguageCode().'"'.
-            ' xmlns="http://www.w3.org/1999/xhtml">'."\n";
-
-        $res .= '<head>'."\n";
+        $res = '<head>';
 
         if ($this->title)
             $res .= '<title>'.$this->title.'</title>';
@@ -196,17 +185,16 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if ($this->embed_js)
             $res .= js_embed( implode('', $this->embed_js) );
 
-        $res .= '</head>'."\n";
+        $res .= '</head>';
 
         $res .= '<body class="yui-skin-sam"'; // required for YUI
         if ($this->embed_js_onload)
             $res .= ' onload="'.implode('', $this->embed_js_onload).'"';
-        $res .= '>';
+        $res .= '>'."\n";
 
         if ($this->reload_time)
             $res .= js_reload($this->reload_time * 1000);
 
-        $res .= "\n";
         return $res;
     }
 

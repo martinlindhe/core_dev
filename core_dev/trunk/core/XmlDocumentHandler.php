@@ -12,6 +12,7 @@
 //TODO: move setCoreDevInclude to a "core_dev handler" ? or "setup handler", or "config handler" ?
 
 require_once('CoreBase.php');
+require_once('LocaleHandler.php');
 require_once('Url.php');
 
 class XmlDocumentHandler extends CoreBase
@@ -171,12 +172,6 @@ class XmlDocumentHandler extends CoreBase
     {
         ob_start();
 
-/*
-        //XXX should we really show errors on top of every page?
-        $error = ErrorHandler::getInstance();
-        echo $error->render();
-*/
-
         $out = '';
 
         if ($this->enable_design && $this->design_head) {
@@ -217,23 +212,34 @@ class XmlDocumentHandler extends CoreBase
 
             $view = new ViewModel('views/page_profiler.php');
             $out .= $view->render();
-
-            //XXX <body> and <html> tags is opened in XhtmlHeader->render()
-            $out .= "\n".'</body></html>';
         }
 
         $this->sendHeaders();
 
         $x = ob_get_contents();
         if ($x)
-            throw new Exception ('meh '.$x);
-        //        ob_end_flush();
+            throw new Exception ('XXX should not happen '.$x);
+
+        $lang = LocaleHandler::getInstance()->getLanguageCode();
+
+        echo
+        '<?xml version="1.0" encoding="UTF-8"?>'."\n".
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
+        '<html'.
+            ' xml:lang="'.$lang.'"'.
+            ' lang="'.$lang.'"'.
+            ' xmlns="http://www.w3.org/1999/xhtml">'."\n";
 
         if ($this->enable_design)
             echo XhtmlHeader::getInstance()->render();
 
         echo $out;
 
+        //XXX <body> tag is opened in XhtmlHeader->render()
+        if ($this->enable_design)
+            echo '</body>';
+
+        echo '</html>';
     }
 
 }
