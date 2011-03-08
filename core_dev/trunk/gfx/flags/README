@@ -21,4 +21,40 @@ IM, IMN   Isle of Man    self-governing British Crown Dependency, see http://en.
 
 
 
-Last updated 2011-02-12
+make_sprites.php
+---
+This is a script that combines all flag icons into one big image in order to reduce
+server requests. Since not all flags are yet renamed, this is still disabled.
+
+Test results from 2011-03-08:
+
+  In:  106 images totalling of 39.0 KiB
+  Out: 1 image totalling of 26.2 KiB true-color
+  pngcrush: 25.9 KiB
+
+  Result file size:
+    39.0 - 25.9 = 13.1 KiB savings (33% size reduction)
+
+  Result network bloat reduction:
+    In: 106 requests = 106 * 500 = ~ 51.7 KiB (with a average request HEAD of 500 bytes)
+    Out: 1 request   =   1 * 500 = ~ 0.5 KiB
+
+    Before: 39.0 KiB + 51.7 KiB = 90.7 KiB
+    After:  25.9 KiB +  0.5 KiB = 26.4 KiB
+
+    Savings: 90.7 - 26.4 KiB = 64.3 KiB (huge win!)
+
+  If finally reduceded to 256-color (with somewhat visible loss of quality):
+    Out: 9.7 KiB
+
+
+
+TODO
+---
+* NOT reduce individual icons to 256-color due to some visible loss of image quality
+* rename remaining flags in "todo" directory
+* start using a flag sprite prodcued by make_sprite.php
+
+
+
+Last updated 2011-03-08
