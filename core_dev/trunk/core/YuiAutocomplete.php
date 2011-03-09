@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: wip, not functional yet
 
 require_once('JSON.php');
 require_once('XhtmlComponent.php');

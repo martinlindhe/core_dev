@@ -160,15 +160,16 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         foreach ($this->opensearch as $o)
             $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
 
-        // these are needed for exact precision in multiple browsers
+        // margin and padding on body element can introduce errors in determining element position and are not recommended
+        // height:100% is needed for google maps js widget
         $res .= '<style type="text/css">'.
         'html{'.
             'height:100%'.
         '}'.
         'body{'.
             'height:100%;'.
-            'margin:0px;'.
-            'padding:0px'.
+            'margin:0;'.
+            'padding:0'.
         '}'.
         $this->embed_css.
         '</style>';
