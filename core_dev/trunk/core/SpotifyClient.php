@@ -40,7 +40,7 @@ class SpotifyClient extends CoreBase
 
         if ($http->getStatus() != 200) {
             d('SpotifyMetadata->getArtistId server error: '.$http->getStatus() );
-            d( $http->getHeaders() );
+            d( $http->getResponseHeaders() );
             return false;
         }
 
@@ -107,7 +107,7 @@ class SpotifyClient extends CoreBase
         $data = $http->getBody();
         if ($http->getStatus() != 200) {
             d('SpotifyMetadata->getArtistAlbums server error: '.$http->getStatus() );
-            d( $http->getHeaders() );
+            d( $http->getResponseHeaders() );
             return false;
         }
 
@@ -131,7 +131,7 @@ class SpotifyClient extends CoreBase
         $data = $http->getBody();
         if ($http->getStatus() != 200) {
             d('SpotifyMetadata->getAlbumDetails server error: '.$http->getStatus() );
-            d( $http->getHeaders() );
+            d( $http->getResponseHeaders() );
             return false;
         }
 

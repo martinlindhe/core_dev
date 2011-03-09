@@ -73,7 +73,7 @@ class TheMovieDbClient extends CoreBase
 
         if ($http->getStatus() != 200) {
             d('TheMovieDbMetadata->search server error: '.$http->getStatus() );
-            d( $http->getHeaders() );
+            d( $http->getResponseHeaders() );
             return false;
         }
 
@@ -110,7 +110,7 @@ class TheMovieDbClient extends CoreBase
 
         if ($http->getStatus() != 200) {
             d('TheMovieDbMetadata->getInfo server error: '.$http->getStatus() );
-            d( $http->getHeaders() );
+            d( $http->getResponseHeaders() );
             return false;
         }
 

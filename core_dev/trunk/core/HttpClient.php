@@ -1,7 +1,4 @@
 <?php
-//XXXXXXX IMPORTANT: renamed getHeader -> getResponseHeader, getHeaders->getResponseHeaders  ... update all users!!!
-
-
 /**
  * $Id$
  *
@@ -18,8 +15,6 @@
  */
 
 //STATUS: wip
-
-//TODO: send gzip compression headers & auto-decompress response
 
 //TODO: extend from Url ???
 
