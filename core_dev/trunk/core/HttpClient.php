@@ -234,7 +234,7 @@ class HttpClient extends CoreBase
 
         $headers = array(
         ($this->content_type ? 'Content-Type: '.$this->content_type : ''),
-        'Accept-Encoding: gzip'
+        'Accept-Encoding: gzip,deflate'
         );
 
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
@@ -359,6 +359,7 @@ class HttpClient extends CoreBase
             $body = gzinflate($body);
             break;
 
+	case 'identity':
         case '':
             break;
 
