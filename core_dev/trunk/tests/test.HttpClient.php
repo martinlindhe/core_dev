@@ -5,8 +5,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 require_once('core.php');
 require_once('HttpClient.php');
 
-// test http client
-$http = new HttpClient('http://www.if-not-true-then-false.com/');
+$http = new HttpClient('http://www.if-not-true-then-false.com/'); // this domain returns "gzip" compressed documents
 $body = $http->getBody();
 d($body);
 

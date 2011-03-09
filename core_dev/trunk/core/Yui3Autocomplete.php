@@ -7,6 +7,10 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
+//STATUS: wip, will replace YuiAutocomplete
+
+//TODO: ability to load list with id=>label pairs of data. show label but submit id
+
 require_once('JSON.php');
 
 class Yui3Autocomplete
@@ -32,7 +36,7 @@ class Yui3Autocomplete
                 'tags = '.JSON::encode($this->data_source, false).';'.
 
             'inputNode.plug(Y.Plugin.AutoComplete, {'.
-                'activateFirstItem: true,'.
+//                'activateFirstItem: true,'.
                 'allowTrailingDelimiter: true,'.
                 'minQueryLength: 0,'.
                 'queryDelay: 0,'.
