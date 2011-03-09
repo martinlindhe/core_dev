@@ -189,7 +189,7 @@ class XhtmlForm
                     continue;
                 }
 
-                $dst_file = $page->getUploadRoot().$key['name'];
+                $dst_file = $page->getUploadRoot().'/'.$key['name'];
 
                 if (move_uploaded_file($key['tmp_name'], $dst_file))
                     chmod($dst_file, 0777);
