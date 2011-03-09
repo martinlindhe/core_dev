@@ -248,7 +248,7 @@ class YuiDatatable
                 for ($i=0; $i<count($this->embed_arrays); $i++) {
                     $res .=
                     'this.formatArray'.$i.' = function(elLiner, oRecord, oColumn, oData) {'.
-                        'var a='.JSON::encode($this->embed_arrays[$i],false).';'.
+                        'var a='.JSON::encodeObject($this->embed_arrays[$i],true).';'.
                         'elLiner.innerHTML = a[oData];'.
                     '};'.
                     'YAHOO.widget.DataTable.Formatter.formatArray'.$i.' = this.formatArray'.$i.';';

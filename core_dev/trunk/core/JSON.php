@@ -23,16 +23,26 @@ class JSON
     public static function encode($obj, $with_keys = true)
     {
         if (is_array($obj))
-            return '['.self::encodeObject($obj, $with_keys).']';
+            return self::encodeArray($obj, $with_keys);
 
         if (is_object($obj))
-            return '{'.self::encodeObject($obj, $with_keys).'}';
+            return self::encodeObject($obj, $with_keys);
 
         throw new Exception ('ewwp');
 //        return json_encode($obj);
     }
 
-    private static function encodeObject($list, $with_keys = false)
+    static function encodeArray($obj, $with_keys = true)
+    {
+        return '['.self::encodeInternal($obj, $with_keys).']';
+    }
+
+    static function encodeObject($obj, $with_keys = true)
+    {
+        return '{'.self::encodeInternal($obj, $with_keys).'}';
+    }
+
+    private static function encodeInternal($list, $with_keys = false)
     {
         $all = array();
 

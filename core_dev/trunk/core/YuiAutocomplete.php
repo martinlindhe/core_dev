@@ -18,7 +18,6 @@ class YuiAutocomplete extends XhtmlComponent
 {
     protected $xhr_url;
 
-    protected $js_onclick       = '';
     protected $js_format_result = '';
     protected $result_fields    = array();
 
@@ -26,7 +25,6 @@ class YuiAutocomplete extends XhtmlComponent
 
     function setXhrUrl($s) { $this->xhr_url = $s; }
 
-    function setJsOnclick($s) { $this->js_onclick = $s; }
     function setJsFormatResult($s) { $this->js_format_result = $s; }
 
     function setResultFields($o)
@@ -46,7 +44,7 @@ class YuiAutocomplete extends XhtmlComponent
         if (!$this->xhr_url)
             throw new Exception ('must set xhr url');
 
-        if (!$this->js_onclick || !$this->js_format_result || !$this->result_fields)
+        if (!$this->js_format_result || !$this->result_fields)
             throw new Exception ('need js code');
 
         $header = XhtmlHeader::getInstance();
@@ -61,6 +59,8 @@ class YuiAutocomplete extends XhtmlComponent
         $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/autocomplete/autocomplete-min.js');
 
         $div_holder = 'yui_ac'.mt_rand();
+
+        $hidden_holder = 'ac_hid_'.mt_rand();
 
         $header->embedCss(
         'label {'.
@@ -87,6 +87,8 @@ class YuiAutocomplete extends XhtmlComponent
             'oAC.minQueryLength = 2;'. // minimum length to start search
             'oAC.queryDelay = '.$this->query_delay.';'.
             'oAC.delimChar = [",",";"];'.
+//            'oAC.useShadow = true;'.
+            'oAC.forceSelection=true;'.
 
             // The webservice needs custom parameters
             'oAC.generateRequest = function(sQuery) {'.
@@ -99,10 +101,18 @@ class YuiAutocomplete extends XhtmlComponent
             'oAC.formatResult = function(oResultData, sQuery, sResultMatch) {'.
                 $this->js_format_result.
             '};'.
+
             'oAC.itemSelectEvent.subscribe(function(sType, aArgs) {'.
+                // 'var myAC = aArgs[0];'. // reference back to the AC instance
+                // 'var elLI = aArgs[1];'. // reference to the selected LI element
                 'var oData = aArgs[2];'. // object literal of selected item's result data
-                $this->js_onclick.
+
+                'var myHiddenField = YAHOO.util.Dom.get("'.$hidden_holder.'");'.
+                // update hidden form field with the selected item's ID
+                'myHiddenField.value = oData.id;'.
+                'alert( myHiddenField.value );'.
             '});'.
+
 
             // Stub for form validation
             'var validateForm = function() {'.
@@ -124,6 +134,7 @@ class YuiAutocomplete extends XhtmlComponent
         '<div id="'.$div_holder.'">'.
             $in->render().
             '<div id="myContainer"></div>'.
+            '<input id="'.$hidden_holder.'" type="hidden">'.
         '</div>'.
         js_embed($res);
     }
