@@ -3,6 +3,8 @@
 # sudo apt-get install php5-geoip
 #
 # Updates local geoip databases from the web, usually a new version is available every month
+#
+# XXX TODO later: create a sqlite db (?), see blog post: http://www.splitbrain.org/blog/2011-02/12-maxmind_geoip_db_and_sqlite
 
 DST_DIR=/usr/share/GeoIP
 
