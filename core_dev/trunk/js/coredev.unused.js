@@ -1,312 +1,295 @@
 function trace(s) { console.debug(s); }
 
-function urlencode(str)	//function borrowed from http://www.albionresearch.com/misc/urlencode.php
+function urlencode(str) //function borrowed from http://www.albionresearch.com/misc/urlencode.php
 {
-	var SAFE = "0123456789" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "-_.!~*'()";
-	var HEX = "0123456789ABCDEF";
+    var SAFE = "0123456789" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "-_.!~*'()";
+    var HEX = "0123456789ABCDEF";
 
-	var encoded = "";
-	for (var i = 0; i < str.length; i++ ) {
-		var ch = str.charAt(i);
-	    if (ch == " ") {
-		    encoded += "+";				// x-www-urlencoded, rather than %20
-		} else if (SAFE.indexOf(ch) != -1) {
-		    encoded += ch;
-		} else {
-		    var charCode = ch.charCodeAt(0);
-			if (charCode > 255) {
-			    alert( "Unicode Character '"
+    var encoded = "";
+    for (var i = 0; i < str.length; i++ ) {
+        var ch = str.charAt(i);
+        if (ch == " ") {
+            encoded += "+";             // x-www-urlencoded, rather than %20
+        } else if (SAFE.indexOf(ch) != -1) {
+            encoded += ch;
+        } else {
+            var charCode = ch.charCodeAt(0);
+            if (charCode > 255) {
+                alert( "Unicode Character '"
                         + ch
                         + "' cannot be encoded using standard URL encoding.\n" +
-				          "(URL encoding only supports 8-bit characters.)\n" +
-						  "A space (+) will be substituted." );
-				encoded += "+";
-			} else {
-				encoded += "%";
-				encoded += HEX.charAt((charCode >> 4) & 0xF);
-				encoded += HEX.charAt(charCode & 0xF);
-			}
-		}
-	}
+                          "(URL encoding only supports 8-bit characters.)\n" +
+                          "A space (+) will be substituted." );
+                encoded += "+";
+            } else {
+                encoded += "%";
+                encoded += HEX.charAt((charCode >> 4) & 0xF);
+                encoded += HEX.charAt(charCode & 0xF);
+            }
+        }
+    }
 
-	return encoded;
+    return encoded;
 };
 
 function trim(str)
 {
-	return str.replace(/^\s*|\s*$/g,"");
+    return str.replace(/^\s*|\s*$/g,"");
 }
 
 function is_numeric(n)
 {
-	var VALID = "0123456789.";
+    var VALID = "0123456789.";
 
-	for (i = 0; i < n.length; i++) {
-		var c = n.charAt(i);
-		if (VALID.indexOf(c) == -1)
-			return false;
-	}
+    for (i = 0; i < n.length; i++) {
+        var c = n.charAt(i);
+        if (VALID.indexOf(c) == -1)
+            return false;
+    }
    return true;
 }
 
 function enable_element(n)
 {
-	var e = document.getElementById(n);
-	e.disabled=false;
+    var e = document.getElementById(n);
+    e.disabled=false;
 }
 
 function disable_element(n)
 {
-	var e = document.getElementById(n);
-	e.disabled=true;
+    var e = document.getElementById(n);
+    e.disabled=true;
 }
 
 function toggle_enabled_element(n)
 {
-	var e = document.getElementById(n);
-	e.disabled=!e.disabled;
+    var e = document.getElementById(n);
+    e.disabled=!e.disabled;
 }
 
 
 //Toggles element with name "n" between visible and hidden
 function toggle_element(n)
 {
-	var e = document.getElementById(n);
-	e.style.display = (e.style.display?'':'none');
+    var e = document.getElementById(n);
+    e.style.display = (e.style.display?'':'none');
 }
 
 //Makes element with name "n" invisible in browser
 function hide_element(n)
 {
-	var e = document.getElementById(n);
-	e.style.display = 'none';
+    var e = document.getElementById(n);
+    e.style.display = 'none';
 }
 
 //Makes element with name "n" visible in browser
 function show_element(n)
 {
-	var e = document.getElementById(n);
-	e.style.display = '';
+    var e = document.getElementById(n);
+    e.style.display = '';
 }
 
 //This function, as opposed to the ones above, has the
 //browser render the content but show / dont show it
 function set_visible(n)
 {
-	var e = document.getElementById(n);
-	e.style.visibility="visible";
+    var e = document.getElementById(n);
+    e.style.visibility="visible";
 }
 
 function set_invisible(n)
 {
-	var e = document.getElementById(n);
-	e.style.visibility="hidden";
+    var e = document.getElementById(n);
+    e.style.visibility="hidden";
 }
 
 function empty_element(n)
 {
-	if (is_numeric(n))
-		var e=document.getElementById(n);
-	else
-		e=n;
+    if (is_numeric(n))
+        var e=document.getElementById(n);
+    else
+        e=n;
 
-	while (e.hasChildNodes())
-		e.removeChild(e.firstChild);
+    while (e.hasChildNodes())
+        e.removeChild(e.firstChild);
 }
 
 function fill_element(n,txt)
 {
-	var e = document.getElementById(n);
-	empty_element(e);
+    var e = document.getElementById(n);
+    empty_element(e);
 
-	e.innerHTML = txt;
+    e.innerHTML = txt;
 }
 
 function add_div(e, idname, style)
 {
-	var c=document.createElement('div');
+    var c=document.createElement('div');
 
-	c.setAttribute('id', idname);
-	c.className = style;
-	e.appendChild(c);
+    c.setAttribute('id', idname);
+    c.className = style;
+    e.appendChild(c);
 
-	return c;
+    return c;
 }
 
 function add_span(e)
 {
-	var c=document.createElement('span');
+    var c=document.createElement('span');
 
-//	c.setAttribute('id', idname);
-//	c.className = style;
-	e.appendChild(c);
+//  c.setAttribute('id', idname);
+//  c.className = style;
+    e.appendChild(c);
 
-	return c;
+    return c;
 }
 
 //checks if image n has been loaded, waits until it is done otherwise
 function image_loaded(n)
 {
-	var e = document.getElementById(n);
+    var e = document.getElementById(n);
 
-	trace('image_loaded('+n+') w:'+e.width+',h:'+e.height);
+    trace('image_loaded('+n+') w:'+e.width+',h:'+e.height);
 
-	//IE FIXME untested
-	if (!e.complete) return false;
+    //IE FIXME untested
+    if (!e.complete) return false;
 
-	//Firefox
-	if (typeof e.naturalWidth != "undefined" && e.naturalWidth == 0)
-		return false;
+    //Firefox
+    if (typeof e.naturalWidth != "undefined" && e.naturalWidth == 0)
+        return false;
 
-	return true;
+    return true;
 }
 
 //resizes current window to the same size as image n
 function resize_wnd_to_img(n)
 {
-	var e = document.getElementById(n);
-	trace('resize_wnd_to_img('+n+') w:'+e.width+',h:'+e.height);
-	var NS = (navigator.appName=="Netscape")?true:false;
+    var e = document.getElementById(n);
+    trace('resize_wnd_to_img('+n+') w:'+e.width+',h:'+e.height);
+    var NS = (navigator.appName=="Netscape")?true:false;
 
-	iWidth = (NS)?window.innerWidth:document.body.clientWidth;
-	iHeight = (NS)?window.innerHeight:document.body.clientHeight;
-	iWidth = e.width - iWidth;
-	iHeight = e.height - iHeight;
-	window.resizeBy(iWidth, iHeight);
-	self.focus();
+    iWidth = (NS)?window.innerWidth:document.body.clientWidth;
+    iHeight = (NS)?window.innerHeight:document.body.clientHeight;
+    iWidth = e.width - iWidth;
+    iHeight = e.height - iHeight;
+    window.resizeBy(iWidth, iHeight);
+    self.focus();
 }
 
 function pause(ms)
 {
-	var now = new Date();
-	var exitTime = now.getTime() + ms;
+    var now = new Date();
+    var exitTime = now.getTime() + ms;
 
-	while(true) {
-		now = new Date();
-		if(now.getTime() > exitTime) return;
-	}
+    while(true) {
+        now = new Date();
+        if(now.getTime() > exitTime) return;
+    }
 }
 
 //sends a ajax poll submit
 function submit_poll(id,opt)
 {
-	ajax_poll(id,opt);
+    ajax_poll(id,opt);
 
-	hide_element('poll'+id);
-	show_element('poll_voted'+id);
+    hide_element('poll'+id);
+    show_element('poll_voted'+id);
 }
 
 function get_poll_csv(id)
 {
-	var w = window.open(_ext_core+'csv_poll.php?id='+id+_ext_ref, '_blank');
-	w.focus();
+    var w = window.open(_ext_core+'csv_poll.php?id='+id+_ext_ref, '_blank');
+    w.focus();
 }
 
 //Loads image id into holder-div
 function loadImage(id, holder)
 {
-	var e = document.getElementById(holder);
-	empty_element(e);
+    var e = document.getElementById(holder);
+    empty_element(e);
 
-	var i = document.createElement('img');
-	i.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
-	e.appendChild(i);
+    var i = document.createElement('img');
+    i.setAttribute('src', _ext_core+'file.php?id='+id+_ext_ref);
+    e.appendChild(i);
 
 
-	var j = document.getElementById('image_comments_iframe');
-	j.setAttribute('src', _ext_core+'html_imgcomments.php?i='+id+_ext_ref);
+    var j = document.getElementById('image_comments_iframe');
+    j.setAttribute('src', _ext_core+'html_imgcomments.php?i='+id+_ext_ref);
 }
 
 function scroll_up(e, step, offs)
 {
-	e.scrollTop -= step;
-	offs += step;
+    e.scrollTop -= step;
+    offs += step;
 
-	if (offs<0) setTimeout(function() {scroll_up(e,step,offs)}, 1);
+    if (offs<0) setTimeout(function() {scroll_up(e,step,offs)}, 1);
 }
 
 function scroll_down(e, step, offs)
 {
-	e.scrollTop += step;
-	offs -= step;
+    e.scrollTop += step;
+    offs -= step;
 
-	if (offs>0) setTimeout(function() {scroll_down(e,step,offs)}, 1);
+    if (offs>0) setTimeout(function() {scroll_down(e,step,offs)}, 1);
 }
 
 //scroll the content of element name "n" by offset pixels. use negative value of offset to scroll up, positive to scroll down
 function scroll_element_content(n,offs)
 {
-	var e = document.getElementById(n);
+    var e = document.getElementById(n);
 
-	if (offs>0) {
-		setTimeout(function() {scroll_down(e,6,offs)}, 1);
-	} else {
-		setTimeout(function() {scroll_up(e,6,offs)}, 1);
-	}
+    if (offs>0) {
+        setTimeout(function() {scroll_down(e,6,offs)}, 1);
+    } else {
+        setTimeout(function() {scroll_up(e,6,offs)}, 1);
+    }
 }
 
 //expands size of <input type="text" id="n">
 function expand_input(e)
 {
-	var x=document.getElementById(e);
-	if (x.size < 120) x.size += 20;
-	//fixme: set focus to start of inputted text after resizing
+    var x=document.getElementById(e);
+    if (x.size < 120) x.size += 20;
+    //fixme: set focus to start of inputted text after resizing
 }
 
 function urlOpen(u)
 {
-	document.location = u;
+    document.location = u;
 }
 
 function in_arr(arr,val)
 {
-	for (var i=0; i<arr.length; i++) {
-		if (arr[i] == val) return true;
-	}
-	return false;
+    for (var i=0; i<arr.length; i++) {
+        if (arr[i] == val) return true;
+    }
+    return false;
 }
 
 function arr_del(arr,val)
 {
-	for (var i=0; i<arr.length; i++) {
-		if (arr[i] == val) delete arr[i];	//fixme: this will leave arr[i] undefined, arr.length will not be changed
-	}
+    for (var i=0; i<arr.length; i++) {
+        if (arr[i] == val) delete arr[i];   //fixme: this will leave arr[i] undefined, arr.length will not be changed
+    }
 }
 
 function set_class(e,c){
-	var x=document.getElementById(e);
-	x.className=c;
+    var x=document.getElementById(e);
+    x.className=c;
 }
 
 function add_node(e,t,s) {
-	var c=document.createElement('div');
-	e.appendChild(c);
-	var tx=document.createTextNode(t);
-	c.appendChild(tx);
-	c.className=s;
-	return c;
+    var c=document.createElement('div');
+    e.appendChild(c);
+    var tx=document.createTextNode(t);
+    c.appendChild(tx);
+    c.className=s;
+    return c;
 }
 
 function add_node_and_focus(e,t,s) {
-	var c=add_node(e,t,s);
-	c.scrollIntoView(false);
-}
-
-//focuses on the faq item #i
-function faq_focus(n) {
-	e = document.getElementById('faq_'+n);
-	if (!e) return;
-	e.style.display = '';	//show
-
-	for (i=0;i<=100;i++) {
-		if (i==n) continue;
-		e = document.getElementById('faq_'+i);
-		if (!e) return;
-		e.style.display = 'none';	//hide
-
-		hide_element('faq_edit_'+i);
-		show_element('faq_holder_'+i);
-	}
+    var c=add_node(e,t,s);
+    c.scrollIntoView(false);
 }
 
 //used with $files->showThumbnails(). displays comments div and shrinks currently displayed image
@@ -315,57 +298,57 @@ var comments_shown = false;
 var org_w, org_h;
 function show_image_comments(n)
 {
-	e = document.getElementById('img_'+n);
+    e = document.getElementById('img_'+n);
 
-	if (!comments_shown) {
-		show_element('image_comments_content');
-		comments_shown = true;
-		org_w = e.width;
-		org_h = e.height;
-		//fixme: shrinking image here dont work properly, first time it resizes it gets wrong then it gets correct
-		//e.width *= 0.5;
-		//e.height *= 0.5;
-		return;
-	}
+    if (!comments_shown) {
+        show_element('image_comments_content');
+        comments_shown = true;
+        org_w = e.width;
+        org_h = e.height;
+        //fixme: shrinking image here dont work properly, first time it resizes it gets wrong then it gets correct
+        //e.width *= 0.5;
+        //e.height *= 0.5;
+        return;
+    }
 
-	hide_element('image_comments_content');
-	comments_shown = false;
-	e.width = org_w;
-	e.height = org_h;
+    hide_element('image_comments_content');
+    comments_shown = false;
+    e.width = org_w;
+    e.height = org_h;
 }
 
 //shows fileId i in a new window, displayed as a image
 function popup_imgview(i,w,h)
 {
-	if(!w)w=300;
-	if(!h)h=200;
-	p = window.open(_ext_core+'popup_imgview.php?id='+i+_ext_ref, 'name', 'width='+w+',height='+h);
-	if (window.focus) p.focus();
+    if(!w)w=300;
+    if(!h)h=200;
+    p = window.open(_ext_core+'popup_imgview.php?id='+i+_ext_ref, 'name', 'width='+w+',height='+h);
+    if (window.focus) p.focus();
 }
 
 //sets element name "n" to the html content of "txt"
 function set_div_content(n, txt)
 {
-	var e = document.getElementById(n);
-	empty_element(e);
+    var e = document.getElementById(n);
+    empty_element(e);
 
-	e.innerHTML = txt;
-	show_element(n);
+    e.innerHTML = txt;
+    show_element(n);
 }
 
 //toggles all checkboxes in form "frm" on/off
 function toggle_checkboxes(type, frm)
 {
-	type = (type.checked) ? true : false;
-	var e = document.getElementById(frm);
-	for (i = 0; i < e.length; i++) {
-		var toggle = e.elements[i];
-		if (toggle.type == 'checkbox') toggle.checked = type;
-	}
+    type = (type.checked) ? true : false;
+    var e = document.getElementById(frm);
+    for (i = 0; i < e.length; i++) {
+        var toggle = e.elements[i];
+        if (toggle.type == 'checkbox') toggle.checked = type;
+    }
 }
 
 function confirm_chk(t) {
-	return confirm(t);
+    return confirm(t);
 }
 
 

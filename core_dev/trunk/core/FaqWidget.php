@@ -7,10 +7,9 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: wip, still ugly
+//STATUS: wip
 
-//XXX: edit is broken
-
+//TODO later: detach admin editing to its own class & make a view using it and put in core_dev admin interface
 
 class FaqWidget
 {
@@ -61,22 +60,77 @@ class FaqWidget
         if (!$list && !$session->isAdmin)
             return;
 
+        // auto focus on first entry in list
         if (!$active && $list)
             $active = $list[0]['faqId'];
 
+        $header = XhtmlHeader::getInstance();
+
+        $header->embedCss(
+        '.faq_holder{'.
+            'border:1px #888 solid;'.
+            'background-color:#fff;'.
+            'max-width:600px;'.
+            'color:#444;'.
+        '}'.
+        '.faq_holder:hover{'.
+            'background-color:#eee;'.
+        '}'.
+        '.faq_q{'.
+            'font-size:20px;'.
+            'font-weight:bold;'.
+            'padding:10px;'.
+            'cursor:pointer;'.
+        '}'.
+        '.faq_a{'.
+            'padding:10px;'.
+        '}'
+        );
+
+        $header->embedJs(
+        //Makes element with name "n" invisible in browser
+        'function hide_element(n)'.
+        '{'.
+            'var e = document.getElementById(n);'.
+            'e.style.display = "none";'.
+        '}'.
+
+        //Makes element with name "n" visible in browser
+        'function show_element(n)'.
+        '{'.
+            'var e = document.getElementById(n);'.
+            'e.style.display = "";'.
+        '}'.
+
+        //focuses on the faq item #i
+        'function faq_focus(n)'.
+        '{'.
+            'show_element("faq_"+n);'.
+
+            'for (i=0;i<=100;i++) {'.
+                'if (i==n) continue;'.
+                'e = document.getElementById("faq_"+i);'.
+                'if (!e) return;'.
+                'e.style.display = "none";'.    //hide
+                'hide_element("faq_edit_"+i);'.
+                'show_element("faq_holder_"+i);'.
+            '}'.
+        '}'
+        );
+
         // FAQ full Q&A details
-        for ($i=0; $i<count($list); $i++) {
+        foreach ($list as $i => $row) {
             echo '<div class="faq_holder" id="faq_holder_'.$i.'">';
                 echo '<div class="faq_q" onclick="faq_focus('.$i.')">';
-                    echo ($i+1).'. '.$list[$i]['question'];
+                    echo ($i+1).'. '.$row['question'];
                 echo '</div>';
-                echo '<div class="faq_a" id="faq_'.$i.'" style="'.($list[$i]['faqId']!=$active?'display:none':'').'">';
+                echo '<div class="faq_a" id="faq_'.$i.'" style="'.($row['faqId'] != $active ? 'display:none' : '').'">';
                     echo $list[$i]['answer'];
 
                     if ($session->isAdmin) {
                         echo '<br/><br/>';
                         echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_element(\'faq_holder_'.$i.'\'); show_element(\'faq_edit_'.$i.'\');"/> ';
-                        echo '<input type="button" class="button" value="'.t('Delete').'" onclick="document.location=\'?fdel='.$list[$i]['faqId'].'\'"/>';
+                        echo '<input type="button" class="button" value="'.t('Delete').'" onclick="document.location=\'?fdel='.$row['faqId'].'\'"/>';
                     }
 
                 echo '</div>';
@@ -85,12 +139,12 @@ class FaqWidget
 
             if ($session->isAdmin) {
                 echo '<div class="faq_holder" id="faq_edit_'.$i.'" style="display: none;">';
-                    echo '<form method="post" action="?fid='.$list[$i]['faqId'].'">';
+                    echo '<form method="post" action="?fid='.$row['faqId'].'">';
                     echo '<div class="faq_q">';
-                        echo ($i+1).'. <input type="text" name="faq_uq" size="40" value="'.$list[$i]['question'].'"/>';
+                        echo ($i+1).'. Edit <input type="text" name="faq_uq" size="40" value="'.$row['question'].'"/>';
                     echo '</div>';
                     echo '<div class="faq_a">';
-                        echo '<textarea rows="14" cols="60" name="faq_ua">'.$list[$i]['answer'].'</textarea><br/><br/>';
+                        echo '<textarea rows="14" cols="60" name="faq_ua">'.$row['answer'].'</textarea><br/><br/>';
                         echo '<input type="submit" class="button" value="'.t('Save').'"/>';
                     echo '</div>';
                     echo '</form>';
