@@ -2,72 +2,42 @@
 /**
  * $Id$
  *
+ * Shows all FAQ entries with ability to add/edit/remove for admins
+ *
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
+
+//STATUS: wip, still ugly
+
+//XXX: edit is broken
 
 
 class FaqWidget
 {
-    /**
-     * Adds a new FAQ entry
-     *
-     * @param $_q question
-     * @param $_a answer
-     * @return FAQ id
-     */
-    private static function add($_q, $_a)
-    {
-        global $h, $db;
-        if (!$h->session->isAdmin) return;
-
-        $q = 'INSERT INTO tblFAQ SET question="'.$db->escape($_q).'",answer="'.$db->escape($_a).'",createdBy='.$h->session->id.',timeCreated=NOW()';
-        return $db->insert($q);
-    }
-
-    /**
-     * Updates a FAQ entry
-     *
-     * @param $_id FAQ id
-     * @param $_q question
-     * @param $_a answe
-     * @return true on success
-     */
-    private static function update($_id, $_q, $_a)
-    {
-        global $h, $db;
-        if (!$h->session->isAdmin || !is_numeric($_id)) return false;
-
-        $q = 'UPDATE tblFAQ SET question="'.$db->escape($_q).'",answer="'.$db->escape($_a).'" WHERE faqId='.$_id;
-        $db->update($q);
-        return true;
-    }
-
-    /** Fetches all FAQ entries */
     private static function getEntries()
     {
-        global $db;
-
         $q = 'SELECT * FROM tblFAQ';
-        return $db->getArray($q);
+        return SqlHandler::getInstance()->pSelect($q);
     }
 
-    /**
-     * Deletes a FAQ entry
-     *
-     * @param $_id FAQ id
-     * @return true on success
-     */
-    private static function delete($_id)
+    private static function add($question, $answer)
     {
-        global $h, $db;
-        if (!$h->session->isAdmin || !is_numeric($_id)) return false;
-
-        $q = 'DELETE FROM tblFAQ WHERE faqId='.$_id;
-        $db->delete($q);
-        return true;
+        $q = 'INSERT INTO tblFAQ SET question = ?, answer = ?, createdBy = ?, timeCreated=NOW()';
+        return SqlHandler::getInstance()->pInsert($q, 'ssi', $question, $answer, SessionHandler::getInstance()->id);
     }
 
-    /** Shows all FAQ entries with ability to edit them */
+    private static function update($id, $question, $answer)
+    {
+        $q = 'UPDATE tblFAQ SET question = ?, answer = ? WHERE faqId = ?';
+        return SqlHandler::getInstance()->pUpdate($q, 'ssi', $question, $answer, $id);
+    }
+
+    private static function delete($id)
+    {
+        $q = 'DELETE FROM tblFAQ WHERE faqId = ?';
+        return SqlHandler::getInstance()->pDelete($q, 'i', $id);
+    }
+
     function render()
     {
         $session = SessionHandler::getInstance();
@@ -75,24 +45,26 @@ class FaqWidget
         $active = 0;
 
         if ($session->isAdmin) {
-            if (!empty($_POST['faq_q']) && isset($_POST['faq_a'])) {
+            if (!empty($_POST['faq_q']) && isset($_POST['faq_a']))
                 $active = self::add($_POST['faq_q'], $_POST['faq_a']);
-            }
 
             if (isset($_GET['fid']) && is_numeric($_GET['fid']) && isset($_POST['faq_uq']) && isset($_POST['faq_ua'])) {
                 self::update($_GET['fid'], $_POST['faq_uq'], $_POST['faq_ua']);
                 $active = $_GET['fid'];
             }
 
-            if (isset($_GET['fdel'])) self::delete($_GET['fdel']);
+            if (isset($_GET['fdel']))
+                self::delete($_GET['fdel']);
         }
 
         $list = self::getEntries();
-        if (!$list && !$session->isAdmin) return;
+        if (!$list && !$session->isAdmin)
+            return;
 
-        if (!$active && $list) $active = $list[0]['faqId'];
+        if (!$active && $list)
+            $active = $list[0]['faqId'];
 
-        //FAQ full Q&A details
+        // FAQ full Q&A details
         for ($i=0; $i<count($list); $i++) {
             echo '<div class="faq_holder" id="faq_holder_'.$i.'">';
                 echo '<div class="faq_q" onclick="faq_focus('.$i.')">';
@@ -109,7 +81,7 @@ class FaqWidget
 
                 echo '</div>';
 
-            echo '</div>';    //id="faq_holder_x"
+            echo '</div>'; // id="faq_holder_x"
 
             if ($session->isAdmin) {
                 echo '<div class="faq_holder" id="faq_edit_'.$i.'" style="display: none;">';
@@ -122,7 +94,7 @@ class FaqWidget
                         echo '<input type="submit" class="button" value="'.t('Save').'"/>';
                     echo '</div>';
                     echo '</form>';
-                echo '</div>';    //id="faq_edit_x"
+                echo '</div>'; // id="faq_edit_x"
             }
         }
 
