@@ -17,7 +17,9 @@
 require_once('CoreBase.php');
 require_once('core.php'); //for str_get_ending()
 
-class Diff extends CoreBase
+require_once('DifferenceEngine.php');
+
+class Diff_DEPRECATED extends CoreBase  //XXX use DifferenceEngine.php
 {
     private $r1, $r2;        ///< data revisions
     private $diff = array();
