@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: DEPRECATED! use DifferenceEngine.php instead
 
 //TODO: use http://code.google.com/p/google-diff-match-patch/ instead when its ported to a php plugin
 

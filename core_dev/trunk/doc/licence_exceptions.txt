@@ -1,0 +1,1 @@
+core/DifferenceEngine.php is licenced under the GPL

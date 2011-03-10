@@ -1,86 +1,80 @@
 <?php
-// this version taken from dokuwiki-2010-11-07a.tgz at 2011-03-10
-
 /**
  * A PHP diff engine for phpwiki. (Taken from phpwiki-1.3.3)
  *
  * Additions by Axel Boldt for MediaWiki
  *
+ * 2011-03-10: imported from dokuwiki-2010-11-07a.tgz
+ * 2011-03-10: cosmetics & coding style cleanup
+ *
  * @copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
  * @license  You may copy this code freely under the conditions of the GPL.
  */
+
 define('USE_ASSERTS', function_exists('assert'));
 
-class _DiffOp {
+class _DiffOp
+{
     var $type;
     var $orig;
     var $closing;
 
-    function reverse() {
-        trigger_error("pure virtual", E_USER_ERROR);
-    }
+    function reverse() { trigger_error("pure virtual", E_USER_ERROR); }
 
-    function norig() {
-        return $this->orig ? count($this->orig) : 0;
-    }
+    function norig() { return $this->orig ? count($this->orig) : 0; }
 
-    function nclosing() {
-        return $this->closing ? count($this->closing) : 0;
-    }
+    function nclosing() { return $this->closing ? count($this->closing) : 0; }
 }
 
-class _DiffOp_Copy extends _DiffOp {
+class _DiffOp_Copy extends _DiffOp
+{
     var $type = 'copy';
 
-    function _DiffOp_Copy ($orig, $closing = false) {
+    function __construct($orig, $closing = false) {
         if (!is_array($closing))
             $closing = $orig;
         $this->orig = $orig;
         $this->closing = $closing;
     }
 
-    function reverse() {
-        return new _DiffOp_Copy($this->closing, $this->orig);
-    }
+    function reverse() { return new _DiffOp_Copy($this->closing, $this->orig); }
 }
 
-class _DiffOp_Delete extends _DiffOp {
+class _DiffOp_Delete extends _DiffOp
+{
     var $type = 'delete';
 
-    function _DiffOp_Delete ($lines) {
+    function __construct($lines) {
         $this->orig = $lines;
         $this->closing = false;
     }
 
-    function reverse() {
-        return new _DiffOp_Add($this->orig);
-    }
+    function reverse() { return new _DiffOp_Add($this->orig); }
 }
 
-class _DiffOp_Add extends _DiffOp {
+class _DiffOp_Add extends _DiffOp
+{
     var $type = 'add';
 
-    function _DiffOp_Add ($lines) {
+    function __construct($lines) {
         $this->closing = $lines;
         $this->orig = false;
     }
 
-    function reverse() {
-        return new _DiffOp_Delete($this->closing);
-    }
+    function reverse() { return new _DiffOp_Delete($this->closing); }
 }
 
-class _DiffOp_Change extends _DiffOp {
+class _DiffOp_Change extends _DiffOp
+{
     var $type = 'change';
 
-    function _DiffOp_Change ($orig, $closing) {
+    function __construct($orig, $closing)
+    {
         $this->orig = $orig;
         $this->closing = $closing;
     }
 
-    function reverse() {
-        return new _DiffOp_Change($this->closing, $this->orig);
-    }
+    function reverse() { return new _DiffOp_Change($this->closing, $this->orig); }
 }
 
 
@@ -104,9 +98,10 @@ class _DiffOp_Change extends _DiffOp {
  * @author Geoffrey T. Dairiki
  * @access private
  */
-class _DiffEngine {
-
-    function diff ($from_lines, $to_lines) {
+class _DiffEngine
+{
+    function diff($from_lines, $to_lines)
+    {
         if (!is_array($from_lines))
             $from_lines = explode("\n", $from_lines);
 
@@ -218,7 +213,8 @@ class _DiffEngine {
      * match.  The caller must trim matching lines from the beginning and end
      * of the portions it is going to specify.
      */
-    function _diag ($xoff, $xlim, $yoff, $ylim, $nchunks) {
+    function _diag($xoff, $xlim, $yoff, $ylim, $nchunks)
+    {
         $flip = false;
 
         if ($xlim - $xoff > $ylim - $yoff) {
@@ -292,7 +288,8 @@ class _DiffEngine {
         return array($this->lcs, $seps);
     }
 
-    function _lcs_pos ($ypos) {
+    function _lcs_pos($ypos)
+    {
         $end = $this->lcs;
         if ($end == 0 || $ypos > $this->seq[$end]) {
             $this->seq[++$this->lcs] = $ypos;
@@ -329,7 +326,8 @@ class _DiffEngine {
      * Note that XLIM, YLIM are exclusive bounds.
      * All line numbers are origin-0 and discarded lines are not counted.
      */
-    function _compareseq ($xoff, $xlim, $yoff, $ylim) {
+    function _compareseq($xoff, $xlim, $yoff, $ylim)
+    {
         // Slide down the bottom initial diagonal.
         while ($xoff < $xlim && $yoff < $ylim
                 && $this->xv[$xoff] == $this->yv[$yoff]) {
@@ -387,7 +385,8 @@ class _DiffEngine {
      *
      * This is extracted verbatim from analyze.c (GNU diffutils-2.7).
      */
-    function _shift_boundaries ($lines, &$changed, $other_changed) {
+    function _shift_boundaries($lines, &$changed, $other_changed)
+    {
         $i = 0;
         $j = 0;
 
@@ -499,8 +498,8 @@ class _DiffEngine {
 /**
  * Class representing a 'diff' between two sequences of strings.
  */
-class Diff {
-
+class Diff
+{
     var $edits;
 
     /**
@@ -510,7 +509,8 @@ class Diff {
      *      (Typically these are lines from a file.)
      * @param $to_lines array An array of strings.
      */
-    function __construct($from_lines, $to_lines) {
+    function __construct($from_lines, $to_lines)
+    {
         $eng = new _DiffEngine;
         $this->edits = $eng->diff($from_lines, $to_lines);
         //$this->_check($from_lines, $to_lines);
@@ -526,7 +526,8 @@ class Diff {
      * @return object A Diff object representing the inverse of the
      *          original diff.
      */
-    function reverse () {
+    function reverse()
+    {
         $rev = $this;
         $rev->edits = array();
         foreach ($this->edits as $edit) {
@@ -540,7 +541,8 @@ class Diff {
      *
      * @return bool True iff two sequences were identical.
      */
-    function isEmpty () {
+    function isEmpty()
+    {
         foreach ($this->edits as $edit) {
             if ($edit->type != 'copy')
                 return false;
@@ -555,7 +557,8 @@ class Diff {
      *
      * @return int The length of the LCS.
      */
-    function lcs () {
+    function lcs()
+    {
         $lcs = 0;
         foreach ($this->edits as $edit) {
             if ($edit->type == 'copy')
@@ -572,7 +575,8 @@ class Diff {
      *
      * @return array The original sequence of strings.
      */
-    function orig() {
+    function orig()
+    {
         $lines = array();
 
         foreach ($this->edits as $edit) {
@@ -590,7 +594,8 @@ class Diff {
      *
      * @return array The sequence of strings.
      */
-    function closing() {
+    function closing()
+    {
         $lines = array();
 
         foreach ($this->edits as $edit) {
@@ -605,7 +610,8 @@ class Diff {
      *
      * This is here only for debugging purposes.
      */
-    function _check ($from_lines, $to_lines) {
+    function _check($from_lines, $to_lines)
+    {
         if (serialize($from_lines) != serialize($this->orig()))
             trigger_error("Reconstructed original doesn't match", E_USER_ERROR);
         if (serialize($to_lines) != serialize($this->closing()))
@@ -632,7 +638,8 @@ class Diff {
 /**
  * FIXME: bad name.
  */
-class MappedDiff extends Diff {
+class MappedDiff extends Diff
+{
     /**
      * Computes diff between sequences of strings.
      *
@@ -687,7 +694,8 @@ class MappedDiff extends Diff {
  * It is intended that this class be customized via inheritance,
  * to obtain fancier outputs.
  */
-class DiffFormatter {
+class DiffFormatter
+{
     /**
      * Number of leading context "lines" to preserve.
      *
@@ -710,8 +718,8 @@ class DiffFormatter {
      * @param $diff object A Diff object.
      * @return string The formatted output.
      */
-    function format($diff) {
-
+    function format($diff)
+    {
         $xi = $yi = 1;
         $block = false;
         $context = array();
@@ -766,7 +774,8 @@ class DiffFormatter {
         return $this->_end_diff();
     }
 
-    function _block($xbeg, $xlen, $ybeg, $ylen, &$edits) {
+    function _block($xbeg, $xlen, $ybeg, $ylen, &$edits)
+    {
         $this->_start_block($this->_block_header($xbeg, $xlen, $ybeg, $ylen));
         foreach ($edits as $edit) {
             if ($edit->type == 'copy')
@@ -783,17 +792,20 @@ class DiffFormatter {
         $this->_end_block();
     }
 
-    function _start_diff() {
+    function _start_diff()
+    {
         ob_start();
     }
 
-    function _end_diff() {
+    function _end_diff()
+    {
         $val = ob_get_contents();
         ob_end_clean();
         return $val;
     }
 
-    function _block_header($xbeg, $xlen, $ybeg, $ylen) {
+    function _block_header($xbeg, $xlen, $ybeg, $ylen)
+    {
         if ($xlen > 1)
             $xbeg .= "," . ($xbeg + $xlen - 1);
         if ($ylen > 1)
@@ -802,30 +814,37 @@ class DiffFormatter {
         return $xbeg . ($xlen ? ($ylen ? 'c' : 'd') : 'a') . $ybeg;
     }
 
-    function _start_block($header) {
+    function _start_block($header)
+    {
         echo $header;
     }
 
-    function _end_block() {
+    function _end_block()
+    {
     }
 
-    function _lines($lines, $prefix = ' ') {
+    function _lines($lines, $prefix = ' ')
+    {
         foreach ($lines as $line)
             echo "$prefix $line\n";
     }
 
-    function _context($lines) {
+    function _context($lines)
+    {
         $this->_lines($lines);
     }
 
-    function _added($lines) {
+    function _added($lines)
+    {
         $this->_lines($lines, ">");
     }
-    function _deleted($lines) {
+    function _deleted($lines)
+    {
         $this->_lines($lines, "<");
     }
 
-    function _changed($orig, $closing) {
+    function _changed($orig, $closing)
+    {
         $this->_deleted($orig);
         echo "---\n";
         $this->_added($closing);
@@ -840,15 +859,18 @@ class DiffFormatter {
 
 define('NBSP', "\xC2\xA0");     // utf-8 non-breaking space.
 
-class _HWLDF_WordAccumulator {
-    function __construct () {
+class _HWLDF_WordAccumulator
+{
+    function __construct()
+    {
         $this->_lines = array();
         $this->_line = '';
         $this->_group = '';
         $this->_tag = '';
     }
 
-    function _flushGroup ($new_tag) {
+    function _flushGroup($new_tag)
+    {
         if ($this->_group !== '') {
             if ($this->_tag == 'mark')
                 $this->_line .= '<strong>'.$this->_group.'</strong>';
@@ -859,14 +881,16 @@ class _HWLDF_WordAccumulator {
         $this->_tag = $new_tag;
     }
 
-    function _flushLine ($new_tag) {
+    function _flushLine($new_tag)
+    {
         $this->_flushGroup($new_tag);
         if ($this->_line != '')
             $this->_lines[] = $this->_line;
         $this->_line = '';
     }
 
-    function addWords ($words, $tag = '') {
+    function addWords($words, $tag = '')
+    {
         if ($tag != $this->_tag)
             $this->_flushGroup($tag);
 
@@ -884,15 +908,17 @@ class _HWLDF_WordAccumulator {
         }
     }
 
-    function getLines() {
+    function getLines()
+    {
         $this->_flushLine('~done');
         return $this->_lines;
     }
 }
 
-class WordLevelDiff extends MappedDiff {
-
-    function __construct ($orig_lines, $closing_lines) {
+class WordLevelDiff extends MappedDiff
+{
+    function __construct($orig_lines, $closing_lines)
+    {
         list ($orig_words, $orig_stripped) = $this->_split($orig_lines);
         list ($closing_words, $closing_stripped) = $this->_split($closing_lines);
 
@@ -900,38 +926,40 @@ class WordLevelDiff extends MappedDiff {
                 $orig_stripped, $closing_stripped);
     }
 
-    function _split($lines) {
-            if (!preg_match_all('/ ( [^\S\n]+ | [0-9_A-Za-z\x80-\xff]+ | . ) (?: (?!< \n) [^\S\n])? /xs',
-                    implode("\n", $lines),
-                    $m)) {
+    function _split($lines)
+    {
+        if (!preg_match_all('/ ( [^\S\n]+ | [0-9_A-Za-z\x80-\xff]+ | . ) (?: (?!< \n) [^\S\n])? /xs',
+            implode("\n", $lines),
+            $m))
+        {
             return array(array(''), array(''));
-            }
-            return array($m[0], $m[1]);
-            }
+        }
+        return array($m[0], $m[1]);
+    }
 
-            function orig () {
-            $orig = new _HWLDF_WordAccumulator;
+    function orig () {
+        $orig = new _HWLDF_WordAccumulator;
 
-            foreach ($this->edits as $edit) {
+        foreach ($this->edits as $edit) {
             if ($edit->type == 'copy')
-            $orig->addWords($edit->orig);
+                $orig->addWords($edit->orig);
             elseif ($edit->orig)
-            $orig->addWords($edit->orig, 'mark');
-            }
-            return $orig->getLines();
-            }
+                $orig->addWords($edit->orig, 'mark');
+        }
+        return $orig->getLines();
+    }
 
-            function closing () {
-                $closing = new _HWLDF_WordAccumulator;
+    function closing () {
+        $closing = new _HWLDF_WordAccumulator;
 
-                foreach ($this->edits as $edit) {
-                    if ($edit->type == 'copy')
-                        $closing->addWords($edit->closing);
-                    elseif ($edit->closing)
-                        $closing->addWords($edit->closing, 'mark');
-                }
-                return $closing->getLines();
-            }
+        foreach ($this->edits as $edit) {
+            if ($edit->type == 'copy')
+                $closing->addWords($edit->closing);
+            elseif ($edit->closing)
+                $closing->addWords($edit->closing, 'mark');
+        }
+        return $closing->getLines();
+    }
 }
 
 /**
@@ -939,14 +967,16 @@ class WordLevelDiff extends MappedDiff {
  *
  * This class formats the diff in classic "unified diff" format.
  */
-class UnifiedDiffFormatter extends DiffFormatter {
-
-    function __construct($context_lines = 4) {
+class UnifiedDiffFormatter extends DiffFormatter
+{
+    function __construct($context_lines = 4)
+    {
         $this->leading_context_lines = $context_lines;
         $this->trailing_context_lines = $context_lines;
     }
 
-    function _block_header($xbeg, $xlen, $ybeg, $ylen) {
+    function _block_header($xbeg, $xlen, $ybeg, $ylen)
+    {
         if ($xlen != 1)
             $xbeg .= "," . $xlen;
         if ($ylen != 1)
@@ -954,13 +984,18 @@ class UnifiedDiffFormatter extends DiffFormatter {
         return "@@ -$xbeg +$ybeg @@\n";
     }
 
-    function _added($lines) {
+    function _added($lines)
+    {
         $this->_lines($lines, "+");
     }
-    function _deleted($lines) {
+
+    function _deleted($lines)
+    {
         $this->_lines($lines, "-");
     }
-    function _changed($orig, $final) {
+
+    function _changed($orig, $final)
+    {
         $this->_deleted($orig);
         $this->_added($final);
     }
@@ -970,14 +1005,16 @@ class UnifiedDiffFormatter extends DiffFormatter {
  *  Wikipedia Table style diff formatter.
  *
  */
-class TableDiffFormatter extends DiffFormatter {
-
-    function __construct() {
+class TableDiffFormatter extends DiffFormatter
+{
+    function __construct()
+    {
         $this->leading_context_lines = 2;
         $this->trailing_context_lines = 2;
     }
 
-    function format($diff) {
+    function format($diff)
+    {
         // Preserve whitespaces by converting some to non-breaking spaces.
         // Do not convert all of them to allow word-wrap.
         $val = parent::format($diff);
@@ -986,12 +1023,14 @@ class TableDiffFormatter extends DiffFormatter {
         return $val;
     }
 
-    function _pre($text){
+    function _pre($text)
+    {
         $text = htmlspecialchars($text);
         return $text;
     }
 
-    function _block_header( $xbeg, $xlen, $ybeg, $ylen ) {
+    function _block_header($xbeg, $xlen, $ybeg, $ylen)
+    {
         global $lang;
         $l1 = $lang['line'].' '.$xbeg;
         $l2 = $lang['line'].' '.$ybeg;
@@ -1000,65 +1039,59 @@ class TableDiffFormatter extends DiffFormatter {
         return $r;
     }
 
-    function _start_block( $header ) {
-        print( $header );
+    function _start_block($header) { echo $header; }
+
+    function _end_block() { }
+
+    function _lines($lines, $prefix=' ', $color="white") { }
+
+    function addedLine($line)
+    {
+        return '<td>+</td><td class="diff-addedline">'.$line.'</td>';
     }
 
-    function _end_block() {
+    function deletedLine($line)
+    {
+        return '<td>-</td><td class="diff-deletedline">'.$line.'</td>';
     }
 
-    function _lines( $lines, $prefix=' ', $color="white" ) {
-    }
-
-    function addedLine( $line ) {
-        return '<td>+</td><td class="diff-addedline">' .
-            $line.'</td>';
-
-    }
-
-    function deletedLine( $line ) {
-        return '<td>-</td><td class="diff-deletedline">' .
-            $line.'</td>';
-    }
-
-    function emptyLine() {
+    function emptyLine()
+    {
         return '<td colspan="2">&nbsp;</td>';
     }
 
-    function contextLine( $line ) {
+    function contextLine($line)
+    {
         return '<td> </td><td class="diff-context">'.$line.'</td>';
     }
 
-    function _added($lines) {
-        foreach ($lines as $line) {
-            print( '<tr>' . $this->emptyLine() .
-                    $this->addedLine( $line ) . "</tr>\n" );
-        }
+    function _added($lines)
+    {
+        foreach ($lines as $line)
+            echo '<tr>'.$this->emptyLine().$this->addedLine( $line )."</tr>\n";
     }
 
-    function _deleted($lines) {
-        foreach ($lines as $line) {
-            print( '<tr>' . $this->deletedLine( $line ) .
-                    $this->emptyLine() . "</tr>\n" );
-        }
+    function _deleted($lines)
+    {
+        foreach ($lines as $line)
+            echo '<tr>'.$this->deletedLine( $line ).$this->emptyLine()."</tr>\n";
     }
 
-    function _context( $lines ) {
-        foreach ($lines as $line) {
-            print( '<tr>' . $this->contextLine( $line ) .
-                    $this->contextLine( $line ) . "</tr>\n" );
-        }
+    function _context($lines)
+    {
+        foreach ($lines as $line)
+            echo '<tr>'.$this->contextLine( $line ).$this->contextLine( $line )."</tr>\n";
     }
 
-    function _changed( $orig, $closing ) {
+    function _changed($orig, $closing)
+    {
         $diff = new WordLevelDiff( $orig, $closing );
         $del = $diff->orig();
         $add = $diff->closing();
 
         while ( $line = array_shift( $del ) ) {
             $aline = array_shift( $add );
-            print( '<tr>' . $this->deletedLine( $line ) .
-                    $this->addedLine( $aline ) . "</tr>\n" );
+            echo '<tr>' . $this->deletedLine( $line ).$this->addedLine( $aline )."</tr>\n" ;
         }
         $this->_added( $add ); # If any leftovers
     }
