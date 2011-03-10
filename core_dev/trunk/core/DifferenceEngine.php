@@ -1,11 +1,11 @@
 <?php
+// 2011-03-10: imported from dokuwiki-2010-11-07a.tgz, cosmetics & coding style cleanup
+
+
 /**
  * A PHP diff engine for phpwiki. (Taken from phpwiki-1.3.3)
  *
  * Additions by Axel Boldt for MediaWiki
- *
- * 2011-03-10: imported from dokuwiki-2010-11-07a.tgz
- * 2011-03-10: cosmetics & coding style cleanup
  *
  * @copyright (C) 2000, 2001 Geoffrey T. Dairiki <dairiki@dairiki.org>
  * @license  You may copy this code freely under the conditions of the GPL.
@@ -30,7 +30,8 @@ class _DiffOp_Copy extends _DiffOp
 {
     var $type = 'copy';
 
-    function __construct($orig, $closing = false) {
+    function __construct($orig, $closing = false)
+    {
         if (!is_array($closing))
             $closing = $orig;
         $this->orig = $orig;
@@ -44,7 +45,8 @@ class _DiffOp_Delete extends _DiffOp
 {
     var $type = 'delete';
 
-    function __construct($lines) {
+    function __construct($lines)
+    {
         $this->orig = $lines;
         $this->closing = false;
     }
@@ -56,7 +58,8 @@ class _DiffOp_Add extends _DiffOp
 {
     var $type = 'add';
 
-    function __construct($lines) {
+    function __construct($lines)
+    {
         $this->closing = $lines;
         $this->orig = false;
     }
@@ -511,7 +514,7 @@ class Diff
      */
     function __construct($from_lines, $to_lines)
     {
-        $eng = new _DiffEngine;
+        $eng = new _DiffEngine();
         $this->edits = $eng->diff($from_lines, $to_lines);
         //$this->_check($from_lines, $to_lines);
     }
@@ -814,14 +817,8 @@ class DiffFormatter
         return $xbeg . ($xlen ? ($ylen ? 'c' : 'd') : 'a') . $ybeg;
     }
 
-    function _start_block($header)
-    {
-        echo $header;
-    }
-
-    function _end_block()
-    {
-    }
+    function _start_block($header) { echo $header; }
+    function _end_block() { }
 
     function _lines($lines, $prefix = ' ')
     {
@@ -829,19 +826,9 @@ class DiffFormatter
             echo "$prefix $line\n";
     }
 
-    function _context($lines)
-    {
-        $this->_lines($lines);
-    }
-
-    function _added($lines)
-    {
-        $this->_lines($lines, ">");
-    }
-    function _deleted($lines)
-    {
-        $this->_lines($lines, "<");
-    }
+    function _context($lines) { $this->_lines($lines); }
+    function _added($lines) { $this->_lines($lines, ">"); }
+    function _deleted($lines) { $this->_lines($lines, "<"); }
 
     function _changed($orig, $closing)
     {
@@ -984,15 +971,8 @@ class UnifiedDiffFormatter extends DiffFormatter
         return "@@ -$xbeg +$ybeg @@\n";
     }
 
-    function _added($lines)
-    {
-        $this->_lines($lines, "+");
-    }
-
-    function _deleted($lines)
-    {
-        $this->_lines($lines, "-");
-    }
+    function _added($lines) { $this->_lines($lines, "+"); }
+    function _deleted($lines) { $this->_lines($lines, "-"); }
 
     function _changed($orig, $final)
     {
@@ -1040,30 +1020,13 @@ class TableDiffFormatter extends DiffFormatter
     }
 
     function _start_block($header) { echo $header; }
-
     function _end_block() { }
-
     function _lines($lines, $prefix=' ', $color="white") { }
 
-    function addedLine($line)
-    {
-        return '<td>+</td><td class="diff-addedline">'.$line.'</td>';
-    }
-
-    function deletedLine($line)
-    {
-        return '<td>-</td><td class="diff-deletedline">'.$line.'</td>';
-    }
-
-    function emptyLine()
-    {
-        return '<td colspan="2">&nbsp;</td>';
-    }
-
-    function contextLine($line)
-    {
-        return '<td> </td><td class="diff-context">'.$line.'</td>';
-    }
+    function addedLine($line) { return '<td>+</td><td class="diff-addedline">'.$line.'</td>'; }
+    function deletedLine($line) { return '<td>-</td><td class="diff-deletedline">'.$line.'</td>'; }
+    function emptyLine() { return '<td colspan="2">&nbsp;</td>'; }
+    function contextLine($line) { return '<td> </td><td class="diff-context">'.$line.'</td>'; }
 
     function _added($lines)
     {
