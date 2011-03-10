@@ -6,3 +6,14 @@ BEFORE 1.0 (201?):
     * rewrite/finish/cleanup core modules: blog / news, comments, users, forum, file uploading
     * all non-prepared sql should be removed & non-prepared DatabaseMysql methods removed
 
+
+rewrite/cleanup following modules:
+    * atom_polls.php         WIP ....
+    * function_messages.php
+    * function_contacts.php
+    * function_forum.php
+    * function_guestbook.php  (XXX messages,different type)
+    * function_userdata.php
+    * function_chat1on1.php
+    * atom_rating.php
+    * atom_subscriptions.php

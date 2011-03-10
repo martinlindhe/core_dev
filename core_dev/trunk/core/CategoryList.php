@@ -5,23 +5,46 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: xxx
+//STATUS: wip ... used by PollWidget where CategoryList is actually list of poll options
 
-require_once('CoreList.php');
 
-class CategoryList extends CoreList
+class CategoryList
 {
     private $type;         ///< category type
     private $owner;        ///< owner id, the meaning depends on category type
     private $creator;
 
-    function __construct($type)
-    {
-        global $h;
-        if (!is_numeric($type)) return false;
+    protected $items = array(); ///< list of objects
 
-        $this->type    = $type;
-        $this->creator = $h->session->id;
+    function __construct($type = 0)
+    {
+        $this->type = $type;
+    }
+
+    function getItems() { return $this->items; }
+
+    function getKeyVals()
+    {
+        $res = array();
+        foreach ($this->items as $item) {
+            if (get_parent_class($item) != 'CategoryItem') {
+                echo 'CoreList->getKeyVals: cant handle object type '.get_class($item).ln();
+                continue;
+            }
+            $res[ $item->getId() ] = $item->getTitle();
+        }
+        return $res;
+    }
+
+    function addItem($i)
+    {
+        $this->items[] = $i;
+    }
+
+    function addItems($list)
+    {
+        foreach ($list as $e)
+            $this->addItem($e);
     }
 
     function setOwner($id)
@@ -37,7 +60,7 @@ class CategoryList extends CoreList
     function init()
     {
         global $db;
-
+//XXX use SqlObject loading
         $q  = 'SELECT * FROM tblCategories WHERE categoryType='.$this->type.' ';
         if ($this->owner) $q .= 'AND ownerId='.$this->owner;
 

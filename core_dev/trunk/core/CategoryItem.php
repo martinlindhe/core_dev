@@ -5,23 +5,35 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: xxx
+//STATUS: wip, used in PollManager
 
-require_once('class.CoreItem.php');
+require_once('constants.php');
 
-
-class CoreItem extends CoreBase //XXX DROP THIS, merge with CategoryItem
+class CategoryItem
 {
+    // category types
+    const POLL_OPTIONS = 1;  ///< used by PollWidget where it is a list of poll options
+
     var $id;
     var $type;         ///< type as defined in constants.php
     var $owner;
     var $title;
 
-    function setId($id)
+    private $creator;     ///< if set, stores creatorId when categories are created
+    public  $TimeCreated; ///< Timestamp object
+
+    private $permissions = PERM_USER;  ///< permission flags as defined in constants.php
+
+    function __construct($type)
     {
-        if (!is_numeric($id)) return false;
-        $this->id = $id;
+        if (!is_numeric($type))
+            return false;
+
+        $this->type = $type;
     }
+
+    function getId() { return $this->id; }
+    function getTitle() { return $this->title; }
 
     function setType($id)
     {
@@ -36,26 +48,6 @@ class CoreItem extends CoreBase //XXX DROP THIS, merge with CategoryItem
     }
 
     function setTitle($s) { $this->title = $s; }
-
-    function getId() { return $this->id; }
-    function getTitle() { return $this->title; }
-}
-
-
-class CategoryItem extends CoreItem
-{
-    private $creator;     ///< if set, stores creatorId when categories are created
-    public  $TimeCreated; ///< Timestamp object
-
-    private $permissions = PERM_USER;  ///< permission flags as defined in constants.php
-
-    function __construct($type)
-    {
-        if (!is_numeric($type))
-            return false;
-
-        $this->type = $type;
-    }
 
     function setId($id)
     {

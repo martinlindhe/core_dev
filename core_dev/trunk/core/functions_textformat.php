@@ -280,10 +280,6 @@ function formatUserInputText($text, $convert_html = true)   //XXXX DEPRECATE, us
                 $result = embedFlashAudio($url, 176, 60, '', '/core_dev/gfx/voice_play.png', false);
                 break;
 
-            case 'poll':
-                $result = poll(POLL_NEWS, $link['param']);
-                break;
-
             default:
                 if (!empty($link['title'])) {
                     //[[About|read about us]] format

@@ -375,18 +375,6 @@ overflow: auto;
     padding-bottom: 10px;
 }
 
-.poll_attached {
-    background-color: #eee;
-    margin-bottom: 5px;
-}
-
-.poll_item {
-    background-color: #eee;
-    padding: 5px;
-    cursor: pointer;
-}
-
-
 /* forum css */
 .forum_overview_group {
     border: 1px solid #aaa;

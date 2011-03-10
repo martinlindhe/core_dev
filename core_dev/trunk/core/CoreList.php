@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: drop this code & rework it into user classes: CategoryList, FeedWriter, Playlist
+//STATUS: drop this code & rework it into user classes: FeedWriter, Playlist
 
 //TODO: use list sort code from newsfeed & playlist
 
@@ -21,7 +21,7 @@ class CoreList extends CoreBase
     {
         $res = array();
         foreach ($this->items as $item) {
-            if (get_parent_class($item) != 'CoreItem') {         //XXX only works for CoreItem type
+            if (get_parent_class($item) != 'CategoryItem') {         //XXX only works for CategoryItem type
                 echo 'CoreList->getKeyVals: cant handle object type '.get_class($item).ln();
                 continue;
             }
