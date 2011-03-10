@@ -23,7 +23,6 @@ class Url extends CoreProperty
 
     function setUsername($username) { $this->username = $username; }
     function setPassword($password) { $this->password = $password; }
-    function setPath($path) { $this->path = $path; }
 
     function getScheme()   { return $this->scheme; }
     function getUsername() { return $this->username; }
@@ -109,15 +108,26 @@ class Url extends CoreProperty
 
         $this->scheme = $parsed['scheme'];
         $this->host   = $parsed['host'];
-        $this->path   = $parsed['path'];
 
         if (!empty($parsed['port']))
             $this->port = $parsed['port'];
+
+        $this->path   = $parsed['path'];
 
         if (!empty($parsed['query']))
             parse_str($parsed['query'], $this->params);
 
         return true;
+    }
+
+    function setPath($path)
+    {
+        $parsed = parse_url($path);
+
+        $this->path = $parsed['path'];
+
+        if (!empty($parsed['query']))
+            parse_str($parsed['query'], $this->params);
     }
 
     function setScheme($scheme)

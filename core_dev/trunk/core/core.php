@@ -465,7 +465,8 @@ function relurl_add($p)
     $page = XmlDocumentHandler::getInstance();
 
     $u = new Url( $page->getUrl() );
-    $u->setPath($_SERVER['REDIRECT_URL']);
+    $u->setPath($_SERVER['REQUEST_URI']);
+
     foreach ($p as $key => $val)
         $u->setParam($key, $val);
 
