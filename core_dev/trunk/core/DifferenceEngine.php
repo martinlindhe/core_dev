@@ -107,6 +107,12 @@ class _DiffOp_Change extends _DiffOp {
 class _DiffEngine {
 
     function diff ($from_lines, $to_lines) {
+        if (!is_array($from_lines))
+            $from_lines = explode("\n", $from_lines);
+
+        if (!is_array($to_lines))
+            $to_lines = explode("\n", $to_lines);
+
         $n_from = count($from_lines);
         $n_to = count($to_lines);
 
