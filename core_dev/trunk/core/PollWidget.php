@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO later: allow anonymous polls? then allow 1 vote from each IP
+
 require_once('Yui3PieChart.php');
 
 class PollWidget

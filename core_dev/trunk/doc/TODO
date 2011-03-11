@@ -5,6 +5,7 @@ BEFORE 1.0 (201?):
     * identify core modules, write some docs
     * rewrite/finish/cleanup core modules: blog / news, comments, users, forum, file uploading
     * all non-prepared sql should be removed & non-prepared DatabaseMysql methods removed
+    * some infrastructure to handle scheduling of jobs?
 
 
 rewrite/cleanup following modules:
