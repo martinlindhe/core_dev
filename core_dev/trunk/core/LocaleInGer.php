@@ -39,6 +39,7 @@ class LocaleInGer extends CoreLocale
     'USA' => 'Vereinigte Staaten von Amerika',
     'GBR' => 'Vereinigte Königreich',
     'DEU' => 'Deutschland',
+    'DNK' => 'Dänemark',
     );
 
     function formatCurrency($n)

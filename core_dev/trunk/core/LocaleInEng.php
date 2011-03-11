@@ -39,6 +39,7 @@ class LocaleInEng extends CoreLocale
     'USA' => 'United States of America',
     'GBR' => 'United Kingdom',
     'DEU' => 'Germany',
+    'DNK' => 'Denmark',
     );
 
     var $durations = array( //XXX this array can be removed if translateDuration in LocaleHandler can be overridden, need LocaleHandler class nesting fixed first

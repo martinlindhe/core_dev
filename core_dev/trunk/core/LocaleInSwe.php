@@ -41,6 +41,7 @@ class LocaleInSwe extends CoreLocale
     'USA' => 'Amerikas förenta stater',
     'GBR' => 'Storbritannien',
     'DEU' => 'Tyskland',
+    'DNK' => 'Danmark',
     );
 
     var $durations = array(
