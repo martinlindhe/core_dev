@@ -28,6 +28,9 @@ class Yui3PieChart
     function setWidth($n) { if (is_numeric($n)) $this->width = $n; }
     function setHeight($n) { if (is_numeric($n)) $this->height = $n; }
 
+    /**
+     * @param $arr needs array formatted like ( array('name'=>'v1','value'=>'444'), array('name'=>'v2','value'=>'555'),  ... )
+     */
     function setDataSource($arr)
     {
         if (!$this->category_key)
@@ -86,20 +89,20 @@ class Yui3PieChart
             '};'.
 
             'var mychart = new Y.Chart({'.
-                    'dataProvider:myDataValues,'.
-                    'categoryKey:"'.$this->category_key.'",'.
-                    'type:"pie",'.
-                    'render: "#'.$div_holder.'",'.
-                    'tooltip: myTooltip,'.
+                'dataProvider:myDataValues,'.
+                'categoryKey:"'.$this->category_key.'",'.
+                'type:"pie",'.
+                'render: "#'.$div_holder.'",'.
+                'tooltip: myTooltip,'.
 
-                    'seriesKeys:["value"],'.
-                    'seriesCollection:['.
-                        '{'.
-                            'categoryKey:"'.$this->category_key.'",'.
-                            'valueKey:"value"'.
-                        '}'.
-                    ']'.
-                '});'.
+                'seriesKeys:["value"],'.
+                'seriesCollection:['.
+                    '{'.
+                        'categoryKey:"'.$this->category_key.'",'.
+                        'valueKey:"value"'.
+                    '}'.
+                ']'.
+            '});'.
         '});';
 
         return

@@ -47,7 +47,6 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
             if (!empty($_POST['poll_a'.$i])) {
                 $opt->title = $_POST['poll_a'.$i];
                 $opt->store();
-//                updateCategory(CATEGORY_POLL, $opt->id, $_POST['poll_a'.$i]);
             }
 
         if (!empty($_POST['poll_new_a'])) {
@@ -189,8 +188,12 @@ if (count($list)) {
 foreach ($list as $row)
 {
     $expired = $active = false;
-    if (time() > datetime_to_timestamp($row['timeEnd'])) $expired = true;
-    if (time() >= datetime_to_timestamp($row['timeStart']) && !$expired) $active = true;
+
+    if (time()  > ts($row['timeEnd']))
+        $expired = true;
+
+    if (time() >= ts($row['timeStart']) && !$expired)
+        $active = true;
 
     if ($expired) {
         echo '<tr style="font-style: italic">';
@@ -207,6 +210,7 @@ foreach ($list as $row)
 
     echo '</tr>';
 }
+
 if (count($list)) echo '</table>';
 echo '<br/>';
 

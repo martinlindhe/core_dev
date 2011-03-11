@@ -1,11 +1,16 @@
 <?php
+/**
+ * $Id$
+ *
+ * Shows one poll and lets the user interact with it
+ *
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ */
 
-//STATUS: wip... half working
+//STATUS: wip
 
-//TODO: rework ajax callback for vote
-//TODO: move "get poll as csv" feature to PollManager
+require_once('Yui3PieChart.php');
 
-/** Shows one poll and lets the user interact with it */
 class PollWidget
 {
     function __construct($id = 0)
@@ -35,13 +40,12 @@ class PollWidget
             '(SELECT COUNT(*) FROM tblPollVotes  WHERE voteId=t1.categoryId) AS cnt'.
         ' FROM tblCategories AS t1'.
         ' WHERE t1.ownerId = ?';
-        return SqlHandler::getInstance()->pSelect($q, 'i', $id);
+        return SqlHandler::getInstance()->pSelectMapped($q, 'i', $id);
     }
 
     /** Has current user answered specified poll? */
     static function hasAnsweredPoll($id)
     {
-        // XXX store & check by ip if anon?
         $session = SessionHandler::getInstance();
         if (!$session->id)
             return false;
@@ -53,6 +57,23 @@ class PollWidget
         return false;
     }
 
+    function addPollVote($id, $voteId)
+    {
+        // XXX store & check by ip if anon?
+        $session = SessionHandler::getInstance();
+        if (!$session->id)
+            return false;
+
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT userId FROM tblPollVotes WHERE pollId = ? AND userId = ?';
+        if ($db->pSelectItem($q, 'ii', $id, $session->id)) return false;
+
+        $q = 'INSERT INTO tblPollVotes SET pollId = ?, userId = ?, voteId = ?';
+        $db->pInsert($q, 'iii', $id, $session->id, $voteId);
+        return true;
+    }
+
     function render()
     {
         if (!$this->id)
@@ -62,12 +83,20 @@ class PollWidget
         if (!$data)
             return false;
 
-        $active = false;
-        if (time() >= datetime_to_timestamp($data['timeStart']) && time() <= datetime_to_timestamp($data['timeEnd']))
-            $active = true;
+        $session = SessionHandler::getInstance();
 
-        if (!$data['timeStart'])
-            $active = true;
+        if (!empty($_GET['poll_vote']) && !empty($_GET['opt']))
+        {
+            if (!$session->id || !is_numeric($_GET['poll_vote']) || !is_numeric($_GET['opt']))
+                die('XXX');
+
+            $page = XmlDocumentHandler::getInstance();
+            $page->disableDesign();
+
+            ob_clean(); // XXX hack.. removes previous output
+            self::addPollVote($_GET['poll_vote'], $_GET['opt']);
+            die('1');
+        }
 
         $header = XhtmlHeader::getInstance();
 
@@ -79,7 +108,7 @@ class PollWidget
         '}'
         );
 
-        $header->includeJs('core_dev/js/ajax.js');
+        $header->includeJs('http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js');
 
         $header->embedJs(
         //Makes element with name "n" invisible in browser
@@ -95,88 +124,110 @@ class PollWidget
             'e.style.display = "";'.
         '}'.
 
-        //sends a ajax poll submit
         'function submit_poll(id,opt)'.
         '{'.
-            'ajax_poll(id,opt);'.
+            'YUI().use("io-base", function(Y) {'.
+                'var uri = "?poll_vote=" + id + "&opt=" + opt;'.
+
+                // Define a function to handle the response data
+                'function complete(id, o, args) {'.
+                    'var id = id;'.               // Transaction ID
+                    'var data = o.responseText;'. // Response data
+                    'var args = args[1];'.
+                    'if (data==1) return;'.
+                    'alert("Voting error " + data);'.
+                '};'.
+
+                // Subscribe to event "io:complete", and pass an array
+                // as an argument to the event handler "complete", since
+                // "complete" is global.   At this point in the transaction
+                // lifecycle, success or failure is not yet known.
+                'Y.on("io:complete", complete, Y, ["lorem", "ipsum"]);'.
+
+                // Make request
+                'var request = Y.io(uri);'.
+            '});'.
+
             'hide_element("poll"+id);'.
             'show_element("poll_voted"+id);'.
-        '}'.
-        'function get_poll_csv(id)'.
-        '{'.
-            'var w = window.open("csv_poll.php?id="+id, "_blank");'.
-            'w.focus();'.
-        '}'.
-        //Sends an AJAX call to submit someones vote for a site poll
-        'var poll_request = null;'.
-        'function ajax_poll(id,opt)'.   //XXXX requires core_dev/js/ajax.js   update to use yui or something
-        '{'.
-            'poll_request = new AJAX();'.
-            'poll_request.GET("ajax_poll.php?i="+id+"&o="+opt, null);'.
         '}'
         );
 
-        $session = SessionHandler::getInstance();
+        $active = false;
+        if (time() >= ts($data['timeStart']) && time() <= ts($data['timeEnd']))
+            $active = true;
 
-        $result = '<div class="item">';
+        if (!$data['timeStart'])
+            $active = true;
+
+        $res = '<div class="item">';
         if ($active)
-            $result .= t('Active poll').': ';
+            $res .= 'Active poll: ';
 
-        $result .= $data['pollText'].'<br/><br/>';
+        $res .= $data['pollText'].'<br/><br/>';
 
-        $result .= '<div id="poll'.$this->id.'">';
-        if ($session->isAdmin && $data['timeStart'])
-            $result .= t('Starts').': '.$data['timeStart'].', '.t('ends').' '.$data['timeEnd'].'<br/>';
+        $res .= '<div id="poll'.$this->id.'">';
+        if ($data['timeStart'])
+            $res .= 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'<br/>';
 
-        if ($session->id && $active && !self::hasAnsweredPoll($this->id)) {
-
+        if ($session->id && $active && !self::hasAnsweredPoll($this->id))
+        {
             $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
             $cats->setOwner($this->id);
 
-            foreach ($cats->getItems() as $opt) {
-                $result .=
+            foreach ($cats->getItems() as $opt)
+                $res .=
                 '<div class="poll_item" onclick="submit_poll('.$this->id.','.$opt->id.')">'.
                     $opt->title.
                 '</div><br/>';
-            }
+
         } else {
             if ($session->id) {
-                $result .= '<br/>';
+                $res .= '<br/>';
                 if ($active) {
-                    $result .= t('You already voted, showing current standings').':<br/><br/>';
+                    $res .= 'You already voted, showing current standings:<br/><br/>';
                 } else {
-                    $result .= t('The poll closed, final result').':<br/><br/>';
+                    $res .= 'The poll closed, final result:<br/><br/>';
                 }
             }
 
             $votes = self::getPollStats($this->id);
 
             $tot_votes = 0;
-            foreach ($votes as $row)
-                $tot_votes += $row['cnt'];
+            foreach ($votes as $cnt)
+                $tot_votes += $cnt;
 
-            foreach ($votes as $row) {
+            $list = array();
+            foreach ($votes as $title => $cnt) {
                 $pct = 0;
-                if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
-                $result .= ' &bull; '.$row['categoryName'].' '.t('got').' '.$row['cnt'].' '.t('votes').' ('.$pct.'%)<br/>';
+                if ($tot_votes)
+                    $pct = (($cnt / $tot_votes)*100);
+                $res .= ' &bull; '.$title.' got '.$cnt.' votes ('.$pct.'%)<br/>';
+
+                $list[] = array('name' => $title, 'value' => $cnt);
             }
+
+            $pie = new Yui3PieChart();
+            $pie->setWidth(100);
+            $pie->setHeight(100);
+            $pie->setCategoryKey('name');
+            $pie->setDataSource($list);
+
+            $res .= $pie->render();
         }
 
-        if ($session->isAdmin)
-            $result .= '<br/><input type="button" class="button" value="'.t('Save as .csv').'" onclick="get_poll_csv('.$this->id.')"/>';
-
-        $result .= '</div>';
+        $res .= '</div>';
 
         if ($session->id) {
-            $result .=
+            $res .=
             '<div id="poll_voted'.$this->id.'" style="display:none">'.
-                t('Your vote has been registered.').
+                'Your vote has been registered.'.
             '</div>';
         }
 
-        $result .= '</div>';    //class="item"
+        $res .= '</div>';    //class="item"
 
-        return $result;
+        return $res;
     }
 
 }

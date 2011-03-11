@@ -3,11 +3,15 @@
  * $Id$
  *
  * Helper function to manage polls, used by admin_polls.php & functions_news.php
+ *
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: wip, half working...
 
-//TODO: cant show / edit existing poll
+//TODO: rework how addPoll handles start modes
+
+//TODO later: ability to export results (csv, xls, ...?)
 
 
 require_once('PollWidget.php');
@@ -21,7 +25,7 @@ class PollManager extends PollWidget
      */
     static function addPoll($ownerId, $text, $duration_mode = '', $start_mode = '')
     {
-        ///XXX TODO FIXME: parse duration string in $duration_mode, eg "2w", "1m", "3d"
+        ///XXX FIXME: parse duration string in $duration_mode, eg "2w", "1m", "3d"
         switch ($duration_mode) {
         case 'day'; $length = 1; break;
         case 'week': $length = 7; break;

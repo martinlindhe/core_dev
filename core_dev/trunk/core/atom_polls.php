@@ -44,22 +44,6 @@ function getActivePolls($_type, $ownerId = 0, $limit = 0)
 }
 
 /**
- * Add poll vote
- */
-function addPollVote($_id, $voteId)
-{
-    global $h, $db;
-    if (!is_numeric($_id) || !is_numeric($voteId)) return false;
-
-    $q = 'SELECT userId FROM tblPollVotes WHERE pollId='.$_id.' AND userId='.$h->session->id;
-    if ($db->getOneItem($q)) return false;
-
-    $q = 'INSERT INTO tblPollVotes SET userId='.$h->session->id.',pollId='.$_id.',voteId='.$voteId;
-    $db->insert($q);
-    return true;
-}
-
-/**
  * Shows active polls of specified type
  *
  * @param $_type type of poll
