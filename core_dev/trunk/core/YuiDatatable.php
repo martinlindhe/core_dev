@@ -72,11 +72,18 @@ class YuiDatatable
         if (!in_array($order, array('asc', 'desc')))
             throw new Exception ('bad sort order: '.$order);
 
+        $this->sort_column = false;
+
         foreach ($this->columns as $idx => $c)
             if ($c->key == $col)
                 $this->sort_column = $idx;
 
         $this->sort_order = $order;
+
+        if (!$this->sort_column) {
+//            d( $this->columns );
+            throw new Exception ('column '.$col.' not found');
+        }
     }
 
     /**
