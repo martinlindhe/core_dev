@@ -148,6 +148,8 @@ class LastFmClient
     function getAlbumCover($artist, $album, $quality = '')
     {
         $images = $this->getAlbumCovers($artist, $album);
+        if (!$images)
+            return false;
 
         return self::getBestImage($images, $quality);
     }
