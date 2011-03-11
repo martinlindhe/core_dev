@@ -60,21 +60,6 @@ function addPollVote($_id, $voteId)
 }
 
 /**
- * Get statistics for specified poll
- */
-function getPollStats($_id)
-{
-    global $db;
-    if (!is_numeric($_id)) return false;
-
-    $q  = 'SELECT t1.categoryName, ';
-    $q .= '(SELECT COUNT(*) FROM tblPollVotes WHERE voteId=t1.categoryId) AS cnt ';
-    $q .= 'FROM tblCategories AS t1 ';
-    $q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
-    return $db->getArray($q);
-}
-
-/**
  * Shows active polls of specified type
  *
  * @param $_type type of poll

@@ -27,6 +27,17 @@ class PollWidget
         return SqlHandler::getInstance()->pSelect($q, 'i', $ownerId);
     }
 
+    /** Get statistics for specified poll */
+    function getPollStats($id)
+    {
+        $q  =
+        'SELECT t1.categoryName, '.
+            '(SELECT COUNT(*) FROM tblPollVotes  WHERE voteId=t1.categoryId) AS cnt'.
+        ' FROM tblCategories AS t1'.
+        ' WHERE t1.ownerId = ?';
+        return SqlHandler::getInstance()->pSelect($q, 'i', $id);
+    }
+
     /** Has current user answered specified poll? */
     static function hasAnsweredPoll($id)
     {
@@ -41,7 +52,6 @@ class PollWidget
 
         return false;
     }
-
 
     function render()
     {
@@ -139,9 +149,11 @@ class PollWidget
                 }
             }
 
-            $votes = getPollStats($_id);
+            $votes = self::getPollStats($this->id);
+
             $tot_votes = 0;
-            foreach ($votes as $row) $tot_votes += $row['cnt'];
+            foreach ($votes as $row)
+                $tot_votes += $row['cnt'];
 
             foreach ($votes as $row) {
                 $pct = 0;
