@@ -175,11 +175,18 @@ class PollWidget
             $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
             $cats->setOwner($this->id);
 
-            foreach ($cats->getItems() as $opt)
-                $res .=
-                '<div class="poll_item" onclick="submit_poll('.$this->id.','.$opt->id.')">'.
-                    $opt->title.
-                '</div><br/>';
+            $list = $cats->getItems();
+
+            if (!$list)
+                echo '<div class="critical">No options is available to this poll!</div>';
+            else if (count($list) == 1)
+                echo '<div class="critical">Only one options is available to this poll!</div>';
+            else
+                foreach ($list as $opt)
+                    $res .=
+                    '<div class="poll_item" onclick="submit_poll('.$this->id.','.$opt->id.')">'.
+                        $opt->title.
+                    '</div><br/>';
 
         } else {
             if ($session->id) {
