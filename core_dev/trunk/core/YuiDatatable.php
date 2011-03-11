@@ -80,7 +80,7 @@ class YuiDatatable
 
         $this->sort_order = $order;
 
-        if (!$this->sort_column) {
+        if ($this->sort_column === false) {
 //            d( $this->columns );
             throw new Exception ('column '.$col.' not found');
         }
