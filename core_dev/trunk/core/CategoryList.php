@@ -7,6 +7,11 @@
 
 //STATUS: wip ... used by PollWidget where CategoryList is actually list of poll options
 
+//XXX: rename to OptionList and OptionItem ??
+
+//XXXX2: why do a list have a type? each item have types.. maybe useful to be able to mix types in a list?
+
+require_once('CategoryItem.php');
 
 class CategoryList
 {
@@ -18,6 +23,9 @@ class CategoryList
 
     function __construct($type = 0)
     {
+        if (!is_numeric($type))
+            throw new Exception ('non-numeric type');
+
         $this->type = $type;
     }
 
@@ -27,11 +35,10 @@ class CategoryList
     {
         $res = array();
         foreach ($this->items as $item) {
-            if (get_parent_class($item) != 'CategoryItem') {
-                echo 'CoreList->getKeyVals: cant handle object type '.get_class($item).ln();
-                continue;
-            }
-            $res[ $item->getId() ] = $item->getTitle();
+            if ($item instanceof CategoryItem)
+                $res[ $item->getId() ] = $item->getTitle();
+            else
+                throw new Exception ('CoreList->getKeyVals: cant handle object type '.get_class($item) );
         }
         return $res;
     }
@@ -59,10 +66,12 @@ class CategoryList
      */
     function init()
     {
-        global $db;
+        $db = SqlHandler::getInstance();
+
 //XXX use SqlObject loading
         $q  = 'SELECT * FROM tblCategories WHERE categoryType='.$this->type.' ';
-        if ($this->owner) $q .= 'AND ownerId='.$this->owner;
+        if ($this->owner)
+            $q .= 'AND ownerId='.$this->owner;
 
         $list = $db->getArray($q);
         foreach ($list as $row) {

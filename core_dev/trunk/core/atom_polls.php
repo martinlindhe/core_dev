@@ -31,23 +31,6 @@ function addPollExactPeriod($_type, $ownerId, $text, $_start, $_end)
 }
 
 /**
- * Update poll
- */
-function updatePoll($_type, $_id, $_text, $timestart = '', $timeend = '')
-{
-    global $db;
-    if (!is_numeric($_type) || !is_numeric($_id)) return false;
-
-    $add_string = '';
-
-    if (!empty($timestart)) $add_string .= ', timeStart = "'.$timestart.'"';
-    if (!empty($timeend)) $add_string .= ', timeEnd = "'.$timeend.'"';
-
-    $q = 'UPDATE tblPolls SET pollText="'.$db->escape($_text).'"'.$add_string.' WHERE pollType='.$_type.' AND pollId='.$_id;
-    $db->update($q);
-}
-
-/**
  * Get active polls
  */
 function getActivePolls($_type, $ownerId = 0, $limit = 0)
@@ -77,19 +60,6 @@ function addPollVote($_id, $voteId)
 }
 
 /**
- * Has current user answered specified poll?
- */
-function hasAnsweredPoll($_id)
-{
-    global $h, $db;
-    if (!is_numeric($_id) || !$h->session->id) return false;
-
-    $q = 'SELECT pollId FROM tblPollVotes WHERE userId='.$h->session->id.' AND pollId='.$_id;
-    if ($db->getOneItem($q)) return true;
-    return false;
-}
-
-/**
  * Get statistics for specified poll
  */
 function getPollStats($_id)
@@ -102,18 +72,6 @@ function getPollStats($_id)
     $q .= 'FROM tblCategories AS t1 ';
     $q .= 'WHERE t1.ownerId='.$_id.' AND t1.categoryType='.CATEGORY_POLL;
     return $db->getArray($q);
-}
-
-/**
- * Remove poll
- */
-function removePoll($_type, $_id)
-{
-    global $h, $db;
-    if (!$h->session->isAdmin || !is_numeric($_type) || !is_numeric($_id)) return false;
-
-    $q = 'UPDATE tblPolls SET deletedBy='.$h->session->id.',timeDeleted=NOW() WHERE pollType='.$_type.' AND pollId='.$_id;
-    $db->update($q);
 }
 
 /**

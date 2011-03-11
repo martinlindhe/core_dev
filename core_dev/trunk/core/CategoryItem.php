@@ -15,19 +15,18 @@ class CategoryItem
     const POLL_OPTIONS = 1;  ///< used by PollWidget where it is a list of poll options
 
     var $id;
-    var $type;         ///< type as defined in constants.php
+    var $type;                           ///< type as defined in constants.php
     var $owner;
     var $title;
+    var $TimeCreated;                    ///< Timestamp object
 
-    private $creator;     ///< if set, stores creatorId when categories are created
-    public  $TimeCreated; ///< Timestamp object
+    protected $creator;                  ///< if set, stores creatorId when categories are created
+    protected $permissions = PERM_USER;  ///< permission flags as defined in constants.php
 
-    private $permissions = PERM_USER;  ///< permission flags as defined in constants.php
-
-    function __construct($type)
+    function __construct($type = 0)
     {
         if (!is_numeric($type))
-            return false;
+            throw new Exception ('non-numeric type');
 
         $this->type = $type;
     }
@@ -87,8 +86,10 @@ class CategoryItem
         global $db;
 
         if ($this->id) {
-            die('XXX UPDATE CATEGORY '.$this->id);
-            return $this->id;
+            $q =
+            'UPDATE tblCategories SET categoryType = ?, categoryName = ?,'.
+            ' permissions = ?, ownerId = ?, creatorId = ? WHERE categoryId = ?';
+            return $db->pUpdate($q, 'isiiii', $this->type, $this->title, $this->permissions, $this->owner, $this->creator, $this->id);
         }
 
         $q = 'INSERT INTO tblCategories SET '.
@@ -102,6 +103,7 @@ class CategoryItem
         $this->id = $db->insert($q);
         return $this->id;
     }
+
 }
 
 ?>

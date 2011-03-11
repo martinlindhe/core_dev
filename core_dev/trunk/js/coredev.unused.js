@@ -187,21 +187,6 @@ function pause(ms)
     }
 }
 
-//sends a ajax poll submit
-function submit_poll(id,opt)
-{
-    ajax_poll(id,opt);
-
-    hide_element('poll'+id);
-    show_element('poll_voted'+id);
-}
-
-function get_poll_csv(id)
-{
-    var w = window.open(_ext_core+'csv_poll.php?id='+id+_ext_ref, '_blank');
-    w.focus();
-}
-
 //Loads image id into holder-div
 function loadImage(id, holder)
 {
