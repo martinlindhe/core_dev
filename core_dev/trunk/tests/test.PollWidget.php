@@ -14,6 +14,6 @@ if ($session->isAdmin) {
     echo $man->render();
 }
 
-echo PollWidget::renderActivePolls();
+echo PollWidget::renderPoll(SITE, 1);
 
 ?>

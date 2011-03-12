@@ -12,6 +12,13 @@
 //STATUS: hackish.. .
 //XXX TODO: upgrade to a more finished version of the widget (css on yahoo server etc?)
 
+/**
+
+echo RateWidget::render(BLOG, 74);
+
+*/
+
+
 require_once('PollWidget.php');
 
 class RateWidget extends PollWidget
@@ -45,7 +52,7 @@ class RateWidget extends PollWidget
 
         $header->includeJs('http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js');
 
-///XXX will css+gfx be hosted on yahoo?
+///XXX will css+gfx be hosted on yahoo? is here too: https://github.com/petey/yui3-gallery/blob/master/src/gallery-ratings/assets/gallery-ratings.css
         $header->includeCss('http://peterpeterson.net/gallery-ratings/assets/gallery-ratings.css');
 
         $widget_id = 'rate_'.mt_rand();
