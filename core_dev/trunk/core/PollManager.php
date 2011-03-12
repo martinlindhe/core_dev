@@ -23,7 +23,7 @@ class PollManager extends PollWidget
     /**
      * @param $duration_mode "day", "week" or numerical number of days
      */
-    static function addPoll($ownerId, $text, $duration_mode = '', $start_mode = '')
+    static function addPoll($type, $ownerId, $text, $duration_mode = '', $start_mode = '')
     {
         ///XXX FIXME: parse duration string in $duration_mode, eg "2w", "1m", "3d"
         switch ($duration_mode) {
@@ -75,19 +75,19 @@ class PollManager extends PollWidget
 
         $session = SessionHandler::getInstance();
 
-        $q = 'INSERT INTO tblPolls SET ownerId = ?, pollText = ?, createdBy = ?, timeCreated=NOW()'.$timeStart.$timeEnd;
-        return SqlHandler::getInstance()->pInsert($q, 'isi', $ownerId, $text, $session->id);
+        $q = 'INSERT INTO tblPolls SET type = ?, ownerId = ?, pollText = ?, createdBy = ?, timeCreated=NOW()'.$timeStart.$timeEnd;
+        return SqlHandler::getInstance()->pInsert($q, 'iisi', $type, $ownerId, $text, $session->id);
     }
 
-    static function addPollExactPeriod($ownerId, $text, $time_start, $time_end)
+    static function addPollExactPeriod($type, $ownerId, $text, $time_start, $time_end)
     {
         $text = trim($text);
 
-        $time_start = sql_datetime($start));
-        $time_end   = sql_datetime($end));
+        $time_start = sql_datetime($start);
+        $time_end   = sql_datetime($end);
 
-        $q = 'INSERT INTO tblPolls SET ownerId = ?, createdBy = ?, pollText = ?, timeStart = ?, timeEnd = ?, timeCreated=NOW()';
-        SqlHandler::getInstance()->pInsert($q, 'iisss', $owner, $session->id, $text, $time_start, $time_end);
+        $q = 'INSERT INTO tblPolls SET type = ?, ownerId = ?, createdBy = ?, pollText = ?, timeStart = ?, timeEnd = ?, timeCreated=NOW()';
+        SqlHandler::getInstance()->pInsert($q, 'iiisss', $type, $owner, $session->id, $text, $time_start, $time_end);
     }
 
     static function removePoll($id)

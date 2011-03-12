@@ -35,7 +35,7 @@ class SessionHandler extends CoreBase
     var $timeout = 86400;          ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 
-    var $name = 'core_dev_sid';    ///< session cookie name, needs to be unique for multiple projects on same webhost
+    var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
     var $logged_out_start_page;
     var $error_page = 'coredev/error';     ///< redirects the user to this page to show errors
@@ -170,6 +170,9 @@ class SessionHandler extends CoreBase
     /** Start / resume session using a magic cookie */
     function start()
     {
+        if (!$this->name)
+            throw new Exception ('session name not set');
+
         if ($this->started)
             return;
 

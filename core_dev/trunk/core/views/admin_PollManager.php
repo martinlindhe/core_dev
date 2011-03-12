@@ -119,13 +119,13 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
     return;
 }
 
-$_owner = 0;
+$owner = 0;
 
 if (!empty($_POST['poll_q'])) {
     if (!empty($_POST['poll_start_man'])) {
-        $pollId = self::addPollExactPeriod($_owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
+        $pollId = $caller::addPollExactPeriod(SITE, $owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
     } else {
-        $pollId = self::addPoll($_owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
+        $pollId = $caller::addPoll(SITE, $owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
     }
 
     for ($i=1; $i<=$answer_fields; $i++) {
@@ -175,7 +175,7 @@ echo '</div>';
 
 echo '<h1>polls</h1>';
 
-$list = $caller::getPolls();
+$list = $caller::getPolls(SITE);
 if (count($list)) {
     echo '<table>';
     echo '<tr>';

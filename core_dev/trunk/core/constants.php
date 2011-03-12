@@ -18,11 +18,13 @@
  * USERS: CategoryItem.php, class.Comments.php
  */
 
+
+//XXX defines "objects".. ?
 define('USER',       1);  ///< normal, public userfile
 define('NEWS',       2);  ///< news categories
 define('BLOG',       3);  ///< normal, personal blog category
 define('WIKI',       4);  ///< category for wiki file attachments, to allow better organization if needed
-
+define('SITE',       5);  ///< for SITE POLLS etc
 
 //define('CONTACT',      11); ///< friend relation category, like "Old friends", "Family"
 //define('USERDATA',     12); ///< used for multi-choice userdata types. tblCategories.ownerId = tblUserdata.fieldId

@@ -11,6 +11,8 @@
 
 //TODO later: allow anonymous polls? then allow 1 vote from each IP
 
+require_once('constants.php');
+
 require_once('Yui3PieChart.php');
 
 class PollWidget
@@ -21,12 +23,12 @@ class PollWidget
         return SqlHandler::getInstance()->pSelectRow($q, 'i', $id);
     }
 
-    static function getPolls($ownerId = 0)
+    static function getPolls($type, $ownerId = 0)
     {
         $q =
-        'SELECT * FROM tblPolls WHERE ownerId = ? AND deletedBy=0'.
+        'SELECT * FROM tblPolls WHERE type = ? AND ownerId = ? AND deletedBy = 0'.
         ' ORDER BY timeStart ASC,pollText ASC';
-        return SqlHandler::getInstance()->pSelect($q, 'i', $ownerId);
+        return SqlHandler::getInstance()->pSelect($q, 'ii', $type, $ownerId);
     }
 
     /** Get statistics for specified poll */
@@ -34,7 +36,7 @@ class PollWidget
     {
         $q  =
         'SELECT t1.categoryName, '.
-            '(SELECT COUNT(*) FROM tblPollVotes  WHERE voteId=t1.categoryId) AS cnt'.
+            '(SELECT COUNT(*) FROM tblRatings  WHERE voteId=t1.categoryId) AS cnt'.
         ' FROM tblCategories AS t1'.
         ' WHERE t1.ownerId = ?';
         return SqlHandler::getInstance()->pSelectMapped($q, 'i', $id);
@@ -45,53 +47,46 @@ class PollWidget
     {
         $session = SessionHandler::getInstance();
         if (!$session->id)
-            return false;
+            return true;
 
-        $q = 'SELECT pollId FROM tblPollVotes WHERE userId = ? AND pollId = ?';
+        $q = 'SELECT owner FROM tblRatings WHERE userId = ? AND owner = ?';
         if (SqlHandler::getInstance()->pSelectItem($q, 'ii', $session->id, $id))
             return true;
 
         return false;
     }
 
-    static function addPollVote($id, $voteId)
+    static function addPollVote($type, $id, $value)
     {
-        // XXX store & check by ip if anon?
-        $session = SessionHandler::getInstance();
-        if (!$session->id)
+        if (self::hasAnsweredPoll($id))
             return false;
 
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT userId FROM tblPollVotes WHERE pollId = ? AND userId = ?';
-        if ($db->pSelectItem($q, 'ii', $id, $session->id)) return false;
-
-        $q = 'INSERT INTO tblPollVotes SET pollId = ?, userId = ?, voteId = ?';
-        $db->pInsert($q, 'iii', $id, $session->id, $voteId);
+        $q = 'INSERT INTO tblRatings SET type = ?, owner = ?, userId = ?, value = ?, timestamp = NOW()';
+        $db->pInsert($q, 'iiii', $type, $id, $session->id, $value);
         return true;
     }
 
-    static function getActivePolls($ownerId = 0)
+    static function getActivePolls($type, $ownerId = 0)
     {
         $q =
         'SELECT * FROM tblPolls'.
-        ' WHERE ownerId = ? AND deletedBy=0 AND NOW() BETWEEN timeStart AND timeEnd'.
+        ' WHERE type = ? AND ownerId = ? AND deletedBy = 0 AND NOW() BETWEEN timeStart AND timeEnd'.
         ' ORDER BY timeStart ASC,pollText ASC';
-        return SqlHandler::getInstance()->pSelect($q, 'i', $ownerId);
+        return SqlHandler::getInstance()->pSelect($q, 'ii', $type, $ownerId);
     }
 
-
-    static function renderActivePolls()
+    static function renderActivePolls($type)
     {
         $res = '';
-        foreach (self::getActivePolls() as $poll)
-            $res .= self::renderPoll($poll['pollId']);
+        foreach (self::getActivePolls($type) as $poll)
+            $res .= self::renderPoll($type, $poll['owner']);
 
         return $res;
     }
 
-
-    static function renderPoll($id)
+    static function renderPoll($type, $id)
     {
         if (!$id)
             throw new Exception ('no id set');
@@ -110,8 +105,9 @@ class PollWidget
             $page = XmlDocumentHandler::getInstance();
             $page->disableDesign();
 
+            self::addPollVote($type, $_GET['poll_vote'], $_GET['opt']);
+
             ob_clean(); // XXX hack.. removes previous output
-            self::addPollVote($_GET['poll_vote'], $_GET['opt']);
             die('1');
         }
 

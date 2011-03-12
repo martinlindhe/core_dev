@@ -9,7 +9,6 @@ BEFORE 1.0 (201?):
 
 
 rewrite/cleanup following modules:
-    * atom_rating.php
     * function_messages.php
     * function_contacts.php
     * function_forum.php
