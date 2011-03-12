@@ -14,8 +14,6 @@ if ($session->isAdmin) {
     echo $man->render();
 }
 
-
-$poll = new PollWidget(1);
-echo $poll->render();
+echo PollWidget::renderActivePolls();
 
 ?>

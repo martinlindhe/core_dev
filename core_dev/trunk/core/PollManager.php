@@ -71,10 +71,23 @@ class PollManager extends PollWidget
         default: die('eexp');
         }
 
+        //XXX cleanup timestamps & call addPollExactPeriod() instead
+
         $session = SessionHandler::getInstance();
 
         $q = 'INSERT INTO tblPolls SET ownerId = ?, pollText = ?, createdBy = ?, timeCreated=NOW()'.$timeStart.$timeEnd;
         return SqlHandler::getInstance()->pInsert($q, 'isi', $ownerId, $text, $session->id);
+    }
+
+    static function addPollExactPeriod($ownerId, $text, $time_start, $time_end)
+    {
+        $text = trim($text);
+
+        $time_start = sql_datetime($start));
+        $time_end   = sql_datetime($end));
+
+        $q = 'INSERT INTO tblPolls SET ownerId = ?, createdBy = ?, pollText = ?, timeStart = ?, timeEnd = ?, timeCreated=NOW()';
+        SqlHandler::getInstance()->pInsert($q, 'iisss', $owner, $session->id, $text, $time_start, $time_end);
     }
 
     static function removePoll($id)

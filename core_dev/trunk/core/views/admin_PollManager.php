@@ -123,7 +123,7 @@ $_owner = 0;
 
 if (!empty($_POST['poll_q'])) {
     if (!empty($_POST['poll_start_man'])) {
-        $pollId = addPollExactPeriod($_owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
+        $pollId = self::addPollExactPeriod($_owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
     } else {
         $pollId = self::addPoll($_owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
     }

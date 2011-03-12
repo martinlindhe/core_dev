@@ -15,11 +15,6 @@ require_once('Yui3PieChart.php');
 
 class PollWidget
 {
-    function __construct($id = 0)
-    {
-        $this->id = $id;
-    }
-
     static function getPoll($id)
     {
         $q = 'SELECT * FROM tblPolls WHERE pollId = ? AND deletedBy = 0';
@@ -35,7 +30,7 @@ class PollWidget
     }
 
     /** Get statistics for specified poll */
-    function getPollStats($id)
+    static function getPollStats($id)
     {
         $q  =
         'SELECT t1.categoryName, '.
@@ -59,7 +54,7 @@ class PollWidget
         return false;
     }
 
-    function addPollVote($id, $voteId)
+    static function addPollVote($id, $voteId)
     {
         // XXX store & check by ip if anon?
         $session = SessionHandler::getInstance();
@@ -76,12 +71,32 @@ class PollWidget
         return true;
     }
 
-    function render()
+    static function getActivePolls($ownerId = 0)
     {
-        if (!$this->id)
+        $q =
+        'SELECT * FROM tblPolls'.
+        ' WHERE ownerId = ? AND deletedBy=0 AND NOW() BETWEEN timeStart AND timeEnd'.
+        ' ORDER BY timeStart ASC,pollText ASC';
+        return SqlHandler::getInstance()->pSelect($q, 'i', $ownerId);
+    }
+
+
+    static function renderActivePolls()
+    {
+        $res = '';
+        foreach (self::getActivePolls() as $poll)
+            $res .= self::renderPoll($poll['pollId']);
+
+        return $res;
+    }
+
+
+    static function renderPoll($id)
+    {
+        if (!$id)
             throw new Exception ('no id set');
 
-        $data = self::getPoll($this->id);
+        $data = self::getPoll($id);
         if (!$data)
             return false;
 
@@ -168,14 +183,14 @@ class PollWidget
 
         $res .= $data['pollText'].'<br/><br/>';
 
-        $res .= '<div id="poll'.$this->id.'">';
+        $res .= '<div id="poll'.$id.'">';
         if ($data['timeStart'])
             $res .= 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'<br/>';
 
-        if ($session->id && $active && !self::hasAnsweredPoll($this->id))
+        if ($session->id && $active && !self::hasAnsweredPoll($id))
         {
             $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
-            $cats->setOwner($this->id);
+            $cats->setOwner($id);
 
             $list = $cats->getItems();
 
@@ -186,7 +201,7 @@ class PollWidget
             else
                 foreach ($list as $opt)
                     $res .=
-                    '<div class="poll_item" onclick="submit_poll('.$this->id.','.$opt->id.')">'.
+                    '<div class="poll_item" onclick="submit_poll('.$id.','.$opt->id.')">'.
                         $opt->title.
                     '</div><br/>';
 
@@ -200,7 +215,7 @@ class PollWidget
                 }
             }
 
-            $votes = self::getPollStats($this->id);
+            $votes = self::getPollStats($id);
 
             $tot_votes = 0;
             foreach ($votes as $cnt)
@@ -229,7 +244,7 @@ class PollWidget
 
         if ($session->id) {
             $res .=
-            '<div id="poll_voted'.$this->id.'" style="display:none">'.
+            '<div id="poll_voted'.$id.'" style="display:none">'.
                 'Your vote has been registered.'.
             '</div>';
         }
