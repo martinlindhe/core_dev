@@ -9,11 +9,12 @@ BEFORE 1.0 (201?):
 
 
 rewrite/cleanup following modules:
+    * atom_rating.php
     * function_messages.php
     * function_contacts.php
     * function_forum.php
     * function_guestbook.php  (XXX messages,different type)
     * function_userdata.php
     * function_chat1on1.php
-    * atom_rating.php
     * atom_subscriptions.php
+
