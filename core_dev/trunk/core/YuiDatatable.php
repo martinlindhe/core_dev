@@ -93,7 +93,7 @@ class YuiDatatable
      * @param $extra extra-data for column type (for "link" its url prefix)
      * @param $col_label use a different cell content for the label of this cell
      */
-    function addColumn($key, $label, $type = '', $extra = '', $col_label = '')
+    function addColumn($key, $label, $type = '', $extra = '', $col_label = '', $max_width = '')
     {
         $response = array('key' => $key);
 
@@ -150,6 +150,9 @@ class YuiDatatable
 
         default: throw new Exception('Unknown column type '.$type);
         }
+
+        if ($max_width)
+            $col->maxAutoWidth = $max_width;
 
         $this->response_fields[] = $key;
         $this->columns[] = $col;
