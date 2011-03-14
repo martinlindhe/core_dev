@@ -133,7 +133,7 @@ class CaptchaRecaptcha extends Captcha
         }
 
         return
-        embed_js('var RecaptchaOptions = { '.$opts.' };').
+        js_embed('var RecaptchaOptions = { '.$opts.' };').
 
         '<script type="text/javascript" src="'.$server.'/challenge?k='.$this->pub_key.'"></script>'.
 
