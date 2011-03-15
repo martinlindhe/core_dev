@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-abstract class MediaResource extends CoreBase
+abstract class MediaResource extends CoreBase  //XXXX delete this class
 {
     var $track_id;
     var $album_id;
@@ -25,7 +25,7 @@ abstract class MediaResource extends CoreBase
     function setMimetype($s) { $this->mimetype = $s; }
 }
 
-class AudioResource extends MediaResource
+class AudioResource extends MediaResource  //XXX stop extending MediaResource
 {
     var $thumbnail;          ///< location of thumbnail/cover art
     var $thumb_width;
@@ -65,8 +65,11 @@ class ImageResource
     var $image_id;
     var $type;  // example "poster", "cover"
 
+    var $mimetype;           ///< mimetype of media
+
     function setUrl($n) { $this->Url = new Url($n); }
     function getUrl() { return $this->Url->get(); }
+    function setMimetype($s) { $this->mimetype = $s; }
 }
 
 class ArtistResource
