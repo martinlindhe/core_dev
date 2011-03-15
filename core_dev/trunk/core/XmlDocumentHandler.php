@@ -23,6 +23,7 @@ class XmlDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design   = true;
     private $enable_headers  = true;         ///< send http headers?
+    private $enable_profiler = false;        ///< embed page profiler?
     private $allow_frames    = false;        ///< allow this document to be framed using <frame> or <iframe> ?
     private $cache_duration  = 0;            ///< number of seconds to allow browser client to cache this result
     private $mimetype        = '';           ///< "text/html" should be "application/xhtml+xml" but IE8 still cant even understand such a page
@@ -125,6 +126,8 @@ class XmlDocumentHandler extends CoreBase
     /** Disables headers being set automatically */
     function disableHeaders() { $this->enable_headers = false; }
 
+    function enableProfiler($b = true) { $this->enable_profiler = $b; }
+
     /** How long (in seconds) should the browser client cache this page? */
     function setCacheDuration($n) { $this->cache_duration = $n; }
 
@@ -210,8 +213,10 @@ class XmlDocumentHandler extends CoreBase
                 $out .= $view->render();
             }
 
-            $view = new ViewModel('views/page_profiler.php');
-            $out .= $view->render();
+            if ($this->enable_profiler) {
+                $view = new ViewModel('views/page_profiler.php');
+                $out .= $view->render();
+            }
         }
 
         $this->sendHeaders();
