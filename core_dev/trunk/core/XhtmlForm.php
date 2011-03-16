@@ -440,7 +440,7 @@ class XhtmlForm
                 if ($e['obj'] instanceof XhtmlComponentHidden) {
                     $res .= $e['obj']->render();
                 } else {
-                    if (!empty($this->form_data[ $e['obj']->name ]))  ///XXX ... not all XhtmlComponents has a value
+                    if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )  // not all XhtmlComponents has a value
                         $e['obj']->value = $this->form_data[ $e['obj']->name ];
 
                     $res .= '<tr>';
