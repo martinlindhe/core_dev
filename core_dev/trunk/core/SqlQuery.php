@@ -22,7 +22,9 @@ class SqlQuery
 
         $keywords = array(
         'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ',
-        ' FROM ', ' SET ', ' WHERE ', ' LEFT JOIN ', ' INNER JOIN ', ' GROUP BY ', ' ORDER BY ',
+        ' FROM ', ' SET ', ' WHERE ',
+        ' LEFT JOIN ', ' LEFT OUTER JOIN ', ' INNER JOIN ',
+        ' GROUP BY ', ' ORDER BY ',
         ' ON ', ' AS ', ' AND ', ' OR ', ' LIMIT ', ' BETWEEN ',
         ' IS NULL', ' IS NOT NULL', ' DESC', ' ASC',
         ' != ',
@@ -32,7 +34,9 @@ class SqlQuery
 
         $decorated = array(
         '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ',
-        ' <b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ', '<br/><b>LEFT JOIN</b> ', '<br/><b>INNER JOIN</b> ', '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
+        ' <b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ',
+        '<br/><b>LEFT JOIN</b> ', '<br/><b>LEFT OUTER JOIN</b> ', '<br/><b>INNER JOIN</b> ',
+         '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
         ' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ', ' <b>BETWEEN</b> ',
         ' <b>IS NULL</b>', ' <b>IS NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
         ' <b>!=</b> ',
