@@ -1,0 +1,7 @@
+facebook-php-sdk from: https://github.com/facebook/php-sdk/
+
+  git clone https://github.com/facebook/php-sdk/ facebook-php-sdk
+
+  + removed .git directories manually
+
+retrieved at 2011.03.20
