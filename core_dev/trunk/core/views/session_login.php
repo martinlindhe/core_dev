@@ -15,15 +15,15 @@
 require_once('UserList.php');
 
 $header->embedCss('
-.login_box {'.
- 'font-size: 14px;'.
- 'border: 1px solid #aaa;'.
- 'min-width: 280px;'.
- 'color: #000;'.
- 'background-color: #DDD;'.
- 'padding: 10px;'.
- 'border-radius:15px 15px 15px 15px;'.      //css3
- '-moz-border-radius:15px 15px 15px 15px;'. //ff
+.login_box{'.
+    'font-size:14px;'.
+    'border:1px solid #aaa;'.
+    'min-width:280px;'.
+    'color:#000;'.
+    'background-color:#ddd;'.
+    'padding:10px;'.
+    'border-radius:15px 15px 15px 15px;'.      //css3
+    '-moz-border-radius:15px 15px 15px 15px;'. //ff
 '}'
 );
 
@@ -33,9 +33,79 @@ if (!$session->allow_logins) {
 }
 
 
+//XXX: move facebook-code somewhere else?
+
+require_once( $page->getCoreDevInclude().'../facebook-php-sdk/facebook.php');
+$facebook = new Facebook(
+    array(
+        'appId'  => $session->facebook_app_id,
+        'secret' => $session->facebook_secret,
+        'cookie' => true
+    )
+);
+
+$fbsession = $facebook->getSession();
+if ($fbsession) {
+
+    try {
+        $fb_me = $facebook->api('/me');
+    } catch (FacebookApiException $e) {
+        d( $e );
+        error_log($e);
+        return;
+    }
+
+    $session->facebook_id = $facebook->getUser();
+
+    echo "LOGGED IN FBID ".$session->facebook_id;
+    //XXX load or create user-id for this facebook-id
+
+$x = 'https://graph.facebook.com/'.$session->facebook_id.'?fields=email,name,picture&access_token='.$fbsession['access_token'];
+$v = file_get_contents($x);
+d($v);
+//XXXX: has facebook email adresss
+///XXX: has facebook profile picture
+
+    echo '<a href="'.$facebook->getLogoutUrl().'"><img src="http://static.ak.fbcdn.net/rsrc.php/z2Y31/hash/cxrz4k7j.gif"></a>';
+
+    return;
+}
+
+
 echo '<div class="login_box">';
 
 echo '<div id="login_form_layer">';
+
+if ($session->facebook_app_id && !$session->facebook_id) {
+    echo '<div id="fb-root"></div>';
+
+    $header->includeJs('http://connect.facebook.net/en_US/all.js');
+    echo js_embed(
+    'window.fbAsyncInit = function() {'.
+        'FB.init({'.
+            'appId:"'.$session->facebook_app_id.'",'.
+            ($fbsession ? 'session:"'.json_encode($fbsession).'",' : ''). // don't refetch the session when PHP already has it
+            'status:true,'. // check login status
+            'cookie:true,'. // enable cookies to allow the server to access the session
+            'xfbml:true'.   // parse XFBML
+        '});'.
+
+        // whenever the user logs in, we refresh the page
+        'FB.Event.subscribe("auth.login", function() {'.
+            'window.location.reload();'.
+        '});'.
+    '};'.
+
+    '(function() {'.
+        'var e = document.createElement("script");'.
+        'e.src = document.location.protocol + "//connect.facebook.net/en_US/all.js";'.
+        'e.async = true;'.
+        'document.getElementById("fb-root").appendChild(e);'.
+    '}());'
+    );
+
+    echo '<fb:login-button width="200" max-rows="1" perms="email">Login with Facebook</fb:login-button>';
+}
 
 echo xhtmlForm('login_form');
 

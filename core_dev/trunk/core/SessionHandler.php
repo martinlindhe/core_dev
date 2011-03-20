@@ -31,9 +31,12 @@ class SessionHandler extends CoreBase
     var $ip;                       /// current IP address
     var $username;
     var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
-    var $referer = '';             ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
-    var $timeout = 86400;          ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
+    var $referer;                  ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
+    var $timeout        = 86400;   ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
+    var $facebook_app_id;          ///< facebook app id, enables "login with facebook"?
+    var $facebook_secret;          ///< facebook secret
+    var $facebook_id;              ///< "fbid" facebook user id
 
     var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
@@ -78,6 +81,15 @@ class SessionHandler extends CoreBase
 
     function allowLogins($b) { $this->allow_logins = $b; }
     function allowRegistrations($b) { $this->allow_registrations = $b; }
+
+    /**
+     * App must be registed at http://developers.facebook.com/setup
+     */
+    function setFacebookAuth($app_id, $secret)
+    {
+        $this->facebook_app_id = $app_id;
+        $this->facebook_secret = $secret;
+    }
 
     /**
      * Handles logins

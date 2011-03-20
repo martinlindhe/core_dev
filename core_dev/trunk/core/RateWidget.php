@@ -11,6 +11,7 @@
 
 //STATUS: hackish.. .
 //XXX TODO: upgrade to a more finished version of the widget (css on yahoo server etc?)
+//XXX later: ability to have different scales of the rating, like 1-5, 0-5, 1-10 etc? needs a better js widget
 
 /**
 
