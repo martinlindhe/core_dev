@@ -1,4 +1,5 @@
 BEFORE 1.0 (201?):
+    * mature Facebook Connect support
     * make a script that updates tables to current structure by adding / renaming columns & changing datatypes from a description
     * rename files some more
     * delete deprecated code

@@ -37,4 +37,7 @@ if (instr('abc', 'aa') )           echo "FAIL 23\n";
 if (instr('a', 'aa') )             echo "FAIL 24\n";
 if (!instr('aa', 'a') )            echo "FAIL 25\n";
 
+if (htmlchars_decode('ja&nbsp;ha') != 'ja ha')  echo "FAIL 26\n"; // space char is a special NBSP character
+if (htmlchars_decode('reg&reg;me') != 'reg®me') echo "FAIL 27\n";
+
 ?>

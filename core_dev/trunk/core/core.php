@@ -504,9 +504,7 @@ function strip_spaces($s)
  */
 function htmlchars_decode($s)
 {
-    $s = str_replace('&#160;', ' ', $s); //nbsp in hex
-    $s = str_replace('&nbsp;', ' ', $s);
-    return html_entity_decode($s);
+    return html_entity_decode($s, ENT_COMPAT, 'UTF-8');
 }
 
 /**
