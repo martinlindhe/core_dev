@@ -9,10 +9,12 @@
 
 //STATUS: wip
 
-//TODO: see if yui has money rounding code & use that instead of my formatMoney()
+//TODO WIP: finish conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
+//          current code is half-working... multiple rules dont work well together, only integer comparisions???
 
-//TODO: Conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
+//TODO: see if yui has money rounding code & use that instead of my formatMoney()
 //TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
+//TODO: right-align money column types
 
 require_once('JSON.php');
 
@@ -28,17 +30,26 @@ class YuiColumnDef
     var $resizable;
 }
 
+class YuiColorRow
+{
+    var $c1, $c2;      // items to compare
+    var $comparison;   ///   "=", "<", ">" etc
+    var $css;
+}
+
+
 class YuiDatatable
 {
     private $columns         = array();
     private $response_fields = array();
     private $datalist        = array();
-    private $caption         = ''; ///< caption for the datatable
-    private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
-    private $rows_per_page   = 20; ///< for the paginator
-    private $sort_column     = false;
+    private $caption         = '';        ///< caption for the datatable
+    private $xhr_source      = '';        ///< url to retrieve data from XMLHttpRequest
+    private $rows_per_page   = 20;        ///< for the paginator
+    private $sort_column     = false;     ///< default to false, because first column idx is 0
     private $sort_order;
-    private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
+    private $embed_arrays    = array();   ///< array with strings for substitution of numeric values in some columns
+    private $color_rows      = array();
 
     private $pixel_width;                 ///< if set, forces horizontal scrollbar on the datatable
     private $pixel_height;                ///< if set, forces vertical scrollbar on the datatable
@@ -84,6 +95,17 @@ class YuiDatatable
 //            d( $this->columns );
             throw new Exception ('column '.$col.' not found');
         }
+    }
+
+    function colorRow( $c1, $comp, $c2, $css)
+    {
+        $col = new YuiColorRow();
+        $col->c1 = $c1;
+        $col->comparison = $comp;
+        $col->c2 = $c2;
+        $col->css = $css;
+
+        $this->color_rows[] = $col;
     }
 
     /**
@@ -287,10 +309,29 @@ class YuiDatatable
                     //embedded js-array
                     'var '.$data_var.' = '.JSON::encode($this->datalist).';'."\n".
                     'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
-                    'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'.
+                    'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'. // XXX whats difference of JSARRAY and JSON types?
                     'myDataSource.responseSchema = { fields:'.JSON::encode($this->response_fields, false).'};'
-                ).
+                );
 
+                if ($this->color_rows) {
+                    // Define a custom row formatter function
+                    $res .=
+                    'var myRowFormatter = function(elTr, oRecord) {';
+
+                    foreach ($this->color_rows as $col) {
+                        $c1 = is_numeric($col->c1) ? $col->c1 : 'parseInt( oRecord.getData("'.$col->c1.'") )';
+                        $c2 = is_numeric($col->c2) ? $col->c2 : 'parseInt( oRecord.getData("'.$col->c2.'") )';
+                        $res .=
+                        'if ('.$c1.' '.$col->comparison.' '.$c2.') YAHOO.util.Dom.addClass(elTr, "'.$col->css.'");';
+//                        'alert( '.$c1.' + " '.$col->comparison.' " + '.$c2.' + " = " + ('.$c1.' '.$col->comparison.' '.$c2.')   );';
+                    }
+
+                    $res .=
+                        'return true;'.
+                    '};';
+                }
+
+                $res .=
                 'var myConfigs = {'.
                     'caption:"'.$this->caption.'",'.
                     ($this->pixel_width  ? 'width:"'.$this->pixel_width.'px",' : '').
@@ -303,6 +344,7 @@ class YuiDatatable
                     :
                         ''
                     ).
+                    ( $this->color_rows ? 'formatRow: myRowFormatter,' : '').
                     'paginator: new YAHOO.widget.Paginator({'.
                         (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
                         'rowsPerPage:'.$this->rows_per_page.','.
