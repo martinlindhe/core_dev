@@ -313,7 +313,10 @@ class YuiDatatable
                     '}),'.
                     ($this->xhr_source ?
                         'dynamicData:true,'.
-                        'initialRequest:"sort='.$this->columns[ $this->sort_column ]->key.($this->sort_order ? '&dir='.$this->sort_order : '').'&startIndex=0&results='.$this->rows_per_page.'"' // Initial request for first page of data
+                        'initialRequest:"startIndex=0&'.
+                            ($this->sort_column ? '&sort='.$this->columns[ $this->sort_column ]->key : '').
+                            ($this->sort_order ? '&dir='.$this->sort_order : '').
+                            '&results='.$this->rows_per_page.'"' // Initial request for first page of data
                     :
                         ''
                     ).
