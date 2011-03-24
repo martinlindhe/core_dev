@@ -32,19 +32,19 @@ class XlsWriter
     function setData($data) { $this->data = $data; }
 
     /** Beginning Of File marker */
-    private function bof() { return pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0); }
+    protected static function bof() { return pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0); }
 
     /** End Of File marker */
-    private function eof() { return pack("ss", 0x0A, 0x00); }
+    protected static  function eof() { return pack("ss", 0x0A, 0x00); }
 
     /** Writes a number (dobule) */
-    function writeDouble($val)
+    protected function writeDouble($val)
     {
         return pack("sssssd", 0x203, 14, $this->row, $this->col, 0x0, $val);    //0x203 = double
     }
 
     /** Writes a text string */
-    function writeText($s)
+    protected function writeText($s)
     {
         //FIXME support unicode strings, see pg 18 in Excel97-2007BinaryFileFormat(xls)Specification.xps
         $len = strlen($s);
@@ -53,9 +53,9 @@ class XlsWriter
 
     function render()
     {
-        $res = $this->bof();
+        $res = self::bof();
 
-        //first row contains the column names
+        // first row contains the column names
         if ($this->write_header) {
             $header = array();
             foreach ($this->data[0] as $idx => $val) {
@@ -68,16 +68,16 @@ class XlsWriter
         foreach ($this->data as $row) {
             $this->col = 0;
             foreach ($row as $val) {
-                if (is_numeric($val))
+                /*if (is_numeric($val))
                     $res .= $this->writeDouble($val);
-                else
+                else*/
                     $res .= $this->writeText($val);
                 $this->col++;
             }
             $this->row++;
         }
 
-        $res .= $this->eof();
+        $res .= self::eof();
         return $res;
     }
 }
