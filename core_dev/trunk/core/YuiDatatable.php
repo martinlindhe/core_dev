@@ -36,7 +36,7 @@ class YuiDatatable
     private $caption         = ''; ///< caption for the datatable
     private $xhr_source      = ''; ///< url to retrieve data from XMLHttpRequest
     private $rows_per_page   = 20; ///< for the paginator
-    private $sort_column;
+    private $sort_column     = false;
     private $sort_order;
     private $embed_arrays    = array(); ///< array with strings for substitution of numeric values in some columns
 
