@@ -28,14 +28,14 @@ class CsvWriter
 
     /**
      * Escapes data if nessecary
+     * @param $force force escaping?
      */
-    function escape($s)
+    static function escape($s, $force = true)
     {
         //Fields with embedded double-quote characters must be delimited with double-quote characters,
         // and the embedded double-quote characters must be represented by a pair of double-quote characters.
-        if (strpos($s, '"') !== false) {
+        if (strpos($s, '"') !== false || $force)
             return '"'.str_replace('"', '""', $s).'"';
-        }
 
         //Fields with embedded commas or line breaks must be delimited with double-quote characters.
         //Fields with leading or trailing spaces must be delimited by double-quote characters.
@@ -43,10 +43,10 @@ class CsvWriter
             strpos($s, $this->separator) !== false ||
             strpos($s, "\r") !== false || strpos($s, "\n") !== false ||
             substr($s, 0, 1)  == ' '   || substr($s, -1)    == ' ' ||
-            substr($s, 0, 1)  == "\t"  || substr($s, -1)    == "\t")
-        {
+            substr($s, 0, 1)  == "\t"  || substr($s, -1)    == "\t"
+        )
             return '"'.$s.'"';
-        }
+
         return $s;
     }
 
@@ -58,7 +58,7 @@ class CsvWriter
         if ($this->write_header) {
             $header = array();
             foreach ($this->data[0] as $idx => $val)
-                $header[] = $this->escape($idx);
+                $header[] = self::escape($idx);
 
             $res .= implode($this->separator, $header).$this->eol;
         }
@@ -66,7 +66,7 @@ class CsvWriter
         foreach ($this->data as $row) {
             $line = array();
             foreach ($row as $val)
-                $line[] = $this->escape($val);
+                $line[] = self::escape($val);
 
             $res .= implode($this->separator, $line).$this->eol;
         }
