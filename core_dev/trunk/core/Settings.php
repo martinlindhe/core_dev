@@ -9,6 +9,16 @@
 
 //XXX: rework into a static class
 
+
+class SettingsByOwner
+{
+    static function getList($type, $name)
+    {
+        $q = 'SELECT ownerId FROM tblSettings WHERE settingType = ? AND settingName = ?';
+        return SqlHandler::getInstance()->pSelect1d($q, 'is', $type, $name);
+    }
+}
+
 class Settings
 {
     //default types - use id's from 50 and up for application specified types

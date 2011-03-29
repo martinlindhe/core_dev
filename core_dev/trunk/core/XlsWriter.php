@@ -35,7 +35,7 @@ class XlsWriter
     protected static function bof() { return pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0); }
 
     /** End Of File marker */
-    protected static  function eof() { return pack("ss", 0x0A, 0x00); }
+    protected static function eof() { return pack("ss", 0x0A, 0x00); }
 
     /** Writes a number (dobule) */
     protected function writeDouble($val)

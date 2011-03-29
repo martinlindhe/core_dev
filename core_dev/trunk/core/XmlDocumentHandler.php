@@ -160,7 +160,10 @@ class XmlDocumentHandler extends CoreBase
 
         // XSS prevention, specifies valid sources for inclusion of javascript files,
         // see https://developer.mozilla.org/en/Introducing_Content_Security_Policy
-        header("X-Content-Security-Policy: allow 'self' yui.yahooapis.com");
+        // DISABLED FOR NOW! we need to eliminate inline javascript due to base restriction "No inline scripts will execute":
+        // https://wiki.mozilla.org/Security/CSP/Specification#Base_Restrictions
+
+        // header("X-Content-Security-Policy: allow 'self' yui.yahooapis.com");
     }
 
     /**
