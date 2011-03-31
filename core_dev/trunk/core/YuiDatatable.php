@@ -78,7 +78,7 @@ class YuiDatatable
      * @param $col sort by column name
      * @param $order asc,desc
      */
-    function setSortOrder($col, $order)
+    function setSortOrder($col, $order = 'asc')
     {
         if (!in_array($order, array('asc', 'desc')))
             throw new Exception ('bad sort order: '.$order);
