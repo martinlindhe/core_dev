@@ -46,21 +46,17 @@ abstract class XhrBackend
     function setResultIndex($n) { if (is_numeric($n)) $this->result_idx = $n; }
 
     //XXX require to be a registered column!
-    function sortBy($s)
+    function setSortOrder($s, $order = 'asc')
     {
         if (!is_alphanumeric($s))
             return false;
 
-        $this->sort_column = $s;
-    }
-
-    function sortOrder($s)
-    {
-        $s = strtoupper($s);
-        if (!in_array($s, array('DESC', 'ASC')))
+        $order = strtolower($order);
+        if (!in_array($order, array('desc', 'asc')))
             throw new Exception ('Bad sortOrder');
 
-        $this->sort_order = $s;
+        $this->sort_column = $s;
+        $this->sort_order  = $order;
     }
 
     abstract function getTotalCount();

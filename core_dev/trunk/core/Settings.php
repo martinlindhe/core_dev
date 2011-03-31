@@ -12,10 +12,10 @@
 
 class SettingsByOwner
 {
-    static function getList($type, $name)
+    static function getList($type, $name, $value)
     {
-        $q = 'SELECT ownerId FROM tblSettings WHERE settingType = ? AND settingName = ?';
-        return SqlHandler::getInstance()->pSelect1d($q, 'is', $type, $name);
+        $q = 'SELECT ownerId FROM tblSettings WHERE settingType = ? AND settingName = ? AND settingValue = ?';
+        return SqlHandler::getInstance()->pSelect1d($q, 'iss', $type, $name, $value);
     }
 }
 
