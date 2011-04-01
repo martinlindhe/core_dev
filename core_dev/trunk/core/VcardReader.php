@@ -106,7 +106,11 @@ class VcardReader
                 case 'HOME':
                     $adr->homephone = formatMSID($val[0]);
                     break;
-                default: dp('XXX VcardReader unhandled telephone type: '.$params[0]);
+                case 'WORK':
+                    $adr->cellphone = formatMSID($val[0]);
+                    break;
+                default:
+                    dp('XXX VcardReader unhandled telephone type: '.$params[ count($params) - 1] );
                 }
                 break;
 
@@ -117,7 +121,17 @@ class VcardReader
                     $adr->city    = $val[3];
                     $adr->zipcode = $val[5];
                     break;
-                default: dp('XXX VcardReader unhandled address type: '.$params[0]);
+                case 'WORK': // ADR;WORK:;;Verkensveien 6;Hell;;7517;
+                    // XXXX: store work adddress separately?
+                    if (!$adr->street) {
+                        $adr->street  = $val[2];
+                        $adr->city    = $val[3];
+                        $adr->zipcode = $val[5];
+                    }
+                    break;
+
+                default:
+                    dp('XXX VcardReader unhandled address type: '.$params[0]);
                 }
                 break;
 
