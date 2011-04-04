@@ -9,25 +9,42 @@
 
 //STATUS: wip
 
+class ApiCustomerItem
+{
+    static function load($id)
+    {
+        $q = 'SELECT * FROM tblApiCustomers WHERE customerId = ?';
+        return SqlHandler::getInstance()->pSelectRow($q, 'i', $id);
+    }
+}
+
 class ApiCustomerList
 {
     private $customers = array(); ///< array of ApiCustomer objects
     private $owner; ///< UserGroup owner
 
-    function __construct($owner = 0)
+    function __construct($owner = 0, $partner = 0)
     {
-        $this->load($owner);
+        $this->load($owner, $partner);
     }
 
     function getCustomers() { return $this->customers; }
 
-    function load($owner = 0)
+    function load($owner = 0, $partner = 0)
     {
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblApiCustomers';
+
+        $cond = array();
         if ($owner && is_numeric($owner))
-            $q .= ' WHERE ownerId='.$owner;
+            $cond[] = 'ownerId='.$owner;
+
+        if ($partner && is_numeric($partner))
+            $cond[] = 'partnerId='.$partner;
+
+        if (count($cond))
+            $q .= ' WHERE '.implode(' AND ', $cond);
 
         $list = $db->getArray($q);
 
