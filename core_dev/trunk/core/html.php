@@ -15,6 +15,21 @@ function htmlchars_decode($s)
     return html_entity_decode($s, ENT_COMPAT, 'UTF-8');
 }
 
+/** similar to strip_tags() but also removes all javascript / css inside <script> or <style> tags */
+function strip_html($s)
+{
+    $search = array(
+    '@<(script|style)[^>]*?>.*?</(script|style)>@si', // javascript, css
+    '@<[\/\!]*?[^<>]*?>@si',                          // HTML tags
+    '@<![\s\S]*?--[ \t\n\r]*>@',    // strip multi-line comments including CDATA
+    );
+
+    $s = preg_replace($search, '', $s);
+
+    $s = htmlchars_decode($s);
+    return $s;
+}
+
 /** @param $dst redirects user to destination url relative to website base url */
 function redir($dst)
 {
