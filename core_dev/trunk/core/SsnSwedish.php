@@ -45,7 +45,20 @@ class SsnSwedish
         $ssn = str_replace(' ', '', $ssn);
         $ssn = trim($ssn);
 
+        $last4 = '';
+
         switch (strlen($ssn)) {
+        case 8:
+            // YYYYMMDD
+            $yr = substr($ssn, 0, 4);
+            // years in the future cant be valid ssn
+            if ($yr > date('Y'))
+                return false;
+            $mn = substr($ssn, 4, 2);
+            $dy = substr($ssn, 6, 2);
+            $last4 = '0000';
+            break;
+
         case 10:
             // "YY" is converted to "YYYY"
             // years below current year is considered to be 2000-20xx, otherwise its 1900-19xx
@@ -56,6 +69,7 @@ class SsnSwedish
             $dy = substr($ssn, 4, 2);
             $last4 = substr($ssn, 6, 4);
             break;
+
         case 12:
             $yr = substr($ssn, 0, 4);
             // years in the future cant be valid ssn
