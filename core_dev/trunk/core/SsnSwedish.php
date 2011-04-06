@@ -24,7 +24,7 @@
 
 class OrgNoSwedish extends SsnSwedish
 {
-    static function isValid()
+    static function isValid($ssn, $gender = 0)
     {
         // XXX validate how?
         return true;
