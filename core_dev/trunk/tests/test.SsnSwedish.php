@@ -4,35 +4,20 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('SsnSwedish.php');
 
-$ssn = new SsnSwedish('811218-9876'); //known correct
-if (!$ssn->isValid()) echo "FAIL 1\n";
+if (!SsnSwedish::isValid('811218-9876')) echo "FAIL 1\n";  //known correct
+if (!SsnSwedish::isValid('800726-2010')) echo "FAIL 2\n";  //known correct
+if (SsnSwedish::isValid('800726-2222'))  echo "FAIL 3\n";  //known fake
+if (!SsnSwedish::isValid('800222-0138')) echo "FAIL 4\n";  //known correct
+
+if (!SsnSwedish::isValid('800726-2010', SsnSwedish::MALE)) echo "FAIL 5\n"; // known to be a male ssn
 
 
-$ssn = new SsnSwedish('800726-2010'); //known correct
-if (!$ssn->isValid()) echo "FAIL 2\n";
-
-$ssn = new SsnSwedish('800726-2222'); //known fake
-if ($ssn->isValid()) echo "FAIL 3\n";
-
-$ssn = new SsnSwedish('800222-0138'); //known correct
-if (!$ssn->isValid()) echo "FAIL 4\n";
-
-$ssn = new SsnSwedish('800726-2010', SsnSwedish::MALE);
-if (!$ssn->isValid()) echo "FAIL 5\n";
+if (!OrgNoSwedish::isValid('556684-8635')) echo "FAIL 6\n"; //Kryptonit AB
+if (!OrgNoSwedish::isValid('556455-4656')) echo "FAIL 7\n"; //Unicorn Communications AB
+if (!OrgNoSwedish::isValid('556632-0221')) echo "FAIL 8\n"; //Unicorn Interactive AB
+if (!OrgNoSwedish::isValid('556539-1355')) echo "FAIL 9\n"; //Unicorn Telecom AB
 
 
-
-$ssn = new OrgNoSwedish('556684-8635'); //Kryptonit AB
-if (!$ssn->isValid()) echo "FAIL 6\n";
-
-$ssn = new OrgNoSwedish('556455-4656'); //Unicorn Communications AB
-if (!$ssn->isValid()) echo "FAIL 7\n";
-
-$ssn = new OrgNoSwedish('556632-0221');  //Unicorn Interactive AB
-if (!$ssn->isValid()) echo "FAIL 8\n";
-
-$ssn = new OrgNoSwedish('556539-1355'); //Unicorn Telecom AB
-if (!$ssn->isValid()) echo "FAIL 9\n";
-
+echo SsnSwedish::getTimestamp('800726-2222');
 
 ?>
