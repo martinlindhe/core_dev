@@ -21,7 +21,9 @@ case 'selftest':
     // returns a error code if anything is wrong
     // the idea is to have a external script fetch http://coredevapp/coredev/selftest  and warn if != "0",
     // such as on parse errors, low disk space in upload directories, etc (XXX TODO IMPLEMENT)
-    die('0');
+    $status = 'OK';
+
+    die('STATUS:'.$status);
 
 case 'admin':
     $session->requireSuperAdmin();
