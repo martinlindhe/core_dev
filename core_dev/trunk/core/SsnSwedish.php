@@ -152,7 +152,11 @@ class SsnSwedish
         if (strlen($ssn) != 12 || !is_numeric($ssn))
             throw new Exception ('isValid invalid ssn: '.$ssn);
 
-        return strtotime($ssn);
+        $yr = substr($ssn, 0, 4);
+        $mn = substr($ssn, 4, 2);
+        $dy = substr($ssn, 6, 2);
+
+        return mktime(0, 0, 0, $mn, $dy, $yr);
     }
 
     static function getGender($ssn)
