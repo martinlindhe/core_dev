@@ -154,11 +154,16 @@ class XmlDocumentHandler extends CoreBase
             ($this->cache_duration ? 'max-age='.$this->cache_duration : 'no-cache').
             ', must-revalidate');
 
-        // XSS prevention, forbids this document to be embedded in a frame from an
-        // external source, see https://developer.mozilla.org/en/the_x-frame-options_response_header
+        // IE8, Fiefox 3.6: "Clickjacking Defense" (XSS prevention), Forbids this document to be embedded in a frame from
+        // an external source, see https://developer.mozilla.org/en/the_x-frame-options_response_header
+        // and http://blogs.msdn.com/b/ie/archive/2009/01/27/ie8-security-part-vii-clickjacking-defenses.aspx
         header('X-Frame-Options: '.($this->allow_frames ? 'SAMEORIGIN' : 'DENY') );
 
-        // XSS prevention, specifies valid sources for inclusion of javascript files,
+        // IE8: "XSS Filter"
+        // see http://blogs.msdn.com/b/ie/archive/2008/07/01/ie8-security-part-iv-the-xss-filter.aspx
+        header('X-XSS-Protection: 1; mode=block');
+
+        // Firefox 4: XSS prevention, specifies valid sources for inclusion of javascript files,
         // see https://developer.mozilla.org/en/Introducing_Content_Security_Policy
         // DISABLED FOR NOW! we need to eliminate inline javascript due to base restriction "No inline scripts will execute":
         // https://wiki.mozilla.org/Security/CSP/Specification#Base_Restrictions
