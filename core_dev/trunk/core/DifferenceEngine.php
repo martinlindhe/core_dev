@@ -670,7 +670,7 @@ class MappedDiff extends Diff
         assert(count($from_lines) == count($mapped_from_lines));
         assert(count($to_lines) == count($mapped_to_lines));
 
-        $this->Diff($mapped_from_lines, $mapped_to_lines);
+        parent::__construct($mapped_from_lines, $mapped_to_lines);
 
         $xi = $yi = 0;
         $ecnt = count($this->edits);
@@ -909,7 +909,7 @@ class WordLevelDiff extends MappedDiff
         list ($orig_words, $orig_stripped) = $this->_split($orig_lines);
         list ($closing_words, $closing_stripped) = $this->_split($closing_lines);
 
-        $this->MappedDiff($orig_words, $closing_words,
+        parent::__construct($orig_words, $closing_words,
                 $orig_stripped, $closing_stripped);
     }
 
