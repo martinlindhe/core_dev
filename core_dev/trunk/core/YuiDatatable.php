@@ -274,7 +274,7 @@ class YuiDatatable
 
                 // draws a gray (false) or green (true) checkmark
                 'this.formatBool = function(elLiner, oRecord, oColumn, oData) {'.
-                    'elLiner.innerHTML = \'<img src="'.relurl('core_dev/gfx/icon_ok').'\' + ( oData ? "" : "_gray") + \'.png"/>\';'.
+                    'elLiner.innerHTML = \'<img src="'.relurl('core_dev/gfx/icon_ok').'\' + ( oData == 1 ? "" : "_gray") + \'.png"/>\';'.
                 '};';
 
                 for ($i=0; $i<count($this->embed_arrays); $i++) {
