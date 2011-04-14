@@ -61,8 +61,8 @@ class XhtmlForm
 
         $this->post_handler = $f;
 
-        if (is_object($objectinstance))
-            $this->objectinstance = $objectinstance;
+		if (is_object($objectinstance))
+			$this->objectinstance = $objectinstance;
     }
 
     /**
@@ -408,11 +408,13 @@ class XhtmlForm
      */
     function render()
     {
-		if (!function_exists($this->post_handler))
-			throw new Exception ('FATAL: XhtmlForm post handler "'.$this->post_handler.'" is not defined!');
-
-        if (!$this->url_handler && !$this->objectinstance)
+        if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
+        {
+			if (!function_exists($this->post_handler))
+				throw new Exception ('FATAL: XhtmlForm post handler "'.$this->post_handler.'" is not defined!');
+			
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
+		}
 
         $this->handle();
 
