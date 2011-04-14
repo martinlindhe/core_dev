@@ -49,14 +49,14 @@ class YuiAutocomplete extends XhtmlComponent
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/fonts/fonts-min.css');
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/autocomplete/assets/skins/sam/autocomplete.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/get/get-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/animation/animation-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/datasource/datasource-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/autocomplete/autocomplete-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/get/get-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js');
 
         $div_holder = 'yui_ac'.mt_rand();
 

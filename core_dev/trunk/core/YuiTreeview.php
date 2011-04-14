@@ -47,15 +47,15 @@ class YuiTreeview
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/treeview/assets/skins/sam/treeview.css');
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/calendar/assets/skins/sam/calendar.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/animation/animation-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/calendar/calendar-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/json/json-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/connection/connection-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/treeview/treeview-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/json/json-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js');
 
         $locale = LocaleHandler::getInstance();
 

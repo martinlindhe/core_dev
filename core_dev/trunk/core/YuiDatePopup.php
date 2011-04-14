@@ -37,17 +37,17 @@ class YuiDatePopup
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/fonts/fonts-min.css');
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/button/assets/skins/sam/button.css');
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/container/assets/skins/sam/container.css');
-        $header->includeCss('http://yui.yahooapis.com/2.8.2r1/build/calendar/assets/skins/sam/calendar.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/dragdrop/dragdrop-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/element/element-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/button/button-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/container/container-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.8.2r1/build/calendar/calendar-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/element/element-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/button/button-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/container/container-min.js');
+        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js');
 
         $header->embedCss(
         // Clear calendars float, using dialog inbuilt form element
