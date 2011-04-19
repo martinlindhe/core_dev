@@ -157,7 +157,7 @@ function exectime($c, &$retval = 0)
     //XXX: Use 2>&1 in $c to redirect stderr to $output buffer
     $output = array();
     $exec_start = microtime(true);
-    exec($c, $output, &$retval);
+    exec($c, $output, $retval);
 
     return microtime(true) - $exec_start;
 }

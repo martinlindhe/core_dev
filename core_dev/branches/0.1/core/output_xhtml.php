@@ -414,7 +414,7 @@ function xhtmlTable($arr, $heads = '', $callback = '')
 	$i = 0;
 	foreach ($arr as $row) {
 		if (function_exists($callback)) {
-			$out .= call_user_func($callback, $row, &$i);
+			$out .= call_user_func($callback, $row, $i);
 			$i++;
 		} else if (is_array($heads) && $heads_idx) {
 			$out .= '<tr>';
