@@ -119,7 +119,7 @@ function dp($str)
 {
     global $config;
 
-    if (is_array($str))
+    if (is_array($str) || is_object($str))
         $str = serialize($str);
 
     error_log($str);
