@@ -27,6 +27,7 @@ class RequestHandler
 
     private function __clone() {}      //singleton: prevent cloning of class
 
+    public function getController() { return $this->_controller; }
     public function getView() { return $this->_view; }
 
     /**
@@ -98,17 +99,16 @@ class RequestHandler
      */
     public function route()
     {
-        $page    = XmlDocumentHandler::getInstance();
-        $error   = ErrorHandler::getInstance();
+        $page  = XmlDocumentHandler::getInstance();
+        $error = ErrorHandler::getInstance();
 
         // automatically resumes session unless it is blacklisted
-        if (!in_array($this->_controller, $this->exclude_session) && class_exists('SessionHandler') ) {
-            $session = SessionHandler::getInstance();
-            $session->resume();
+        if (class_exists('SessionHandler') && !in_array($this->_controller, $this->exclude_session))
+        {
+            // handle login/logout/register user requests to any page
+            $view = new ViewModel('views/handle_request.php', $this);
+            $page->attach( $view->render() );
         }
-
-        // handle login/logout/register user requests to any page
-        $page->attach( $this->render() );
 
         if ($error->getErrorCount())
             $page->attach( $error->render(true) );
@@ -128,18 +128,6 @@ class RequestHandler
         $view->child  = $this->_child;
 
         $page->attach( $view->render() );
-    }
-
-    /**
-     * Handles login, logout & register user requests
-     */
-    private function render()
-    {
-        if (!class_exists('SessionHandler'))
-            return;
-
-        $view = new ViewModel('views/handle_request.php');
-        return $view->render();
     }
 
 }

@@ -41,12 +41,11 @@ class SessionHandler extends CoreBase
     var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
     var $logged_out_start_page;
-    var $error_page = 'coredev/error';     ///< redirects the user to this page to show errors
+    var $error_page = 'coredev/error';  ///< redirects the user to this page to show errors
 
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?
     var $isSuperAdmin;             ///< is user superadmin?
-    protected $started = false;    ///< has session been started for this request?
     protected $last_active;        ///< timestamp of last activity
 
     var $allow_logins        = true; ///< do app currently allow logins?
@@ -165,43 +164,29 @@ class SessionHandler extends CoreBase
         return true;
     }
 
-    /** Logs out the user */
-    function logout()
-    {
-        dp($this->username.' logged out');
-
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
-
-        $this->end();
-
-        $this->showLoggedOutStartPage();
-        die;
-    }
-
     /** Start / resume session using a magic cookie */
     function start()
     {
         if (!$this->name)
             throw new Exception ('session name not set');
 
-        if ($this->started)
-            return;
-
-        ini_set('session.gc_maxlifetime', $this->timeout);
+        $page = XmlDocumentHandler::getInstance();
 
         session_name($this->name);
-        session_start();
+        if (!session_id())
+            session_start();
 
-        $this->started = true;
+        setcookie($this->name, session_id(), time()+$this->timeout, $page->getRelativeUrl() );
     }
 
     /** Resumes the session from previous request */
     function resume()
     {
-        $this->start();
+        session_name($this->name);
+        if (!session_id())
+            session_start();
 
-        if (empty($_COOKIE[$this->name]))
+        if (empty($_SESSION['id']))
             return;
 
         $this->id           = &$_SESSION['id'];
@@ -213,9 +198,6 @@ class SessionHandler extends CoreBase
         $this->referer      = &$_SESSION['referer'];
         $this->ip           = &$_SESSION['ip'];
         $this->last_active  = &$_SESSION['last_active'];
-
-        if (!$this->id)
-            return;
 
         $error = ErrorHandler::getInstance();
 
@@ -233,6 +215,23 @@ class SessionHandler extends CoreBase
         $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
+    /** Logs out the user */
+    function logout()
+    {
+        dp($this->username.' logged out');
+
+        $db = SqlHandler::getInstance();
+        $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
+
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 604800, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+
+        $this->end();
+
+        $this->showLoggedOutStartPage();
+        die;
+    }
+
     /**
      * Kills the current session, clearing all session variables
      */
@@ -247,18 +246,10 @@ class SessionHandler extends CoreBase
         $this->isAdmin      = false;
         $this->isSuperAdmin = false;
 
-        if (ini_get('session.use_cookies')) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
-            );
-        }
-
-        if (!empty($_SESSION)) {
+        if (!empty($_SESSION))
             $_SESSION = array();  //XXXX FIXME: dont destroy $_SESSION['cd_errors'] (error handler messages)
-            session_destroy();
-        }
+
+        session_destroy();
     }
 
     function getUserLevelName()
