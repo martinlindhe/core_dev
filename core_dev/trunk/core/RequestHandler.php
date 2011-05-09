@@ -105,7 +105,7 @@ class RequestHandler
         // automatically resumes session unless it is blacklisted
         if (class_exists('SessionHandler') && !in_array($this->_controller, $this->exclude_session))
         {
-            // handle login/logout/register user requests to any page
+            // resume session & handle login/logout/register requests to any page
             $view = new ViewModel('views/handle_request.php', $this);
             $page->attach( $view->render() );
         }

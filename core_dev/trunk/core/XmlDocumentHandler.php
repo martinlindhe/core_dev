@@ -181,7 +181,7 @@ class XmlDocumentHandler extends CoreBase
 
     function render()
     {
-        ob_start();
+        ob_start();   //XXXX debug haxx, should be removed at some point
 
         $out = '';
 
@@ -197,6 +197,7 @@ class XmlDocumentHandler extends CoreBase
 
             if (is_string($obj)) {
                 //XXX hack to allow any text to be attached
+//                throw new Exception ('obj is string: '.$obj);
                 $out .= $obj;
                 continue;
             }

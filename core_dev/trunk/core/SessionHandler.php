@@ -72,11 +72,17 @@ class SessionHandler extends CoreBase
         $this->timeout = parse_duration($n);
     }
     function setStartPage($s) { $this->start_page = $s; }
+    function setLastActive()
+    {
+        $this->last_active = time();
+        SqlHandler::getInstance()->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
+    }
 
     function setEncryptKey($key) { $this->encrypt_key = $key; }
     function getEncryptKey() { return $this->encrypt_key; }
 
     function getUsername() { return $this->username; }
+    function getLastActive() { return $this->last_active; }
 
     function allowLogins($b) { $this->allow_logins = $b; }
     function allowRegistrations($b) { $this->allow_registrations = $b; }
@@ -144,8 +150,6 @@ class SessionHandler extends CoreBase
         $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
         $db->pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
 
-        $this->start();
-
         $_SESSION['id']           = $this->id;
         $_SESSION['username']     = $this->username;
         $_SESSION['usermode']     = $this->usermode;
@@ -164,28 +168,25 @@ class SessionHandler extends CoreBase
         return true;
     }
 
-    /** Start / resume session using a magic cookie */
+    /** starts session, must be called at beginning of each page request */
     function start()
     {
         if (!$this->name)
             throw new Exception ('session name not set');
 
-        $page = XmlDocumentHandler::getInstance();
-
         session_name($this->name);
-        if (!session_id())
-            session_start();
 
-        setcookie($this->name, session_id(), time()+$this->timeout, $page->getRelativeUrl() );
+        if (!session_start())
+            throw new Exception ('failed to start session');
+
+//        setcookie($this->name, session_id(), time()+$this->timeout, $page->getRelativeUrl() );
+
+        $this->resume();
     }
 
-    /** Resumes the session from previous request */
+    /** loads previous session data if found */
     function resume()
     {
-        session_name($this->name);
-        if (!session_id())
-            session_start();
-
         if (empty($_SESSION['id']))
             return;
 
@@ -198,21 +199,6 @@ class SessionHandler extends CoreBase
         $this->referer      = &$_SESSION['referer'];
         $this->ip           = &$_SESSION['ip'];
         $this->last_active  = &$_SESSION['last_active'];
-
-        $error = ErrorHandler::getInstance();
-
-        // Check user activity - log out inactive user
-        if ($this->last_active < (time()-$this->timeout)) {
-            dp('Session timed out for '.$this->username.' after '.(time()-$this->last_active).'s (timeout is '.($this->timeout).'s)');
-            $this->end();
-            $error->add('Session timed out');
-            $this->showErrorPage();
-        }
-
-        $this->last_active = time();
-
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
     }
 
     /** Logs out the user */
