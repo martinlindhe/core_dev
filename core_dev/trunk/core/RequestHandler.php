@@ -31,7 +31,7 @@ class RequestHandler
     public function getView() { return $this->_view; }
 
     /**
-     * Registers a list of controllers that should not invoke $session->resume()
+     * Registers a list of controllers that should not invoke $session->start()
      * XXX this is a hack. dont know how to handle this elegantly.
      * the problem is to mark certain requests as "no session", for example RPC:s
      */

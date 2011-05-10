@@ -25,7 +25,7 @@ class XmlDocumentHandler extends CoreBase
     private $enable_headers  = true;         ///< send http headers?
     private $enable_profiler = false;        ///< embed page profiler?
     private $allow_frames    = false;        ///< allow this document to be framed using <frame> or <iframe> ?
-    private $cache_duration  = 0;            ///< number of seconds to allow browser client to cache this result
+    private $cache_duration  = 0;            ///< seconds to allow browser client to cache this result
     private $mimetype        = '';           ///< "text/html" should be "application/xhtml+xml" but IE8 still cant even understand such a page
     private $Url;                            ///< Url object
     private $attachment_name;                ///< name of file attachment (force user to save file)
@@ -149,10 +149,17 @@ class XmlDocumentHandler extends CoreBase
         else if ($this->inline_name)
             header('Content-Disposition: inline; filename="'.$this->inline_name.'"');
 
-        // see http://www.mnot.net/cache_docs/
-        header('Cache-Control: '.
-            ($this->cache_duration ? 'max-age='.$this->cache_duration : 'no-cache').
-            ', must-revalidate');
+        // see http://www.php.net/manual/en/function.session-cache-limiter.php
+        // and http://www.mnot.net/cache_docs/
+        if ($this->cache_duration)
+        {
+            session_cache_expire( $this->cache_duration / 60); // in minutes
+            session_cache_limiter('private');
+        }
+        else
+        {
+            session_cache_limiter('nocache');
+        }
 
         // IE8, Fiefox 3.6: "Clickjacking Defense" (XSS prevention), Forbids this document to be embedded in a frame from
         // an external source, see https://developer.mozilla.org/en/the_x-frame-options_response_header

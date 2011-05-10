@@ -163,12 +163,15 @@ class SessionHandler extends CoreBase
 
         dp($this->username.' logged in');
 
-        $error->reset(); /// remove previous errors
+        $error->reset(); // remove previous errors
 
         return true;
     }
 
-    /** starts session, must be called at beginning of each page request */
+    /**
+     * Starts session & loads previous session data if found
+     * must be called at beginning of each page request
+     */
     function start()
     {
         if (!$this->name)
@@ -176,19 +179,18 @@ class SessionHandler extends CoreBase
 
         session_name($this->name);
 
+        ini_set('session.cookie_lifetime', $this->timeout); // in seconds
+        ini_set('session.gc_maxlifetime', $this->timeout);  // in seconds
+
         if (!session_start())
             throw new Exception ('failed to start session');
 
-//        setcookie($this->name, session_id(), time()+$this->timeout, $page->getRelativeUrl() );
-
-        $this->resume();
-    }
-
-    /** loads previous session data if found */
-    function resume()
-    {
         if (empty($_SESSION['id']))
             return;
+
+        $page = XmlDocumentHandler::getInstance();
+
+        setcookie($this->name, session_id(), time() + $this->timeout, $page->getRelativeUrl() );
 
         $this->id           = &$_SESSION['id'];
         $this->username     = &$_SESSION['username'];
