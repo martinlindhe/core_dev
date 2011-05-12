@@ -9,6 +9,10 @@ if ( GeoIp::getTimezone('www.stockholm.se') != 'Europe/Stockholm') echo "FAIL 2\
 
 print_r(  GeoIp::getRecord('www.google.com')  );
 
-echo GeoIp::renderVersion();
+print_r( GeoIp::getRecord('31.9.15.73') );
+
+
+echo "db version: \n";
+print_r( GeoIp::getDatabaseVersions() );
 
 ?>

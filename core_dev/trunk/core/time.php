@@ -221,8 +221,25 @@ function datetime_to_timestamp($datetime) //XXX deprecate! use ts() instead
  */
 function ts($d)
 {
-    if (!$d) return 0;
-    if (is_numeric($d)) return $d;
+    if (!$d)
+        return 0;
+
+    if (is_numeric($d) && strlen($d) == 8 && substr($d, 0, 2) == '20')
+    {
+        // convert "20110502" to ts
+        $yy = substr($d, 0, 4);
+        $mm = substr($d, 4, 2);
+        $dd = substr($d, 6, 2);
+
+        if (!checkdate($mm, $dd, $yy))
+            throw new Exception ('invalid ts form: '.$d);
+
+        return mktime(0, 0, 0, $mm, $dd, $yy);
+    }
+
+    if (is_numeric($d))
+        return $d;
+
     return strtotime($d);
 }
 

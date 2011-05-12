@@ -23,4 +23,9 @@ if (is_duration('abc'))                                   echo "FAIL 13\n";
 if (is_duration('1a2d'))                                  echo "FAIL 13\n";
 if (!is_duration( 500 ))                                  echo "FAIL 14\n";
 
+if ( sql_date(ts('2011-05-08')) != '2011-05-08')          echo "FAIL 15\n";
+if ( sql_date(ts('20110508')) != '2011-05-08')            echo "FAIL 16\n";
+if ( sql_date(ts('5/8/2011')) != '2011-05-08')            echo "FAIL 17\n";
+if ( sql_date(ts('05/08/2011')) != '2011-05-08')          echo "FAIL 18\n";
+
 ?>
