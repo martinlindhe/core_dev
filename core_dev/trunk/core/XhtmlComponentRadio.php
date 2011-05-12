@@ -27,10 +27,9 @@ class XhtmlComponentRadio extends XhtmlComponent
         $out = '';
 
         foreach ($this->options as $id => $title)
-        {
-            $out .= '<input type="radio" class="radio" name="'.$this->name.'" value="'.$id.'" id="lab_'.$id.'"'.($this->value == $id ? ' checked="checked"' : '').'/>';
-            $out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
-        }
+            $out .=
+            '<input type="radio" class="radio" name="'.$this->name.'" value="'.$id.'" id="lab_'.$id.'"'.($this->value == $id ? ' checked="checked"' : '').'/>'.
+            '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
 
         return $out;
     }
