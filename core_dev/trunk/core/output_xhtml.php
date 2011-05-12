@@ -109,19 +109,6 @@ function xhtmlCheckboxArray($arr, $prefix = '')
 }
 
 /**
- * Creates a bunch of radio buttons out of an array
- */
-function xhtmlRadioArray($_name, $_arr, $_default = '')
-{
-    $out = '';
-    foreach ($_arr as $id => $title) {
-        $out .= '<input type="radio" class="radio" name="'.$_name.'" value="'.$id.'" id="lab_'.$id.'"'.($_default == $id ? ' checked="checked"' : '').'/>';
-        $out .= '<label for="lab_'.$id.'"> '.$title.'</label><br/>';
-    }
-    return $out;
-}
-
-/**
  * Creates a input field
  */
 function xhtmlInput($_name, $_value = '', $_size = 0, $_maxlen = 0, $_disabled = false)  //XXX deprecate, see XhtmlInput.php

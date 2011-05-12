@@ -336,7 +336,12 @@ class XhtmlForm
 
     function addRadio($name, $str, $arr, $default = '')
     {
-        $this->elems[] = array('type' => 'RADIO', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
+        $o = new XhtmlComponentRadio();
+        $o->name    = $name;
+        $o->value   = $default;
+        $o->options = $arr;
+
+        $this->add($o, $str);
     }
 
     /**
@@ -412,7 +417,7 @@ class XhtmlForm
         {
 			if (!function_exists($this->post_handler))
 				throw new Exception ('FATAL: XhtmlForm post handler "'.$this->post_handler.'" is not defined!');
-			
+
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
 		}
 
@@ -494,11 +499,6 @@ class XhtmlForm
                 $richedit->setWidth($e['width']);
                 $richedit->setHeight($e['height']);
                 $res .= $richedit->render();
-                break;
-
-            case 'RADIO':
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlRadioArray($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'LISTBOX':
