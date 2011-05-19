@@ -1,17 +1,24 @@
 <?php
+/**
+ * This is the application handler
+ * all webpage requests is sent here from a RewriteRule in .htaccess
+ */
 
 require_once('config.php');
+require_once('RequestHandler.php');
 
-require('design_head.php');
+try {
+    $front = RequestHandler::getInstance();
+    $front->excludeSession( array('api') ); //exclude session handling for these controllers
+    $front->route();
 
-if (!$h->session->id) {
-    showLoginForm();
+    $page = XmlDocumentHandler::getInstance();
+    echo $page->render();
+} catch (Exception $e) {
+    echo '<pre>';
+    echo $e->__toString();
+    dp( $e->__toString() ); //because the exception is caught it is not written to error log
+    echo '</pre>';
 }
 
-//FIXME re-implement SOAP interface
-if (!defined('SOAP_1_2')) {
-    echo '<div class="critical">php_soap extension is not loaded! This application will not function properly</div>';
-}
-
-require('design_foot.php');
 ?>

@@ -1,0 +1,22 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    ### BEGIN: core_dev rewrite rules ###
+    # use internal robots.txt generator
+    RewriteRule ^robots.txt$ /coredev/robots [L]
+    RewriteRule ^favicon.ico$ /coredev/favicon [L]
+
+    # we skip all files with .something
+    RewriteCond %{REQUEST_URI} \..+$
+    RewriteCond %{REQUEST_URI} !\.html$
+    RewriteRule .* - [L]
+
+    RewriteRule ^(.*)$ index.php [QSA,L]
+    ### END: core_dev rewrite rules ###
+
+</IfModule>
+
+
+
+
+

@@ -18,10 +18,11 @@
  * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
  */
 
-require_once('atom_customers.php');
+// require_once('atom_customers.php');
+// require_once('functions_fileareas.php');
+// require_once('functions_image.php');
 require_once('HttpClient.php');
-require_once('functions_image.php');
-require_once('functions_fileareas.php');
+
 
 //how many enqued items to process at max each time the process_queue.php script is called
 //WARNING: keep this a low number unless you are sure what the consequences are

@@ -1,10 +1,3 @@
-<?php
-$head = new xhtml_header();
-$head->setTitle('process');
-$head->addCss('css/site.css');
-echo $head->render();
-
-?>
 <div id="header">
     <div id="header-logo">
         process site
@@ -15,28 +8,28 @@ echo $head->render();
 <div id="leftmenu">
 <?php
 
-$menu = array(
-    'index.php' => 'Home'
-);
-echo xhtmlMenu($menu);
+$menu = new XhtmlMenu();
+$menu->setCss('nav_menu', 'nav_menu_current');
+$menu->add('Home', '/');
 
-if ($h->session->id) {
-    $menu = array(
-        'show_files.php' => 'Show uploaded files',
-        'show_queue.php' => 'Show work queue',
-        'http_upload.php' => 'Upload file',
-        'http_download.php' => 'Request a fetch',
-        '?logout' => 'Logout');
-    echo xhtmlMenu($menu);
+if ($session->id) {
+    $menu->add('Uploads',       'uploads/show');
+    $menu->add('Work queue',    'queue/show');
+    $menu->add('Upload file',   'uploads/new');
+    $menu->add('Add to queue',  'queue/add');
 }
 
-if ($h->session->isAdmin) {
-    $menu = array(
-        'process_queue.php' => 'FORCE process',
-        $config['core']['web_root'].'admin/admin.php'.getProjectPath(0) => 'Admin'
-    );
-    echo xhtmlMenu($menu);
+if ($session->isSuperAdmin) {
+    $menu->add('Process queue', 'queue/process');
+    $menu->add('Admin',         '/admin');
 }
+
+if ($session->id) {
+    $menu->add('Logout', '?logout');
+}
+
+echo $menu->render();
+
 ?>
 </div>
 
