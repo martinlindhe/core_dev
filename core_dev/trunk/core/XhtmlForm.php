@@ -18,6 +18,7 @@ require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
+require_once('FileList.php');
 require_once('XhtmlComponent.php');
 
 require_once('YuiAutocomplete.php');
@@ -180,23 +181,7 @@ class XhtmlForm
             {
                 $key = $_FILES[ $e['obj']->name ];
 
-                // ignore empty file uploads
-                if (!$key['name'])
-                    continue;
-
-                if (!is_uploaded_file($key['tmp_name'])) {
-                    $error->add('Upload failed for file '.$key['name'] );
-                    continue;
-                }
-
-                $dst_file = $page->getUploadRoot().'/'.$key['name'];
-
-                if (move_uploaded_file($key['tmp_name'], $dst_file))
-                    chmod($dst_file, 0777);
-                else
-                    throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
-
-                $key['name'] = $dst_file;
+                $fileId = FileList::importUpload($e['obj']->type, $key);
 
                 $p[ $e['obj']->name ] = $key;
 
@@ -398,12 +383,13 @@ class XhtmlForm
     /**
      * Adds a file uploader
      */
-    function addFile($name, $str = '')
+    function addFile($name, $str = '', $type = USER)
     {
         $this->file_upload = true;
 
         $o = new XhtmlComponentFile();
         $o->name = $name;
+        $o->type = $type;
 
         $this->add($o, $str);
     }

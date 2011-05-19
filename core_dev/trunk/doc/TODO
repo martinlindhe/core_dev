@@ -18,3 +18,7 @@ rewrite/cleanup following modules:
     * function_userdata.php
     * function_chat1on1.php
     * atom_subscriptions.php
+
+
+replace icons with this icon set:
+	http://p.yusukekamiyamane.com/ (creative commons 3.0 licence)
