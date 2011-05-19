@@ -13,9 +13,12 @@ require_once('SqlFactory.php');
 require_once('ErrorHandler.php');
 require_once('SessionHandler.php');
 require_once('XhtmlMenu.php');
+require_once('XhtmlForm.php');
+require_once('FileList.php');
 
 //project includes:
 require_once('functions_process.php');
+require_once('TaskQueue.php'); //XXX move to core_dev when matured
 
 
 

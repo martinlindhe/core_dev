@@ -15,7 +15,7 @@
  * soap.wsdl_cache_enabled=1
  * soap.wsdl_cache_ttl=172800
  *
- * @author Martin Lindhe, 2008-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 // require_once('atom_customers.php');
@@ -28,93 +28,6 @@ require_once('HttpClient.php');
 //WARNING: keep this a low number unless you are sure what the consequences are
 $config['process']['process_limit'] = 3;
 $config['process']['retry_limit']   = 50;
-
-define('PROCESSQUEUE_AUDIO_RECODE',  10); ///< Enqueue this
-define('PROCESSQUEUE_VIDEO_RECODE',  11); ///< fixme: use
-define('PROCESSQUEUE_IMAGE_RECODE',  12); ///< Enqueue this file for recoding/converting to another image format
-
-define('PROCESS_UPLOAD',             19); ///< HTTP Post upload
-define('PROCESS_FETCH',              20); ///< Ask the server to download remote media. Parameter is URL
-
-define('PROCESS_PARSE_AND_FETCH',    21); ///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
-define('PROCESS_CONVERT_TO_DEFAULT', 22); ///< Convert media to default format
-
-
-//process order status modes
-define('ORDER_NEW',         0);
-define('ORDER_EXECUTING',   1);
-define('ORDER_COMPLETED',   2);
-define('ORDER_FAILED',      3);
-
-/**
- * Adds something to the process queue
- *
- * @param $_type type of process action
- * @param $creatorId user id of the one giving the order
- * @param $param
- * @param $param2
- * @return process event id
- */
-function addProcessEvent($_type, $creatorId, $param, $param2 = '')
-{
-    global $db, $h;
-    if (!is_numeric($_type) || !is_numeric($creatorId)) return false;
-
-    switch ($_type) {
-        case PROCESS_UPLOAD:
-            //handle HTTP post file upload. is not enqueued
-            //    $param is the $_FILES[idx] array
-
-            $exec_start = microtime(true);    //dont count the actual upload time, just the process time
-            $newFileId = $h->files->handleUpload($param, FILETYPE_PROCESS);
-
-            $h->files->checksums($newFileId);    //force generation of file checksums
-
-            $exec_time = microtime(true) - $exec_start;
-            $q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$newFileId.',orderStatus='.ORDER_COMPLETED.',orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
-            return $db->insert($q);
-
-        case PROCESSQUEUE_AUDIO_RECODE:
-        case PROCESSQUEUE_IMAGE_RECODE:
-        case PROCESSQUEUE_VIDEO_RECODE:
-            //enque file for recoding.
-            //    $param = fileId
-            //    $param2 = destination format (by extension)
-            if (!is_numeric($param)) die;
-            $q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param2).'"';
-            return $db->insert($q);
-
-        case PROCESS_FETCH:
-            //enqueue url for download and processing
-            //    $param = url
-            // downloads media files, torrents & youtube links
-            $q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId=0,orderStatus='.ORDER_NEW.',orderParams="'.$db->escape($param).'"';
-            return $db->insert($q);
-
-        case PROCESS_CONVERT_TO_DEFAULT:
-            if (!is_numeric($param)) return false;
-            //convert some media to the default media type, can be used to enqueue a conversion of a PROCESSFETCH before the server
-            //has fetched it & cant know the media type
-            //  $param = eventId we refer to. from this we can extract the future fileId to process
-            //    $param2 = array of additional parameters:
-            //        'callback' = callback URL on process completion (optional)
-            //        'watermark' = URL for watermark file (optional)
-            $q = 'INSERT INTO tblProcessQueue SET timeCreated=NOW(),creatorId='.$creatorId.',orderType='.$_type.',referId='.$param.',orderStatus='.ORDER_NEW.',orderParams="'.$db->escape(serialize($param2)).'"';
-            return $db->insert($q);
-
-        case PROCESS_PARSE_AND_FETCH:
-            //parse this resource for further media resources and fetches them
-            // $param = fileId
-            // use to process a uploaded .torrent file & download it's content
-            // or to process a webpage and extract video files from it (including youtube) and download them to the server
-            die('not implemented PROCESS_PARSE_AND_FETCH');
-            break;
-
-        default:
-            die('unknown processqueue type');
-            return false;
-    }
-}
 
 /**
  * Returns a process queue entry
@@ -369,7 +282,7 @@ function processQueue()
             $fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
 
             $http = new HttpClient($job['orderParams']);
-            $http->getHeaders();
+            $http->getHead();
 
             if ($http->getStatus() != 200) {
                 //retry in 20 seconds if file is not yet ready
@@ -377,20 +290,20 @@ function processQueue()
                 break;
             }
 
-            $newFileId = $h->files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
+            $newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
-            $c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$h->files->findUploadPath($newFileId);
+            $c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
             echo "$ ".$c."\n";
             $retval = 0;
             $exec_time = exectime($c, $retval);
             if (!$retval) {
                 //TODO: process html document for media links if it is a html document
                 markQueueCompleted($job['entryId'], $exec_time, $newFileId);
-                $h->files->updateFile($newFileId);
+                $files->updateFile($newFileId);
             } else {
                 //wget failed somehow, delay work for 1 minute
                 retryQueueEntry($job['entryId'], 60);
-                $h->files->deleteFile($newFileId, 0, true);    //remove failed local file entry
+                $files->deleteFile($newFileId, 0, true);    //remove failed local file entry
             }
             break;
 
@@ -405,7 +318,7 @@ function processQueue()
                 break;
             }
 
-            $file = $h->files->getFileInfo($prev_job['referId']);
+            $file = $files->getFileInfo($prev_job['referId']);
 
             $exec_start = microtime(true);
 

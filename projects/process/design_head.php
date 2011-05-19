@@ -14,14 +14,14 @@ $menu->add('Home', '/');
 
 if ($session->id) {
     $menu->add('Uploads',       'uploads/show');
-    $menu->add('Work queue',    'queue/show');
+    $menu->add('Work queue',    'queue/overview');
     $menu->add('Upload file',   'uploads/new');
     $menu->add('Add to queue',  'queue/add');
 }
 
 if ($session->isSuperAdmin) {
     $menu->add('Process queue', 'queue/process');
-    $menu->add('Admin',         '/admin');
+    $menu->add('Admin',         '/coredev/admin');
 }
 
 if ($session->id) {

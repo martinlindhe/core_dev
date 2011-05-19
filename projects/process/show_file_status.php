@@ -73,7 +73,7 @@ echo '<br/>';
 
 $h->files->updateFile($fileId);
 
-echo '<a href="http_enqueue.php?id='.$fileId.'">Create process (media conversion, or further processing)</a>';
+echo ahref('queue/show/'.$fileId, 'Create process (media conversion, or further processing)');
 
 require('design_foot.php');
 ?>

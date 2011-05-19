@@ -4,26 +4,21 @@ $session->requireLoggedIn();
 
 switch ($this->view) {
 case 'show':
-    echo '<input type="checkbox" checked="checked="/> Show all ';
-    echo '<input type="checkbox"/> Images ';
-    echo '<input type="checkbox"/> Videos ';
-    echo '<input type="checkbox"/> Music ';
-    echo '<input type="checkbox"/> Documents ';
-    echo '<input type="checkbox"/> Other ';
-
     echo '<h1>Uploaded files</h1>';
-    showFiles(FILETYPE_PROCESS);
 
-    $list = $h->files->getFileList(FILETYPE_PROCESS);
+    $files = new FileList(FILETYPE_PROCESS);
+    $list = $files->get();
+
     foreach ($list as $row) {
         echo '<a href="show_file_status.php?id='.$row['fileId'].'">'.$row['fileName'].'</a>';
         echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
     }
 
-    echo '<h1>Converted files:</h1>';
-    showFiles(FILETYPE_CLONE_CONVERTED);
+    echo '<h1>Converted files</h1>';
 
-    $list = $h->files->getFileList(FILETYPE_CLONE_CONVERTED);
+    $files = new FileList(FILETYPE_CLONE_CONVERTED);
+    $list = $files->get();
+
     foreach ($list as $row) {
         echo '<a href="show_file_status.php?id='.$row['fileId'].'">Details</a>';
         echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
@@ -37,7 +32,7 @@ case 'new':
         $eventId = addProcessEvent(PROCESS_UPLOAD, $h->session->id, $_FILES['file2']);
         if ($eventId) {
             echo '<div class="okay">Your file has been uploaded successfully!</div><br/>';
-            echo '<a href="http_enqueue.php?id='.$eventId.'">Click here</a> to perform further actions on this file.';
+            echo ahref('queue/show/'.$eventId, 'Click here').' to perform further actions on this file.';
             require('design_foot.php');
             die;
         } else {
