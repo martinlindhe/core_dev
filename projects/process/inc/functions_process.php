@@ -183,193 +183,193 @@ function processQueue()
     echo "\n\n-------------\n";
     switch ($job['orderType'])
     {
-        case PROCESSQUEUE_IMAGE_RECODE:
-            echo 'IMAGE RECODE<br/>';
-            if (!in_array($job['orderParams'], $h->files->image_mime_types)) {
-                echo 'error: invalid mime type<br/>';
-                $h->session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
-                break;
-            }
-            $newId = $h->files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
-
-            $exec_start = microtime(true);
-            $check = convertImage($h->files->findUploadPath($job['referId']), $h->files->findUploadPath($newId), $job['orderParams']);
-            $exec_time = microtime(true) - $exec_start;
-            echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
-
-            if (!$check) {
-                $h->session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
-                echo 'Error: Image convert failed!<br/>';
-                break;
-            }
-            $h->files->updateFile($newId, $job['orderParams']);
-            markQueueCompleted($job['entryId'], $exec_time);
+    case PROCESSQUEUE_IMAGE_RECODE:
+        echo 'IMAGE RECODE<br/>';
+        if (!in_array($job['orderParams'], $h->files->image_mime_types)) {
+            echo 'error: invalid mime type<br/>';
+            $h->session->log('Process queue error - image conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
             break;
+        }
+        $newId = $h->files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
 
-        case PROCESSQUEUE_AUDIO_RECODE:
-            //Recodes source audio file into orderParams destination format
+        $exec_start = microtime(true);
+        $check = convertImage($h->files->findUploadPath($job['referId']), $h->files->findUploadPath($newId), $job['orderParams']);
+        $exec_time = microtime(true) - $exec_start;
+        echo 'Execution time: '.shortTimePeriod($exec_time).'<br/>';
 
-            $dst_audio_ok = array('ogg', 'wma', 'mp3');    //FIXME: config item or $h->files->var
-            if (!in_array($job['orderParams'], $dst_audio_ok)) {
-                echo 'error: invalid mime type<br/>';
-                $h->session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
-                break;
-            }
-
-            $file = $h->files->getFileInfo($job['referId']);
-            if (!$file) {
-                echo 'Error: no fileentry existed for fileId '.$job['referId'];
-                break;
-            }
-            $newId = $h->files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
-
-            echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
-
-            switch ($job['orderParams']) {
-                case 'application/x-ogg':
-                    //FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
-                    $dst_file = 'tmpfile.ogg';
-                    $c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
-                    break;
-
-                case 'audio/x-ms-wma':
-                    $dst_file = 'tmpfile.wma';
-                    $c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
-                    break;
-
-                case 'audio/mpeg':
-                case 'audio/x-mpeg':
-                    //fixme: source & destination should not be able to be the same!
-                    $dst_file = 'tmpfile.mp3';
-                    $c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
-                    break;
-
-                default:
-                    die('unknown destination audio format: '.$job['orderParams']);
-            }
-
-            echo 'Executing: '.$c."\n";
-            $exec_time = exectime($c);
-
-            echo 'Execution time: '.shortTimePeriod($exec_time)."\n";
-
-            if (!file_exists($dst_file)) {
-                echo '<b>FAILED - dst file '.$dst_file." dont exist!\n";
-                break;
-            }
-
-            //FIXME: behöver inget rename-steg. kan skriva till rätt output fil i första steget
-            rename($dst_file, $h->files->upload_dir.$newId);
-
-            $h->files->updateFile($newId);
-            markQueueCompleted($job['entryId'], $exec_time);
+        if (!$check) {
+            $h->session->log('#'.$job['entryId'].': IMAGE CONVERT failed! format='.$job['orderParams'], LOGLEVEL_ERROR);
+            echo 'Error: Image convert failed!<br/>';
             break;
+        }
+        $h->files->updateFile($newId, $job['orderParams']);
+        markQueueCompleted($job['entryId'], $exec_time);
+        break;
 
-        case PROCESSQUEUE_VIDEO_RECODE:
-            echo "VIDEO RECODE:\n";
+    case PROCESSQUEUE_AUDIO_RECODE:
+        //Recodes source audio file into orderParams destination format
 
-            $exec_start = microtime(true);
-            if (convertVideo($job['referId'], $job['orderParams']) === false) {
-                markQueue($job['entryId'], ORDER_FAILED);
-            } else {
-                markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
-            }
+        $dst_audio_ok = array('ogg', 'wma', 'mp3');    //FIXME: config item or $h->files->var
+        if (!in_array($job['orderParams'], $dst_audio_ok)) {
+            echo 'error: invalid mime type<br/>';
+            $h->session->log('Process queue error - audio conversion destination mimetype not supported: '.$job['orderParams'], LOGLEVEL_ERROR);
             break;
+        }
 
-        case PROCESS_FETCH:
-            echo "FETCH CONTENT\n";
-
-            $fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
-
-            $http = new HttpClient($job['orderParams']);
-            $http->getHead();
-
-            if ($http->getStatus() != 200) {
-                //retry in 20 seconds if file is not yet ready
-                retryQueueEntry($job['entryId'], 20);
-                break;
-            }
-
-            $newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
-
-            $c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
-            echo "$ ".$c."\n";
-            $retval = 0;
-            $exec_time = exectime($c, $retval);
-            if (!$retval) {
-                //TODO: process html document for media links if it is a html document
-                markQueueCompleted($job['entryId'], $exec_time, $newFileId);
-                $files->updateFile($newFileId);
-            } else {
-                //wget failed somehow, delay work for 1 minute
-                retryQueueEntry($job['entryId'], 60);
-                $files->deleteFile($newFileId, 0, true);    //remove failed local file entry
-            }
+        $file = $h->files->getFileInfo($job['referId']);
+        if (!$file) {
+            echo 'Error: no fileentry existed for fileId '.$job['referId'];
             break;
+        }
+        $newId = $h->files->cloneFile($job['referId'], FILETYPE_CLONE_CONVERTED);
 
-        case PROCESS_CONVERT_TO_DEFAULT:
-            echo "CONVERT TO DEFAULT\n";
-            //referId is entryId of previous proccess queue order
-            $params = unserialize($job['orderParams']);
-            $prev_job = getProcessQueueEntry($job['referId']);
+        echo 'Recoding source audio of "'.$file['fileName'].'" ('.$file['fileMime'].') to format '.$job['orderParams']." ...\n";
 
-            if ($prev_job['orderStatus'] != ORDER_COMPLETED) {
-                retryQueueEntry($job['entryId'], 60);
+        switch ($job['orderParams']) {
+            case 'application/x-ogg':
+                //FIXME hur anger ja dst-format utan filändelse? tvingas göra det i 2 steg nu
+                $dst_file = 'tmpfile.ogg';
+                $c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
                 break;
-            }
 
-            $file = $files->getFileInfo($prev_job['referId']);
+            case 'audio/x-ms-wma':
+                $dst_file = 'tmpfile.wma';
+                $c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
+                break;
 
-            $exec_start = microtime(true);
+            case 'audio/mpeg':
+            case 'audio/x-mpeg':
+                //fixme: source & destination should not be able to be the same!
+                $dst_file = 'tmpfile.mp3';
+                $c = '/usr/local/bin/ffmpeg -i "'.$h->files->findUploadPath($job['referId']).'" '.$dst_file;
+                break;
 
-            $newId = false;
-            switch ($file['mediaType']) {
-                case MEDIATYPE_VIDEO:
-                    $newId = convertVideo(
-                        $prev_job['referId'],    //what file
-                        $h->files->default_video,    //destination format (flv)
-                        (!empty($params['callback']) ? false : true),//no thumbs on callback files
-                        (!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
-                    );
-                    break;
+            default:
+                die('unknown destination audio format: '.$job['orderParams']);
+        }
 
-                case MEDIATYPE_AUDIO:
-                    $newId = convertAudio(
-                        $prev_job['referId'],    //what file
-                        $h->files->default_audio    //destination format (mp3)
-                    );
-                    break;
+        echo 'Executing: '.$c."\n";
+        $exec_time = exectime($c);
 
-                default:
-                    echo "UNKNOWN MEDIA TYPE ".$file['mediaType'].", MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
-                    break;
-            }
+        echo 'Execution time: '.shortTimePeriod($exec_time)."\n";
 
-            if (!$newId) {
-                markQueue($job['entryId'], ORDER_FAILED);
-                return false;
-            }
+        if (!file_exists($dst_file)) {
+            echo '<b>FAILED - dst file '.$dst_file." dont exist!\n";
+            break;
+        }
 
+        //FIXME: behöver inget rename-steg. kan skriva till rätt output fil i första steget
+        rename($dst_file, $h->files->upload_dir.$newId);
+
+        $h->files->updateFile($newId);
+        markQueueCompleted($job['entryId'], $exec_time);
+        break;
+
+    case PROCESSQUEUE_VIDEO_RECODE:
+        echo "VIDEO RECODE:\n";
+
+        $exec_start = microtime(true);
+        if (convertVideo($job['referId'], $job['orderParams']) === false) {
+            markQueue($job['entryId'], ORDER_FAILED);
+        } else {
             markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
+        }
+        break;
 
-            if (empty($params['callback'])) break;
+    case PROCESS_FETCH:
+        echo "FETCH CONTENT\n";
 
-            //'uri' isnt known before the new file is created so it is added at this point
-            $uri = $config['core']['full_url'].'api/file.php?id='.$newId;
+        $fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
 
-            $params['callback'] .= (strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
+        $http = new HttpClient($job['orderParams']);
+        $http->getHead();
 
-            $data = file_get_contents($params['callback']);
-
-            echo "Performing callback: ".$params['callback']."\n\n";
-            echo "Callback script returned:\n".$data;
-            storeCallbackData($job['entryId'], $data, $params);
+        if ($http->getStatus() != 200) {
+            //retry in 20 seconds if file is not yet ready
+            retryQueueEntry($job['entryId'], 20);
             break;
+        }
 
-        default:
-            echo "Unknown ordertype: ".$job['orderType']."\n";
-            d($job);
-            die;
+        $newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
+
+        $c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
+        echo "$ ".$c."\n";
+        $retval = 0;
+        $exec_time = exectime($c, $retval);
+        if (!$retval) {
+            //TODO: process html document for media links if it is a html document
+            markQueueCompleted($job['entryId'], $exec_time, $newFileId);
+            $files->updateFile($newFileId);
+        } else {
+            //wget failed somehow, delay work for 1 minute
+            retryQueueEntry($job['entryId'], 60);
+            $files->deleteFile($newFileId, 0, true);    //remove failed local file entry
+        }
+        break;
+
+    case PROCESS_CONVERT_TO_DEFAULT:
+        echo "CONVERT TO DEFAULT\n";
+        //referId is entryId of previous proccess queue order
+        $params = unserialize($job['orderParams']);
+        $prev_job = getProcessQueueEntry($job['referId']);
+
+        if ($prev_job['orderStatus'] != ORDER_COMPLETED) {
+            retryQueueEntry($job['entryId'], 60);
+            break;
+        }
+
+        $file = $files->getFileInfo($prev_job['referId']);
+
+        $exec_start = microtime(true);
+
+        $newId = false;
+        switch ($file['mediaType']) {
+            case MEDIATYPE_VIDEO:
+                $newId = convertVideo(
+                    $prev_job['referId'],    //what file
+                    $h->files->default_video,    //destination format (flv)
+                    (!empty($params['callback']) ? false : true),//no thumbs on callback files
+                    (!empty($params['watermark']) ? $params['watermark'] : '')//specify watermark file to use
+                );
+                break;
+
+            case MEDIATYPE_AUDIO:
+                $newId = convertAudio(
+                    $prev_job['referId'],    //what file
+                    $h->files->default_audio    //destination format (mp3)
+                );
+                break;
+
+            default:
+                echo "UNKNOWN MEDIA TYPE ".$file['mediaType'].", MIME TYPE ".$file['fileMime'].", CANNOT CONVERT MEDIA!!!\n";
+                break;
+        }
+
+        if (!$newId) {
+            markQueue($job['entryId'], ORDER_FAILED);
+            return false;
+        }
+
+        markQueueCompleted($job['entryId'], microtime(true) - $exec_start);
+
+        if (empty($params['callback'])) break;
+
+        //'uri' isnt known before the new file is created so it is added at this point
+        $uri = $config['core']['full_url'].'api/file.php?id='.$newId;
+
+        $params['callback'] .= (strpos($params['callback'], '?') !== false ? '&' : '?').'uri='.urlencode($uri);
+
+        $data = file_get_contents($params['callback']);
+
+        echo "Performing callback: ".$params['callback']."\n\n";
+        echo "Callback script returned:\n".$data;
+        storeCallbackData($job['entryId'], $data, $params);
+        break;
+
+    default:
+        echo "Unknown ordertype: ".$job['orderType']."\n";
+        d($job);
+        die;
     }
 
 }
@@ -388,39 +388,39 @@ function convertVideo($fileId, $mime, $thumbs = true, $watermark = '')
     $newId = $h->files->cloneFile($fileId, FILETYPE_CLONE_CONVERTED);
 
     switch ($mime) {
-        case 'video/x-flv':
-            //Flash video. Confirmed working
-            $c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
-            //XXX: vhook is disabled in ffmpeg, replacement in libavfilter is not yet committed in ffmpeg-svn (2009-09-01)
-            ///if ($watermark) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$watermark.'" ';
-            $c .= $h->files->findUploadPath($newId);
-            break;
+    case 'video/x-flv':
+        //Flash video. Confirmed working
+        $c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -f flv -ac 2 -ar 22050 ';
+        //XXX: vhook is disabled in ffmpeg, replacement in libavfilter is not yet committed in ffmpeg-svn (2009-09-01)
+        ///if ($watermark) $c .= '-vhook "/usr/lib/vhook/watermark.so -m 1 -f '.$watermark.'" ';
+        $c .= $h->files->findUploadPath($newId);
+        break;
 
-        case 'video/avi':
-            //default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
-            $c = 'mencoder '.$h->files->findUploadPath($fileId).' -o '.$h->files->findUploadPath($newId).' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
-            die('verify to video/avi');
-            break;
+    case 'video/avi':
+        //default profile: mpeg4 video (DivX 3) + mp3 audio. should play on any windows/linux/mac without codecs
+        $c = 'mencoder '.$h->files->findUploadPath($fileId).' -o '.$h->files->findUploadPath($newId).' -ovc lavc -oac mp3lame -ffourcc DX50 -lavcopts vcodec=msmpeg4';
+        die('verify to video/avi');
+        break;
 
-        case 'video/mpeg':
-            //mpeg2 video, should be playable anywhere
-            $c = 'mencoder '.$h->files->findUploadPath($fileId).' -o '.$h->files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
-            die('verify to video/mpeg');
-            break;
+    case 'video/mpeg':
+        //mpeg2 video, should be playable anywhere
+        $c = 'mencoder '.$h->files->findUploadPath($fileId).' -o '.$h->files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=mpeg2video -ofps 25';
+        die('verify to video/mpeg');
+        break;
 
-        case 'video/x-ms-wmv':
-            //Windows Media Video, version 2 (AKA WMV8)
-            $c = 'mencoder '.$h->files->findUploadPath($fileId).' -o '.$h->files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
-            die('verify to video/x-ms-wmv');
-            break;
+    case 'video/x-ms-wmv':
+        //Windows Media Video, version 2 (AKA WMV8)
+        $c = 'mencoder '.$h->files->findUploadPath($fileId).' -o '.$h->files->findUploadPath($newId).' -ovc lavc -oac mp3lame -lavcopts vcodec=wmv2';
+        die('verify to video/x-ms-wmv');
+        break;
 
-        case 'video/3gpp':
-            //3gp video
-            die('add to video/3gpp');
-            break;
+    case 'video/3gpp':
+        //3gp video
+        die('add to video/3gpp');
+        break;
 
-        default:
-            die('unknown destination video format: '.$mime);
+    default:
+        die('unknown destination video format: '.$mime);
     }
 
     echo "$ ".$c."\n";
@@ -454,14 +454,14 @@ function convertAudio($fileId, $mime)
     $newId = $h->files->cloneFile($fileId, FILETYPE_CLONE_CONVERTED);
 
     switch ($mime) {
-        case 'audio/x-mpeg':
-            //MP3 audio
-            $c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -f mp3 -ac 2 -ar 22050 ';
-            $c .= $h->files->findUploadPath($newId);
-            break;
+    case 'audio/x-mpeg':
+        //MP3 audio
+        $c = '/usr/local/bin/ffmpeg -i '.$h->files->findUploadPath($fileId).' -f mp3 -ac 2 -ar 22050 ';
+        $c .= $h->files->findUploadPath($newId);
+        break;
 
-        default:
-            die('unknown destination audio format: '.$mime);
+    default:
+        die('unknown destination audio format: '.$mime);
     }
 
     echo "$ ".$c."\n";
