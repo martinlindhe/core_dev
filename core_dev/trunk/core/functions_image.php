@@ -9,8 +9,8 @@
 
 //STATUS: reworking snippets into classes, see ImageResizer
 
-$config['image']['resample_resized']    = true;        ///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
-$config['image']['jpeg_quality']        = 75;        ///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
+$config['image']['resample_resized'] = true;      ///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
+$config['image']['jpeg_quality']     = 75;        ///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
 
 $predef_color['white'] = array(255,255,255);
 $predef_color['black'] = array(0,0,0);
@@ -167,26 +167,32 @@ function rotateImage($in_file, $out_file, $_angle)
 function loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh)
 {
     $ttf = false;
-    if (!is_numeric($font)) {
-        if (substr(strtolower($font), -4) == '.ttf' || substr(strtolower($font), -4) == '.otf') {
-            //supported font formats:
-            //.ttf (true type font)
-            //.otf (open type font)
+
+    if (!is_numeric($font))
+    {
+        if (substr(strtolower($font), -4) == '.ttf' || substr(strtolower($font), -4) == '.otf')
+        {
+            // supported font formats:
+            // .ttf (true type font)
+            // .otf (open type font)
             $ttf = true;
 
             $fh = 0;
-            foreach ($str as $txt) {    //find highest font height
+            foreach ($str as $txt)
+            {
+                // find highest font height
                 $x = imagettfbbox($ttf_size, $ttf_angle, $font, $txt);
                 $t = $x[1] - $x[7];
                 if ($t > $fh) $fh = $t;
             }
         } else {
-            //GDF font handling
+            // GDF font handling
             $font = imageloadfont($font);
         }
     }
 
-    if (!$ttf) $fh = imagefontheight($font);
+    if (!$ttf)
+        $fh = imagefontheight($font);
 
     return $font;
 }
@@ -213,7 +219,7 @@ function pngCenterText($str, $template, $font = 1, $col = array(), $ttf_size = 1
         $color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
     }
 
-    $font = loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh);
+    $font = loadFont($str, $font, $ttf_size, $ttf_angle, $ttf, $fh);
 
     $i = 0;
 
@@ -253,7 +259,7 @@ function pngLeftText($str, $template, $font = 1, $col = array(), $ttf_size = 12,
         $color = imagecolorallocate($im, $col[0], $col[1], $col[2]);
     }
 
-    $font = loadFont($str, $font, $ttf_size, $ttf_angle, &$ttf, &$fh);
+    $font = loadFont($str, $font, $ttf_size, $ttf_angle, $ttf, $fh);
 
     //Prints the text in $str array centered vertically & horizontally over the image
     foreach ($str as $txt) {

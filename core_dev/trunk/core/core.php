@@ -307,7 +307,7 @@ function numbers_only($s) //XXXX FIXME use a regexp
 /**
  * Rounds a number to exactly $precision number of decimals, padding with zeros if nessecary
  */
-function round_decimals($val, $precision = 0, $separator = '.', $combinator = '.')
+function round_decimals($val, $precision = 0, $separator = '.', $combinator = '.')  // XXX FIXME move to math.php
 {
     $ex = explode($separator, round($val, $precision));
 
