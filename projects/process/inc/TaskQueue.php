@@ -13,14 +13,14 @@
 //define('TASK_VIDEO_RECODE',  11); ///< fixme: use
 //define('TASK_IMAGE_RECODE',  12); ///< Enqueue this file for recoding/converting to another image format
 
-//define('TASK_UPLOAD',             19); ///< HTTP Post upload
+define('TASK_UPLOAD',             19); ///< HTTP Post upload
 define('TASK_FETCH',              20); ///< Ask the server to download remote media. Parameter is URL
 
 //define('TASK_PARSE_AND_FETCH',    21); ///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
 //define('TASK_CONVERT_TO_DEFAULT', 22); ///< Convert media to default format
 
 
-//process order status modes
+// order status
 define('ORDER_NEW',         0);
 define('ORDER_EXECUTING',   1);
 define('ORDER_COMPLETED',   2);
@@ -28,6 +28,25 @@ define('ORDER_FAILED',      3);
 
 class TaskQueue
 {
+
+    /**
+     * Returns the oldest work orders still active for processing
+     */
+    static function getList($orderType = 0, $orderStatus = ORDER_NEW)
+    {
+        global $db;
+        if (!is_numeric($orderType) || !is_numeric($orderStatus))
+            return false;
+
+        $q = 'SELECT * FROM tblTaskQueue';
+        $q .= ' WHERE orderStatus = '.$orderStatus;
+        if ($orderType) $q .= ' AND orderType = '.$orderType;
+        $q .= ' ORDER BY timeCreated DESC';
+
+        return $db->getArray($q);
+    }
+
+
     /**
      * Adds a task to the Task Queue
      *
@@ -49,22 +68,23 @@ class TaskQueue
         case TASK_FETCH:
             // downloads media files; enqueue url for download and processing
             //    $param = url
-            $q = 'INSERT INTO tblTaskQueue SET timeCreated=NOW(), creatorId = ?, orderType='.$type.',referId=0, orderStatus = ?, orderParams = ?';
-            return $db->pInsert($q, 'iiis', $session->id, $type, ORDER_NEW, $param);
-/*
-        case PROCESS_UPLOAD:
-            //handle HTTP post file upload. is not enqueued
+            $q = 'INSERT INTO tblTaskQueue SET timeCreated = NOW(), creatorId = ?, orderType = ?, referId = ?, orderStatus = ?, orderParams = ?';
+            return $db->pInsert($q, 'iiiis', $session->id, $type, 0, ORDER_NEW, $param);
+
+        case TASK_UPLOAD:
+            // handle HTTP post file upload. is not enqueued
             //    $param is the $_FILES[idx] array
 
             $exec_start = microtime(true);    //dont count the actual upload time, just the process time
-            $newFileId = $h->files->handleUpload($param, FILETYPE_PROCESS);
+            $newFileId = $files->handleUpload($param, FILETYPE_PROCESS);
 
-            $h->files->checksums($newFileId);    //force generation of file checksums
+            $files->checksums($newFileId);    //force generation of file checksums
 
             $exec_time = microtime(true) - $exec_start;
-            $q = 'INSERT INTO tblTaskQueue SET timeCreated=NOW(),creatorId='.$session->id.',orderType='.$_type.',referId='.$newFileId.',orderStatus='.ORDER_COMPLETED.',orderParams="'.$db->escape(serialize($param)).'", timeExec="'.$exec_time.'",timeCompleted=NOW()';
-            return $db->insert($q);
+            $q = 'INSERT INTO tblTaskQueue SET timeCreated = NOW(), creatorId = ?, orderType = ?, referId = ?, orderStatus = ?, orderParams = ?, timeExec = ?, timeCompleted = NOW()';
+            return $db->pInsert($q, 'iiiiss', $session->id, $type, $newFileId, ORDER_COMPLETED, serialize($param), $exec_time );
 
+/*
         case PROCESSQUEUE_AUDIO_RECODE:
         case PROCESSQUEUE_IMAGE_RECODE:
         case PROCESSQUEUE_VIDEO_RECODE:

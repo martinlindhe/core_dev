@@ -36,9 +36,10 @@ case 'add':
 case 'overview':
 
     //FIXME show failed & in progress aswell
-    $tot_cnt = getProcessQueueCount(0, isset($_GET['completed']) ? ORDER_COMPLETED : ORDER_NEW);
 
-    $list = getProcessQueue(0, $pager['limit'], isset($_GET['completed']) ? ORDER_COMPLETED : ORDER_NEW);
+    $list = TaskQueue::getList(0, isset($_GET['completed']) ? ORDER_COMPLETED : ORDER_NEW );
+
+//d($list);die;
 
     if (!empty($list)) {
         foreach ($list as $row) {

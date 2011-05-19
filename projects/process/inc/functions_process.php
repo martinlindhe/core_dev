@@ -103,36 +103,6 @@ function getProcessLog($_id)
 }
 
 /**
- * Returns the oldest work orders still active for processing
- */
-function getProcessQueue($orderType = 0, $_limit = '', $orderStatus = ORDER_NEW, $agedDays = 0)
-{
-    global $db;
-    if (!is_numeric($orderType) || !is_numeric($orderStatus) || !is_numeric($agedDays)) return false;
-
-    $q = 'SELECT * FROM tblProcessQueue';
-    $q .= ' WHERE orderStatus='.$orderStatus;
-    if ($orderType) $q .= ' AND orderType='.$orderType;
-    if ($agedDays) $q .= ' AND timeCompleted <= DATE_SUB(NOW(), INTERVAL '.$agedDays.' DAY)';
-    $q .= ' ORDER BY timeCreated DESC'.$_limit;
-    return $db->getArray($q);
-}
-
-/**
- * Returns the number of entries in work queue
- */
-function getProcessQueueCount($orderType = 0, $orderStatus = ORDER_NEW)
-{
-    global $db;
-    if (!is_numeric($orderType) || !is_numeric($orderStatus)) return false;
-
-    $q = 'SELECT COUNT(entryId) FROM tblProcessQueue';
-    $q .= ' WHERE orderStatus='.$orderStatus;
-    if ($orderType) $q .= ' AND orderType='.$orderType;
-    return $db->getOneItem($q);
-}
-
-/**
  * Returns a list of currently enqueued actions to do for referId $_id
  * (can be tblFiles.fileId or tblProcessQueue.eventId)
  */
