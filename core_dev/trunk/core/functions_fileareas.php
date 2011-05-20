@@ -288,57 +288,6 @@ function showThumbnails($fileType, $categoryId)
 }
 
 /**
- * Used by the ajax file core/ajax_fileinfo.php to show file details of currently selected file
- *
- * @param $_id fileId
- */
-function showFileInfo($_id)
-{
-    global $h;
-
-    $file = $h->files->getFileInfo($_id);
-    if (!$file) return false;
-
-    $list = getComments(COMMENT_FILEDESC, $_id);
-    if ($list && $list[0]['commentText']) {
-        echo '<b>'.t('Description').':</b><br/>';
-        echo nl2br(strip_tags($list[0]['commentText'])).'<br/><br/>';
-    } else {
-        echo '<b><i>'.t('No description').'</i></b><br/><br/>';
-    }
-
-    echo t('Uploaded at').': '.formatTime($file['timeUploaded']).' ('.ago($file['timeUploaded']).')<br/>';
-    echo t('Filename').': '.strip_tags($file['fileName']).'<br/>';
-    echo t('Filesize').': '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
-    if ($h->files->count_file_views) echo t('Downloaded').': '.$file['cnt'].' '.t('times').'<br/>';
-
-    if (!$h->session->isAdmin) return;
-    echo t('Uploader').': '.htmlentities($file['uploaderName']).'<br/>';
-    echo 'Mime type: '.$file['fileMime'].'<br/>';
-
-    if (in_array($file['fileMime'], $h->files->image_mime_types)) {
-        //Show additional information for image files
-        list($img_width, $img_height) = getimagesize($h->files->findUploadPath($_id));
-        echo t('Width').': '.$img_width.', '.t('Height').': '.$img_height.'<br/>';
-        echo makeThumbLink($_id);
-    } else if (in_array($file['fileMime'], $h->files->audio_mime_types) && extension_loaded('id3')) {
-        //Show additional information for audio files
-        echo '<h3>id3 tag</h3>';
-        $id3 = @id3_get_tag($this->findUploadPath($_id), ID3_V2_2);    //XXX: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
-        d($id3);
-    }
-
-    //display checksums, if any
-    $arr = $h->files->checksums($_id);
-    echo '<h3>Checksums</h3>';
-    echo '<pre>';
-    echo 'sha1: '.$arr['sha1']."\n";
-    echo 'md5:  '.$arr['md5']."\n";
-    echo '</pre>';
-    echo 'Generated at '.$arr['timeCreated'].' in '.$arr['timeExec'].' sec<br/>';
-}
-
-/**
  * Generates image gadget
  *
  * @param $ownerId owner of this image

@@ -10,46 +10,6 @@ $config['url_rewrite_length'] = 45;     //max length of visible url's after rewr
 $config['url_rewrite_trailing'] = 15;   //number of characters to save at the end of the string
 $config['url_rewrite_redirfile'] = ''; //'redir.php?url=';  //set to '' to disable redir feature
 
-function getThumbUrl($_id, $width = 0, $height = 0, $fullUrl = false)
-{
-    global $h, $config;
-
-    if (!is_numeric($width)  || !$width)  $width  = $h->files->thumb_default_width;
-    if (!is_numeric($height) || !$height) $height = $h->files->thumb_default_height;
-    if (is_float($width))  $width  = floor($width);
-    if (is_float($height)) $height = floor($height);
-
-    $str = '';
-    if ($fullUrl) $str .= $config['app']['full_url'];
-
-    $str .= coredev_webroot().'api/file.php?id='.$_id.'&amp;w='.$width.'&amp;h='.$height;
-    return $str;
-}
-
-function showThumb($_id, $_title = '', $w = 0, $h = 0)
-{
-    $str = '<img src="'.getThumbUrl($_id, $w, $h).'" alt="'.strip_tags($_title).'" title="'.strip_tags($_title).'"/>';
-    return $str;
-}
-
-function makeThumbLink($_id, $_title = '', $w = 50, $h = 50)
-{
-    if (!is_numeric($_id)) return false;
-
-    $str  = '<a href="#" onclick="popup_imgview('.$_id.')">';
-    $str .= showThumb($_id, $_title, $w, $h);
-    $str .= '</a>';
-    return $str;
-}
-
-function makeImageLink($_id, $_title = '')
-{
-    if (!is_numeric($_id)) return false;
-
-    return '<img id="img_'.$_id.'" src="'.coredev_webroot().'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
-}
-
-
 /**
  * Takes text input such as "128M" and returns bytes
  */

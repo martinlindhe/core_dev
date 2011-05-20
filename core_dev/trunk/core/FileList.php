@@ -27,7 +27,7 @@ class FileList
      * @param $key array from $_FILES entry
      * @return file id
      */
-    static function importUpload($type, &$key)  /// XXXXX use in XhtmlForm file upload
+    static function importUpload($type, &$key)
     {
         // ignore empty file uploads
         if (!$key['name'])

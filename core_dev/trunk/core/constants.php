@@ -25,6 +25,7 @@ define('NEWS',       2);  ///< news categories
 define('BLOG',       3);  ///< normal, personal blog category
 define('WIKI',       4);  ///< category for wiki file attachments, to allow better organization if needed
 define('SITE',       5);  ///< for SITE POLLS etc
+define('FILE',       6);  ///< comments for a file
 
 //define('CONTACT',      11); ///< friend relation category, like "Old friends", "Family"
 //define('LANGUAGE',     14); ///< represents a language, for multi-language features
@@ -33,7 +34,6 @@ define('SITE',       5);  ///< for SITE POLLS etc
 
     //XXX: only enable types when they are used. some should be depreacated
 /*
-    const FILE       =  3; ///< anonymous or registered users comments on a image
     const TODOLIST   =  4; ///< todolist item comments
     const GENERIC    =  5; ///< generic comment type
     const PASTEBIN   =  6; ///< "pastebin" text. anonymous submissions are allowed

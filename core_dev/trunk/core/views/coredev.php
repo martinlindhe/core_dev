@@ -9,6 +9,7 @@ require_once('UserEditor.php');
 require_once('UserGroupList.php');
 require_once('FtpClient.php'); // for curl_check_protocol_support()
 require_once('IconWriter.php');
+require_once('FileInfo.php');
 
 switch ($this->view) {
 case 'error':
@@ -37,6 +38,11 @@ case 'selftest':
     }
 
     die('STATUS:'.$status);
+
+case 'file':
+    // passes thru a file
+    echo FileInfo::passthru($this->owner);
+    die;
 
 case 'admin':
     $session->requireSuperAdmin();
@@ -172,7 +178,7 @@ case 'favicon':
     break;
 
 default:
-    throw new Exception ('DEBUG: no such view '.$this->view);
+    throw new Exception ('no such view: '.$this->view);
 }
 
 ?>
