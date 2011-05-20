@@ -130,12 +130,13 @@ case 'process':
 
     $limit = 10;    //do a few encodings each time the script is run
 
-    for ($i = 0; $i < $limit; $i++) {
+    for ($i = 0; $i < $limit; $i++)
+    {
         processQueue();
-        sleep(1);
+//        sleep(1);
         echo '.';
     }
-    break;
+    die;
 
 case 'show':
     // owner = event id

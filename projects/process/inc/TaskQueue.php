@@ -87,6 +87,39 @@ class TaskQueue
     }
 
     /**
+     * Returns the number of items in process queue of specified status
+     * Particulary useful to see how many orders are currently being processed (ORDER_EXECUTING)
+     *
+     * @param $_order_status status code
+     * @return number of entries of specified status
+     */
+    static function getTaskQueueStatusCnt($order_status)
+    {
+        global $db;
+
+        $q = 'SELECT COUNT(*) FROM tblTaskQueue WHERE orderStatus = ?';
+        return $db->pSelectItem($q, 'i', $order_status);
+    }
+
+     /**
+     * Returns the oldest task marked as ORDER_NEW
+     */
+    static function getOldestEntry()
+    {
+        global $db;
+
+        //XXX: this little delay is needed because huge uploaded files (100mb+)
+        //     is'nt ready for process yet on test box. even after move_uploaded_file()
+        //     hopefully it can be removed later on
+        $q =
+        'SELECT * FROM tblTaskQueue WHERE orderStatus = ?'.
+        ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 10 SECOND)'.
+        ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
+
+        return $db->pSelectRow($q, 'i', ORDER_NEW);
+    }
+
+    /**
      * Adds a task to the Task Queue
      *
      * @param $_type type of task

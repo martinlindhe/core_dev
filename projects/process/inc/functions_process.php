@@ -30,25 +30,6 @@ $config['process']['process_limit'] = 3;
 $config['process']['retry_limit']   = 50;
 
 
- /**
- * Returns a process queue entry
- *
- * @param $_id entryId or 0 to return the oldest marked as ORDER_NEW
- */
-function getOldestProcessQueueEntry()
-{
-    global $db;
-
-    //XXX: this little delay is needed because huge uploaded files (100mb+)
-    //     is'nt ready for process yet on test box. even after move_uploaded_file().
-    //     hopefully it can be removed later on
-    $q = 'SELECT * FROM tblProcessQueue WHERE orderStatus='.ORDER_NEW;
-    $q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 10 SECOND)';
-    $q .= ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
-
-    return $db->getOneRow($q);
-}
-
 /**
  * Updates timeCreated for the entry, to have it retry again later
  *
@@ -86,36 +67,21 @@ function retryQueueEntry($_id, $_delay)
 }
 
 /**
- * Returns the number of items in process queue of specified status
- * Particulary useful to see how many orders are currently being processed (ORDER_EXECUTING)
- *
- * @param $_order_status status code
- * @return number of entries of specified status
- */
-function getProcessesQueueStatusCnt($_order_status)
-{
-    global $db;
-    if (!is_numeric($_order_status)) return false;
-
-    $q = 'SELECT COUNT(*) FROM tblProcessQueue WHERE orderStatus='.$_order_status;
-    return $db->getOneItem($q);
-}
-
-/**
  * Takes some work orders from the process queue and performs them
  */
 function processQueue()
 {
-    global $db, $config, $h;
+    global $db, $config;
 
     //Only allows a few work orders being executed at once, so we can do this very often
-    if (getProcessesQueueStatusCnt(ORDER_EXECUTING) >= $config['process']['process_limit']) {
+    if (TaskQueue::getTaskQueueStatusCnt(ORDER_EXECUTING) >= $config['process']['process_limit']) {
         echo "TOO MUCH ACTIVE WORK, ABORTING\n";
         return;
     }
 
-    $job = getOldestProcessQueueEntry();
-    if (!$job) return;
+    $job = TaskQueue::getOldestEntry();
+    if (!$job)
+        return;
 
     //mark current job as "IN PROGRESS" so another process won't start on it aswell
     markQueue($job['entryId'], ORDER_EXECUTING);
