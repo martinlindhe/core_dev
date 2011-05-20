@@ -66,6 +66,17 @@ function retryQueueEntry($_id, $_delay)
     echo "***************************************************************\n";
 }
 
+function storeCallbackData($entryId, $data, $newParams = '')
+{
+    global $db;
+    if (!is_numeric($entryId)) return false;
+
+    $q = 'UPDATE tblProcessQueue555 SET callback_log="'.$db->escape($data).'"';
+    if ($newParams) $q .= ', orderParams="'.$db->escape(serialize($newParams)).'"';
+    $q .= ' WHERE entryId='.$entryId;
+    $db->update($q);
+}
+
 /**
  * Takes some work orders from the process queue and performs them
  */
@@ -204,8 +215,8 @@ function processQueue()
         $exec_time = exectime($c, $retval);
         if (!$retval) {
             //TODO: process html document for media links if it is a html document
-            markQueueCompleted($job['entryId'], $exec_time, $newFileId);
-            $files->updateFile($newFileId);
+            TaskQueue::markTaskCompleted($job['entryId'], $exec_time, $newFileId);
+            FileInfo::updateData($newFileId);
         } else {
             //wget failed somehow, delay work for 1 minute
             retryQueueEntry($job['entryId'], 60);
@@ -382,36 +393,6 @@ function convertAudio($fileId, $mime)
     $h->files->updateFile($newId);
     return $newId;
 }
-
-/**
- * Marks an object in the process queue as completed
- *
- * @param $entryId entry id
- * @param $exec_time time it took to execute this task
- * @param $referId optional, specify if we now refer to a file, used when the process event was to fetch a file
- */
-function markQueueCompleted($entryId, $exec_time, $referId = 0)
-{
-    global $db;
-    if (!is_numeric($entryId) || !is_float($exec_time) || !is_numeric($referId)) return false;
-
-    $q = 'UPDATE tblProcessQueue333 SET orderStatus='.ORDER_COMPLETED.',timeCompleted=NOW(),timeExec="'.$exec_time.'"';
-    if ($referId) $q .= ',referId='.$referId;
-    $q .= ' WHERE entryId='.$entryId;
-    $db->update($q);
-}
-
-function storeCallbackData($entryId, $data, $newParams = '')
-{
-    global $db;
-    if (!is_numeric($entryId)) return false;
-
-    $q = 'UPDATE tblProcessQueue555 SET callback_log="'.$db->escape($data).'"';
-    if ($newParams) $q .= ', orderParams="'.$db->escape(serialize($newParams)).'"';
-    $q .= ' WHERE entryId='.$entryId;
-    $db->update($q);
-}
-
 
 /**
  * Generates image thumbnails from specified video file

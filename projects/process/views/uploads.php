@@ -12,7 +12,8 @@ case 'show':
     foreach ($list as $row) {
         echo ahref('queue/status/'.$row['fileId'], $row['fileName']);
 
-        echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
+        $uploader = new User($row['uploaderId']);
+        echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.$uploader->render().'<br/>';
     }
 
     echo '<h1>Converted files</h1>';
@@ -22,7 +23,8 @@ case 'show':
 
     foreach ($list as $row) {
         echo ahref('queue/status/'.$row['fileId'], 'Details');
-        echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
+        $uploader = new User($row['uploaderId']);
+        echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.$uploader->render().'<br/>';
     }
     break;
 

@@ -113,7 +113,7 @@ class TaskQueue
         //     hopefully it can be removed later on
         $q =
         'SELECT * FROM tblTaskQueue WHERE orderStatus = ?'.
-        ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 10 SECOND)'.
+        ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 5 SECOND)'.
         ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
 
         return $db->pSelectRow($q, 'i', ORDER_NEW);
@@ -131,6 +131,22 @@ class TaskQueue
 
         $q = 'UPDATE tblTaskQueue SET orderStatus = ? WHERE entryId = ?';
         $db->pUpdate($q, 'ii', $status, $entryId);
+    }
+
+    /**
+     * Marks an object in the process queue as completed
+     *
+     * @param $entryId entry id
+     * @param $exec_time time it took to execute this task
+     * @param $referId optional, specify if we now refer to a file, used when the process event was to fetch a file
+     */
+    static function markTaskCompleted($entryId, $exec_time, $referId = 0)
+    {
+        global $db;
+        if (!is_numeric($entryId) || !is_float($exec_time) || !is_numeric($referId)) return false;
+
+        $q = 'UPDATE tblTaskQueue SET orderStatus = ?, timeCompleted=NOW(), timeExec = ?, referId = ? WHERE entryId = ?';
+        $db->pUpdate($q, 'isii', ORDER_COMPLETED, $exec_time, $referId, $entryId);
     }
 
     /**
