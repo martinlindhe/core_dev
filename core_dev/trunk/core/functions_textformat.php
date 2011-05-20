@@ -48,14 +48,20 @@ function decodeDataSize($s)
 /**
  * Returns a string like "2 KiB"
  */
-function formatDataSize($bytes) //XXX use ConvertDatasize class
+function formatDataSize($bytes, $tooltip = false) //XXX use ConvertDatasize class
 {
-    //$units = array('bytes', 'KiB', 'MiB', 'GiB', 'TiB');
+    $org_bytes = $bytes;
     $units = array('bytes', 'k', 'mb', 'gb', 'tb');
-    foreach ($units as $unit) {
+
+    foreach ($units as $unit)
+    {
         if ($bytes < 1024) break;
         $bytes = round($bytes/1024, 1);
     }
+
+    if ($tooltip)
+        return '<span title="'.$org_bytes.' bytes" style="cursor:pointer">'.$bytes.' '.$unit.'</span>';
+
     return $bytes.' '.$unit;
 }
 

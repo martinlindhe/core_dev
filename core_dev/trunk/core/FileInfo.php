@@ -89,14 +89,10 @@ class FileInfo
 
         $session = SessionHandler::getInstance();
 
-        $comments = new CommentList(FILE);
-        $comments->setOwner($id);
-        $res = $comments->render();
-
-        $res .=
+        $res =
         'Uploaded at: '.formatTime($file['timeUploaded']).' ('.ago($file['timeUploaded']).')<br/>'.
         'Filename: '.strip_tags($file['fileName']).'<br/>'.
-        'Filesize: '.formatDataSize($file['fileSize']).' ('.$file['fileSize'].' bytes)<br/>';
+        'Filesize: '.formatDataSize($file['fileSize'], true).'<br/>';
 
         if (!$session->isAdmin)
             return;
@@ -111,15 +107,21 @@ class FileInfo
         {
             // Show additional information for image files
             list($img_width, $img_height) = getimagesize( self::getUploadPath($id) );
-            $res .= 'Width: '.$img_width.', Height: '.$img_height.'<br/>'. makeThumbLink($id);
+            $res .= 'Width: '.$img_width.', Height: '.$img_height.'<br/>'. showThumb($id);
         }
         else if (in_array($file['fileMime'], $h->files->audio_mime_types) && extension_loaded('id3'))
         {
             // Show additional information for audio files
             $res .= '<h3>id3 tag</h3>';
-            $id3 = @id3_get_tag($this->findUploadPath($_id), ID3_V2_2);    //XXX: the warning suppress was because the wip plugin caused a warning sometime on parsing id. maybe unneeded when you read this
+            $id3 = id3_get_tag($this->findUploadPath($_id), ID3_V2_2);
             d($id3);
         }
+
+        $comments = new CommentList(FILE);
+        $comments->setOwner($id);
+        $res .= $comments->render();
+
+
 /*
         // display checksums, if any
         $arr = $h->files->checksums($id);
@@ -130,6 +132,8 @@ class FileInfo
         echo '</pre>';
         echo 'Generated at '.$arr['timeCreated'].' in '.$arr['timeExec'].' sec<br/>';
 */
+
+        return $res;
     }
 
 }
