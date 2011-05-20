@@ -16,7 +16,6 @@ case 'add':
         }
 
         $eventId = TaskQueue::addTask(PROCESS_FETCH, $p['url']);
-//        $eventId = addProcessEvent(PROCESS_FETCH, $p['url']);
 
         echo '<div class="okay">URL to process has been enqueued.</div><br/>';
         echo ahref('queue/show/'.$eventId, 'Click here').' to perform further actions on this file.';
@@ -140,10 +139,10 @@ case 'process':
 case 'show':
     // owner = event id
 
-    $eventId = $this->owner;
-
-    $event = getProcessQueueEntry($eventId);
+    $event = TaskQueue::getEntry($this->owner);
     $fileId = $event['referId'];
+    if (!$fileId)
+        throw new Exception ('file not found');
 
     $added = false;
     if (!empty($_POST['dst_audio_fmt'])) {
@@ -155,7 +154,7 @@ case 'show':
     } else if (isset($_GET['process'])) {
         $added = addProcessEvent(PROCESSPARSE_AND_FETCH, $h->session->id, $fileId);
     } else if (!empty($_POST['unfetched_process']) && $_POST['unfetched_process'] == 'convert') {
-        $added = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $h->session->id, $eventId);
+        $added = addProcessEvent(PROCESS_CONVERT_TO_DEFAULT, $h->session->id, $this->owner);
     }
 
     if ($added) {
@@ -163,17 +162,15 @@ case 'show':
 
         echo '<a href="show_file_status.php?id='.$fileId.'">Show file status</a><br/><br/>';
         echo '<a href="show_queue.php">Show active queue</a>';
-
-        require('design_foot.php');
-        die;
+        return;
     }
 
-    if ($event['orderType'] == PROCESS_FETCH) {
+    if ($event['orderType'] == TASK_FETCH) {
         echo '<h1>convert unfetched media</h1>';
 
         echo 'The following order has not yet been processed and media type cannot be determined.<br/><br/>';
 
-        echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$eventId.'">';
+        echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$this->owner.'">';
         echo 'Select preferred action: ';
 
         echo '<select name="unfetched_process">';
@@ -183,14 +180,14 @@ case 'show':
         echo '<input type="submit" value="Continue"/>';
         echo '</form>';
     } else {
-        showFileInfo($fileId);
+        echo FileInfo::render($fileId);
 
-        $data = $h->files->getFileInfo($fileId);
+        $data = FileInfo::get($fileId);
 
-        if (in_array($data['fileMime'], $h->files->audio_mime_types)) {
+        if (in_array($data['fileMime'], FileInfo::$audio_mime_types)) {
             echo '<h1>convert audio</h1>';
 
-            echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$eventId.'">';
+            echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$this->owner.'">';
             echo 'Select output format: ';
 
             echo '<select name="dst_audio_fmt">';
@@ -201,11 +198,11 @@ case 'show':
 
             echo '<input type="submit" value="Continue"/>';
             echo '</form>';
-        } else if (in_array($data['fileMime'], $h->files->image_mime_types)) {
+        } else if (in_array($data['fileMime'], FileInfo::$image_mime_types)) {
 
             echo '<h1>convert image</h1>';
 
-            echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$eventId.'">';
+            echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$this->owner.'">';
             echo 'Select output format: ';
 
             echo '<select name="dst_image_fmt">';
@@ -217,14 +214,11 @@ case 'show':
             echo '<input type="submit" value="Continue"/>';
             echo '</form><br/>';
 
-            echo 'Image view:<br/>';
-            echo makeThumbLink($fileId);
-
-        } else if (in_array($data['fileMime'], $h->files->video_mime_types)) {
+        } else if (in_array($data['fileMime'], FileInfo::$video_mime_types)) {
 
             echo '<h1>convert video</h1>';
 
-            echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$eventId.'">';
+            echo '<form method="post" action="'.$_SERVER['PHP_SELF'].'?id='.$this->owner.'">';
             echo 'Select output format: ';
 
             echo '<select name="dst_video_fmt">';

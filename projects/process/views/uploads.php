@@ -26,12 +26,10 @@ case 'show':
     break;
 
 case 'new':
-    set_time_limit(60*10);    //10 minute max, for big uploads
-
-
 
     function uploadSubmit($p)
     {
+        // XhtmlForm:s upload handler har redan processat filen här
         $eventId = TaskQueue::addTask(TASK_UPLOAD, $p['f1']);
         if (!$eventId) {
             echo 'file upload handling failed';
@@ -48,11 +46,10 @@ case 'new':
     echo '<br/>';
 
     $form = new XhtmlForm('ul_pdf');
-    $form->addFile('f1', 'Fil');
+    $form->addFile('f1', 'Fil', USER);
     $form->addSubmit('Upload');
     $form->setHandler('uploadSubmit');
     echo $form->render();
-
     break;
 
 default:

@@ -15,6 +15,7 @@ require_once('SessionHandler.php');
 require_once('XhtmlMenu.php');
 require_once('XhtmlForm.php');
 require_once('FileList.php');
+require_once('FileInfo.php');
 
 //project includes:
 require_once('functions_process.php');

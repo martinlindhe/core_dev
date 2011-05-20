@@ -8,6 +8,8 @@
 
 //XXX: move to core_dev when matured
 
+require_once('constants.php');
+
 
 //define('TASK_AUDIO_RECODE',  10); ///< Enqueue this
 //define('TASK_VIDEO_RECODE',  11); ///< fixme: use
@@ -46,6 +48,18 @@ class TaskQueue
         return $db->getArray($q);
     }
 
+    /**
+     * Returns a process queue entry
+     *
+     * @param $_id entryId
+     */
+    static function getEntry($id)
+    {
+        global $db;
+
+        $q = 'SELECT * FROM tblTaskQueue WHERE entryId = ?';
+        return $db->pSelectRow($q, 'i', $id);
+    }
 
     /**
      * Adds a task to the Task Queue
@@ -75,14 +89,13 @@ class TaskQueue
             // handle HTTP post file upload. is not enqueued
             //    $param is the $_FILES[idx] array
 
-            $exec_start = microtime(true);    //dont count the actual upload time, just the process time
-            $newFileId = $files->handleUpload($param, FILETYPE_PROCESS);
+            $exec_time = 0 ; // XXXX FIXME measure
 
-            $files->checksums($newFileId);    //force generation of file checksums
+            // THE UPLOAD IS ALREADY PROCESSED BY XhtmlForm upload handler
+            $fileId = $param['file_id'];
 
-            $exec_time = microtime(true) - $exec_start;
             $q = 'INSERT INTO tblTaskQueue SET timeCreated = NOW(), creatorId = ?, orderType = ?, referId = ?, orderStatus = ?, orderParams = ?, timeExec = ?, timeCompleted = NOW()';
-            return $db->pInsert($q, 'iiiiss', $session->id, $type, $newFileId, ORDER_COMPLETED, serialize($param), $exec_time );
+            return $db->pInsert($q, 'iiiiss', $session->id, $type, $fileId, ORDER_COMPLETED, serialize($param), $exec_time );
 
 /*
         case PROCESSQUEUE_AUDIO_RECODE:

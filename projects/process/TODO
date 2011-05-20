@@ -1,2 +1,3 @@
-* factorize file upload code from XhtmlForm and reuse
-*
+* en fil klass med en handle file upload metod som skapar file id i databasen och flyttar till upload dir, se file upload code from XhtmlForm
+
+* kolla tblFiles i savak...!

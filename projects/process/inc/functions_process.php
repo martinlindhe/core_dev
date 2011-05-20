@@ -29,26 +29,23 @@ require_once('HttpClient.php');
 $config['process']['process_limit'] = 3;
 $config['process']['retry_limit']   = 50;
 
-/**
+
+ /**
  * Returns a process queue entry
  *
  * @param $_id entryId or 0 to return the oldest marked as ORDER_NEW
  */
-function getProcessQueueEntry($_id = 0)
+function getOldestProcessQueueEntry()
 {
     global $db;
-    if (!is_numeric($_id)) return false;
 
-    if ($_id) {
-        $q = 'SELECT * FROM tblProcessQueue WHERE entryId='.$_id;
-    } else {
-        //XXX: this little delay is needed because huge uploaded files (100mb+)
-        //     is'nt ready for process yet on test box. even after move_uploaded_file().
-        //     hopefully it can be removed later on
-        $q = 'SELECT * FROM tblProcessQueue WHERE orderStatus='.ORDER_NEW;
-        $q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 10 SECOND)';
-        $q .= ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
-    }
+    //XXX: this little delay is needed because huge uploaded files (100mb+)
+    //     is'nt ready for process yet on test box. even after move_uploaded_file().
+    //     hopefully it can be removed later on
+    $q = 'SELECT * FROM tblProcessQueue WHERE orderStatus='.ORDER_NEW;
+    $q .= ' AND timeCreated <= DATE_SUB(NOW(), INTERVAL 10 SECOND)';
+    $q .= ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
+
     return $db->getOneRow($q);
 }
 
@@ -63,7 +60,7 @@ function retryQueueEntry($_id, $_delay)
     global $db, $config;
     if (!is_numeric($_id) || !is_numeric($_delay)) return false;
 
-    $curr = getProcessQueueEntry($_id);
+    $curr = TaskQueue::getEntry($_id);
     if ($curr['attempts'] >= $config['process']['retry_limit']) {
         echo "***************************************************************\n";
         echo "***************************************************************\n";
@@ -144,7 +141,7 @@ function processQueue()
         return;
     }
 
-    $job = getProcessQueueEntry();
+    $job = getOldestProcessQueueEntry();
     if (!$job) return;
 
     //mark current job as "IN PROGRESS" so another process won't start on it aswell
@@ -281,7 +278,7 @@ function processQueue()
         echo "CONVERT TO DEFAULT\n";
         //referId is entryId of previous proccess queue order
         $params = unserialize($job['orderParams']);
-        $prev_job = getProcessQueueEntry($job['referId']);
+        $prev_job = TaskQueue::getEntry($job['referId']);
 
         if ($prev_job['orderStatus'] != ORDER_COMPLETED) {
             retryQueueEntry($job['entryId'], 60);

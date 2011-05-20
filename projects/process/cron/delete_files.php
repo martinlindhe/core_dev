@@ -21,7 +21,7 @@ foreach ($list as $row) {
 //removes converted media - FIXME lookup is wierd
 $list = getProcessQueue(PROCESS_CONVERT_TO_DEFAULT, '', ORDER_COMPLETED, EXPIRE_DAYS);
 foreach ($list as $row) {
-	getProcessQueueEntry($row['refererId']);
+	TaskQueue::getEntry($row['refererId']);
 	//$h->files->deleteFile($row['refererId'], 0, true);
 }
 
