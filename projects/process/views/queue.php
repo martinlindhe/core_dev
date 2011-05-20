@@ -15,7 +15,7 @@ case 'add':
             return false;
         }
 
-        $eventId = TaskQueue::addTask(PROCESS_FETCH, $p['url']);
+        $eventId = TaskQueue::addTask(TASK_FETCH, $p['url']);
 
         echo '<div class="okay">URL to process has been enqueued.</div><br/>';
         echo ahref('queue/show/'.$eventId, 'Click here').' to perform further actions on this file.';
@@ -125,7 +125,6 @@ case 'process':
 
     set_time_limit(0);    //no time limit
     //$config['no_session'] = true;    //force session "last active" update to be skipped
-    //require_once('config.php');
     //$config['debug'] = false;
 
     $limit = 10;    //do a few encodings each time the script is run
@@ -143,8 +142,6 @@ case 'show':
 
     $event = TaskQueue::getEntry($this->owner);
     $fileId = $event['referId'];
-    if (!$fileId)
-        throw new Exception ('file not found');
 
     $added = false;
     if (!empty($_POST['dst_audio_fmt'])) {

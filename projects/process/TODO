@@ -1,3 +1,2 @@
-* en fil klass med en handle file upload metod som skapar file id i databasen och flyttar till upload dir, se file upload code from XhtmlForm
 
-* kolla tblFiles i savak...!
+* gör en FileChecksum class som fyller tblChecksums med data ...ändra tblChecksums att ha entryId, fileId, timeCreated, checksum.. där checksum = "sha1:sihdfkjshfkjsha", eller "md5:kjsdhfkgjhsdfjksgh"

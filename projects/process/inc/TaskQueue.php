@@ -11,9 +11,9 @@
 require_once('constants.php');
 
 
-//define('TASK_AUDIO_RECODE',  10); ///< Enqueue this
-//define('TASK_VIDEO_RECODE',  11); ///< fixme: use
-//define('TASK_IMAGE_RECODE',  12); ///< Enqueue this file for recoding/converting to another image format
+define('TASK_AUDIO_RECODE',  10); ///< Enqueue this
+define('TASK_VIDEO_RECODE',  11); ///< fixme: use
+define('TASK_IMAGE_RECODE',  12); ///< Enqueue this file for recoding/converting to another image format
 
 define('TASK_UPLOAD',             19); ///< HTTP Post upload
 define('TASK_FETCH',              20); ///< Ask the server to download remote media. Parameter is URL
@@ -117,6 +117,20 @@ class TaskQueue
         ' ORDER BY timeCreated ASC,entryId ASC LIMIT 1';
 
         return $db->pSelectRow($q, 'i', ORDER_NEW);
+    }
+
+    /**
+     * Marks an object in the process queue with specified status code
+     *
+     * @param $entryId entry id
+     * @param $status status code
+     */
+    static function markTask($entryId, $status)
+    {
+        global $db;
+
+        $q = 'UPDATE tblTaskQueue SET orderStatus = ? WHERE entryId = ?';
+        $db->pUpdate($q, 'ii', $status, $entryId);
     }
 
     /**

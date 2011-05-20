@@ -84,12 +84,12 @@ function processQueue()
         return;
 
     //mark current job as "IN PROGRESS" so another process won't start on it aswell
-    markQueue($job['entryId'], ORDER_EXECUTING);
+    TaskQueue::markTask($job['entryId'], ORDER_EXECUTING);
 
     echo "\n\n-------------\n";
     switch ($job['orderType'])
     {
-    case PROCESSQUEUE_IMAGE_RECODE:
+    case TASK_IMAGE_RECODE:
         echo 'IMAGE RECODE<br/>';
         if (!in_array($job['orderParams'], $h->files->image_mime_types)) {
             echo 'error: invalid mime type<br/>';
@@ -112,7 +112,7 @@ function processQueue()
         markQueueCompleted($job['entryId'], $exec_time);
         break;
 
-    case PROCESSQUEUE_AUDIO_RECODE:
+    case TASK_AUDIO_RECODE:
         //Recodes source audio file into orderParams destination format
 
         $dst_audio_ok = array('ogg', 'wma', 'mp3');    //FIXME: config item or $h->files->var
@@ -171,7 +171,7 @@ function processQueue()
         markQueueCompleted($job['entryId'], $exec_time);
         break;
 
-    case PROCESSQUEUE_VIDEO_RECODE:
+    case TASK_VIDEO_RECODE:
         echo "VIDEO RECODE:\n";
 
         $exec_start = microtime(true);
@@ -182,7 +182,7 @@ function processQueue()
         }
         break;
 
-    case PROCESS_FETCH:
+    case TASK_FETCH:
         echo "FETCH CONTENT\n";
 
         $fileName = basename($job['orderParams']); //extract filename part of url, used as "filename" in database
@@ -191,14 +191,14 @@ function processQueue()
         $http->getHead();
 
         if ($http->getStatus() != 200) {
-            //retry in 20 seconds if file is not yet ready
+            // retry in 20 seconds if file is not yet ready
             retryQueueEntry($job['entryId'], 20);
             break;
         }
 
-        $newFileId = $files->addFileEntry(FILETYPE_PROCESS, 0, 0, $fileName);
+        $newFileId = FileList::createEntry(FILETYPE_PROCESS, 0, 0, $fileName);
 
-        $c = 'wget '.escapeshellarg($job['orderParams']).' -O '.$files->findUploadPath($newFileId);
+        $c = 'wget '.escapeshellarg($job['orderParams']).' -O '.FileInfo::getUploadPath($newFileId);
         echo "$ ".$c."\n";
         $retval = 0;
         $exec_time = exectime($c, $retval);
@@ -213,7 +213,7 @@ function processQueue()
         }
         break;
 
-    case PROCESS_CONVERT_TO_DEFAULT:
+    case TASK_CONVERT_TO_DEFAULT:
         echo "CONVERT TO DEFAULT\n";
         //referId is entryId of previous proccess queue order
         $params = unserialize($job['orderParams']);
@@ -395,26 +395,23 @@ function markQueueCompleted($entryId, $exec_time, $referId = 0)
     global $db;
     if (!is_numeric($entryId) || !is_float($exec_time) || !is_numeric($referId)) return false;
 
-    $q = 'UPDATE tblProcessQueue SET orderStatus='.ORDER_COMPLETED.',timeCompleted=NOW(),timeExec="'.$exec_time.'"';
+    $q = 'UPDATE tblProcessQueue333 SET orderStatus='.ORDER_COMPLETED.',timeCompleted=NOW(),timeExec="'.$exec_time.'"';
     if ($referId) $q .= ',referId='.$referId;
     $q .= ' WHERE entryId='.$entryId;
     $db->update($q);
 }
 
-/**
- * Marks an object in the process queue with specified status code
- *
- * @param $entryId entry id
- * @param $_status status code
- */
-function markQueue($entryId, $_status)
+function storeCallbackData($entryId, $data, $newParams = '')
 {
     global $db;
-    if (!is_numeric($entryId) || !is_numeric($_status)) return false;
+    if (!is_numeric($entryId)) return false;
 
-    $q = 'UPDATE tblProcessQueue SET orderStatus='.$_status.' WHERE entryId='.$entryId;
+    $q = 'UPDATE tblProcessQueue555 SET callback_log="'.$db->escape($data).'"';
+    if ($newParams) $q .= ', orderParams="'.$db->escape(serialize($newParams)).'"';
+    $q .= ' WHERE entryId='.$entryId;
     $db->update($q);
 }
+
 
 /**
  * Generates image thumbnails from specified video file
@@ -443,17 +440,6 @@ function generateVideoThumbs($fileId)
     exec($c);
 
     $h->files->updateFile($newId);
-}
-
-function storeCallbackData($entryId, $data, $newParams = '')
-{
-    global $db;
-    if (!is_numeric($entryId)) return false;
-
-    $q = 'UPDATE tblProcessQueue SET callback_log="'.$db->escape($data).'"';
-    if ($newParams) $q .= ', orderParams="'.$db->escape(serialize($newParams)).'"';
-    $q .= ' WHERE entryId='.$entryId;
-    $db->update($q);
 }
 
 ?>
