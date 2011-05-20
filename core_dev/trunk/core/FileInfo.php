@@ -56,11 +56,49 @@ class FileInfo
     {
         $page = XmlDocumentHandler::getInstance();
 
-        $path = $page->getUploadRoot().'/'.$id;
-        if (!file_exists($path))
-            throw new Exception ('getUploadPath failed, file dont exist: '.$path);
+        return $page->getUploadRoot().'/'.$id;
+    }
 
-        return $path;
+    /**
+     * Updates tblFiles data according to file written on disk
+     */
+    static function updateData($id)
+    {
+        $file = self::getUploadPath($id);
+        if (!file_exists($file))
+            throw new Exception ('file not found');
+
+        $size = filesize($file);
+        $mime = self::getMimeType($file);
+
+        // XXX FIXME: update mediaType according to mime type
+
+        $q = 'UPDATE tblFiles SET fileSize = ?, fileMime = ? WHERE fileId = ?';
+        return SqlHandler::getInstance()->pInsert($q, 'isi', $size, $mime, $id);
+    }
+
+    static function getMimeType($filename)
+    {
+		if (!file_exists($filename))
+            return false;
+
+		$c = 'file -bi '.escapeshellarg($filename);
+		$res = exec($c);
+
+        // $ file -bi file.flv
+        // video/x-flv; charset=binary
+        $x = explode(';', $res);
+
+		//XXX: use mediaprobe to distinguish between wmv/wma files.
+		//FIXME: enhance mediaprobe to handle all media detection and stop use "file"
+/*
+		if ($x[0] == 'video/x-ms-wmv') {
+			$c = 'mediaprobe '.escapeshellarg($filename);
+			return exec($c);
+		}
+*/
+
+		return $x[0];
     }
 
     static function passthru($id)
@@ -109,13 +147,15 @@ class FileInfo
             list($img_width, $img_height) = getimagesize( self::getUploadPath($id) );
             $res .= 'Width: '.$img_width.', Height: '.$img_height.'<br/>'. showThumb($id);
         }
-        else if (in_array($file['fileMime'], $h->files->audio_mime_types) && extension_loaded('id3'))
+        else if (in_array($file['fileMime'], self::$audio_mime_types) && extension_loaded('id3'))
         {
             // Show additional information for audio files
             $res .= '<h3>id3 tag</h3>';
             $id3 = id3_get_tag($this->findUploadPath($_id), ID3_V2_2);
             d($id3);
         }
+
+        $res .= '<br/>';
 
         $comments = new CommentList(FILE);
         $comments->setOwner($id);
@@ -166,9 +206,6 @@ function getThumbUrl($id, $width = 50, $height = 50)
     $page = XmlDocumentHandler::getInstance();
 
     return $page->getRelativeUrl().'coredev/file/'.$id.'?w='.$width.'&h='.$height;
-
-//    $str = coredev_webroot().'api/file.php?id='.$id.'&amp;w='.$width.'&amp;h='.$height;
-
 }
 
 /*

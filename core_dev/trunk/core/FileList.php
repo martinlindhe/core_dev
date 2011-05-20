@@ -24,6 +24,15 @@ class FileList
     }
 
     /**
+     * Creates a file entry in tblFiles
+     */
+    static function createEntry($type, $uploader = 0, $size = 0, $name = '', $mimetype = '')
+    {
+        $q = 'INSERT INTO tblFiles SET timeUploaded = NOW(), fileType = ?, uploaderId = ?, fileSize = ?, fileName = ?, fileMime = ?';
+        return SqlHandler::getInstance()->pInsert($q, 'iiiss', $type, $uploader, $size, $name, $mimetype);
+    }
+
+    /**
      * @param $key array from $_FILES entry
      * @return file id
      */
@@ -41,10 +50,8 @@ class FileList
 
         $page = XmlDocumentHandler::getInstance();
         $session = SessionHandler::getInstance();
-        $db = SqlHandler::getInstance();
 
-        $q = 'INSERT INTO tblFiles SET timeUploaded = NOW(), fileType = ?, uploaderId = ?, fileSize = ?, fileName = ?, fileMime = ?';
-        $id = $db->pInsert($q, 'iiiss', $type, $session->id, $key['size'], $key['name'], $key['type']);
+        $id = self::createEntry($type, $session->id, $key['size'], $key['name'], $key['type']);
 
         $dst_file = $page->getUploadRoot().'/'.$id;
 

@@ -41,6 +41,7 @@ case 'selftest':
 
 case 'file':
     // passes thru a file
+    // XXX FIXME: handle w & h parameters inside FileInfo to resize images
     echo FileInfo::passthru($this->owner);
     die;
 
