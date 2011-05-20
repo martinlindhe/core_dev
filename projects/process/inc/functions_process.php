@@ -86,33 +86,6 @@ function retryQueueEntry($_id, $_delay)
 }
 
 /**
- * Returns past process queue entries for specified file
- *
- * @param $_id file id
- */
-function getProcessLog($_id)
-{
-    global $db;
-    if (!is_numeric($_id)) return false;
-
-    $q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderType != '.PROCESS_CONVERT_TO_DEFAULT;
-    return $db->getArray($q);
-}
-
-/**
- * Returns a list of currently enqueued actions to do for referId $_id
- * (can be tblFiles.fileId or tblProcessQueue.eventId)
- */
-function getQueuedEvents($_id)
-{
-    global $db;
-    if (!is_numeric($_id)) return false;
-
-    $q = 'SELECT * FROM tblProcessQueue WHERE referId='.$_id.' AND orderStatus='.ORDER_NEW.' ORDER BY timeCreated ASC';
-    return $db->getArray($q);
-}
-
-/**
  * Returns the number of items in process queue of specified status
  * Particulary useful to see how many orders are currently being processed (ORDER_EXECUTING)
  *

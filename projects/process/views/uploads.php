@@ -10,7 +10,8 @@ case 'show':
     $list = $files->get();
 
     foreach ($list as $row) {
-        echo '<a href="show_file_status.php?id='.$row['fileId'].'">'.$row['fileName'].'</a>';
+        echo ahref('queue/status/'.$row['fileId'], $row['fileName']);
+
         echo ', mime='.$row['fileMime'].' uploaded '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
     }
 
@@ -20,7 +21,7 @@ case 'show':
     $list = $files->get();
 
     foreach ($list as $row) {
-        echo '<a href="show_file_status.php?id='.$row['fileId'].'">Details</a>';
+        echo ahref('queue/status/'.$row['fileId'], 'Details');
         echo ', mime='.$row['fileMime'].' created '.$row['timeUploaded'].' by '.Users::link($row['uploaderId']).'<br/>';
     }
     break;

@@ -19,7 +19,7 @@ define('TASK_UPLOAD',             19); ///< HTTP Post upload
 define('TASK_FETCH',              20); ///< Ask the server to download remote media. Parameter is URL
 
 //define('TASK_PARSE_AND_FETCH',    21); ///< Parse the content of the file for further resources (extract media links from html, or download torrent files from .torrent)
-//define('TASK_CONVERT_TO_DEFAULT', 22); ///< Convert media to default format
+define('TASK_CONVERT_TO_DEFAULT', 22); ///< Convert media to default format
 
 
 // order status
@@ -55,10 +55,35 @@ class TaskQueue
      */
     static function getEntry($id)
     {
-        global $db;
+        $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblTaskQueue WHERE entryId = ?';
         return $db->pSelectRow($q, 'i', $id);
+    }
+
+    /**
+     * Returns past process queue entries for specified file
+     *
+     * @param $_id file id
+     */
+    static function getLog($id)
+    {
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT * FROM tblTaskQueue WHERE referId = ? AND orderType != ?';
+        return $db->pSelect($q, 'ii', $id, TASK_CONVERT_TO_DEFAULT);
+    }
+
+    /**
+     * Returns a list of currently enqueued actions to do for referId $id
+     * (can be tblFiles.fileId or tblTaskQueue.eventId)
+     */
+    static function getQueuedTasks($id)
+    {
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT * FROM tblTaskQueue WHERE referId = ? AND orderStatus = ? ORDER BY timeCreated ASC';
+        return $db->pSelect($q, 'ii', $id, ORDER_NEW);
     }
 
     /**

@@ -46,28 +46,29 @@ case 'overview':
             echo '<h2>#'.$row['entryId'].': ';
 
             switch ($row['orderType']) {
-            case PROCESSQUEUE_AUDIO_RECODE:
+/*
+            case TASK_AUDIO_RECODE:
                 echo 'Audio recode to <b>"'.$row['orderParams'].'"</b></h2>';
                 break;
 
-            case PROCESSQUEUE_IMAGE_RECODE:
+            case TASK_IMAGE_RECODE:
                 echo 'Image recode to <b>"'.$row['orderParams'].'"</b></h2>';
                 break;
 
-            case PROCESSQUEUE_VIDEO_RECODE:
+            case TASK_VIDEO_RECODE:
                 echo 'Video recode to <b>"'.$row['orderParams'].'"</b></h2>';
                 break;
-
-            case PROCESS_FETCH:
+*/
+            case TASK_FETCH:
                 echo 'Fetch remote media</h2>';
                 echo 'from <b>'.$row['orderParams'].'</b><br/>';
                 break;
 
-            case PROCESS_UPLOAD:
+            case TASK_UPLOAD:
                 echo 'Uploaded remote media from client</h2>';
                 break;
 
-            case PROCESS_CONVERT_TO_DEFAULT:
+            case TASK_CONVERT_TO_DEFAULT:
                 echo 'Convert media to default type for entry <b>#'.$row['referId'].'</b></h2>';
                 if ($row['orderParams']) {
                     $params = unserialize($row['orderParams']);
@@ -83,20 +84,20 @@ case 'overview':
             default:
                 die('unknown processqueue type: '.$row['orderType']);
             }
-            echo $row['timeCreated'].' added by '.getCustomerName($row['creatorId']).'<br/><br/>';
+            $creator = new User($row['creatorId']);
+            echo $row['timeCreated'].' added by '.$creator->render().'<br/><br/>';
             echo 'Attempts: '.$row['attempts'].'<br/><br/>';
 
-            if ($row['orderType'] != PROCESS_CONVERT_TO_DEFAULT) {
+            if ($row['orderType'] != TASK_CONVERT_TO_DEFAULT) {
                 if ($row['referId']) {
-                    echo '<a href="show_file_status.php?id='.$row['referId'].'">Show file status</a><br/>';
+                    echo ahref('queue/status/'.$row['referId'], 'Show file status').'<br/>';
                 }
 
-                $file = $h->files->getFileInfo($row['referId']);
+                $file = FileInfo::get($row['referId']);
                 if ($file) {
                     echo '<h3>Source file:</h3>';
                     echo 'Mime: '.$file['fileMime'].'<br/>';
                     echo 'Size: '.formatDataSize($file['fileSize']).'<br/>';
-                    echo 'SHA1: '.$h->files->sha1($row['referId']).'<br/>';
                 }
             }
 
@@ -160,7 +161,7 @@ case 'show':
     if ($added) {
         echo 'Work order has been enqueued.<br/><br/>';
 
-        echo '<a href="show_file_status.php?id='.$fileId.'">Show file status</a><br/><br/>';
+        echo ahref('queue/status/'.$fileId, 'Show file status').'<br/><br/>';
         echo '<a href="show_queue.php">Show active queue</a>';
         return;
     }
@@ -253,6 +254,79 @@ case 'show':
     }
     break;
 
+case 'status':
+    // show file status
+
+    //TODO: ability to force recalculation of checksums. verify that the file is on disk
+
+    $fileId = $this->owner;
+
+    $data = FileInfo::get($fileId);
+    if (!$data) {
+        echo '<h1>File dont exist</h1>';
+        return;
+    }
+
+    $list = TaskQueue::getQueuedTasks($fileId);
+
+    if (!empty($list)) {
+        echo '<h1>'.count($list).' queued actions</h1>';
+        foreach ($list as $row) {
+            echo '<h3>Was enqueued '.ago($row['timeCreated']).' by '.Users::link($row['creatorId']);
+            echo ' type='.$row['orderType'].', params='.$row['orderParams'];
+            echo '</h3>';
+        }
+    } else {
+        echo '<h1>No queued action</h1>';
+    }
+
+    echo 'Process log:<br/>';
+    $list = TaskQueue::getLog($fileId);
+
+    echo '<table border="1">';
+    echo '<tr>';
+    echo '<th>Added</th>';
+    echo '<th>Completed</th>';
+    echo '<th>Exec time</th>';
+    echo '<th>Type</th>';
+    echo '<th>Created by</th>';
+    echo '</tr>';
+    foreach ($list as $row) {
+        echo '<tr>';
+        echo '<td>'.$row['timeCreated'].'</td>';
+        if ($row['orderStatus'] == ORDER_COMPLETED) {
+            echo '<td>'.$row['timeCompleted'].'</td>';
+            echo '<td>'.round($row['timeExec'], 3).'s</td>';
+        } else {
+            echo '<td>not done</td>';
+            echo '<td>?</td>';
+        }
+        echo '<td>'.$row['orderType'].'</td>';
+        $creator = new User($row['creatorId']);
+        echo '<td>'.$creator->render().'</td>';
+        //echo $row['orderParams'];
+        echo '</tr>';
+    }
+    echo '</table>';
+
+    echo FileInfo::render($fileId);
+
+    $file = FileInfo::get($fileId);
+    if ($file['fileType'] == FILETYPE_CLONE_CONVERTED) {
+        echo 'This file is a converted version of the orginal file <a href="'.$_SERVER['PHP_SELF'].'?id='.$file['ownerId'].'">'.$file['ownerId'].'</a><br/>';
+    }
+
+/*
+    $list = $h->files->getFileList(FILETYPE_CLONE_CONVERTED, $fileId);
+    if ($list) echo '<h1>Conversions based on this file</h1>';
+    foreach ($list as $row) {
+        echo '<a href="'.$_SERVER['PHP_SELF'].'?id='.$row['fileId'].'">'.$row['fileId'].'</a> '.formatDataSize($row['fileSize']).' '.$row['fileMime'].'<br/>';
+    }
+    echo '<br/>';
+*/
+
+    echo ahref('queue/show/'.$fileId, 'Create process (media conversion, or further processing)');
+    break;
 
 
 default:
