@@ -34,7 +34,7 @@ class ConvertMass extends ConvertBase
     'ton'       => 't',  //"metric tonne"
     'tonne'     => 't',
     'ounce'     => 'oz',    'ounces' => 'oz',
-    'pound'     => 'lb',    'pounds' => 'lb',
+    'pound'     => 'lb',    'pounds' => 'lb', 'lbs'  => 'lb',
     'stone'     => 'st',    'stones' => 'st',
     );
 
