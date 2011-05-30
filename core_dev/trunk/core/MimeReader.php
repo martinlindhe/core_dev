@@ -32,6 +32,18 @@ class MimeReader
     function getHeaders() { return $this->headers; }
     function getAttachments() { return $this->attachments; }
 
+    function getHeader($s, $arr = false)
+    {
+        if (!$arr)
+            $arr = $this->headers;
+
+        foreach ($arr as $key => $val)
+            if (strtolower($key) == strtolower($s))
+                return $val;
+
+        return false;
+    }
+
     function getAsEMail($id)
     {
         $mail = new EMail();
@@ -116,20 +128,22 @@ class MimeReader
     {
         $att = array();
 
-        //find multipart separator
-        $content = explode('; ', $this->headers['Content-Type']);
+        // find multipart separator
+        $content = explode('; ', $this->getHeader('Content-Type') );
 
-        if ($content[0] == 'text/plain') {
+        if ($content[0] == 'text/plain')
+        {
             // if mail header "Content-Type" dont contain "multipart/XXXX" (see below) then it's a plain message
 
-            //returns message body as an attachment
+            // returns message body as an attachment
             $att[0]['mimetype'] = $content[0];
             $att[0]['body']     = $body;
             return $att;
         }
 
-        //Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
+        // Content-Type: multipart/mixed; boundary="------------020600010407070807000608"
         $multipart_id = '';
+
         foreach ($content as $part)
         {
             if ($part == 'multipart/mixed' || $part == 'multipart/related' || $part == 'multipart/alternative')
@@ -138,7 +152,7 @@ class MimeReader
             $pos = strpos($part, '=');
 
             if ($pos === false)
-                die("multipart header error, Content-Type: ".$this->headers['Content-Type']."\n");
+                throw new Exception ("multipart header error, Content-Type: ".$this->getHeader('Content-Type'));
 
             $key = substr($part, 0, $pos);
             $val = substr($part, $pos+1);
@@ -158,7 +172,7 @@ class MimeReader
 
         //echo "Splitting msg using id '".$multipart_id."'\n";
 
-        //Parses attachments into array
+        // parses attachments into array
         $part_cnt = 0;
         do {
             $p1 = strpos($body, $multipart_id);
@@ -184,18 +198,18 @@ class MimeReader
             $att[ $part_cnt ]['body']   = $a_body;
             $body = substr($body, $p2);
 
-            $params = explode('; ', $att[ $part_cnt ]['header']['Content-Type']);
+            $params = explode('; ', $this->getHeader('Content-Type', $att[ $part_cnt ]['header']) );
             $att[ $part_cnt ]['mimetype'] = $params[0];
 
-            if (!empty($att[ $part_cnt ]['header']['Content-Location']))
-                $att[ $part_cnt ]['filename'] = $att[ $part_cnt ]['header']['Content-Location'];
+            if ($this->getHeader('Content-Location', $att[ $part_cnt ]['header']))
+                $att[ $part_cnt ]['filename'] = $this->getHeader('Content-Location', $att[ $part_cnt ]['header'] );
 
-            if (empty($att[ $part_cnt ]['filename'])) {
-                //Extract name from [Content-Type] => image/jpeg; name="header.jpg"
-                //or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
-                if (isset($params[1]) && substr($params[1], 0, 5) == 'name=') {
+            if (empty($att[ $part_cnt ]['filename']))
+            {
+                // extract name from [Content-Type] => image/jpeg; name="header.jpg"
+                // or                [Content-Type] => image/jpeg; name=DSC00071.jpeg
+                if (isset($params[1]) && substr($params[1], 0, 5) == 'name=')
                     $att[ $part_cnt ]['filename'] = str_replace('"', '', substr($params[1], 5) );
-                }
             }
 
             if (!in_array($att[ $part_cnt ]['mimetype'], $this->allowed_mime_types)) {
@@ -203,7 +217,8 @@ class MimeReader
                 continue;
             }
 
-            switch ($att[ $part_cnt ]['header']['Content-Transfer-Encoding']) {
+            switch ( $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header']) )
+            {
             case '7bit':
                 break;
 
@@ -218,7 +233,7 @@ class MimeReader
                 break;
 
             default:
-                echo "Unknown transfer encoding: '". $att[ $part_cnt ]['header']['Content-Transfer-Encoding']."'\n";
+                echo "Unknown transfer encoding: '". $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header'])."'\n";
                 break;
             }
 
