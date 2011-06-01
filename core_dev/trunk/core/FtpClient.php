@@ -35,10 +35,8 @@ class FtpClient extends CoreBase
 
     function __construct($url = '')
     {
-        if (!function_exists('curl_init')) {
-            echo "ERROR: php5-curl missing".ln();
-            return false;
-        }
+        if (!function_exists('curl_init'))
+            throw new exception ('php5-curl missing');
 
         if ($url)
             $this->setAddress($url);
@@ -146,8 +144,8 @@ class FtpClient extends CoreBase
 
         if ($this->getDebug()) {
             print_r(curl_getinfo($this->curl));
-            echo "cURL error number:" .curl_errno($this->curl).ln();
-            echo "cURL error:" . curl_error($this->curl).ln();
+            echo 'cURL error number:' .curl_errno($this->curl).ln();
+            echo 'cURL error:' . curl_error($this->curl).ln();
             print_r(curl_version());
         }
 
@@ -173,7 +171,7 @@ class FtpClient extends CoreBase
 
         $fp = fopen($local_file, 'w');
         if (!$fp) {
-            echo "ftp->get failed to open local file for writing".ln();
+            echo 'ftp->get failed to open local file for writing'.ln();
             return false;
         }
         curl_setopt($this->curl, CURLOPT_FILE, $fp);
@@ -182,7 +180,6 @@ class FtpClient extends CoreBase
 
         if (curl_errno($this->curl))
         {
-            //XXX use ErrorHandler ?
             throw new Exception ('curl error "'.$this->getFtpError($this->curl).'" while reading '.$remote_file);
 
             if (!filesize($local_file))
@@ -191,7 +188,8 @@ class FtpClient extends CoreBase
             return false;
         }
 
-        if ($this->getDebug()) echo 'getFile md5: '.md5_file($local_file).ln();
+        if ($this->getDebug())
+            echo 'getFile md5: '.md5_file($local_file).ln();
 
         return true;
     }
@@ -206,18 +204,16 @@ class FtpClient extends CoreBase
         $this->setPath($remote_file);
 
         curl_setopt($this->curl, CURLOPT_URL, $this->getUrl() );
-
         curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->timeout);
-
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, 1);
+
         $res = curl_exec($this->curl);
 
-        if (curl_errno($this->curl)) {
-            echo "ftp download error: ".curl_error($this->curl).ln();
-            return false;
-        }
+        if (curl_errno($this->curl))
+            throw new Exception ('ftp download error: '.curl_error($this->curl));
 
-        if ($this->getDebug()) echo 'getData md5: '.md5($res).ln();
+        if ($this->getDebug())
+            echo 'getData md5: '.md5($res).ln();
 
         return $res;
     }
@@ -249,11 +245,12 @@ class FtpClient extends CoreBase
         if (!$this->connect()) return false;
 
         if (!file_exists($local_file)) {
-            echo "ftp: local file ".$local_file." dont exist!".ln();
+            echo 'ftp: local file '.$local_file.' dont exist!'.ln();
             return false;
         }
 
-        if ($this->getDebug()) echo 'putFile md5: '.md5_file($local_file).ln();
+        if ($this->getDebug())
+            echo 'putFile md5: '.md5_file($local_file).ln();
 
         if ($temp_file)
             $this->setPath($temp_file);
@@ -272,12 +269,12 @@ class FtpClient extends CoreBase
         if ($temp_file) {
             if ($this->scheme == 'sftp') {
                 $buf = array(
-                "rename ".$temp_file." ".$remote_file
+                'rename '.$temp_file.' '.$remote_file
                 );
             } else {
                 $buf = array(
-                "RNFR ".$temp_file,
-                "RNTO ".$remote_file
+                'RNFR '.$temp_file,
+                'RNTO '.$remote_file
                 );
             }
 
@@ -287,10 +284,8 @@ class FtpClient extends CoreBase
         curl_exec($this->curl);
         fclose($fp);
 
-        if (curl_errno($this->curl)) {
-            echo "ftp exec error: ".curl_error($this->curl).ln();
-            return false;
-        }
+        if (curl_errno($this->curl))
+            throw new Exception ('ftp exec error: '.curl_error($this->curl) );
 
         return true;
     }
@@ -311,10 +306,8 @@ class FtpClient extends CoreBase
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
         $raw = curl_exec($this->curl);
 
-        if (curl_errno($this->curl)) {
-            echo "ftp download error: ".curl_error($this->curl).ln();
-            return false;
-        }
+        if (curl_errno($this->curl))
+            throw new Exception ('ftp download error: '.curl_error($this->curl));
 
         //  mode        ?   ?        ?          size    mtime      filename
         //drwxrwxr-x    2 1137     1100         2048 Apr  4  2009 slackware
@@ -354,10 +347,11 @@ class FtpClient extends CoreBase
 function curl_check_protocol_support($prot)
 {
     $v = curl_version();
-    foreach ($v['protocols'] as $p) {
+
+    foreach ($v['protocols'] as $p)
         if ($p == $prot)
             return true;
-    }
+
     return false;
 }
 
