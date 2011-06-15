@@ -10,7 +10,7 @@ DST_DIR=/usr/share/GeoIP
 
 wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 gunzip GeoLiteCity.dat.gz
-sudo mkdir -v $DST_DIR
+sudo mkdir -pv $DST_DIR
 sudo mv -v GeoLiteCity.dat $DST_DIR/GeoIPCity.dat
 
 wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
