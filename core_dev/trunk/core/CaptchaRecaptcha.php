@@ -24,9 +24,9 @@ class CaptchaRecaptcha extends Captcha
 {
     static $_instance;             ///< singleton
 
-    private $api_url        = 'http://api.recaptcha.net';
-    private $api_url_ssl    = 'https://api-secure.recaptcha.net';
-    private $api_url_verify = 'http://api-verify.recaptcha.net/verify';
+    private $api_url        = 'http://www.google.com/recaptcha/api';
+    private $api_url_ssl    = 'https://www.google.com/recaptcha/api';
+    private $api_url_verify = 'http://www.google.com/recaptcha/api/verify';
 
     private $pub_key, $priv_key;
 
