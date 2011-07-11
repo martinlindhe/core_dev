@@ -208,9 +208,12 @@ function seconds_to_hms($secs)
     $m = $m % 60;
 
     if ($frac)
-        return $h.':'.$m.':'.($s+$frac);
-    else
-        return $h.':'.$m.':'.$s;
+        $s = round($s + $frac, 2);
+
+    if ($m < 10) $m = '0'.$m;
+    if ($s < 10) $s = '0'.$s;
+
+    return $h.':'.$m.':'.$s;
 }
 
 /** Returns current time of day as a formatted 24-hour timestamp "HH:MM:SS" */
