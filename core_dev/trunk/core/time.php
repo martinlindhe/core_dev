@@ -187,8 +187,9 @@ function in_seconds($s)
 
 /**
  * Renders a second representation as "18:40:22"
+ * @param $milli force millisecond rendering?
  */
-function seconds_to_hms($secs)
+function seconds_to_hms($secs, $milli = false)
 {
     //XXX regexp validate format "nn:nn:nn"
 
@@ -207,8 +208,8 @@ function seconds_to_hms($secs)
     $h = (int) ($m / 60);
     $m = $m % 60;
 
-    if ($frac)
-        $s = round($s + $frac, 2);
+    if ($frac || $milli)
+        $s = round_decimals($s + $frac, 2);
 
     if ($m < 10) $m = '0'.$m;
     if ($s < 10) $s = '0'.$s;
