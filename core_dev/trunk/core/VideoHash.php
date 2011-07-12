@@ -17,7 +17,7 @@
 //STATUS: ok
 
 require_once('IHash.php');
-require_once('Cache.php');
+require_once('TempStore.php');
 
 class VideoHash implements IHash
 {
@@ -27,13 +27,12 @@ class VideoHash implements IHash
         if (!file_exists($file))
             return false;
 
-        $hash_cache = new Cache();
-        $hash_cache->setCacheTime(60*60*24*7); //7 days
-        $hash = $hash_cache->get('videohash/'.$file);
-        if ($hash) {
-            //echo "CACHE: REUSING VIDEO HASH ".$hash."\n";
+        $temp = TempStore::getInstance();
+        $key = 'videohash/'.$file;
+
+        $hash = $temp->get($key);
+        if ($hash)
             return $hash;
-        }
 
         $handle = fopen($file, 'rb');
         $fsize = filesize($file);
@@ -60,7 +59,7 @@ class VideoHash implements IHash
         $res = sprintf("%04x%04x%04x%04x", $hash[3], $hash[2], $hash[1], $hash[0]);
 
         //echo "CALCULATED HASH ".$res." for ".$file."\n";
-        $hash_cache->set('videohash/'.$file, $res);
+        $temp->set($key, $res);
         return $res;
     }
 
