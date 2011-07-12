@@ -226,7 +226,13 @@ function seconds_to_hms($secs, $milli = false, $precision = 2, $separator = '.')
  */
 function is_hms($s)
 {
-    $regexp = '/^([0-9]+):[0-5]\d(:[0-5]\d([\.\,]\d{1,3})?)?$/';
+    $regexp =
+    '/^([0-9]+)'.
+        ':[0-9]+'.
+        '(:[0-9]+'.
+            '([\.\,]\d{1,3})'.
+        '?)'.
+    '?$/';
     preg_match_all($regexp, $s, $matches);
 
     if ($matches && $matches[0] && $matches[0][0] == $s)

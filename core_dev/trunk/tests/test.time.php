@@ -42,5 +42,6 @@ if (!is_hms('00:00:00.00'))                               echo "FAIL 28\n";
 if (is_hms('123.123.123'))                                echo "FAIL 29\n";
 if (!is_hms('12:44:11,21'))                               echo "FAIL 30\n";
 if (!is_hms('00:26:36,595'))                              echo "FAIL 31\n";
+if (!is_hms('00:00:0,500'))                               echo "FAIL 32\n";
 
 ?>
