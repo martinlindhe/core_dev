@@ -172,7 +172,7 @@ function elapsed_seconds($s)
 }
 
 /**
- * Translates a time string such as "18:40:22" into number of seconds
+ * Translates a time string such as "18:40:22", "18:40:22.11" or "18:44:22,09" into number of seconds
  */
 function in_seconds($s)
 {
@@ -182,6 +182,8 @@ function in_seconds($s)
     $x = explode(':', $s);
     if (count($x) != 3)
         throw new Exception ('bad format: '.$s);
+
+    $x[2] = str_replace(',', '.', $x[2]);
 
     return ($x[0] * 3600) + ($x[1] * 60) + $x[2];
 }
@@ -217,11 +219,11 @@ function seconds_to_hms($secs, $milli = false)
 }
 
 /**
- * @return true if input string a time string, such as HH:MM or HH:MM:SS or HH:MM:SS.mmm
+ * @return true if input string a time string, such as HH:MM or HH:MM:SS or HH:MM:SS.mmm  (or HH:MM:SS,mmm)
  */
 function is_hms($s)
 {
-    $regexp = '/^([0-9]+):[0-5]\d(:[0-5]\d(\.\d{1,3})?)?$/';
+    $regexp = '/^([0-9]+):[0-5]\d(:[0-5]\d([\.\,]\d{1,3})?)?$/';
     preg_match_all($regexp, $s, $matches);
 
     if ($matches && $matches[0] && $matches[0][0] == $s)
