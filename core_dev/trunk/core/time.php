@@ -172,11 +172,12 @@ function elapsed_seconds($s)
 }
 
 /**
- * Translates a timestamp such as "18:40:22" into number of seconds
+ * Translates a time string such as "18:40:22" into number of seconds
  */
 function in_seconds($s)
 {
-    //XXX regexp validate format "nn:nn:nn"
+    if (!is_hms($s))
+        throw new Exception ('not a time string: '.$s);
 
     $x = explode(':', $s);
     if (count($x) != 3)
@@ -191,8 +192,6 @@ function in_seconds($s)
  */
 function seconds_to_hms($secs, $milli = false)
 {
-    //XXX regexp validate format "nn:nn:nn"
-
     if (!is_numeric($secs))
         throw new Exception ('bad input');
 
@@ -215,6 +214,20 @@ function seconds_to_hms($secs, $milli = false)
     if ($s < 10) $s = '0'.$s;
 
     return $h.':'.$m.':'.$s;
+}
+
+/**
+ * @return true if input string a time string, such as HH:MM or HH:MM:SS or HH:MM:SS.mmm
+ */
+function is_hms($s)
+{
+    $regexp = '/^([0-9]+):[0-5]\d(:[0-5]\d(\.\d{1,3})?)?$/';
+    preg_match_all($regexp, $s, $matches);
+
+    if ($matches && $matches[0] && $matches[0][0] == $s)
+        return true;
+
+    return false;
 }
 
 /** Returns current time of day as a formatted 24-hour timestamp "HH:MM:SS" */

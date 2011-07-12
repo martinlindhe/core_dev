@@ -34,4 +34,9 @@ if ( sql_date(ts('20110508')) != '2011-05-08')            echo "FAIL 22\n";
 if ( sql_date(ts('5/8/2011')) != '2011-05-08')            echo "FAIL 23\n";
 if ( sql_date(ts('05/08/2011')) != '2011-05-08')          echo "FAIL 24\n";
 
+if (!is_hms('12:44:11.21'))                               echo "FAIL 25\n";
+if (!is_hms('00:00:00'))                                  echo "FAIL 26\n";
+if (!is_hms('00:00:00.00'))                               echo "FAIL 27\n";
+if (is_hms('123.123.123'))                                echo "FAIL 28\n";
+
 ?>
