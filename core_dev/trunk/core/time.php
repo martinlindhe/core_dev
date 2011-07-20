@@ -191,8 +191,11 @@ function in_seconds($s)
 /**
  * Renders a second representation as "18:40:22"
  * @param $milli force millisecond rendering?
+ * @param $precision decimal precision of milliseconds
+ * @param $separator decimal separator for millisecond value
+ * @param $pad_hours set to true to always pad hours to 2 digits
  */
-function seconds_to_hms($secs, $milli = false, $precision = 2, $separator = '.')
+function seconds_to_hms($secs, $show_milli = false, $precision = 2, $separator = '.', $pad_hours = false)
 {
     if (!is_numeric($secs))
         throw new Exception ('bad input');
@@ -209,9 +212,10 @@ function seconds_to_hms($secs, $milli = false, $precision = 2, $separator = '.')
     $h = (int) ($m / 60);
     $m = $m % 60;
 
-    if ($frac || $milli)
+    if ($frac || $show_milli)
         $s = round_decimals($s + $frac, $precision);
 
+    if ($pad_hours && $h < 10) $h = '0'.$h;
     if ($m < 10) $m = '0'.$m;
     if ($s < 10) $s = '0'.$s;
 
