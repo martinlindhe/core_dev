@@ -37,4 +37,6 @@ if (instr('abc', 'aa') )           echo "FAIL 23\n";
 if (instr('a', 'aa') )             echo "FAIL 24\n";
 if (!instr('aa', 'a') )            echo "FAIL 25\n";
 
+if (strip_spaces('  hello  ') != 'hello') echo "FAIL 26\n";
+
 ?>

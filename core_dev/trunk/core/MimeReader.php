@@ -213,7 +213,8 @@ class MimeReader
             }
 
             if (!in_array($att[ $part_cnt ]['mimetype'], $this->allowed_mime_types)) {
-                echo "Unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
+                echo "XXX Skipping attachment due to unknown mime type: ". $att[ $part_cnt ]['mimetype']."\n";
+                d($att[$part_cnt]);
                 continue;
             }
 
