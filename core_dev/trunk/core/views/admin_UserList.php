@@ -42,6 +42,7 @@ if ($session->isSuperAdmin && !empty($_POST))
         }
 
         $user->setPassword($pwd);
+        $user->saveSetting('email', $_POST['u_email']);
 
         if (!empty($_POST['u_grp']))
             $user->addToGroup($_POST['u_grp']);
@@ -90,8 +91,8 @@ foreach (UserList::getUsers($filter) as $user)
     echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="6">';
-echo 'Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd');
+echo '<td colspan="7">';
+echo 'Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').' - email: '.xhtmlInput('u_email');
 
 $grp = new UserGroupList();
 
