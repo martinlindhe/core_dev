@@ -10,12 +10,24 @@
 //XXX: rework into a static class
 
 
-class SettingsByOwner
+class SettingsByOwner  // XXX rename
 {
-    static function getList($type, $name, $value)
+    /**
+     * @return 1d array of owner id's matching type, name & value
+     */
+    static function getList($type, $name, $value)  //XXXX rename
     {
         $q = 'SELECT ownerId FROM tblSettings WHERE settingType = ? AND settingName = ? AND settingValue = ?';
         return SqlHandler::getInstance()->pSelect1d($q, 'iss', $type, $name, $value);
+    }
+
+    /**
+     * @return 2d array of all settings matching type & owner
+     */
+    static function getAll($type, $owner) // XXX rename
+    {
+        $q = 'SELECT settingId, settingName, settingValue, categoryId FROM tblSettings WHERE settingType = ? AND ownerId = ?';
+        return SqlHandler::getInstance()->pSelect($q, 'ii', $type, $owner);
     }
 }
 
@@ -37,6 +49,19 @@ class Settings
             $this->type = $type;
     }
 
+    /**
+     * @return ownerId of the setting with the unique value $val
+     */
+    function getOwner($name, $val)
+    {
+        $db = SqlHandler::getInstance();
+
+        $q =
+        'SELECT ownerId FROM tblSettings'.
+        ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
+        return $db->pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
+    }
+
     function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
 
     function get($name, $default = '')
@@ -50,20 +75,6 @@ class Settings
 
         if ($res) return $res['settingValue'];
         return $default;
-    }
-
-    /**
-     * Returns ownerId of the setting with the unique value $val
-     *
-     */
-    function getOwner($name, $val)
-    {
-        $db = SqlHandler::getInstance();
-
-        $q =
-        'SELECT ownerId FROM tblSettings'.
-        ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
-        return $db->pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
     }
 
     function set($name, $val)
@@ -84,6 +95,17 @@ class Settings
             'ownerId = ?, categoryId = ?, settingType = ?, settingName = ?, settingValue = ?';
             $db->pInsert($q, 'iiiss', $this->owner, $this->category, $this->type, $name, $val);
         }
+        return true;
+    }
+
+    function delete($name)
+    {
+        $db = SqlHandler::getInstance();
+
+        $q =
+        'DELETE FROM tblSettings'.
+        ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
+        $db->pDelete($q, 'iiis', $this->owner, $this->category, $this->type, $name);
         return true;
     }
 

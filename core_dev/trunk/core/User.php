@@ -21,6 +21,7 @@ class User
     private $time_created;
     private $time_last_active;
     private $last_ip;            ///< the IP address used for the most recent login
+    private $email;
 
     function __construct($s = 0)
     {
@@ -45,6 +46,7 @@ class User
     function getTimeCreated() { return $this->time_created; }
     function getTimeLastActive() { return $this->time_last_active; }
     function getLastIp() { return $this->last_ip; }
+    function getEmail() { return $this->email; }
 
     function loadFromSql($row)
     {
@@ -53,6 +55,29 @@ class User
         $this->time_created     = $row['timeCreated'];
         $this->time_last_active = $row['timeLastActive'];
         $this->last_ip          = $row['lastIp'];
+
+        $this->email = $this->loadSetting('email');
+    }
+
+    function loadSetting($name)
+    {
+        $setting = new Settings(Settings::USER);
+        $setting->setOwner($this->id);
+        return $setting->get($name);
+    }
+
+    function saveSetting($name, $val)
+    {
+        $setting = new Settings(Settings::USER);
+        $setting->setOwner($this->id);
+        return $setting->set($name, $val);
+    }
+
+    function deleteSetting($name)
+    {
+        $setting = new Settings(Settings::USER);
+        $setting->setOwner($this->id);
+        return $setting->delete($name);
     }
 
     function loadById($id)

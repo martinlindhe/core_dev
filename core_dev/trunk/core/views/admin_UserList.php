@@ -63,6 +63,7 @@ if ($session->isSuperAdmin)
 echo '<table border="1">';
 echo '<tr>';
 echo '<th>Username</th>';
+echo '<th>E-mail</th>';
 echo '<th>Last active</th>';
 echo '<th>Last Ip</th>';
 echo '<th>Created</th>';
@@ -74,6 +75,7 @@ foreach (UserList::getUsers($filter) as $user)
 {
     echo '<tr>';
     echo '<td>'.ahref('coredev/admin/useredit/'.$user->getId(), $user->getName()).'</a></td>';
+    echo '<td>'.$user->getEmail().'</td>';
     echo '<td>'.$user->getTimeLastActive().'</td>';
     echo '<td>'.$user->getLastIp().'</td>';
     echo '<td>'.$user->getTimeCreated().'</td>';

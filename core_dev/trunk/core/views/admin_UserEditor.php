@@ -5,6 +5,14 @@
 
 //TODO: use XhtmlForm
 
+//TODO: show user comments:
+/*
+
+        echo '<h2>'.t('Comments').'</h2>';
+        echo showComments(COMMENT_USER, $user->getId());
+
+*/
+
 require_once('YuiDatatable.php');
 
 if (!$session->isSuperAdmin)
@@ -34,6 +42,26 @@ if (!empty($_POST['change_pwd'])) {
     echo '<div class="item">Password changed!</div>';
     return;
 }
+
+if (!empty($_POST['setting_name']) && isset($_POST['setting_val'])) {
+    $user->saveSetting($_POST['setting_name'], $_POST['setting_val']);
+    echo '<div class="good">Setting added!</div>';
+}
+
+if (!empty($_GET['remove_setting'])) {
+    $user->deleteSetting($_GET['remove_setting']);
+    echo '<div class="good">Setting removed!</div>';
+}
+
+// save changes in edited settings
+if (!empty($_POST)) {
+    $settings = SettingsByOwner::getAll(Settings::USER, $user->getId());
+
+    foreach ($settings as $set)
+        if (!empty($_POST['setting_name_'.$set['settingId']]))
+            $user->saveSetting($_POST['setting_name_'.$set['settingId']], $_POST['setting_val_'.$set['settingId']]);
+}
+
 
 if (!empty($_POST['grp_id'])) {
     $user->addToGroup($_POST['grp_id']);
@@ -76,6 +104,34 @@ echo xhtmlSubmit('Change');
 echo xhtmlFormClose().'<br/><br/>';
 
 
+echo '<h2>User settings</h2>';
+
+$settings = SettingsByOwner::getAll(Settings::USER, $user->getId());
+echo xhtmlForm('edit_setting');
+echo '<table>';
+echo '<tr><th>Name</th><th>Value</th><th>Delete</th></tr>';
+//XXX use editable YuiDataTable
+foreach ($settings as $set)
+{
+    echo '<tr>';
+    echo '<td>'.xhtmlInput('setting_name_'.$set['settingId'], $set['settingName']).'</td>';
+    echo '<td>'.xhtmlInput('setting_val_'.$set['settingId'], $set['settingValue']).'</td>';
+    echo '<td><a href="'.relurl_add( array('remove_setting'=>$set['settingName']) ).'">Remove</a></td>';
+    echo '</tr>';
+}
+echo '</table>';
+echo xhtmlSubmit('Save changes');
+echo xhtmlFormClose().'<br/><br/>';
+
+
+echo '<h3>Add new user setting</h3>';
+echo xhtmlForm('new_setting');
+echo 'Name: '.xhtmlInput('setting_name').' ';
+echo 'Value: '.xhtmlInput('setting_val').' ';
+echo xhtmlSubmit('Add');
+echo xhtmlFormClose().'<br/><br/>';
+
+
 
 echo '<h2>Login history</h2>';
 
@@ -111,14 +167,8 @@ if ($session->id != $caller->getId() )
             echo '</tr>';
         }
         echo '</table>';
-*/
 
-/*
-        echo '<h2>'.t('Comments').'</h2>';
-        echo showComments(COMMENT_USER, $user->getId());
-*/
 
-/*
         echo '<h2>All userdata</h2>';
         if (!empty($_POST['new_ud_key']) && isset($_POST['new_ud_val'])) {
             saveSetting(SETTING_USERDATA, 0, $userId, $_POST['new_ud_key'], $_POST['new_ud_val']);
