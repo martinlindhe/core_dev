@@ -10,11 +10,6 @@ require_once('UserList.php');
 if (!$session->isAdmin)
     return;
 
-if ($session->isSuperAdmin && !empty($_GET['del'])) {
-    $user = new User($_GET['del']);
-    $user->remove();
-}
-
 echo '<h1>Manage users</h1>';
 echo 'All users: '.ahref('coredev/admin/userlist/', UserList::getCount()).'<br/>';
 echo 'Users online: '.ahref('coredev/admin/userlist/?online', UserList::onlineCount()).'<br/>';
@@ -22,43 +17,12 @@ echo 'Users online: '.ahref('coredev/admin/userlist/?online', UserList::onlineCo
 $filter = '';
 if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
 
-// process updates
-if ($session->isSuperAdmin && !empty($_POST))
-{
-    if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']))
-    {
-        $username = trim($_POST['u_name']);
-        $pwd      = trim($_POST['u_pwd']);
-
-        $user = new User();
-        $user->create($username);
-        if (!$user->getId())
-            $error->add('Failed to create user');
-
-        if ($error->getErrorCount()) {
-            echo $error->render(true);
-            return;
-        }
-
-        $user->setPassword($pwd);
-        $user->saveSetting('email', $_POST['u_email']);
-
-        if (!empty($_POST['u_grp']))
-            $user->addToGroup($_POST['u_grp']);
-
-        echo '<div class="good">New user created. '.ahref('coredev/admin/useredit/'.$user->getId(), $username).'</div>';
-    }
-}
-
 echo '<br/>';
 echo xhtmlForm('usearch_frm');
 echo 'Username filter: '.xhtmlInput('usearch');
 echo xhtmlSubmit('Search');
 echo xhtmlFormClose();
 echo '<br/>';
-
-if ($session->isSuperAdmin)
-    echo xhtmlForm('add_user');
 
 echo '<table border="1">';
 echo '<tr>';
@@ -107,25 +71,10 @@ foreach ($list as $user)
 
     echo '</tr>';
 }
-echo '<tr>';
-echo '<td colspan="7">';
-echo 'Add user: '.xhtmlInput('u_name').' - pwd: '.xhtmlInput('u_pwd').' - email: '.xhtmlInput('u_email');
-
-$grp = new UserGroupList();
-
-$x = new XhtmlComponentDropdown();
-$x->name = 'u_grp';
-$x->options = $grp->getIndexedList();
-echo $x->render();
-
-
-echo '</td>';
-echo '</tr>';
 echo '</table>';
+echo '<br/>';
 
-if ($session->isSuperAdmin) {
-    echo '<br/>';
-    echo xhtmlSubmit('Save changes');
-    echo '</form>';
-}
+if ($session->isSuperAdmin)
+    echo ahref('coredev/view/create_user/', 'Create new user');
+
 ?>
