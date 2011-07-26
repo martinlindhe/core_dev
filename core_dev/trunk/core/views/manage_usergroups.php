@@ -3,6 +3,9 @@
  * This is the user group manager
  */
 
+if (!$session->isAdmin)
+    return;
+
 function addUserGroupSubmit($p)
 {
     $grp = new UserGroup();

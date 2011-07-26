@@ -5,9 +5,14 @@
 
 //TODO: ability to remove a empty usergroup
 
-$header->setTitle('Admin: Edit user group: '.$caller->getName() );
+//XXX move to manage_usergroup.php
 
-echo '<h1>Edit user group: '.$caller->getName().'</h1>';
+if (!$session->isAdmin)
+    return;
+
+$header->setTitle('Admin: Manage user group: '.$caller->getName() );
+
+echo '<h1>Manage user group: '.$caller->getName().'</h1>';
 
 echo 'Created at '.sql_datetime($caller->getTimeCreated()).' by '.$caller->getCreatorName().'<br/><br/>';
 
