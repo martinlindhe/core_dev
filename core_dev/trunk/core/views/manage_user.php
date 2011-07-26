@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the defualt view for the UserEditor class
+ * This is the user manager
  */
 
 //TODO: use XhtmlForm
@@ -18,7 +18,7 @@ require_once('YuiDatatable.php');
 if (!$session->isSuperAdmin)
     return;
 
-$user = new User($caller->getId() );
+$user = new User($this->owner);
 if (!$user->getId()) {
     echo '<h2>No such user exists</h2>';
     return;
@@ -29,7 +29,7 @@ echo '<h1>User admin for '.$user->getName().'</h1>';
 echo 'Last IP: '.$user->getLastIp().'<br/>';
 echo '<br/>';
 
-if ($session->id != $caller->getId() && isset($_GET['remove'])) {
+if ($session->id != $this->owner && isset($_GET['remove'])) {
     //if (confirmed('Are you sure you want to remove this user?')) {  //XXX fix so confirmation works here
         $user->remove();
         echo '<div class="item">User removed</div>';
@@ -145,7 +145,7 @@ echo $dt->render();
 
 
 
-if ($session->id != $caller->getId() )
+if ($session->id != $this->owner )
     echo '&raquo; <a href="'.relurl_add( array('remove'=>1) ).'">Remove user</a><br/><br/>';
 
 

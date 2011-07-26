@@ -5,9 +5,7 @@
 //TODO: ability to attach project-specific admin pages here
 
 require_once('UserList.php');
-require_once('UserEditor.php');
 require_once('UserGroupList.php');
-require_once('FtpClient.php'); // for curl_check_protocol_support()
 require_once('IconWriter.php');
 require_once('FileInfo.php');
 
@@ -48,25 +46,13 @@ case 'file':
 case 'admin':
     $session->requireSuperAdmin();
 
-    switch ($this->owner) {
-
-    case 'useredit': //child=user id
-        // XXX link to here is hardcoded in admin_UserList.php view
-        $useredit = new UserEditor();
-        $useredit->setId($this->child);
-        echo $useredit->render();
-        break;
-
-    default:
-        echo '<h1>core_dev admin</h1>';
-        echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
-        echo ahref('coredev/view/manage_usergroups', 'Manage user groups').'<br/>';
-        echo '<br/>';
-        echo ahref('coredev/view/phpinfo', 'phpinfo()').'<br/>';
-        echo ahref('coredev/view/compatiblity', 'Compatibility check').'<br/>';
-        echo ahref('coredev/view/timezones', 'Time zones').'<br/>';
-        break;
-    }
+    echo '<h1>core_dev admin</h1>';
+    echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
+    echo ahref('coredev/view/manage_usergroups', 'Manage user groups').'<br/>';
+    echo '<br/>';
+    echo ahref('coredev/view/phpinfo', 'phpinfo()').'<br/>';
+    echo ahref('coredev/view/compatiblity', 'Compatibility check').'<br/>';
+    echo ahref('coredev/view/timezones', 'Time zones').'<br/>';
     break;
 
 case 'view':

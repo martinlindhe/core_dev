@@ -56,7 +56,7 @@ foreach ($list as $user)
 {
     if ($user->isOnline()) echo '<tr style="background:#79EFFF;">';
     else echo '<tr>';
-    echo '<td>'.ahref('coredev/admin/useredit/'.$user->getId(), $user->getName()).'</a></td>';
+    echo '<td>'.ahref('coredev/view/manage_user/'.$user->getId(), $user->getName()).'</a></td>';
     echo '<td>'.$user->getEmail().'</td>';
     echo '<td>'.sql_datetime($user->getTimeLastActive()).'</td>';
     echo '<td>'.$user->getLastIp().'</td>';

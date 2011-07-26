@@ -27,7 +27,7 @@ if (!empty($_POST))
         if (!empty($_POST['u_grp']))
             $user->addToGroup($_POST['u_grp']);
 
-        echo '<div class="good">New user created. '.ahref('coredev/admin/useredit/'.$user->getId(), $username).'</div>';
+        echo '<div class="good">New user created. '.ahref('coredev/view/manage_user/'.$user->getId(), $username).'</div>';
     }
 }
 

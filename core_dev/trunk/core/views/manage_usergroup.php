@@ -42,6 +42,6 @@ echo '<br/><br/>';
 echo '<h1>Group members</h1>';
 
 foreach ($grp->getMembers() as $user)
-    echo ahref('coredev/admin/useredit/'.$user->getId(), $user->getName() ).'<br/>';
+    echo ahref('coredev/view/manage_user/'.$user->getId(), $user->getName() ).'<br/>';
 
 ?>

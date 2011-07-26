@@ -1,5 +1,7 @@
 <?php
 
+require_once('FtpClient.php'); // for curl_check_protocol_support()
+
 if (!$session->isAdmin)
     return;
 
