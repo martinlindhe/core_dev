@@ -38,9 +38,9 @@ class UserList
     }
 
     /**
-     * @returns array of all users online
+     * @return array of User objects for all users online
      */
-    static function allOnline()
+    static function getUsersOnline()
     {
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
@@ -48,7 +48,16 @@ class UserList
         $q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
         $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
         $q .= ' ORDER BY timeLastActive DESC';
-        return $db->getArray($q);
+
+        $users = array();
+
+        foreach ($db->getArray($q) as $row) {
+            $user = new User();
+            $user->loadFromSql($row);
+            $users[] = $user;
+        }
+
+        return $users;
     }
 
     /**

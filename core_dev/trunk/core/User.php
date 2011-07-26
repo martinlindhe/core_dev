@@ -50,12 +50,25 @@ class User
     function getLastIp() { return $this->last_ip; }
     function getEmail() { return $this->email; }
 
+    function isOnline()
+    {
+        if (!$this->id)
+            throw new Exception ('no id set');
+
+        $session = SessionHandler::getInstance();
+
+        if ($this->time_last_active > time() - $session->online_timeout)
+            return true;
+
+        return false;
+    }
+
     function loadFromSql($row)
     {
         $this->id               = $row['userId'];
         $this->name             = $row['userName'];
-        $this->time_created     = $row['timeCreated'];
-        $this->time_last_active = $row['timeLastActive'];
+        $this->time_created     = ts($row['timeCreated']);
+        $this->time_last_active = ts($row['timeLastActive']);
         $this->last_ip          = $row['lastIp'];
 
         $this->email = $this->loadSetting('email');

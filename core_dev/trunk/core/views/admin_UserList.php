@@ -4,7 +4,6 @@
  */
 
 //TODO: use editable YuiDatatable
-//XXX TODO: lista användare online
 
 require_once('UserList.php');
 
@@ -17,13 +16,13 @@ if ($session->isSuperAdmin && !empty($_GET['del'])) {
 }
 
 echo '<h1>Manage users</h1>';
-echo 'All users: '.ahref('coredev/admin/userlist', UserList::getCount()).'<br/>';
-echo 'Users online: '.ahref('coredev/admin/userlist/0/online', UserList::onlineCount()).'<br/>';
+echo 'All users: '.ahref('coredev/admin/userlist/', UserList::getCount()).'<br/>';
+echo 'Users online: '.ahref('coredev/admin/userlist/?online', UserList::onlineCount()).'<br/>';
 
 $filter = '';
 if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
 
-//process updates
+// process updates
 if ($session->isSuperAdmin && !empty($_POST))
 {
     if (!empty($_POST['u_name']) && !empty($_POST['u_pwd']))
@@ -72,14 +71,20 @@ echo '<th>User level</th>';
 echo '<th>Groups</th>';
 echo '</tr>';
 
-foreach (UserList::getUsers($filter) as $user)
+if (isset($_GET['online']))
+    $list = UserList::getUsersOnline($filter);
+else
+    $list = UserList::getUsers($filter);
+
+foreach ($list as $user)
 {
-    echo '<tr>';
+    if ($user->isOnline()) echo '<tr style="background:#79EFFF;">';
+    else echo '<tr>';
     echo '<td>'.ahref('coredev/admin/useredit/'.$user->getId(), $user->getName()).'</a></td>';
     echo '<td>'.$user->getEmail().'</td>';
-    echo '<td>'.$user->getTimeLastActive().'</td>';
+    echo '<td>'.sql_datetime($user->getTimeLastActive()).'</td>';
     echo '<td>'.$user->getLastIp().'</td>';
-    echo '<td>'.$user->getTimeCreated().'</td>';
+    echo '<td>'.sql_datetime($user->getTimeCreated()).'</td>';
     echo '<td>'.$user->getUserLevelName().'</td>';
 
     $grps = array();
