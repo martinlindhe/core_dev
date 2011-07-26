@@ -40,12 +40,16 @@ class UserList
     /**
      * @return array of User objects for all users online
      */
-    static function getUsersOnline()
+    static function getUsersOnline($filter = '')
     {
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
 
         $q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
+
+        if ($filter)
+            $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+
         $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
         $q .= ' ORDER BY timeLastActive DESC';
 

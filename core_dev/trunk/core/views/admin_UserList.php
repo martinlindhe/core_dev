@@ -72,9 +72,21 @@ echo '<th>Groups</th>';
 echo '</tr>';
 
 if (isset($_GET['online']))
+{
     $list = UserList::getUsersOnline($filter);
+    echo '<h2>Showing all users online';
+}
 else
+{
     $list = UserList::getUsers($filter);
+    echo '<h2>Showing all users';
+}
+
+if ($filter)
+    echo ', matching <u>'.$filter.'</u>';
+
+echo ' ('.count($list).' hits)</h2>';
+
 
 foreach ($list as $user)
 {
