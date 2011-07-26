@@ -57,12 +57,6 @@ case 'admin':
         echo $useredit->render();
         break;
 
-    case 'usergroup_details': //child=group id
-        // XXX link to here is hardcoded in admin_UserGroupList.php
-        $details = new UserGroup($this->child);
-        echo $details->render();
-        break;
-
     default:
         echo '<h1>core_dev admin</h1>';
         echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
@@ -78,11 +72,14 @@ case 'admin':
 case 'view':
     // view built in view. owner = name of view in core/views/
 
+    //XXX FIXME: make sure $this->owner only contains a-z and underscore
+
     $file = $page->getCoreDevInclude().'views/'.$this->owner.'.php';
     if (!file_exists($file))
         throw new Exception ('DEBUG: view not found '.$file);
 
     $view = new ViewModel($file);
+    $view->registerVar('owner', $this->child);
     echo $view->render();
     break;
 

@@ -76,7 +76,7 @@ echo 'This user is member of the following groups:<br/>';
 
 foreach ($user->getGroups() as $g) {
     echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
-    echo ahref('coredev/admin/usergroup_details/'.$g->getId(), $g->getName()).'<br/>';
+    echo ahref('coredev/view/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
 }
 echo '<br/>';
 
