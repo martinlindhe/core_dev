@@ -49,9 +49,6 @@ case 'admin':
     $session->requireSuperAdmin();
 
     switch ($this->owner) {
-    case 'userlist':
-        echo UserList::render();
-        break;
 
     case 'useredit': //child=user id
         // XXX link to here is hardcoded in admin_UserList.php view
@@ -124,7 +121,7 @@ case 'admin':
 
     default:
         echo '<h1>core_dev admin</h1>';
-        echo ahref('coredev/admin/userlist', 'Manage users').'<br/>';
+        echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
         echo ahref('coredev/admin/usergroup', 'Manage user groups').'<br/>';
         echo '<br/>';
         echo ahref('coredev/admin/phpinfo', 'phpinfo()').'<br/>';

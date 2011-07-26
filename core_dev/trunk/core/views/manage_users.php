@@ -11,8 +11,8 @@ if (!$session->isAdmin)
     return;
 
 echo '<h1>Manage users</h1>';
-echo 'All users: '.ahref('coredev/admin/userlist/', UserList::getCount()).'<br/>';
-echo 'Users online: '.ahref('coredev/admin/userlist/?online', UserList::onlineCount()).'<br/>';
+echo 'All users: '.ahref('coredev/view/manage_users/', UserList::getCount()).'<br/>';
+echo 'Users online: '.ahref('coredev/view/manage_users/?online', UserList::onlineCount()).'<br/>';
 
 $filter = '';
 if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];

@@ -105,11 +105,6 @@ class UserList
         return $db->getMappedArray($q);
     }
 
-    static function render()
-    {
-        $view = new ViewModel('views/admin_UserList.php');
-        return $view->render();
-    }
 }
 
 ?>
