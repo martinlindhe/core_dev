@@ -18,12 +18,14 @@ require_once('UserSetting.php');
 
 class User
 {
-    private $id;
-    private $name;
-    private $time_created;
-    private $time_last_active;
-    private $last_ip;            ///< the IP address used for the most recent login
-    private $email;
+    var $id;
+    var $name;
+    var $time_created;
+    var $time_last_active;
+    var $last_ip;            ///< the IP address used for the most recent login
+    var $email;
+    var $userlevel = 0;
+    var $is_online = false;
 
     function __construct($s = 0)
     {
@@ -55,23 +57,35 @@ class User
         if (!$this->id)
             throw new Exception ('no id set');
 
-        $session = SessionHandler::getInstance();
-
-        if ($this->time_last_active > time() - $session->online_timeout)
-            return true;
-
-        return false;
+        return $this->is_online;
     }
 
     function loadFromSql($row)
     {
         $this->id               = $row['userId'];
         $this->name             = $row['userName'];
-        $this->time_created     = ts($row['timeCreated']);
-        $this->time_last_active = ts($row['timeLastActive']);
+        $this->time_created     = $row['timeCreated'];
+        $this->time_last_active = $row['timeLastActive'];
         $this->last_ip          = $row['lastIp'];
 
         $this->email = $this->loadSetting('email');
+
+        $this->is_online = false;
+
+        $session = SessionHandler::getInstance();
+
+        if (ts($this->time_last_active) > time() - $session->online_timeout)
+            $this->is_online = true;
+
+        $db = SqlHandler::getInstance();
+
+        $q = 'SELECT t2.level FROM tblGroupMembers AS t1'.
+        ' INNER JOIN tblUserGroups AS t2 ON (t1.groupId=t2.groupId)'.
+        ' WHERE t1.userId = ?'.
+        ' ORDER BY t2.level DESC LIMIT 1';
+
+        $l = $db->pSelectItem($q, 'i', $this->id);
+        $this->userlevel = $l ? $l : 0;
     }
 
     function loadSetting($name)
@@ -194,24 +208,13 @@ class User
     }
 
     /** Returns the highest access level from group membership */
-    function getUserLevel()
-    {
-        $db = SqlHandler::getInstance();
-
-        $q = 'SELECT t2.level FROM tblGroupMembers AS t1'.
-        ' INNER JOIN tblUserGroups AS t2 ON (t1.groupId=t2.groupId)'.
-        ' WHERE t1.userId = ?'.
-        ' ORDER BY t2.level DESC LIMIT 1';
-
-        $l = $db->pSelectItem($q, 'i', $this->id);
-        return $l ? $l : 0;
-    }
+    function getUserLevel() { return $this->userlevel; }
 
     function getUserLevelName()
     {
         $x = User::getUserLevels();
 
-        return $x[ $this->getUserLevel() ];
+        return $x[ $this->userlevel ];
     }
 
     /**

@@ -3,9 +3,10 @@
  * This is the user manager
  */
 
-//TODO: use editable YuiDatatable
+//TODO: fix up row coloring with YuiDatatable
 
 require_once('UserList.php');
+require_once('YuiDatatable.php');
 
 if (!$session->isAdmin)
     return;
@@ -24,17 +25,6 @@ echo xhtmlSubmit('Search');
 echo xhtmlFormClose();
 echo '<br/>';
 
-echo '<table border="1">';
-echo '<tr>';
-echo '<th>Username</th>';
-echo '<th>E-mail</th>';
-echo '<th>Last active</th>';
-echo '<th>Last Ip</th>';
-echo '<th>Created</th>';
-echo '<th>User level</th>';
-echo '<th>Groups</th>';
-echo '</tr>';
-
 if (isset($_GET['online']))
 {
     $list = UserList::getUsersOnline($filter);
@@ -51,30 +41,39 @@ if ($filter)
 
 echo ' ('.count($list).' hits)</h2>';
 
+$dt = new YuiDatatable();
+$dt->addColumn('id',    'Username', 'link', '/coredev/view/manage_user/', 'name');
 
-foreach ($list as $user)
-{
-    if ($user->isOnline()) echo '<tr style="background:#79EFFF;">';
-    else echo '<tr>';
-    echo '<td>'.ahref('coredev/view/manage_user/'.$user->getId(), $user->getName()).'</a></td>';
-    echo '<td>'.$user->getEmail().'</td>';
-    echo '<td>'.sql_datetime($user->getTimeLastActive()).'</td>';
-    echo '<td>'.$user->getLastIp().'</td>';
-    echo '<td>'.sql_datetime($user->getTimeCreated()).'</td>';
-    echo '<td>'.$user->getUserLevelName().'</td>';
+$dt->addColumn('email',             'E-mail');
+$dt->addColumn('time_last_active',  'Last active');
+$dt->addColumn('last_ip',           'Last IP');
+$dt->addColumn('time_created',      'Created');
+$dt->addColumn('is_online',         'Online?');
+$dt->addColumn('userlevel',         'User level', 'array', User::getUserLevels() );
 
-    $grps = array();
-    foreach ($user->getGroups() as $g)
-        $grps[] = $g->getName();
 
-    echo '<td>'.implode(', ', $grps).'</td>';
+/*  //XXX row coloring not fully working in YuiDatatable
+$header->embedCss(
+'.yui-skin-sam .yui-dt tr.green_mark,'.
+'.yui-skin-sam .yui-dt tr.green_mark td.yui-dt-asc,'.
+'.yui-skin-sam .yui-dt tr.green_mark td.yui-dt-desc,'.
+'.yui-skin-sam .yui-dt tr.green_mark td.yui-dt-asc,'.
+'.yui-skin-sam .yui-dt tr.green_mark td.yui-dt-desc {'.
+    'background-color: #3a3;'.
+    'color: #fff;'.
+'}');
 
-    echo '</tr>';
-}
-echo '</table>';
+$dt->colorRow('is_online', '!=', false, 'green_mark');
+*/
+
+$dt->setSortOrder('time_last_active', 'desc');
+$dt->setDataList( $list );
+//$dt->setRowsPerPage(10);
+echo $dt->render();
 echo '<br/>';
 
+
 if ($session->isSuperAdmin)
-    echo ahref('coredev/view/create_user/', 'Create new user');
+    echo '&raquo; '.ahref('coredev/view/create_user/', 'Create new user');
 
 ?>

@@ -99,6 +99,9 @@ class YuiDatatable
 
     function colorRow( $c1, $comp, $c2, $css)
     {
+        if (!in_array($comp, array('==', '!=', '>=', '<=', '>', '<')))
+            throw new Exception ('unhandled comparison method: '.$comp);
+
         $col = new YuiColorRow();
         $col->c1 = $c1;
         $col->comparison = $comp;
@@ -318,7 +321,8 @@ class YuiDatatable
                     $res .=
                     'var myRowFormatter = function(elTr, oRecord) {';
 
-                    foreach ($this->color_rows as $col) {
+                    foreach ($this->color_rows as $col)
+                    {
                         $c1 = is_numeric($col->c1) ? $col->c1 : 'parseInt( oRecord.getData("'.$col->c1.'") )';
                         $c2 = is_numeric($col->c2) ? $col->c2 : 'parseInt( oRecord.getData("'.$col->c2.'") )';
                         $res .=
