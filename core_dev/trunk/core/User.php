@@ -14,6 +14,8 @@ define('USERLEVEL_WEBMASTER',   1);
 define('USERLEVEL_ADMIN',       2);
 define('USERLEVEL_SUPERADMIN',  3);
 
+require_once('UserSetting.php');
+
 class User
 {
     private $id;
@@ -61,23 +63,17 @@ class User
 
     function loadSetting($name)
     {
-        $setting = new Settings(Settings::USER);
-        $setting->setOwner($this->id);
-        return $setting->get($name);
+        return UserSetting::get($this->id, $name);
     }
 
     function saveSetting($name, $val)
     {
-        $setting = new Settings(Settings::USER);
-        $setting->setOwner($this->id);
-        return $setting->set($name, $val);
+        return UserSetting::set($this->id, $name, $val);
     }
 
     function deleteSetting($name)
     {
-        $setting = new Settings(Settings::USER);
-        $setting->setOwner($this->id);
-        return $setting->delete($name);
+        return UserSetting::delete($this->id, $name);
     }
 
     function loadById($id)
