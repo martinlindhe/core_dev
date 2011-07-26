@@ -13,6 +13,8 @@
 
 //STATUS: wip
 
+//XXXX: upgrade yo yui 3.4.0 calendar when its released
+
 require_once('JSON.php');
 
 class YuiDate
