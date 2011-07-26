@@ -13,14 +13,7 @@ require_once('UserGroup.php');
 
 class UserGroupList
 {
-    private $items;
-
-    function __construct()
-    {
-        $this->load();
-    }
-
-    private function load()
+    static function getItems()
     {
         $db = SqlHandler::getInstance();
 
@@ -34,29 +27,22 @@ class UserGroupList
             $arr[] = $item;
         }
 
-        $this->items = $arr;
+        return $arr;
     }
-
-    function getItems() { return $this->items; }
 
     /**
      * @return array of id=>name pairs
      */
-    function getIndexedList()
+    static function getIndexedList()
     {
         $res = array();
 
-        foreach ($this->items as $i)
+        foreach (self::getItems() as $i)
             $res[ $i->getId() ] = $i->getName();
 
         return $res;
     }
 
-    function render()
-    {
-        $view = new ViewModel('views/admin_UserGroupList.php', $this);
-        return $view->render();
-    }
 }
 
 ?>

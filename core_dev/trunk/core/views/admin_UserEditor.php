@@ -81,13 +81,11 @@ foreach ($user->getGroups() as $g) {
 echo '<br/>';
 
 
-$grp = new UserGroupList();
-
 echo xhtmlForm('grp');
 
 $x = new XhtmlComponentDropdown();
 $x->name = 'grp_id';
-$x->options = $grp->getIndexedList();
+$x->options = UserGroupList::getIndexedList();
 
 echo $x->render().' ';
 

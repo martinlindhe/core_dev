@@ -57,11 +57,6 @@ case 'admin':
         echo $useredit->render();
         break;
 
-    case 'usergroup':
-        $grouplist = new UserGroupList();
-        echo $grouplist->render();
-        break;
-
     case 'usergroup_details': //child=group id
         // XXX link to here is hardcoded in admin_UserGroupList.php
         $details = new UserGroup($this->child);
@@ -122,7 +117,7 @@ case 'admin':
     default:
         echo '<h1>core_dev admin</h1>';
         echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
-        echo ahref('coredev/admin/usergroup', 'Manage user groups').'<br/>';
+        echo ahref('coredev/view/manage_usergroups', 'Manage user groups').'<br/>';
         echo '<br/>';
         echo ahref('coredev/admin/phpinfo', 'phpinfo()').'<br/>';
         echo ahref('coredev/admin/compatiblity', 'Compatibility check').'<br/>';

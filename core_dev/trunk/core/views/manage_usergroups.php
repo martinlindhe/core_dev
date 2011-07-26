@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the defualt view for the UserGroupList class
+ * This is the user group manager
  */
 
 function addUserGroupSubmit($p)
@@ -35,7 +35,8 @@ echo '<h2>Existing groups</h2>';
 
 echo '<table>';
 echo '<tr><th>Name</th><th>Level</th><th>Info</th><th>Created</th></tr>';
-foreach ( $caller->getItems() as $grp) {
+foreach ( UserGroupList::getItems() as $grp)
+{
     echo '<tr>';
     echo '<td>'.ahref('coredev/admin/usergroup_details/'.$grp->getId(), $grp->getName()).'</td>';
     echo '<td>'.$grp->getLevelDesc().'</td>';

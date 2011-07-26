@@ -1,6 +1,6 @@
 <?php
 /**
- * This is the defualt view for the UserList class
+ * This is the user manager
  */
 
 //TODO: use editable YuiDatatable
