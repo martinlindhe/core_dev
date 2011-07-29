@@ -16,12 +16,13 @@ class RegressionTest
         {
             $cnt++;
 
-            $code = 'return '.$a.';';
+
+            $code = 'return '.$a[0].';';
 
             $err = eval($code);
 
-            if ($err) {
-                echo 'FAIL '.$cnt.': '.$a."\n";
+            if ($err != $a[1]) {
+                echo 'FAIL '.$cnt.': '.$a[0].'. expected "'.$a[1].'" but got "'.$err.'"'."\n";
                 $fail++;
             }
 
