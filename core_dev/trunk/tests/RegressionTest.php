@@ -3,11 +3,11 @@
  * $Id$
  */
 
-//STATUS: early wip
+//STATUS: wip
 
 class RegressionTest
 {
-    static function check($arr)
+    static function check($filename, $arr)
     {
         $cnt = 0;
         $fail = 0;
@@ -22,13 +22,13 @@ class RegressionTest
             $err = eval($code);
 
             if ($err != $a[1]) {
-                echo 'FAIL '.$cnt.': '.$a[0].'. expected "'.$a[1].'" but got "'.$err.'"'."\n";
+                echo basename($filename).' FAIL '.$cnt.': '.$a[0].'. expected "'.$a[1].'" but got "'.$err.'"'."\n";
                 $fail++;
             }
 
         }
 
-        echo ($cnt-$fail).'/'.$cnt." SUCCESS\n";
+        echo basename($filename).': '.($cnt-$fail).'/'.$cnt." SUCCESS\n";
     }
 
 }
