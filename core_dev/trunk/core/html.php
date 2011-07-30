@@ -65,9 +65,18 @@ function relurl_add($p)
     return $u->getPath();
 }
 
-function ahref($url, $title, $target = '')
+function ahref($url, $text, $target = '', $onclick = '')
 {
-    return '<a href="'.relurl($url).'"'.($target ? ' target="'.$target.'"' : '').'>'.$title.'</a>';
+    return
+    '<a href="'.relurl($url).'"'.
+    ($target ? ' target="'.$target.'"' : '').
+    ($onclick ? ' onclick="'.$onclick.'"' : ''). // executes javascript
+    '>'.$text.'</a>';
+}
+
+function ahref_js($text, $js)
+{
+    return ahref('#', $text, '', $js);
 }
 
 /** Creates "are you sure?" pages */
