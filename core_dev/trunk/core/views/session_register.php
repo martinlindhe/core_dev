@@ -1,6 +1,8 @@
 <?php
 /**
  * Register user view
+ *
+ * DIRECTLY INCLUDED FROM session_login.php
  */
 
 //STATUS: wip
@@ -13,7 +15,6 @@ $allow_superadmin_reg = !UserList::getCount();
 
 if ($allow_superadmin_reg || ($session->allow_logins && $session->allow_registrations))
 {
-
     $header->embedCss(
     '.register_box{'.
         'font-size:14px;'.

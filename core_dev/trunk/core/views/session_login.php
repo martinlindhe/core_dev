@@ -71,10 +71,9 @@ d($v);
     return;
 }
 
+$login_div = 'login_div';
 
-echo '<div class="login_box">';
-
-echo '<div id="login_form_layer">';
+echo '<div id="'.$login_div.'" class="login_box">';
 
 if ($session->facebook_app_id && !$session->facebook_id) {
     echo '<div id="fb-root"></div>';
@@ -125,14 +124,33 @@ echo '<tr>'.
 echo '</table>';
 echo '<br/>';
 echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
-echo xhtmlFormClose();
-echo '</div>';
-
 
 if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations)) {
-    echo ahref('coredev/view/session_register', 'Register');
+    // include session_register view as a hidden div
+
+    $reg_div = 'reg_div';
+
+    $header->registerJsFunction(
+    'function show_reg_form()'.
+    '{'.
+        'show_el("'.$reg_div.'");'.
+        'hide_el("'.$login_div.'");'.
+    '}'
+    );
+
+    $x = new XhtmlComponentButton();
+    $x->text = ahref_js('Register', 'return show_reg_form();');
+    echo $x->render();
 }
 
+echo xhtmlFormClose();
+
 echo '</div>';
+
+
+echo '<div id="'.$reg_div.'" style="display:none;">';
+include('session_register.php');
+echo '</div>';
+
 
 ?>

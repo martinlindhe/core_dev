@@ -9,6 +9,8 @@
 
 //STATUS: ok
 
+//FIXME all code should use registerJsFunction instead of embedJs!!!
+
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
@@ -42,6 +44,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     protected $include_js      = array();
     protected $include_css     = array();
     protected $include_feed    = array();
+
+    protected $js_functions    = array();
 
     protected $meta_tags       = array();
     protected $opensearch      = array();
@@ -78,6 +82,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     function setReloadTime($secs) { $this->reload_time = $secs; }
 
+    /** Adds a js file include to the header */
     function includeJs($uri)
     {
         if (substr($uri, 0, 1) != '/')
@@ -113,6 +118,22 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $o->url   = $url;
 
         $this->opensearch[] = $o;
+    }
+
+    /** Registers a javascript function */
+    function registerJsFunction($code)
+    {
+        if (substr($code, 0, 9) != 'function ')
+            throw new Exception ('wierd code: '.$code);
+
+        $tmp = substr($code, 9);
+        $fn = explode('(', $tmp);
+
+        // detect duplicate function names
+        if (isset($this->js_functions[$fn[0]]))
+            throw new Exception ('XXX js function already defined: '.$fn[0]);
+
+        $this->js_functions[$fn[0]] = $code;
     }
 
     /** CSS snippets to be added inside <head> */
@@ -176,6 +197,45 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         if ($this->embed_js)
             $res .= js_embed( implode('', $this->embed_js) );
+
+
+        // define a minimal set of core functions:
+
+        $this->registerJsFunction(
+        // Makes element with name "n" invisible in browser
+        'function hide_el(n)'.
+        '{'.
+            'var e=document.getElementById(n);'.
+            'e.style.display="none";'.
+        '}'
+        );
+
+        $this->registerJsFunction(
+        // Makes element with name "n" visible in browser
+        'function show_el(n)'.
+        '{'.
+            'var e=document.getElementById(n);'.
+            'e.style.display="";'.
+        '}'
+        );
+
+        $this->registerJsFunction(
+        // Toggles element with name "n" between visible and hidden
+        'function toggle_el(n)'.
+        '{'.
+            'var e=document.getElementById(n);'.
+            'e.style.display=(e.style.display?"":"none");'.
+        '}'
+        );
+
+        if ($this->js_functions)
+        {
+            $js = '';
+            foreach ($this->js_functions as $key => $val)
+                $js .= $val;
+
+            $res .= js_embed($js);
+        }
 
         $res .= '</head>';
 
