@@ -63,15 +63,6 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $prof;
     }
 
-    /**
-     * Shows the profiler view
-     */
-    public function renderProfiler()
-    {
-        $view = new ViewModel('views/sql_profiler.php');
-        return $view->render();
-    }
-
     function connect()
     {
         $this->measure_start = microtime(true);

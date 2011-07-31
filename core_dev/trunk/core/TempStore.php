@@ -158,15 +158,6 @@ class TempStore
         return $ret;
     }
 
-    /**
-     * Shows the cache status view
-     */
-    public function renderStatus()
-    {
-        $view = new ViewModel('views/TempStore_status.php');
-        return $view->render();
-    }
-
 }
 
 ?>

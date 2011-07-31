@@ -28,15 +28,13 @@ echo '<a class="closebtn" href="#" onclick="hide_el(\''.$container_id.'\');"></a
 echo 'core_dev 0.2-svn ';
 
 if (class_exists('SqlHandler')) {
-    $db = SqlHandler::getInstance();
-
-    if ($db instanceof DatabaseMySQLProfiler)
-        echo $db->renderProfiler();  //XXXXX delete method, use ViewModel directly on view file
+    $view = new ViewModel('views/sql_profiler.php');
+    echo $view->render();
 }
 
 if (class_exists('TempStore')) {
-    $store = TempStore::getInstance();
-    echo $store->renderStatus();    //XXXXX delete method, use ViewModel directly on view file
+    $view = new ViewModel('views/TempStore_status.php');
+    echo $view->render();
 }
 
 $prof_id = 'prof_'.mt_rand();
