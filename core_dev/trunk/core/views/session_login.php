@@ -124,7 +124,7 @@ if ($session->facebook_app_id && !$session->facebook_id) {
 $header->registerJsFunction(
 'function validate_login_form(frm)'.
 '{'.
-    'if (!frm.login_usr.value || !frm.login_pwd.value)'.
+    'if (!frm.login_usr.value||!frm.login_pwd.value)'.
         'return false;'.
     'return true;'.
 '}'

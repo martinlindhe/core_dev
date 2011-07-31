@@ -199,36 +199,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if ($this->embed_js)
             $res .= js_embed( implode('', $this->embed_js) );
 
-
-        // define a minimal set of core functions:
-
-        $this->registerJsFunction(
-        // Makes element with name "n" invisible in browser
-        'function hide_el(n)'.
-        '{'.
-            'var e=document.getElementById(n);'.
-            'e.style.display="none";'.
-        '}'
-        );
-
-        $this->registerJsFunction(
-        // Makes element with name "n" visible in browser
-        'function show_el(n)'.
-        '{'.
-            'var e=document.getElementById(n);'.
-            'e.style.display="";'.
-        '}'
-        );
-
-        $this->registerJsFunction(
-        // Toggles element with name "n" between visible and hidden
-        'function toggle_el(n)'.
-        '{'.
-            'var e=document.getElementById(n);'.
-            'e.style.display=(e.style.display?"":"none");'.
-        '}'
-        );
-
         if ($this->js_functions)
         {
             $js = '';
