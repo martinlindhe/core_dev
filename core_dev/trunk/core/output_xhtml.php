@@ -135,9 +135,17 @@ function xhtmlImage($_src, $_alt = '')
  *
  * @param $enctype set to "multipart/form-data" to handle file uploads
  */
-function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '')
+function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '', $onsubmit = '')
 {
-    return '<form action="'.$action.'" method="'.$method.'"'.($name ? ' id="'.$name.'" name="'.$name.'"' : '').($enctype ? ' enctype="'.$enctype.'"' : '').'>';
+    if (!in_array($method, array('get', 'post')))
+        throw new Exception ('wierd method '.$method);
+
+    return
+    '<form action="'.$action.'" method="'.$method.'"'.
+    ($name ? ' id="'.$name.'" name="'.$name.'"' : '').
+    ($enctype ? ' enctype="'.$enctype.'"' : '').
+    ($onsubmit ? ' onsubmit="'.$onsubmit.'"' : '').
+    '>';
 }
 
 /**
