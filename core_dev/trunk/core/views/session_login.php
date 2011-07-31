@@ -121,7 +121,16 @@ if ($session->facebook_app_id && !$session->facebook_id) {
     echo '<fb:login-button width="200" max-rows="1" perms="email">Login with Facebook</fb:login-button>';
 }
 
-echo xhtmlForm('login_form');
+$header->registerJsFunction(
+'function validate_login_form(frm)'.
+'{'.
+    'if (!frm.login_usr.value || !frm.login_pwd.value)'.
+        'return false;'.
+    'return true;'.
+'}'
+);
+
+echo xhtmlForm('login_form', '', '', '', 'return validate_login_form(this);');
 
 echo '<table cellpadding="2">';
 echo '<tr>'.

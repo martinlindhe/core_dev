@@ -169,7 +169,7 @@ if ($superadmin_reg)
 
 
 //XXXX use XhtmlForm class, it needs a way to show the images first. also needs a way to show multiple buttons
-echo xhtmlForm('reg_frm', '', 'post', '', 'return validate_reg_form(this);');
+echo xhtmlForm('reg_frm', '', '', '', 'return validate_reg_form(this);');
 echo '<table cellpadding="2">';
 echo '<tr>'.
     '<td>'.t('Username').':</td>'.
