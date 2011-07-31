@@ -135,8 +135,11 @@ function xhtmlImage($_src, $_alt = '')
  *
  * @param $enctype set to "multipart/form-data" to handle file uploads
  */
-function xhtmlForm($name = '', $action = '', $method = 'post', $enctype = '', $onsubmit = '')
+function xhtmlForm($name = '', $action = '', $method = '', $enctype = '', $onsubmit = '')
 {
+    if (!$method)
+        $method = 'post';
+
     if (!in_array($method, array('get', 'post')))
         throw new Exception ('wierd method '.$method);
 

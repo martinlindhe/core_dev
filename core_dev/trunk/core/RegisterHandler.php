@@ -20,6 +20,9 @@ class RegisterHandler
 
     protected $post_reg_callback; ///< function to execute when user registration was complete
 
+    protected $username_minlen = 3;
+    protected $password_minlen = 6;
+
     private function __clone() {}      //singleton: prevent cloning of class
     private function __construct() { }
 
@@ -31,25 +34,28 @@ class RegisterHandler
         return self::$_instance;
     }
 
+    function setUsernameMinlen($n) { if (is_numeric($n)) $this->username_minlen = $n; }
+    function setPasswordMinlen($n) { if (is_numeric($n)) $this->password_minlen = $n; }
+
+    function getUsernameMinlen() { return $this->username_minlen; }
+    function getPasswordMinlen() { return $this->password_minlen; }
+
     function setPostRegistrationCallback($s) { $this->post_reg_callback = $s; }
 
     function register($username, $pwd1, $pwd2)
     {
         $error = ErrorHandler::getInstance();
 
-        $minlen_username = 3;
-        $minlen_password = 4;
-
         $username = trim($username);
         $pwd1     = trim($pwd1);
 
-        if (strlen($username) < $minlen_username) {
-            $error->add('Username must be at least '.$minlen_username.' characters long');
+        if (strlen($username) < $this->username_minlen) {
+            $error->add('Username must be at least '.$this->username_minlen.' characters long');
             return false;
         }
 
-        if (strlen($pwd1) < $minlen_password) {
-            $error->add('Password must be at least '.$minlen_password.' characters long');
+        if (strlen($pwd1) < $this->password_minlen) {
+            $error->add('Password must be at least '.$this->password_minlen.' characters long');
             return false;
         }
 

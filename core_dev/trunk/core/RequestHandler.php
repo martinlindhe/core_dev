@@ -110,9 +110,6 @@ class RequestHandler
             $page->attach( $view->render() );
         }
 
-        if ($error->getErrorCount())
-            $page->attach( $error->render(true) );
-
         if ($this->_controller == 'coredev')
             $file = $page->getCoreDevInclude().'views/coredev.php';
         else
@@ -128,6 +125,10 @@ class RequestHandler
         $view->child  = $this->_child;
 
         $page->attach( $view->render() );
+
+        // this must be done last, so that errors that was created during the view render can be displayed
+        if ($error->getErrorCount())
+            $page->attach( $error->render(true) );
     }
 
 }

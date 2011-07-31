@@ -14,6 +14,24 @@
 
 require_once('UserList.php');
 
+$login_div = 'login_div';
+$reg_div = 'reg_div';
+
+$show_reg_div = false;
+
+if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations))
+{
+    $show_reg_div = true;
+
+    // this must be included here so registration handling can happen first
+    echo '<div id="'.$reg_div.'" style="display:none;">';
+    include('session_register.php');
+    echo '</div>';
+}
+
+if ($session->id)
+    return;
+
 $header->embedCss('
 .login_box{'.
     'font-size:14px;'.
@@ -69,11 +87,10 @@ d($v);
     return;
 }
 
-$login_div = 'login_div';
-
 echo '<div id="'.$login_div.'" class="login_box">';
 
 if ($session->facebook_app_id && !$session->facebook_id) {
+
     echo '<div id="fb-root"></div>';
 
     $header->includeJs('http://connect.facebook.net/en_US/all.js');
@@ -123,13 +140,7 @@ echo '</table>';
 echo '<br/>';
 echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
 
-$show_reg_div = false;
-
-if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations))
-    $show_reg_div = true;
-
 if ($show_reg_div) {
-    $reg_div = 'reg_div';
 
     $header->registerJsFunction(
     'function show_reg_form()'.
@@ -150,18 +161,12 @@ if ($show_reg_div) {
     $x = new XhtmlComponentButton();
     $x->onClick('return show_reg_form();');
     $x->text = 'Register';
+    $x->style = 'font-weight:bold';
     echo $x->render();
 }
 
 echo xhtmlFormClose();
 
 echo '</div>';
-
-
-if ($show_reg_div) {
-    echo '<div id="'.$reg_div.'" style="display:none;">';
-    include('session_register.php');
-    echo '</div>';
-}
 
 ?>

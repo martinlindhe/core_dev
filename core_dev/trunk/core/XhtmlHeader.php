@@ -123,6 +123,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     /** Registers a javascript function */
     function registerJsFunction($code)
     {
+        $code = trim($code);
         if (substr($code, 0, 9) != 'function ')
             throw new Exception ('wierd code: '.$code);
 
