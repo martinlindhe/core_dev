@@ -23,7 +23,7 @@ $container_id = 'cd_c_'.mt_rand();
 
 echo '<div id="'.$container_id .'" style="'.$css.'">';
 
-echo '<a class="closebtn" href="#" onclick="close_profiler();"></a>';
+echo '<a class="closebtn" href="#" onclick="hide_el(\''.$container_id.'\');"></a>';
 
 echo 'core_dev 0.2-svn ';
 
@@ -31,29 +31,15 @@ if (class_exists('SqlHandler')) {
     $db = SqlHandler::getInstance();
 
     if ($db instanceof DatabaseMySQLProfiler)
-        echo $db->renderProfiler();
+        echo $db->renderProfiler();  //XXXXX delete method, use ViewModel directly on view file
 }
 
 if (class_exists('TempStore')) {
     $store = TempStore::getInstance();
-    echo $store->renderStatus();
+    echo $store->renderStatus();    //XXXXX delete method, use ViewModel directly on view file
 }
 
-$pager_id = 'page_prof_'.mt_rand();
-
-$header->embedJs(
-//Toggles element with name "n" between visible and hidden
-'function toggle_page_profiler()'.
-'{'.
-    'var e=document.getElementById("'.$pager_id.'");'.
-    'e.style.display=(e.style.display?"":"none");'.
-'}'.
-'function close_profiler()'.
-'{'.
-    'var e=document.getElementById("'.$container_id.'");'.
-    'e.style.display="none";'.
-'}'
-);
+$prof_id = 'prof_'.mt_rand();
 
 $header->embedCss(
 'a.closebtn'.
@@ -72,7 +58,7 @@ $header->embedCss(
 '}'
 );
 
-echo '| <a href="#" onclick="return toggle_page_profiler();">load</a>';
+echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">load</a>';
 
 $css =
 'display:none;'.
@@ -80,7 +66,7 @@ $css =
 'padding:4px;'.
 'border:#000 1px solid;';
 
-echo '<div id="'.$pager_id.'" style="'.$css.'">';
+echo '<div id="'.$prof_id.'" style="'.$css.'">';
 
 $total_time = microtime(true) - $page->getStartTime();
 
@@ -105,7 +91,7 @@ echo 'Server <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> runn
 echo 'Server time: '.sql_datetime( time() ).' '.date('T').'<br/>';
 echo 'Uptime: '.elapsed_seconds( uptime() ).'<br/>';
 
-echo '</div>'; // closing $pager_id
+echo '</div>'; // closing $prof_id
 
 echo '</div>';
 

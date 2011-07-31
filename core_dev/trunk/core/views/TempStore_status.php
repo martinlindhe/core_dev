@@ -1,16 +1,8 @@
 <?php
 
-$rand_id = mt_rand();
+$tempstore_div = 'tss_'.mt_rand();
 
-$header->embedJs(
-'function toggle_tempstore()'.
-'{'.
-    'var e=document.getElementById("tss_'.$rand_id.'");'.
-    'e.style.display=(e.style.display?"":"none");'.
-'}'
-);
-
-echo ' | <a href="#" onclick="return toggle_tempstore();">tmp</a> ';
+echo ' | <a href="#" onclick="return toggle_el(\''.$tempstore_div.'\');">tmp</a> ';
 
 $temp = TempStore::getInstance();
 
@@ -20,7 +12,7 @@ $css =
 'padding:4px;'.
 'border:#000 1px solid;';
 
-echo '<div id="tss_'.$rand_id.'" style="'.$css.'">';
+echo '<div id="'.$tempstore_div.'" style="'.$css.'">';
 
 foreach ($temp->getServerStats() as $host => $stat)
 {
