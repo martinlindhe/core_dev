@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-//TODO: separate "register user" from here and move into separate view
+//TODO: separate facebook code from here and move into separate view?
 
 //TODO: fix & link to "forgot password", in core/views/session_forgot_pwd.php
 //TODO: use XhtmlForm (?)
@@ -32,8 +32,6 @@ if (!$session->allow_logins) {
     return;
 }
 
-
-//XXX: move facebook-code somewhere else?
 
 require_once( $page->getCoreDevInclude().'../facebook-php-sdk/facebook.php');
 $facebook = new Facebook(
@@ -125,9 +123,12 @@ echo '</table>';
 echo '<br/>';
 echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
 
-if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations)) {
-    // include session_register view as a hidden div
+$show_reg_div = false;
 
+if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations))
+    $show_reg_div = true;
+
+if ($show_reg_div) {
     $reg_div = 'reg_div';
 
     $header->registerJsFunction(
@@ -138,8 +139,17 @@ if (!UserList::getCount() || ($session->allow_logins && $session->allow_registra
     '}'
     );
 
+    $header->registerJsFunction(
+    'function show_login_form()'.
+    '{'.
+        'hide_el("'.$reg_div.'");'.
+        'show_el("'.$login_div.'");'.
+    '}'
+    );
+
     $x = new XhtmlComponentButton();
-    $x->text = ahref_js('Register', 'return show_reg_form();');
+    $x->onClick('return show_reg_form();');
+    $x->text = 'Register';
     echo $x->render();
 }
 
@@ -148,9 +158,10 @@ echo xhtmlFormClose();
 echo '</div>';
 
 
-echo '<div id="'.$reg_div.'" style="display:none;">';
-include('session_register.php');
-echo '</div>';
-
+if ($show_reg_div) {
+    echo '<div id="'.$reg_div.'" style="display:none;">';
+    include('session_register.php');
+    echo '</div>';
+}
 
 ?>
