@@ -65,12 +65,12 @@ echo xhtmlForm('reg_frm', '', '', '', 'return validate_reset_pwd_form(this);');
 echo '<table cellpadding="2">';
 echo '<tr><td>'.t('New password').':</td>'.
     '<td>'.xhtmlPassword('reset_pwd').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
     '</td>'.
     '</tr>';
 echo '<tr><td>'.t('Again').':</td>'.
     '<td>'.xhtmlPassword('reset_pwd2').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Repeat password')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_keys.png', t('Repeat password')).
     '</td>'.
     '</tr>';
 

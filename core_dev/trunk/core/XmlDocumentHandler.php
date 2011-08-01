@@ -26,11 +26,12 @@ class XmlDocumentHandler extends CoreBase
     private $enable_profiler = false;        ///< embed page profiler?
     private $allow_frames    = false;        ///< allow this document to be framed using <frame> or <iframe> ?
     private $cache_duration  = 0;            ///< seconds to allow browser client to cache this result
-    private $mimetype        = '';           ///< "text/html" should be "application/xhtml+xml" but IE8 still cant even understand such a page
+    private $mimetype;
     private $Url;                            ///< Url object
     private $attachment_name;                ///< name of file attachment (force user to save file)
     private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
     private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
+    private $coredev_root;                   ///< web path to core_dev for ajax api calls
     private $upload_root;                    ///< root directory for file uploads
     private $app_root;                       ///< application root directory, currently only used to locate favicon.png for auto conversion to favicon.ico
     private $ts_initial;                     ///< used to measure page load time
@@ -67,6 +68,16 @@ class XmlDocumentHandler extends CoreBase
             throw new Exception ('setCoreDevInclude not configured');
 
         return $this->coredev_inc;
+    }
+
+    function getCoreDevRoot() { return $this->coredev_root; }
+
+    function setCoreDevRoot($s)
+    {
+        if (substr($s, 0, 1) != '/')
+            $s = $this->getRelativeUrl().$s;
+
+        $this->coredev_root = $s;
     }
 
     function getApplicationRoot() { return $this->app_root; }
@@ -140,6 +151,7 @@ class XmlDocumentHandler extends CoreBase
             return;
 
         if (!$this->mimetype)
+            // "text/html" should be "application/xhtml+xml" but IE8 still cant even understand such a page
             $this->mimetype = 'text/html';
 
         header('Content-Type: '.$this->mimetype);

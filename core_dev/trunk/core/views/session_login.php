@@ -148,13 +148,13 @@ echo '<table cellpadding="2">';
 echo '<tr>'.
     '<td>'.t('Username').':</td>'.
     '<td>'.xhtmlInput('login_usr').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
     '</td>'.
     '</tr>';
 echo '<tr>'.
     '<td>'.t('Password').':</td>'.
         '<td>'.xhtmlPassword('login_pwd').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
         '</td>'.
     '</tr>';
 echo '</table>';

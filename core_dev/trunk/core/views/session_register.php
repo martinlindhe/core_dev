@@ -174,17 +174,17 @@ echo '<table cellpadding="2">';
 echo '<tr>'.
     '<td>'.t('Username').':</td>'.
     '<td>'.xhtmlInput('register_usr', !empty($_POST['register_usr']) ? $_POST['register_usr'] : '').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
     '</td>'.
     '</tr>';
 echo '<tr><td>'.t('Password').':</td>'.
     '<td>'.xhtmlPassword('register_pwd').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
     '</td>'.
     '</tr>';
 echo '<tr><td>'.t('Again').':</td>'.
     '<td>'.xhtmlPassword('register_pwd2').' '.
-        xhtmlImage( $header->getCoreDevRoot().'gfx/icon_keys.png', t('Repeat password')).
+        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_keys.png', t('Repeat password')).
     '</td>'.
     '</tr>';
 

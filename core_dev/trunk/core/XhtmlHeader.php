@@ -51,7 +51,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     protected $opensearch      = array();
 
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
-    protected $core_dev_root   = '';       ///< web path to core_dev for ajax api calls
 
     private function __construct() { }
 
@@ -66,9 +65,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     public function handlePost($p) {}
 
     function getFavicon() { return $this->favicon; }
-    function getCoreDevRoot() { return $this->core_dev_root; }
-
-    function setCoreDevRoot($s) { $this->core_dev_root = $s; }
 
     function setTitle($t) { $this->title = $t; }
 
