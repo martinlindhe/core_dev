@@ -68,6 +68,8 @@ class SendMail extends CoreBase
         return self::$_instance;
     }
 
+    function getServer() { return $this->server_host; }
+
     protected static function resetInstance()
     {
 //        self::$from_adr = '';

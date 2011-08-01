@@ -13,12 +13,18 @@
 //TODO cosmetic: mark input field for username or password with a color if empty in validate_login_form()
 
 require_once('UserList.php');
+require_once('SendMail.php');
 
 $login_div = 'login_div';
 $reg_div = 'reg_div';
 $recover_div = 'recover_div';
 
 $show_reg_div = false;
+
+
+// only show "recover password" if mail server is configured
+$show_recover_div = SendMail::getInstance()->getServer() ? true : false;
+
 
 if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations))
 {
@@ -31,11 +37,12 @@ if (!UserList::getCount() || ($session->allow_logins && $session->allow_registra
 }
 
 
-
-echo '<div id="'.$recover_div.'" style="display:none;">';
-include('session_forgot_pwd.php');
-echo '</div>';
-
+if ($show_recover_div)
+{
+    echo '<div id="'.$recover_div.'" style="display:none;">';
+    include('session_forgot_pwd.php');
+    echo '</div>';
+}
 
 if ($session->id)
     return;
@@ -175,25 +182,28 @@ if ($show_reg_div)
     '}'
     );
 
-    $header->registerJsFunction(
-    'function show_recover_form()'.
-    '{'.
-        'hide_el("'.$reg_div.'");'.
-        'show_el("'.$recover_div.'");'.
-    '}'
-    );
-
     $x = new XhtmlComponentButton();
     $x->onClick('return show_reg_form();');
     $x->text = 'Register';
     $x->style = 'font-weight:bold';
     echo $x->render();
 
-    $x = new XhtmlComponentButton();
-    $x->onClick('return show_recover_form();');
-    $x->text = 'Recover password';
-    $x->style = 'font-weight:bold';
-    echo $x->render();
+    if ($show_recover_div)
+    {
+        $header->registerJsFunction(
+        'function show_recover_form()'.
+        '{'.
+            'hide_el("'.$reg_div.'");'.
+            'show_el("'.$recover_div.'");'.
+        '}'
+        );
+
+        $x = new XhtmlComponentButton();
+        $x->onClick('return show_recover_form();');
+        $x->text = 'Recover password';
+        $x->style = 'font-weight:bold';
+        echo $x->render();
+    }
 }
 
 echo xhtmlFormClose();
