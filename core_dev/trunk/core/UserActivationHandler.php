@@ -2,33 +2,23 @@
 /**
  * $Id$
  *
- * Skeleton for auth classes
- *
- * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: xxx
+//STATUS: nonworking. code cleanup / rewrite + accompanying view is needed
 
-//LATER: move activation code to different class?
-
-
-require_once('atom_activation.php');    //for mail activation
-require_once('class.Sendmail.php');        //for sending mail
-
-class xxxx
+class UserActivationHandler
 {
-
     protected $activate_msg =
-        "Hello. Someone (probably you) registered an account from IP __IP__
+        'Hello. Someone (probably you) registered an account from IP @IP@
 
-Username: __USERNAME__
-Activation code: __CODE__
+Username: @USERNAME@
+Activation code: @CODE@
 
 Follow this link to activate your account:
-__URL__
+<a href="@URL@">@URL@</a>
 
-The link will expire in __EXPIRETIME__";
-
+The link will expire in @EXPIRETIME@';
 
 
     /**

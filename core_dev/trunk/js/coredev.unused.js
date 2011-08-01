@@ -67,28 +67,6 @@ function toggle_enabled_element(n)
     e.disabled=!e.disabled;
 }
 
-
-//Toggles element with name "n" between visible and hidden
-function toggle_element(n)
-{
-    var e = document.getElementById(n);
-    e.style.display = (e.style.display?'':'none');
-}
-
-//Makes element with name "n" invisible in browser
-function hide_element(n)
-{
-    var e = document.getElementById(n);
-    e.style.display = 'none';
-}
-
-//Makes element with name "n" visible in browser
-function show_element(n)
-{
-    var e = document.getElementById(n);
-    e.style.display = '';
-}
-
 //This function, as opposed to the ones above, has the
 //browser render the content but show / dont show it
 function set_visible(n)
