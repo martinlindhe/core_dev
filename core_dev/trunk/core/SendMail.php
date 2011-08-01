@@ -16,6 +16,7 @@
 //STATUS: wip
 
 //TODO: untangle smtp class, create a new connect() method
+//XXXX: why are stuff static arrays?
 
 require_once('CoreBase.php');
 require_once('SmtpClient.php');
@@ -34,9 +35,12 @@ class SendMail extends CoreBase
 {
     protected static $_instance; ///< singleton
 
-    protected $smtp;
+    protected $smtp;                         ///< SmtpClient object
     protected $version            = 'core_dev Sendmail 0.9';
     protected $connected          = false;
+
+    protected $server_host, $server_port;
+    protected $username, $password;
 
     protected static $from_adr, $from_name;
     protected static $rply_adr, $rply_name;
@@ -81,14 +85,24 @@ class SendMail extends CoreBase
     {
         mb_internal_encoding('UTF-8');    //XXX: required for utf8-encoded text (php 5.2)
 
-        $this->smtp = new SmtpClient($server, $username, $password, $port);
+        $this->server_host = $server;
+        $this->server_port = $port;
+        $this->username    = $username;
+        $this->password    = $password;
+
         self::$from_adr = $username;
+
+        $this->smtp = new SmtpClient($server, $username, $password, $port);
     }
 
     private function connect()
     {
         if ($this->getDebug())
             $this->smtp->debug = true;
+
+        if (!$this->server_host)
+            // throw new Exception ('No email server configured');
+            return false;
 
         if (!$this->smtp->login())
             throw new Exception ('Cant connect to smtp server');
@@ -196,7 +210,7 @@ class SendMail extends CoreBase
     function embedFile($filename, $cid = '')
     {
         if (!file_exists($filename))
-            throw new Exception ('File ".$filename." not found');
+            throw new Exception ('File '.$filename.' not found');
 
         $a = new MailAttachment();
         $a->data       = file_get_contents($filename);
@@ -212,7 +226,10 @@ class SendMail extends CoreBase
      */
     function send($msg = '')
     {
-        $this->connect();
+        if (!$this->connect()) {
+            dp('SendMail failed to send mail because no mail server configured: '.$msg);
+            return false;
+        }
 
         if (!$this->smtp->_MAIL_FROM(self::$from_adr))
             throw new Exception ('Failed to set from address');

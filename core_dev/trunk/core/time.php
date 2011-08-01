@@ -101,7 +101,12 @@ function num_days($d1, $d2)
  */
 function shortTimePeriod($secs) //XXX rename to something with duration. also see Duration class .. DROP for elapsed_seconds() ?
 {
-    if (is_float($secs)) $secs = ceil($secs);
+    if (is_float($secs))
+        $secs = ceil($secs);
+
+    if (is_duration($secs))
+        $secs = parse_duration($secs);
+
     $retval = '';
 
     //years

@@ -1,21 +1,22 @@
 <?php
 /**
  * Shows a login form with tabs for Register & Forgot password functions
- *
- * The handling of the result variables is handled in $this->handleAuthEvents of class.Auth_Base.php
  */
 
 //STATUS: wip
 
+//TODO: fix & link to "forgot password", in core/views/session_forgot_pwd.php
 //TODO: separate facebook code from here and move into separate view?
 
-//TODO: fix & link to "forgot password", in core/views/session_forgot_pwd.php
 //TODO: use XhtmlForm (?)
+
+//TODO cosmetic: mark input field for username or password with a color if empty in validate_login_form()
 
 require_once('UserList.php');
 
 $login_div = 'login_div';
 $reg_div = 'reg_div';
+$recover_div = 'recover_div';
 
 $show_reg_div = false;
 
@@ -29,11 +30,18 @@ if (!UserList::getCount() || ($session->allow_logins && $session->allow_registra
     echo '</div>';
 }
 
+
+
+echo '<div id="'.$recover_div.'" style="display:none;">';
+include('session_forgot_pwd.php');
+echo '</div>';
+
+
 if ($session->id)
     return;
 
-$header->embedCss('
-.login_box{'.
+$header->embedCss(
+'.login_box{'.
     'font-size:14px;'.
     'border:1px solid #aaa;'.
     'min-width:280px;'.
@@ -61,8 +69,8 @@ $facebook = new Facebook(
 );
 
 $fbsession = $facebook->getSession();
-if ($fbsession) {
-
+if ($fbsession)
+{
     try {
         $fb_me = $facebook->api('/me');
     } catch (FacebookApiException $e) {
@@ -89,8 +97,8 @@ d($v);
 
 echo '<div id="'.$login_div.'" class="login_box">';
 
-if ($session->facebook_app_id && !$session->facebook_id) {
-
+if ($session->facebook_app_id && !$session->facebook_id)
+{
     echo '<div id="fb-root"></div>';
 
     $header->includeJs('http://connect.facebook.net/en_US/all.js');
@@ -149,8 +157,8 @@ echo '</table>';
 echo '<br/>';
 echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
 
-if ($show_reg_div) {
-
+if ($show_reg_div)
+{
     $header->registerJsFunction(
     'function show_reg_form()'.
     '{'.
@@ -167,9 +175,23 @@ if ($show_reg_div) {
     '}'
     );
 
+    $header->registerJsFunction(
+    'function show_recover_form()'.
+    '{'.
+        'hide_el("'.$reg_div.'");'.
+        'show_el("'.$recover_div.'");'.
+    '}'
+    );
+
     $x = new XhtmlComponentButton();
     $x->onClick('return show_reg_form();');
     $x->text = 'Register';
+    $x->style = 'font-weight:bold';
+    echo $x->render();
+
+    $x = new XhtmlComponentButton();
+    $x->onClick('return show_recover_form();');
+    $x->text = 'Recover password';
     $x->style = 'font-weight:bold';
     echo $x->render();
 }

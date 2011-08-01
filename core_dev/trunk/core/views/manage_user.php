@@ -55,7 +55,7 @@ if (!empty($_GET['remove_setting'])) {
 
 // save changes in edited settings
 if (!empty($_POST)) {
-    $settings = SettingsByOwner::getAll(Settings::USER, $user->getId());
+    $settings = SettingsByOwner::getAll(USER, $user->getId());
 
     foreach ($settings as $set)
         if (!empty($_POST['setting_name_'.$set['settingId']]))
@@ -104,7 +104,7 @@ echo xhtmlFormClose().'<br/><br/>';
 
 echo '<h2>User settings</h2>';
 
-$settings = SettingsByOwner::getAll(Settings::USER, $user->getId());
+$settings = SettingsByOwner::getAll(USER, $user->getId());
 echo xhtmlForm('edit_setting');
 echo '<table>';
 echo '<tr><th>Name</th><th>Value</th><th>Delete</th></tr>';

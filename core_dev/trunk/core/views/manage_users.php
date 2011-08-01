@@ -42,7 +42,7 @@ if ($filter)
 echo ' ('.count($list).' hits)</h2>';
 
 $dt = new YuiDatatable();
-$dt->addColumn('id',    'Username', 'link', '/coredev/view/manage_user/', 'name');
+$dt->addColumn('id',    'Username', 'link', relurl('coredev/view/manage_user/'), 'name');
 
 $dt->addColumn('email',             'E-mail');
 $dt->addColumn('time_last_active',  'Last active');

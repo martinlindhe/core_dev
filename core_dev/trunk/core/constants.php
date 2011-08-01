@@ -19,17 +19,17 @@
  */
 
 
-// defines possible object owners
+// defines possible objects and object owners
 define('USER',       1);  ///< normal, public userfile
 define('NEWS',       2);  ///< news categories
 define('BLOG',       3);  ///< normal, personal blog category
 define('WIKI',       4);  ///< category for wiki file attachments, to allow better organization if needed
 define('SITE',       5);  ///< for SITE POLLS etc
 define('FILE',       6);  ///< comments for a file
+define('TOKEN',      7);  ///< activation tokens etc
 
 //define('CONTACT',      11); ///< friend relation category, like "Old friends", "Family"
 //define('LANGUAGE',     14); ///< represents a language, for multi-language features
-//define('GENERIC',      30); ///< generic type
 
 
     //XXX: only enable types when they are used. some should be depreacated

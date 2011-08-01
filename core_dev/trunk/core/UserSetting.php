@@ -13,21 +13,21 @@ class UserSetting
 {
     static function get($id, $name)
     {
-        $setting = new Settings(Settings::USER);
+        $setting = new Settings(USER);
         $setting->setOwner($id);
         return $setting->get($name);
     }
 
     static function set($id, $name, $val)
     {
-        $setting = new Settings(Settings::USER);
+        $setting = new Settings(USER);
         $setting->setOwner($id);
         return $setting->set($name, $val);
     }
 
     static function delete($id, $name)
     {
-        $setting = new Settings(Settings::USER);
+        $setting = new Settings(USER);
         $setting->setOwner($id);
         return $setting->delete($name);
     }

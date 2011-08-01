@@ -7,14 +7,18 @@
  * @author Martin Lindhe, 2007-2009 <martin@startwars.org>
  */
 
-//STATUS: drop all code, make a new mail activation module
+//STATUS: xxx
+
+//LATER: move activation code to different class?
+
 
 require_once('atom_activation.php');    //for mail activation
 require_once('class.Sendmail.php');        //for sending mail
 
-abstract class auth_base___DEPRECATED
+class xxxx
 {
-    public $mail_activate_msg =
+
+    protected $activate_msg =
         "Hello. Someone (probably you) registered an account from IP __IP__
 
 Username: __USERNAME__
@@ -25,25 +29,17 @@ __URL__
 
 The link will expire in __EXPIRETIME__";
 
-    public $mail_password_msg =
-        "Hello. Someone (probably you) asked for a password reset procedure from IP __IP__
 
-Registered username: __USERNAME__
-
-Follow this link to set a new password:
-__URL__
-
-The link will expire in __EXPIRETIME__";
 
     /**
      * Sends a account activation mail to specified user
      *
      * @param $_id user id
      */
-    function sendActivationMail($_id)
+    function xxx_sendActivationMail($_id)
     {
-        global $config;
-        if (!is_numeric($_id)) return false;
+        if (!is_numeric($_id))
+            return false;
 
         $email = loadUserdataEmail($_id);
         if (!$email) return false;
@@ -51,7 +47,7 @@ The link will expire in __EXPIRETIME__";
         $code = generateActivationCode(ACTIVATE_EMAIL, 1000000, 9999999);
         createActivation(ACTIVATE_EMAIL, $code, $_id);
 
-        $subj = t('Account activation');
+        $subj = 'Account activation';
 
         $pattern = array('/__USERNAME__/', '/__IP__/', '/__CODE__/', '/__URL__/', '/__EXPIRETIME__/');
         $replacement = array(
@@ -59,7 +55,7 @@ The link will expire in __EXPIRETIME__";
             client_ip(),
             $code,
             xhtmlGetUrl("activate.php?id=".$_id."&code=".$code),
-            shortTimePeriod($config['activate']['expire_time_email'])
+            shortTimePeriod($this->expire_time_email)
         );
         $msg = preg_replace($pattern, $replacement, $this->mail_activate_msg);
 
@@ -76,12 +72,12 @@ The link will expire in __EXPIRETIME__";
      * @param $_code
      * @return true if success
      */
-    function verifyActivationMail($_id, $_code)
+    function xxx_verifyActivationMail($_id, $_code)
     {
         if (!is_numeric($_id) || !is_numeric($_code)) return false;
 
         if (!verifyActivation(ACTIVATE_EMAIL, $_code, $_id)) {
-            echo t('Activation code is invalid or expired.');
+            echo 'Activation code is invalid or expired.';
             return false;
         }
 
@@ -89,56 +85,8 @@ The link will expire in __EXPIRETIME__";
 
         removeActivation(ACTIVATE_EMAIL, $_code);
 
-        echo t('Your account has been activated.').'<br/>';
-        echo t('You can now proceed to').' <a href="login.php">'.t('log in').'</a>.';
-        return true;
-    }
-
-    /**
-     * Looks up user supplied email address / alias and generates a mail for them if needed
-     *
-     * @param $email email address
-     */
-    function handleForgotPassword($email)
-    {
-        global $config;
-
-        $email = trim($email);
-        if (strpos($email, '@')) {
-            if (!is_email($email)) return false;
-            $_id = findUserByEmail($email);
-        } else {
-            //find user by alias
-            $_id = Users::getId($email);
-        }
-        if (!$_id) {
-            $session->error = t('Invalid email address or username');
-            return false;
-        }
-
-        $email = loadUserdataEmail($_id);
-
-        $code = generateActivationCode(ACTIVATE_CHANGE_PWD, 10000000, 99999999);
-        createActivation(ACTIVATE_CHANGE_PWD, $code, $_id);
-
-        $subj  = t('Forgot password');
-
-        $pattern = array('/__USERNAME__/', '/__IP__/', '/__URL__/', '/__EXPIRETIME__/');
-        $replacement = array(
-            Users::getName($_id),
-            client_ip(),
-            xhtmlGetUrl("reset_password.php?id=".$_id."&code=".$code),
-            shortTimePeriod($config['activate']['expire_time_email'])
-        );
-        $msg = preg_replace($pattern, $replacement, $this->mail_password_msg);
-
-        if (!$this->SmtpSend($email, $subj, $msg)) {
-            removeActivation(ACTIVATE_CHANGE_PWD, $code);
-            $session->error = t('Problems sending mail');
-            return false;
-        }
-
-        $this->resetpwd_sent = true;
+        echo 'Your account has been activated.<br/>';
+        echo 'You can now proceed to <a href="login.php">log in</a>.';
         return true;
     }
 

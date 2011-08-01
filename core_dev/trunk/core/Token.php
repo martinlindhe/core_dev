@@ -12,7 +12,8 @@
 
 //STATUS: wip
 
-//XXX: rework into a static class, when Settings is done
+//XXX: dont extend from Settings. make its own class
+//CODE CLEANUP: use constants.php TOKEN (7) instead of current (4).. will break databases
 
 require_once('Settings.php');
 
@@ -43,7 +44,6 @@ class Token extends Settings
 
         $this->type = Settings::TOKEN;
 
-        // rainbow table proof: session id adjust outcome per user
         do {
             $val = sha1('pOwplopw' . $session->id . mt_rand() . $session->name . 'LAZER!!');
 

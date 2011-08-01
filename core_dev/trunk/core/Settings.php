@@ -9,6 +9,7 @@
 
 //XXX: rework into a static class
 
+require_once('constants.php');
 
 class SettingsByOwner  // XXX rename
 {
@@ -34,7 +35,7 @@ class SettingsByOwner  // XXX rename
 class Settings
 {
     //default types - use id's from 50 and up for application specified types
-    const APPLICATION = 1;
+    const APPLICATION = 1;  /// XXXX LATER: drop all these constants. must be in major core_dev bump because all databases will break. some places use USER (from constants.php), orher this
     const USER        = 2;
     const CUSTOMER    = 3; ///< ApiCustomer setting
     const TOKEN       = 4; ///< Token setting
