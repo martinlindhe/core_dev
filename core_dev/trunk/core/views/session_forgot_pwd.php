@@ -27,8 +27,20 @@ if (isset($_POST['forgot_pwd']))
 }
 
 
+$header->embedCss(
+'.forgot_pwd_box{'.
+    'font-size:14px;'.
+    'border:1px solid #aaa;'.
+    'min-width:280px;'.
+    'color:#000;'.
+    'background-color:#ddd;'.
+    'padding:10px;'.
+    'border-radius:15px 15px 15px 15px;'.      //css3
+    '-moz-border-radius:15px 15px 15px 15px;'. //ff
+'}'
+);
 
-echo '<div id="forgot_pwd_layer">';
+echo '<div id="forgot_pwd_layer" class="forgot_pwd_box">';
 
 echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 echo 'You will recieve an e-mail with a link to follow,<br/>';
@@ -47,6 +59,13 @@ echo
     '</table><br/>';
 
 echo xhtmlSubmit('Forgot password', 'button', 'font-weight: bold');
+
+$x = new XhtmlComponentButton();
+$x->text = 'Cancel';
+$x->onClick('return show_login_form();');
+//$x->style = 'font-weight:bold';
+echo $x->render();
+
 echo xhtmlFormClose();
 
 echo '</div>';

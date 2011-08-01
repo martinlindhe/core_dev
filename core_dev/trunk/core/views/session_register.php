@@ -163,9 +163,9 @@ $header->registerJsFunction(
 
 echo '<div id="login_register_layer" class="register_box">';
 
-echo '<b>'.t('Register new account').'</b><br/><br/>';
+echo '<b>Register new account</b><br/><br/>';
 if ($superadmin_reg)
-    echo '<div class="critical">'.t('The account you create now will be the super administrator account.').'</div><br/>';
+    echo '<div class="critical">The account you create now will be the super administrator account.</div><br/>';
 
 
 //XXXX use XhtmlForm class, it needs a way to show the images first. also needs a way to show multiple buttons

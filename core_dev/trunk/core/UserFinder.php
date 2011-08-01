@@ -3,7 +3,7 @@
  * Helper class for locating users
  */
 
-//STATUS: early wip
+//STATUS: wip
 
 class UserFinder
 {
@@ -14,13 +14,20 @@ class UserFinder
         if (count($res) == 1)
             return $res[0];
 
+        if (count($res) > 1)
+            throw new Exception ('XXX multiple users with same email address');
+
         return false;
     }
 
     /** @return user id */
     static function byUsername($name)
     {
-        throw new Exception ('FIXME implement byUsername');
+        $user = new User($name);
+        if ($user->id)
+            return $user->id;
+
+        return false;
     }
 
 }

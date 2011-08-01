@@ -178,6 +178,7 @@ if ($show_reg_div)
     'function show_login_form()'.
     '{'.
         'hide_el("'.$reg_div.'");'.
+        'hide_el("'.$recover_div.'");'.
         'show_el("'.$login_div.'");'.
     '}'
     );
@@ -193,14 +194,14 @@ if ($show_reg_div)
         $header->registerJsFunction(
         'function show_recover_form()'.
         '{'.
-            'hide_el("'.$reg_div.'");'.
+            'hide_el("'.$login_div.'");'.
             'show_el("'.$recover_div.'");'.
         '}'
         );
 
         $x = new XhtmlComponentButton();
         $x->onClick('return show_recover_form();');
-        $x->text = 'Recover password';
+        $x->text = 'Forgot password';
         $x->style = 'font-weight:bold';
         echo $x->render();
     }
