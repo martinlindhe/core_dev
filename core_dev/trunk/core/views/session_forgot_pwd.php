@@ -3,13 +3,11 @@
  *
  */
 
-//STATUS: xxx
+//STATUS: wip
 
 //TODO!: need a core_dev internal handler to handle the link from the email
 
-
 require_once('ForgotPasswordHandler.php');
-
 
 if ($session->id)
     return;
@@ -42,8 +40,6 @@ if (isset($_POST['forgot_pwd']))
         return;
     }
 }
-
-
 
 echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 echo 'You will recieve an e-mail with a link to follow,<br/>';

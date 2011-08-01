@@ -6,9 +6,7 @@
 //STATUS: wip
 
 //TODO: separate facebook code from here and move into separate view?
-
 //TODO: use XhtmlForm (?)
-
 //TODO cosmetic: mark input field for username or password with a color if empty in validate_login_form()
 
 require_once('UserList.php');

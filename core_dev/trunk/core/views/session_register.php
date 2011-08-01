@@ -9,14 +9,9 @@
 
 //STATUS: wip
 
-// XXXX XHR för att se om användarnamn är ledigt
-
-
-// XXXX js som visuellt visar password strength & "dont match" medans man skriver
-
-
-//XXXX efter form submit, sätt åter fokus på register form div:en
-
+//XXX XHR för att se om användarnamn är ledigt
+//XXX js som visuellt visar password strength & "dont match" medans man skriver
+//XXX efter form submit, sätt åter fokus på register form div:en
 //TODO: send account activation mail
 
 require_once('UserList.php');
