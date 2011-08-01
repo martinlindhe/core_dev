@@ -32,8 +32,10 @@ echo '<b>Forgot password</b><br/><br/>';
 
 if (isset($_POST['forgot_pwd']))
 {
+    $header->embedJsOnload('show_recover_form();');
+
     if (!ForgotPasswordHandler::getInstance()->sendMail($_POST['forgot_pwd']))
-        $error->add = 'The specified email address does not match any registered user.';
+        $error->add('The specified email address does not match any registered user.');
     else {
         echo 'A email has been sent to your mail address with instructions how to reclaim your account.';
         echo '</div>';

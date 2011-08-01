@@ -12,6 +12,9 @@
 require_once('UserList.php');
 require_once('SendMail.php');
 
+if ($session->id)
+    return;
+
 $login_div = 'login_div';
 $reg_div = 'reg_div';
 $recover_div = 'recover_div';
@@ -31,16 +34,12 @@ if ($show_reg_div)
     echo '</div>';
 }
 
-
 if ($show_recover_div)
 {
     echo '<div id="'.$recover_div.'" style="display:none;">';
     include('session_forgot_pwd.php');
     echo '</div>';
 }
-
-if ($session->id)
-    return;
 
 $header->embedCss(
 '.login_box{'.
@@ -164,8 +163,8 @@ if ($show_reg_div)
     $header->registerJsFunction(
     'function show_reg_form()'.
     '{'.
-        'show_el("'.$reg_div.'");'.
         'hide_el("'.$login_div.'");'.
+        'show_el("'.$reg_div.'");'.
     '}'
     );
 

@@ -11,7 +11,6 @@
 
 //XXX XHR för att se om användarnamn är ledigt
 //XXX js som visuellt visar password strength & "dont match" medans man skriver
-//XXX efter form submit, sätt åter fokus på register form div:en
 //TODO: send account activation mail
 
 require_once('UserList.php');
@@ -26,11 +25,14 @@ if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_PO
 {
     $reg = RegisterHandler::getInstance();
 
-    if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']))
+    if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'])) {
         $session->login($_POST['register_usr'], $_POST['register_pwd']);
+        return;
+    }
+
+    // after form submit, put focus back to the register form
+    $header->embedJsOnload('show_reg_form();');
 }
-
-
 
 $header->embedCss(
 '.register_box{'.

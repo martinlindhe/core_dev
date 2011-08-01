@@ -91,12 +91,12 @@ The link will expire in @EXPIRETIME@';
         );
 
         $msg = preg_replace($pattern, $replacement, $this->password_msg);
-//d($msg);
+d($msg);
         $mail = SendMail::getInstance();
         $mail->addRecipient($email);
 
         $mail->setSubject('Forgot password');
-        $mail->send($msg);
+//        $mail->send($msg);
 
         return true;
     }

@@ -10,6 +10,7 @@ $header->registerJsFunction(
 'function show_el(n)'.
 '{'.
     'var e=document.getElementById(n);'.
+//    'if (!e) alert("show_el fail on " + n);'.
     'e.style.display="";'.
 '}'
 );
@@ -19,6 +20,7 @@ $header->registerJsFunction(
 'function hide_el(n)'.
 '{'.
     'var e=document.getElementById(n);'.
+//    'if (!e) alert("hide_el fail on " + n);'.
     'e.style.display="none";'.
 '}'
 );
@@ -28,6 +30,7 @@ $header->registerJsFunction(
 'function toggle_el(n)'.
 '{'.
     'var e=document.getElementById(n);'.
+//    'if (!e) alert("toggle_el fail on " + n);'.
     'e.style.display=(e.style.display?"":"none");'.
 '}'
 );
