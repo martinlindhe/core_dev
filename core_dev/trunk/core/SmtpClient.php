@@ -2,7 +2,8 @@
 /**
  * $Id$
  *
- * Sends mail through a SMTP email server
+ * Sends mail through a SMTP email server.
+ * Use the SendMail class for a easy to use "send mail" API
  *
  * References
  * http://tools.ietf.org/html/rfc5321
@@ -19,8 +20,7 @@
 
 //STATUS: wip
 
-//Use SendMail class for a easy to use "send mail" API
-
+//FIXME: smtp.banhof.se dont work with this: smtp->_AUTH() PLAIN [502]: Error: command not implemented
 //VERIFY: different AUTH methods against different SMTP servers
 //VERIFY: do all AUTH methods work with non-latin1 letters in username & password?
 //VERIFY: do HELO work on a non-ESMTP capable server?
@@ -144,6 +144,7 @@ class SmtpClient
         }
 
         $arr = explode("\r\n", $this->lastreply);
+//d($arr);
         $this->servername = array_shift($arr);
 
         foreach ($arr as $line) {
@@ -274,14 +275,13 @@ class SmtpClient
             }
             return true;
         }
-
+//d($this->ability);
         //Defaults to "AUTH PLAIN" if the server is not ESMTP-capable (FIXME: verify with non-capable server)
         $this->write('AUTH PLAIN');
         if ($this->status == 503) return true; //authentication not enabled
-        if ($this->status != 334) {
-            echo "smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply.ln();
-            return false;
-        }
+        if ($this->status != 334)
+            throw new Exception ("smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply);
+
         $cmd = base64_encode(chr(0).$this->username.chr(0).$this->password);
         $this->write($cmd);
         if ($this->status != 235) {

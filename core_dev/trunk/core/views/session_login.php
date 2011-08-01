@@ -5,7 +5,6 @@
 
 //STATUS: wip
 
-//TODO: fix & link to "forgot password", in core/views/session_forgot_pwd.php
 //TODO: separate facebook code from here and move into separate view?
 
 //TODO: use XhtmlForm (?)
@@ -19,17 +18,15 @@ $login_div = 'login_div';
 $reg_div = 'reg_div';
 $recover_div = 'recover_div';
 
-$show_reg_div = false;
+// only show "register user" if initial setup or if config allows it
+$show_reg_div = !UserList::getCount() || ($session->allow_logins && $session->allow_registrations);
 
 
 // only show "recover password" if mail server is configured
 $show_recover_div = SendMail::getInstance()->getServer() ? true : false;
 
-
-if (!UserList::getCount() || ($session->allow_logins && $session->allow_registrations))
+if ($show_reg_div)
 {
-    $show_reg_div = true;
-
     // this must be included here so registration handling can happen first
     echo '<div id="'.$reg_div.'" style="display:none;">';
     include('session_register.php');
@@ -61,7 +58,7 @@ $header->embedCss(
 );
 
 if (!$session->allow_logins) {
-    echo '<div class="critical">'.t('Logins are currently not allowed.').'<br/>'.t('Please try again later.').'</div>';
+    echo '<div class="critical">Logins are currently not allowed.<br/>Please try again later.</div>';
     return;
 }
 

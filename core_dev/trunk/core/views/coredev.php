@@ -43,6 +43,14 @@ case 'file':
     echo FileInfo::passthru($this->owner);
     die;
 
+
+case 'reset_password':
+    // allows users who lost their password to reset it by following a email-link to this view
+    $view = new ViewModel('views/session_reset_pwd.php');
+    $view->registerVar('token', $this->owner);
+    echo $view->render();
+    break;
+
 case 'admin':
     $session->requireSuperAdmin();
 

@@ -12,23 +12,37 @@
 
 //STATUS: wip
 
-//XXX: dont extend from Settings. make its own class
+//XXX: dont extend from Settings. make its own class? make class fully static
 //CODE CLEANUP: use constants.php TOKEN (7) instead of current (4).. will break databases
 
 require_once('Settings.php');
 
 class Token extends Settings
 {
-    function getOwner($name, $val)
+    function __construct()
     {
         $this->type = Settings::TOKEN;
-        return parent::getOwner($name, $val);
     }
 
-    function get($name, $default = '')
+    function exists($name, $val)
     {
-        $this->type = Settings::TOKEN;
-        return parent::get($name, $default);
+        $id = $this->getOwner($name, $val);
+        if ($id)
+            return true;
+        return false;
+    }
+
+    /** @return true if token is expired or dont exists */
+    function isExpired($name, $val, $duration)
+    {
+        $ts = $this->getTimeSaved($name, $val);
+        if (!$ts)
+            return true;
+
+        if (ts($ts) < time() - parse_duration($duration))
+            return true;
+
+        return false;
     }
 
     /**
@@ -41,8 +55,6 @@ class Token extends Settings
             return false;
 
         $session = SessionHandler::getInstance();
-
-        $this->type = Settings::TOKEN;
 
         do {
             $val = sha1('pOwplopw' . $session->id . mt_rand() . $session->name . 'LAZER!!');

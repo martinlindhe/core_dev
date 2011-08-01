@@ -65,6 +65,16 @@ class Settings
 
     function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
 
+    function getTimeSaved($name, $val)
+    {
+        $db = SqlHandler::getInstance();
+
+        $q =
+        'SELECT timeSaved FROM tblSettings'.
+        ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
+        return $db->pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
+    }
+
     function get($name, $default = '')
     {
         $db = SqlHandler::getInstance();

@@ -223,7 +223,7 @@ class User
      * @param $_id user id
      * @param $_pwd password to set
      */
-    function setPassword($_pwd)
+    function setPassword($pwd)
     {
         $db = SqlHandler::getInstance();
         $session = SessionHandler::getInstance();
@@ -231,7 +231,7 @@ class User
         $db->pUpdate(
         'UPDATE tblUsers SET userPass = ? WHERE userId = ?',
         'si',
-        sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($_pwd) ),
+        sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
         $this->id
         );
 

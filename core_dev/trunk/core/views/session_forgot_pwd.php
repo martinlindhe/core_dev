@@ -14,19 +14,6 @@ require_once('ForgotPasswordHandler.php');
 if ($session->id)
     return;
 
-if (isset($_POST['forgot_pwd']))
-{
-    $check = new ForgotPasswordHandler();
-
-    if (!$check->sendMail($_POST['forgot_pwd']))
-        $error->add = 'The specified email address does not match any registered user.';
-    else {
-        echo 'A email has been sent to your mail address with instructions how to reclaim your account.';
-        return;
-    }
-}
-
-
 $header->embedCss(
 '.forgot_pwd_box{'.
     'font-size:14px;'.
@@ -41,6 +28,22 @@ $header->embedCss(
 );
 
 echo '<div id="forgot_pwd_layer" class="forgot_pwd_box">';
+
+
+echo '<b>Forgot password</b><br/><br/>';
+
+if (isset($_POST['forgot_pwd']))
+{
+    if (!ForgotPasswordHandler::getInstance()->sendMail($_POST['forgot_pwd']))
+        $error->add = 'The specified email address does not match any registered user.';
+    else {
+        echo 'A email has been sent to your mail address with instructions how to reclaim your account.';
+        echo '</div>';
+        return;
+    }
+}
+
+
 
 echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 echo 'You will recieve an e-mail with a link to follow,<br/>';

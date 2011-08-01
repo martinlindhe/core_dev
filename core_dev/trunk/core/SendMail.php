@@ -107,7 +107,7 @@ class SendMail extends CoreBase
             return false;
 
         if (!$this->smtp->login())
-            throw new Exception ('Cant connect to smtp server');
+            throw new Exception ('Cant connect to smtp server '.$this->server_host.':'.$this->server_port);
 
         $this->connected = true;
     }
