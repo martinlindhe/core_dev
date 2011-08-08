@@ -155,15 +155,18 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function render()
     {
-        $session = SessionHandler::getInstance();
         $page = XmlDocumentHandler::getInstance();
 
-        //XXX move out of here?
-        if ($session->facebook_app_id)
-        {
-            $this->includeJs( $page->getScheme().'://connect.facebook.net/en_US/all.js');
+        if (class_exists('SessionHandler')) {
+            $session = SessionHandler::getInstance();
 
-            $page->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
+            //XXX move out of here?
+            if ($session->facebook_app_id)
+            {
+                $this->includeJs( $page->getScheme().'://connect.facebook.net/en_US/all.js');
+
+                $page->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
+            }
         }
 
         $res = '<head>';
@@ -228,7 +231,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             $res .= js_reload($this->reload_time * 1000);
 
         //XXX move out of here?
-        if ($session->facebook_app_id)
+        if (class_exists('SessionHandler') && $session->facebook_app_id)
         {
             $res .= '<div id="fb-root"></div>'; // required for Facebook API
 
