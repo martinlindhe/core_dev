@@ -36,11 +36,11 @@ class FacebookUser extends User
 class User
 {
     var $id;
-    var $type = USER_REGULAR;               ///< user type USER_REGULAR or USER_FACEBOOK
-    var $name;               ///< username
+    var $type = USER_REGULAR;  ///< user type USER_REGULAR or USER_FACEBOOK
+    var $name;                 ///< username
     var $time_created;
     var $time_last_active;
-    var $last_ip;            ///< the IP address used for the most recent login
+    var $last_ip;              ///< the IP address used for the most recent login
     var $email;
     var $userlevel = 0;
     var $is_online = false;
@@ -76,6 +76,7 @@ class User
     function getTimeCreated() { return $this->time_created; }
     function getTimeLastActive() { return $this->time_last_active; }
     function getLastIp() { return $this->last_ip; }
+    function getType() { return $this->type; }
 
     function getEmail() { return $this->email; }
 

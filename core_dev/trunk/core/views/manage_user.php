@@ -26,6 +26,15 @@ if (!$user->getId()) {
 
 echo '<h1>User admin for '.$user->getName().'</h1>';
 
+if ($user->getType() == USER_FACEBOOK)
+{
+    echo '<h2>Facebook account</h2>';
+    echo 'Fb username: '.UserSetting::get($user->id, 'fb_name').'<br/>';
+    echo 'Fb picture: <img src="'.UserSetting::get($user->id, 'fb_picture').'"/><br/>';
+    $fburl = 'http://www.facebook.com/profile.php?id='.$user->name;
+    echo 'Fb profile: <a href="'.$fburl.'" target="_blank">'.$fburl.'</a><br/>';
+}
+
 echo 'Last IP: '.$user->getLastIp().'<br/>';
 echo '<br/>';
 
