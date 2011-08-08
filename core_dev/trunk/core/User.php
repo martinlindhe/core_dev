@@ -16,10 +16,28 @@ define('USERLEVEL_SUPERADMIN',  3);
 
 require_once('UserSetting.php');
 
+define('USER_NORMAL',   1);
+define('USER_FACEBOOK', 2);
+
+class FacebookUser extends User
+{
+    function __construct($fbid)
+    {
+        $this->type = USER_FACEBOOK;
+        if (!$this->loadByName($fbid)) // tblUsers.userName = facebook id
+        {
+            // create a new user entry for this facebook id
+            $this->create($fbid, USER_FACEBOOK);
+            $this->setPassword('');
+        }
+    }
+}
+
 class User
 {
     var $id;
-    var $name;
+    var $type;               ///< user type USER_NORMAL or USER_FACEBOOK
+    var $name;               ///< username
     var $time_created;
     var $time_last_active;
     var $last_ip;            ///< the IP address used for the most recent login
@@ -29,6 +47,7 @@ class User
 
     function __construct($s = 0)
     {
+        $this->type = USER_NORMAL;
         if ($s && is_numeric($s))
             $this->loadById($s);
         else if (is_string($s))
@@ -50,7 +69,10 @@ class User
     function getTimeCreated() { return $this->time_created; }
     function getTimeLastActive() { return $this->time_last_active; }
     function getLastIp() { return $this->last_ip; }
+
     function getEmail() { return $this->email; }
+
+    function setEmail($val) { $this->saveSetting('email', $val); }
 
     function isOnline()
     {
@@ -63,6 +85,7 @@ class User
     function loadFromSql($row)
     {
         $this->id               = $row['userId'];
+        $this->type             = $row['userType'];
         $this->name             = $row['userName'];
         $this->time_created     = $row['timeCreated'];
         $this->time_last_active = $row['timeLastActive'];
@@ -134,7 +157,7 @@ class User
     /**
      * Creates a new user
      */
-    function create($username)
+    function create($username, $type = USER_NORMAL)
     {
         $db = SqlHandler::getInstance();
         $username = trim($username);
@@ -143,13 +166,16 @@ class User
         if ($user->loadByName($username))
             return false;
 
-        $q = 'INSERT INTO tblUsers SET timeCreated=NOW(),userName = ?';
-        $this->id   = $db->pInsert($q, 's', $username);
         $this->name = $username;
+        $this->type = $type;
+        $this->last_ip = client_ip();
+
+        $q = 'INSERT INTO tblUsers SET timeCreated=NOW(),userName = ?,userType = ?, lastIp = ?';
+        $this->id = $db->pInsert($q, 'sis', $this->name, $this->type, $this->last_ip);
 
         $session = SessionHandler::getInstance();
 
-        dp($session->getUsername().' created user '.$this->name.' ('.$this->id.')');
+        dp($session->getUsername().' created user '.$this->name.' ('.$this->id.') of type '.$this->type);
 
         return $this->id;
     }
@@ -251,7 +277,16 @@ class User
         if (!$this->id)
             return t('Anonymous');
 
-        return $this->name;
+        switch ($this->type) {
+        case USER_NORMAL: return $this->name;
+        case USER_FACEBOOK:
+            $name = UserSetting::get($this->id, 'fb_name');
+            //$pic = UserSetting::get($this->id, 'fb_picture');
+            return $name.' (facebook)';
+//            return '<fb:name uid="'.$this->name.'" useyou="false"></fb:name>';
+
+        default: throw new Exception ('hm');
+        }
     }
 
 }

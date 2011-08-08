@@ -47,7 +47,14 @@ class Url extends CoreProperty
         return $res;
     }
 
-    function getHost() { return $this->host; }
+    function getHost()
+    {
+        if (($this->scheme == 'http'  && $this->port != 80) ||
+            ($this->scheme == 'https' && $this->port != 443))
+            return $this->host.':'.$this->port;
+
+        return $this->host;
+    }
 
     /** @return url path excluding hostname */
     function getPath($safe = false)

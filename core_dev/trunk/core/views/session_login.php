@@ -5,14 +5,17 @@
 
 //STATUS: wip
 
-//TODO: separate facebook code from here and move into separate view?
+//TODO: make facebook javascript login code work
 //TODO: use XhtmlForm (?)
 //TODO cosmetic: mark input field for username or password with a color if empty in validate_login_form()
 
 require_once('UserList.php');
 require_once('SendMail.php');
 
-if ($session->id)
+if ($session->facebook_app_id)
+    $session->handleFacebookLogin();
+
+if ($session->id || $session->facebook_id)
     return;
 
 $login_div = 'login_div';
@@ -59,75 +62,15 @@ if (!$session->allow_logins) {
     return;
 }
 
-
-require_once( $page->getCoreDevInclude().'../facebook-php-sdk/facebook.php');
-$facebook = new Facebook(
-    array(
-        'appId'  => $session->facebook_app_id,
-        'secret' => $session->facebook_secret,
-        'cookie' => true
-    )
-);
-
-$fbsession = $facebook->getSession();
-if ($fbsession)
-{
-    try {
-        $fb_me = $facebook->api('/me');
-    } catch (FacebookApiException $e) {
-        d( $e );
-        error_log($e);
-        return;
-    }
-
-    $session->facebook_id = $facebook->getUser();
-
-    echo "LOGGED IN FBID ".$session->facebook_id;
-    //XXX load or create user-id for this facebook-id
-
-$x = 'https://graph.facebook.com/'.$session->facebook_id.'?fields=email,name,picture&access_token='.$fbsession['access_token'];
-$v = file_get_contents($x);
-d($v);
-//XXXX: has facebook email adresss
-///XXX: has facebook profile picture
-
-    echo '<a href="'.$facebook->getLogoutUrl().'"><img src="http://static.ak.fbcdn.net/rsrc.php/z2Y31/hash/cxrz4k7j.gif"></a>';
-
-    return;
-}
-
 echo '<div id="'.$login_div.'" class="login_box">';
 
 if ($session->facebook_app_id && !$session->facebook_id)
 {
-    echo '<div id="fb-root"></div>';
-
-    $header->includeJs('http://connect.facebook.net/en_US/all.js');
-    echo js_embed(
-    'window.fbAsyncInit = function() {'.
-        'FB.init({'.
-            'appId:"'.$session->facebook_app_id.'",'.
-            ($fbsession ? 'session:"'.json_encode($fbsession).'",' : ''). // don't refetch the session when PHP already has it
-            'status:true,'. // check login status
-            'cookie:true,'. // enable cookies to allow the server to access the session
-            'xfbml:true'.   // parse XFBML
-        '});'.
-
-        // whenever the user logs in, we refresh the page
-        'FB.Event.subscribe("auth.login", function() {'.
-            'window.location.reload();'.
-        '});'.
-    '};'.
-
-    '(function() {'.
-        'var e = document.createElement("script");'.
-        'e.src = document.location.protocol + "//connect.facebook.net/en_US/all.js";'.
-        'e.async = true;'.
-        'document.getElementById("fb-root").appendChild(e);'.
-    '}());'
-    );
-
+    /*
     echo '<fb:login-button width="200" max-rows="1" perms="email">Login with Facebook</fb:login-button>';
+    */
+
+    echo '<a href="'.$session->fb_handle->getLoginUrl().'">Login with Facebook</a>';
 }
 
 $header->registerJsFunction(

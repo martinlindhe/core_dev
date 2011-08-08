@@ -23,20 +23,20 @@ require_once('CoreBase.php');
 require_once('User.php');
 require_once('ErrorHandler.php');
 
-class SessionHandler extends CoreBase
+require_once('/home/ml/dev/core_dev/facebook-php-sdk/facebook.php');
+
+class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 {
     static $_instance;             ///< singleton
 
-    var $id;
-    var $ip;                       /// current IP address
-    var $username;
+    var $id;                       ///< internal user id (tblUsers.userId)
+    var $type = 'normal';          ///< 'normal' or 'facebook' session
+    var $ip;                       ///< current IP address
+    var $username;                 ///< stores "facebook id" for facebook users, otherwise unique username
     var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
     var $referer;                  ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
     var $timeout        = 86400;   ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
-    var $facebook_app_id;          ///< facebook app id, enables "login with facebook"?
-    var $facebook_secret;          ///< facebook secret
-    var $facebook_id;              ///< "fbid" facebook user id
 
     var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
@@ -51,6 +51,11 @@ class SessionHandler extends CoreBase
     var $allow_logins        = true; ///< do app currently allow logins?
     var $allow_registrations = true; ///< do app currently allow registrations?
     protected $encrypt_key   = '';
+
+    var $fb_handle;                ///< points to Facebook object
+    var $facebook_app_id;          ///< facebook app id, enables "login with facebook"?
+    protected $facebook_secret;    ///< facebook secret
+    var $facebook_id;              ///< facebook user id "fbid"
 
     private function __construct() { }
     private function __clone() {}      //singleton: prevent cloning of class
@@ -84,6 +89,8 @@ class SessionHandler extends CoreBase
     function getUsername() { return $this->username; }
     function getLastActive() { return $this->last_active; }
 
+    function setUsername($s) { $this->username = $s; }
+
     function allowLogins($b) { $this->allow_logins = $b; }
     function allowRegistrations($b) { $this->allow_registrations = $b; }
 
@@ -94,6 +101,11 @@ class SessionHandler extends CoreBase
     {
         $this->facebook_app_id = $app_id;
         $this->facebook_secret = $secret;
+
+        $this->fb_handle = new Facebook(array(
+            'appId'  => $this->facebook_app_id,
+            'secret' => $this->facebook_secret
+        ));
     }
 
     /**
@@ -103,7 +115,7 @@ class SessionHandler extends CoreBase
      * @param $pwd
      * @return true on success
      */
-    function login($username, $pwd)
+    function login($username, $pwd, $type = 'normal')
     {
         $db      = SqlHandler::getInstance();
         $error   = ErrorHandler::getInstance();
@@ -116,28 +128,40 @@ class SessionHandler extends CoreBase
         $username = trim($username);
         $pwd      = trim($pwd);
 
-        $user = new User($username);
+        switch ($type) {
+        case 'normal':
+            $user = new User($username);
+            break;
+
+        case 'facebook':
+            $user = new FacebookUser($username);
+            break;
+        default: throw new Exception ('hmm '.$type);
+        }
+
         if (!$user->getId()) {
-            $error->add('Login failed');
+            $error->add('Login failed - user not found1');
             return false;
         }
 
-        $x = $db->pSelectItem('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND timeDeleted IS NULL',
-        'iss',
+        $x = $db->pSelectItem('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND userType=? AND timeDeleted IS NULL',
+        'issi',
         $user->getId(),
         $username,
-        sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) )  // encrypted password
+        sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) ),  // encrypted password
+        $user->type
         );
 
         if (!$x) {
             dp('Failed login attempt: username '.$username);
-            $error->add('Login failed');
+            $error->add('Login failed - user not found2');
             return false;
         }
 
         $this->id = $user->getId();
         $this->ip = client_ip();
         $this->username = $username;
+        $this->type = $type;
 
         $this->usermode = $user->getUserLevel();
 
@@ -158,6 +182,7 @@ class SessionHandler extends CoreBase
         $_SESSION['isSuperAdmin'] = $this->isSuperAdmin;
         $_SESSION['referer']      = $this->referer;
         $_SESSION['ip']           = $this->ip;
+        $_SESSION['type']         = $this->type;
         $_SESSION['last_active']  = time();
         session_write_close();
 
@@ -182,8 +207,9 @@ class SessionHandler extends CoreBase
         ini_set('session.cookie_lifetime', $this->timeout); // in seconds
         ini_set('session.gc_maxlifetime', $this->timeout);  // in seconds
 
-        if (!session_start())
-            throw new Exception ('failed to start session');
+        if (!session_id())
+            if (!session_start())
+                throw new Exception ('failed to start session');
 
         if (empty($_SESSION['id']))
             return;
@@ -200,7 +226,11 @@ class SessionHandler extends CoreBase
         $this->isSuperAdmin = &$_SESSION['isSuperAdmin'];
         $this->referer      = &$_SESSION['referer'];
         $this->ip           = &$_SESSION['ip'];
+        $this->type         = &$_SESSION['type'];
         $this->last_active  = &$_SESSION['last_active'];
+
+        if ($this->type == 'facebook')
+            $this->facebook_id = $this->username;
     }
 
     /** Logs out the user */
@@ -208,15 +238,24 @@ class SessionHandler extends CoreBase
     {
         dp($this->username.' logged out');
 
+        if (!$this->id)
+            throw new Exception ('already logged out');
+
         $db = SqlHandler::getInstance();
         $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
 
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 604800, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
 
-        $this->end();
+        if ($this->type == 'facebook')
+        {
+            header('Location: '.$this->fb_handle->getLogoutUrl() );
+            $this->end();
+            die;
+        }
 
         $this->showLoggedOutStartPage();
+        $this->end();
         die;
     }
 
@@ -227,6 +266,7 @@ class SessionHandler extends CoreBase
     {
         $this->id           = 0;
         $this->ip           = '';
+        $this->type         = 'normal';
         $this->username     = '';
         $this->usermode     = 0;
         $this->referer      = '';
@@ -399,6 +439,50 @@ class SessionHandler extends CoreBase
     function showLoggedOutStartPage()
     {
        js_redirect($this->logged_out_start_page);
+    }
+
+    function handleFacebookLogin() /// XXXX move to own class?
+    {
+        if ($this->facebook_id)
+            throw new Exception ('wiee! already handled');
+
+        $fbuser = $this->fb_handle->getUser();
+        if (!$fbuser)
+            return false;
+
+        try {
+            $fb_me = $this->fb_handle->api('/me');
+
+        } catch (FacebookApiException $e) {
+            d( $e );
+            error_log($e);
+            return false;
+        }
+
+        $this->type = 'facebook';
+        $this->username    = $this->fb_handle->getUser();
+        $this->facebook_id = $this->fb_handle->getUser();
+
+        if (!$this->login($this->facebook_id, '', 'facebook'))
+            return false;
+
+        // store email from this result
+        UserSetting::set($this->id, 'email', $fb_me['email']);
+
+        // store fb_name setting with "name" value
+        UserSetting::set($this->id, 'fb_name', $fb_me['name']);
+
+        // fetch email,name,picture
+        $x = 'https://graph.facebook.com/'.$this->fb_handle->getUser().'?fields=email,name,picture&access_token='.$this->fb_handle->getAccessToken();
+        $res = file_get_contents($x);
+        $res = json_decode($res);
+
+//d($res);
+
+        // store fb_picture setting with "picture" value
+        UserSetting::set($this->id, 'fb_picture', $res->picture);
+
+        return true;
     }
 
     function renderLoginForm()

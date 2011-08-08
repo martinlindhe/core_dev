@@ -9,6 +9,8 @@
 
 //STATUS: ok
 
+//XXX: move facebook stuff out of here!
+
 //FIXME all code should use registerJsFunction instead of embedJs!!!
 
 require_once('CoreBase.php');
@@ -153,6 +155,13 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function render()
     {
+        $session = SessionHandler::getInstance();
+        $page = XmlDocumentHandler::getInstance();
+
+        //XXX move out of here?
+        if ($session->facebook_app_id)
+            $this->includeJs( $page->getScheme().'://connect.facebook.net/en_US/all.js');
+
         $res = '<head>';
 
         if ($this->title)
@@ -213,6 +222,23 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         if ($this->reload_time)
             $res .= js_reload($this->reload_time * 1000);
+
+        //XXX move out of here?
+        if ($session->facebook_app_id)
+        {
+            $res .= '<div id="fb-root"></div>'; // required for Facebook API
+
+            $res .= js_embed(
+            'FB.init({'.
+                'appId:"'.$session->facebook_app_id.'",'.
+                'status:true,'. // fetch fresh status
+                'cookie:true,'. // enable cookie support
+                'xfbml:true,'.  // parse XFBML tags
+                'channelURL:"'.$page->getUrl().'coredev/fbchannel",'. // channel.html file
+        //        'oauth:true'.   // enable OAuth 2.0   XXX dont work with stable Chrome at 2011.08.08
+            '});'
+            );
+        }
 
         return $res;
     }

@@ -62,6 +62,9 @@ class XmlDocumentHandler extends CoreBase
     /** @return domain name part of base URL to website */
     function getHostName() { return $this->Url->getHost(); }
 
+    /** @return "http" or "https" */
+    function getScheme() { return $this->Url->getScheme(); }
+
     function getCoreDevInclude()
     {
         if (!$this->coredev_inc)
@@ -78,6 +81,14 @@ class XmlDocumentHandler extends CoreBase
             $s = $this->getRelativeUrl().$s;
 
         $this->coredev_root = $s;
+    }
+
+    /** @return full url to core_dev root */
+    function getCoreDevUrl()
+    {
+        $t = new Url( $this->getUrl() );
+        $t->setPath( $this->getCoreDevRoot() );
+        return $t->get();
     }
 
     function getApplicationRoot() { return $this->app_root; }
@@ -187,7 +198,7 @@ class XmlDocumentHandler extends CoreBase
         // DISABLED FOR NOW! we need to eliminate inline javascript due to base restriction "No inline scripts will execute":
         // https://wiki.mozilla.org/Security/CSP/Specification#Base_Restrictions
 
-        // header("X-Content-Security-Policy: allow 'self' yui.yahooapis.com");
+//        header("X-Content-Security-Policy: allow 'self' http://yui.yahooapis.com http://connect.facebook.net");
     }
 
     /**
