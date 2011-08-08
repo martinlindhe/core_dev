@@ -64,6 +64,14 @@ class User
         );
     }
 
+    static function getUserTypes()
+    {
+        return array(
+        USER_NORMAL    => 'Normal',
+        USER_FACEBOOK  => 'Facebook',
+        );
+    }
+
     function getId() { return $this->id; }
     function getName() { return $this->name; }
     function getTimeCreated() { return $this->time_created; }
