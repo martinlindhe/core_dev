@@ -35,7 +35,7 @@ class SqlFactory
 
         $db = new $class();
 
-        if (!($db instanceof  IDB_SQL))
+        if (!($db instanceof IDB_SQL))
             throw new Exception('Database driver must implement IDB_SQL');
 
         return $db;

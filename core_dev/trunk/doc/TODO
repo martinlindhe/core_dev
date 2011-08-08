@@ -1,9 +1,9 @@
 BEFORE 1.0 (201?):
 
     * Login with Facebook:
+        - cleanup of facebook connect code, should subclass SessionHandler- but how do we then get correct instance later? like with sql?
         - ability to link a Facebook account with a regular account, XXX always give privilegies to regular account
-        - ability to "login with facebook" and get logged in to the linked priviliegied account
-        - cleanup of facebook connect code
+        - ability to "login with facebook" and get logged in to the linked privilegied account
         - if using a linked account, show facebook info on user rendered link
 
     * make a script that updates tables to current structure by adding / renaming columns & changing datatypes from a description

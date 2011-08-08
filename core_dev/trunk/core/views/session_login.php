@@ -66,9 +66,7 @@ echo '<div id="'.$login_div.'" class="login_box">';
 
 if ($session->facebook_app_id && !$session->facebook_id)
 {
-    /*
     echo '<fb:login-button width="200" max-rows="1" perms="email">Login with Facebook</fb:login-button>';
-    */
 
     echo '<a href="'.$session->fb_handle->getLoginUrl().'">Login with Facebook</a>';
 }
