@@ -16,7 +16,7 @@ define('USERLEVEL_SUPERADMIN',  3);
 
 require_once('UserSetting.php');
 
-define('USER_NORMAL',   1);
+define('USER_REGULAR',  1);
 define('USER_FACEBOOK', 2);
 
 class FacebookUser extends User
@@ -36,7 +36,7 @@ class FacebookUser extends User
 class User
 {
     var $id;
-    var $type;               ///< user type USER_NORMAL or USER_FACEBOOK
+    var $type = USER_REGULAR;               ///< user type USER_REGULAR or USER_FACEBOOK
     var $name;               ///< username
     var $time_created;
     var $time_last_active;
@@ -47,7 +47,6 @@ class User
 
     function __construct($s = 0)
     {
-        $this->type = USER_NORMAL;
         if ($s && is_numeric($s))
             $this->loadById($s);
         else if (is_string($s))
@@ -67,7 +66,7 @@ class User
     static function getUserTypes()
     {
         return array(
-        USER_NORMAL    => 'Normal',
+        USER_REGULAR   => 'Regular',
         USER_FACEBOOK  => 'Facebook',
         );
     }
@@ -165,7 +164,7 @@ class User
     /**
      * Creates a new user
      */
-    function create($username, $type = USER_NORMAL)
+    function create($username, $type = USER_REGULAR)
     {
         $db = SqlHandler::getInstance();
         $username = trim($username);
@@ -286,7 +285,7 @@ class User
             return t('Anonymous');
 
         switch ($this->type) {
-        case USER_NORMAL: return $this->name;
+        case USER_REGULAR: return $this->name;
         case USER_FACEBOOK:
             $name = UserSetting::get($this->id, 'fb_name');
             //$pic = UserSetting::get($this->id, 'fb_picture');
