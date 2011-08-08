@@ -88,33 +88,15 @@ class FaqWidget
         );
 
         $header->embedJs(
-        //Makes element with name "n" invisible in browser
-        'function hide_element(n)'.
-        '{'.
-            'var e = document.getElementById(n);'.
-            'e.style.display = "none";'.
-        '}'.
-
-        //Makes element with name "n" visible in browser
-        'function show_element(n)'.
-        '{'.
-            'var e = document.getElementById(n);'.
-            'e.style.display = "";'.
-        '}'.
-
         //focuses on the faq item #i
         'function faq_focus(n)'.
         '{'.
-            'show_element("faq_"+n);'.
-
-            'for (i=0;i<=100;i++) {'.
-                'if (i==n) continue;'.
-                'e = document.getElementById("faq_"+i);'.
-                'if (!e) return;'.
-                'e.style.display = "none";'.    //hide
-                'hide_element("faq_edit_"+i);'.
-                'show_element("faq_holder_"+i);'.
+            'for (i=0;i<'.(count($list)).';i++) {'.
+                ($session->isAdmin ? 'hide_el("faq_edit_"+i);' : '').
+                'show_el("faq_holder_"+i);'.
+                'hide_el("faq_"+i);'.
             '}'.
+            'show_el("faq_"+n);'.
         '}'
         );
 
@@ -129,7 +111,7 @@ class FaqWidget
 
                     if ($session->isAdmin) {
                         echo '<br/><br/>';
-                        echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_element(\'faq_holder_'.$i.'\'); show_element(\'faq_edit_'.$i.'\');"/> ';
+                        echo '<input type="button" class="button" value="'.t('Edit').'" onclick="faq_focus('.$i.'); hide_el(\'faq_holder_'.$i.'\'); show_el(\'faq_edit_'.$i.'\');"/> ';
                         echo '<input type="button" class="button" value="'.t('Delete').'" onclick="document.location=\'?fdel='.$row['faqId'].'\'"/>';
                     }
 
