@@ -247,13 +247,6 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 604800, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
 
-        if ($this->type == 'facebook')
-        {
-            header('Location: '.$this->fb_handle->getLogoutUrl() );
-            $this->end();
-            die;
-        }
-
         $page = XmlDocumentHandler::getInstance();
 
         $show_page = $this->logged_out_start_page ? $this->logged_out_start_page : $page->getRelativeUrl();
@@ -442,15 +435,15 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         if ($this->facebook_id)
             throw new Exception ('wiee! already handled');
 
+        // Get User ID
         $fbuser = $this->fb_handle->getUser();
         if (!$fbuser)
             return false;
 
         try {
-            $fb_me = $this->fb_handle->api('/me');
-
+            $user_profile = $this->fb_handle->api('/me');
         } catch (FacebookApiException $e) {
-            d( $e );
+//            d( $e );
             error_log($e);
             return false;
         }
@@ -463,12 +456,12 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             return false;
 
         // store email from this result
-        UserSetting::set($this->id, 'email', $fb_me['email']);
+        UserSetting::set($this->id, 'email', $user_profile['email']);
 
         // store fb_name setting with "name" value
-        UserSetting::set($this->id, 'fb_name', $fb_me['name']);
+        UserSetting::set($this->id, 'fb_name', $user_profile['name']);
 
-        // fetch email,name,picture
+        // fetch picture
         $x = 'https://graph.facebook.com/'.$this->fb_handle->getUser().'?fields=email,name,picture&access_token='.$this->fb_handle->getAccessToken();
         $res = file_get_contents($x);
         $res = json_decode($res);
