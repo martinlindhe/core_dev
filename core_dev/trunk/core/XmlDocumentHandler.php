@@ -35,7 +35,7 @@ class XmlDocumentHandler extends CoreBase
     private $upload_root;                    ///< root directory for file uploads
     private $app_root;                       ///< application root directory, currently only used to locate favicon.png for auto conversion to favicon.ico
     private $ts_initial;                     ///< used to measure page load time
-    private $xmlns;                          ///< registered XML namespaces
+    private $xmlns = array();                ///< registered XML namespaces
 
     private $objs = array();                 ///< IXmlComponent objects
 
@@ -44,7 +44,6 @@ class XmlDocumentHandler extends CoreBase
     private function __construct()
     {
         $this->ts_initial = microtime(true);
-        $this->registerXmlNs('', 'http://www.w3.org/1999/xhtml');
     }
 
     public static function getInstance()
@@ -282,13 +281,14 @@ class XmlDocumentHandler extends CoreBase
             $lang = LocaleHandler::getInstance()->getLanguageCode();
             echo
             '<?xml version="1.0" encoding="UTF-8"?>'."\n".
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
-            '<html'.
-            ' xml:lang="'.$lang.'"'.
-            ' lang="'.$lang.'"';
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
+
+            echo
+            '<html xml:lang="'.$lang.'" lang="'.$lang.'"'.
+            ' xmlns="http://www.w3.org/1999/xhtml"';
 
             foreach ($this->xmlns as $name => $uri)
-                echo ' xmlns'.($name ? ':'.$name : '').'="'.$uri.'"';
+                echo ' xmlns:'.$name.'="'.$uri.'"';
 
             echo '>'."\n";
             echo $xhtml_head;
