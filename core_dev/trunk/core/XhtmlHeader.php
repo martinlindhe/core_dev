@@ -157,16 +157,12 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     {
         $page = XmlDocumentHandler::getInstance();
 
-        if (class_exists('SessionHandler')) {
-            $session = SessionHandler::getInstance();
+        //XXX move out of here?
+        if (class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
+        {
+            $this->includeJs( $page->getScheme().'://connect.facebook.net/en_US/all.js');
 
-            //XXX move out of here?
-            if ($session->facebook_app_id)
-            {
-                $this->includeJs( $page->getScheme().'://connect.facebook.net/en_US/all.js');
-
-                $page->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
-            }
+            $page->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
         }
 
         $res = '<head>';
@@ -231,14 +227,14 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             $res .= js_reload($this->reload_time * 1000);
 
         //XXX move out of here?
-        if (class_exists('SessionHandler') && $session->facebook_app_id)
+        if (class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
         {
             $res .= '<div id="fb-root"></div>'; // required for Facebook API
 
             $res .= js_embed(
             'window.fbAsyncInit = function() {'.
                 'FB.init({'.
-                    'appId:"'.$session->facebook_app_id.'",'.
+                    'appId:"'.SessionHandler::getInstance()->facebook_app_id.'",'.
                     'status:true,'. // fetch fresh status
                     'cookie:true,'. // enable cookie support
                     'xfbml:true,'.  // parse XFBML tags
