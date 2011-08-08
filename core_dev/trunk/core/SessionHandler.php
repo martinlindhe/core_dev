@@ -40,7 +40,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
     var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
-    var $logged_out_start_page;
+    var $logged_out_start_page;    ///< go to specific page? else root page url will be used
     var $error_page = 'coredev/error';  ///< redirects the user to this page to show errors
 
     var $isWebmaster;              ///< is user webmaster?
@@ -254,7 +254,11 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             die;
         }
 
-        $this->showLoggedOutStartPage();
+        $page = XmlDocumentHandler::getInstance();
+
+        $show_page = $this->logged_out_start_page ? $this->logged_out_start_page : $page->getRelativeUrl();
+
+        header('Location: '.$show_page);
         $this->end();
         die;
     }
@@ -431,14 +435,6 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             js_redirect($this->referer);
 
         js_redirect($this->start_page);
-    }
-
-    /**
-     * Redirects user to default start page (logged out)
-     */
-    function showLoggedOutStartPage()
-    {
-       js_redirect($this->logged_out_start_page);
     }
 
     function handleFacebookLogin() /// XXXX move to own class?
