@@ -144,7 +144,7 @@ class YuiDatatable
 
         case 'link':
             $col->formatter  = 'formatLink';
-            $col->extra_data = $extra;
+            $col->extra_data = relurl($extra);
             $col->col_label  = $col_label;
             $this->addHiddenColumn($col_label);
             break;

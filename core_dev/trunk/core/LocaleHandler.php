@@ -162,8 +162,8 @@ define('LANG_ENG', 2);
 function language($n)
 {
     switch ($n) {
-    case LANG_ENG: return 'English';
     case LANG_SWE: return 'Swedish';
+    case LANG_ENG: return 'English';
     default: throw new Exception ('language unknown: '.$n);
     }
 }
@@ -171,8 +171,8 @@ function language($n)
 function getLanguages()
 {
     return array(
-    LANG_ENG => 'English',
     LANG_SWE => 'Swedish',
+    LANG_ENG => 'English',
     );
 }
 
