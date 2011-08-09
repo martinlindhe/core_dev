@@ -18,14 +18,14 @@ $header->embedCss(
 echo '<a href="#" onclick="return toggle_el(\''.$sql_div.'\');">'.count($db->queries).' sql</a>';
 
 $sql_time = 0;
-$error = false;
+$show_div = $db->getErrorCount() ? true : false;
 $res = '';
 
 foreach ($db->queries as $prof)
     $res .= $prof->render();
 
 $css =
-($error ? '' : 'display:none;').
+($show_div ? '' : 'display:none;').
 'overflow:auto;'.
 'max-width:400px;'.
 'border:#000 1px solid;';
