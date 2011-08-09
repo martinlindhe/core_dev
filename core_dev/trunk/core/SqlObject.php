@@ -2,12 +2,13 @@
 /**
  * $Id$
  *
+ * Reads database columns into properties of objects
+ *
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
 //STATUS: wip
 
-/** reads all db columns into properties of a object */
 class SqlObject
 {
     /**
@@ -132,13 +133,39 @@ class SqlObject
 
     static function getById($id, $tblname, $classname, $id_field = 'id')
     {
-        if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
+        return self::getByField($id, $tblname, $classname, $id_field);
+    }
+
+    static function getByField($id, $tblname, $classname, $field_name = 'id')
+    {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        $q = 'SELECT * FROM '.$tblname.' WHERE '.$id_field.' = ?';
+        $q = 'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
         $row = SqlHandler::getInstance()->pSelectRow($q, 'i', $id);
 
         return SqlObject::loadObject($row, $classname);
+    }
+
+    /**
+     * Fetches all items where $field_name = $value
+     */
+    static function getAllByField($field_name, $value, $tblname, $classname)
+    {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
+            throw new Exception ('very bad');
+
+        $q =
+        'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
+
+        if (is_numeric($value))
+            $form = 'i';
+        else
+            $form = 's';
+
+        $list = SqlHandler::getInstance()->pSelect($q, $form, $value);
+
+        return SqlObject::loadObjects($list, $classname);
     }
 
     static function updateId($obj, $tblname, $id_field = 'id')
