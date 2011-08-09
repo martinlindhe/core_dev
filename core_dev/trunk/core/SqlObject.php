@@ -20,8 +20,9 @@ class SqlObject
         $db = SqlHandler::getInstance();
 
         if (!$q) {
+            return false;
+//            return new $classname();
 //            throw new Exception ('no query');
-            return new $classname();
         }
 
         $row = is_array($q) ? $q : $db->pSelect($q);
@@ -79,6 +80,9 @@ class SqlObject
 
     static function idExists($id, $tblname, $id_field = 'id')
     {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
+            throw new Exception ('very bad');
+
         $db = SqlHandler::getInstance();
         $q = 'SELECT COUNT(*) FROM '.$tblname.' WHERE '.$id_field.' = ?';
 
@@ -91,6 +95,9 @@ class SqlObject
      */
     static function create($obj, $tblname)
     {
+        if (!is_alphanumeric($tblname))
+            throw new Exception ('very bad');
+
         $db = SqlHandler::getInstance();
 
         $vals = self::reflectQuery($obj);
@@ -100,9 +107,9 @@ class SqlObject
     }
 
     /**
-     * If object was with same name as field in $id_field, already in db, return false
+     * If object exists with same name as field in $id_field, already in db, return false
      */
-    static function storeUnique($obj, $tblname, $id_field)
+    static function storeUnique($obj, $tblname, $id_field = 'id')
     {
         if (self::idExists($obj->$id_field, $tblname, $id_field))
             return false;
@@ -110,8 +117,35 @@ class SqlObject
         return self::create($obj, $tblname);
     }
 
+    /**
+     * If object exists with the same name as field in $id_field, update that item
+     */
+    static function store($obj, $tblname, $id_field = 'id')
+    {
+        if (SqlObject::idExists($obj->$id_field, $tblname, $id_field)) {
+            sqlObject::updateId($obj, $tblname, $id_field);
+            return $obj->id;
+        }
+
+        return SqlObject::create($obj, $tblname);
+    }
+
+    static function getById($id, $tblname, $classname, $id_field = 'id')
+    {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
+            throw new Exception ('very bad');
+
+        $q = 'SELECT * FROM '.$tblname.' WHERE '.$id_field.' = ?';
+        $row = SqlHandler::getInstance()->pSelectRow($q, 'i', $id);
+
+        return SqlObject::loadObject($row, $classname);
+    }
+
     static function updateId($obj, $tblname, $id_field = 'id')
     {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
+            throw new Exception ('very bad');
+
         $db = SqlHandler::getInstance();
 
         $vals = self::reflectQuery($obj, $id_field);

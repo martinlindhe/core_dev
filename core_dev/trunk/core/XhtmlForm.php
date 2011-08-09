@@ -62,8 +62,8 @@ class XhtmlForm
 
         $this->post_handler = $f;
 
-		if (is_object($objectinstance))
-			$this->objectinstance = $objectinstance;
+        if (is_object($objectinstance))
+            $this->objectinstance = $objectinstance;
     }
 
     /**
@@ -278,8 +278,14 @@ class XhtmlForm
     /**
      * Adds a richedit textarea to the form
      */
-    function addRichedit($name, $str, $val = '', $width = 500, $height = 200)
+    function addRichedit($name, $str, $val = '', $width = 0, $height = 0)
     {
+        if (!$width)
+            $width = 440;
+
+        if (!$height)
+            $height = 200;
+
         $this->elems[] = array('type' => 'RICHEDIT', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
     }
 
@@ -401,11 +407,11 @@ class XhtmlForm
     {
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
         {
-			if (!function_exists($this->post_handler))
-				throw new Exception ('FATAL: XhtmlForm post handler "'.$this->post_handler.'" is not defined!');
+            if (!function_exists($this->post_handler))
+                throw new Exception ('FATAL: XhtmlForm post handler "'.$this->post_handler.'" is not defined!');
 
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
-		}
+        }
 
         $this->handle();
 
