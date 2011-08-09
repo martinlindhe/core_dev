@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-//TODO: move setCoreDevInclude to a "core_dev handler" ? or "setup handler", or "config handler" ?
+//XXX: move facebook stuff out of here?
 
 require_once('CoreBase.php');
 require_once('LocaleHandler.php');
@@ -270,14 +270,47 @@ class XmlDocumentHandler extends CoreBase
 
         $this->sendHeaders();
 
+        $header = XhtmlHeader::getInstance();
+
+        $enable_fb = false;
+
+        if ($this->enable_design && class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
+            $enable_fb = true;
+
+        if ($enable_fb)
+        {
+            $header->includeJs( $this->getScheme().'://connect.facebook.net/en_US/all.js');
+
+            $this->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
+
+            $header->embedJs(
+            'window.fbAsyncInit = function() {'.
+                'FB.init({'.
+                    'appId:"'.SessionHandler::getInstance()->facebook_app_id.'",'.
+                    'status:true,'. // fetch fresh status
+                    'cookie:true,'. // enable cookie support
+                    'xfbml:true,'.  // parse XFBML tags
+                    'channelUrl:"'.$this->getUrl().'coredev/fbchannel",'. // channel.html file
+            //        'oauth:true'.   // enable OAuth 2.0   XXX dont work with stable Chrome at 2011.08.08
+                '});'.
+            '};'.
+
+            '(function() {'.
+                'var e = document.createElement("script"); e.async = true;'.
+                'e.src = document.location.protocol + "//connect.facebook.net/en_US/all.js";'.
+                'e.async = true;'.
+                'document.getElementById("fb-root").appendChild(e);'.
+            '}());'
+            );
+
+        }
+
         $x = ob_get_contents();
         if ($x)
             throw new Exception ('XXX should not happen '.$x);
 
         if ($this->enable_design)
         {
-            $xhtml_head = XhtmlHeader::getInstance()->render();
-
             $lang = LocaleHandler::getInstance()->getLanguageCode();
             echo
             '<?xml version="1.0" encoding="UTF-8"?>'."\n".
@@ -291,7 +324,11 @@ class XmlDocumentHandler extends CoreBase
                 echo ' xmlns:'.$name.'="'.$uri.'"';
 
             echo '>'."\n";
-            echo $xhtml_head;
+
+            if ($enable_fb)
+                echo '<div id="fb-root"></div>'; // required for Facebook API
+
+            echo $header->render();
         }
 
         echo $out;

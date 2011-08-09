@@ -9,8 +9,6 @@
 
 //STATUS: ok
 
-//XXX: move facebook stuff out of here!
-
 //FIXME all code should use registerJsFunction instead of embedJs!!!
 
 require_once('CoreBase.php');
@@ -155,16 +153,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function render()
     {
-        $page = XmlDocumentHandler::getInstance();
-
-        //XXX move out of here?
-        if (class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
-        {
-            $this->includeJs( $page->getScheme().'://connect.facebook.net/en_US/all.js');
-
-            $page->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
-        }
-
         $res = '<head>';
 
         if ($this->title)
@@ -204,17 +192,17 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->embed_css.
         '</style>';
 
+        $js = '';
+
         if ($this->embed_js)
-            $res .= js_embed( implode('', $this->embed_js) );
+            $js .= implode('', $this->embed_js);
 
         if ($this->js_functions)
-        {
-            $js = '';
             foreach ($this->js_functions as $key => $val)
                 $js .= $val;
 
+        if ($js)
             $res .= js_embed($js);
-        }
 
         $res .= '</head>';
 
@@ -225,33 +213,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         if ($this->reload_time)
             $res .= js_reload($this->reload_time * 1000);
-
-        //XXX move out of here?
-        if (class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
-        {
-            $res .= '<div id="fb-root"></div>'; // required for Facebook API
-
-            $res .= js_embed(
-            'window.fbAsyncInit = function() {'.
-                'FB.init({'.
-                    'appId:"'.SessionHandler::getInstance()->facebook_app_id.'",'.
-                    'status:true,'. // fetch fresh status
-                    'cookie:true,'. // enable cookie support
-                    'xfbml:true,'.  // parse XFBML tags
-                    'channelUrl:"'.$page->getUrl().'coredev/fbchannel",'. // channel.html file
-            //        'oauth:true'.   // enable OAuth 2.0   XXX dont work with stable Chrome at 2011.08.08
-                '});'.
-            '};'.
-
-            '(function() {'.
-                'var e = document.createElement("script"); e.async = true;'.
-                'e.src = document.location.protocol + "//connect.facebook.net/en_US/all.js";'.
-                'e.async = true;'.
-                'document.getElementById("fb-root").appendChild(e);'.
-            '}());'
-
-            );
-        }
 
         return $res;
     }
