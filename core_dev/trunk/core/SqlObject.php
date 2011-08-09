@@ -79,6 +79,34 @@ class SqlObject
         return $res;
     }
 
+    /** XXX document */
+    protected static function reflectQuery($obj, $exclude_col = '')
+    {
+        $db = SqlHandler::getInstance();
+
+        $reflect = new ReflectionClass($obj);
+        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
+        // the list is huge, so we only try to cover common ones
+        $reserved_words = array('desc', 'default');
+
+        $vals = array();
+        foreach ($props as $prop)
+        {
+            $col = $prop->getName();
+            if ($col == $exclude_col)
+                continue;
+
+            if (in_array($col, $reserved_words))
+                // escape column names for reserved SQL words
+                $vals[] = '`'.$col.'`="'.$db->escape($obj->$col).'"';
+            else
+                $vals[] = $col.'="'.$db->escape($obj->$col).'"';
+        }
+        return $vals;
+    }
+
     static function idExists($id, $tblname, $id_field = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
@@ -179,30 +207,6 @@ class SqlObject
 
         $q = 'UPDATE '.$tblname.' SET '.implode(', ', $vals).' WHERE '.$id_field.' = '.$obj->id;
         return $db->update($q);
-    }
-
-    protected static function reflectQuery($obj, $exclude_col = '')
-    {
-        $db = SqlHandler::getInstance();
-
-        $reflect = new ReflectionClass($obj);
-        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
-
-        $bad_names = array('desc', 'asc');
-
-        $vals = array();
-        foreach ($props as $prop)
-        {
-            $col = $prop->getName();
-            if ($col == $exclude_col)
-                continue;
-
-            if (in_array($col, $bad_names))
-                throw new Exception ('"'.$tblname.'.'.$col.'" should be renamed, "'.$col.'" is reserved MySQL syntax');
-
-            $vals[] = $col.'="'.$db->escape($obj->$col).'"';
-        }
-        return $vals;
     }
 
 }

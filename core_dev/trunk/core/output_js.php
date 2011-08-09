@@ -43,6 +43,18 @@ function js_redirect($url)
     }
 }
 
+function js_goback($title = 'Go back')
+{
+    $res = '<a href="javascript:history.go(-1)">'.$title.'</a>';
+    return $res;
+}
+
+function js_goforward($title = 'Go forward')
+{
+    $res = '<a href="javascript:history.go(1)">'.$title.'</a>';
+    return $res;
+}
+
 /**
  * Renders a Unix timestamp in Javascript format (american): MM/DD/YYYY
  */
