@@ -117,22 +117,6 @@ class LocaleHandler
 }
 
 /**
- * Translates ISO 3166-1 (2 letter country code) to 3 letter country code
- */
-function country_2_to_3_letters($s)
-{
-    switch (strtoupper($s)) {
-    case 'EU': return 'EUR';
-    case 'US': return 'USA';
-    case 'GB': case 'UK': return 'GBR';  // GB is official 2-letter code, altough UK is also used & reserved for other use in ISO
-    case 'SE': return 'SWE';
-    case 'NO': return 'NOR';
-    case 'DE': return 'DEU';
-    }
-    return $s;
-}
-
-/**
  * Translates strings into other languages
  */
 function t($s)
@@ -153,6 +137,43 @@ function t($s)
 
     return $t;
 
+}
+
+/**
+ * Translates ISO 3166-1 (2 letter country code) to 3 letter country code
+ */
+function country_2_to_3_letters($s)
+{
+    switch (strtoupper($s)) {
+    case 'EU': return 'EUR';
+    case 'US': return 'USA';
+    case 'GB': case 'UK': return 'GBR';  // GB is official 2-letter code, altough UK is also used & reserved for other use in ISO
+    case 'SE': return 'SWE';
+    case 'NO': return 'NOR';
+    case 'DE': return 'DEU';
+    }
+    return $s;
+}
+
+// ISO 639-2 naming: http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+define('LANG_SWE', 1);
+define('LANG_ENG', 2);
+
+function language($n)
+{
+    switch ($n) {
+    case LANG_ENG: return 'English';
+    case LANG_SWE: return 'Swedish';
+    default: throw new Exception ('language unknown: '.$n);
+    }
+}
+
+function getLanguages()
+{
+    return array(
+    LANG_ENG => 'English',
+    LANG_SWE => 'Swedish',
+    );
 }
 
 ?>
