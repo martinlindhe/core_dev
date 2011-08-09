@@ -26,22 +26,34 @@ class SqlObject
 
         $row = is_array($q) ? $q : $db->pSelect($q);
 
+        if (!is_array($row))
+            throw new Exception ('loadObject fail, need array of rows, got: '.$row);
+
         $reflect = new ReflectionClass($classname);
         $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
 
-        $res = array();
-
-        if (!is_array($row))
-            throw new Exception ('need array of row, got: '.$row);
-
         $obj = new $classname();
-        foreach ($props as $prop) {
+        foreach ($props as $prop)
+        {
             $n = $prop->getName();
+
             if (!array_key_exists($n, $row)) {
                 d( $row);
-                throw new Exception ('SqlObject not right! db column named "'.$n.'" dont exist');
+                throw new Exception ('loadObject fail, db column named "'.$n.'" dont exist');
             }
             $obj->$n = $row[ $n ];
+        }
+
+        if ( count($props) != count($row))
+        {
+/*
+            d($row);
+            d( count($row ) );
+
+            d($props);
+            d( count($props ) );
+*/
+            throw new Exception ('loadObject fail, class '.$classname.' misses defined variables, or something!');
         }
 
         return $obj;
