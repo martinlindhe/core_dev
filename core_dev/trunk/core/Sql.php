@@ -63,6 +63,21 @@ class Sql
     }
 
     /**
+     * Escapes a string for use in queries
+     *
+     * @param $q is the query to escape
+     * @return the escaped string, taking db-connection locale into account
+     */
+    public static function escape($q)
+    {
+        //db handle is needed to use the escape function... XXX, REALLY?, WHY???
+        $db = SqlHandler::getInstance();
+        $db->connect();
+
+        return $db->db_handle->real_escape_string($q);
+    }
+
+    /**
      * Prepared select
      *
      * @param $args[0] query
