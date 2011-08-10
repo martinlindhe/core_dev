@@ -17,35 +17,45 @@ class MediaWikiPage
     var $content;
 }
 
-class MediaWikiClient extends HttpClient
+class MediaWikiClient
 {
-    function getArticle($name)
+    static function getArticle($full_url)
     {
-        if (!$this->getUrl())
-            throw new Exception ('set a mediawiki site url in constructor');
+        if (!is_url($full_url))
+            throw new Exception ('need a url... '.$full_url);
 
-        $temp = TempStore::getInstance();
+        //XXX verify url against is_mediawiki_url() regexp: http(s)://lang.host.tld/wiki/alphanumeric
 
-        $url = $this->getUrl().'w/api.php'.
+
+        // full_url examples: http://sv.wiktionary.org/wiki/bestick
+        //                    http://en.wikipedia.org/wiki/Cutlery
+
+        $url = new Url($full_url);
+
+        $x = explode('/', $url->getPath() );
+        $name = array_pop($x);
+
+        $url->setPath('/w/api.php'.
         '?action=query'.
         '&format=json'.
         '&prop=revisions'.
         '&rvlimit=1'.
         '&rvprop=content'.
-        '&titles='.urlencode($name);
+        '&titles='.urlencode($name)
+        );
 
-        $key = 'MediaWikiClient/'.sha1( $url );
+        $http = new HttpClient();
 
+        $key = 'MediaWikiClient/'.sha1( $url->get() );
+
+        $temp = TempStore::getInstance();
         $res = $temp->get($key);
         if ($res)
             return unserialize($res);
 
-        $this->setUrl($url);
+        $http->setUrl($url);
 
-        // required: http://meta.wikimedia.org/wiki/User-Agent_policy
-        $this->setUserAgent('core_dev 0.2');
-
-        $raw = $this->getBody();
+        $raw = $http->getBody();
         $json = JSON::decode($raw);
 
         $pages = array();
@@ -56,9 +66,9 @@ class MediaWikiClient extends HttpClient
             $o->content = $p->revisions[0]->{'*'};
             $pages[] = $o;
         }
-        $res = $pages[0]; // XXX only exports one article
+        $res = $pages[0]; // XXX only exports first article
 
-        $temp->set($key, serialize($res), '24h');
+        $temp->set($key, serialize($res), '48h');
         return $res;
     }
 
