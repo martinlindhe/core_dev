@@ -24,12 +24,14 @@ class DatabaseMysql implements IDB_SQL
     var $charset         = 'utf8';      ///< What character set to use
     protected $connected = false;       ///< Are we connected to the db?
 
-    function __construct()
+/*
+    public function __construct()
     {
         mysqli_report(MYSQLI_REPORT_OFF);
     }
+*/
 
-    function setConfig($conf)
+    public function setConfig($conf)
     {
         if (!is_array($conf))
             return;
@@ -42,7 +44,7 @@ class DatabaseMysql implements IDB_SQL
         if (!empty($conf['charset']))  $this->charset  = $conf['charset'];
     }
 
-    function setHost($s)
+    public function setHost($s)
     {
         // parse "hostname:port" format
         preg_match('/([0-9a-zA-Z.]+):([0-9]+)/u', $s, $match);
@@ -53,7 +55,7 @@ class DatabaseMysql implements IDB_SQL
             $this->host = $s;
     }
 
-    function setPort($n)
+    public function setPort($n)
     {
         if (!is_numeric($n))
             throw new Exception ('non-numeric port: '.$n);
@@ -61,7 +63,7 @@ class DatabaseMysql implements IDB_SQL
         $this->port = $n;
     }
 
-    function disconnect()
+    public function disconnect()
     {
         if ($this->connected)
             $this->db_handle->close();
@@ -70,18 +72,23 @@ class DatabaseMysql implements IDB_SQL
     /**
      * Opens a connection to MySQL database
      */
-    function connect()
+    public function connect()
     {
+        if ($this->db_handle)
+            return true;
+
         //silence warning from failed connection and display our error instead
         $this->db_handle = new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
-            die('<div class="critical">db_mysqli->connect: '.$this->db_handle->connect_error.'</div>');
+            throw new Exception ('db_mysqli->connect: '.$this->db_handle->connect_error);
 
         if (!$this->db_handle->set_charset($this->charset))
-            die('Error loading character set '.$this->charset.': '.$this->db_handle->error);
+            throw new Exception ('Error loading character set '.$this->charset.': '.$this->db_handle->error);
 
         $this->connected = true;
+
+        return true;
     }
 
     /**
@@ -101,7 +108,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to escape
      * @return the escaped string, taking db-connection locale into account
      */
-    function escape($q)
+    public function escape($q)
     {
         //db handle is needed to use the escape function
         if (!$this->connected)
@@ -116,7 +123,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q the query to execute
      * @return result
      */
-    private function real_query($q)
+    protected function real_query($q)
     {
         if (!$this->connected)
             $this->connect();
@@ -130,7 +137,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return insert_id (autoincrement primary key of table)
      */
-    function insert($q)
+    public function insert($q)
     {
         if ($this->real_query($q))
             return $this->db_handle->insert_id;
@@ -144,7 +151,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return the number of rows affected
      */
-    function replace($q) { return $this->insert($q); }
+    public function replace($q) { return $this->insert($q); }
 
     /**
      * Performs a query that does a DELETE
@@ -153,7 +160,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return the number of rows affected
      */
-    function delete($q)
+    public function delete($q)
     {
         $result = $this->real_query($q);
 
@@ -170,7 +177,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return the number of rows affected
      */
-    function update($q) { return $this->delete($q); }
+    public function update($q) { return $this->delete($q); }
 
     /**
      * Selects one column of one row of data
@@ -179,7 +186,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return one column-result only
      */
-    function getOneItem($q)
+    public function getOneItem($q)
     {
         if (!$result = $this->real_query($q))
             return false;
@@ -200,7 +207,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return one row-result with columns as array indexes
      */
-    function getOneRow($q)
+    public function getOneRow($q)
     {
         if (!$result = $this->real_query($q))
             return false;
@@ -221,7 +228,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return an array with the results, with columns as array indexes
      */
-    function getArray($q)
+    public function getArray($q)
     {
         if (!$result = $this->real_query($q))
             return false;
@@ -241,7 +248,7 @@ class DatabaseMysql implements IDB_SQL
      * Example: SELECT val FROM t WHERE id=3
      * *        SHOW TABLES FROM mysql
      */
-    function get1dArray($q)
+    public function get1dArray($q)
     {
         if (!$result = $this->real_query($q))
             return false;
@@ -263,7 +270,7 @@ class DatabaseMysql implements IDB_SQL
      * @param $q is the query to execute
      * @return an array with the results mapped as key => value
      */
-    function getMappedArray($q)
+    public function getMappedArray($q)
     {
         if (!$result = $this->real_query($q))
             return false;
@@ -278,10 +285,8 @@ class DatabaseMysql implements IDB_SQL
         return $data;
     }
 
-    /**
-     * Executes a prepared statement and binds parameters
-     */
-    private function pExecStmt($args)
+    /** Executes a prepared statement and binds parameters */
+    protected function pExecStmt($args)
     {
         if (!$args[0])
             throw new Exception ('no query');
@@ -316,7 +321,7 @@ class DatabaseMysql implements IDB_SQL
      * STATUS: in development
      * SEE http://devzone.zend.com/article/686 for bind prepare statements
      */
-    function pSelect()
+    public function pSelect()
     {
         $stmt = $this->pExecStmt( func_get_args() );
 
@@ -329,20 +334,22 @@ class DatabaseMysql implements IDB_SQL
 
         call_user_func_array(array($stmt, 'bind_result'), $this->refValues($parameters));
 
-        while ( $stmt->fetch() ) {
+        while ($stmt->fetch())
+        {
             $x = array();
-            foreach ($row as $key => $val )
+            foreach ($row as $key => $val)
                 $x[$key] = $val;
 
             $data[] = $x;
         }
+
         $meta->close();
 
         $stmt->close();
         return $data;
     }
 
-    function pSelectRow()
+    public function pSelectRow()
     {
         $res = call_user_func_array(array($this, 'pSelect'), func_get_args() );  // HACK to pass dynamic variables to parent method
 
@@ -357,7 +364,7 @@ class DatabaseMysql implements IDB_SQL
         return $res[0];
     }
 
-    function pSelectItem()
+    public function pSelectItem()
     {
         $stmt = $this->pExecStmt( func_get_args() );
 
@@ -381,8 +388,8 @@ class DatabaseMysql implements IDB_SQL
         return $data[0];
     }
 
-    // selects 1d array
-    function pSelect1d()
+    /** Selects 1d array */
+    public function pSelect1d()
     {
         $stmt = $this->pExecStmt( func_get_args() );
 
@@ -400,10 +407,8 @@ class DatabaseMysql implements IDB_SQL
         return $data;
     }
 
-    /**
-     * like getMappedArray(). query selects a list of key->value pairs
-     */
-    function pSelectMapped()
+    /** like getMappedArray(). query selects a list of key->value pairs */
+    public function pSelectMapped()
     {
         $stmt = $this->pExecStmt( func_get_args() );
 
@@ -422,8 +427,8 @@ class DatabaseMysql implements IDB_SQL
         return $data;
     }
 
-    // like pSelect, but returns affected rows
-    function pDelete()
+    /** like pSelect, but returns affected rows */
+    public function pDelete()
     {
         $stmt = $this->pExecStmt( func_get_args() );
 
@@ -433,15 +438,15 @@ class DatabaseMysql implements IDB_SQL
         return $data;
     }
 
-    // like pDelete
-    function pUpdate()
+    /** like pDelete */
+    public function pUpdate()
     {
         $args = func_get_args();
         return call_user_func_array(array($this, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
     }
 
-    // like pDelete, but returns insert id
-    function pInsert()
+    /** like pDelete, but returns insert id */
+    public function pInsert()
     {
         $args = func_get_args();
         $res = call_user_func_array(array($this, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
@@ -451,7 +456,8 @@ class DatabaseMysql implements IDB_SQL
             throw new Exception ('insert fail: '.$args[0]);
     }
 
-    private function refValues($arr)
+    /** HACK needed for some reason */
+    protected function refValues($arr)
     {
         if (!php_min_ver('5.3'))
             return $arr;
@@ -464,9 +470,7 @@ class DatabaseMysql implements IDB_SQL
         return $refs;
     }
 
-    /**
-     * Shows the config view
-     */
+    /** Shows the config view */
     public function renderConfig()
     {
         $view = new ViewModel('views/mysql_config.php');

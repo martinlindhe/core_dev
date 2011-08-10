@@ -1,0 +1,250 @@
+<?php
+/**
+ * $Id$
+ *
+ * Utility class for writing prepared SQL statements
+ * It always grabs current SqlHandler::getInstance(),
+ * so you can write code like:
+ *
+ *   $id = Sql:pInsert($q, 'i', $val);
+ *
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
+ */
+
+//STATUS: experimental. most code copied from DatabaseMysql
+
+//TODO: hook up with sql profiler
+
+class Sql
+{
+    /** Executes a prepared statement and binds parameters
+     * @param @arg[0] sql query
+     * @param @arg[1-n] params
+     */
+    protected static function pExecStmt($args)
+    {
+        if (!$args[0])
+            throw new Exception ('no query');
+
+        $db = SqlHandler::getInstance();
+        $db->connect();
+
+        if (! ($stmt = $db->db_handle->prepare($args[0])) ) {
+            bt();
+            throw new Exception ('FAIL prepare: '.$args[0]);
+        }
+
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
+
+        if ($params)
+            call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));
+
+        $stmt->execute();
+
+        return $stmt;
+    }
+
+    /**
+     * Prepared select
+     *
+     * @param $args[0] query
+     * @param $args[1] prepare format (isdb), integer, string, double/float, binary
+     * @param $args[2,3,..] variables
+     *
+     * STATUS: in development
+     * SEE http://devzone.zend.com/article/686 for bind prepare statements
+     */
+    static function pSelect()
+    {
+        $stmt = self::pExecStmt( func_get_args() );
+
+        $data = array();
+
+        $meta = $stmt->result_metadata();
+
+        while ($field = $meta->fetch_field())
+            $parameters[] = &$row[$field->name];
+
+        call_user_func_array(array($stmt, 'bind_result'), self::refValues($parameters));
+
+        while ($stmt->fetch())
+        {
+            $x = array();
+            foreach ($row as $key => $val)
+                $x[$key] = $val;
+
+            $data[] = $x;
+        }
+
+        $meta->close();
+
+        $stmt->close();
+
+        return $data;
+    }
+
+/* XXXX profiler:
+    public function pSelect()
+    {
+        $args = func_get_args();
+
+        $this->measure_start = microtime(true);
+
+        $res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+
+        $prof = &$this->measureQuery($args[0]);
+        $prof->prepared = true;
+
+        if (isset($args[1]))
+            $prof->format = $args[1];
+
+        if (isset($args[2])) {
+            $params = array();
+            for ($i = 2; $i < count($args); $i++)
+                $prof->params[] = $args[$i];
+        }
+
+        if ($res === false)
+            $prof->error = $this->db_handle->error;
+
+        return $res;
+    }
+*/
+
+
+
+
+
+
+
+
+
+
+
+    static function pSelectRow()
+    {
+        $res = call_user_func_array('Sql::pSelect', func_get_args() );  // HACK to pass dynamic variables to parent method
+
+        if (count($res) > 1) {
+//            d( func_get_args() );
+            throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
+        }
+
+        if (!$res)
+            return false;
+
+        return $res[0];
+    }
+
+    static function pSelectItem()
+    {
+        $stmt = self::pExecStmt( func_get_args() );
+
+        if ($stmt->field_count != 1)
+            throw new Exception ('not 1 column result');
+
+        $stmt->bind_result($col1);
+
+        $data = array();
+        while ($stmt->fetch())
+            $data[] = $col1;
+
+        $stmt->close();
+
+        if (count($data) > 1)
+            throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($data).' rows');
+
+        if (!$data)
+            return false;
+
+        return $data[0];
+    }
+
+    /** selects 1d array */
+    static function pSelect1d()
+    {
+        $stmt = self::pExecStmt( func_get_args() );
+
+        $data = array();
+
+        if ($stmt->field_count != 1)
+            throw new Exception ('not 1d result');
+
+        $stmt->bind_result($col1);
+
+        while ($stmt->fetch())
+            $data[] = $col1;
+
+        $stmt->close();
+        return $data;
+    }
+
+    /** like getMappedArray(). query selects a list of key->value pairs */
+    static function pSelectMapped()
+    {
+        $stmt = self::pExecStmt( func_get_args() );
+
+        $data = array();
+
+        if ($stmt->field_count != 2)
+            throw new Exception ('pSelectMapped requires a key->val result set');
+
+        // 2d array
+        $stmt->bind_result($col1, $col2);
+
+        while ($stmt->fetch())
+            $data[ $col1 ] = $col2;
+
+        $stmt->close();
+        return $data;
+    }
+
+
+    /** like pSelect, but returns affected rows */
+    static function pDelete()
+    {
+        $stmt = self::pExecStmt( func_get_args() );
+
+        $data = $stmt->affected_rows;
+
+        $stmt->close();
+        return $data;
+    }
+
+    /** like pDelete */
+    static function pUpdate()
+    {
+        $args = func_get_args();
+        return call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+    }
+
+    /** like pDelete, but returns insert id */
+    static function pInsert()
+    {
+        $args = func_get_args();
+        $res = call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+        if ($res == 1)
+            return $this->db_handle->insert_id;
+        else
+            throw new Exception ('insert fail: '.$args[0]);
+    }
+
+    /** HACK needed for some reason */
+    protected static function refValues($arr)
+    {
+        if (!php_min_ver('5.3'))
+            return $arr;
+
+        // reference is required for PHP 5.3+
+        $refs = array();
+        foreach ($arr as $key => $val)
+            $refs[$key] = &$arr[$key];
+
+        return $refs;
+    }
+
+}
+
+?>

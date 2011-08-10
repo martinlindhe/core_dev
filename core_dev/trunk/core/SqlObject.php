@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+require_once('Sql.php');
+
 class SqlObject
 {
     /**
@@ -68,9 +70,7 @@ class SqlObject
      */
     static function loadObjects($q, $classname)
     {
-        $db = SqlHandler::getInstance();
-
-        $list = is_array($q) ? $q : $db->pSelect($q);
+        $list = is_array($q) ? $q : Sql::pSelect($q);
 
         $res = array();
         foreach ($list as $row)
@@ -82,8 +82,6 @@ class SqlObject
     /** XXX document */
     protected static function reflectQuery($obj, $exclude_col = '')
     {
-        $db = SqlHandler::getInstance();
-
         $reflect = new ReflectionClass($obj);
         $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
 
@@ -100,9 +98,9 @@ class SqlObject
 
             if (in_array($col, $reserved_words))
                 // escape column names for reserved SQL words
-                $vals[] = '`'.$col.'`="'.$db->escape($obj->$col).'"';
+                $vals[] = '`'.$col.'`="'.Sql::escape($obj->$col).'"';
             else
-                $vals[] = $col.'="'.$db->escape($obj->$col).'"';
+                $vals[] = $col.'="'.Sql::escape($obj->$col).'"';
         }
         return $vals;
     }
@@ -112,10 +110,9 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
             throw new Exception ('very bad');
 
-        $db = SqlHandler::getInstance();
         $q = 'SELECT COUNT(*) FROM '.$tblname.' WHERE '.$id_field.' = ?';
 
-        return $db->pSelectItem($q, 's', $id) ? true : false;
+        return Sql::pSelectItem($q, 's', $id) ? true : false;
     }
 
     /**
@@ -127,12 +124,10 @@ class SqlObject
         if (!is_alphanumeric($tblname))
             throw new Exception ('very bad');
 
-        $db = SqlHandler::getInstance();
-
         $vals = self::reflectQuery($obj);
 
         $q = 'INSERT INTO '.$tblname.' SET '.implode(', ', $vals);
-        return $db->insert($q);
+        return SqlHandler::getInstance()->insert($q); ///XXXXXXXXXXXX use Sql::pInsert ..!!!
     }
 
     /**
@@ -170,7 +165,7 @@ class SqlObject
             throw new Exception ('very bad');
 
         $q = 'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
-        $row = SqlHandler::getInstance()->pSelectRow($q, 'i', $id);
+        $row = Sql::pSelectRow($q, 'i', $id);
 
         return SqlObject::loadObject($row, $classname);
     }
@@ -197,7 +192,7 @@ class SqlObject
         if ($order_field)
             $q .= ' ORDER BY '.$order_field.' '.strtoupper($order);
 
-        $list = SqlHandler::getInstance()->pSelect($q, $form, $value);
+        $list = Sql::pSelect($q, $form, $value);
 
         return SqlObject::loadObjects($list, $classname);
     }
@@ -207,12 +202,10 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
             throw new Exception ('very bad');
 
-        $db = SqlHandler::getInstance();
-
         $vals = self::reflectQuery($obj, $id_field);
 
         $q = 'UPDATE '.$tblname.' SET '.implode(', ', $vals).' WHERE '.$id_field.' = '.$obj->id;
-        return $db->update($q);
+        return SqlHandler::getInstance()->update($q);  //XXXXXXXXXXx use Sql::pUpdate
     }
 
 }

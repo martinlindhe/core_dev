@@ -27,9 +27,9 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         //mysqli_report(MYSQLI_REPORT_ALL ^ MYSQLI_REPORT_STRICT); // all errors on, but disable exceptions (strict)
     }
 
-    function debug($b = true) { $this->debug = $b; }
+    public function debug($b = true) { $this->debug = $b; }
 
-    function getErrorCount()
+    public function getErrorCount()
     {
         $cnt = 0;
 
@@ -40,7 +40,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $cnt;
     }
 
-    function getTotalQueryTime()
+    public function getTotalQueryTime()
     {
         $time = 0;
         foreach ($this->queries as $q)
@@ -52,7 +52,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
     /**
      * Calculates the time it took to execute a query
      */
-    private function &measureQuery($q)
+    public function &measureQuery($q)
     {
         $prof = new SqlQuery();
         $prof->query = $q;
@@ -63,7 +63,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $prof;
     }
 
-    function connect()
+    public function connect()
     {
         $this->measure_start = microtime(true);
 
@@ -73,7 +73,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         $this->time_connect = microtime(true) - $this->measure_start;
     }
 
-    function insert($q)
+    public function insert($q)
     {
         $this->measure_start = microtime(true);
 
@@ -86,7 +86,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function delete($q)
+    public function delete($q)
     {
         $this->measure_start = microtime(true);
 
@@ -99,7 +99,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function getOneItem($q)
+    public function getOneItem($q)
     {
         $this->measure_start = microtime(true);
 
@@ -112,7 +112,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function getOneRow($q)
+    public function getOneRow($q)
     {
         $this->measure_start = microtime(true);
 
@@ -125,7 +125,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function getArray($q)
+    public function getArray($q)
     {
         $this->measure_start = microtime(true);
 
@@ -138,7 +138,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function getMappedArray($q) //XXX = get2dArray
+    public function getMappedArray($q) //XXX = get2dArray
     {
         $this->measure_start = microtime(true);
 
@@ -151,7 +151,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function get1dArray($q)
+    public function get1dArray($q)
     {
         $this->measure_start = microtime(true);
 
@@ -164,7 +164,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function pSelect()
+    public function pSelect()
     {
         $args = func_get_args();
 
@@ -190,7 +190,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function pSelectItem()
+    public function pSelectItem()
     {
         $args = func_get_args();
 
@@ -216,7 +216,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function pSelectMapped()
+    public function pSelectMapped()
     {
         $args = func_get_args();
 
@@ -242,7 +242,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function pSelect1d()
+    public function pSelect1d()
     {
         $args = func_get_args();
 
@@ -268,7 +268,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    function pDelete()
+    public function pDelete()
     {
         $args = func_get_args();
 
