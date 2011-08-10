@@ -38,7 +38,7 @@ class MediaWikiClient
 {
 
     /** @return raw unparsed article */
-    static function getArticle($full_url)
+    public static function getArticle($full_url)
     {
         if (!is_url($full_url) || !is_mediawiki_url($full_url))
             throw new Exception ('need a mediawiki url... '.$full_url);
@@ -85,7 +85,7 @@ class MediaWikiClient
         return $res;
     }
 
-    static function getArticleIntro($full_url)
+    public static function getArticleIntro($full_url)
     {
         //XXX strip all text inside {{blabla}}
 
@@ -98,10 +98,11 @@ class MediaWikiClient
             // return false;
 
         $intro = substr($article->content, 0, $pos);
-        return self::cleanText($intro, $full_url);
+        return self::formatText($intro, $full_url);
     }
 
-    static function cleanText($html, $page_url)
+    /** Attempt to format MediaWiki markup code */
+    public static function formatText($html, $page_url)
     {
 
 //XXX: how to set full url for helper_interwikilinks() while called static and as callback?
@@ -177,14 +178,14 @@ class MediaWikiClient
         return $html;
     }
 
-    static function helper_externlinks($matches)
+    protected static function helper_externlinks($matches)
     {
         $target = $matches[1];
         $text = empty($matches[2])?$matches[1]:$matches[2];
         return '<a href="'.$target.'">'.$text.'</a>';
     }
 
-    static function helper_interwikilinks($matches)
+    protected static function helper_interwikilinks($matches)
     {
         $target = $matches[1];
         $text = empty($matches[2])?$matches[1]:$matches[2];

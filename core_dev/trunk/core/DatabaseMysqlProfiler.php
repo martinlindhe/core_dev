@@ -198,12 +198,11 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
             $prof->format = $args[1];
 
         if (isset($args[2])) {
-            $params = array();
             for ($i = 2; $i < count($args); $i++)
                 $prof->params[] = $args[$i];
         }
 
-        if ($res === false)
+        if ($params && $res === false)
             $prof->error = $this->db_handle->error;
 
         return $stmt;
