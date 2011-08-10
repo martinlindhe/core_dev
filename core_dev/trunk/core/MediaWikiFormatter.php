@@ -6,6 +6,8 @@
  *
  * MediaWiki formatting code based on
  * http://johbuc6.coconia.net/doku.php/mediawiki2html_machine/code
+ *
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
 //STATUS: wip... used by MediaWikiClient
@@ -29,10 +31,8 @@ class MediaWikiFormatter
     /** Attempt to format MediaWiki markup code */
     public function format($html, $page_url)
     {
-
         $this->url = $page_url;
 
-//XXX: how to set full url for helper_interwikilinks() while called static and as callback?
         $html = str_replace('&ndash;', '-', $html);
         $html = str_replace('&quot;', '"', $html);
         $html = preg_replace('/\&amp;(nbsp);/', '&${1};', $html);
@@ -119,6 +119,5 @@ class MediaWikiFormatter
         return '<a  href="'.$this->getBaseUrl().$target.'" target="_blank">'.$text.'</a>';
     }
 }
-
 
 ?>
