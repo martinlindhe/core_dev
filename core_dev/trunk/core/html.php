@@ -74,6 +74,11 @@ function ahref($url, $text, $target = '', $onclick = '')
     '>'.$text.'</a>';
 }
 
+function ahref_blank($url, $text)
+{
+    return ahref($url, $text, '_blank');
+}
+
 function ahref_js($text, $js)
 {
     return ahref('#', $text, '', $js);

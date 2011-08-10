@@ -76,11 +76,12 @@ class MediaWikiClient
         }
         $res = $pages[0]; // XXX only exports first article
 
-        $temp->set($key, serialize($res), '48h');
+        $temp->set($key, serialize($res), '24h');
         return $res;
     }
 
-    public static function getArticleIntro($full_url)
+    /** @return Article summary */
+    public static function getArticleSummary($full_url)
     {
         //XXX strip all text inside {{blabla}}
 
