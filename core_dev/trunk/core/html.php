@@ -65,6 +65,7 @@ function relurl_add($p)
     return $u->getPath();
 }
 
+/** Creates a clickable link */
 function ahref($url, $text, $target = '', $onclick = '')
 {
     return
@@ -74,6 +75,7 @@ function ahref($url, $text, $target = '', $onclick = '')
     '>'.$text.'</a>';
 }
 
+/** Creates a clickable link that opens in a new window */
 function ahref_blank($url, $text)
 {
     return ahref($url, $text, '_blank');
