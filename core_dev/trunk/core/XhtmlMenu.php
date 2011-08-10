@@ -18,11 +18,12 @@ class XhtmlMenu extends CoreBase
 
     public function add($title, $link)
     {
-        if (!get_protocol($link) && substr($link, 0, 1) != '/') {
-            $page = XmlDocumentHandler::getInstance();
-            $link = $page->getRelativeUrl().$link;
-        }
-        $this->items[] = array('title'=>$title, 'link'=>$link);
+        $this->items[] = array('title'=>$title, 'link'=>relurl($link));
+    }
+
+    public function spacer()
+    {
+        $this->items[] = array();
     }
 
     function setCss($class, $current = '')
@@ -39,6 +40,13 @@ class XhtmlMenu extends CoreBase
 
         foreach ($this->items as $item)
         {
+            if (!$item)
+            {
+                // spacer
+                $res .= '<li>&nbsp;</li>';
+                continue;
+            }
+
             if ($this->css_current && $item['link'] == $cur)
                 $res .= '<li class="'.$this->css_current.'">';
             else
