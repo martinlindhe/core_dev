@@ -8,6 +8,7 @@
  */
 
 //STATUS: wip
+
 //TODO: make it a general sql profiler (reuse for ms-sql)
 //XXX: somehow show return values if debug is enabled
 
@@ -16,10 +17,10 @@ require_once('SqlQuery.php');
 
 class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 {
-    var $measure_start = 0;       ///< time when profiling started
-    var $time_connect  = 0;       ///< time it took to connect to db
-    var $queries       = array(); ///< array of SqlQuery (queries executed)
-    protected $debug   = false;
+    protected $measure_start = 0;       ///< time when last profiling started
+    var       $time_connect  = 0;       ///< time it took to connect to db
+    var       $queries       = array(); ///< array of SqlQuery (queries executed)
+    protected $debug         = false;
 
     function __construct()
     {
@@ -28,6 +29,8 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
     }
 
     public function debug($b = true) { $this->debug = $b; }
+
+    public function startMeasure() { $this->measure_start = microtime(true); }
 
     public function getErrorCount()
     {
@@ -65,7 +68,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function connect()
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         parent::connect();
 
@@ -75,7 +78,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function insert($q)
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::insert($q);
         $prof = &$this->measureQuery($q);
@@ -88,7 +91,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function delete($q)
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::delete($q);
         $prof = &$this->measureQuery($q);
@@ -101,7 +104,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function getOneItem($q)
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::getOneItem($q);
         $prof = &$this->measureQuery($q);
@@ -114,7 +117,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function getOneRow($q)
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::getOneRow($q);
         $prof = &$this->measureQuery($q);
@@ -127,7 +130,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function getArray($q)
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::getArray($q);
         $prof = &$this->measureQuery($q);
@@ -140,7 +143,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function getMappedArray($q) //XXX = get2dArray
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::getMappedArray($q);
         $prof = &$this->measureQuery($q);
@@ -153,7 +156,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
     public function get1dArray($q)
     {
-        $this->measure_start = microtime(true);
+        $this->startMeasure();
 
         $res = parent::get1dArray($q);
         $prof = &$this->measureQuery($q);
@@ -164,13 +167,29 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-    public function pSelect()
+
+    /** Executes a prepared statement and binds parameters */
+    protected function pExecStmt($args)
     {
-        $args = func_get_args();
+        if (!$args[0])
+            throw new Exception ('no query');
 
-        $this->measure_start = microtime(true);
+        if (!$this->connected)
+            $this->connect();
 
-        $res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
+        if (! ($stmt = $this->db_handle->prepare($args[0])) ) {
+            bt();
+            throw new Exception ('FAIL prepare: '.$args[0]);
+        }
+
+        $params = array();
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
+
+        if ($params)
+            $res = call_user_func_array(array($stmt, 'bind_param'), $this->refValues($params));
+
+        $stmt->execute();
 
         $prof = &$this->measureQuery($args[0]);
         $prof->prepared = true;
@@ -187,111 +206,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         if ($res === false)
             $prof->error = $this->db_handle->error;
 
-        return $res;
-    }
-
-    public function pSelectItem()
-    {
-        $args = func_get_args();
-
-        $this->measure_start = microtime(true);
-
-        $res = call_user_func_array(array('parent', 'pSelectItem'), $args);  // HACK to pass dynamic variables to parent method
-
-        $prof = &$this->measureQuery($args[0]);
-        $prof->prepared = true;
-
-        if (isset($args[1]))
-            $prof->format = $args[1];
-
-        if (isset($args[2])) {
-            $params = array();
-            for ($i = 2; $i < count($args); $i++)
-                $prof->params[] = $args[$i];
-        }
-
-        if ($res === false)
-            $prof->error = $this->db_handle->error;
-
-        return $res;
-    }
-
-    public function pSelectMapped()
-    {
-        $args = func_get_args();
-
-        $this->measure_start = microtime(true);
-
-        $res = call_user_func_array(array('parent', 'pSelectMapped'), $args);  // HACK to pass dynamic variables to parent method
-
-        $prof = &$this->measureQuery($args[0]);
-        $prof->prepared = true;
-
-        if (isset($args[1]))
-            $prof->format = $args[1];
-
-        if (isset($args[2])) {
-            $params = array();
-            for ($i = 2; $i < count($args); $i++)
-                $prof->params[] = $args[$i];
-        }
-
-        if ($res === false)
-            $prof->error = $this->db_handle->error;
-
-        return $res;
-    }
-
-    public function pSelect1d()
-    {
-        $args = func_get_args();
-
-        $this->measure_start = microtime(true);
-
-        $res = call_user_func_array(array('parent', 'pSelect1d'), $args);  // HACK to pass dynamic variables to parent method
-
-        $prof = &$this->measureQuery($args[0]);
-        $prof->prepared = true;
-
-        if (isset($args[1]))
-            $prof->format = $args[1];
-
-        if (isset($args[2])) {
-            $params = array();
-            for ($i = 2; $i < count($args); $i++)
-                $prof->params[] = $args[$i];
-        }
-
-        if ($res === false)
-            $prof->error = $this->db_handle->error;
-
-        return $res;
-    }
-
-    public function pDelete()
-    {
-        $args = func_get_args();
-
-        $this->measure_start = microtime(true);
-
-        $res = call_user_func_array(array('parent', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
-
-        $prof = &$this->measureQuery($args[0]);
-        $prof->prepared = true;
-
-        if (isset($args[1]))
-            $prof->format = $args[1];
-
-        if (isset($args[2])) {
-            $params = array();
-            for ($i = 2; $i < count($args); $i++)
-                $prof->params[] = $args[$i];
-        }
-
-        if ($res === false)
-            $prof->error = $this->db_handle->error;
-
-        return $res;
+        return $stmt;
     }
 
 }

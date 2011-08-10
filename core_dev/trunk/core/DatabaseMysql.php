@@ -24,12 +24,11 @@ class DatabaseMysql implements IDB_SQL
     var $charset         = 'utf8';      ///< What character set to use
     protected $connected = false;       ///< Are we connected to the db?
 
-/*
     public function __construct()
     {
+        // SECURITY: disable error output in production
         mysqli_report(MYSQLI_REPORT_OFF);
     }
-*/
 
     public function setConfig($conf)
     {

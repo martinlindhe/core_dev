@@ -13,8 +13,6 @@
 
 //STATUS: experimental. most code copied from DatabaseMysql
 
-//TODO: hook up with sql profiler
-
 class Sql
 {
     /** Executes a prepared statement and binds parameters
@@ -29,6 +27,9 @@ class Sql
         $db = SqlHandler::getInstance();
         $db->connect();
 
+        if ($db instanceof DatabaseMysqlProfiler)
+            $db->startMeasure();
+
         if (! ($stmt = $db->db_handle->prepare($args[0])) ) {
             bt();
             throw new Exception ('FAIL prepare: '.$args[0]);
@@ -39,9 +40,24 @@ class Sql
             $params[] = $args[$i];
 
         if ($params)
-            call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));
+            $res = call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));
 
         $stmt->execute();
+
+        $prof = &$db->measureQuery($args[0]);
+        $prof->prepared = true;
+
+        if (isset($args[1]))
+            $prof->format = $args[1];
+
+        if (isset($args[2])) {
+            $params = array();
+            for ($i = 2; $i < count($args); $i++)
+                $prof->params[] = $args[$i];
+        }
+
+        if ($res === false)
+            $prof->error = $this->db_handle->error;
 
         return $stmt;
     }
@@ -56,7 +72,7 @@ class Sql
      * STATUS: in development
      * SEE http://devzone.zend.com/article/686 for bind prepare statements
      */
-    static function pSelect()
+    public static function pSelect()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
@@ -85,45 +101,7 @@ class Sql
         return $data;
     }
 
-/* XXXX profiler:
-    public function pSelect()
-    {
-        $args = func_get_args();
-
-        $this->measure_start = microtime(true);
-
-        $res = call_user_func_array(array('parent', 'pSelect'), $args);  // HACK to pass dynamic variables to parent method
-
-        $prof = &$this->measureQuery($args[0]);
-        $prof->prepared = true;
-
-        if (isset($args[1]))
-            $prof->format = $args[1];
-
-        if (isset($args[2])) {
-            $params = array();
-            for ($i = 2; $i < count($args); $i++)
-                $prof->params[] = $args[$i];
-        }
-
-        if ($res === false)
-            $prof->error = $this->db_handle->error;
-
-        return $res;
-    }
-*/
-
-
-
-
-
-
-
-
-
-
-
-    static function pSelectRow()
+    public static function pSelectRow()
     {
         $res = call_user_func_array('Sql::pSelect', func_get_args() );  // HACK to pass dynamic variables to parent method
 
@@ -138,7 +116,7 @@ class Sql
         return $res[0];
     }
 
-    static function pSelectItem()
+    public static function pSelectItem()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
@@ -163,7 +141,7 @@ class Sql
     }
 
     /** selects 1d array */
-    static function pSelect1d()
+    public static function pSelect1d()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
@@ -182,7 +160,7 @@ class Sql
     }
 
     /** like getMappedArray(). query selects a list of key->value pairs */
-    static function pSelectMapped()
+    public static function pSelectMapped()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
@@ -203,7 +181,7 @@ class Sql
 
 
     /** like pSelect, but returns affected rows */
-    static function pDelete()
+    public static function pDelete()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
@@ -214,14 +192,14 @@ class Sql
     }
 
     /** like pDelete */
-    static function pUpdate()
+    public static function pUpdate()
     {
         $args = func_get_args();
         return call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
     }
 
     /** like pDelete, but returns insert id */
-    static function pInsert()
+    public static function pInsert()
     {
         $args = func_get_args();
         $res = call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
