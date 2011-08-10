@@ -177,19 +177,27 @@ class SqlObject
 
     /**
      * Fetches all items where $field_name = $value
+     * @param $order 'desc', 'asc' or empty
      */
-    static function getAllByField($field_name, $value, $tblname, $classname)
+    static function getAllByField($field_name, $value, $tblname, $classname, $order_field = '', $order = 'asc')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        $q =
-        'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
+        $q = 'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
 
         if (is_numeric($value))
             $form = 'i';
         else
             $form = 's';
+
+        if ($order_field)
+        {
+            if (!in_array(strtoupper($order), array('DESC', 'ASC')))
+                throw new Exception ('odd order '.$order);
+
+            $q .= ' ORDER BY '.$order_field.' '.strtoupper($order);
+        }
 
         $list = SqlHandler::getInstance()->pSelect($q, $form, $value);
 

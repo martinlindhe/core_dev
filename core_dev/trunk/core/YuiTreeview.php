@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id: YuiDate.php 5710 2011-02-03 17:39:53Z ml $
+ * $Id$
  *
  * Renders a Yahoo UI treeview (javascript)
  *

@@ -346,8 +346,10 @@ class DatabaseMysql implements IDB_SQL
     {
         $res = call_user_func_array(array($this, 'pSelect'), func_get_args() );  // HACK to pass dynamic variables to parent method
 
-        if (count($res) > 1)
+        if (count($res) > 1){
+            d( func_get_args() );
             throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
+        }
 
         if (!$res)
             return false;
