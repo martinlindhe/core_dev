@@ -101,19 +101,22 @@ function client_ip()
 }
 
 define('URL_REGEXP',
-"(".
-    "(https?|ftps?|rtmpe?|mms|rtsp)".
-    "://".
-    "(?:\w+:\w+@)?". //optional username & password
-    "(\w)+".         //1 or more alphanumeric
-    "([\w\-\.])+".   //1 or more alphanumeric, . or -
-    "(:\d+)?".       //optional port number
-    "(/".            //optional url parameters must begin with /
-        "(".
-            "[\w/_\-\'\?\|\=\&\;\+\*\#\%\.\,\:\~\(\)]*".  //0 or more alphanumeric and/or _-'?=&;+*#%.,:~()
-        ")?".
-    ")?".
-")"
+'('.
+    '(https?|ftps?|rtmpe?|mms|rtsp)'.
+    '://'.
+    '(?:\w+'.        // optional username
+        '(:\w+)?'.   // optional password
+    '@)?'.
+    '(\w)+'.         // 1 or more alphanumeric
+    '([\w\-\.])+'.   // 1 or more alphanumeric, . or -
+    '(:\d+)?'.       // optional port number
+    '(/'.            // optional url parameters must begin with /
+        '('.
+            // 0 or more alphanumeric and/or: _-'?=&;+*#%.,:~()
+            '[\w/_\-\'\?\|\=\&\;\+\*\#\%\.\,\:\~\(\)]*'.
+        ')?'.
+    ')?'.
+')'
 );
 
 /**

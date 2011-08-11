@@ -38,15 +38,16 @@ $valid_urls = array(
 'http://server.com/~xx/file.htm',
 'http://server.com/path?arg=value',
 'http://server.com/path?arg=value#anchor',
+'http://sv.wiktionary.org/wiki/höra',       // XXX fails, but should be valid? unicode in path of url is valid
 'http://server.com/path?arg=value&arg2=4',
 'http://server.com/path?arg=value&amp;arg2=4',
-'http://username@server.com/path?arg=value',   //XXX fails but is valid
+'http://username@server.com/path?arg=value',
 'http://username:password@server.com/path?arg=value',
 'http://digg.com/submit?phase=2&url=http&#37;3A&#37;2F&#37;2Fexample.com%2Fpath%2F2on%2F%3Fdomain%3Dp1&p2=text%3A+string',
 );
 
 foreach ($valid_urls as $url)
-    if (!is_url($url)) echo "URL FAIL BUT IS VALID ".$url."\n";
+    if (!is_url($url)) echo "URL FAIL BUT IS VALID:      ".$url."\n";
 
 $invalid_urls = array(
 'x',
@@ -61,18 +62,6 @@ $invalid_urls = array(
 );
 
 foreach ($invalid_urls as $url)
-    if (is_url($url)) echo "URL SUCCESS BUT IS INVALID ".$url."\n";
-
-
-$tmp = implode(' glue ', $valid_urls);
-$test_matches = match_urls($tmp);
-
-
-//compare against $valid_urls, should be the same
-$err = array_diff($valid_urls, $test_matches);
-if (count($err)) {
-    echo "ERROR: the following mismatches occured!\n";
-    var_dump($err);
-}
+    if (is_url($url)) echo "URL SUCCESS BUT IS INVALID: ".$url."\n";
 
 ?>
