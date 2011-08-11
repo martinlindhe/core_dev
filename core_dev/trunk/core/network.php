@@ -102,11 +102,12 @@ function client_ip()
 
 define('URL_REGEXP',
 '('.
-    '(https?|ftps?|rtmpe?|mms|rtsp)'.
-    '://'.
+    '(https?|ftps?|rtmpe?|mms|rtsp){1}'. // protocol
+    '(://){1}'.
     '(?:\w+'.        // optional username
         '(:\w+)?'.   // optional password
-    '@)?'.
+        '@'.         // required separator
+    ')?'.
     '(\w)+'.         // 1 or more alphanumeric
     '([\w\-\.])+'.   // 1 or more alphanumeric, . or -
     '(:\d+)?'.       // optional port number

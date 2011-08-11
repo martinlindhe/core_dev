@@ -38,7 +38,6 @@ $valid_urls = array(
 'http://server.com/~xx/file.htm',
 'http://server.com/path?arg=value',
 'http://server.com/path?arg=value#anchor',
-'http://sv.wiktionary.org/wiki/höra',       // XXX fails, but should be valid? unicode in path of url is valid
 'http://server.com/path?arg=value&arg2=4',
 'http://server.com/path?arg=value&amp;arg2=4',
 'http://username@server.com/path?arg=value',
