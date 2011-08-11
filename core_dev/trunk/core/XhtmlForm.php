@@ -43,9 +43,15 @@ class XhtmlForm
 
     function __construct($name = '', $url_handler = '')
     {
-        $this->name        = $name;
+        if ($name)
+            $this->name = $name;
+        else
+            $this->name = 'frm'.mt_rand();
+
         $this->url_handler = $url_handler;
     }
+
+    function getName() { return $this->name; }
 
     /**
      * Defines the function/object->method that will handle form submit processing
@@ -423,9 +429,6 @@ class XhtmlForm
             $res .= $error->render(true);
 
         $enctype = $this->file_upload ? 'multipart/form-data' : '';
-
-        if (!$this->name)
-            $this->name = 'frm'.mt_rand();
 
         $header = XhtmlHeader::getInstance();
 

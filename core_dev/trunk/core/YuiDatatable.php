@@ -50,6 +50,7 @@ class YuiDatatable
     private $sort_order;
     private $embed_arrays    = array();   ///< array with strings for substitution of numeric values in some columns
     private $color_rows      = array();
+    private $show_paginator = true;
 
     private $pixel_width;                 ///< if set, forces horizontal scrollbar on the datatable
     private $pixel_height;                ///< if set, forces vertical scrollbar on the datatable
@@ -58,6 +59,8 @@ class YuiDatatable
     function setRowsPerPage($n) { $this->rows_per_page = $n; }
     function setWidth($n) { $this->pixel_width = $n; }
     function setHeight($n) { $this->pixel_height = $n; }
+
+    function disablePaginator() { $this->show_paginator = false; }
 
     /**
      * Adds a hidden column to the dataset, needed to embed data in the table linked to other cells, see $col_label param for addColumn()
@@ -222,14 +225,19 @@ class YuiDatatable
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css');
+        if ($this->show_paginator)
+            $header->includeCss('http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css');
+
         $header->includeCss('http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css');
 
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/element/element-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js');
+
+        if ($this->show_paginator)
+            $header->includeJs('http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js');
+
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/json/json-min.js');
 
@@ -349,14 +357,19 @@ class YuiDatatable
                         ''
                     ).
                     ( $this->color_rows ? 'formatRow: myRowFormatter,' : '').
-                    'paginator: new YAHOO.widget.Paginator({'.
-                        (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
-                        'rowsPerPage:'.$this->rows_per_page.','.
-                        'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
-                        'containers:["'.$pag_holder.'"],'.
-                        'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; {CurrentPageReport} {RowsPerPageDropdown} per page",'.
-                        'pageReportTemplate:"Showing items {startRecord} - {endRecord} of {totalRecords}",'.
-                    '}),'.
+                    ($this->show_paginator ?
+                        'paginator: new YAHOO.widget.Paginator({'.
+                            (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
+                            'rowsPerPage:'.$this->rows_per_page.','.
+                            'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
+                            'containers:["'.$pag_holder.'"],'.
+                            'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; {CurrentPageReport} {RowsPerPageDropdown} per page",'.
+                            'pageReportTemplate:"Showing items {startRecord} - {endRecord} of {totalRecords}",'.
+                        '}),'
+                    :
+                        ''
+                    )
+                    .
                     ($this->xhr_source ?
                         'dynamicData:true,'.
                         'initialRequest:"startIndex=0'.

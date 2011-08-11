@@ -18,6 +18,9 @@ class XhtmlComponentInput extends XhtmlComponent
     var $size;
     var $maxlen;
     var $disabled = false;  ///< disable field (make it read only)
+    var $onchange;          ///< js to execute on change event (when input field lost focus after user input)
+
+    function onChange($s) { $this->onchange = $s; }
 
     function render()
     {
@@ -36,6 +39,7 @@ class XhtmlComponentInput extends XhtmlComponent
         ($this->size ? ' size="'.$this->size.'"': '').
         ($this->maxlen ? ' maxlength="'.$this->maxlen.'"': '').
         ($this->disabled ? ' disabled': '').
+        ($this->onchange ? ' onchange="'.$this->onchange.'"': '').
         '/>';
 
         return $res;

@@ -65,10 +65,17 @@ class MediaWikiClient
 
         $raw = $http->getBody();
         $json = JSON::decode($raw);
-
         $pages = array();
-        foreach ( $json->query->pages as $id => $p) {
+        foreach ( $json->query->pages as $id => $p)
+        {
+            if ($id == '-1')
+            {
+                echo 'MEDIAWIKI FAIL: no page result for "'.$name.'"<br/>';
+                return false;
+            }
+
             $o = new MediaWikiPage();
+
             $o->title   = $p->title;
             $o->pageid  = $p->pageid;
             $o->content = $p->revisions[0]->{'*'};
@@ -86,6 +93,8 @@ class MediaWikiClient
         //XXX strip all text inside {{blabla}}
 
         $article = self::getArticle($full_url);
+        if (!$article)
+            throw new Exception ('failed to fetch article '.$full_url);
 //d($article->content);
 
         $pos = strpos($article->content, '==');
