@@ -7,9 +7,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
-
-//TODO soon: rewrite internal form field representation to use objects passed to add() method- 591 lines of code when ~20% done, 2011-01-12
+//STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method
 
 //TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
 //FIXME: dateinterval selection is not auto-filled on next request, see handle() ???
@@ -347,8 +345,12 @@ class XhtmlForm
      */
     function addListbox($name, $str, $arr, $default = '')
     {
-        //FIXME: $default param is ignored by xhtmlSelectMultiple()
-        $this->elems[] = array('type' => 'LISTBOX', 'name' => $name, 'str' => $str, 'arr' => $arr, 'default' => $default);
+        $o = new XhtmlComponentListbox();
+        $o->name    = $name;
+        $o->value   = $default;
+        $o->options = $arr;
+
+        $this->add($o, $str);
     }
 
     /**
@@ -495,11 +497,6 @@ class XhtmlForm
                 $richedit->setWidth($e['width']);
                 $richedit->setHeight($e['height']);
                 $res .= $richedit->render();
-                break;
-
-            case 'LISTBOX':
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= xhtmlSelectMultiple($e['name'], $e['arr'], $e['default']).'</td>';
                 break;
 
             case 'CATEGORY':

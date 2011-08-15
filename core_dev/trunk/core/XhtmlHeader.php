@@ -127,8 +127,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $fn = explode('(', $tmp);
 
         // detect duplicate function names
-        if (isset($this->js_functions[$fn[0]]))
-            throw new Exception ('XXX js function already defined: '.$fn[0]);
+        if (isset($this->js_functions[$fn[0]]) && $this->js_functions[$fn[0]] != $code)
+            throw new Exception ('XXX js function with different code already defined: '.$fn[0]);
 
         $this->js_functions[$fn[0]] = $code;
     }
