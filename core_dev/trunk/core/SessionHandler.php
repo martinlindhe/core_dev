@@ -186,7 +186,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $_SESSION['last_active']  = time();
         session_write_close();
 
-        dp($this->username.' logged in');
+        dp($this->username.' logged in from '.$this->ip );
 
         $error->reset(); // remove previous errors
 
