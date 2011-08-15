@@ -56,9 +56,9 @@ function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')
 
     $out .= '</select>';
 
-    $header = XhtmlHeader::getInstance();
+    $page = XmlDocumentHandler::getInstance();
 
-    $out .= '<a href="#" onclick="toggle_multi_'.$rnd.'(); return false;" style="vertical-align: bottom;"><img src="'.$header->getCoreDevRoot().'gfx/bullet_toggle_plus.png"/></a>';
+    $out .= '<a href="#" onclick="toggle_multi_'.$rnd.'(); return false;" style="vertical-align: bottom;"><img src="'.$page->getCoreDevRoot().'gfx/bullet_toggle_plus.png"/></a>';
 
     return $out;
 }
