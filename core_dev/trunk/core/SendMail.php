@@ -110,6 +110,7 @@ class SendMail extends CoreBase
             throw new Exception ('Cant connect to smtp server '.$this->server_host.':'.$this->server_port);
 
         $this->connected = true;
+        return true;
     }
 
     private function disconnect()
@@ -229,7 +230,7 @@ class SendMail extends CoreBase
     function send($msg = '')
     {
         if (!$this->connect()) {
-            dp('SendMail failed to send mail because no mail server configured: '.$msg);
+            dp('SendMail failed to send mail because no mail server configured: '.substr($msg, 0, 200) );
             return false;
         }
 

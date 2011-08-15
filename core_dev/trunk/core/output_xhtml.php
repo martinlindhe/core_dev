@@ -31,7 +31,7 @@ function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
 /**
  * @param $_size number of fields shown
  */
-function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')
+function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')   /// XXXXXX DEPRECATE this! use XhtmlComponentListbox instead
 {
     //TODO not ignore the default param
 
