@@ -43,7 +43,7 @@ class XhtmlComponentListbox extends XhtmlComponent
         $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
 
         foreach ($this->options as $id => $title)
-            $out .= '<option value="'.$id.'"'.($this->value == $id ? ' selected="selected"':'').'>'.$title.'</option>';
+            $out .= '<option value="'.$id.'"'.($this->value && $this->value == $id ? ' selected="selected"':'').'>'.$title.'</option>';
 
         $out .= '</select>';
 
