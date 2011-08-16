@@ -259,6 +259,19 @@ class XhtmlForm
    }
 
     /**
+     * Adds a password field to the form
+     */
+    function addPassword($name, $str, $size = 0, $maxlen = 0)
+    {
+        $o = new XhtmlComponentPassword();
+        $o->name  = $name;
+        $o->size  = $size;
+        $o->maxlen = $maxlen;
+
+        $this->add($o, $str);
+   }
+
+    /**
      * Adds a checkbox field to the form
      */
     function addCheckbox($name, $str, $checked = false, $val = '1')

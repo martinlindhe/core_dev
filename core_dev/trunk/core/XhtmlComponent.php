@@ -16,6 +16,7 @@ require_once('XhtmlComponentHidden.php');
 require_once('XhtmlComponentInput.php');
 require_once('XhtmlComponentListbox.php');
 require_once('XhtmlComponentOpenSearch.php');
+require_once('XhtmlComponentPassword.php');
 require_once('XhtmlComponentRadio.php');
 require_once('XhtmlComponentSubmit.php');
 require_once('XhtmlComponentText.php');
