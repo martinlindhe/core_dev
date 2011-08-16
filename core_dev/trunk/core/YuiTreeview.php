@@ -22,6 +22,7 @@ class YuiTreeview
 
     protected $allow_expand_all = false;   ///< allow multiple nodes open at once?
     protected $leaf_mode        = true;    ///< shows childless nodes. disable to use Expand/Collapse icons
+    protected $js_click;                   ///< code to execute on single click
     protected $js_dblclick;                ///< code to execute on double click
 
     function setRootNodes($arr)
@@ -32,10 +33,13 @@ class YuiTreeview
         }
     }
 
+    function expandAll($b = true) { $this->allow_expand_all = $b; }
+
     function setXhrUrl($s) { $this->xhr_url = relurl($s); }
 
     /** node id is in oArgs.node.data.id */
-    function setJsDblClick($s) { $this->js_dblclick = $s; }
+    function onClick($s) { $this->js_click = $s; }
+    function onDoubleClick($s) { $this->js_dblclick = $s; }
 
     function render()
     {
@@ -138,18 +142,12 @@ class YuiTreeview
             'var tempNode = new YAHOO.widget.'.$node_type.'({label:aChilds[i].name,id:aChilds[i].id}, root, false);'.
         '}'.
 
+        ($this->js_click    ? 'tree.subscribe("clickEvent",function(oArgs){'.$this->js_click.'});'       : '').
+        ($this->js_dblclick ? 'tree.subscribe("dblClickEvent",function(oArgs){'.$this->js_dblclick.'});' : '').
+
         //render tree with these toplevel nodes; all descendants of these nodes
         //will be generated as needed by the dynamic loader.
-        'tree.render();'.
-
-        ($this->js_dblclick ?
-            'tree.subscribe("dblClickEvent",function(oArgs) {'.
-                //'alert("Double click on node: " + oArgs.node.label);'.
-                $this->js_dblclick.
-            '});'
-        :
-            ''
-        );
+        'tree.render();';
 
         return
         '<div id="'.$div_holder.'"></div>'.
