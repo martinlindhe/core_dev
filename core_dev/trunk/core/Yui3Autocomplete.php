@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip, will replace YuiAutocomplete
+//STATUS: not finished. YuiAutocomplete is currently preferred. this will eventuall replace YuiAutocomplete
 
 //TODO: ability to load list with id=>label pairs of data. show label but submit id
 
