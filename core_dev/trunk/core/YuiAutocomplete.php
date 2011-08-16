@@ -23,7 +23,8 @@ class YuiAutocomplete extends XhtmlComponent
 {
     protected $xhr_url;
 
-    protected $js_format_result = '';
+    protected $js_format_result = 'return "<div class=\"result\"><span class=\"name\">" + highlight(oResultData.name, sQuery) + "</span></div>";';
+
     protected $result_fields    = array();
 
     protected $query_delay      = 0.1;         // Bump up the query delay to reduce server load
@@ -74,6 +75,14 @@ class YuiAutocomplete extends XhtmlComponent
 
         $input_id = 'ac_input_'.mt_rand();
 
+        $header->embedJs(
+        'function highlight(s,h)'.
+        '{'.
+            'var regex = new RegExp("("+h+")","ig");'.
+            'return s.replace(regex, "<span class=\"highlighted\">$1</span>");'.
+        '}'
+        );
+
         $header->embedCss(
         'label {'.
             'color:#E76300;'.
@@ -82,6 +91,11 @@ class YuiAutocomplete extends XhtmlComponent
         '#'.$div_holder.' {'.
             'width:20em;'. // set width here or else widget will expand to fit its container
         '}'.
+
+        '.yui-ac .result {position:relative;height:20px;}'.
+        '.yui-ac .name {position:absolute;bottom:0;}'.
+        '.highlighted {color:#CA485E;font-weight:bold; }'.
+
         // buttons
         '.yui-ac .yui-button {vertical-align:middle;}'.
         '.yui-ac .yui-button button {background: url(http://developer.yahoo.com/yui/examples/autocomplete/assets/img/ac-arrow-rt.png) center center no-repeat}'.
@@ -181,13 +195,13 @@ class YuiAutocomplete extends XhtmlComponent
 
         $in = new XhtmlComponentInput();
         $in->name = $input_id;
-        $in->width = 100;
+        $in->width = 200;   // XXXX HACK, should not set width at all.. but we do it now so button dont end up on the next line
 
         return
         '<div id="'.$div_holder.'">'.
             $in->render().
-            '<div id="'.$container_holder.'"></div>'.
-            '<span id="'.$button_id.'"></span>'.
+            '<span id="'.$container_holder.'"></span>'.
+            ' <span id="'.$button_id.'"></span>'.
         '</div>'.
         js_embed($res);
     }
