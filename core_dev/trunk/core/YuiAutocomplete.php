@@ -11,6 +11,8 @@
 
 //STATUS: wip, currently only used in savak/bnr
 
+//TODO: clean up css so button is on same line as input field
+
 //XXX TODO: remove items from selection menu which was already selected
 // XXX TODO later: encase each selected item with a <span> or somehting, and add a "X" remove button, similar to facebook autocomplete lists
 
@@ -79,7 +81,6 @@ class YuiAutocomplete extends XhtmlComponent
         '}'.
         '#'.$div_holder.' {'.
             'width:20em;'. // set width here or else widget will expand to fit its container
-            'padding-bottom:2em;'.
         '}'.
         // buttons
         '.yui-ac .yui-button {vertical-align:middle;}'.
@@ -180,6 +181,7 @@ class YuiAutocomplete extends XhtmlComponent
 
         $in = new XhtmlComponentInput();
         $in->name = $input_id;
+        $in->width = 100;
 
         return
         '<div id="'.$div_holder.'">'.

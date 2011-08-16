@@ -15,7 +15,8 @@ class XhtmlComponentInput extends XhtmlComponent
 {
     var $id;                ///< xhtml component id
     var $value;             ///< default value
-    var $size;
+    var $size;              ///< for <input type="text"> the size attribute defines the number of characters that should be visible
+    var $width;             ///< width in pixels
     var $maxlen;
     var $disabled = false;  ///< disable field (make it read only)
     var $onchange;          ///< js to execute on change event (when input field lost focus after user input)
@@ -40,6 +41,7 @@ class XhtmlComponentInput extends XhtmlComponent
         ($this->maxlen ? ' maxlength="'.$this->maxlen.'"': '').
         ($this->disabled ? ' disabled': '').
         ($this->onchange ? ' onchange="'.$this->onchange.'"': '').
+        ($this->width ? ' style="width:'.$this->width.'px"': '').
         '/>';
 
         return $res;
