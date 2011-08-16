@@ -39,6 +39,10 @@ class XhtmlForm
     protected $using_captcha    = false;
     protected $focus_element;
 
+    protected $css_table        = 'border:1px solid;';
+
+    protected $js_onsubmit;                ///< js to execute on form submit
+
     function __construct($name = '', $url_handler = '')
     {
         if ($name)
@@ -50,6 +54,10 @@ class XhtmlForm
     }
 
     function getName() { return $this->name; }
+
+    function onSubmit($s) { $this->js_onsubmit = $s; }
+
+    function cssTable($s) { $this->css_table = $s; }
 
     /**
      * Defines the function/object->method that will handle form submit processing
@@ -461,9 +469,17 @@ class XhtmlForm
         if ($this->focus_element)
             $header->embedJsOnload('document.'.$this->name.'.'.$this->focus_element.'.focus();');
 
-        $res .= xhtmlForm($this->name, $this->url_handler, 'post', $enctype);
+        $res .=
+        '<form action="'.$this->url_handler.'" method="post" name="'.$this->name.
+        ($enctype ? '" enctype="'.$enctype : '').
+        ($this->js_onsubmit ? '" onsubmit="'.$this->js_onsubmit.'"' : '').
+        '>';
 
-        $res .= '<table cellpadding="10" cellspacing="0" border="1">';
+
+        $res .=
+        '<table cellpadding="10" cellspacing="0"'.
+        ($this->css_table ? ' style="'.$this->css_table.'"' : '').
+        '>';
 
         foreach ($this->elems as $e)
         {
@@ -606,7 +622,7 @@ class XhtmlForm
 
         $res .= '</table>';
 
-        $res .= xhtmlFormClose();
+        $res .= '</form>';
         return $res;
     }
 }
