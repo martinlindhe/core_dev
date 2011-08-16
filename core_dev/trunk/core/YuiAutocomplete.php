@@ -29,7 +29,7 @@ class YuiAutocomplete extends XhtmlComponent
 
     protected $query_delay      = 0.1;         // Bump up the query delay to reduce server load
 
-    function setXhrUrl($s) { $this->xhr_url = $s; }
+    function setXhrUrl($s) { $this->xhr_url = relurl($s); }
 
     function setJsFormatResult($s) { $this->js_format_result = $s; }
 

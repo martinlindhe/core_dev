@@ -353,6 +353,16 @@ class XhtmlForm
         $this->add($o, $str);
     }
 
+    function addAutocomplete($name, $str, $url, $result_fields)
+    {
+        $o = new YuiAutocomplete();
+        $o->setName($name);
+        $o->setXhrUrl($url);
+        $o->setResultFields( $result_fields );
+        $this->add($o, $str);
+    }
+
+
     /**
      * Adds a category to the form
      * @param $cat_type category type
