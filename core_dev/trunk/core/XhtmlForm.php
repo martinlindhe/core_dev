@@ -329,10 +329,11 @@ class XhtmlForm
     /**
      * Adds a submit button to the form
      */
-    function addSubmit($title)
+    function addSubmit($title, $bold_text = false)
     {
         $o = new XhtmlComponentSubmit();
         $o->title = $title;
+        $o->style = $bold_text ? 'font-weight: bold' : '';
 
         $this->add($o);
     }
