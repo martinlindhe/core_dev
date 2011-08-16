@@ -471,7 +471,7 @@ class XhtmlForm
             $header->embedJsOnload('document.'.$this->name.'.'.$this->focus_element.'.focus();');
 
         $res .=
-        '<form action="'.$this->url_handler.'" method="post" name="'.$this->name.
+        '<form action="'.$this->url_handler.'" method="post" name="'.$this->name.'"'.
         ($enctype ? '" enctype="'.$enctype : '').
         ($this->js_onsubmit ? '" onsubmit="'.$this->js_onsubmit.'"' : '').
         '>';
