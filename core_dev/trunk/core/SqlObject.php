@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO: add a "delete" method
+
 require_once('Sql.php');
 
 class SqlObject
@@ -168,6 +170,15 @@ class SqlObject
         $row = Sql::pSelectRow($q, 'i', $id);
 
         return SqlObject::loadObject($row, $classname);
+    }
+
+    static function deleteById($id, $tblname, $field_name = 'id')
+    {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
+            throw new Exception ('very bad');
+
+        $q = 'DELETE FROM '.$tblname.' WHERE '.$field_name.' = ?';
+        Sql::pDelete($q, 'i', $id);
     }
 
     /**
