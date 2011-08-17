@@ -9,8 +9,6 @@
 
 //STATUS: wip
 
-//TODO: add a "delete" method
-
 require_once('Sql.php');
 
 class SqlObject

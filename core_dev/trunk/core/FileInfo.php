@@ -13,35 +13,35 @@ require_once('CommentList.php');
 
 class FileInfo
 {
-	public static $image_mime_types = array(
-		'image/jpeg',
-		'image/png',
-		'image/gif',
-		'image/bmp'
-	); ///<FIXME remove
+    public static $image_mime_types = array(
+	'image/jpeg',
+	'image/png',
+	'image/gif',
+	'image/bmp'
+    ); ///<FIXME remove
 
-	public static $audio_mime_types	= array(
-		'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
-		'audio/x-ms-wma',					//.wma file. FF2 & IE7 sends this
-		'application/x-ogg'					//.ogg file		- FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
-	); ///<FIXME remove
+    public static $audio_mime_types	= array(
+	'audio/x-mpeg',	'audio/mpeg',		//.mp3 file. FF2 = 'audio/x-mpeg', IE7 = 'audio/mpeg'
+	'audio/x-ms-wma',					//.wma file. FF2 & IE7 sends this
+	'application/x-ogg'					//.ogg file		- FIXME: IE7 sends mime header 'application/octet-stream' for .ogg
+    ); ///<FIXME remove
 
-	public static $video_mime_types = array(
-		'video/mpeg',           // .mpg file
-		'video/avi',            // .avi file
-		'video/x-msvideo',      // .avi file
-		'video/x-ms-wmv',	    // Microsoft .wmv file
-		'video/3gpp',			// .3gp video file
-		'video/x-flv',          // Flash video
-		'video/mp4',            // MPEG-4 video
-		'application/ogg'       // Ogg video
-	); ///<FIXME remove
+    public static $video_mime_types = array(
+	'video/mpeg',           // .mpg file
+	'video/avi',            // .avi file
+	'video/x-msvideo',      // .avi file
+	'video/x-ms-wmv',	    // Microsoft .wmv file
+	'video/3gpp',			// .3gp video file
+	'video/x-flv',          // Flash video
+	'video/mp4',            // MPEG-4 video
+	'application/ogg'       // Ogg video
+    ); ///<FIXME remove
 
-	public static $document_mime_types = array(
-		'text/plain',           // normal text file
-		'application/msword',   // Microsoft .doc file
-		'application/pdf'       // Adobe .pdf file
-	); ///<FIXME remove
+    public static $document_mime_types = array(
+	'text/plain',           // normal text file
+	'application/msword',   // Microsoft .doc file
+	'application/pdf'       // Adobe .pdf file
+    ); ///<FIXME remove
 
     static function get($id)
     {
@@ -79,26 +79,26 @@ class FileInfo
 
     static function getMimeType($filename)
     {
-		if (!file_exists($filename))
+	if (!file_exists($filename))
             return false;
 
-		$c = 'file -bi '.escapeshellarg($filename);
-		$res = exec($c);
+	$c = 'file -bi '.escapeshellarg($filename);
+	$res = exec($c);
 
         // $ file -bi file.flv
         // video/x-flv; charset=binary
         $x = explode(';', $res);
 
-		//XXX: use mediaprobe to distinguish between wmv/wma files.
-		//FIXME: enhance mediaprobe to handle all media detection and stop use "file"
+	//XXX: use mediaprobe to distinguish between wmv/wma files.
+	//FIXME: enhance mediaprobe to handle all media detection and stop use "file"
 /*
-		if ($x[0] == 'video/x-ms-wmv') {
-			$c = 'mediaprobe '.escapeshellarg($filename);
-			return exec($c);
-		}
+	if ($x[0] == 'video/x-ms-wmv') {
+	    $c = 'mediaprobe '.escapeshellarg($filename);
+	    return exec($c);
+	}
 */
 
-		return $x[0];
+	return $x[0];
     }
 
     static function passthru($id)
@@ -109,7 +109,7 @@ class FileInfo
 
         // Displays the file in the browser, and assigns a filename for the browser's "save as..." features
         header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
-		header('Content-Transfer-Encoding: binary');
+	header('Content-Transfer-Encoding: binary');
 
         header('Content-Type: '.$data['fileMime']);
 
