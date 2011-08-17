@@ -68,7 +68,7 @@ class UserList
      * @param $filter partial username matching
      * @return array of User objects
      */
-    static function getUsers($filter = '')
+    static function getUsers($filter = '')  //XXXX use SqlObject
     {
         $db = SqlHandler::getInstance();
 
