@@ -25,7 +25,7 @@ class File
 
     static function get($id)
     {
-        return SqlObject::getById($id, 'tblFiles', 'File');
+        return SqlObject::getById($id, 'tblFiles', 'File', 'fileId');
     }
 
 }

@@ -16,6 +16,7 @@ require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
+require_once('constants.php');
 require_once('FileList.php');
 require_once('XhtmlComponent.php');
 
@@ -463,22 +464,24 @@ class XhtmlForm
         if ($error->getErrorCount())
             $res .= $error->render(true);
 
-        $enctype = $this->file_upload ? 'multipart/form-data' : '';
-
         $header = XhtmlHeader::getInstance();
 
         if ($this->focus_element)
             $header->embedJsOnload('document.'.$this->name.'.'.$this->focus_element.'.focus();');
 
         $res .=
-        '<form action="'.$this->url_handler.'" method="post" name="'.$this->name.'"'.
-        ($enctype ? '" enctype="'.$enctype : '').
+        '<form'.
+        ' action="'.$this->url_handler.'"'.
+        ' method="post"'.
+        ' name="'.$this->name.'"'.
+        ($this->file_upload ? '" enctype="multipart/form-data"'     : '').
         ($this->js_onsubmit ? '" onsubmit="'.$this->js_onsubmit.'"' : '').
         '>';
 
-
         $res .=
-        '<table cellpadding="10" cellspacing="0"'.
+        '<table'.
+        ' cellpadding="10"'.
+        ' cellspacing="0"'.
         ($this->css_table ? ' style="'.$this->css_table.'"' : '').
         '>';
 
