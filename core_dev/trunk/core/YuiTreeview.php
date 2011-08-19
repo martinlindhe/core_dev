@@ -43,9 +43,6 @@ class YuiTreeview
 
     function render()
     {
-        if (!$this->root_nodes)
-            throw new Exception ('no root nodes set');
-
         if (!$this->xhr_url)
             throw new Exception ('xhr url must be set');
 
@@ -139,12 +136,15 @@ class YuiTreeview
         //get root node for tree:
         'var root = tree.getRoot();'.
 
-        //add child nodes for tree:
-        'var aChilds = '.JSON::encode($this->root_nodes).';'.
-
-        'for (var i=0, j=aChilds.length; i<j; i++) {'.
-            'var tempNode = new YAHOO.widget.'.$node_type.'({label:aChilds[i].name,id:aChilds[i].id}, root, false);'.
-        '}'.
+        ($this->root_nodes ?
+            //add child nodes for tree:
+            'var aChilds = '.JSON::encode($this->root_nodes).';'.
+            'for (var i=0, j=aChilds.length; i<j; i++) {'.
+                'var tempNode = new YAHOO.widget.'.$node_type.'({label:aChilds[i].name,id:aChilds[i].id}, root, false);'.
+            '}'
+        :
+            ''
+        ).
 
         ($this->js_click    ? 'tree.subscribe("clickEvent",function(oArgs){'.$this->js_click.'});'       : '').
         ($this->js_dblclick ? 'tree.subscribe("dblClickEvent",function(oArgs){'.$this->js_dblclick.'});' : '').
