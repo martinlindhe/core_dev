@@ -105,12 +105,14 @@ class SqlObject
         return $vals;
     }
 
-    static function idExists($id, $tblname, $id_field = 'id')
+    static function idExists($id, $tblname, $field_name = 'id')
     {
-        if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        $q = 'SELECT COUNT(*) FROM '.$tblname.' WHERE '.$id_field.' = ?';
+        $q =
+        'SELECT COUNT(*) FROM '.$tblname.
+        ' WHERE '.$field_name.' = ?';
 
         return Sql::pSelectItem($q, 's', $id) ? true : false;
     }
@@ -126,37 +128,39 @@ class SqlObject
 
         $vals = self::reflectQuery($obj);
 
-        $q = 'INSERT INTO '.$tblname.' SET '.implode(', ', $vals);
+        $q =
+        'INSERT INTO '.$tblname.
+        ' SET '.implode(', ', $vals);
         return SqlHandler::getInstance()->insert($q); ///XXXXXXXXXXXX use Sql::pInsert ..!!!
     }
 
     /**
-     * If object exists with same name as field in $id_field, already in db, return false
+     * If object exists with same name as field in $field_name, already in db, return false
      */
-    static function storeUnique($obj, $tblname, $id_field = 'id')
+    static function storeUnique($obj, $tblname, $field_name = 'id')
     {
-        if (self::idExists($obj->$id_field, $tblname, $id_field))
+        if (self::idExists($obj->$field_name, $tblname, $field_name))
             return false;
 
         return self::create($obj, $tblname);
     }
 
     /**
-     * If object exists with the same name as field in $id_field, update that item
+     * If object exists with the same name as field in $field_name, update that item
      */
-    static function store($obj, $tblname, $id_field = 'id')
+    static function store($obj, $tblname, $field_name = 'id')
     {
-        if (SqlObject::idExists($obj->$id_field, $tblname, $id_field)) {
-            sqlObject::updateId($obj, $tblname, $id_field);
+        if (SqlObject::idExists($obj->$field_name, $tblname, $field_name)) {
+            sqlObject::updateId($obj, $tblname, $field_name);
             return $obj->id;
         }
 
         return SqlObject::create($obj, $tblname);
     }
 
-    static function getById($id, $tblname, $classname, $id_field = 'id')
+    static function getById($id, $tblname, $classname, $field_name = 'id')
     {
-        return self::getByField($id, $tblname, $classname, $id_field);
+        return self::getByField($id, $tblname, $classname, $field_name);
     }
 
     static function getByField($id, $tblname, $classname, $field_name = 'id')
@@ -164,7 +168,9 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        $q = 'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
+        $q =
+         'SELECT * FROM '.$tblname.
+        ' WHERE '.$field_name.' = ?';
         $row = Sql::pSelectRow($q, 'i', $id);
 
         return SqlObject::loadObject($row, $classname);
@@ -175,7 +181,9 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        $q = 'DELETE FROM '.$tblname.' WHERE '.$field_name.' = ?';
+        $q =
+         'DELETE FROM '.$tblname.
+        ' WHERE '.$field_name.' = ?';
         Sql::pDelete($q, 'i', $id);
     }
 
@@ -188,7 +196,7 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name) || !is_alphanumeric($order_field))
             throw new Exception ('very bad');
 
-        if (!in_array(strtoupper($order), array('DESC', 'ASC')))
+        if (!Sql::isValidOrder($order))
             throw new Exception ('odd order '.$order);
 
         $q = 'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
@@ -206,14 +214,18 @@ class SqlObject
         return SqlObject::loadObjects($list, $classname);
     }
 
-    static function updateId($obj, $tblname, $id_field = 'id')
+    static function updateId($obj, $tblname, $field_name = 'id')
     {
-        if (!is_alphanumeric($tblname) || !is_alphanumeric($id_field))
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        $vals = self::reflectQuery($obj, $id_field);
+        $vals = self::reflectQuery($obj, $field_name);
 
-        $q = 'UPDATE '.$tblname.' SET '.implode(', ', $vals).' WHERE '.$id_field.' = '.$obj->id;
+        $q =
+        'UPDATE '.$tblname.
+        ' SET '.implode(', ', $vals).
+        ' WHERE '.$field_name.' = '.$obj->id;
+
         return SqlHandler::getInstance()->update($q);  //XXXXXXXXXXx use Sql::pUpdate
     }
 

@@ -77,6 +77,19 @@ class Sql
     }
 
     /**
+     * @return true if $order is a valid sort order
+     */
+    public static function isValidOrder($order)
+    {
+        $valid = array('DESC', 'ASC');
+
+        if (!in_array(strtoupper($order), $valid))
+            return false;
+
+        return true;
+    }
+
+    /**
      * Prepared select
      *
      * @param $args[0] query
