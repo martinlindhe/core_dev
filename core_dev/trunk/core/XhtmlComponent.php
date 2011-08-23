@@ -10,6 +10,7 @@
 require_once('CoreBase.php');
 
 require_once('XhtmlComponentButton.php');
+require_once('XhtmlComponentCheckbox.php');
 require_once('XhtmlComponentDropdown.php');
 require_once('XhtmlComponentFile.php');
 require_once('XhtmlComponentHidden.php');
@@ -27,6 +28,11 @@ abstract class XhtmlComponent extends CoreBase
     var $name;
 
     abstract function render();
+
+    function __construct($s = '')
+    {
+        $this->name = $s;
+    }
 
     function setName($s) { $this->name = $s; }
     function getName() { return $this->name; }

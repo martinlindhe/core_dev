@@ -81,7 +81,7 @@ function xhtmlHidden($_name, $_val = 1)   //XXXX DEPRECATE later (used by phonec
 /**
  * Creates a checkbox
  */
-function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $onclick = '')
+function xhtmlCheckbox__DEPRECATED($_name, $_title = '', $_val = 1, $_checked = false, $onclick = '')
 {
     $out = '';
     if (!$onclick) $out .= xhtmlHidden($_name, 0);

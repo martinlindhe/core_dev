@@ -26,7 +26,10 @@ class XhtmlComponentHidden extends XhtmlComponent
                 $out .= '<input type="hidden" name="'.$this->name.'[]" value="'.$v.'"/>';
 */
         return
-        '<input type="hidden" name="'.$this->name.'" value="'.urlencode($this->value).'"/>';
+        '<input type="hidden"'.
+        ' name="'.$this->name.'"'.
+        ' value="'.urlencode($this->value).'"'.
+        '/>';
     }
 
 }

@@ -292,7 +292,13 @@ class XhtmlForm
      */
     function addCheckbox($name, $str, $checked = false, $val = '1')
     {
-        $this->elems[] = array('type' => 'CHECKBOX', 'name' => $name, 'str' => $str, 'default' => $val, 'checked' => $checked);
+        $o = new XhtmlComponentCheckbox();
+        $o->name  = $name;
+        $o->title = $str;
+        $o->value = $val;
+        $o->checked = $checked;
+
+        $this->add($o);
     }
 
     /**
@@ -496,33 +502,38 @@ class XhtmlForm
         ($this->css_table ? ' style="'.$this->css_table.'"' : '').
         '>';
 
+        // fills in form with previous entered data
         foreach ($this->elems as $e)
         {
-            if (isset($e['obj']) && is_object($e['obj'])) {
+            if (isset($e['obj']))
+            {
+                if (!is_object($e['obj']))
+                    throw new Exeption ('dont do that');
+
                 if ($e['obj'] instanceof XhtmlComponentHidden) {
                     $res .= $e['obj']->render();
                 } else {
-                    if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )  // not all XhtmlComponents has a value
-                        $e['obj']->value = $this->form_data[ $e['obj']->name ];
 
-                    $res .= '<tr>';
-                    $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                    $res .= $e['obj']->render().'</td>';
-                    $res .= '</tr>';
+                    if ($e['obj'] instanceof XhtmlComponentCheckbox)
+                        if (isset($this->form_data[ $e['obj']->name ]))
+                            $e['obj']->checked = $this->form_data[ $e['obj']->name ];
+                    else
+                        if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )
+                            $e['obj']->value = $this->form_data[ $e['obj']->name ];
+
+                    $res .=
+                    '<tr>'.
+                    ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
+                    $e['obj']->render().'</td>'.
+                    '</tr>';
                 }
                 continue;
             }
 
             $res .= '<tr>';
 
-            //fills in form with previous entered data
+            // fills in form with previous entered data (old school style.. TODO drop when all is objects)
             switch ($e['type']) {
-            case 'CHECKBOX':
-                //dont set a unset checkbox to value 0, it breaks the form
-                if (!empty($e['name']) && !empty($this->form_data[$e['name']]))
-                    $e['checked'] = true;
-                break;
-
             default:
                 if (!empty($e['name']) && isset($this->form_data[$e['name']]))
                     $e['default'] = $this->form_data[$e['name']];
@@ -532,9 +543,6 @@ class XhtmlForm
                 $e['value'] = urlencode($e['value']);
 
             switch ($e['type']) {
-            case 'CHECKBOX':
-                $res .= '<td colspan="2">'.xhtmlCheckbox($e['name'], $e['str'], $e['default'], $e['checked']).'</td>';
-                break;
 
             case 'RICHEDIT':
                 $hold = new XhtmlComponentTextarea();
@@ -629,8 +637,7 @@ class XhtmlForm
                 break;
 
             default:
-                $res .= '<h1>'.$e['type'].' not implemented</h1>';
-                break;
+                throw new Exception ('XhtmlForm type '.$e['type'].' not implemented');
             }
             $res .= '</tr>';
         }
