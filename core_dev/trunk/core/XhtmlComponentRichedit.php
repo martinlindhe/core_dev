@@ -2,10 +2,14 @@
 /**
  * $Id$
  *
+ * XhtmlComponent compilant wrapper for YuiRichedit class
+ *
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
 //STATUS: wip
+
+//XXX useless... YuiRichedit can directly extend from XhtmlComponent!!!!!
 
 require_once('XhtmlComponent.php');
 
@@ -19,18 +23,13 @@ class XhtmlComponentRichedit extends XhtmlComponent
 
     function render()
     {
-        $hold = new XhtmlComponentTextarea();
-        $hold->name   = $this->name;
-        $hold->value  = $this->value;
-        $hold->width  = 1;
-        $hold->height = 1;
-
         $re = new YuiRichedit();
-        $re->setInputName($this->name);
+        $re->setName($this->name);
+        $re->setValue($this->value);
         $re->setWidth($this->width);
         $re->setHeight($this->height);
 
-        return $hold->render().$re->render();
+        return $re->render();
     }
 
 }

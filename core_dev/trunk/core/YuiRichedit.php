@@ -12,53 +12,58 @@
 
 //STATUS: wip
 
+//XXX TODO... YuiRichedit can directly extend from XhtmlComponent!!!!! if so, drop XhtmlComponentRichedit
+
 //TODO: integrate image upload
 
 require_once('JSON.php');
 
 class YuiRichedit
 {
-    private $width      = 500;
-    private $height     = 200;
-    private $input_name;       ///< name of <textarea> to decorate with rich editor
-    private $titlebar   = '';
-    private $show_dompath = false; //Displays the DOM bar at the bottom
+    private $name;                  ///< name of <textarea> to decorate with rich editor
+    private $value;                 ///< initial value of textarea
 
+    private $width        = 500;
+    private $height       = 200;
+    private $titlebar     = '';
+    private $show_dompath = false;  ///< displays the DOM bar at the bottom
+
+    function setName($s) { $this->name = $s; }
+    function setValue($s) { $this->value = $s; }
     function setWidth($n) { $this->width = $n; }
     function setHeight($n) { $this->height = $n; }
-    function setInputName($s) { $this->input_name = $s; }
 
     function render()
     {
-        if (!$this->input_name)
-            throw new Exception ('must set a name');
-
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css');
 
-        //Utility Dependencies
+        // utility Dependencies
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/element/element-min.js');
 
-        //Needed for Menus, Buttons and Overlays used in the Toolbar
+        // needed for Menus, Buttons and Overlays used in the Toolbar
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/button/button-min.js');
 
-        //Source file for Rich Text Editor
+        // source file for Rich Text Editor
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js');
 
+        $div_id = $this->name ? $this->name : 're_'.mt_rand();
+
         $res =
-        'var myEditor = new YAHOO.widget.Editor("'.$this->input_name.'", {'.
+        'var myEditor = new YAHOO.widget.Editor("'.$div_id.'",'.
+        '{'.
             'width: "'.$this->width.'px",'.
             'height: "'.$this->height.'px",'.
             'dompath: '.($this->show_dompath ? 'true' : 'false').','.
-            'animate: true,'.      //Animates the opening, closing and moving of Editor windows
-            'handleSubmit: true,'. //editor will attach itself to the textareas parent form's submit handler
+            'animate: true,'.      // animates the opening, closing and moving of Editor windows
+            'handleSubmit: true,'. // editor will attach itself to the textareas parent form's submit handler
 
             'toolbar: {'.
-                'titlebar: "'.$this->titlebar.'",'.
+                ($this->titlebar ? 'titlebar: "'.$this->titlebar.'",' : '').
                 'buttons: ['.
                     '{ group: "textstyle", label: " ",'. ///XXX if not using a space as label, holder div will shrink and it looks ugly
                         'buttons: ['.
@@ -95,7 +100,13 @@ class YuiRichedit
 
         'myEditor.render();';
 
-        return js_embed($res);
+        $hold = new XhtmlComponentTextarea();
+        $hold->name   = $this->name;
+        $hold->value  = $this->value;
+        $hold->width  = 1;
+        $hold->height = 1;
+
+        return $hold->render().js_embed($res);
     }
 }
 
