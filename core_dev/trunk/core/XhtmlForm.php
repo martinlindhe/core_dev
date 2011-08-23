@@ -78,13 +78,11 @@ class XhtmlForm
             $this->objectinstance = $objectinstance;
     }
 
-    /**
-     * Activates javascript that auto-focuses on specified input field
-     */
+    /** Activates javascript that auto-focuses on specified input field */
     function setFocus($s)
     {
-
-        foreach ($this->elems as $e) {
+        foreach ($this->elems as $e)
+        {
             if (isset($e['obj']) && is_object($e['obj'])) {
                 if ($e['obj']->name == $s) {
                     $this->focus_element = $s;
@@ -204,7 +202,8 @@ class XhtmlForm
 
                 $p[ $e['obj']->name ] = $key;
 
-                unset($_FILES[ $e['obj']->name ]);    //to avoid further processing of this file upload elsewhere
+                // to avoid further processing of this file upload elsewhere
+                unset($_FILES[ $e['obj']->name ]);
             }
         }
 
@@ -232,10 +231,8 @@ class XhtmlForm
         return false;
     }
 
-    /**
-     * Adds a object to the form
-     */
-    function add($o, $str = '')
+    /** Adds a object to the form */
+    function add($o, $text = '')
     {
         if (!is_object($o))
             throw new Exception ('not an object');
@@ -243,80 +240,66 @@ class XhtmlForm
         if (!$o instanceof XhtmlComponent)
             throw new exception ('obj must extend from XhtmlComponent');
 
-        $this->elems[] = array('obj' => $o, 'str' => $str);
+        if ($o instanceof XhtmlComponentFile)
+            $this->file_upload = true;
+
+        $this->elems[] = array('obj' => $o, 'str' => $text);
     }
 
-    /**
-     * Adds a hidden input field to the form
-     */
+    /** Adds a hidden input field to the form */
     function addHidden($name, $val)
     {
         $o = new XhtmlComponentHidden();
         $o->name  = $name;
         $o->value = $val;
-
         $this->add($o);
     }
 
-    /**
-     * Adds a input field to the form
-     */
-    function addInput($name, $str, $val = '', $size = 0, $maxlen = 0)
+    /** Adds a input field to the form */
+    function addInput($name, $text, $val = '', $size = 0, $maxlen = 0)
     {
         $o = new XhtmlComponentInput();
-        $o->name  = $name;
-        $o->value = $val;
-        $o->size  = $size;
+        $o->name   = $name;
+        $o->value  = $val;
+        $o->size   = $size;
         $o->maxlen = $maxlen;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
    }
 
-    /**
-     * Adds a password field to the form
-     */
-    function addPassword($name, $str, $size = 0, $maxlen = 0)
+    /** Adds a password field to the form */
+    function addPassword($name, $text, $size = 0, $maxlen = 0)
     {
         $o = new XhtmlComponentPassword();
-        $o->name  = $name;
-        $o->size  = $size;
+        $o->name   = $name;
+        $o->size   = $size;
         $o->maxlen = $maxlen;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
    }
 
-    /**
-     * Adds a checkbox field to the form
-     */
-    function addCheckbox($name, $str, $checked = false, $val = '1')
+    /** Adds a checkbox field to the form */
+    function addCheckbox($name, $text, $checked = false, $val = '1')
     {
         $o = new XhtmlComponentCheckbox();
         $o->name  = $name;
-        $o->title = $str;
+        $o->title = $text;
         $o->value = $val;
         $o->checked = $checked;
-
         $this->add($o);
     }
 
-    /**
-     * Adds a textarea to the form
-     */
-    function addTextarea($name, $str, $val = '', $width = 0, $height = 0)
+    /** Adds a textarea to the form */
+    function addTextarea($name, $text, $val = '', $width = 0, $height = 0)
     {
         $o = new XhtmlComponentTextarea();
-        $o->name  = $name;
-        $o->value = $val;
+        $o->name   = $name;
+        $o->value  = $val;
         $o->width  = $width;
         $o->height = $height;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
 
-    /**
-     * Adds a richedit textarea to the form
-     */
-    function addRichedit($name, $str, $val = '', $width = 0, $height = 0)
+    /** Adds a richedit textarea to the form */
+    function addRichedit($name, $text, $val = '', $width = 0, $height = 0)
     {
         if (!$width)
             $width = 440;
@@ -325,34 +308,27 @@ class XhtmlForm
             $height = 200;
 
         $o = new YuiRichedit();
-        $o->name  = $name;
-        $o->value = $val;
+        $o->name   = $name;
+        $o->value  = $val;
         $o->width  = $width;
         $o->height = $height;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
 
-    /**
-     * Adds a text string to the form
-     */
-    function addText($str, $str2 = '')
+    /** Adds a text string to the form */
+    function addText($text, $text2 = '')
     {
         $o = new XhtmlComponentText();
-        $o->value = $str;
-
-        $this->add($o, $str2);
+        $o->value = $text;
+        $this->add($o, $text2);
     }
 
-    /**
-     * Adds a submit button to the form
-     */
+    /** Adds a submit button to the form */
     function addSubmit($title, $css = '')
     {
         $o = new XhtmlComponentSubmit();
         $o->title = $title;
         $o->style = $css ? $css : '';
-
         $this->add($o);
     }
 
@@ -360,108 +336,87 @@ class XhtmlForm
      * Adds a select dropdown list to the form
      * @param $arr array with id=>name pairs
      */
-    function addDropdown($name, $str, $arr, $selected = '')
+    function addDropdown($name, $text, $arr, $selected = '')
     {
         $o = new XhtmlComponentDropdown();
         $o->name    = $name;
         $o->value   = $selected;
         $o->options = $arr;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
 
-    function addRadio($name, $str, $arr, $default = '')
+    function addRadio($name, $text, $arr, $default = '')
     {
         $o = new XhtmlComponentRadio();
         $o->name    = $name;
         $o->value   = $default;
         $o->options = $arr;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
 
-    /**
-     * Adds a multi-select listbox
-     */
-    function addListbox($name, $str, $arr, $default = '')
+    /** Adds a multi-select listbox */
+    function addListbox($name, $text, $arr, $default = '')
     {
         $o = new XhtmlComponentListbox();
         $o->name    = $name;
         $o->value   = $default;
         $o->options = $arr;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
 
-    function addAutocomplete($name, $str, $url, $result_fields)
+    function addAutocomplete($name, $text, $url, $result_fields)
     {
         $o = new YuiAutocomplete();
         $o->setName($name);
         $o->setXhrUrl($url);
         $o->setResultFields( $result_fields );
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
-
 
     /**
      * Adds a category to the form
      * @param $cat_type category type
      */
-    function addCategory($name, $str, $cat_type, $default = '')
+    function addCategory($name, $text, $cat_type, $default = '')
     {
-        $this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $str, 'cat_type' => $cat_type, 'default' => $default);
+        $this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $text, 'cat_type' => $cat_type, 'default' => $default);
     }
 
-    /**
-     * Adds a date selector
-     */
-    function addDate($name, $str = '', $init = '')
+    /** Adds a date selector */
+    function addDate($name, $text = '', $init = '')
     {
-        $this->elems[] = array('type' => 'DATE', 'name' => $name, 'str' => $str, 'init' => $init);
+        $this->elems[] = array('type' => 'DATE', 'name' => $name, 'str' => $text, 'init' => $init);
     }
 
-    /**
-     * Adds a date selector popup
-     */
-    function addDatePopup($name, $str = '', $init = '')
+    /** Adds a date selector popup */
+    function addDatePopup($name, $text = '', $init = '')
     {
-        $this->elems[] = array('type' => 'DATEPOPUP', 'name' => $name, 'str' => $str, 'init' => $init);
+        $this->elems[] = array('type' => 'DATEPOPUP', 'name' => $name, 'str' => $text, 'init' => $init);
     }
 
-    /**
-     * Adds a date interval selector
-     */
-    function addDateInterval($namefrom, $nameto, $str = '', $init_from = '', $init_to = '')
+    /** Adds a date interval selector */
+    function addDateInterval($namefrom, $nameto, $text = '', $init_from = '', $init_to = '')
     {
-        $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $str, 'init_from' => $init_from, 'init_to' => $init_to);
+        $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $text, 'init_from' => $init_from, 'init_to' => $init_to);
     }
 
-    /**
-     * Adds a captcha
-     */
+    /** Adds a captcha */
     function addCaptcha()
     {
         $this->using_captcha = true;
         $this->elems[] = array('type' => 'CAPTCHA');
     }
 
-    /**
-     * Adds a file uploader
-     */
-    function addFile($name, $str = '', $type = USER)
+    /** Adds a file uploader */
+    function addFile($name, $text = '', $type = USER)
     {
-        $this->file_upload = true;
-
         $o = new XhtmlComponentFile();
         $o->name = $name;
         $o->type = $type;
-
-        $this->add($o, $str);
+        $this->add($o, $text);
     }
 
-    /**
-     * Renders the form in XHTML
-     */
+    /** Renders the form in XHTML */
     function render()
     {
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
