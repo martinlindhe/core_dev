@@ -100,8 +100,11 @@ class XhtmlForm
         throw new Exception ('element '.$s.' not defined');
     }
 
-    /** Processes the form submit */
-    protected function handle()
+    /**
+     * Processes the form submit. Is called automatically from render() if not called before
+     * @return true if handled
+     */
+    public function handle()
     {
         if ($this->using_captcha) {
             $captcha = CaptchaRecaptcha::getInstance();
@@ -113,7 +116,8 @@ class XhtmlForm
         // fetch GET parameters before processing POST
         if (!empty($_GET))
             foreach ($_GET as $key => $val)
-                foreach ($this->elems as $e) {
+                foreach ($this->elems as $e)
+                {
                     if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
                         $p[ $key ] = $this->auto_code && is_string($val) ? urldecode($val) : $val;
 
@@ -124,8 +128,8 @@ class XhtmlForm
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
                 foreach ($this->elems as $e) {
-                    if (isset($e['obj']) && is_object($e['obj'])) {
-
+                    if (isset($e['obj']) && is_object($e['obj']))
+                    {
                         if (!isset($e['obj']->name))
                             continue;
 
@@ -151,7 +155,7 @@ class XhtmlForm
                         continue;
                     }
 
-//                    throw new Exception ('blergh '.$e['type']);  //XXX drop following code
+                    //XXX drop the following code:
 
                     switch ($e['type']) {
                     case 'DATEINTERVAL':
@@ -161,6 +165,8 @@ class XhtmlForm
                         break;
 
                     default:
+                        throw new Exception ('blergh '.$e['type']);
+/*
                         if (empty($e['name']))
                             break;
 
@@ -183,6 +189,7 @@ class XhtmlForm
                                 $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         }
                         break;
+*/
                     }
                 }
 
@@ -450,12 +457,16 @@ class XhtmlForm
         if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
         {
             if (!function_exists($this->post_handler))
-                throw new Exception ('FATAL: XhtmlForm post handler "'.$this->post_handler.'" is not defined!');
+                throw new Exception ('FATAL: XhtmlForm post handler: function "'.$this->post_handler.'" is not declared!');
 
             throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
         }
 
-        $this->handle();
+        if (!$this->name)
+            throw new Exception ('We need a form name!');
+
+        if (!$this->handled)
+            $this->handle();
 
         $res = '';
 

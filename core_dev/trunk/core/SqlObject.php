@@ -219,6 +219,12 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
+        if (!$obj->id)
+        {
+            d($obj);
+            throw new Exception ('eehh');
+        }
+
         $vals = self::reflectQuery($obj, $field_name);
 
         $q =

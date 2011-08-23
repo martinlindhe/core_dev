@@ -474,12 +474,6 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         return true;
     }
 
-    function renderLoginForm()
-    {
-        $view = new ViewModel('views/session_login.php');
-        return $view->render();
-    }
-
 }
 
 ?>

@@ -6,7 +6,6 @@
 //STATUS: wip
 
 //TODO: make facebook javascript login code work
-//TODO: use XhtmlForm (?)
 //TODO cosmetic: mark input field for username or password with a color if empty in validate_login_form()
 
 require_once('UserList.php');
@@ -72,7 +71,7 @@ if ($session->facebook_app_id && !$session->facebook_id)
 }
 
 $header->registerJsFunction(
-'function validate_login_form(frm)'.
+'function check_login(frm)'.
 '{'.
     'if (!frm.login_usr.value||!frm.login_pwd.value)'.
         'return false;'.
@@ -80,24 +79,30 @@ $header->registerJsFunction(
 '}'
 );
 
-echo xhtmlForm('login_form', '', '', '', 'return validate_login_form(this);');
+function loginHandler($p)
+{
+    $session = SessionHandler::getInstance();
+    if ($session->id)
+    {
+        dp('HACK user '.$session->name.' ('.$session->id.') tried to login user '.$p['usr']);
+        return false;
+    }
 
-echo '<table cellpadding="2">';
-echo '<tr>'.
-    '<td>'.t('Username').':</td>'.
-    '<td>'.xhtmlInput('login_usr').' '.
-        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_user.png', t('Username')).
-    '</td>'.
-    '</tr>';
-echo '<tr>'.
-    '<td>'.t('Password').':</td>'.
-        '<td>'.xhtmlPassword('login_pwd').' '.
-        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_keys.png', t('Password')).
-        '</td>'.
-    '</tr>';
-echo '</table>';
-echo '<br/>';
-echo xhtmlSubmit('Log in', 'button', 'font-weight: bold');
+    if ($session->login($p['usr'], $p['pwd']))
+        $session->showStartPage();
+
+    return true;
+}
+
+$form = new XhtmlForm('login');
+$form->cssTable('');
+$form->addInput('usr', t('Username'));    // XXXX show image     $page->getCoreDevRoot().'gfx/icon_user.png
+$form->addPassword('pwd', t('Password')); // XXXX show image     $page->getCoreDevRoot().'gfx/icon_keys.png
+$form->addSubmit('Log in', 'font-weight:bold');
+$form->setFocus('usr');
+$form->onSubmit('return check_login(this);');
+$form->setHandler('loginHandler');
+echo $form->render();
 
 if ($show_reg_div)
 {
@@ -123,23 +128,23 @@ if ($show_reg_div)
     $x->text = 'Register';
     $x->style = 'font-weight:bold';
     echo $x->render();
+}
 
-    if ($show_recover_div)
-    {
-        $header->registerJsFunction(
-        'function show_recover_form()'.
-        '{'.
-            'hide_el("'.$login_div.'");'.
-            'show_el("'.$recover_div.'");'.
-        '}'
-        );
+if ($show_recover_div)
+{
+    $header->registerJsFunction(
+    'function show_recover_form()'.
+    '{'.
+        'hide_el("'.$login_div.'");'.
+        'show_el("'.$recover_div.'");'.
+    '}'
+    );
 
-        $x = new XhtmlComponentButton();
-        $x->onClick('return show_recover_form();');
-        $x->text = 'Forgot password';
-        $x->style = 'font-weight:bold';
-        echo $x->render();
-    }
+    $x = new XhtmlComponentButton();
+    $x->onClick('return show_recover_form();');
+    $x->text = 'Forgot password';
+    $x->style = 'font-weight:bold';
+    echo $x->render();
 }
 
 echo xhtmlFormClose();

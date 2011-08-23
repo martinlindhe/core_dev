@@ -43,7 +43,6 @@ case 'file':
     echo FileInfo::passthru($this->owner);
     die;
 
-
 case 'reset_password':
     // allows users who lost their password to reset it by following a email-link to this view
     $view = new ViewModel('views/session_reset_pwd.php');
@@ -65,9 +64,12 @@ case 'admin':
     break;
 
 case 'view':
-    // view built in view. owner = name of view in core/views/
+    // display a built-in view. owner = name of view in core/views/
 
-    //XXX FIXME: make sure $this->owner only contains a-z and underscore
+    if (!is_alphanumeric($this->owner)) {
+        dp('HACK user '.$session->id.' attempted to use load view: '.$this->owner);
+        die(':-P');
+    }
 
     $file = $page->getCoreDevInclude().'views/'.$this->owner.'.php';
     if (!file_exists($file))

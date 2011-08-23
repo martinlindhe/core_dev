@@ -7,8 +7,6 @@
   * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-require_once('JSON.php');
-
 /**
  * Reload current page after specified period of time
  *
@@ -16,7 +14,10 @@ require_once('JSON.php');
  */
 function js_reload($ms)
 {
-    if (!is_numeric($ms)) return false;
+    if (!is_numeric($ms))
+        return false;
+
+    // XXXX throw exception if server outputted errors during this page load. how to check that?
 
     return js_embed('setTimeout("location.reload();", '.$ms.');');
 }
@@ -26,6 +27,8 @@ function js_reload($ms)
  */
 function js_redirect($url)
 {
+    // XXXX throw exception if server outputted errors during this page load. how to check that?
+
     if (substr($url, 0, 1) != '/')
         $url = relurl($url);
 
@@ -45,14 +48,12 @@ function js_redirect($url)
 
 function js_goback($title = 'Go back')
 {
-    $res = '<a href="javascript:history.go(-1)">'.$title.'</a>';
-    return $res;
+    return '<a href="javascript:history.go(-1)">'.$title.'</a>';
 }
 
 function js_goforward($title = 'Go forward')
 {
-    $res = '<a href="javascript:history.go(1)">'.$title.'</a>';
-    return $res;
+    return '<a href="javascript:history.go(1)">'.$title.'</a>';
 }
 
 /**
