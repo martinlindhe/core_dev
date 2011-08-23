@@ -154,7 +154,7 @@ class XhtmlForm
                         continue;
                     }
 
-                    //XXX drop the following code:
+                    //XXX drop the following code when everything is OO:
 
                     switch ($e['type']) {
                     case 'DATEINTERVAL':
@@ -164,8 +164,8 @@ class XhtmlForm
                         break;
 
                     default:
-                        throw new Exception ('blergh '.$e['type']);
-/*
+//                        throw new Exception ('blergh '.$e['type']);
+
                         if (empty($e['name']))
                             break;
 
@@ -188,7 +188,6 @@ class XhtmlForm
                                 $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
                         }
                         break;
-*/
                     }
                 }
 
