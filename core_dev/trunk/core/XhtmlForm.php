@@ -24,7 +24,6 @@ require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
 require_once('YuiDatePopup.php');
 require_once('YuiDateInterval.php');
-require_once('YuiRichedit.php');
 
 class XhtmlForm
 {
@@ -326,7 +325,13 @@ class XhtmlForm
         if (!$height)
             $height = 200;
 
-        $this->elems[] = array('type' => 'RICHEDIT', 'name' => $name, 'str' => $str, 'default' => $val, 'width' => $width, 'height' => $height);
+        $o = new XhtmlComponentRichedit();
+        $o->name  = $name;
+        $o->value = $val;
+        $o->width  = $width;
+        $o->height = $height;
+
+        $this->add($o, $str);
     }
 
     /**
@@ -543,24 +548,6 @@ class XhtmlForm
                 $e['value'] = urlencode($e['value']);
 
             switch ($e['type']) {
-
-            case 'RICHEDIT':
-                $hold = new XhtmlComponentTextarea();
-                $hold->name = $e['name'];
-                $hold->value = $e['default'];
-                $hold->width = 1;
-                $hold->height = 1;
-
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-                $res .= $hold->render().'</td>';
-
-                $richedit = new YuiRichedit();
-                $richedit->setInputName($e['name']);
-                $richedit->setWidth($e['width']);
-                $richedit->setHeight($e['height']);
-                $res .= $richedit->render();
-                break;
-
             case 'CATEGORY':
                 $cat = new CategoryList($e['cat_type']);
                 $cat->setOwner($h->session->id);

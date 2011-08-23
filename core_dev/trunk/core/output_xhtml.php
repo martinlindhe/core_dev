@@ -67,7 +67,7 @@ function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')   /
  * Creates a hidden input field
  * @param $_val field value, or array of multiple values
  */
-function xhtmlHidden($_name, $_val = 1)   //XXXX DEPRECATE later (used by phonecafe.se and xhtmlCheckbox(), use XhtmlComponentHidden instead
+function xhtmlHidden($_name, $_val = 1)   //XXXX DEPRECATE later (used by phonecafe.se, use XhtmlComponentHidden instead
 {
     $out = '';
     if (is_array($_val))
@@ -81,8 +81,8 @@ function xhtmlHidden($_name, $_val = 1)   //XXXX DEPRECATE later (used by phonec
 /**
  * Creates a checkbox
  */
-function xhtmlCheckbox__DEPRECATED($_name, $_title = '', $_val = 1, $_checked = false, $onclick = '')
-{
+function xhtmlCheckbox($_name, $_title = '', $_val = 1, $_checked = false, $onclick = '')
+{ /// XXXX DEPRECATE later!!
     $out = '';
     if (!$onclick) $out .= xhtmlHidden($_name, 0);
     $out .= '<input type="checkbox" class="checkbox" name="'.$_name.'" value="'.$_val.'" id="lab_'.$_name.'"'.($_checked ? ' checked="checked"':'').($onclick ? ' onclick="'.$onclick.'"' : '').'/>';
