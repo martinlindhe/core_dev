@@ -24,7 +24,7 @@ require_once('XhtmlComponentText.php');
 require_once('XhtmlComponentTextarea.php');
 
 // YUI-javascript enhanced components:
-require_once('XhtmlComponentRichedit.php');
+require_once('YuiRichedit.php');
 
 abstract class XhtmlComponent extends CoreBase
 {

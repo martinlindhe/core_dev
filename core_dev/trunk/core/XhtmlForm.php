@@ -324,7 +324,7 @@ class XhtmlForm
         if (!$height)
             $height = 200;
 
-        $o = new XhtmlComponentRichedit();
+        $o = new YuiRichedit();
         $o->name  = $name;
         $o->value = $val;
         $o->width  = $width;

@@ -12,23 +12,20 @@
 
 //STATUS: wip
 
-//XXX TODO... YuiRichedit can directly extend from XhtmlComponent!!!!! if so, drop XhtmlComponentRichedit
-
 //TODO: integrate image upload
+
+require_once('XhtmlComponent.php');
 
 require_once('JSON.php');
 
-class YuiRichedit
+class YuiRichedit extends XhtmlComponent
 {
-    private $name;                  ///< name of <textarea> to decorate with rich editor
-    private $value;                 ///< initial value of textarea
+    var       $value;                 ///< initial value of textarea
+    var       $width        = 500;
+    var       $height       = 200;
+    protected $titlebar     = '';
+    protected $show_dompath = false;  ///< displays the DOM bar at the bottom
 
-    private $width        = 500;
-    private $height       = 200;
-    private $titlebar     = '';
-    private $show_dompath = false;  ///< displays the DOM bar at the bottom
-
-    function setName($s) { $this->name = $s; }
     function setValue($s) { $this->value = $s; }
     function setWidth($n) { $this->width = $n; }
     function setHeight($n) { $this->height = $n; }
