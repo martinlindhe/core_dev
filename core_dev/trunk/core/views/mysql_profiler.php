@@ -47,6 +47,15 @@ if (is_client_localhost())
 echo
 count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
 ' in '.round($db->getTotalQueryTime(), 2).'s<br/>';
+echo '<br/>';
+
+echo 'MySQL server: <b>'.$db->db_handle->server_info.'</b><br/>';
+
+$db_time = $db->getOneItem('SELECT NOW()');
+echo 'MySQL server time: <b>'.$db_time.'</b><br/>';
+
+$uptime = $db->getOneRow('SHOW STATUS WHERE Variable_name="Uptime"');
+echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
 echo '</div>';
 

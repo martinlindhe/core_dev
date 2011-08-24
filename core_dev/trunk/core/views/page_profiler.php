@@ -120,6 +120,7 @@ echo
  'User: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
 ' using '.
 ' <span title="'.$_SERVER['HTTP_USER_AGENT'].'" style="font-weight:bold">'.$client->name.' '.$client->version.'</span><br/>';
+echo '<br/>';
 
 echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 

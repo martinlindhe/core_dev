@@ -19,10 +19,14 @@ echo 'Database: '.$db->database.'<br/>';
 echo 'Configured charset: '.$db->charset.'<br/>';
 echo '<br/>';
 
-echo '<h2>Host features</h2>';
+echo '<h2>Database time</h2>';
 $db_time = $db->getOneItem('SELECT NOW()');
-echo 'Host time: '.$db_time.'<br/>';
+echo 'Database time: '.$db_time.'<br/>';
 echo 'Webserver time: '.now().'<br/>';
+
+$uptime = $db->getOneRow('SHOW STATUS WHERE Variable_name="Uptime"');
+echo 'Database uptime: '.elapsed_seconds($uptime['Value']).'<br/>';
+
 echo '<br/>';
 
 echo '<h2>Driver specific settings</h2>';
