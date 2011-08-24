@@ -10,7 +10,6 @@
 //STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method
 
 //TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
-//FIXME: dateinterval selection is not auto-filled on next request, see handle() ???
 
 require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
@@ -23,7 +22,6 @@ require_once('XhtmlComponent.php');
 require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
 require_once('YuiDatePopup.php');
-require_once('YuiDateInterval.php');
 
 class XhtmlForm
 {
@@ -124,24 +122,39 @@ class XhtmlForm
 
         if (!empty($_POST))
             foreach ($_POST as $key => $val)
-                foreach ($this->elems as $e) {
+                foreach ($this->elems as $e)
+                {
                     if (isset($e['obj']) && is_object($e['obj']))
                     {
                         if (!isset($e['obj']->name))
                             continue;
 
-                        if ($e['obj']->name == $key) {
+                        if ($e['obj']->name == $key)
+                        {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
                                 $p[ $key ] = $val;
                             } else
                                 $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
-
                         }
+                        else if ($e['obj'] instanceof YuiDateInterval)
+                        {
+                            if ($e['obj']->name.'_from' == $key)
+                            {
+                                $e['obj']->selectFrom($val);
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                            }
 
-                        // handle input arrays
-                        if ($e['obj']->name == $key.'[]') {
+                            if ($e['obj']->name.'_to' == $key)
+                            {
+                                $e['obj']->selectTo($val);
+                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                            }
+
+                        } else if ($e['obj']->name == $key.'[]')
+                        {
+                            // handle input arrays
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
@@ -155,12 +168,6 @@ class XhtmlForm
                     //XXX drop the following code when everything is OO:
 
                     switch ($e['type']) {
-                    case 'DATEINTERVAL':
-                        if (!empty($e['namefrom']) && $e['namefrom'] == $key ||
-                            !empty($e['nameto'])   && $e['nameto']   == $key)
-                            $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
-                        break;
-
                     default:
 //                        throw new Exception ('blergh '.$e['type']);
 
@@ -395,9 +402,13 @@ class XhtmlForm
     }
 
     /** Adds a date interval selector */
-    function addDateInterval($namefrom, $nameto, $text = '', $init_from = '', $init_to = '')
+    function addDateInterval($name, $text = '', $select_from = '', $select_to = '')
     {
-        $this->elems[] = array('type' => 'DATEINTERVAL', 'namefrom' => $namefrom, 'nameto' => $nameto, 'str' => $text, 'init_from' => $init_from, 'init_to' => $init_to);
+        $o = new YuiDateInterval();
+        $o->setName($name);
+        $o->setSelection($select_from, $select_to);
+
+        $this->add($o, $text);
     }
 
     /** Adds a captcha */
@@ -461,7 +472,7 @@ class XhtmlForm
         ($this->css_table ? ' style="'.$this->css_table.'"' : '').
         '>';
 
-        // fills in form with previous entered data
+        // fills in form with previous entered data        XXXXX move into handle() ?
         foreach ($this->elems as $e)
         {
             if (isset($e['obj']))
@@ -474,11 +485,15 @@ class XhtmlForm
                 } else {
 
                     if ($e['obj'] instanceof XhtmlComponentCheckbox)
+                    {
                         if (isset($this->form_data[ $e['obj']->name ]))
                             $e['obj']->checked = $this->form_data[ $e['obj']->name ];
+                    }
                     else
+                    {
                         if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )
                             $e['obj']->value = $this->form_data[ $e['obj']->name ];
+                    }
 
                     $res .=
                     '<tr>'.
@@ -546,25 +561,6 @@ class XhtmlForm
 
                 $dateselect->setSelection($e['init']);
                 $res .= $dateselect->render();
-
-                $res .= '</td>';
-                break;
-
-            case 'DATEINTERVAL':
-                $res .= '<td colspan="2">';
-                if ($e['str']) $res .= $e['str'].'<br/><br/>';
-
-                $dateselect = new YuiDateInterval();
-                $dateselect->setNameFrom($e['namefrom']);
-                $dateselect->setNameTo($e['nameto']);
-
-                $e['namefrom_val'] = !empty($this->form_data[$e['namefrom']]) ? $this->form_data[$e['namefrom']] : $e['init_from'];
-                $e['nameto_val']   = !empty($this->form_data[$e['nameto']])   ? $this->form_data[$e['nameto']]   : $e['init_to'];
-
-                $dateselect->setSelection($e['namefrom_val'], $e['nameto_val']);
-                $res .= $dateselect->render().'<br/>';
-
-                $res .= xhtmlInput($e['namefrom']).' - '.xhtmlInput($e['nameto']);
 
                 $res .= '</td>';
                 break;

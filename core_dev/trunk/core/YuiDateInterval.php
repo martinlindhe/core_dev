@@ -17,29 +17,31 @@
 
 //FIXME: selection of a new time is buggy if the calendar was rendered with a selection
 
+require_once('XhtmlComponent.php');
+
 require_once('JSON.php');
 
-class YuiDateInterval
+class YuiDateInterval extends XhtmlComponent
 {
-    private $name_from;
-    private $name_to;
-    private $start_weekday = 1; //0=sundays, 1=mondays
-    private $select_from, $select_to;
+    var       $select_from;
+    var       $select_to;
+    protected $start_weekday = 1; //0=sundays, 1=mondays
 
-    function setNameFrom($s) { $this->name_from = $s; }
-    function setNameTo($s) { $this->name_to = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
+
+    function selectFrom($date) { $this->select_from = ts($date); }
+    function selectTo($date) { $this->select_to = ts($date); }
 
     function setSelection($date_from, $date_to)
     {
-        $this->select_from = ts($date_from);
-        $this->select_to   = ts($date_to);
+        $this->selectFrom($date_from);
+        $this->selectTo($date_to);
     }
 
     function render()
     {
-        if (!$this->name_from || !$this->name_to)
-            throw new Exception ('name_from and name_to must be configured');
+        if (!$this->name)
+            throw new Exception ('name must be configured');
 
         $header = XhtmlHeader::getInstance();
 
@@ -49,9 +51,10 @@ class YuiDateInterval
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js');
 
         $res =
-        '(function() {'.
-
-            'function IntervalCalendar(container, cfg) {'.
+        '(function()'.
+        '{'.
+            'function IntervalCalendar(container, cfg)'.
+            '{'.
                 'this._iState = 0;'.
 
                 'cfg = cfg || {};'.
@@ -67,8 +70,8 @@ class YuiDateInterval
 
             'IntervalCalendar._DEFAULT_CONFIG = YAHOO.widget.CalendarGroup._DEFAULT_CONFIG;'.
 
-            'YAHOO.lang.extend(IntervalCalendar, YAHOO.widget.CalendarGroup, {'.
-
+            'YAHOO.lang.extend(IntervalCalendar, YAHOO.widget.CalendarGroup,'.
+            '{'.
                 '_dateString : function(d) {'.
                     'var a = [];'.
                     'a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_MONTH_POSITION.key)-1] = (d.getMonth() + 1);'.
@@ -178,13 +181,15 @@ class YuiDateInterval
         $res .=
         'YAHOO.util.Event.onDOMReady(function()'.
         '{'.
-            'var inTxt  = YAHOO.util.Dom.get("'.$this->name_from.'");'.
-            'var outTxt = YAHOO.util.Dom.get("'.$this->name_to.'");'.
+            'var inTxt  = YAHOO.util.Dom.get("'.$this->name.'_from");'.
+            'var outTxt = YAHOO.util.Dom.get("'.$this->name.'_to");'.
             'var inDate, outDate, interval;'.
+
             ($this->select_from ? 'inTxt.value  = "'.sql_date($this->select_from).'";' : '').
             ($this->select_to   ? 'outTxt.value = "'.sql_date($this->select_to).'";' : '').
 
-            'var myConfigs = {'.
+            'var myConfigs ='.
+            '{'.
                 'pages:2,'.
                 ($this->select_from && $this->select_to ?
                     'selected:"'.js_date($this->select_from).'-'.js_date($this->select_to).'",'.
@@ -202,7 +207,8 @@ class YuiDateInterval
 
             'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$div_holder.'",myConfigs);'.
 
-            'cal.selectEvent.subscribe(function() {'.
+            'cal.selectEvent.subscribe(function()'.
+            '{'.
                 'interval = this.getInterval();'.
 
                 'if (interval.length == 2) {'.
@@ -224,7 +230,8 @@ class YuiDateInterval
         return
         '<div id="'.$div_holder.'"></div>'.
         '<div style="clear:both"></div>'.
-        js_embed($res);
+        js_embed($res).
+        xhtmlInput($this->name.'_from').' - '.xhtmlInput($this->name.'_to');
     }
 
 }
