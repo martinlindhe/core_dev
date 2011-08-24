@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: wip ... XXX merge with Sql.php ?
 
 require_once('Sql.php');
 

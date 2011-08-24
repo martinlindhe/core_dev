@@ -11,7 +11,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: experimental. most code copied from DatabaseMysql
+//STATUS: experimental. most code copied from DatabaseMysql. XXX TODO merge with SqlObject ???
 
 class Sql
 {
