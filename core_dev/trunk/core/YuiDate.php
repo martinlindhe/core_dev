@@ -15,15 +15,15 @@
 
 //XXXX: upgrade yo yui 3.4.0 calendar when its released
 
+require_once('XhtmlComponent.php');
+
 require_once('JSON.php');
 
-class YuiDate
+class YuiDate extends XhtmlComponent
 {
-    private $name;
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $selected_date;
 
-    function setName($s) { $this->name = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
 
     function setSelection($date)
@@ -78,7 +78,11 @@ class YuiDate
         '}'."\n".
         'YAHOO.util.Event.onDOMReady(YAHOO.example.calendar.init);';
 
-        return js_embed($res);
+        return
+        '<div id="'.$div_holder.'"></div>'.
+        '<div style="clear:both"></div>'.
+        xhtmlInput($this->name).'<br/>'.
+        js_embed($res);
     }
 
 }

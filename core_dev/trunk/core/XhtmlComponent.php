@@ -24,6 +24,8 @@ require_once('XhtmlComponentText.php');
 require_once('XhtmlComponentTextarea.php');
 
 // YUI-javascript enhanced components:
+require_once('YuiAutocomplete.php');
+require_once('YuiDate.php');
 require_once('YuiDateInterval.php');
 require_once('YuiDatePopup.php');
 require_once('YuiRichedit.php');

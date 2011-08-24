@@ -19,9 +19,6 @@ require_once('constants.php');
 require_once('FileList.php');
 require_once('XhtmlComponent.php');
 
-require_once('YuiAutocomplete.php');
-require_once('YuiDate.php');
-
 class XhtmlForm
 {
     protected $file_upload      = false;
@@ -370,6 +367,15 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
+    /** Adds a file uploader */
+    function addFile($name, $text = '', $type = USER)
+    {
+        $o = new XhtmlComponentFile();
+        $o->name = $name;
+        $o->type = $type;
+        $this->add($o, $text);
+    }
+
     function addAutocomplete($name, $text, $url, $result_fields)
     {
         $o = new YuiAutocomplete();
@@ -379,19 +385,13 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
-    /**
-     * Adds a category to the form
-     * @param $cat_type category type
-     */
-    function addCategory($name, $text, $cat_type, $default = '')
-    {
-        $this->elems[] = array('type' => 'CATEGORY', 'name' => $name, 'str' => $text, 'cat_type' => $cat_type, 'default' => $default);
-    }
-
     /** Adds a date selector */
-    function addDate($name, $text = '', $init = '')
+    function addDate($name, $text = '', $select = '')
     {
-        $this->elems[] = array('type' => 'DATE', 'name' => $name, 'str' => $text, 'init' => $init);
+        $o = new YuiDate();
+        $o->setName($name);
+        $o->setSelection($select);
+        $this->add($o, $text);
     }
 
     /** Adds a date selector popup */
@@ -417,15 +417,6 @@ class XhtmlForm
     {
         $this->using_captcha = true;
         $this->elems[] = array('type' => 'CAPTCHA');
-    }
-
-    /** Adds a file uploader */
-    function addFile($name, $text = '', $type = USER)
-    {
-        $o = new XhtmlComponentFile();
-        $o->name = $name;
-        $o->type = $type;
-        $this->add($o, $text);
     }
 
     /** Renders the form in XHTML */
@@ -518,40 +509,6 @@ class XhtmlForm
                 $e['value'] = urlencode($e['value']);
 
             switch ($e['type']) {
-            case 'CATEGORY':
-                $cat = new CategoryList($e['cat_type']);
-                $cat->setOwner($h->session->id);
-
-                $res .= '<td>'.$e['str'].'</td>';
-                $res .= '<td>';
-                $res .= xhtmlSelectArray($e['name'], $cat->getKeyVals(), $e['default']).' ';
-                //add new category widget
-                $res .= '<a href="#" onClick="toggle_element(\'cd_new_'.$e['name'].'\');toggle_enabled_element(\'new_'.$e['name'].'\');">'.coreButton('Add').'</a>';
-                $res .= '<span id="cd_new_'.$e['name'].'" style="display:none;">';
-                $res .= xhtmlInput('new_'.$e['name'], 'new category', 15, 0, true);
-                $res .= '</span>';
-                $res .= '</td>';
-                break;
-
-            case 'DATE':
-                $res .= '<td colspan="2">';
-                if ($e['str']) $res .= $e['str'].'<br/><br/>';
-                $res .= '<div id="cal1Container"></div>';
-                $res .= '<div style="clear:both"></div>';
-
-                $res .= xhtmlInput($e['name']).'<br/>';
-
-                $dateselect = new YuiDate();
-                $dateselect->setDivName('cal1Container');
-                $dateselect->setName($e['name']);
-                $e['name_val'] = !empty($this->form_data[$e['name']]) ? $this->form_data[$e['name']] : $e['init'];
-
-                $dateselect->setSelection($e['name_val']);
-                $res .= $dateselect->render();
-
-                $res .= '</td>';
-                break;
-
             case 'CAPTCHA':
                 $captcha = CaptchaRecaptcha::getInstance();
 

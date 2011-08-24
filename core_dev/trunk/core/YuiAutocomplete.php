@@ -16,8 +16,9 @@
 //XXX TODO: remove items from selection menu which was already selected
 // XXX TODO later: encase each selected item with a <span> or somehting, and add a "X" remove button, similar to facebook autocomplete lists
 
-require_once('JSON.php');
 require_once('XhtmlComponent.php');
+
+require_once('JSON.php');
 
 class YuiAutocomplete extends XhtmlComponent
 {
