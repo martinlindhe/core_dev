@@ -16,8 +16,9 @@
 class Sql
 {
     /** Executes a prepared statement and binds parameters
-     * @param @arg[0] sql query
-     * @param @arg[1-n] params
+     * @param $args[0]    sql query
+     * @param $args[1]    prepared statement string (isii)..
+     * @param $args[2..n] query parameters
      */
     protected static function pExecStmt($args)
     {
@@ -45,7 +46,9 @@ class Sql
         $stmt->execute();
 
         $prof = &$db->measureQuery($args[0]);
-        $prof->prepared = true;
+
+        if (isset($args[1]) && $args[1])
+            $prof->prepared = true;
 
         if (isset($args[1]))
             $prof->format = $args[1];

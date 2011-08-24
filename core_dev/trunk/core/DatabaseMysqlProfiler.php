@@ -167,8 +167,11 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         return $res;
     }
 
-
-    /** Executes a prepared statement and binds parameters */
+    /** Executes a prepared statement and binds parameters
+     * $args[0]    = query
+     * $args[1]    = prepared statement string (isii)..
+     * $args[2..n] = query parameters
+     */
     protected function pExecStmt($args)
     {
         if (!$args[0])
@@ -192,7 +195,9 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         $stmt->execute();
 
         $prof = &$this->measureQuery($args[0]);
-        $prof->prepared = true;
+
+        if (isset($args[1]) && $args[1])
+            $prof->prepared = true;
 
         if (isset($args[1]))
             $prof->format = $args[1];
