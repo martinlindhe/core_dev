@@ -99,12 +99,18 @@ class SqlObject
             if (!$include_unset && !$obj->$col)
                 continue;
 
+            if (is_numeric($obj->$col))
+                $val = $obj->$col;
+            else
+                $val = '"'.Sql::escape($obj->$col).'"';
+
             if (in_array($col, $reserved_words))
                 // escape column names for reserved SQL words
-                $vals[] = '`'.$col.'`="'.Sql::escape($obj->$col).'"';
-            else
-                $vals[] = $col.'="'.Sql::escape($obj->$col).'"';
+                $col = '`'.$col.'`';
+
+            $vals[] = $col.'='.$val;
         }
+
         return $vals;
     }
 
