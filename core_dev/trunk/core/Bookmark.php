@@ -9,8 +9,6 @@
 
 //STATUS: wip
 
-//TODO 2: easy methdo for "remove bookmark for object"
-
 // use these, or any numbers >= 100 for application specific needs
 define('BOOKMARK_CUSTOM',  100);
 define('BOOKMARK_CUSTOM2', 101);
@@ -63,18 +61,39 @@ class Bookmark
     /**
      * Creates a new bookmark
      * @param $type
-     * @param $bookmark_id
-     * @param $owner  if not set, owner will be current user
+     * @param $object_id   the object who owns the bookmark
+     * @param $owner       if not set, owner will be current user
      */
-    static function create($type, $bookmark_id, $owner = 0)
+    static function create($type, $object_id, $owner = 0)
     {
         $session = SessionHandler::getInstance();
 
         $o = new Bookmark();
         $o->type = $type;
-        $o->value = $bookmark_id;
+        $o->value = $object_id;
         $o->owner = $owner ? $owner : $session->id;
         self::store($o);
+    }
+
+    /**
+     *
+     * @param $type
+     * @param $object_id   the object who owns the bookmark
+     */
+    static function remove($type, $object_id, $owner = 0)
+    {
+        if (!is_numeric($type) || !is_numeric($object_id) || !is_numeric($owner))
+            throw new Exception ('noo');
+
+        $session = SessionHandler::getInstance();
+
+        $q =
+        'DELETE FROM '.self::$tbl_name.
+        ' WHERE owner = '.($owner ? $owner : $session->id).
+        ' AND value = '.$object_id.
+        ' AND type = '.$type;
+
+        return Sql::pDelete($q);
     }
 
 }
