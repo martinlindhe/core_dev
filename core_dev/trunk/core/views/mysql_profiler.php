@@ -17,12 +17,7 @@ $header->embedCss(
 
 echo '<a href="#" onclick="return toggle_el(\''.$sql_div.'\');">'.count($db->queries).' sql</a>';
 
-$sql_time = 0;
 $show_div = $db->getErrorCount() ? true : false;
-$res = '';
-
-foreach ($db->queries as $prof)
-    $res .= $prof->render();
 
 $css =
 ($show_div ? '' : 'display:none;').
@@ -31,6 +26,11 @@ $css =
 'border:#000 1px solid;';
 
 echo '<div id="'.$sql_div.'" style="'.$css.'">';
+
+$res = '';
+
+foreach ($db->queries as $prof)
+    $res .= $prof->render();
 
 echo $res;
 
