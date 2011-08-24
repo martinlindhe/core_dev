@@ -9,7 +9,6 @@
 
 //STATUS: wip
 
-//TODO 1: easy method for "is object already bookmarked?"
 //TODO 2: easy methdo for "remove bookmark for object"
 
 // use these, or any numbers >= 100 for application specific needs
@@ -44,10 +43,13 @@ class Bookmark
         return SqlObject::loadObjects($q, __CLASS__); // XXX pselect?
     }
 
+    /**
+     * Check if an object (owner id & type) is already bookmarked
+     */
     static function exists($owner, $type)
     {
         $o = new Bookmark();
-        $o->owner = $owner;
+        $o->value = $owner;
         $o->type = $type;
 
         return SqlObject::exists($o, self::$tbl_name);
@@ -56,6 +58,23 @@ class Bookmark
     static function store($obj)
     {
         return SqlObject::storeUnique($obj, self::$tbl_name);
+    }
+
+    /**
+     * Creates a new bookmark
+     * @param $type
+     * @param $bookmark_id
+     * @param $owner  if not set, owner will be current user
+     */
+    static function create($type, $bookmark_id, $owner = 0)
+    {
+        $session = SessionHandler::getInstance();
+
+        $o = new Bookmark();
+        $o->type = $type;
+        $o->value = $bookmark_id;
+        $o->owner = $owner ? $owner : $session->id;
+        self::store($o);
     }
 
 }
