@@ -49,8 +49,10 @@ class Url extends CoreProperty
 
     function getHost()
     {
-        if (($this->scheme == 'http'  && $this->port != 80) ||
-            ($this->scheme == 'https' && $this->port != 443))
+        if ($this->port &&
+            ($this->scheme == 'http'  && $this->port != 80) ||
+            ($this->scheme == 'https' && $this->port != 443)
+        )
             return $this->host.':'.$this->port;
 
         return $this->host;
