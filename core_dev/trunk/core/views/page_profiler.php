@@ -5,6 +5,8 @@
  * Shows page load time & other information
  */
 
+require_once('HttpUserAgent.php');
+
 $css =
 'position:fixed;'.
 'right:0;'.
@@ -28,7 +30,7 @@ echo '<a class="closebtn" href="#" onclick="hide_el(\''.$container_id.'\');"></a
 echo 'core_dev 0.2-svn ';
 
 if (class_exists('SqlHandler')) {
-    $view = new ViewModel('views/sql_profiler.php');
+    $view = new ViewModel('views/mysql_profiler.php');
     echo $view->render();
 }
 
@@ -116,7 +118,12 @@ if (function_exists('apc_cache_info')) {
 
 echo '<br/>';
 
-echo 'Client: <b>'.$_SERVER['REMOTE_ADDR'].'</b> using <b>'.$_SERVER['HTTP_USER_AGENT'].'</b><br/>';
+$client = HttpUserAgent::getBrowser($_SERVER['HTTP_USER_AGENT']);
+echo
+ 'Client: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
+' using '.
+' <span title="'.$_SERVER['HTTP_USER_AGENT'].'" style="font-weight:bold">'.$client->name.' '.$client->version.'</span><br/>';
+
 echo 'Server: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 
 echo 'Server time: '.sql_datetime( time() ).' '.date('T').'<br/>';

@@ -47,8 +47,8 @@ class Bookmark
     static function exists($owner, $type)
     {
         $o = new Bookmark();
+        $o->type  = $type;
         $o->value = $owner;
-        $o->type = $type;
 
         return SqlObject::exists($o, self::$tbl_name);
     }
@@ -69,7 +69,7 @@ class Bookmark
         $session = SessionHandler::getInstance();
 
         $o = new Bookmark();
-        $o->type = $type;
+        $o->type  = $type;
         $o->value = $object_id;
         $o->owner = $owner ? $owner : $session->id;
         self::store($o);
