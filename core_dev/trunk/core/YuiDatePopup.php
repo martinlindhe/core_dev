@@ -16,15 +16,15 @@
 
 //TODO: hide useless "Reset" and "close" buttons in the bottom
 
+require_once('XhtmlComponent.php');
+
 require_once('JSON.php');
 
-class YuiDatePopup
+class YuiDatePopup extends XhtmlComponent
 {
-    private $name;  // name of input field which stores selected date
     private $start_weekday = 1; //0=sundays, 1=mondays
     private $selected_date;
 
-    function setName($s) { $this->name = $s; }
     function setStartWeekday($n) { $this->start_weekday = $n; }
 
     function setSelection($date)
@@ -202,6 +202,7 @@ class YuiDatePopup
         '});';
 
         return
+        xhtmlInput($this->name, sql_date($this->selected_date), 8).' '.
         '<button type="button" id="'.$button_name.'" title="Pick a date">'.
             '<img src="'.relurl('core_dev/gfx/icon_date-picker.png').'" alt="Pick a date"/>'.
         '</button>'.

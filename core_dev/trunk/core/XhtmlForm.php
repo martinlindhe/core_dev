@@ -21,7 +21,6 @@ require_once('XhtmlComponent.php');
 
 require_once('YuiAutocomplete.php');
 require_once('YuiDate.php');
-require_once('YuiDatePopup.php');
 
 class XhtmlForm
 {
@@ -396,9 +395,12 @@ class XhtmlForm
     }
 
     /** Adds a date selector popup */
-    function addDatePopup($name, $text = '', $init = '')
+    function addDatePopup($name, $text = '', $select = '')
     {
-        $this->elems[] = array('type' => 'DATEPOPUP', 'name' => $name, 'str' => $text, 'init' => $init);
+        $o = new YuiDatePopup();
+        $o->setName($name);
+        $o->setSelection($select);
+        $this->add($o, $text);
     }
 
     /** Adds a date interval selector */
@@ -407,7 +409,6 @@ class XhtmlForm
         $o = new YuiDateInterval();
         $o->setName($name);
         $o->setSelection($select_from, $select_to);
-
         $this->add($o, $text);
     }
 
@@ -546,20 +547,6 @@ class XhtmlForm
                 $e['name_val'] = !empty($this->form_data[$e['name']]) ? $this->form_data[$e['name']] : $e['init'];
 
                 $dateselect->setSelection($e['name_val']);
-                $res .= $dateselect->render();
-
-                $res .= '</td>';
-                break;
-
-            case 'DATEPOPUP':
-                $res .= $e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">';
-
-                $res .= xhtmlInput($e['name'], $e['init'], 8).' ';
-
-                $dateselect = new YuiDatePopup();
-                $dateselect->setName($e['name']);
-
-                $dateselect->setSelection($e['init']);
                 $res .= $dateselect->render();
 
                 $res .= '</td>';
