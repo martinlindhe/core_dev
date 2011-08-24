@@ -41,7 +41,8 @@ count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
 ' in '.round($db->getTotalQueryTime(), 2).'s<br/>';
 echo '<br/>';
 
-echo 'MySQL server: <b>'.$db->db_handle->server_info.'</b><br/>';
+echo 'Server: <b>'.$db->getHost().'</b><br/>';
+echo 'Software: <b>MySQL '.$db->db_handle->server_info.'</b><br/>';
 echo 'Local time: <b>'.$db_time.'</b><br/>';
 echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 

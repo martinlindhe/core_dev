@@ -62,6 +62,14 @@ class DatabaseMysql implements IDB_SQL
         $this->port = $n;
     }
 
+    function getHost()
+    {
+        if ($this->port && $this->port != 3306)
+            return $this->host.':'.$this->port;
+
+        return $this->host;
+    }
+
     public function disconnect()
     {
         if ($this->connected)

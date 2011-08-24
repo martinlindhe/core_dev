@@ -41,7 +41,8 @@ foreach ($temp->getServerStats() as $host => $stat)
     echo 'Threads: <b>'.$stat['threads'].'</b><br/>';
     echo '<br/>';
 
-    echo 'Memcached server: <b>'.$host.'</b> v<b>'.$stat['version'].'</b><br/>';
+    echo 'Server: <b>'.$host.'</b><br/>';
+    echo 'Software: <b>memcached '.$stat['version'].'</b><br/>';
 
     echo 'Local time: <b>'.sql_datetime($stat['time']).'</b><br/>';
     echo 'Uptime: <b>'.elapsed_seconds($stat['uptime']).'</b><br/>';

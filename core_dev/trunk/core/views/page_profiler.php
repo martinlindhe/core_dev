@@ -117,12 +117,13 @@ if (function_exists('apc_cache_info')) {
 
 $client = HttpUserAgent::getBrowser($_SERVER['HTTP_USER_AGENT']);
 echo
- 'User: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
+ 'Client: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
 ' using '.
 ' <span title="'.$_SERVER['HTTP_USER_AGENT'].'" style="font-weight:bold">'.$client->name.' '.$client->version.'</span><br/>';
 echo '<br/>';
 
-echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
+echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b><br/>';
+echo 'Software: <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 
 echo 'Local time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
 echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
