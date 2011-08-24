@@ -249,6 +249,10 @@ function is_client_localhost()
     if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' ||  $_SERVER['REMOTE_ADDR'] == '::ffff:127.0.0.1')
         return true;
 
+    // if client ip == server ip, return true
+    if ($_SERVER['SERVER_ADDR'] == $_SERVER['REMOTE_ADDR'])
+        return true;
+
     return false;
 }
 

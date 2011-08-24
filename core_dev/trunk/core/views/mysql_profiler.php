@@ -15,6 +15,13 @@ $header->embedCss(
 '}'
 );
 
+$db_time = $db->getOneItem('SELECT NOW()');
+$uptime  = $db->getOneRow('SHOW STATUS WHERE Variable_name="Uptime"');
+
+$res = '';
+foreach ($db->queries as $prof)
+    $res .= $prof->render();
+
 echo '<a href="#" onclick="return toggle_el(\''.$sql_div.'\');">'.count($db->queries).' sql</a>';
 
 $show_div = $db->getErrorCount() ? true : false;
@@ -27,12 +34,17 @@ $css =
 
 echo '<div id="'.$sql_div.'" style="'.$css.'">';
 
-$res = '';
-
-foreach ($db->queries as $prof)
-    $res .= $prof->render();
-
 echo $res;
+
+echo
+count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
+' in '.round($db->getTotalQueryTime(), 2).'s<br/>';
+echo '<br/>';
+
+echo 'MySQL server: <b>'.$db->db_handle->server_info.'</b><br/>';
+echo 'MySQL server time: <b>'.$db_time.'</b><br/>';
+echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
+
 
 if (is_client_localhost())
 {
@@ -43,19 +55,6 @@ if (is_client_localhost())
         echo ' <b>(CONNECTION NOT INITIALIZED)</b>';
     echo '<br/>';
 }
-
-echo
-count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
-' in '.round($db->getTotalQueryTime(), 2).'s<br/>';
-echo '<br/>';
-
-echo 'MySQL server: <b>'.$db->db_handle->server_info.'</b><br/>';
-
-$db_time = $db->getOneItem('SELECT NOW()');
-echo 'MySQL server time: <b>'.$db_time.'</b><br/>';
-
-$uptime = $db->getOneRow('SHOW STATUS WHERE Variable_name="Uptime"');
-echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
 echo '</div>';
 
