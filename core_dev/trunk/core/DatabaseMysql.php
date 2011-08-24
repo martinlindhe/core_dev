@@ -469,13 +469,6 @@ class DatabaseMysql implements IDB_SQL
         return $refs;
     }
 
-    /** Shows the config view */
-    public function renderConfig()
-    {
-        $view = new ViewModel('views/mysql_config.php');
-        return $view->render();
-    }
-
 }
 
 ?>

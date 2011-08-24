@@ -7,6 +7,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
+require_once('constants.php');
 require_once('Settings.php');
 
 class UserSetting

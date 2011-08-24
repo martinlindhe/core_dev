@@ -79,7 +79,14 @@ class SqlObject
         return $res;
     }
 
-    /** XXX document */
+    /**
+     * Creates part of a sql statement out of public properties of $obj
+     *
+     * @param $obj
+     * @param $exclude_col
+     * @param $include_unset  shall unset object properties be included in result?
+     * @return array with key=val strings usable for sql queries
+     */
     protected static function reflectQuery($obj, $exclude_col = '', $include_unset = true)
     {
         $reflect = new ReflectionClass($obj);

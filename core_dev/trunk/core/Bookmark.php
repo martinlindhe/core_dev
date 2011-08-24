@@ -44,6 +44,15 @@ class Bookmark
         return SqlObject::loadObjects($q, 'Bookmark'); // XXX pselect?
     }
 
+    static function exists($owner, $type)
+    {
+        $o = new Bookmark();
+        $o->owner = $owner;
+        $o->type = $type;
+
+        return SqlObject::exists($o, self::$tbl_name);
+    }
+
     static function store($obj)
     {
         return SqlObject::storeUnique($obj, self::$tbl_name);

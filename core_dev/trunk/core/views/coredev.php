@@ -61,6 +61,8 @@ case 'admin':
     echo ahref('coredev/view/compatiblity', 'Compatibility check').'<br/>';
     echo ahref('coredev/view/timezones', 'Time zones').'<br/>';
     echo ahref('coredev/view/currency', 'Currencies').'<br/>';
+    echo '<br/>';
+    echo ahref('coredev/view/mysql_config', 'mysql config').'<br/>';
     break;
 
 case 'view':

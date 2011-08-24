@@ -1,36 +1,38 @@
 <?php
 /**
- * Shows current settings
+ * Shows information about current MySQL connection
  */
 
-echo '<div class="item">';
+//TODO: present data in pretty tables
+//TODO: use pie charts to show percentage of used memory etc
+
+$session->requireSuperAdmin();
+
 echo '<h2>Current database configuration</h2>';
 echo 'DB driver: '.get_class($db).'<br/>';
-echo 'Server version: '.$db->db_handle->server_info.'<br/>';
-echo 'Client version: '.$db->db_handle->client_info.'<br/>';
-echo 'Host: '.$db->host.':'.$db->port.'<br/>';
-echo 'Login: '.$db->username.':'.($db->password ? $db->password : '(blank)').'<br/>';
+echo 'Server version: <b>'.$db->db_handle->server_info.'</b><br/>';
+echo 'Client version: <b>'.$db->db_handle->client_info.'</b><br/>';
+echo 'Host: <b>'.$db->host.':'.$db->port.'</b><br/>';
+echo 'Username: '.$db->username.'<br/>';
+// echo 'Password: '.($db->password ? $db->password : '(blank)').'<br/>';
 echo 'Database: '.$db->database.'<br/>';
-echo 'Configured charset: '.$db->charset;
-echo '</div><br/>';
+echo 'Configured charset: '.$db->charset.'<br/>';
+echo '<br/>';
 
-echo '<div class="item">';
 echo '<h2>DB host features</h2>';
 $db_time = $db->getOneItem('SELECT NOW()');
-echo 'DB time: '.$db_time.' (webserver time: '.now().')<br/>';
-echo '</div><br/>';
+echo 'DB time: '.$db_time.'<br/>';
+echo 'Webserver time: '.now().'<br/>';
+echo '<br/>';
 
-echo '<div class="item">';
 echo '<h2>DB driver specific settings</h2>';
 echo 'Host info: '.$db->db_handle->host_info.'<br/>';
 echo 'Connection character set: '.$db->db_handle->character_set_name().'<br/>';
 echo 'Last error: '.$db->db_handle->error.'<br/>';
-echo 'Last errno: '.$db->db_handle->errno;
-echo '</div><br/>';
+echo 'Last errno: '.$db->db_handle->errno.'<br/>';
+echo '<br/>';
 
-echo '<div class="item">';
-
-//Show MySQL query cache settings
+// show MySQL query cache settings
 $data = $db->getMappedArray('SHOW VARIABLES LIKE "%query_cache%"');
 if ($data['have_query_cache'] == 'YES') {
     echo '<h2>MySQL query cache settings</h2>';
@@ -40,7 +42,7 @@ if ($data['have_query_cache'] == 'YES') {
     echo 'Min result unit: '. formatDataSize($data['query_cache_min_res_unit']).'<br/>';
     echo 'Wlock invalidate: '. $data['query_cache_wlock_invalidate'].'<br/><br/>';
 
-    //Current query cache status
+    // current query cache status
     $data = $db->getMappedArray('SHOW STATUS LIKE "%Qcache%"', 'Variable_name', 'Value');
     echo '<h2>MySQL query cache status</h2>';
     echo 'Hits: '. formatNumber($data['Qcache_hits']).'<br/>';
@@ -56,7 +58,5 @@ if ($data['have_query_cache'] == 'YES') {
 } else {
     echo '<h2>MySQL query cache is disabled</h2>';
 }
-
-echo '</div>';
 
 ?>

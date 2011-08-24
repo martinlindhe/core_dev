@@ -279,16 +279,6 @@ class DatabaseMssql extends CoreBase implements IDB_SQL
         return $data;
     }
 
-    /**
-     * Shows the config view
-     */
-    public function renderConfig()
-    {
-        die('IMPLEMENT');
-        $view = new ViewModel('views/mysql_config.php');
-        return $view->render();
-    }
-
 }
 
 ?>
