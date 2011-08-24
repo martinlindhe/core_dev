@@ -5,12 +5,9 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip - not finished
+//STATUS: wip
 
-//TODO: need a is_mediawiki_url():
-//          full_url examples: http://sv.wiktionary.org/wiki/bestick
-//                             http://en.wikipedia.org/wiki/Cutlery
-//                     regexp: http(s)://lang.host.tld/wiki/alphanumeric
+//TODO: finish is_mediawiki_url()
 
 require_once('HttpClient.php');
 require_once('JSON.php');
@@ -25,12 +22,39 @@ class MediaWikiPage
 
 function is_mediawiki_url($url)
 {
-    // FIXME implement
+/* FIXME implement
+
+full_url examples: http://sv.wiktionary.org/wiki/bestick
+                   http://en.wikipedia.org/wiki/Cutlery
+
+           regexp: http(s)://lang.host.tld/wiki/alphanumeric
+*/
     return true;
 }
 
 class MediaWikiClient
 {
+    public static function getArticleName($full_url)
+    {
+        $url = new Url($full_url);
+
+        $x = explode('/', $url->getPath() );
+        return array_pop($x);
+    }
+
+    /** @return 2-letter language code from MediaWiki url */
+    public static function getArticleLanguage($full_url)
+    {
+        // XXX only works on xxx.wikipedia.org or xx.wiktionary.org url:s
+        $url = new Url($full_url);
+
+        $host = $url->getHost();
+        $x = explode('.', $host);
+        if (count($x) != 3)
+            throw new Exception ('something wrong with the url '.$full_url);
+
+        return $x[0];
+    }
 
     /** @return raw unparsed article */
     public static function getArticle($full_url)
@@ -38,10 +62,9 @@ class MediaWikiClient
         if (!is_url($full_url) || !is_mediawiki_url($full_url))
             throw new Exception ('need a mediawiki url... '.$full_url);
 
-        $url = new Url($full_url);
+        $article_name = self::getArticleName($full_url);
 
-        $x = explode('/', $url->getPath() );
-        $name = array_pop($x);
+        $url = new Url($full_url);
 
         $url->setPath('/w/api.php'.
         '?action=query'.
@@ -49,7 +72,7 @@ class MediaWikiClient
         '&prop=revisions'.
         '&rvlimit=1'.
         '&rvprop=content'.
-        '&titles='.urlencode($name)
+        '&titles='.urlencode($article_name)
         );
 
         $http = new HttpClient();
@@ -70,7 +93,7 @@ class MediaWikiClient
         {
             if ($id == '-1')
             {
-                echo 'MEDIAWIKI FAIL: no page result for "'.$name.'"<br/>';
+                echo 'MEDIAWIKI FAIL: no page result for "'.$article_name.'"<br/>';
                 return false;
             }
 
@@ -95,17 +118,29 @@ class MediaWikiClient
         $article = self::getArticle($full_url);
         if (!$article)
             throw new Exception ('failed to fetch article '.$full_url);
-//d($article->content);
 
         $pos = strpos($article->content, '==');
         if ($pos === false)
             throw new Exception ('unexpected wiki format '.$article->content);
-            // return false;
 
         $intro = substr($article->content, 0, $pos);
 
         $fmt = new MediaWikiFormatter();
         return $fmt->format($intro, $full_url);
+    }
+
+    public static function showArticle($full_url)
+    {
+        $res =
+        '<div class="okay">'.    // XXX have some better css
+        '<h3>'.
+        'MediaWiki of '.ahref_blank($full_url, MediaWikiClient::getArticleName($full_url)).
+        ' ('.MediaWikiClient::getArticleLanguage($full_url).')'.
+        '</h3>'.
+        MediaWikiClient::getArticleSummary( $full_url ).
+        '</div>';
+
+        return $res;
     }
 
 }
