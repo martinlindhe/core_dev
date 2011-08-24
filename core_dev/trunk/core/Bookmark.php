@@ -28,7 +28,7 @@ class Bookmark
 
     static function get($id)
     {
-        return SqlObject::getById($id, self::$tbl_name, 'Bookmark');
+        return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
     static function getList($owner, $type)
@@ -41,7 +41,7 @@ class Bookmark
         ' WHERE owner = '.$owner.
         ' AND type = '.$type;
 
-        return SqlObject::loadObjects($q, 'Bookmark'); // XXX pselect?
+        return SqlObject::loadObjects($q, __CLASS__); // XXX pselect?
     }
 
     static function exists($owner, $type)

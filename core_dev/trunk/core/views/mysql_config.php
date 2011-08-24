@@ -8,24 +8,24 @@
 
 $session->requireSuperAdmin();
 
-echo '<h2>Current database configuration</h2>';
-echo 'DB driver: '.get_class($db).'<br/>';
+echo '<h1>Default MySQL db information</h1>';
+echo 'Driver: '.get_class($db).'<br/>';
 echo 'Server version: <b>'.$db->db_handle->server_info.'</b><br/>';
 echo 'Client version: <b>'.$db->db_handle->client_info.'</b><br/>';
 echo 'Host: <b>'.$db->host.':'.$db->port.'</b><br/>';
-echo 'Username: '.$db->username.'<br/>';
+echo 'Username: <b>'.$db->username.'</b><br/>';
 // echo 'Password: '.($db->password ? $db->password : '(blank)').'<br/>';
 echo 'Database: '.$db->database.'<br/>';
 echo 'Configured charset: '.$db->charset.'<br/>';
 echo '<br/>';
 
-echo '<h2>DB host features</h2>';
+echo '<h2>Host features</h2>';
 $db_time = $db->getOneItem('SELECT NOW()');
-echo 'DB time: '.$db_time.'<br/>';
+echo 'Host time: '.$db_time.'<br/>';
 echo 'Webserver time: '.now().'<br/>';
 echo '<br/>';
 
-echo '<h2>DB driver specific settings</h2>';
+echo '<h2>Driver specific settings</h2>';
 echo 'Host info: '.$db->db_handle->host_info.'<br/>';
 echo 'Connection character set: '.$db->db_handle->character_set_name().'<br/>';
 echo 'Last error: '.$db->db_handle->error.'<br/>';
