@@ -58,7 +58,14 @@ $header->embedCss(
 '}'
 );
 
-echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">web</a>';
+$total_time = microtime(true) - $page->getStartTime();
+
+if (isset($db) && $db instanceof DatabaseMySQLProfiler) {
+    $sql_time   = $db->getTotalQueryTime();
+    $php_time   = $total_time - $sql_time - $db->time_connect;
+}
+
+echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">'.round($total_time, 2).'s web</a>';
 
 $css =
 'display:none;'.
@@ -68,12 +75,7 @@ $css =
 
 echo '<div id="'.$prof_id.'" style="'.$css.'">';
 
-$total_time = microtime(true) - $page->getStartTime();
-
 if (isset($db) && $db instanceof DatabaseMySQLProfiler) {
-    $sql_time   = $db->getTotalQueryTime();
-    $php_time   = $total_time - $sql_time - $db->time_connect;
-
     echo 'Load: <b>'.round($total_time, 2).'s</b> ';
     echo ' (DB connect: '.round($db->time_connect, 2).'s, ';
     echo 'SQL: '.round($sql_time, 2).'s, ';
