@@ -80,7 +80,7 @@ class SqlObject
     }
 
     /** XXX document */
-    protected static function reflectQuery($obj, $exclude_col = '')
+    protected static function reflectQuery($obj, $exclude_col = '', $include_unset = true)
     {
         $reflect = new ReflectionClass($obj);
         $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -94,6 +94,9 @@ class SqlObject
         {
             $col = $prop->getName();
             if ($col == $exclude_col)
+                continue;
+
+            if (!$include_unset && !$obj->$col)
                 continue;
 
             if (in_array($col, $reserved_words))
@@ -118,6 +121,24 @@ class SqlObject
     }
 
     /**
+     * Compares the object:s set properties to table columns
+     * @return true if object exists
+     **/
+    static function exists($obj, $tblname)
+    {
+        if (!is_alphanumeric($tblname))
+            throw new Exception ('very bad');
+
+        $vals = self::reflectQuery($obj, '', false);
+
+        $q =
+        'SELECT COUNT(*) FROM '.$tblname.
+        ' WHERE '.implode(' AND ', $vals);
+
+        return Sql::pSelectItem($q) ? true : false;  /// XXX use prepared select properly.. how?
+    }
+
+    /**
      * Creates a object in a database table
      * @return insert id
      */
@@ -137,9 +158,9 @@ class SqlObject
     /**
      * If object exists with same name as field in $field_name, already in db, return false
      */
-    static function storeUnique($obj, $tblname, $field_name = 'id')
+    static function storeUnique($obj, $tblname)
     {
-        if (self::idExists($obj->$field_name, $tblname, $field_name))
+        if (self::exists($obj, $tblname))
             return false;
 
         return self::create($obj, $tblname);

@@ -7,12 +7,14 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: working but oo-rewrite is planned
+//STATUS: working, but oo-rewrite using "tblShortcuts" is planned; 2011-08-24
+
+throw new Exception ('functions_contacts is deprecated!!!');
 
 //TODO: greater flexiblity, ability to create "favorites" lists
 
 define('CONTACT_FRIEND',    1);
-define('CONTACT_BLOCKED',    2);
+define('CONTACT_BLOCKED',   2);
 
 $config['contacts']['friend_requests'] = true; //sends a request to another user to become friends,if false, it simply adds other user to your contact list
 
