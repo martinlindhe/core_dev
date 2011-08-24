@@ -42,7 +42,7 @@ count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
 echo '<br/>';
 
 echo 'MySQL server: <b>'.$db->db_handle->server_info.'</b><br/>';
-echo 'MySQL server time: <b>'.$db_time.'</b><br/>';
+echo 'Local time: <b>'.$db_time.'</b><br/>';
 echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
 

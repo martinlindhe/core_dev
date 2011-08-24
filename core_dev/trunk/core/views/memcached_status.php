@@ -5,7 +5,7 @@
 
 $tempstore_div = 'tss_'.mt_rand();
 
-echo ' | <a href="#" onclick="return toggle_el(\''.$tempstore_div.'\');">tmp</a> ';
+echo ' | <a href="#" onclick="return toggle_el(\''.$tempstore_div.'\');">cache</a> ';
 
 $temp = TempStore::getInstance();
 
@@ -43,7 +43,7 @@ foreach ($temp->getServerStats() as $host => $stat)
 
     echo 'Memcached server: <b>'.$host.'</b> v<b>'.$stat['version'].'</b><br/>';
 
-    echo 'Memcached server time: <b>'.sql_datetime($stat['time']).'</b><br/>';
+    echo 'Local time: <b>'.sql_datetime($stat['time']).'</b><br/>';
     echo 'Uptime: <b>'.elapsed_seconds($stat['uptime']).'</b><br/>';
 }
 

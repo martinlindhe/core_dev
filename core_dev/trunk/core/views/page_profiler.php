@@ -58,7 +58,7 @@ $header->embedCss(
 '}'
 );
 
-echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">load</a>';
+echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">web</a>';
 
 $css =
 'display:none;'.
@@ -124,7 +124,7 @@ echo '<br/>';
 
 echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 
-echo 'Webserver time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
+echo 'Local time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
 echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
