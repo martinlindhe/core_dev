@@ -19,28 +19,31 @@ echo '<div id="'.$tempstore_div.'" style="'.$css.'">';
 
 foreach ($temp->getServerStats() as $host => $stat)
 {
-    echo 'Currently <b>'.$stat['curr_items'].'</b> items, <b>'.$stat['curr_connections'].'</b> connections<br/>';
-    echo 'Total <b>'.$stat['total_items'].'</b> items, <b>'.$stat['total_connections'].'</b> connections<br/>';
-    echo '<br/>';
-
-    echo 'Cmd: <b>'.$stat['cmd_get'].'</b> get, <b>'.$stat['cmd_set'].'</b> set<br/>';
-    echo 'Get: <b>'.$stat['get_hits'].'</b> hits, <b>'.$stat['get_misses'].'</b> misses<br/>';
-    echo 'Evictions: <b>'.$stat['evictions'].'</b><br/>';  // ????
-    echo 'Threads: <b>'.$stat['threads'].'</b><br/>';
-    echo '<br/>';
-
+    echo 'Read: <b>'.byte_count($stat['bytes_read']).'</b><br/>';
+    echo 'Written: <b>'.byte_count($stat['bytes_written']).'</b><br/>';
     echo 'Used memory: <b>'.byte_count($stat['bytes']).'</b>'.
     ' (<b>'.round($stat['bytes'] / $stat['limit_maxbytes'] * 100, 1).'%</b>'.
 
     ' of <b>'.byte_count($stat['limit_maxbytes']).'</b>)'.
     '<br/>';
-
-    echo 'Bytes read: <b>'.byte_count($stat['bytes_read']).'</b><br/>';
-    echo 'Bytes written: <b>'.byte_count($stat['bytes_written']).'</b><br/>';
     echo '<br/>';
 
-    echo 'Server: <b>'.$host.'</b> running <b>memcached '.$stat['version'].'</b><br/>';
-    echo 'Server time: <b>'.sql_datetime($stat['time']).'</b><br/>';
+    echo 'Get: <b>'.$stat['get_hits'].'</b> hits, <b>'.$stat['get_misses'].'</b> misses<br/>';
+    echo 'Cmd: <b>'.$stat['cmd_get'].'</b> get, <b>'.$stat['cmd_set'].'</b> set<br/>';
+    echo '<br/>';
+
+    echo 'Currently <b>'.$stat['curr_items'].'</b> items, <b>'.$stat['curr_connections'].'</b> connections<br/>';
+    echo 'Total <b>'.$stat['total_items'].'</b> items, <b>'.$stat['total_connections'].'</b> connections<br/>';
+    echo '<br/>';
+
+    // ???
+    echo 'Evictions: <b>'.$stat['evictions'].'</b><br/>';
+    echo 'Threads: <b>'.$stat['threads'].'</b><br/>';
+    echo '<br/>';
+
+    echo 'Memcached server: <b>'.$host.'</b> v<b>'.$stat['version'].'</b><br/>';
+
+    echo 'Memcached server time: <b>'.sql_datetime($stat['time']).'</b><br/>';
     echo 'Uptime: <b>'.elapsed_seconds($stat['uptime']).'</b><br/>';
 }
 

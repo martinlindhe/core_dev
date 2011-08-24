@@ -62,7 +62,7 @@ echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">load</a>';
 
 $css =
 'display:none;'.
-'width:370px;'.
+'width:400px;'.
 'padding:4px;'.
 'border:#000 1px solid;';
 
@@ -102,32 +102,29 @@ if (ini_get('memory_limit') != '-1') {
 } else {
     echo ' (no limit)<br/>';
 }
+echo '<br/>';
 
 if (function_exists('apc_cache_info')) {
     $conv = new ConvertDatasize();
 
     $info = apc_cache_info('', true);
 //d($info);
-    echo
-    'APC: using <b>'.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB</b>'.
-    ', <b>'.$info['num_hits'].'</b> hits'.
-    ', <b>'.$info['num_misses'].'</b> misses'.
-    ', <b>'.$info['num_entries'].'</b> entries (max <b>'.$info['num_slots'].'</b>)'.
-    '<br/>';
+    echo 'APC: using <b>'.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB</b><br/>';
+    echo 'APC: <b>'.$info['num_hits'].'</b> hits, <b>'.$info['num_misses'].'</b> misses<br/>';
+    echo 'APC: <b>'.$info['num_entries'].'</b> entries (max <b>'.$info['num_slots'].'</b>)<br/>';
+    echo '<br/>';
 }
-
-echo '<br/>';
 
 $client = HttpUserAgent::getBrowser($_SERVER['HTTP_USER_AGENT']);
 echo
- 'Client: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
+ 'User: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
 ' using '.
 ' <span title="'.$_SERVER['HTTP_USER_AGENT'].'" style="font-weight:bold">'.$client->name.' '.$client->version.'</span><br/>';
 
-echo 'Server: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
+echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b> running <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 
-echo 'Server time: '.sql_datetime( time() ).' '.date('T').'<br/>';
-echo 'Uptime: '.elapsed_seconds( uptime() ).'<br/>';
+echo 'Webserver time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
+echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
 
