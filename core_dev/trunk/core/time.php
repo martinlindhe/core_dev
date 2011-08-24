@@ -164,7 +164,7 @@ function elapsed_seconds($s)
     if ($s < (60 * 60 * 24))
         return round($s / 60 / 60, 1).' hours';
 
-    if ($s < (60 * 60 * 24 * 7))
+    if ($s < (60 * 60 * 24 * 14)) // rather show "13 days" than "1.5 weeks"
         return round($s / 60 / 60 / 24, 1).' days';
 
     if ($s < (60 * 60 * 24 * 28))

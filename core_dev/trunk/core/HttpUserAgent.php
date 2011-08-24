@@ -2,12 +2,14 @@
 /**
  * $Id
  *
- * A class to extract useful infromation from a HTTP user agent
+ * A helper class to parse useful infromation from a HTTP user agent string
+ *
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
 //STATUS: wip
 
-//TODO 1!!!!!: identify Internet Explorer, Opera!
+//TODO 1!!!!!: identify Internet Explorer, Opera, Safari!
 //TODO 2: parse os & arch from HttpUserAgent into WebBrowser
 
 require_once('core.php');
@@ -26,6 +28,10 @@ class HttpUserAgent
     public static function getBrowser($s)
     {
         $o = new WebBrowser();
+
+        $o->vendor  = 'Unknown vendor';
+        $o->name    = 'Unknown browser';
+        $o->version = 'Unknown version';
 
         if (instr($s, 'Chrome'))
         {
