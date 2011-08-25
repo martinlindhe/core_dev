@@ -245,6 +245,9 @@ class YuiDatatable
         $data_var   = 'yui_dt_data'.mt_rand();
         $pag_holder = 'yui_pag'.mt_rand();
 
+        // available "show rows per page" options
+        $rpp_opts = array(10, 15, 20, 25, 35, 50, 75, 100, 250, 500, 1000);
+
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
             'YAHOO.example.Basic = function() {'.
@@ -361,7 +364,7 @@ class YuiDatatable
                         'paginator: new YAHOO.widget.Paginator({'.
                             (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
                             'rowsPerPage:'.$this->rows_per_page.','.
-                            'rowsPerPageOptions:['.implode(',', array(10, 15, 20, 25, 50, 75, 100, 250, 500, 1000) ).'],'.
+                            'rowsPerPageOptions:['.implode(',', $rpp_opts).'],'.
                             'containers:["'.$pag_holder.'"],'.
                             'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; {CurrentPageReport} {RowsPerPageDropdown} per page",'.
                             'pageReportTemplate:"Showing items {startRecord} - {endRecord} of {totalRecords}",'.
