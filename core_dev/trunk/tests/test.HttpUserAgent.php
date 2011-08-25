@@ -63,6 +63,7 @@ if ($b->vendor != 'Apple' || $b->name != 'Safari' || $b->version != '5.0.4')
 
 
 
+
 $s = 'Mozilla/4.0 (compatible; MSIE 4.01; Windows 98)';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Microsoft' || $b->name != 'Internet Explorer' || $b->version != '4.01')
@@ -95,7 +96,6 @@ if ($b->vendor != 'Microsoft' || $b->name != 'Internet Explorer' || $b->version 
 
 
 
-// Opera:
 $s = 'Opera/9.00 (Windows NT 5.1; U; en)';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Opera Software' || $b->name != 'Opera' || $b->version != '9.00')
@@ -115,6 +115,5 @@ $s = 'Opera/9.80 (Windows NT 6.0; U; en) Presto/2.8.99 Version/11.10';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Opera Software' || $b->name != 'Opera' || $b->version != '11.10')
     echo 'FAIL 20: '.$s;
-
 
 ?>
