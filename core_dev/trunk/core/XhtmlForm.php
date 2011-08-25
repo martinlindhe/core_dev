@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method
+//STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method.. only addCaptcha() left!
 
 //TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
 
