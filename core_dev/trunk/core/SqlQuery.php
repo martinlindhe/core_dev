@@ -46,9 +46,15 @@ class SqlQuery
 
         $query = str_replace($keywords, $decorated, $query);
 
-        $res = '<table summary="" class="hover" width="100%" cellpadding="0">';
+        $css =
+        'overflow:auto;'.
+        'max-width:400px;'.
+        'max-height:100px;';
 
-        $res .= '<tr><td width="30"'.($this->prepared ? ' style="background-color: #B2A23D"': '').'>';
+        $res =
+        '<div style="'.$css.'">'.
+        '<table summary="" class="hover" width="100%" cellpadding="0">'.
+        '<tr><td width="30"'.($this->prepared ? ' style="background-color:#B1F9AA"': '').'>';
 
         if ($this->error)
             $res .= coreButton('Error', '', 'SQL Error');
@@ -67,7 +73,9 @@ class SqlQuery
         if ($this->format) $res .= ' ('.$this->format.')';
         if ($this->params) $res .= ': '.implode(', ', $this->params);
 
-        $res .= '</td></tr></table>';
+        $res .=
+        '</td></tr></table>'.
+        '</div>';
         return $res;
     }
 

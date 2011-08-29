@@ -197,15 +197,20 @@ class SqlObject
         return self::getByField($id, $tblname, $classname, $field_name);
     }
 
-    static function getByField($id, $tblname, $classname, $field_name = 'id')
+    static function getByField($val, $tblname, $classname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
+        if (is_numeric($val))
+            $format = 'i';
+        else
+            $format = 's';
+
         $q =
          'SELECT * FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
-        $row = Sql::pSelectRow($q, 'i', $id);
+        $row = Sql::pSelectRow($q, $format, $val);
 
         return SqlObject::loadObject($row, $classname);
     }
