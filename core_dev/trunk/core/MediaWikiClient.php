@@ -7,6 +7,10 @@
 
 //STATUS: wip
 
+//TODO: automatically expire mediaiwiki pages (fetch new version when needed)
+//      finish $use_db_cache by respecting max-age parameter (currently ignored,
+//      only first version of page is ever fetched)
+
 //TODO: finish is_mediawiki_url()
 
 require_once('HttpClient.php');
@@ -15,9 +19,30 @@ require_once('MediaWikiFormatter.php');
 
 class MediaWikiPage
 {
+    var $id;          ///< internal db id
+    var $url;
     var $title;
-    var $pageid; // id in mediawiki database
+    var $lang;        ///< 2-letter language code
+    var $pageid;      ///< unsigned integer id in mediawiki database
     var $content;
+    var $time_saved;
+
+    protected static $tbl_name = 'tblMediaWikiPages';
+
+    static function get($url)
+    {
+// XXXX: only get latest article
+        return SqlObject::getByField($url, self::$tbl_name, __CLASS__, 'url');
+    }
+
+    public static function store($o)
+    {
+        if (!$o->time_saved)
+            $o->time_saved = sql_datetime( time() );
+
+// XXXX: delete all articles with same $url before storing (?)
+        return SqlObject::store($o, self::$tbl_name, 'url');
+    }
 }
 
 function is_mediawiki_url($url)
@@ -34,7 +59,7 @@ full_url examples: http://sv.wiktionary.org/wiki/bestick
 
 class MediaWikiClient
 {
-    public static function getArticleName($full_url)
+    public static function getArticleTitle($full_url)
     {
         $url = new Url($full_url);
 
@@ -56,13 +81,16 @@ class MediaWikiClient
         return $x[0];
     }
 
-    /** @return raw unparsed article */
-    public static function getArticle($full_url)
+    /**
+     * @param $use_db_cache false to disable; set to a time period, like "6m" or "6 months" to cache articles in local db
+     * @return raw unparsed article
+     */
+    public static function getArticle($full_url, $use_db_cache = '6 months')
     {
         if (!is_url($full_url) || !is_mediawiki_url($full_url))
             throw new Exception ('need a mediawiki url... '.$full_url);
 
-        $article_name = self::getArticleName($full_url);
+        $article_name = self::getArticleTitle($full_url);
 
         $url = new Url($full_url);
 
@@ -75,16 +103,25 @@ class MediaWikiClient
         '&titles='.urlencode($article_name)
         );
 
-        $http = new HttpClient();
+        if ($use_db_cache)
+        {
+            // XXX is $use_db_cache a time-span?
+            // XXXX is article recent enough?
 
-        $key = 'MediaWikiClient/'.sha1( $url->get() );
+            $res = MediaWikiPage::get($full_url);
+            if ($res)
+                return $res;
+        }
+        else
+        {
+            $key = 'MediaWikiClient/'.sha1( $url->get() );
+            $temp = TempStore::getInstance();
+            $res = $temp->get($key);
+            if ($res)
+                return unserialize($res);
+        }
 
-        $temp = TempStore::getInstance();
-        $res = $temp->get($key);
-        if ($res)
-            return unserialize($res);
-
-        $http->setUrl($url);
+        $http = new HttpClient($url);
 
         $raw = $http->getBody();
         $json = JSON::decode($raw);
@@ -99,25 +136,39 @@ class MediaWikiClient
 
             $o = new MediaWikiPage();
 
+            $o->url     = $full_url;
+            $o->lang    = self::getArticleLanguage($full_url);
             $o->title   = $p->title;
             $o->pageid  = $p->pageid;
             $o->content = $p->revisions[0]->{'*'};
+
             $pages[] = $o;
         }
         $res = $pages[0]; // XXX only exports first article
 
-        $temp->set($key, serialize($res), '24h');
+        if ($use_db_cache)
+            MediaWikiPage::store($res);
+        else
+            $temp->set($key, serialize($res), '24h');
+
         return $res;
     }
 
     /** @return Article summary */
     public static function getArticleSummary($full_url)
     {
-        //XXX strip all text inside {{blabla}}
-
-        $article = self::getArticle($full_url);
-        if (!$article)
-            throw new Exception ('failed to fetch article '.$full_url);
+        if ($full_url instanceof MediaWikiPage)
+        {
+            $article = $full_url;
+        }
+        else if (is_url($full_url))
+        {
+            $article = self::getArticle($full_url);
+            if (!$article)
+                throw new Exception ('failed to fetch article '.$full_url);
+        }
+        else
+            throw new Exception ('wierd input: '.$full_url);
 
         $pos = strpos($article->content, '==');
         if ($pos === false)
@@ -125,19 +176,24 @@ class MediaWikiClient
 
         $intro = substr($article->content, 0, $pos);
 
+        //XXX strip all text inside {{blabla}}
+
         $fmt = new MediaWikiFormatter();
-        return $fmt->format($intro, $full_url);
+        return $fmt->format($intro, $article->url);
     }
 
     public static function showArticle($full_url)
     {
+        $o = self::getArticle( $full_url );
+
         $res =
         '<div class="okay">'.    // XXX have some better css
         '<h3>'.
-        'MediaWiki of '.ahref_blank($full_url, MediaWikiClient::getArticleName($full_url)).
-        ' ('.MediaWikiClient::getArticleLanguage($full_url).')'.
+        'MediaWiki of '.ahref_blank($full_url, $o->title).
+        ' ('.$o->lang.')'.
+        ' as of '.$o->time_saved.
         '</h3>'.
-        MediaWikiClient::getArticleSummary( $full_url ).
+        MediaWikiClient::getArticleSummary( $o ).
         '</div>';
 
         return $res;
