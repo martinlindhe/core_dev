@@ -218,12 +218,12 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         $js = '';
 
-        if ($this->embed_js)
-            $js .= implode('', $this->embed_js);
-
         if ($this->js_functions)
             foreach ($this->js_functions as $key => $val)
                 $js .= $val;
+
+        if ($this->embed_js)
+            $js .= implode('', $this->embed_js);
 
         if ($js)
             $res .= js_embed($js);
