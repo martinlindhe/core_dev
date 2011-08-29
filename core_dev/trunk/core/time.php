@@ -21,18 +21,13 @@ require_once('sql_misc.php');
  */
 function ago($sql_time)
 {
-    //XXX deprecate!!! use Timestamp->getRelative() instead
-    if (function_exists('agoOverride')) {
-        return agoOverride($sql_time);
-    }
-
-    $old_time = strtotime($sql_time);
+    $old_time  = strtotime($sql_time);
     $curr_time = time();
 
     if ($curr_time >= $old_time) {
-        return shortTimePeriod($curr_time - $old_time).' ago';
+        return elapsed_seconds($curr_time - $old_time).' ago';
     } else {
-        return shortTimePeriod($old_time - $curr_time).' in the future';
+        return elapsed_seconds($old_time - $curr_time).' in the future';
     }
 }
 

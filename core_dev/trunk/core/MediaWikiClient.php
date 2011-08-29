@@ -191,8 +191,8 @@ class MediaWikiClient
         '<h3>'.
         'MediaWiki of '.ahref_blank($full_url, $o->title).
         ' ('.$o->lang.')'.
-        ' as of '.$o->time_saved.
         '</h3>'.
+        '<i>Retrieved '.ago($o->time_saved).'</i><br/>'.
         MediaWikiClient::getArticleSummary( $o ).
         '</div>';
 
