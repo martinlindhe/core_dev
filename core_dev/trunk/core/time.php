@@ -25,9 +25,9 @@ function ago($sql_time)
     $curr_time = time();
 
     if ($curr_time >= $old_time) {
-        return elapsed_seconds($curr_time - $old_time).' ago';
+        return elapsed_seconds($curr_time - $old_time, 0).' ago';
     } else {
-        return elapsed_seconds($old_time - $curr_time).' in the future';
+        return elapsed_seconds($old_time - $curr_time, 0).' in the future';
     }
 }
 
@@ -145,7 +145,7 @@ function shortTimePeriod($secs) //XXX rename to something with duration. also se
 /**
  * Formats number of elapsed seconds in a readable way, such as "2.5 hours" or "4 weeks"
  */
-function elapsed_seconds($s)
+function elapsed_seconds($s, $precision = 1)
 {
     if (!is_numeric($s))
         throw new Exception ('not a number '.$s);
@@ -154,21 +154,21 @@ function elapsed_seconds($s)
         return $s.' seconds';
 
     if ($s < (60 * 60))
-        return round($s / 60, 1).' minutes';
+        return round($s / 60, $precision).' minutes';
 
     if ($s < (60 * 60 * 24))
-        return round($s / 60 / 60, 1).' hours';
+        return round($s / 60 / 60, $precision).' hours';
 
     if ($s < (60 * 60 * 24 * 14)) // rather show "13 days" than "1.5 weeks"
-        return round($s / 60 / 60 / 24, 1).' days';
+        return round($s / 60 / 60 / 24, $precision).' days';
 
     if ($s < (60 * 60 * 24 * 28))
-        return round($s / 60 / 60 / 24 / 7, 1).' weeks';
+        return round($s / 60 / 60 / 24 / 7, $precision).' weeks';
 
     if ($s < (60 * 60 * 24 * 30 * 12))
-        return round($s / 60 / 60 / 24 / 30, 1).' months';
+        return round($s / 60 / 60 / 24 / 30, $precision).' months';
 
-    return round($s / 60 / 60 / 24 / 365, 1).' years';
+    return round($s / 60 / 60 / 24 / 365, $precision).' years';
 }
 
 /**
