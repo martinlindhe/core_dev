@@ -26,8 +26,7 @@
 
 //TODO: ability to use "css sprite" images somehow
 
-require_once('output_js.php');
-require_once('output_css.php');
+require_once('html.php');
 require_once('Coordinate.php');
 
 class GoogleMapMarker extends Coordinate

@@ -24,11 +24,14 @@ function ago($sql_time)
     $old_time  = strtotime($sql_time);
     $curr_time = time();
 
-    if ($curr_time >= $old_time) {
+    if ($curr_time == $old_time)
+        return 'just now';
+
+    if ($curr_time >= $old_time)
         return elapsed_seconds($curr_time - $old_time, 0).' ago';
-    } else {
-        return elapsed_seconds($old_time - $curr_time, 0).' in the future';
-    }
+
+    return elapsed_seconds($old_time - $curr_time, 0).' in the future';
+
 }
 
 /**

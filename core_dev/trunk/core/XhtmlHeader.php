@@ -14,7 +14,7 @@
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
-require_once('output_js.php');
+require_once('html.php');
 
 class FeedDescription
 {

@@ -18,7 +18,7 @@
 require_once('ErrorHandler.php');
 require_once('Captcha.php');
 require_once('HttpClient.php');
-require_once('output_js.php');
+require_once('html.php');
 
 class CaptchaRecaptcha extends Captcha
 {

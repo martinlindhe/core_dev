@@ -9,7 +9,7 @@
 
 require_once('LocaleHandler.php');
 require_once('XhtmlHeader.php');
-require_once('output_js.php');
+require_once('html.php');
 
 /**
  * Creates a select-dropdown with numbers
