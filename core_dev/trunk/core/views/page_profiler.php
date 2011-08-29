@@ -7,28 +7,31 @@
 
 require_once('HttpUserAgent.php');
 
-/*
 $header->embedJs( // code will be in <head>
 'var startTime=new Date();'.
 
+'window.onload=function()'.
+'{'.
+//    'alert("onload");'.  // this is getting called!
+    'clearTimeout(loopTime);'.
+'};'
+);
+
+$header->registerJsFunction(
 'function currentTime()'.
 '{'.
     'alert("XALLSLLSLS");'.  // XXXX it is never getting called???
     'var a=Math.floor( (new Date()-startTime) / 100) / 10;'.
     'if (a%1==0) a+=".0";'.
-    'document.getElementById("cd_startTime").innerHTML=a;'.
-'}'.
-
-'window.onload=function()'.
-'{'.
-    'clearTimeout(cd_loopTime);'.
-'};'
+    'document.getElementById("span_rendertime").innerHTML=a;'.
+'}'
 );
+
 
 echo js_embed(
-'var cd_loopTime=setInterval("currentTime()",100);'
+'var loopTime=setInterval("currentTime()",100);'
 );
-*/
+
 
 
 $css =
@@ -156,7 +159,7 @@ echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
 
-//echo ' | <span id="cd_startTime">99.99</span>s render';
+echo ' | <span id="span_rendertime">99.99</span>s render';
 echo '</div>'; // closing $container_id
 
 ?>
