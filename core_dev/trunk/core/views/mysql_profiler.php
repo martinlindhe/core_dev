@@ -20,6 +20,7 @@ function print_query($q)
     ' LEFT JOIN ', ' LEFT OUTER JOIN ', ' INNER JOIN ',
     ' GROUP BY ', ' ORDER BY ',
     ' ON ', ' AS ', ' AND ', ' OR ', ' LIMIT ', ' BETWEEN ',
+    ' STATUS',
     ' IS NULL', ' IS NOT NULL', ' DESC', ' ASC',
     ' != ',
     'NOW()', ' DATE(',
@@ -32,6 +33,7 @@ function print_query($q)
     '<br/><b>LEFT JOIN</b> ', '<br/><b>LEFT OUTER JOIN</b> ', '<br/><b>INNER JOIN</b> ',
     '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
     ' <b>ON</b> ', ' <b>AS</b> ', ' <b>AND</b> ', ' <b>OR</b> ', ' <b>LIMIT</b> ', ' <b>BETWEEN</b> ',
+    ' <b>STATUS</b>',
     ' <b>IS NULL</b>', ' <b>IS NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
     ' <b>!=</b> ',
     '<b>NOW()</b>', ' <b>DATE</b>(',
@@ -45,9 +47,9 @@ function print_query($q)
     'max-width:400px;'.
     'max-height:100px;';
 
-    Echo
+    echo
     '<div style="'.$css.'">'.
-    '<table summary="" class="hover" width="100%" cellpadding="0">'.
+    '<table summary="" class="hover" width="100%">'.
     '<tr><td width="30"'.($q->prepared ? ' style="background-color:#B1F9AA"': '').'>';
 
     if ($q->error)

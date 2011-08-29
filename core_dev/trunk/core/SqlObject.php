@@ -126,14 +126,16 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        if (!is_numeric($id))
-            throw new Exception ('bad data'. $id);
-
         $q =
         'SELECT COUNT(*) FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
 
-        return Sql::pSelectItem($q, 's', $id) ? true : false;
+        if (is_numeric($id))
+            $form = 'i';
+        else
+            $form = 's';
+
+        return Sql::pSelectItem($q, $form, $id) ? true : false;
     }
 
     /**
