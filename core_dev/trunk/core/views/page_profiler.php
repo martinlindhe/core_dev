@@ -15,29 +15,46 @@ $header->embedJs( // code will be in <head>
 $header->registerJsFunction(
 'function loadtime()'.
 '{'.
-    's=(new Date()-beforeload)/1000;'.
-
+    'var s=(new Date()-beforeload)/1000;'.
     'document.getElementById("span_rendertime").innerHTML=s;'.
 '}'
 );
 
-$css =
-'position:fixed;'.
-'right:0;'.
-'bottom:0;'.
-'text-align:right;'.
-'margin:2px;'.
-'padding:2px;'.
-'padding-top:0px;'.
-'border:1px dashed #aaa;'.
-'color:#000;'.
-'background-color:#fafafa;'.
-'font:9px verdana;'.
-'text-align:left;';
-
 $container_id = 'cd_c_'.mt_rand();
 
-echo '<div id="'.$container_id.'" style="'.$css.'">';
+$header->embedCss(
+'#'.$container_id.
+'{'.
+    'position:fixed;'.
+    'right:0;'.
+    'bottom:0;'.
+    'text-align:right;'.
+    'margin:2px;'.
+    'padding:2px;'.
+    'padding-top:0px;'.
+    'border:1px dashed #aaa;'.
+    'color:#000;'.
+    'background-color:#fafafa;'.
+    'font:9px verdana;'.
+    'text-align:left;'.
+'}'.
+'a.closebtn'.
+'{'.
+    'display:block;'.
+    'float:right;'.
+    'width:7px;'.
+    'height:7px;'.
+    'margin-left:4px;'.
+    'margin-top:4px;'.
+    'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
+'}'.
+'a.closebtn:hover'.
+'{'.
+    'background-position:0px -7px;'.
+'}'
+);
+
+echo '<div id="'.$container_id.'">';
 
 echo '<a class="closebtn" href="#" onclick="hide_el(\''.$container_id.'\');"></a>';
 
@@ -54,23 +71,6 @@ if (class_exists('TempStore')) {
 }
 
 $prof_id = 'prof_'.mt_rand();
-
-$header->embedCss(
-'a.closebtn'.
-'{'.
-    'display:block;'.
-    'float:right;'.
-    'width:7px;'.
-    'height:7px;'.
-    'margin-left:4px;'.
-    'margin-top:4px;'.
-    'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
-'}'.
-'a.closebtn:hover'.
-'{'.
-    'background-position:0px -7px;'.
-'}'
-);
 
 $total_time = microtime(true) - $page->getStartTime();
 
