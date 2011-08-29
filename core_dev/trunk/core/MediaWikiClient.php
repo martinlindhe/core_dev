@@ -182,7 +182,7 @@ class MediaWikiClient
         return $fmt->format($intro, $article->url);
     }
 
-    public static function showArticle($full_url)
+    public static function showArticle($full_url)  /// XXXX MAKE THIS INTO A VIEW, WHICH CAN HANDLE "FETCH NEW VERSION OF ARTICLE" CAPSLOCKFTW
     {
         $o = self::getArticle( $full_url );
 
