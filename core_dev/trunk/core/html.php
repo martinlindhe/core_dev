@@ -66,11 +66,13 @@ function relurl_add($p)
 }
 
 /** Creates a clickable link */
-function ahref($url, $text, $target = '', $onclick = '')
+function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
+    // XXX reimplement using a XhtmlComponentA object
     return
     '<a href="'.relurl($url).'"'.
-    ($target ? ' target="'.$target.'"' : '').
+    ($class   ? ' class="'.$class.'"' : '').
+    ($target  ? ' target="'.$target.'"' : '').
     ($onclick ? ' onclick="'.$onclick.'"' : ''). // executes javascript
     '>'.$text.'</a>';
 }
@@ -81,9 +83,9 @@ function ahref_blank($url, $text)
     return ahref($url, $text, '_blank');
 }
 
-function ahref_js($text, $js)
+function ahref_js($text, $js, $class)
 {
-    return ahref('#', $text, '', $js);
+    return ahref('#', $text, '', $js, $class);
 }
 
 /** Creates "are you sure?" pages */

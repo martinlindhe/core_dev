@@ -7,17 +7,17 @@
 
 require_once('HttpUserAgent.php');
 
-$header->embedJs( // code will be in <head>
-'var beforeload=new Date();'.
-'window.onload = loadtime;'
-);
-
 $header->registerJsFunction(
 'function loadtime()'.
 '{'.
     'var s=(new Date()-beforeload)/1000;'.
     'document.getElementById("span_rendertime").innerHTML=s;'.
 '}'
+);
+
+$header->embedJs( // code will be in <head>
+'var beforeload=new Date();'.
+'window.onload=loadtime;'
 );
 
 $container_id = 'cd_c_'.mt_rand();
@@ -56,7 +56,7 @@ $header->embedCss(
 
 echo '<div id="'.$container_id.'">';
 
-echo '<a class="closebtn" href="#" onclick="hide_el(\''.$container_id.'\');"></a>';
+echo ahref_js('', "hide_el('".$container_id."');return false;", 'closebtn');
 
 echo 'core_dev 0.2-svn ';
 
