@@ -8,31 +8,21 @@
 require_once('HttpUserAgent.php');
 
 $header->embedJs( // code will be in <head>
-'var startTime=new Date();'.
-
-'window.onload=function()'.
-'{'.
-//    'alert("onload");'.  // this is getting called!
-    'clearTimeout(loopTime);'.
-'};'
+'var beforeload=new Date();'.
+'window.onload = loadtime;'
 );
 
 $header->registerJsFunction(
-'function currentTime()'.
+'function loadtime()'.
 '{'.
-    'alert("XALLSLLSLS");'.  // XXXX it is never getting called???
-    'var a=Math.floor( (new Date()-startTime) / 100) / 10;'.
-    'if (a%1==0) a+=".0";'.
-    'document.getElementById("span_rendertime").innerHTML=a;'.
+    // calculate the current time in afterload
+    'afterload = (new Date()).getTime();'.
+    // now use the beforeload and afterload to calculate the seconds
+    'secs = (afterload-beforeload)/1000;'.
+
+    'document.getElementById("span_rendertime").innerHTML = secs;'.
 '}'
 );
-
-
-echo js_embed(
-'var loopTime=setInterval("currentTime()",100);'
-);
-
-
 
 $css =
 'position:fixed;'.
