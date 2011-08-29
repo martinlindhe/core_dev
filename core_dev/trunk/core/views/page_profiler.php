@@ -7,6 +7,30 @@
 
 require_once('HttpUserAgent.php');
 
+/*
+$header->embedJs( // code will be in <head>
+'var startTime=new Date();'.
+
+'function currentTime()'.
+'{'.
+    'alert("XALLSLLSLS");'.  // XXXX it is never getting called???
+    'var a=Math.floor( (new Date()-startTime) / 100) / 10;'.
+    'if (a%1==0) a+=".0";'.
+    'document.getElementById("cd_startTime").innerHTML=a;'.
+'}'.
+
+'window.onload=function()'.
+'{'.
+    'clearTimeout(cd_loopTime);'.
+'};'
+);
+
+echo js_embed(
+'var cd_loopTime=setInterval("currentTime()",100);'
+);
+*/
+
+
 $css =
 'position:fixed;'.
 'right:0;'.
@@ -132,6 +156,7 @@ echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
 
+//echo ' | <span id="cd_startTime">99.99</span>s render';
 echo '</div>'; // closing $container_id
 
 ?>
