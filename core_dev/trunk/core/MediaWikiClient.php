@@ -11,11 +11,15 @@
 //      finish $use_db_cache by respecting max-age parameter (currently ignored,
 //      only first version of page is ever fetched)
 
-//TODO: finish is_mediawiki_url()
+//TODO: implement is_mediawiki_url()
+//     examples: http://sv.wiktionary.org/wiki/bestick
+//               http://en.wikipedia.org/wiki/Cutlery
+//       regexp: http(s)://lang.host.tld/wiki/utf8
+
 
 require_once('HttpClient.php');
 require_once('JSON.php');
-require_once('MediaWikiFormatter.php');
+require_once('MediaWikiParser.php');
 
 class MediaWikiPage
 {
@@ -47,13 +51,6 @@ class MediaWikiPage
 
 function is_mediawiki_url($url)
 {
-/* FIXME implement
-
-full_url examples: http://sv.wiktionary.org/wiki/bestick
-                   http://en.wikipedia.org/wiki/Cutlery
-
-           regexp: http(s)://lang.host.tld/wiki/alphanumeric
-*/
     return is_url($url);
 }
 
@@ -170,16 +167,8 @@ class MediaWikiClient
         else
             throw new Exception ('wierd input: '.$full_url);
 
-        $pos = strpos($article->content, '==');
-        if ($pos === false)
-            throw new Exception ('unexpected wiki format '.$article->content);
-
-        $intro = substr($article->content, 0, $pos);
-
-        //XXX strip all text inside {{blabla}}
-
-        $fmt = new MediaWikiFormatter();
-        return $fmt->format($intro, $article->url);
+        $article = MediaWikiParser::parseArticle($article->content);
+        return $article->summary;
     }
 
     public static function showArticle($full_url)  /// XXXX MAKE THIS INTO A VIEW, WHICH CAN HANDLE "FETCH NEW VERSION OF ARTICLE" CAPSLOCKFTW

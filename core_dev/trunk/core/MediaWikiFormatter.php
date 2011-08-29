@@ -8,8 +8,9 @@
  * http://johbuc6.coconia.net/doku.php/mediawiki2html_machine/code
  *
  * @author FIXME credit orignal author
- * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
+
+//STATUS!!!: see MediaWikiParser for a full rewrite
 
 //STATUS: the code is close to useless... write a clean parser from draft
 
