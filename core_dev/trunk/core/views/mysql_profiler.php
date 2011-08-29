@@ -15,7 +15,7 @@ function print_query($q)
     $query = htmlentities(nl2br($q->query), ENT_COMPAT, 'UTF-8');
 
     $keywords = array(
-    'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ',
+    'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ', 'SHOW ',
     ' FROM ', ' SET ', ' WHERE ',
     ' LEFT JOIN ', ' LEFT OUTER JOIN ', ' INNER JOIN ',
     ' GROUP BY ', ' ORDER BY ',
@@ -27,7 +27,7 @@ function print_query($q)
     );
 
     $decorated = array(
-    '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ',
+    '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ', '<b>SHOW</b> ',
     ' <b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ',
     '<br/><b>LEFT JOIN</b> ', '<br/><b>LEFT OUTER JOIN</b> ', '<br/><b>INNER JOIN</b> ',
     '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',

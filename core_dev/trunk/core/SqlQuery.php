@@ -13,7 +13,7 @@ class SqlQuery
     var $error;
     var $time;
     var $prepared = false;
-    var $format;            ///< f or prepared statements
+    var $format;            ///< for prepared statements
     var $params;            ///< for prepared statements
 }
 
