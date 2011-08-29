@@ -85,7 +85,7 @@ $header->embedCss(
 $db_time = $db->getOneItem('SELECT NOW()');
 $uptime  = $db->getOneRow('SHOW STATUS WHERE Variable_name="Uptime"');
 
-echo '<a href="#" onclick="return toggle_el(\''.$sql_div.'\');">'.count($db->queries).' sql</a>';
+echo ahref_js(count($db->queries).' sql', "return toggle_el('".$sql_div."')");
 
 $show_div = $db->getErrorCount() ? true : false;
 

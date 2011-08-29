@@ -5,7 +5,7 @@
 
 $tempstore_div = 'tss_'.mt_rand();
 
-echo ' | <a href="#" onclick="return toggle_el(\''.$tempstore_div.'\');">cache</a> ';
+echo ' | '.ahref_js('cache', "return toggle_el('".$tempstore_div."')").' ';
 
 $temp = TempStore::getInstance();
 

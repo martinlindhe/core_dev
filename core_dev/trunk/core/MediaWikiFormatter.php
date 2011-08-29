@@ -7,32 +7,36 @@
  * MediaWiki formatting code based on
  * http://johbuc6.coconia.net/doku.php/mediawiki2html_machine/code
  *
+ * @author FIXME credit orignal author
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip... used by MediaWikiClient
+//STATUS: the code is close to useless... write a clean parser from draft
 
 class MediaWikiFormatter
 {
-    protected $url;          ///< needed to expand full url:s
-
-    /** @return Base URL to the MediaWiki installation */
-    public function getBaseUrl()
+    public function format($html, $title)
     {
-        $url = new Url($this->url);
 
-        if (substr($url->getPath(), 0, 6) != '/wiki/')
-            throw new Exception ('not a mediawiki url: '.$this->url);
+        // re-html
+        $html = html_entity_decode($html);
+        $html = str_replace('&ndash;','-',$html);
+        $html = str_replace('&quot;','"',$html);
+        $html = preg_replace('/\&amp;(nbsp);/','&${1};',$html);
 
-        $url->setPath('/wiki/');
-        return $url->render();
+//        $html = str_replace('{{PAGENAME}}', $title, $html);
+
+        // Table
+//        $html = self::convertTables($html);
+
+        $html = self::formatArticle($html);
+
+        return $html;
     }
 
     /** Attempt to format MediaWiki markup code */
-    public function format($html, $page_url)
+    public static function formatArticle($html)
     {
-        $this->url = $page_url;
-
         $html = str_replace('&ndash;', '-', $html);
         $html = str_replace('&quot;', '"', $html);
         $html = preg_replace('/\&amp;(nbsp);/', '&${1};', $html);
@@ -43,9 +47,9 @@ class MediaWikiFormatter
         // emphasized
         $html = preg_replace('/\'\'([^\'\n]+)\'\'?/', '<em>${1}</em>', $html);
         //interwiki links
-        $html = preg_replace_callback('/\[\[([^\|\n\]:]+)[\|]([^\]]+)\]\]/', array($this, 'helper_interwikilinks'), $html);
+        $html = preg_replace_callback('/\[\[([^\|\n\]:]+)[\|]([^\]]+)\]\]/', array(__CLASS__, 'helper_interwikilinks'), $html);
         // without text
-        $html = preg_replace_callback('/\[\[([^\|\n\]:]+)\]\]/', array($this, 'helper_interwikilinks'), $html);
+        $html = preg_replace_callback('/\[\[([^\|\n\]:]+)\]\]/', array(__CLASS__, 'helper_interwikilinks'), $html);
 
         //$html = preg_replace('/{{([^}]+)+}}/', 'Interwiki: ${1}+${2}+${3}', $html);
         $html = preg_replace('/{{([^\|\n\}]+)([\|]?([^\}]+))+\}\}/', 'Interwiki: ${1} &raquo; ${3}', $html);
@@ -60,10 +64,10 @@ class MediaWikiFormatter
 
         //links
         //$html = preg_replace('/\[([^\[\]\|\n\': ]+)\]/', '<a href="${1}">${1}</a>', $html);
-        $html = preg_replace_callback('/\[([^\[\]\|\n\': ]+)\]/', array($this, 'helper_externlinks'), $html);
+        $html = preg_replace_callback('/\[([^\[\]\|\n\': ]+)\]/', array(__CLASS__, 'helper_externlinks'), $html);
         // with text
         //$html = preg_replace('/\[([^\[\]\|\n\' ]+)[\| ]([^\]\']+)\]/', '<a href="${1}">${2}</a>', $html);
-        $html = preg_replace_callback('/\[([^\[\]\|\n\' ]+)[\| ]([^\]\']+)\]/', array($this, 'helper_externlinks'), $html);
+        $html = preg_replace_callback('/\[([^\[\]\|\n\' ]+)[\| ]([^\]\']+)\]/', array(__CLASS__, 'helper_externlinks'), $html);
 
         // allowed tags
         $html = preg_replace('/&lt;(\/?)(small|sup|sub|u)&gt;/', '<${1}${2}>', $html);
@@ -105,19 +109,133 @@ class MediaWikiFormatter
         return $html;
     }
 
-    protected function helper_externlinks($matches)
+    protected static function helper_externlinks($match)
     {
-        $target = $matches[1];
-        $text = empty($matches[2])?$matches[1]:$matches[2];
+        $target = $match[1];
+        $text = empty($match[2]) ? $match[1] : $match[2];
         return '<a href="'.$target.'" target="_blank">'.$text.'</a>';
     }
 
-    protected function helper_interwikilinks($matches)
+    protected static function helper_interwikilinks($match)
     {
-        $target = $matches[1];
-        $text = empty($matches[2])?$matches[1]:$matches[2];
-        return '<a  href="'.$this->getBaseUrl().$target.'" target="_blank">'.$text.'</a>';
+/*
+        $url = new Url($this->url);
+
+        if (substr($url->getPath(), 0, 6) != '/wiki/')
+            throw new Exception ('not a mediawiki url: '.$this->url);
+*/
+        $target = $match[1];
+        $text = empty($match[2]) ? $match[1] : $match[2];
+//        return 'XXX-INTER-WIKI:'.$target;
+        //return '<a  href="'.$url->getBaseUrl().$target.'" target="_blank">'.$text.'</a>';
     }
+
+    private static function convertTables($text)
+    {
+        $lines = explode("\n",$text);
+        $innertable = 0;
+        $innertabledata = array();
+        foreach($lines as $line)
+        {
+            //echo "<pre>".++$i.": ".htmlspecialchars($line)."</pre>";
+            $line = str_replace("position:relative","",$line);
+            $line = str_replace("position:absolute","",$line);
+            if(substr($line,0,2) == '{|'){
+                // inner table
+                //echo "<p>beginning inner table #$innertable</p>";
+                $innertable++;
+            }
+            $innertabledata[$innertable] .= $line . "\n";
+            if($innertable){
+                // we're inside
+                if(substr($line,0,2) == '|}'){
+                    $innertableconverted = convertTable($innertabledata[$innertable]);
+                    $innertabledata[$innertable] = "";
+                    $innertable--;
+                    $innertabledata[$innertable] .= $innertableconverted."\n";
+                }
+            }
+        }
+        return $innertabledata[0];
+    }
+
+    private static function convertTable($intext)
+    {
+        $text = $intext;
+        $lines = explode("\n",$text);
+        $intable = false;
+
+        //var_dump($lines);
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+            if(substr($line,0,1) == '{'){
+                //begin of the table
+                $stuff = explode('| ',substr($line,1),2);
+                $tableopen = true;
+                $table = "<table ".$stuff[0].">\n";
+            } else if(substr($line,0,1) == '|'){
+                // table related
+                $line = substr($line,1);
+                if(substr($line,0,5) == '-----'){
+                    // row break
+                    if($thopen)
+                        $table .="</th>\n";
+                    if($tdopen)
+                        $table .="</td>\n";
+                    if($rowopen)
+                        $table .="\t</tr>\n";
+                    $table .= "\t<tr>\n";
+                    $rowopen = true;
+                    $tdopen = false;
+                    $thopen = false;
+                }else if(substr($line,0,1) == '}'){
+                    // table end
+                    break;
+                }else{
+                    // td
+                    $stuff = explode('| ',$line,2);
+                    if($tdopen)
+                        $table .="</td>\n";
+                    if(count($stuff)==1)
+                        $table .= "\t\t<td>".simpleText($stuff[0]);
+                    else
+                        $table .= "\t\t<td ".$stuff[0].">".
+                            simpleText($stuff[1]);
+                    $tdopen = true;
+                }
+            } else if(substr($line,0,1) == '!'){
+                // th
+                $stuff = explode('| ',substr($line,1),2);
+                if($thopen)
+                    $table .="</th>\n";
+                if(count($stuff)==1)
+                    $table .= "\t\t<th>".simpleText($stuff[0]);
+                else
+                    $table .= "\t\t<th ".$stuff[0].">".
+                        simpleText($stuff[1]);
+                $thopen = true;
+            }else{
+                // plain text
+                $table .= simpleText($line) ."\n";
+            }
+            //echo "<pre>".++$i.": ".htmlspecialchars($line)."</pre>";
+            //echo "<p>Table so far: <pre>".htmlspecialchars($table)."</pre></p>";
+        }
+        if($thopen)
+            $table .="</th>\n";
+        if($tdopen)
+            $table .="</td>\n";
+        if($rowopen)
+            $table .="\t</tr>\n";
+        if($tableopen)
+            $table .="</table>\n";
+        //echo "<hr />";
+        //echo "<p>Table at the end: <pre>".htmlspecialchars($table)."</pre></p>";
+        //echo $table;
+        return $table;
+    }
+
 }
 
 ?>
