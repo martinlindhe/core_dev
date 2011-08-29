@@ -67,6 +67,14 @@ class WebBrowser
 
 class HttpUserAgent
 {
+    /**
+     * @return true if UA is a recent "smartphone" (Andriod, iOS, Windows Mobile 7)
+     */
+    public static function isSmartphone($s)
+    {
+        throw new Exception ('FIXME implement');
+    }
+
     public static function getBrowser($s)
     {
         $o = new WebBrowser();

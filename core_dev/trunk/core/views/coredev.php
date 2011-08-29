@@ -13,7 +13,8 @@ switch ($this->view) {
 case 'error':
     $header->setTitle( t('Error message') );
     echo $error->render(true);
-    echo ahref('./', t('Continue') );
+    echo ahref('coredev/view/login', 'Log in').'<br/>';
+    echo ahref('./', 'Go to start page').'<br/>';
     break;
 
 case 'selftest':

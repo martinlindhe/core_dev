@@ -44,7 +44,8 @@ class Image
 
     function load($r)
     {
-        if (is_resource($r) && get_resource_type($r) == 'gd') {
+        if (is_resource($r) && get_resource_type($r) == 'gd')
+        {
             $this->resource = $r;
             $this->width  = imagesx($r);
             $this->height = imagesy($r);
@@ -71,8 +72,7 @@ class Image
             return;
         }
 
-        bt();
-        throw new Exception  ('init class with width&height from resource!!! '. $r);
+        throw new Exception  ('image resource not found: '. $r);
     }
 
     function render($type = 'png', $dst_file = '')

@@ -145,14 +145,38 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     /** Set META tag */
     function setMeta($name, $val)
     {
+        // TODO: see if meta tag already exists
         $o = new MetaDescription();
         $o->name = $name;
         $o->val  = $val;
         $this->meta_tags[] = $o;
     }
 
+    /** Detects User Agent and adjusts output accordingly */
+    private function adjustApperance()
+    {
+        // XXX maybe this is useless?
+
+        // XXX TODO use HttpUserAgent to detect browsers... class dont detect mobile browsers yet
+/*
+        // ios, android
+        $this->setMeta('viewport', 'width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;');
+
+        // also supported by Android devices running software version 1.5 (Cupcake) or newer:
+        //<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+        // enable full-screen mode
+        $this->setMeta('apple-mobile-web-app-capable', 'yes');
+
+        // controls the appearance of the status bar in full-screen mode
+        $this->setMeta('apple-mobile-web-app-status-bar-style', 'black');
+*/
+    }
+
     public function render()
     {
+        $this->adjustApperance();
+
         $res = '<head>';
 
         if ($this->title)
