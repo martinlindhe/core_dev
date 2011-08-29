@@ -15,12 +15,9 @@ $header->embedJs( // code will be in <head>
 $header->registerJsFunction(
 'function loadtime()'.
 '{'.
-    // calculate the current time in afterload
-    'afterload = (new Date()).getTime();'.
-    // now use the beforeload and afterload to calculate the seconds
-    'secs = (afterload-beforeload)/1000;'.
+    's=(new Date()-beforeload)/1000;'.
 
-    'document.getElementById("span_rendertime").innerHTML = secs;'.
+    'document.getElementById("span_rendertime").innerHTML=s;'.
 '}'
 );
 
@@ -149,7 +146,7 @@ echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
 
-echo ' | <span id="span_rendertime">99.99</span>s render';
+echo ' | <span id="span_rendertime">0.00</span>s render';
 echo '</div>'; // closing $container_id
 
 ?>
