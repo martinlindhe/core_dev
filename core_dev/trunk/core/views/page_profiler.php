@@ -56,7 +56,7 @@ $header->embedCss(
 
 echo '<div id="'.$container_id.'">';
 
-echo ahref_js('', "hide_el('".$container_id."');return false;", 'closebtn');
+echo ahref_js('', "return hide_el('".$container_id."');", 'closebtn');
 
 echo 'core_dev 0.2-svn ';
 
@@ -79,7 +79,7 @@ if (isset($db) && $db instanceof DatabaseMySQLProfiler) {
     $php_time   = $total_time - $sql_time - $db->time_connect;
 }
 
-echo '| <a href="#" onclick="return toggle_el(\''.$prof_id.'\');">'.round($total_time, 2).'s web</a>';
+echo '| '.ahref_js(round($total_time, 2).'s web', "return toggle_el('".$prof_id."')");
 
 $css =
 'display:none;'.

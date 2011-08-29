@@ -86,7 +86,7 @@ function ahref_blank($url, $text)
     return ahref($url, $text, '_blank');
 }
 
-function ahref_js($text, $js, $class)
+function ahref_js($text, $js, $class = '')
 {
     return ahref('#', $text, '', $js, $class);
 }

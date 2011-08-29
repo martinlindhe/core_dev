@@ -12,6 +12,7 @@ $header->registerJsFunction(
     'var e=document.getElementById(n);'.
 //    'if (!e) alert("show_el fail on " + n);'.
     'e.style.display="";'.
+    'return false;'.
 '}'
 );
 
@@ -22,6 +23,7 @@ $header->registerJsFunction(
     'var e=document.getElementById(n);'.
 //    'if (!e) alert("hide_el fail on " + n);'.
     'e.style.display="none";'.
+    'return false;'.
 '}'
 );
 
@@ -32,6 +34,7 @@ $header->registerJsFunction(
     'var e=document.getElementById(n);'.
 //    'if (!e) alert("toggle_el fail on " + n);'.
     'e.style.display=(e.style.display?"":"none");'.
+    'return false;'.
 '}'
 );
 
