@@ -29,7 +29,6 @@ class XhtmlForm
     protected $form_data        = array();
     protected $elems            = array();
     protected $url_handler;                ///< sends form to a different url
-    protected $auto_code        = true;    ///< automatically encode/decode form data using urlencode
     protected $using_captcha    = false;
     protected $focus_element;
 
@@ -110,10 +109,10 @@ class XhtmlForm
                 foreach ($this->elems as $e)
                 {
                     if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
-                        $p[ $key ] = $this->auto_code && is_string($val) ? urldecode($val) : $val;
+                        $p[ $key ] = $val;
 
                     if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
-                        $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                        $p[ $key ] = $val;
                 }
 
         if (!empty($_POST))
@@ -129,23 +128,23 @@ class XhtmlForm
                         {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                    $val[ $idx ] = $v;
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = ($this->auto_code && !is_url($val)) ? urldecode($val) : $val;
+                                $p[ $key ] = $val;
                         }
                         else if ($e['obj'] instanceof YuiDateInterval)
                         {
                             if ($e['obj']->name.'_from' == $key)
                             {
                                 $e['obj']->selectFrom($val);
-                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                                $p[ $key ] = $val;
                             }
 
                             if ($e['obj']->name.'_to' == $key)
                             {
                                 $e['obj']->selectTo($val);
-                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                                $p[ $key ] = $val;
                             }
 
                         } else if ($e['obj']->name == $key.'[]')
@@ -153,10 +152,10 @@ class XhtmlForm
                             // handle input arrays
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                    $val[ $idx ] = $v;
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                                $p[ $key ] = $val;
                         }
                         continue;
                     }
@@ -173,20 +172,20 @@ class XhtmlForm
                         if ($e['name'] == $key) {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                    $val[ $idx ] = $v;
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                                $p[ $key ] = $val;
                         }
 
                         // handle input arrays
                         if ($e['name'] == $key.'[]') {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $this->auto_code ? urldecode($v) : $v;
+                                    $val[ $idx ] = $v;
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $this->auto_code ? urldecode($val) : $val;
+                                $p[ $key ] = $val;
                         }
                         break;
                     }
@@ -504,9 +503,6 @@ class XhtmlForm
                 if (!empty($e['name']) && isset($this->form_data[$e['name']]))
                     $e['default'] = $this->form_data[$e['name']];
             }
-
-            if ($this->auto_code && isset($e['value']))
-                $e['value'] = urlencode($e['value']);
 
             switch ($e['type']) {
             case 'CAPTCHA':
