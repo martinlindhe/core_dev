@@ -204,7 +204,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         // margin and padding on body element can introduce errors in determining element position and are not recommended
         // height:100% is needed for google maps js widget
-        $res .= '<style type="text/css">'.
+        $res .= css_embed(
         'html{'.
             'height:100%'.
         '}'.
@@ -213,8 +213,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             'margin:0;'.
             'padding:0'.
         '}'.
-        $this->embed_css.
-        '</style>';
+        $this->embed_css
+        );
 
         $js = '';
 

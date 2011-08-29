@@ -122,9 +122,9 @@ function confirmed($text)
 function js_reload($ms)
 {
     if (!is_numeric($ms))
-        return false;
+        throw new Exception ('js_reload() requires numeric: '.$ms);
 
-    return js_embed('setTimeout("location.reload();", '.$ms.');');
+    return js_embed('setTimeout("location.reload();",'.$ms.');');
 }
 
 /**
@@ -161,6 +161,11 @@ function js_date($ts)
 function js_embed($s)
 {
     return '<script type="text/javascript">'.$s.'</script>';
+}
+
+function css_embed($s)
+{
+    return '<style type="text/css">'.$s.'</style>';
 }
 
 /**
