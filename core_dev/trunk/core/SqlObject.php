@@ -126,6 +126,9 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
+        if (!is_numeric($id))
+            throw new Exception ('bad data'. $id);
+
         $q =
         'SELECT COUNT(*) FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
@@ -220,6 +223,9 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
+        if (!is_numeric($id))
+            throw new Exception ('bad data'. $id);
+
         $q =
          'DELETE FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
@@ -263,6 +269,9 @@ class SqlObject
             d($obj);
             throw new Exception ('eehh');
         }
+
+        if (!is_numeric($obj->id))
+            throw new Exception ('bad data'. $obj->id);
 
         $vals = self::reflectQuery($obj, $field_name);
 
