@@ -54,7 +54,7 @@ full_url examples: http://sv.wiktionary.org/wiki/bestick
 
            regexp: http(s)://lang.host.tld/wiki/alphanumeric
 */
-    return true;
+    return is_url($url);
 }
 
 class MediaWikiClient
