@@ -9,6 +9,8 @@
 
 // see views/comments.php for a default comment list view
 
+require_once('SqlObject.php');
+
 class CommentViewer
 {
     public static function render($type, $owner)
