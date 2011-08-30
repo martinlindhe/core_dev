@@ -38,7 +38,6 @@ class Settings
     const APPLICATION = 1;  /// XXXX LATER: drop all these constants. must be in major core_dev bump because all databases will break. some places use USER (from constants.php), orher this
     const USER        = 2;
     const CUSTOMER    = 3; ///< ApiCustomer setting
-    const TOKEN       = 4; ///< Token setting
 
     protected $type     = 0;
     protected $category = 0;

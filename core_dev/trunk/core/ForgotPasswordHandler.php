@@ -12,6 +12,7 @@
 
 require_once('UserFinder.php');
 require_once('SendMail.php');
+require_once('Token.php');
 
 class ForgotPasswordHandler
 {
@@ -20,12 +21,12 @@ class ForgotPasswordHandler
     protected $expire_time_email = '7d';
 
     protected $password_msg =
-        'Hello. Someone (probably you) asked for a password reset procedure from IP @IP@
+'Hello. Someone (probably you) asked for a password reset procedure from IP @IP@
 
 Registered username: @USERNAME@
 
 Follow this link to set a new password:
-<a href="@URL@">@URL@</a>
+@URL@
 
 The link will expire in @EXPIRETIME@';
 
@@ -91,12 +92,12 @@ The link will expire in @EXPIRETIME@';
         );
 
         $msg = preg_replace($pattern, $replacement, $this->password_msg);
-d($msg);
+//d($msg);
         $mail = SendMail::getInstance();
         $mail->addRecipient($email);
 
         $mail->setSubject('Forgot password');
-//        $mail->send($msg);
+        $mail->send($msg);
 
         return true;
     }

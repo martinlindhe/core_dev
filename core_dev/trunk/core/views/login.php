@@ -104,6 +104,15 @@ $form->onSubmit('return check_login(this);');
 $form->setHandler('loginHandler');
 echo $form->render();
 
+$header->registerJsFunction(
+'function show_login_form()'.
+'{'.
+    ($show_reg_div     ? 'hide_el("'.$reg_div.'");' : '').
+    ($show_recover_div ? 'hide_el("'.$recover_div.'");' : '').
+    'show_el("'.$login_div.'");'.
+'}'
+);
+
 if ($show_reg_div)
 {
     $header->registerJsFunction(
@@ -114,18 +123,9 @@ if ($show_reg_div)
     '}'
     );
 
-    $header->registerJsFunction(
-    'function show_login_form()'.
-    '{'.
-        'hide_el("'.$reg_div.'");'.
-        'hide_el("'.$recover_div.'");'.
-        'show_el("'.$login_div.'");'.
-    '}'
-    );
-
     $x = new XhtmlComponentButton();
     $x->onClick('return show_reg_form();');
-    $x->text = 'Register';
+    $x->text = t('Register');
     $x->style = 'font-weight:bold';
     echo $x->render();
 }
@@ -142,7 +142,7 @@ if ($show_recover_div)
 
     $x = new XhtmlComponentButton();
     $x->onClick('return show_recover_form();');
-    $x->text = 'Forgot password';
+    $x->text = t('Forgot password');
     $x->style = 'font-weight:bold';
     echo $x->render();
 }

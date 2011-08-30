@@ -12,16 +12,16 @@
 
 //STATUS: wip
 
-//XXX: dont extend from Settings. make its own class? make class fully static
-//CODE CLEANUP: use constants.php TOKEN (7) instead of current (4).. will break databases
+//TODO: make class static
 
+require_once('constants.php');
 require_once('Settings.php');
 
 class Token extends Settings
 {
     function __construct()
     {
-        $this->type = Settings::TOKEN;
+        $this->type = TOKEN;
     }
 
     function exists($name, $val)

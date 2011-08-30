@@ -337,6 +337,7 @@ function t_swe($s)
     case 'Logins currently not allowed.': return 'Inloggningar är för närvarande inte tillåtna.';
     case 'The specified email address does not match any registered user.': return 'Ingen användare har en sådan epost-adress.';
     case 'Forgot password': return 'Glömt lösenord';
+    case 'Reset password': return 'Nollställ lösenord';
     case 'Account activation': return 'Aktivera konto';
     case 'Account blocked': return 'Konto blockerat';
     case 'The password is incorrect': return 'Lösenordet är felaktigt';

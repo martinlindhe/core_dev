@@ -5,8 +5,6 @@
 
 //STATUS: wip
 
-//TODO!: need a core_dev internal handler to handle the link from the email
-
 require_once('ForgotPasswordHandler.php');
 
 if ($session->id)
@@ -34,14 +32,16 @@ if (isset($_POST['forgot_pwd']))
 {
     $header->embedJsOnload('show_recover_form();');
 
-    if (!ForgotPasswordHandler::getInstance()->sendMail($_POST['forgot_pwd']))
+    if (!ForgotPasswordHandler::getInstance()->sendMail($_POST['forgot_pwd'])) {
         $error->add('The specified email address does not match any registered user.');
-    else {
+    } else {
         echo 'A email has been sent to your mail address with instructions how to reclaim your account.';
         echo '</div>';
         return;
     }
 }
+
+echo $error->render(true);
 
 echo 'Enter the e-mail address used when registering your account.<br/><br/>';
 echo 'You will recieve an e-mail with a link to follow,<br/>';
@@ -62,7 +62,7 @@ echo
 echo xhtmlSubmit('Forgot password', 'button', 'font-weight: bold');
 
 $x = new XhtmlComponentButton();
-$x->text = 'Cancel';
+$x->text = t('Cancel');
 $x->onClick('return show_login_form();');
 //$x->style = 'font-weight:bold';
 echo $x->render();

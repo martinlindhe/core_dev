@@ -43,9 +43,10 @@ if (isset($_POST['reset_pwd']) && isset($_POST['reset_pwd2']))
         $tok->delete('activation_code');
         return;
     } else
-        throw new Exception ('passwords dont match');
+        $error->add('The passwords dont match');
 }
 
+echo $error->render(true);
 
 echo 'Reset password for user <b>'.$user->name.'</b>';
 
@@ -54,8 +55,8 @@ $header->registerJsFunction(
 '{'.
     'if (!frm.reset_pwd.value||!frm.reset_pwd2.value)'.//XXX  use js from session_register to check password
         'return false;'.
-    'if (frm.reset_pwd.value!=frm.reset_pwd2.value)'.
-        'return false;'.
+//    'if (frm.reset_pwd.value!=frm.reset_pwd2.value)'.
+//        'return false;'.
     'return true;'.
 '}'
 );
@@ -77,5 +78,6 @@ echo '<tr><td>'.t('Again').':</td>'.
 echo '</table><br/>';
 
 echo xhtmlSubmit('Reset password', 'button', 'font-weight:bold');
+echo xhtmlFormClose();
 
 ?>
