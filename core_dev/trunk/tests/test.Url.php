@@ -32,6 +32,4 @@ $url = new Url('http://test.com/?q=minuter+p%E5+skoj');
 if ($url->get() != 'http://test.com/?q=minuter+p%E5+skoj')  echo "FAIL 10 ".$url->get()."\n";
 if ($url->getPath() != '/?q=minuter+p%E5+skoj')             echo "FAIL 11\n";
 
-if (relurl('/') != '/') echo "FAIL 12\n";
-
 ?>

@@ -18,4 +18,6 @@ $html =
 
 if (strip_html($html) != 'hello world') echo "FAIL 3\n";
 
+if (relurl('/') != '/') echo "FAIL 4\n";
+
 ?>
