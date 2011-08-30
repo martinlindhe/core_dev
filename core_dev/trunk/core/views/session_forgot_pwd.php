@@ -5,6 +5,8 @@
 
 //STATUS: wip
 
+//XXX use XhtmlForm?
+
 require_once('ForgotPasswordHandler.php');
 
 if ($session->id)
