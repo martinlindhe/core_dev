@@ -314,6 +314,7 @@ function coredev_urlencode($s)
     for ($i=0; $i<strlen($s); $i++) {
         $c = substr($s, $i, 1);
         switch ($c) {
+        case '+': $c = '%2B'; break;
         case ':': $c = '%3A'; break;
         case ' ': $c = '+'; break;
         }

@@ -61,7 +61,7 @@ class MediaWikiClient
         $url = new Url($full_url);
 
         $x = explode('/', $url->getPath() );
-        return array_pop($x);
+        return urldecode( array_pop($x) );
     }
 
     /** @return 2-letter language code from MediaWiki url */

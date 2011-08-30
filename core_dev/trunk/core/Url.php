@@ -9,6 +9,7 @@
 
 //STATUS: good
 
+require_once('core.php');
 require_once('CoreProperty.php');
 require_once('network.php'); //for is_url(), scheme_default_port(), url_query()
 
@@ -61,15 +62,15 @@ class Url extends CoreProperty
     /** @return url path excluding hostname */
     function getPath($safe = false)
     {
-        $res = $this->path;
-
         if (!empty($this->params))
+        {
             if ($safe)
-                $res .= '?'.htmlspecialchars(url_query($this->params, '&'));
-            else
-                $res .= '?'.url_query($this->params, '&');
+                return $this->path.'?'.htmlspecialchars(url_query($this->params, '&', true));
 
-        return $res;
+            return $this->path.'?'.url_query($this->params, '&');
+        }
+
+        return $this->path;
     }
 
     function render() { return $this->get(); }
@@ -121,7 +122,7 @@ class Url extends CoreProperty
         if (!empty($parsed['port']))
             $this->port = $parsed['port'];
 
-        $this->path   = $parsed['path'];
+        $this->path = $parsed['path'];
 
         if (!empty($parsed['query']))
             parse_str($parsed['query'], $this->params);
