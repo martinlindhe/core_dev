@@ -9,7 +9,7 @@
 //STATUS: wip
 
 require_once('constants.php');
-require_once('CommentList.php');
+require_once('Comment.php');
 
 class FileInfo
 {
@@ -157,10 +157,7 @@ class FileInfo
 
         $res .= '<br/>';
 
-        $comments = new CommentList(FILE);
-        $comments->setOwner($id);
-        $res .= $comments->render();
-
+	$res .= CommentViewer::render(FILE, $id);
 
 /*
         // display checksums, if any
