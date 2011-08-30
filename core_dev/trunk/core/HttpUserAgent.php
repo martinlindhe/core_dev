@@ -158,6 +158,8 @@ class HttpUserAgent
             $y = explode(';', $x[1]);
             $o->version = $y[0];
         }
+        else
+            dp('XXX unrecognized UA string: '.$s);
 
         return $o;
     }

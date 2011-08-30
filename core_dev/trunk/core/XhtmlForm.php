@@ -126,12 +126,19 @@ class XhtmlForm
 
                         if ($e['obj']->name == $key)
                         {
-                            if (is_array($val)) {
+                            if (is_array($val))
+                            {
                                 foreach ($val as $idx => $v)
                                     $val[ $idx ] = $v;
                                 $p[ $key ] = $val;
-                            } else
-                                $p[ $key ] = $val;
+                            }
+                            else
+                            {
+                                if ($e['obj'] instanceof XhtmlComponentHidden)
+                                    $p[ $key ] = urldecode($val);
+                                else
+                                    $p[ $key ] = $val;
+                            }
                         }
                         else if ($e['obj'] instanceof YuiDateInterval)
                         {
