@@ -94,7 +94,7 @@ class SqlObject
 
         // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
         // the list is huge, so we only try to cover common ones
-        $reserved_words = array('desc', 'default');
+        $reserved_words = array('desc', 'default', 'from', 'to');
 
         $vals = array();
         foreach ($props as $prop)
@@ -165,7 +165,7 @@ class SqlObject
         if (!is_alphanumeric($tblname))
             throw new Exception ('very bad');
 
-        $vals = self::reflectQuery($obj);
+        $vals = self::reflectQuery($obj, '', false);
 
         $q =
         'INSERT INTO '.$tblname.
