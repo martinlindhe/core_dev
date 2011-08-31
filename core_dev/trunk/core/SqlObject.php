@@ -9,6 +9,8 @@
 
 //STATUS: wip ... XXX merge with Sql.php ?
 
+//TODO: rework reflectQuery() to output keys, vals & prepared-statement formatting string so it can produce prepared statements instead
+
 require_once('Sql.php');
 
 class SqlObject

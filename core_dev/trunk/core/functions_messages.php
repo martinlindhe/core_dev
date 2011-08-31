@@ -5,12 +5,12 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: unused, write a oo implementation instead
+//STATUS: unused, see Message.php for OO-implementation
 
 require_once('functions_textformat.php'); //for formatting messages
 
-define('MESSAGE_GROUP_INBOX',    1);
-define('MESSAGE_GROUP_OUTBOX',    2);
+define('MESSAGE_GROUP_INBOX',   1);
+define('MESSAGE_GROUP_OUTBOX',  2);
 
 /**
  * XXX
