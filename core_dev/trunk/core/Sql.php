@@ -45,21 +45,24 @@ class Sql
 
         $stmt->execute();
 
-        $prof = &$db->measureQuery($args[0]);
+        if ($db instanceof DatabaseMysqlProfiler)
+        {
+            $prof = &$db->measureQuery($args[0]);
 
-        if (isset($args[1]) && $args[1])
-            $prof->prepared = true;
+            if (isset($args[1]) && $args[1])
+                $prof->prepared = true;
 
-        if (isset($args[1]))
-            $prof->format = $args[1];
+            if (isset($args[1]))
+                $prof->format = $args[1];
 
-        if (isset($args[2])) {
-            for ($i = 2; $i < count($args); $i++)
-                $prof->params[] = $args[$i];
+            if (isset($args[2])) {
+                for ($i = 2; $i < count($args); $i++)
+                    $prof->params[] = $args[$i];
+            }
+
+            if ($params && $res === false)
+                $prof->error = $this->db_handle->error;
         }
-
-        if ($params && $res === false)
-            $prof->error = $this->db_handle->error;
 
         return $stmt;
     }
