@@ -5,6 +5,8 @@
  * @author Linus Wiklund, 2008 <linus.wiklund@ljw.se>
  */
 
+//STATUS: rewrite
+
 /**
  * Function that prints the html for a pop-up 1on1 chat
  *
