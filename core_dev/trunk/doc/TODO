@@ -1,3 +1,46 @@
+Autumn 2011 cleanup:
+
+
+User profile
+    * write a default view for a user profile (send message, write in guestbook, is online?, chat 1-to-1, see gallery)
+    * ability for more "userdata", like profile picture, home town, gender (revive functions_userdata.php)
+
+
+Messages
+    * finish Messages class (drop functions_messages.php)
+
+
+Guestbook
+    * write a Guestbook class (drop functions_guestbook.php)
+
+
+Friends
+    * The "Bookmark" class cant be used, it is more like a "favourite users bookmarks"
+    * write a proper Friend class using functions_contacts.php logic (1:send friend request, 2:approve, 3:both persons are friends)
+    * write a "friend list" view (for Friend class)
+
+
+Chat
+    * write 1-on-1 chat code (drop functions_chat1on1.php)
+    * need chat rooms (+ ability for admin to create new rooms on the fly)
+
+
+Image gallery
+    * drop / rewrite of functions_fileareas.php
+    * rather use some nice-looking js image viewer
+
+
+Forum
+    * needed?
+
+
+Moderation
+    * ability for a user to report an unappropriate picture, or an abusive user (rewrite of atom_moderation.php)
+
+
+---
+
+
 BEFORE 1.0 (201?):
 
     * Login with Facebook:
@@ -13,13 +56,7 @@ BEFORE 1.0 (201?):
 
 
 rewrite/cleanup following modules:
-    * function_messages.php   (XXX use tblComments for now, with a .type field... rename to tblMessages later)
-    * function_guestbook.php  (XXX messages,different type)
     * function_forum.php      use same table to store messages?
-
-    * function_contacts.php
-    * function_userdata.php
-    * function_chat1on1.php
     * atom_subscriptions.php
 
 
