@@ -22,6 +22,7 @@
 require_once('CoreBase.php');
 require_once('User.php');
 require_once('ErrorHandler.php');
+require_once('Sql.php');
 
 require_once(dirname(__FILE__) . '/../facebook-php-sdk/facebook.php');
 
@@ -80,7 +81,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     function setLastActive()
     {
         $this->last_active = time();
-        SqlHandler::getInstance()->pUpdate('UPDATE tblUsers SET timeLastActive=NOW() WHERE userId = ?', 'i', $this->id);
+        Sql::pUpdate('UPDATE tblUsers SET time_last_active=NOW() WHERE id = ?', 'i', $this->id);
     }
 
     function setEncryptKey($key) { $this->encrypt_key = $key; }
@@ -117,7 +118,6 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
      */
     function login($username, $pwd, $type = 'normal')
     {
-        $db      = SqlHandler::getInstance();
         $error   = ErrorHandler::getInstance();
 
         if (!$this->allow_logins) {
@@ -144,7 +144,11 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             return false;
         }
 
-        $x = $db->pSelectItem('SELECT COUNT(*) FROM tblUsers WHERE userId=? AND userName=? AND userPass=? AND userType=? AND timeDeleted IS NULL',
+        $q =
+        'SELECT COUNT(*) FROM tblUsers'.
+        ' WHERE id = ? AND name = ? AND password = ? AND type = ? AND time_deleted IS NULL';
+
+        $x = Sql::pSelectItem($q,
         'issi',
         $user->getId(),
         $username,
@@ -169,10 +173,14 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
         if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
-        $db->pUpdate('UPDATE tblUsers SET timeLastLogin=NOW(), timeLastActive=NOW(), lastIp = ? WHERE userId = ?', 'si', client_ip(), $this->id);
+        $q =
+        'UPDATE tblUsers SET time_last_login=NOW(), time_last_active=NOW(), last_ip = ?'.
+        ' WHERE userId = ?';
+
+        Sql::pUpdate($q, 'si', client_ip(), $this->id);
 
         $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
-        $db->pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
+        Sql::pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
 
         $_SESSION['id']           = $this->id;
         $_SESSION['username']     = $this->username;
@@ -241,8 +249,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         if (!$this->id)
             throw new Exception ('already logged out');
 
-        $db = SqlHandler::getInstance();
-        $db->pUpdate('UPDATE tblUsers SET timeLastLogout=NOW() WHERE userId = ?', 'i', $this->id);
+        Sql::pUpdate('UPDATE tblUsers SET time_last_logout=NOW() WHERE id = ?', 'i', $this->id);
 
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 604800, $params['path'], $params['domain'], $params['secure'], $params['httponly']);

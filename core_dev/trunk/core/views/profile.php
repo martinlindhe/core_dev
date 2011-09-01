@@ -12,13 +12,12 @@ if ($this->owner)
     $user_id = $this->owner;
 
 
-$user = new User($user_id);
-//d($user);
+$user = User::get($user_id);
 
 echo '<h1>Profile for '.$user->name.'</h1>';
 
 echo 'Last active: '.ago($user->time_last_active).'<br/>';
-echo 'Is online: '. ( $user->is_online ? 'YES' : 'NO').'<br/>';
+echo 'Is online: '. ( UserHandler::isOnline($user_id) ? 'YES' : 'NO').'<br/>';
 
 
 echo '<br/>';

@@ -33,6 +33,11 @@ class UserSetting
         return $setting->delete($name);
     }
 
+    static function setEmail($id, $val)
+    {
+        self::set($id, 'email', $val);
+    }
+
 }
 
 ?>
