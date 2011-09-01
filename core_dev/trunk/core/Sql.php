@@ -27,8 +27,10 @@ class Sql
         if (!$args[0])
             throw new Exception ('no query');
 
+/*      // XXX this check triggers on false positives, like ".. JOIN t2 ON(t1.x=t2.y)"
         if (strpos($args[0], '=') !== false && strpos($args[0], '?') === false)
             throw new Exception ('query is not prepared: '.$args[0]);
+*/
 
         $db = SqlHandler::getInstance();
         $db->connect();
@@ -60,7 +62,7 @@ class Sql
 
         if ($db instanceof DatabaseMysqlProfiler)
         {
-            $prof = &$db->measureQuery($args[0]);
+            $prof = &$db->measureQuery($args[0]);  // XXXX rename to finishMeasure()
 
             $prof->prepared = true;
 

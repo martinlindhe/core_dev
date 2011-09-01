@@ -82,8 +82,8 @@ $header->embedCss(
 '}'
 );
 
-$db_time = Sql::pSelectItem('SELECT NOW()');
-$uptime  = Sql::pSelectRow('SHOW STATUS WHERE Variable_name = ?', 's', 'Uptime');
+$db_time = $db->pSelectItem('SELECT NOW()');
+$uptime  = $db->pSelectRow('SHOW STATUS WHERE Variable_name = ?', 's', 'Uptime');
 
 echo ahref_js(count($db->queries).' sql', "return toggle_el('".$sql_div."')");
 

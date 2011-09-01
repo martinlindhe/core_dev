@@ -61,12 +61,12 @@ echo ahref_js('', "return hide_el('".$container_id."');", 'closebtn');
 echo 'core_dev 0.2-svn ';
 
 if (class_exists('SqlHandler')) {
-    $view = new ViewModel('views/mysql_profiler.php');
+    $view = new ViewModel('views/profiler_mysql.php');
     echo $view->render();
 }
 
 if (class_exists('TempStore')) {
-    $view = new ViewModel('views/memcached_status.php');
+    $view = new ViewModel('views/profiler_memcached.php');
     echo $view->render();
 }
 
