@@ -323,7 +323,7 @@ class SqlObject
 
         if (!is_numeric($obj->id))
             throw new Exception ('bad data'. $obj->id);
-throw new Exception ('XXX use reflectQuery2');
+throw new Exception ('XXX use reflectQuery2'); /// XXXX is anyone even using this method??
         $vals = self::reflectQuery($obj, $field_name);
 
         $q =

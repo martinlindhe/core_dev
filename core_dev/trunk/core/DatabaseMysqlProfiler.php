@@ -177,13 +177,15 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
         if (!$args[0])
             throw new Exception ('no query');
 
+        if (strpos($args[0], '=') !== false && strpos($args[0], '?') === false)
+            if (stripos($args[0], 'SELECT') === false)
+                throw new Exception ('query is not prepared: '.$args[0]);
+
         if (!$this->connected)
             $this->connect();
 
-        if (! ($stmt = $this->db_handle->prepare($args[0])) ) {
-            bt();
+        if (! ($stmt = $this->db_handle->prepare($args[0])) )
             throw new Exception ('FAIL prepare: '.$args[0]);
-        }
 
         $params = array();
         for ($i = 1; $i < count($args); $i++)
@@ -196,8 +198,7 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
         $prof = &$this->measureQuery($args[0]);
 
-        if (isset($args[1]) && $args[1])
-            $prof->prepared = true;
+        $prof->prepared = true;
 
         if (isset($args[1]))
             $prof->format = $args[1];

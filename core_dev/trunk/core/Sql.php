@@ -62,8 +62,7 @@ class Sql
         {
             $prof = &$db->measureQuery($args[0]);
 
-            if (isset($args[1]) && $args[1])
-                $prof->prepared = true;
+            $prof->prepared = true;
 
             if (isset($args[1]))
                 $prof->format = $args[1];
