@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip ...
+//STATUS: wip
 
 //XXX merge with Sql.php ?
 
@@ -25,7 +25,7 @@ class SqlObject
 {
     /**
      * Creates one object $objname
-     * @param $q       a sql select query resulting in one row, or a indexed array
+     * @param $q a sql select query resulting in one row, or a indexed array
      * @param $classname name of class object to load rows into
      */
     static function loadObject($q, $classname)

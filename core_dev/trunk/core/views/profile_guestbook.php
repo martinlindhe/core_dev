@@ -4,6 +4,8 @@
 
 require_once('Guestbook.php');
 
+require_once('YuiDatatable.php');
+
 if (!$session->id)
     die('XXX gb only for logged in users');
 
@@ -26,12 +28,19 @@ $form->setFocus('body');
 $form->onSubmit('return check_gb(this);');
 $form->setHandler('gbHandler');
 
-
 $form->handle(); // to get latest added entry in the following query
 
-$gb = Guestbook::getEntries($user_id);
 
-d( $gb);
+
+$list = Guestbook::getEntries($user_id);
+
+$dt = new YuiDatatable();
+$dt->addColumn('creator',         'Written by');    /// XXXX show username, show link to user page
+$dt->addColumn('time_created',    'When');
+$dt->addColumn('body',            'Msg');
+$dt->setSortOrder('time_created', 'desc');
+$dt->setDataList( $list );
+echo $dt->render();
 
 
 if ($user_id == $session->id)

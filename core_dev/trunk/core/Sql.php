@@ -11,7 +11,9 @@
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
-//STATUS: wip. most code copied from DatabaseMysql. XXX TODO merge with SqlObject ???
+//STATUS: wip
+
+//XXX TODO merge with SqlObject ???
 
 //REQUIRES PHP 5.3+
 

@@ -25,7 +25,7 @@ class Guestbook
         $q =
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE owner = ?'.
-        ' ORDER BY time_created ASC';
+        ' ORDER BY time_created DESC';
         $list = Sql::pSelect($q, 'i', $user_id);
 
         return SqlObject::loadObjects($list, __CLASS__);
