@@ -81,7 +81,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     function setLastActive()
     {
         $this->last_active = time();
-        Sql::pUpdate('UPDATE tblUsers SET time_last_active=NOW() WHERE id = ?', 'i', $this->id);
+        Sql::pUpdate('UPDATE tblUsers SET time_last_active = NOW() WHERE id = ?', 'i', $this->id);
     }
 
     function setEncryptKey($key) { $this->encrypt_key = $key; }
@@ -174,12 +174,12 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         if ($this->usermode >= USERLEVEL_SUPERADMIN) $this->isSuperAdmin = true;
 
         $q =
-        'UPDATE tblUsers SET time_last_login=NOW(), time_last_active=NOW(), last_ip = ?'.
+        'UPDATE tblUsers SET time_last_login = NOW(), time_last_active = NOW(), last_ip = ?'.
         ' WHERE userId = ?';
 
         Sql::pUpdate($q, 'si', client_ip(), $this->id);
 
-        $q = 'INSERT INTO tblLogins SET timeCreated=NOW(), userId = ?, IP = ?, userAgent = ?';
+        $q = 'INSERT INTO tblLogins SET timeCreated = NOW(), userId = ?, IP = ?, userAgent = ?';
         Sql::pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
 
         $_SESSION['id']           = $this->id;
@@ -249,7 +249,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         if (!$this->id)
             throw new Exception ('already logged out');
 
-        Sql::pUpdate('UPDATE tblUsers SET time_last_logout=NOW() WHERE id = ?', 'i', $this->id);
+        Sql::pUpdate('UPDATE tblUsers SET time_last_logout = NOW() WHERE id = ?', 'i', $this->id);
 
         $params = session_get_cookie_params();
         setcookie(session_name(), '', time() - 604800, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
@@ -286,14 +286,13 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
     function getUserLevelName()
     {
-        $u = new User($this->id);
-        return $u->getUserLevelName();
+        return getUserLevelName( UserHandler::getUserLevel($this->id) );
     }
 
     /**
      * @return array of ApiCustomer objects that is owned by groups that current user is a member of
      */
-    function getApiAccounts()
+    function getApiAccounts() //XXX this dont belong here!
     {
         $u = new User($this->id);
 
@@ -312,7 +311,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     /**
      * @return array with api account id:s that is owned by groups that current user is a member of
      */
-    function getApiAccountIds()
+    function getApiAccountIds()  //XXX this dont belong here!
     {
         $u = new User($this->id);
 
@@ -331,7 +330,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     /**
      * @return true if user is member of a UserGroup which owns api account $id
      */
-    function ownsApiAccount($id)
+    function ownsApiAccount($id)  //XXX this dont belong here!
     {
         if ($this->isSuperAdmin)
             return true;

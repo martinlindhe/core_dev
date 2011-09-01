@@ -35,6 +35,18 @@ class UserHandler
         return $l ? $l : 0;
     }
 
+    /** Returns a list of UserGroup objects for all groups the user is a member of */
+    public static function getGroups($user_id)
+    {
+        $q = 'SELECT groupId FROM tblGroupMembers WHERE userId = ?';
+        $res = Sql::pSelect1d($q, 'i', $user_id);
+
+        $groups = array();
+        foreach ($res as $grp_id)
+            $groups[] = new UserGroup($grp_id);
+
+        return $groups;
+    }
 
     /** Adds the user to a user group */
     function addToGroup($n)
@@ -59,25 +71,12 @@ class UserHandler
         return true;
     }
 
-    /** Returns a list of UserGroup objects for all groups the user is a member of */
-    function getGroups()
-    {
-        $q = 'SELECT groupId FROM tblGroupMembers WHERE userId = ?';
-        $res = Sql::pSelect1d($q, 'i', $this->id);
-
-        $groups = array();
-        foreach ($res as $grp_id)
-            $groups[] = new UserGroup($grp_id);
-
-        return $groups;
-    }
-
-    function getLoginHistory()
+    public static function getLoginHistory($id)
     {
         $q = 'SELECT * FROM tblLogins WHERE userId = ? ORDER BY timeCreated DESC';
-        return Sql::pSelect($q, 'i', $this->id);
+        return Sql::pSelect($q, 'i', $id);
     }
-
+/*
     function render() /// XXXX move to a view
     {
         if (!$this->id)
@@ -94,6 +93,8 @@ class UserHandler
         default: throw new Exception ('hm');
         }
     }
+*/
+
 
 }
 

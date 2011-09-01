@@ -69,12 +69,12 @@ class RegisterHandler
             return false;
         }
 
-        $user = new User();
-        if ($user->loadByName($username)) {
+        if (User::getByName($username)) {
             $error->add('Username taken');
             return false;
         }
 
+        $user = new User();
         $user->create($username);
         if (!$user->getId()) {
             $error->add('Failed to create user');

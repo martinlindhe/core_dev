@@ -18,7 +18,7 @@ echo '<h1>Profile for '.$user->name.'</h1>';
 
 echo 'Last active: '.ago($user->time_last_active).'<br/>';
 echo 'Is online: '. ( UserHandler::isOnline($user_id) ? 'YES' : 'NO').'<br/>';
-
+echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 
 echo '<br/>';
 

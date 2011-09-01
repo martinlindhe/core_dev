@@ -64,8 +64,7 @@ The link will expire in @EXPIRETIME@';
             return false;
         }
 
-        $user = new User($user_id);
-        $email = $user->getEmail();
+        $email = UserSetting::getEmail($user_id);
         if (!$email)
             throw new Exception ('entered email not found');
 
@@ -79,6 +78,8 @@ The link will expire in @EXPIRETIME@';
             '/@URL@/',
             '/@EXPIRETIME@/'
         );
+
+        $user = User::get($user_id);
 
         $page = XmlDocumentHandler::getInstance();
 

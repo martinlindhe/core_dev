@@ -18,17 +18,17 @@ require_once('YuiDatatable.php');
 if (!$session->isSuperAdmin)
     return;
 
-$user = new User($this->owner);
-if (!$user->getId()) {
+$user = User::get($this->owner);
+if (!$user->id) {
     echo '<h2>No such user exists</h2>';
     return;
 }
 
-echo '<h1>User admin for '.$user->getName().'</h1>';
+echo '<h1>User admin for '.$user->name.'</h1>';
 
 echo '&raquo; '.ahref('coredev/view/profile/'.$user->id, 'Show profile').'<br/>';
 
-if ($user->getType() == USER_FACEBOOK)
+if ($user->type == USER_FACEBOOK)
 {
     echo '<h2>Facebook account</h2>';
     echo 'Fb username: '.UserSetting::get($user->id, 'fb_name').'<br/>';
@@ -37,7 +37,7 @@ if ($user->getType() == USER_FACEBOOK)
     echo 'Fb profile: <a href="'.$fburl.'" target="_blank">'.$fburl.'</a><br/>';
 }
 
-echo 'Last IP: '.$user->getLastIp().'<br/>';
+echo 'Last IP: '.$user->last_ip.'<br/>';
 echo '<br/>';
 
 if ($session->id != $this->owner && isset($_GET['remove'])) {
@@ -66,7 +66,7 @@ if (!empty($_GET['remove_setting'])) {
 
 // save changes in edited settings
 if (!empty($_POST)) {
-    $settings = SettingsByOwner::getAll(USER, $user->getId());
+    $settings = SettingsByOwner::getAll(USER, $user->id);
 
     foreach ($settings as $set)
         if (!empty($_POST['setting_name_'.$set['settingId']]))
@@ -85,7 +85,7 @@ if (!empty($_GET['rm_grp'])) {
 echo '<h2>Group membership</h2>';
 echo 'This user is member of the following groups:<br/>';
 
-foreach ($user->getGroups() as $g) {
+foreach (UserHandler::getGroups($user->id) as $g) {
     echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
     echo ahref('coredev/view/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
 }
@@ -115,7 +115,7 @@ echo xhtmlFormClose().'<br/><br/>';
 
 echo '<h2>User settings</h2>';
 
-$settings = SettingsByOwner::getAll(USER, $user->getId());
+$settings = SettingsByOwner::getAll(USER, $user->id);
 echo xhtmlForm('edit_setting');
 echo '<table>';
 echo '<tr><th>Name</th><th>Value</th><th>Delete</th></tr>';
@@ -149,7 +149,7 @@ $dt->addColumn('timeCreated',     'Timestamp');
 $dt->addColumn('IP',              'IP');
 $dt->addColumn('userAgent',       'User agent');
 $dt->setSortOrder('timeCreated', 'desc');
-$dt->setDataList( $user->getLoginHistory() );
+$dt->setDataList( UserHandler::getLoginHistory($user->id) );
 $dt->setRowsPerPage( 10 );
 echo $dt->render();
 

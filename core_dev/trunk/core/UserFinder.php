@@ -23,7 +23,7 @@ class UserFinder
     /** @return user id */
     static function byUsername($name)
     {
-        $user = new User($name);
+        $user = User::getByName($name);
         if ($user->id)
             return $user->id;
 

@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+//XXXX TODO make this static map to tblUserGroups
+
 require_once('User.php');
 
 class UserGroup
@@ -33,8 +35,11 @@ class UserGroup
 
     function getCreatorName()
     {
-        $u = new User($this->creator_id);
-        return $u->getName();
+        $u = User::get($this->creator_id);
+        if (!$u)
+            return false;
+
+        return $u->name;
     }
 
     function getLevelDesc()
@@ -50,10 +55,8 @@ class UserGroup
     {
         if (!is_numeric($n)) return false;
 
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT * FROM tblUserGroups WHERE groupId = ?';
-        $row = $db->pSelectRow($q, 'i', $n);
+        $row = Sql::pSelectRow($q, 'i', $n);
         $this->loadFromSql($row);
     }
 
@@ -75,34 +78,30 @@ class UserGroup
         if (!$this->id)
             throw new Exception ('no group id set');
 
-        $db = SqlHandler::getInstance();
-
         $res = array();
 
-        $q = 'SELECT userId FROM tblGroupMembers WHERE groupId='.$this->id;
-        foreach ($db->get1dArray($q) as $uid)
-            $res[] = new User($uid);
+        $q = 'SELECT userId FROM tblGroupMembers WHERE groupId = ?';
+        foreach (Sql::pSelect1d($q, 'i', $this->id) as $uid)
+            $res[] = User::get($uid);
 
         return $res;
     }
 
     function save()
     {
-        $db = SqlHandler::getInstance();
-
         $session = SessionHandler::getInstance();
 
         if (!$this->id) {
-            $q = 'SELECT groupId FROM tblUserGroups WHERE name="'.$db->escape($this->name).'"';
-            $this->id = $db->getOneItem($q);
+            $q = 'SELECT groupId FROM tblUserGroups WHERE name = ?';
+            $this->id = Sql::pSelectItem($q, 's', $this->name);
         }
 
         if ($this->id) {
-            $q = 'UPDATE tblUserGroups SET name="'.$db->escape($this->name).'",info="'.$db->escape($this->info).'",level='.$this->level.' WHERE groupId='.$this->id;
-            $db->update($q);
+            $q = 'UPDATE tblUserGroups SET name = ?, info = ?, level = ? WHERE groupId = ?';
+            Sql::pUpdate($q, 'ssii', $this->name, $this->info, $this->level, $this->id);
         } else {
-            $q = 'INSERT INTO tblUserGroups SET createdBy='.$session->id.',timeCreated=NOW(),name="'.$db->escape($this->name).'",info="'.$db->escape($this->info).'",level='.$this->level;
-            $this->id = $db->insert($q);
+            $q = 'INSERT INTO tblUserGroups SET createdBy = ?, timeCreated = NOW(), name = ?, info = ?, level = ?';
+            $this->id = Sql::pInsert($q, 'issi', $session->id, $this->name, $this->info,$this->level);
         }
 
         return $this->id;

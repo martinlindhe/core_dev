@@ -85,18 +85,15 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-/*
-    function loadByName($name)
+    function getByName($name)
     {
         $q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND userName = ?';
         $row = Sql::pSelectRow($q, 's', $name);
 
         if (!$row) return false;
-        $this->loadFromSql($row);
-
-        return $this->id;
+        return SqlObject::loadObject($row, __CLASS__);
     }
-*/
+
 
     /**
      * Creates a new user

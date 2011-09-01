@@ -50,7 +50,7 @@ $dt->addColumn('last_ip',           'Last IP');
 $dt->addColumn('time_created',      'Created');
 $dt->addColumn('is_online',         'Online?');
 $dt->addColumn('type',              'Type', 'array', getUserTypes() );
-$dt->addColumn('userlevel',         'User level', 'array', getUserLevels() );
+// $dt->addColumn('userlevel',         'User level', 'array', getUserLevels() );
 
 
 /*  //XXX row coloring not fully working in YuiDatatable

@@ -20,7 +20,7 @@ class UserList
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
+        $q = 'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL';
         return $db->pSelectItem($q);
     }
 
@@ -32,8 +32,8 @@ class UserList
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
 
-        $q  = 'SELECT COUNT(*) FROM tblUsers WHERE timeDeleted IS NULL';
-        $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+        $q  = 'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL';
+        $q .= ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
         return $db->getOneItem($q);
     }
 
@@ -45,23 +45,16 @@ class UserList
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
 
-        $q  = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL';
+        $q  = 'SELECT * FROM tblUsers WHERE time_deleted IS NULL';
 
         if ($filter)
             $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
 
-        $q .= ' AND timeLastActive >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
-        $q .= ' ORDER BY timeLastActive DESC';
+        $q .= ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+        $q .= ' ORDER BY time_last_active DESC';
 
-        $users = array();
-
-        foreach ($db->getArray($q) as $row) {
-            $user = new User();
-            $user->loadFromSql($row);
-            $users[] = $user;
-        }
-
-        return $users;
+        $list = $db->getArray($q);
+        return SqlObject::loadObjects($list, 'User');
     }
 
     /**
@@ -73,20 +66,13 @@ class UserList
         $db = SqlHandler::getInstance();
 
         $q = 'SELECT * FROM tblUsers';
-        $q .= ' WHERE timeDeleted IS NULL';
+        $q .= ' WHERE time_deleted IS NULL';
 
         if ($filter)
-            $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+            $q .= ' AND name LIKE "%'.$db->escape($filter).'%"';
 
-        $users = array();
-
-        foreach ($db->getArray($q) as $row) {
-            $user = new User();
-            $user->loadFromSql($row);
-            $users[] = $user;
-        }
-
-        return $users;
+        $list = $db->getArray($q);
+        return SqlObject::loadObjects($list, 'User');
     }
 
     /**
@@ -96,11 +82,11 @@ class UserList
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT userId, userName FROM tblUsers';
-        $q .= ' WHERE timeDeleted IS NULL';
+        $q = 'SELECT id, name FROM tblUsers';
+        $q .= ' WHERE time_deleted IS NULL';
 
         if ($filter)
-            $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
+            $q .= ' AND name LIKE "%'.$db->escape($filter).'%"';
 
         return $db->getMappedArray($q);
     }
