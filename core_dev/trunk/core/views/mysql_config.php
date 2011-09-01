@@ -3,6 +3,7 @@
  * Shows information about current MySQL connection
  */
 
+//TODO: parse db privileges and complain if too low or too high priviliegies!
 //TODO: present data in pretty tables
 //TODO: use pie charts to show percentage of used memory etc
 
@@ -22,9 +23,10 @@ echo 'Configured charset: '.$db->charset.'<br/>';
 
 $q = 'SHOW GRANTS FOR CURRENT_USER';
 $priv = Sql::pSelectItem($q);
-//XXXX: parse output and complain if too low or too high priviliegies!
 // example:  GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER ON *.* TO 'root'@'%' IDENTIFIED BY PASSWORD '*xxx'
 // example2: GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY PASSWORD '*xxx' WITH GRANT OPTION
+
+/// XXXXX FIXME: censor password from string instead of cut it!!!!
 echo 'Privilegies: <b>'.substr($priv, 0, 70).'</b>...<br/>';
 echo'<br/>';
 

@@ -102,6 +102,7 @@ class SqlObject
         $reflect = new ReflectionClass($obj);
         $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
 
+        // we escape column names for reserved SQL words
         // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
         // the list is huge, so we only try to cover common ones
         $reserved_words = array('desc', 'default', 'from', 'to');
@@ -125,7 +126,6 @@ class SqlObject
             $res->vals[] = $obj->$col;
 
             if (in_array($col, $reserved_words))
-                // escape column names for reserved SQL words
                 $res->cols[] = '`'.$col.'` = ?';
             else
                 $res->cols[] = $col.' = ?';
@@ -202,7 +202,8 @@ class SqlObject
      */
     static function store($obj, $tblname, $field_name = 'id')
     {
-        if (SqlObject::idExists($obj->$field_name, $tblname, $field_name)) {
+        if (SqlObject::idExists($obj->$field_name, $tblname, $field_name))
+        {
             sqlObject::updateId($obj, $tblname, $field_name);
             return $obj->id;
         }
@@ -259,15 +260,14 @@ class SqlObject
         if (!Sql::isValidOrder($order))
             throw new Exception ('odd order '.$order);
 
-        $q = 'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?';
-
         if (is_numeric($value))
             $form = 'i';
         else
             $form = 's';
 
-        if ($order_field)
-            $q .= ' ORDER BY '.$order_field.' '.strtoupper($order);
+        $q =
+        'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?'.
+        ($order_field ? ' ORDER BY '.$order_field.' '.strtoupper($order) : '');
 
         $list = Sql::pSelect($q, $form, $value);
 
