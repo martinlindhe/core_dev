@@ -49,25 +49,21 @@ class UserHandler
     }
 
     /** Adds the user to a user group */
-    function addToGroup($n)
+    public static function addToGroup($user_id, $grp_id)
     {
-        if (!is_numeric($n)) return false;
-
         $q = 'SELECT COUNT(*) FROM tblGroupMembers WHERE groupId = ? AND userId = ?';
-        if (Sql::pSelectItem($q, 'ii', $n, $this->id))
+        if (Sql::pSelectItem($q, 'ii', $grp_id, $user_id))
             return true;
 
         $q = 'INSERT INTO tblGroupMembers SET groupId = ?, userId = ?';
-        Sql::pInsert($q, 'ii', $n, $this->id);
+        Sql::pInsert($q, 'ii', $grp_id, $user_id);
         return true;
     }
 
-    function removeFromGroup($n)
+    public static function removeFromGroup($user_id, $grp_id)
     {
-        if (!is_numeric($n)) return false;
-
         $q = 'DELETE FROM tblGroupMembers WHERE groupId = ? AND userId = ?';
-        Sql::pDelete($q, 'ii', $n, $this->id);
+        Sql::pDelete($q, 'ii', $grp_id, $user_id);
         return true;
     }
 
@@ -88,9 +84,9 @@ class UserHandler
         $session = SessionHandler::getInstance();
 
         Sql::pUpdate(
-        'UPDATE tblUsers SET userPass = ? WHERE userId = ?',
+        'UPDATE tblUsers SET password = ? WHERE id = ?',
         'si',
-        sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
+        sha1( $id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
         $id
         );
 

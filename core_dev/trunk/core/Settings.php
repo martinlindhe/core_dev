@@ -11,27 +11,6 @@
 
 require_once('constants.php');
 
-class SettingsByOwner  // XXX rename
-{
-    /**
-     * @return 1d array of owner id's matching type, name & value
-     */
-    static function getList($type, $name, $value)  //XXXX rename
-    {
-        $q = 'SELECT ownerId FROM tblSettings WHERE settingType = ? AND settingName = ? AND settingValue = ?';
-        return SqlHandler::getInstance()->pSelect1d($q, 'iss', $type, $name, $value);
-    }
-
-    /**
-     * @return 2d array of all settings matching type & owner
-     */
-    static function getAll($type, $owner) // XXX rename
-    {
-        $q = 'SELECT settingId, settingName, settingValue, categoryId FROM tblSettings WHERE settingType = ? AND ownerId = ?';
-        return SqlHandler::getInstance()->pSelect($q, 'ii', $type, $owner);
-    }
-}
-
 class Settings
 {
     //default types - use id's from 50 and up for application specified types

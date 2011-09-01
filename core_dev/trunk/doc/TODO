@@ -2,7 +2,7 @@ Autumn 2011 cleanup:
 
 
 User profile
-    * make static User object mapped to tblUsers
+WIP * make static User object mapped to tblUsers
     * ability to edit own info (email, profile pic)
     * ability for more "userdata", like profile picture, home town, gender (revive functions_userdata.php)
     * link to: chat 1-to-1, see gallery

@@ -36,6 +36,28 @@ class UserSetting
     static function getEmail($id) { self::get($id, 'email'); }
 
     static function setEmail($id, $val) { self::set($id, 'email', $val); }
+
+    /**
+     * @return 1d array of owner id's matching name & value
+     */
+    static function getList($name, $value)  //XXXX rename
+    {
+        $q =
+        'SELECT ownerId FROM tblSettings'.
+        ' WHERE settingType = ? AND settingName = ? AND settingValue = ?';
+        return Sql::pSelect1d($q, 'iss', USER, $name, $value);
+    }
+
+    /**
+     * @return 2d array of all settings for owner
+     */
+    static function getAll($owner) // XXX rename
+    {
+        $q =
+        'SELECT settingId, settingName, settingValue, categoryId'.
+        ' FROM tblSettings WHERE settingType = ? AND ownerId = ?';
+        return Sql::pSelect($q, 'ii', USER, $owner);
+    }
 }
 
 ?>

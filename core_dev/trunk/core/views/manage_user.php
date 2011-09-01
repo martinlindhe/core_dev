@@ -15,7 +15,7 @@
 
 require_once('YuiDatatable.php');
 
-if (!$session->isSuperAdmin)
+if (!$this->owner || !$session->isSuperAdmin)
     return;
 
 $user = User::get($this->owner);
@@ -49,37 +49,37 @@ if ($session->id != $this->owner && isset($_GET['remove'])) {
 }
 
 if (!empty($_POST['change_pwd'])) {
-    $user->setPassword($_POST['change_pwd']);
+    UserHandler::setPassword($user->id, $_POST['change_pwd']);
     echo '<div class="item">Password changed!</div>';
     return;
 }
 
 if (!empty($_POST['setting_name']) && isset($_POST['setting_val'])) {
-    $user->saveSetting($_POST['setting_name'], $_POST['setting_val']);
+    UserSetting::set($user->id, $_POST['setting_name'], $_POST['setting_val']);
     echo '<div class="good">Setting added!</div>';
 }
 
 if (!empty($_GET['remove_setting'])) {
-    $user->deleteSetting($_GET['remove_setting']);
+    UserSetting::delete($user->id, $_GET['remove_setting']);
     echo '<div class="good">Setting removed!</div>';
 }
 
 // save changes in edited settings
 if (!empty($_POST)) {
-    $settings = SettingsByOwner::getAll(USER, $user->id);
+    $settings = UserSetting::getAll($user->id);
 
     foreach ($settings as $set)
         if (!empty($_POST['setting_name_'.$set['settingId']]))
-            $user->saveSetting($_POST['setting_name_'.$set['settingId']], $_POST['setting_val_'.$set['settingId']]);
+            UserSetting::set($user->id, $_POST['setting_name_'.$set['settingId']], $_POST['setting_val_'.$set['settingId']]);
 }
 
 
 if (!empty($_POST['grp_id'])) {
-    $user->addToGroup($_POST['grp_id']);
+    UserHandler::addToGroup($user->id, $_POST['grp_id']);
 }
 
 if (!empty($_GET['rm_grp'])) {
-    $user->removeFromGroup($_GET['rm_grp']);
+    UserHandler::removeFromGroup($user->id, $_GET['rm_grp']);
 }
 
 echo '<h2>Group membership</h2>';
@@ -115,7 +115,7 @@ echo xhtmlFormClose().'<br/><br/>';
 
 echo '<h2>User settings</h2>';
 
-$settings = SettingsByOwner::getAll(USER, $user->id);
+$settings = UserSetting::getAll($user->id);
 echo xhtmlForm('edit_setting');
 echo '<table>';
 echo '<tr><th>Name</th><th>Value</th><th>Delete</th></tr>';
