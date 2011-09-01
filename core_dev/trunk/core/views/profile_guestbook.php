@@ -18,6 +18,16 @@ $user = new User($user_id);
 
 echo '<h1>Guestbook for '.$user->name.'</h1>';
 
+$form = new XhtmlForm('msg');
+$form->addHidden('to', $this->owner);
+$form->addTextarea('body', 'Body');
+$form->addSubmit('Send');
+$form->setFocus('body');
+$form->onSubmit('return check_gb(this);');
+$form->setHandler('gbHandler');
+
+
+$form->handle(); // to get latest added entry in the following query
 
 $gb = Guestbook::getEntries($user_id);
 
@@ -55,13 +65,6 @@ function gbHandler($p)
 
 echo '<h1>New guestbook entry to '.$user->name.'</h1>';
 
-$form = new XhtmlForm('msg');
-$form->addHidden('to', $this->owner);
-$form->addTextarea('body', 'Body');
-$form->addSubmit('Send');
-$form->setFocus('body');
-$form->onSubmit('return check_gb(this);');
-$form->setHandler('gbHandler');
 echo $form->render();
 
 ?>

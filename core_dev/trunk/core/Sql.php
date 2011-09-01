@@ -8,22 +8,27 @@
  *
  *   $id = Sql:pInsert($q, 'i', $val);
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
-//STATUS: experimental. most code copied from DatabaseMysql. XXX TODO merge with SqlObject ???
+//STATUS: wip. most code copied from DatabaseMysql. XXX TODO merge with SqlObject ???
+
+//REQUIRES PHP 5.3+
 
 class Sql
 {
     /** Executes a prepared statement and binds parameters
      * @param $args[0]    sql query
      * @param $args[1]    prepared statement string (isii)..
-     * @param $args[2..n] query parameters
+     * @param $args[2..n] query parameters, or all params is an array in $args[2]
      */
     protected static function pExecStmt($args)
     {
         if (!$args[0])
             throw new Exception ('no query');
+
+        if (strpos($args[0], '=') !== false && strpos($args[0], '?') === false)
+            throw new Exception ('query is not prepared: '.$args[0]);
 
         $db = SqlHandler::getInstance();
         $db->connect();
@@ -31,10 +36,8 @@ class Sql
         if ($db instanceof DatabaseMysqlProfiler)
             $db->startMeasure();
 
-        if (! ($stmt = $db->db_handle->prepare($args[0])) ) {
-            bt();
+        if (! ($stmt = $db->db_handle->prepare($args[0])) )
             throw new Exception ('FAIL prepare: '.$args[0]);
-        }
 
         $params = array();
         if (isset($args[2]) && is_array($args[2]))
@@ -237,14 +240,14 @@ class Sql
     public static function pUpdate()
     {
         $args = func_get_args();
-        return call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+        return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
     }
 
     /** like pDelete, but returns insert id */
     public static function pInsert()
     {
         $args = func_get_args();
-        $res = call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+        $res = call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
 
         if ($res != 1)
             throw new Exception ('insert fail: '.$args[0]);
@@ -256,10 +259,7 @@ class Sql
     /** HACK needed for some reason */
     protected static function refValues($arr)
     {
-        if (!php_min_ver('5.3'))
-            return $arr;
-
-        // reference is required for PHP 5.3+
+        // COMPAT: PHP 5.3+ is required for references
         $refs = array();
         foreach ($arr as $key => $val)
             $refs[$key] = &$arr[$key];

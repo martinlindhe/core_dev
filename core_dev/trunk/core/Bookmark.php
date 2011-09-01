@@ -35,10 +35,11 @@ class Bookmark
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE owner = '.$owner.
-        ' AND type = '.$type;
+        ' WHERE owner = ? AND type = ?';
 
-        return SqlObject::loadObjects($q, __CLASS__); // XXX pselect?
+        $list = Sql::pSelect($q, 'ii', $owner, $type);
+
+        return SqlObject::loadObjects($list, __CLASS__); // XXX pselect?
     }
 
     /**

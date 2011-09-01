@@ -38,6 +38,12 @@ Forum
     * needed?
 
 
+DB CHECKER:
+    * all classes that is 1-to-1 mapped to a db table should extend from a common class (SqlObject?)
+    * do a checker that includes all core/*.php files and iterates over all known classes and finds
+        those who extend from SqlObject, and does some special code to compare tbl structure vs class properties
+    * add this to the coredev/selftest eventually (?) may be heavy operation
+
 
 ---
 

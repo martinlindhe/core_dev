@@ -7,9 +7,10 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip ... XXX merge with Sql.php ?
+//STATUS: wip ...
 
-//TODO: rework reflectQuery() to output keys, vals & prepared-statement formatting string so it can produce prepared statements instead
+//TODO: update all code to use reflectQuery2(), drop reflectQuery() !!!
+//XXX merge with Sql.php ?
 
 require_once('Sql.php');
 
@@ -205,6 +206,7 @@ class SqlObject
 
         $vals = self::reflectQuery($obj, '', false);
 
+        //XXXXX BLERGH this is not prepared stmt!!"! make Sql class refuse query with  = and no "?"
         $q =
         'SELECT COUNT(*) FROM '.$tblname.
         ' WHERE '.implode(' AND ', $vals);
