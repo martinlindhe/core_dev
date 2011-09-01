@@ -17,13 +17,9 @@ require_once('Sql.php');
 class ReflectedObject
 {
     var $str;
-    var $props = array(); ///< array of ReflectedProperty
-}
-
-class ReflectedProperty
-{
-    var $col;  // class property / table column name
-    var $val;  // class property / table column value
+    var $props = array();  ///< array of ReflectedProperty
+    var $cols  = array();  ///< class properties / table column names
+    var $vals  = array();  ///< class property / table column value
 }
 
 class SqlObject
@@ -150,8 +146,6 @@ class SqlObject
 
         foreach ($props as $prop)
         {
-            $o = new ReflectedProperty();
-
             $col = $prop->getName();
             if ($col == $exclude_col)
                 continue;
@@ -164,15 +158,13 @@ class SqlObject
             else
                 $res->str .= 's';
 
-            $o->val = $obj->$col;
+            $res->vals[] = $obj->$col;
 
             if (in_array($col, $reserved_words))
                 // escape column names for reserved SQL words
-                $o->col = '`'.$col.'`';
+                $res->cols[] = '`'.$col.'` = ?';
             else
-                $o->col = $col;
-
-            $res->props[] = $o;
+                $res->cols[] = $col.' = ?';
         }
 
         return $res;
@@ -225,19 +217,10 @@ class SqlObject
 
         $reflect = self::reflectQuery2($obj, '', false);
 
-        $comb = array();
-        $vals = array();
-
-        foreach ($reflect->props as $prop)
-        {
-            $comb[] = $prop->col. ' = ?';
-            $vals[] = $prop->val;
-        }
-
         $q = 'INSERT INTO '.$tblname.
-        ' SET '.implode(', ', $comb);
+        ' SET '.implode(', ', $reflect->cols);
 
-        return Sql::pInsert($q, $reflect->str, $vals);
+        return Sql::pInsert($q, $reflect->str, $reflect->vals);
     }
 
     /**
