@@ -9,8 +9,6 @@
 
 //STATUS: early draft. will replace functions_messages.php
 
-//TODO: document table in redmine
-
 require_once('SqlObject.php');
 
 class Message

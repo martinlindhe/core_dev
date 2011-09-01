@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: wip. REWRITE using static User object
 
 define('USERLEVEL_NORMAL',      0);
 define('USERLEVEL_WEBMASTER',   1);
@@ -280,7 +280,7 @@ class User
         return $db->pSelect($q, 'i', $this->id);
     }
 
-    function render()
+    function render() /// XXXX move to a view
     {
         if (!$this->id)
             return t('Anonymous');

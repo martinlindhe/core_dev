@@ -21,7 +21,7 @@ Friends
 
 
 Chat
-    * write 1-on-1 chat code (drop functions_chat1on1.php)
+    * write 1-on-1 chat code (drop functions_chat1on1.php), store messages as normal Message objects
     * need chat rooms (+ ability for admin to create new rooms on the fly)
 
 
@@ -30,12 +30,13 @@ Image gallery
     * rather use some nice-looking js image viewer
 
 
+Moderation
+    * ability for a user to report an unappropriate picture, or an abusive user (rewrite of atom_moderation.php)
+
+
 Forum
     * needed?
 
-
-Moderation
-    * ability for a user to report an unappropriate picture, or an abusive user (rewrite of atom_moderation.php)
 
 
 ---
