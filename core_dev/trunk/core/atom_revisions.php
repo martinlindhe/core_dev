@@ -60,36 +60,36 @@ function showRevisions($articleType, $articleId, $articleName)
     foreach ($list as $row) {
         echo formatTime($row['timeCreated']).': ';
 
-        $creator = new User($row['createdBy']);
+        $creator = User::get($row['createdBy']);
         switch ($row['categoryId']) {
-            case REV_CAT_LOCKED:
-                echo '<img src="'.coredev_webroot().'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
-                echo ' Locked by '.$creator->getName().'<br/>';
-                break;
+        case REV_CAT_LOCKED:
+            echo '<img src="'.coredev_webroot().'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
+            echo ' Locked by '.$creator->name.'<br/>';
+            break;
 
-            case REV_CAT_UNLOCKED:
-                echo '<img src="'.coredev_webroot().'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
-                echo ' Unlocked by '.$creator->getName().'<br/>';
-                break;
+        case REV_CAT_UNLOCKED:
+            echo '<img src="'.coredev_webroot().'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
+            echo ' Unlocked by '.$creator->name.'<br/>';
+            break;
 
-            case REV_CAT_FILE_UPLOADED:
-                echo ' File uploaded by '.$creator->getName().'<br/>';
-                break;
+        case REV_CAT_FILE_UPLOADED:
+            echo ' File uploaded by '.$creator->name.'<br/>';
+            break;
 
-            case REV_CAT_FILE_DELETED:
-                echo ' File deleted by '.$creator->getName().'<br/>';
-                break;
+        case REV_CAT_FILE_DELETED:
+            echo ' File deleted by '.$creator->name.'<br/>';
+            break;
 
-            case REV_CAT_TEXT_CHANGED:
-                echo '<a href="#" onclick="return toggle_element(\'layer_history'.$row['indexId'].'\')">';
-                echo t('Edited by').' '.$creator->getName(). ' ('.strlen($row['fieldText']).' '.t('characters').')</a><br/>';
-                echo '<div id="layer_history'.$row['indexId'].'" class="revision_entry" style="display: none;">';
-                echo nl2br(htmlentities($row['fieldText'], ENT_COMPAT, 'UTF-8'));
-                echo '</div>';
-                break;
+        case REV_CAT_TEXT_CHANGED:
+            echo '<a href="#" onclick="return toggle_element(\'layer_history'.$row['indexId'].'\')">';
+            echo t('Edited by').' '.$creator->name. ' ('.strlen($row['fieldText']).' '.t('characters').')</a><br/>';
+            echo '<div id="layer_history'.$row['indexId'].'" class="revision_entry" style="display: none;">';
+            echo nl2br(htmlentities($row['fieldText'], ENT_COMPAT, 'UTF-8'));
+            echo '</div>';
+            break;
 
-            default:
-                throw new Exception ('unknown revision type '.$row['categoryId']);
+        default:
+            throw new Exception ('unknown revision type '.$row['categoryId']);
         }
     }
 }

@@ -11,6 +11,8 @@
 
 //XXX: move all group stuff to a UserHandler
 
+require_once('SqlObject.php');
+
 require_once('UserHandler.php');
 require_once('UserSetting.php');
 
@@ -32,10 +34,10 @@ function getUserLevels()
     );
 }
 
-function getUserLevelName()
+function getUserLevelName($n)
 {
     $x = getUserLevels();
-    return $x[ $this->userlevel ];
+    return $x[ $n ];
 }
 
 function getUserTypes()
