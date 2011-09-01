@@ -13,6 +13,18 @@
 
 require_once('Sql.php');
 
+class ReflectedObject
+{
+    var $str;
+    var $props = array(); ///< array of ReflectedProperty
+}
+
+class ReflectedProperty
+{
+    var $col;  // class property / table column name
+    var $val;  // class property / table column value
+}
+
 class SqlObject
 {
     /**
@@ -123,6 +135,48 @@ class SqlObject
         return $vals;
     }
 
+    // return data useful for preapred statements, XXXX will replace reflectQuery when working
+    protected static function reflectQuery2($obj, $exclude_col = '', $include_unset = true)
+    {
+        $reflect = new ReflectionClass($obj);
+        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+
+        // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
+        // the list is huge, so we only try to cover common ones
+        $reserved_words = array('desc', 'default', 'from', 'to');
+
+        $res = new ReflectedObject();
+
+        foreach ($props as $prop)
+        {
+            $o = new ReflectedProperty();
+
+            $col = $prop->getName();
+            if ($col == $exclude_col)
+                continue;
+
+            if (!$include_unset && !$obj->$col)
+                continue;
+
+            if (is_numeric($obj->$col))
+                $res->str .= 'i';
+            else
+                $res->str .= 's';
+
+            $o->val = $obj->$col;
+
+            if (in_array($col, $reserved_words))
+                // escape column names for reserved SQL words
+                $o->col = '`'.$col.'`';
+            else
+                $o->col = $col;
+
+            $res->props[] = $o;
+        }
+
+        return $res;
+    }
+
     static function idExists($id, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
@@ -167,12 +221,21 @@ class SqlObject
         if (!is_alphanumeric($tblname))
             throw new Exception ('very bad');
 
-        $vals = self::reflectQuery($obj, '', false);
+        $reflect = self::reflectQuery2($obj, '', false);
 
-        $q =
-        'INSERT INTO '.$tblname.
-        ' SET '.implode(', ', $vals);
-        return SqlHandler::getInstance()->insert($q); ///XXXXXXXXXXXX use Sql::pInsert ..!!!
+        $comb = array();
+        $vals = array();
+
+        foreach ($reflect->props as $prop)
+        {
+            $comb[] = $prop->col. ' = ?';
+            $vals[] = $prop->val;
+        }
+
+        $q = 'INSERT INTO '.$tblname.
+        ' SET '.implode(', ', $comb);
+
+        return Sql::pInsert($q, $reflect->str, $vals);
     }
 
     /**

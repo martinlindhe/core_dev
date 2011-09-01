@@ -37,6 +37,16 @@ class Sql
         }
 
         $params = array();
+        if (isset($args[2]) && is_array($args[2]))
+        {
+            $x = array();
+            for ($i = 0; $i < count($args[2]); $i++)
+                $x[] = $args[2][$i];
+
+            for ($i = 0; $i < count($x); $i++)
+                $args[2+$i] = $x[$i];
+        }
+
         for ($i = 1; $i < count($args); $i++)
             $params[] = $args[$i];
 
@@ -55,13 +65,12 @@ class Sql
             if (isset($args[1]))
                 $prof->format = $args[1];
 
-            if (isset($args[2])) {
+            if (isset($args[2]))
                 for ($i = 2; $i < count($args); $i++)
                     $prof->params[] = $args[$i];
-            }
 
             if ($params && $res === false)
-                $prof->error = $this->db_handle->error;
+                $prof->error = $db->db_handle->error;
         }
 
         return $stmt;
@@ -236,10 +245,12 @@ class Sql
     {
         $args = func_get_args();
         $res = call_user_func_array(array(self, 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
-        if ($res == 1)
-            return $this->db_handle->insert_id;
-        else
+
+        if ($res != 1)
             throw new Exception ('insert fail: '.$args[0]);
+
+        $db = SqlHandler::getInstance();
+        return $db->db_handle->insert_id;
     }
 
     /** HACK needed for some reason */
