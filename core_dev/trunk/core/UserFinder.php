@@ -10,6 +10,11 @@ class UserFinder
     /** @return user id */
     static function byEmail($email)
     {
+        $email = trim($email);
+
+        if (!is_email($email))
+            throw new Exception ('XXX not an email address: '.$email);
+
         $res = UserSetting::getList('email', $email);
         if (count($res) == 1)
             return $res[0];
