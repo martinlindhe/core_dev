@@ -45,6 +45,8 @@ DB CHECKER:
     * add this to the coredev/selftest eventually (?) may be heavy operation
 
 
+sql debugger: ability to test-run sql queries in the browser
+
 ---
 
 

@@ -301,6 +301,9 @@ class DatabaseMysql implements IDB_SQL
         if (!$this->connected)
             $this->connect();
 
+        if (!Sql::isQueryPrepared($args[0]))
+            throw new Exception ('query is not prepared: ... '.$args[0]);
+
         if (! ($stmt = $this->db_handle->prepare($args[0])) ) {
             bt();
             throw new Exception ('FAIL prepare: '.$args[0]);

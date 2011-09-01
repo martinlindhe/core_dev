@@ -27,10 +27,8 @@ class Sql
         if (!$args[0])
             throw new Exception ('no query');
 
-/*      // XXX this check triggers on false positives, like ".. JOIN t2 ON(t1.x=t2.y)"
-        if (strpos($args[0], '=') !== false && strpos($args[0], '?') === false)
-            throw new Exception ('query is not prepared: '.$args[0]);
-*/
+        if (!self::isQueryPrepared($args[0]))
+            throw new Exception ('query is not prepared: ... '.$args[0]);
 
         $db = SqlHandler::getInstance();
         $db->connect();
@@ -78,6 +76,32 @@ class Sql
         }
 
         return $stmt;
+    }
+
+    public static function isQueryPrepared($q)
+    {
+        $s = $q;
+        do
+        {
+            $p = strpos($s, '=');
+            if ($p === false)
+                return true;
+
+            $x1 = substr($s, $p+1);
+            $x2 = substr( trim($x1), 0, 1);
+
+            $old_s = $s;
+            $s = substr($s, $p+1);
+
+            if (is_numeric($x2) || $x2 == '"')
+            {
+                echo 'XXX: query is not prepared: (val is '.$x2.') ... '.$old_s.ln();
+                return false;
+            }
+
+        } while ($s);
+
+        return true;
     }
 
     /**

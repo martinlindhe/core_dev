@@ -198,7 +198,8 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
 
         $prof = &$this->measureQuery($args[0]);
 
-        $prof->prepared = true;
+        if (Sql::isQueryPrepared($args[0]))
+            $prof->prepared = true;
 
         if (isset($args[1]))
             $prof->format = $args[1];
