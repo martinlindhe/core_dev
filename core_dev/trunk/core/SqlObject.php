@@ -9,7 +9,6 @@
 
 //STATUS: wip ...
 
-//TODO: update all code to use reflectQuery2(), drop reflectQuery() !!!
 //XXX merge with Sql.php ?
 
 require_once('Sql.php');
@@ -96,44 +95,9 @@ class SqlObject
      * @param $obj
      * @param $exclude_col
      * @param $include_unset  shall unset object properties be included in result?
-     * @return array with key=val strings usable for sql queries
+     * @return ReflectedObject
      */
     protected static function reflectQuery($obj, $exclude_col = '', $include_unset = true)
-    {
-        $reflect = new ReflectionClass($obj);
-        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
-
-        // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
-        // the list is huge, so we only try to cover common ones
-        $reserved_words = array('desc', 'default', 'from', 'to');
-
-        $vals = array();
-        foreach ($props as $prop)
-        {
-            $col = $prop->getName();
-            if ($col == $exclude_col)
-                continue;
-
-            if (!$include_unset && !$obj->$col)
-                continue;
-
-            if (is_numeric($obj->$col))
-                $val = $obj->$col;
-            else
-                $val = '"'.Sql::escape($obj->$col).'"';
-
-            if (in_array($col, $reserved_words))
-                // escape column names for reserved SQL words
-                $col = '`'.$col.'`';
-
-            $vals[] = $col.'='.$val;
-        }
-
-        return $vals;
-    }
-
-    // return data useful for preapred statements, XXXX will replace reflectQuery when working
-    protected static function reflectQuery2($obj, $exclude_col = '', $include_unset = true)
     {
         $reflect = new ReflectionClass($obj);
         $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
@@ -196,7 +160,7 @@ class SqlObject
         if (!is_alphanumeric($tblname))
             throw new Exception ('very bad');
 
-        $reflect = self::reflectQuery2($obj, '', false);
+        $reflect = self::reflectQuery($obj, '', false);
 
         $q =
         'SELECT COUNT(*) FROM '.$tblname.
@@ -214,7 +178,7 @@ class SqlObject
         if (!is_alphanumeric($tblname))
             throw new Exception ('very bad');
 
-        $reflect = self::reflectQuery2($obj, '', false);
+        $reflect = self::reflectQuery($obj, '', false);
 
         $q = 'INSERT INTO '.$tblname.
         ' SET '.implode(', ', $reflect->cols);
@@ -323,15 +287,15 @@ class SqlObject
 
         if (!is_numeric($obj->id))
             throw new Exception ('bad data'. $obj->id);
-throw new Exception ('XXX use reflectQuery2'); /// XXXX is anyone even using this method??
-        $vals = self::reflectQuery($obj, $field_name);
+
+        $reflect = self::reflectQuery($obj, $field_name);
 
         $q =
         'UPDATE '.$tblname.
-        ' SET '.implode(', ', $vals).
+        ' SET '.implode(', ', $reflect->cols).
         ' WHERE '.$field_name.' = '.$obj->id;
 
-        return SqlHandler::getInstance()->update($q);  //XXXXXXXXXXx use Sql::pUpdate
+        return Sql::pUpdate($q, $reflect->str, $reflect->vals);
     }
 
 }
