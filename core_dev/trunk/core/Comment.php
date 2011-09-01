@@ -44,9 +44,11 @@ class Comment
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE type = '.$type.' AND owner = '.$owner.
+        ' WHERE type = ? AND owner = ?'.
         ' ORDER BY time_created DESC';
-        return SqlObject::loadObjects($q, __CLASS__);
+
+        $list = Sql::pSelect($q, 'ii', $type, $owner);
+        return SqlObject::loadObjects($list, __CLASS__);
     }
 
     public static function store($obj)

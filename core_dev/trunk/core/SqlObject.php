@@ -196,14 +196,13 @@ class SqlObject
         if (!is_alphanumeric($tblname))
             throw new Exception ('very bad');
 
-        $vals = self::reflectQuery($obj, '', false);
+        $reflect = self::reflectQuery2($obj, '', false);
 
-        //XXXXX BLERGH this is not prepared stmt!!"! make Sql class refuse query with  = and no "?"
         $q =
         'SELECT COUNT(*) FROM '.$tblname.
-        ' WHERE '.implode(' AND ', $vals);
+        ' WHERE '.implode(' AND ', $reflect->cols);
 
-        return Sql::pSelectItem($q) ? true : false;  /// XXX use prepared select properly.. how?
+        return Sql::pSelectItem($q, $reflect->str, $reflect->vals) ? true : false;
     }
 
     /**
@@ -324,7 +323,7 @@ class SqlObject
 
         if (!is_numeric($obj->id))
             throw new Exception ('bad data'. $obj->id);
-
+throw new Exception ('XXX use reflectQuery2');
         $vals = self::reflectQuery($obj, $field_name);
 
         $q =
