@@ -15,7 +15,7 @@ require_once('YuiDatatable.php');
 
 echo '<h1>Private messages</h1>';
 
-echo '<h2>Inbox</h2>';
+//echo '<h2>Inbox</h2>';
 $list = Message::getInbox($session->id);
 //d($list);
 
@@ -23,16 +23,25 @@ $dt = new YuiDatatable();
 $dt->setCaption('Inbox');
 $dt->addColumn('from',         'From');    /// XXXX show username, show link to user page
 $dt->addColumn('time_sent',    'Sent');
-$dt->addColumn('subject',      'Subject');
+$dt->addColumn('body',         'Msg');
 $dt->setSortOrder('time_sent', 'desc');
 $dt->setDataList( $list );
 echo $dt->render();
 
 
 
-echo '<h2>Outbox</h2>';
+//echo '<h2>Outbox</h2>';
 $list = Message::getOutbox($session->id);
-d($list);
+//d($list);
+
+$dt = new YuiDatatable();
+$dt->setCaption('Outbox');
+$dt->addColumn('to',           'To');    /// XXXX show username, show link to user page
+$dt->addColumn('time_sent',    'Sent');
+$dt->addColumn('body',         'Msg');
+$dt->setSortOrder('time_sent', 'desc');
+$dt->setDataList( $list );
+echo $dt->render();
 
 
 ?>

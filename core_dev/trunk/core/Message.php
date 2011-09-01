@@ -18,7 +18,7 @@ class Message
     var $to;
     var $time_sent;
     var $time_read;
-    var $subject;
+//    var $subject;   // quite useless, so removed
     var $body;
 
     protected static $tbl_name = 'tblMessages';
