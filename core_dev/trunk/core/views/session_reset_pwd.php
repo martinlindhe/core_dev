@@ -28,13 +28,11 @@ if ($session->id && $user_id != $session->id)
 if ($session->id)
     echo '<div class="critical">You are already logged in! Are you sure you want to reset your password?</div>';
 
-$user = new User($user_id);
-
 if (isset($_POST['reset_pwd']) && isset($_POST['reset_pwd2']))
 {
     /// TODO reuse code from register user
     if ($_POST['reset_pwd'] == $_POST['reset_pwd2']) {
-        $user->setPassword($_POST['reset_pwd']);
+        UserHandler::setPassword($user_id, $_POST['reset_pwd']);
         $session->login($user->name, $_POST['reset_pwd']);
         echo '<div class="okay">Your password has been reset. You have been logged in.</div>';
 

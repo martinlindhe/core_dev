@@ -76,6 +76,27 @@ class UserHandler
         $q = 'SELECT * FROM tblLogins WHERE userId = ? ORDER BY timeCreated DESC';
         return Sql::pSelect($q, 'i', $id);
     }
+
+    /**
+     * Sets a new password for the user
+     *
+     * @param $_id user id
+     * @param $_pwd password to set
+     */
+    public static function setPassword($id, $pwd)
+    {
+        $session = SessionHandler::getInstance();
+
+        Sql::pUpdate(
+        'UPDATE tblUsers SET userPass = ? WHERE userId = ?',
+        'si',
+        sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
+        $id
+        );
+
+        return true;
+    }
+
 /*
     function render() /// XXXX move to a view
     {

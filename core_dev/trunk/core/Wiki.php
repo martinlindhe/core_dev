@@ -267,8 +267,7 @@ class Wiki
 
         echo t('Last edited').' ';
         if ($this->timestamp) {
-            $editor = new User($this->editorId);
-            echo formatTime($this->timestamp).' '.t('by').' '.$editor->getName();
+            echo formatTime($this->timestamp).' '.t('by').' '.User::get($this->editorId)->name;
         } else
             echo t('never');
 
@@ -288,8 +287,13 @@ class Wiki
 
         if ($this->text) {
             echo t('Current version').':<br/>';
-            $editor = new User($this->editorId);
-            echo '<b><a href="#" onclick="return toggle_element(\'layer_history_current\')">'.t('Edited').' '.formatTime($this->timestamp).' '.t('by').' '.$editor->getName().' ('.strlen($this->text).' '.t('characters').')</a></b><br/>';
+
+            echo
+            '<b><a href="#" onclick="return toggle_element(\'layer_history_current\')">'.
+            t('Edited').' '.formatTime($this->timestamp).' '.
+            t('by').' '.User::get($this->editorId)->name.' ('.strlen($this->text).' '.
+            t('characters').')</a></b><br/>';
+
             echo '<div id="layer_history_current" class="revision_entry">';
             echo nl2br(htmlentities($this->text, ENT_COMPAT, 'UTF-8'));
             echo '</div>';

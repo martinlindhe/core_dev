@@ -60,8 +60,7 @@ $list = Comment::get($this->type, $this->owner);
 
 foreach ($list as $c)
 {
-    $user = new User($c->creator);
-    echo $user->render().' wrote: ';
+    echo User::get($c->creator)->name.' wrote: ';
 
     echo nl2br($c->msg).'<br/>';
 

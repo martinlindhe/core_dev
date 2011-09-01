@@ -130,7 +130,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
         switch ($type) {
         case 'normal':
-            $user = new User($username);
+            $user = User::getByName($username);
             break;
 
         case 'facebook':
@@ -139,7 +139,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         default: throw new Exception ('hmm '.$type);
         }
 
-        if (!$user->getId()) {
+        if (!$user->id) {
             $error->add('Login failed - user not found1');
             return false;
         }
@@ -150,9 +150,9 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
         $x = Sql::pSelectItem($q,
         'issi',
-        $user->getId(),
+        $user->id,
         $username,
-        sha1( $user->getId() . sha1($this->encrypt_key) . sha1($pwd) ),  // encrypted password
+        sha1( $user->id . sha1($this->encrypt_key) . sha1($pwd) ),  // encrypted password
         $user->type
         );
 
@@ -162,12 +162,12 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             return false;
         }
 
-        $this->id = $user->getId();
+        $this->id = $user->id;
         $this->ip = client_ip();
         $this->username = $username;
         $this->type = $type;
 
-        $this->usermode = $user->getUserLevel();
+        $this->usermode = UserHandler::getUserLevel($user->id);
 
         if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
         if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
@@ -175,7 +175,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
         $q =
         'UPDATE tblUsers SET time_last_login = NOW(), time_last_active = NOW(), last_ip = ?'.
-        ' WHERE userId = ?';
+        ' WHERE id = ?';
 
         Sql::pUpdate($q, 'si', client_ip(), $this->id);
 

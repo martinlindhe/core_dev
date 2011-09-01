@@ -75,7 +75,7 @@ class User
 
     protected static $tbl_name = 'tblUsers';
 
-    static function get($id)
+    public static function get($id)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -85,14 +85,18 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-    function getByName($name)
+    public static function getByName($name)
     {
-        $q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND userName = ?';
+        $q = 'SELECT * FROM tblUsers WHERE time_deleted IS NULL AND name = ?';
         $row = Sql::pSelectRow($q, 's', $name);
 
         if (!$row) return false;
         return SqlObject::loadObject($row, __CLASS__);
     }
+
+
+
+
 
 
     /**
@@ -102,8 +106,7 @@ class User
     {
         $username = trim($username);
 
-        $user = new User();
-        if ($user->loadByName($username))
+        if (User::getByName($username))
             return false;
 
         $this->name = $username;
@@ -124,28 +127,8 @@ class User
      */
     function remove()
     {
-        $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId = ?';
+        $q = 'UPDATE tblUsers SET time_deleted = NOW() WHERE id = ?';
         Sql::pUpdate($q, 'i', $this->id);
-    }
-
-    /**
-     * Sets a new password for the user
-     *
-     * @param $_id user id
-     * @param $_pwd password to set
-     */
-    function setPassword($pwd)
-    {
-        $session = SessionHandler::getInstance();
-
-        Sql::pUpdate(
-        'UPDATE tblUsers SET userPass = ? WHERE userId = ?',
-        'si',
-        sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
-        $this->id
-        );
-
-        return true;
     }
 
 }

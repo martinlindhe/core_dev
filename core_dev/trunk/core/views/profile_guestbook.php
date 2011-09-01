@@ -16,7 +16,7 @@ if (!$this->owner)
     $user_id = $session->id;
 
 
-$user = new User($user_id);
+$user = User::get($user_id);
 
 echo '<h1>Guestbook for '.$user->name.'</h1>';
 
