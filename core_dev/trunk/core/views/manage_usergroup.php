@@ -32,7 +32,7 @@ $form = new XhtmlForm('adm_usergroup');
 $form->addHidden('g_id', $grp->getId() ); //XXXX hax
 $form->addInput('name', 'Group name', $grp->getName() );
 $form->addTextarea('info', 'Info', $grp->getInfo() );
-$form->addDropdown('level', 'Level', User::getUserLevels(), $grp->getLevel() );
+$form->addDropdown('level', 'Level', getUserLevels(), $grp->getLevel() );
 
 $form->addSubmit('Save');
 $form->setHandler('saveUserGroupSubmit');

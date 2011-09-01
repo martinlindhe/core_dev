@@ -2,8 +2,10 @@ Autumn 2011 cleanup:
 
 
 User profile
-    * write a default view for a user profile (send message, write in guestbook, is online?, chat 1-to-1, see gallery)
+    * make static User object mapped to tblUsers
+    * ability to edit own info (email, profile pic)
     * ability for more "userdata", like profile picture, home town, gender (revive functions_userdata.php)
+    * link to: chat 1-to-1, see gallery
 
 
 Messages
@@ -25,7 +27,7 @@ Chat
     * need chat rooms (+ ability for admin to create new rooms on the fly)
 
 
-Image gallery
+Gallery
     * drop / rewrite of functions_fileareas.php
     * rather use some nice-looking js image viewer
 
@@ -42,7 +44,7 @@ DB CHECKER:
     * all classes that is 1-to-1 mapped to a db table should extend from a common class (SqlObject?)
     * do a checker that includes all core/*.php files and iterates over all known classes and finds
         those who extend from SqlObject, and does some special code to compare tbl structure vs class properties
-    * add this to the coredev/selftest eventually (?) may be heavy operation
+    * add this to the coredev/selftest eventually (?) may be heavy operation; if so use a memcached variable to only do it once in a while?
 
 
 sql debugger: ability to test-run sql queries in the browser

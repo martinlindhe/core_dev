@@ -13,8 +13,6 @@
 
 //STATUS: wip
 
-//XXX TODO merge with SqlObject ???
-
 //REQUIRES PHP 5.3+
 
 class Sql

@@ -9,15 +9,39 @@
 
 //STATUS: wip. REWRITE using static User object
 
+require_once('UserSetting.php');
+
 define('USERLEVEL_NORMAL',      0);
 define('USERLEVEL_WEBMASTER',   1);
 define('USERLEVEL_ADMIN',       2);
 define('USERLEVEL_SUPERADMIN',  3);
 
-require_once('UserSetting.php');
-
 define('USER_REGULAR',  1);
 define('USER_FACEBOOK', 2);
+
+function getUserLevels()
+{
+    return array(
+    USERLEVEL_NORMAL     => 'Normal',
+    USERLEVEL_WEBMASTER  => 'Webmaster',
+    USERLEVEL_ADMIN      => 'Admin',
+    USERLEVEL_SUPERADMIN => 'Super Admin',
+    );
+}
+
+function getUserLevelName()
+{
+    $x = getUserLevels();
+    return $x[ $this->userlevel ];
+}
+
+function getUserTypes()
+{
+    return array(
+    USER_REGULAR   => 'Regular',
+    USER_FACEBOOK  => 'Facebook',
+    );
+}
 
 class FacebookUser extends User
 {
@@ -53,24 +77,6 @@ class User
             $this->loadByName($s);
     }
 
-    static function getUserLevels()
-    {
-        return array(
-        USERLEVEL_NORMAL     => 'Normal',
-        USERLEVEL_WEBMASTER  => 'Webmaster',
-        USERLEVEL_ADMIN      => 'Admin',
-        USERLEVEL_SUPERADMIN => 'Super Admin',
-        );
-    }
-
-    static function getUserTypes()
-    {
-        return array(
-        USER_REGULAR   => 'Regular',
-        USER_FACEBOOK  => 'Facebook',
-        );
-    }
-
     function getId() { return $this->id; }
     function getName() { return $this->name; }
     function getTimeCreated() { return $this->time_created; }
@@ -99,7 +105,7 @@ class User
         $this->time_last_active = $row['timeLastActive'];
         $this->last_ip          = $row['lastIp'];
 
-        $this->email = $this->loadSetting('email');
+        $this->email = UserSetting::get($this->id, 'email');
 
         $this->is_online = false;
 
@@ -108,40 +114,22 @@ class User
         if (ts($this->time_last_active) > time() - $session->online_timeout)
             $this->is_online = true;
 
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT t2.level FROM tblGroupMembers AS t1'.
         ' INNER JOIN tblUserGroups AS t2 ON (t1.groupId=t2.groupId)'.
         ' WHERE t1.userId = ?'.
         ' ORDER BY t2.level DESC LIMIT 1';
 
-        $l = $db->pSelectItem($q, 'i', $this->id);
+        $l = Sql::pSelectItem($q, 'i', $this->id);
         $this->userlevel = $l ? $l : 0;
     }
 
-    function loadSetting($name)
-    {
-        return UserSetting::get($this->id, $name);
-    }
-
-    function saveSetting($name, $val)
-    {
-        return UserSetting::set($this->id, $name, $val);
-    }
-
-    function deleteSetting($name)
-    {
-        return UserSetting::delete($this->id, $name);
-    }
 
     function loadById($id)
     {
         if (!is_numeric($id)) return false;
 
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND userId = ?';
-        $row = $db->pSelectRow($q, 'i', $id);
+        $row = Sql::pSelectRow($q, 'i', $id);
 
         if (!$row) return false;
         $this->loadFromSql($row);
@@ -151,10 +139,8 @@ class User
 
     function loadByName($name)
     {
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT * FROM tblUsers WHERE timeDeleted IS NULL AND userName = ?';
-        $row = $db->pSelectRow($q, 's', $name);
+        $row = Sql::pSelectRow($q, 's', $name);
 
         if (!$row) return false;
         $this->loadFromSql($row);
@@ -167,7 +153,6 @@ class User
      */
     function create($username, $type = USER_REGULAR)
     {
-        $db = SqlHandler::getInstance();
         $username = trim($username);
 
         $user = new User();
@@ -179,7 +164,7 @@ class User
         $this->last_ip = client_ip();
 
         $q = 'INSERT INTO tblUsers SET timeCreated=NOW(),userName = ?,userType = ?, lastIp = ?';
-        $this->id = $db->pInsert($q, 'sis', $this->name, $this->type, $this->last_ip);
+        $this->id = Sql::pInsert($q, 'sis', $this->name, $this->type, $this->last_ip);
 
         $session = SessionHandler::getInstance();
 
@@ -193,10 +178,8 @@ class User
      */
     function remove()
     {
-        $db = SqlHandler::getInstance();
-
         $q = 'UPDATE tblUsers SET timeDeleted=NOW() WHERE userId = ?';
-        $db->pUpdate($q, 'i', $this->id);
+        Sql::pUpdate($q, 'i', $this->id);
     }
 
     /** Adds the user to a user group */
@@ -204,14 +187,12 @@ class User
     {
         if (!is_numeric($n)) return false;
 
-        $db = SqlHandler::getInstance();
-
-        $q = 'SELECT COUNT(*) FROM tblGroupMembers WHERE groupId='.$n.' AND userId='.$this->id;
-        if ($db->getOneItem($q))
+        $q = 'SELECT COUNT(*) FROM tblGroupMembers WHERE groupId = ? AND userId = ?';
+        if (Sql::pSelectItem($q, 'ii', $n, $this->id))
             return true;
 
-        $q = 'INSERT INTO tblGroupMembers SET groupId='.$n.',userId='.$this->id;
-        $db->insert($q);
+        $q = 'INSERT INTO tblGroupMembers SET groupId = ?, userId = ?';
+        Sql::pInsert($q, 'ii', $n, $this->id);
         return true;
     }
 
@@ -219,20 +200,16 @@ class User
     {
         if (!is_numeric($n)) return false;
 
-        $db = SqlHandler::getInstance();
-
-        $q = 'DELETE FROM tblGroupMembers WHERE groupId='.$n.' AND userId='.$this->id;
-        $db->delete($q);
+        $q = 'DELETE FROM tblGroupMembers WHERE groupId = ? AND userId = ?';
+        Sql::pDelete($q, 'ii', $n, $this->id);
         return true;
     }
 
     /** Returns a list of UserGroup objects for all groups the user is a member of */
     function getGroups()
     {
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT groupId FROM tblGroupMembers WHERE userId = ?';
-        $res = $db->pSelect1d($q, 'i', $this->id);
+        $res = Sql::pSelect1d($q, 'i', $this->id);
 
         $groups = array();
         foreach ($res as $grp_id)
@@ -244,13 +221,6 @@ class User
     /** Returns the highest access level from group membership */
     function getUserLevel() { return $this->userlevel; }
 
-    function getUserLevelName()
-    {
-        $x = User::getUserLevels();
-
-        return $x[ $this->userlevel ];
-    }
-
     /**
      * Sets a new password for the user
      *
@@ -259,10 +229,9 @@ class User
      */
     function setPassword($pwd)
     {
-        $db = SqlHandler::getInstance();
         $session = SessionHandler::getInstance();
 
-        $db->pUpdate(
+        Sql::pUpdate(
         'UPDATE tblUsers SET userPass = ? WHERE userId = ?',
         'si',
         sha1( $this->id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
@@ -274,10 +243,8 @@ class User
 
     function getLoginHistory()
     {
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT * FROM tblLogins WHERE userId = ? ORDER BY timeCreated DESC';
-        return $db->pSelect($q, 'i', $this->id);
+        return Sql::pSelect($q, 'i', $this->id);
     }
 
     function render() /// XXXX move to a view

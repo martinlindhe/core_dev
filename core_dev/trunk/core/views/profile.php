@@ -1,4 +1,7 @@
 <?php
+/**
+ * Default view for a user profile
+ */
 
 if (!$session->id)
     die('XXX profile only for logged in users');

@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-//XXX merge with Sql.php ?
+//XXX move some of the methods to Sql.php
 
 require_once('Sql.php');
 

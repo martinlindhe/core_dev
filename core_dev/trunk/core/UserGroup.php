@@ -39,8 +39,7 @@ class UserGroup
 
     function getLevelDesc()
     {
-        $x = User::getUserLevels();
-        return $x[ $this->level ];
+        return getUserLevelName( $this->level );
     }
 
     function setName($s) { $this->name = $s; }
