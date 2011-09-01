@@ -15,19 +15,6 @@ require_once('YuiDatatable.php');
 
 echo '<h1>Private messages</h1>';
 
-
-
-/*
-    $m = new Message();
-    $m->from = 55;
-    $m->to   = $session->id;
-    $m->time_sent = sql_datetime( time() );
-    $m->subject   = 'Hello world';
-    $m->body      = "hej svejs där din gamle räv!";
-    Message::store($m);
-*/
-
-
 echo '<h2>Inbox</h2>';
 $list = Message::getInbox($session->id);
 //d($list);

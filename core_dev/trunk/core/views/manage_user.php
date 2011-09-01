@@ -26,6 +26,8 @@ if (!$user->getId()) {
 
 echo '<h1>User admin for '.$user->getName().'</h1>';
 
+echo '&raquo; '.ahref('coredev/view/profile/'.$user->id, 'Show profile').'<br/>';
+
 if ($user->getType() == USER_FACEBOOK)
 {
     echo '<h2>Facebook account</h2>';

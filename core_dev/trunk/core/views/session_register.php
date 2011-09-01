@@ -25,10 +25,9 @@ if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_PO
 {
     $reg = RegisterHandler::getInstance();
 
-    if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2'])) {
-        $session->login($_POST['register_usr'], $_POST['register_pwd']);
-        return;
-    }
+    if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']))
+        if ($session->login($_POST['register_usr'], $_POST['register_pwd']))
+            $session->showStartPage();
 
     // after form submit, put focus back to the register form
     $header->embedJsOnload('show_reg_form();');

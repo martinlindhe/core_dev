@@ -3,17 +3,20 @@
 if (!$session->id)
     die('XXX profile only for logged in users');
 
-if ($this->owner)
-    throw new Exception ('fixme show profile for id '.$this->owner);
-
 $user_id = $session->id;
 
+if ($this->owner)
+    $user_id = $this->owner;
 
-echo '<h1>User profile</h1>';
 
 $user = new User($user_id);
 
+echo '<h1>Profile for '.$user->name.'</h1>';
+
 d($user);
+
+if ($session->id && $user_id != $session->id)
+    echo '&raquo; '.ahref('coredev/view/profile_message/'.$user_id, 'Send message').'<br/>';
 
 echo '&raquo; '.ahref('coredev/view/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
 
