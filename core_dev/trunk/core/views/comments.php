@@ -1,17 +1,20 @@
 <?php
 /**
  * Default view for a list of comments
+ *
+ * INPUT PARAMS:
+ *   $this->type   - comment type
+ *   $this->owner  - owner object
  */
 
 //STATUS: unfinished
 
-//TODO: integrate captcha from Comments_borked.php
 //TODO: pagination? or auto-hide some comments
+//TODO: ability to create private comments (tbl flag is there)
+//TODO: allow anon comments with Captcha (?)
+//TODO: smaller input box
 
 
-// INPUT PARAMS:
-//   $this->type   - comment type
-//   $this->owner  - owner object
 
 require_once('User.php');
 

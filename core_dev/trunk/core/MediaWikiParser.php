@@ -17,13 +17,16 @@ class MediaWikiParser
     public static function parseArticle($markup)
     {
         $pos = strpos($markup, '==');
-        if ($pos === false)
-            throw new Exception ('unexpected wiki format '.$markup);
+        if ($pos !== false)
+            $intro = substr($markup, 0, $pos);
+        else
+        {
+            //like: "#OMDIRIGERING [[Släkt#Släktskapstermer]] [[da:Faster]]"
+            $intro = $markup;
+        }
 
-        $intro = substr($markup, 0, $pos);
 
         //XXX strip all text inside {{blabla}}
-
 
 
         $obj = new MediaWikiArticle();
