@@ -290,59 +290,6 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     }
 
     /**
-     * @return array of ApiCustomer objects that is owned by groups that current user is a member of
-     */
-    function getApiAccounts() //XXX this dont belong here!
-    {
-        $u = new User($this->id);
-
-        $res = array();
-
-        foreach ($u->getGroups() as $grp)
-        {
-            $api_accts = new ApiCustomerList( $grp->getId() );
-            foreach ($api_accts->getCustomers() as $acc)
-                $res[] = $acc;
-        }
-
-        return $res;
-    }
-
-    /**
-     * @return array with api account id:s that is owned by groups that current user is a member of
-     */
-    function getApiAccountIds()  //XXX this dont belong here!
-    {
-        $u = new User($this->id);
-
-        $res = array();
-
-        foreach ($u->getGroups() as $grp)
-        {
-            $api_accts = new ApiCustomerList( $grp->getId() );
-            foreach ($api_accts->getCustomers() as $acc)
-                $res[] = $acc->getId();
-        }
-
-        return $res;
-    }
-
-    /**
-     * @return true if user is member of a UserGroup which owns api account $id
-     */
-    function ownsApiAccount($id)  //XXX this dont belong here!
-    {
-        if ($this->isSuperAdmin)
-            return true;
-
-        foreach ($this->getApiAccounts() as $acc)
-            if ($acc->getId() == $id)
-                return true;
-
-        return false;
-    }
-
-    /**
      * Locks registered users out from certain pages, such as registration page
      */
     function requireLoggedOut()
