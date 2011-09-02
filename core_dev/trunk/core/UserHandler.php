@@ -10,7 +10,7 @@
 //STATUS: ripped out from User
 // XXX code needs updating in coredev user admin, user registration & user login & user forgot password
 
-class UserHandler
+class UserHandler  /// XXX rename, UserHelper ??
 {
     public static function isOnline($id)
     {

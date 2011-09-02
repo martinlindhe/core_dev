@@ -17,17 +17,27 @@ echo 'Host: <b>'.$db->host.':'.$db->port.'</b><br/>';
 echo 'Username: <b>'.$db->username.'</b><br/>';
 // echo 'Password: '.($db->password ? $db->password : '(blank)').'<br/>';
 echo 'Database: '.$db->database.'<br/>';
-echo 'Configured charset: '.$db->charset.'<br/>';
-
+echo 'Configured charset: <b>'.$db->charset.'</b><br/>';
+echo '<br/>';
 
 
 $q = 'SHOW GRANTS FOR CURRENT_USER';
-$priv = Sql::pSelectItem($q);
-// example:  GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER ON *.* TO 'root'@'%' IDENTIFIED BY PASSWORD '*xxx'
-// example2: GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY PASSWORD '*xxx' WITH GRANT OPTION
+$priv = Sql::pSelect($q);
+
+// ex:  GRANT USAGE ON *.* TO 'savak'@'%' IDENTIFIED BY PASSWORD '*0...
+// ex:  GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, ALTER ON *.* TO 'root'@'%' IDENTIFIED BY PASSWORD '*xxx'
+// ex:  GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY PASSWORD '*xxx' WITH GRANT OPTION
 
 /// XXXXX FIXME: censor password from string instead of cut it!!!!
-echo 'Privilegies: <b>'.substr($priv, 0, 70).'</b>...<br/>';
+//d($priv);
+echo '<h2>Privileges</h2>';
+foreach ($priv as $p)
+{
+    $key = key($p);
+    $val = current($p);
+
+    echo $key.': <b>'.substr($val, 0, 60).'</b>...<br/>';
+}
 echo'<br/>';
 
 
