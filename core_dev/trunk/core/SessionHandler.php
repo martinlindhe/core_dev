@@ -139,7 +139,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         default: throw new Exception ('hmm '.$type);
         }
 
-        if (!$user->id) {
+        if (!$user || !$user->id) {
             $error->add('Login failed - user not found1');
             return false;
         }

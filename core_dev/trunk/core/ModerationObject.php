@@ -2,12 +2,13 @@
 /**
  * $Id$
  *
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: early!! will eventually replace atom_moderation.php
+//STATUS: wip! will  replace atom_moderation.php
 
 // ModerationObject types:
-define('MODERATE_CHANGE_USERNAME', 1);
+define('MODERATE_CHANGE_USERNAME', 1);   // data holds new username
 
 function getModerationTypes()
 {

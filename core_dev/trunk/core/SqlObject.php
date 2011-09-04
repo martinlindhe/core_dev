@@ -293,7 +293,10 @@ class SqlObject
         $q =
         'UPDATE '.$tblname.
         ' SET '.implode(', ', $reflect->cols).
-        ' WHERE '.$field_name.' = '.$obj->id;
+        ' WHERE '.$field_name.' = ?';
+
+        $reflect->str .= 'i';
+        $reflect->vals[] = $obj->id;
 
         return Sql::pUpdate($q, $reflect->str, $reflect->vals);
     }

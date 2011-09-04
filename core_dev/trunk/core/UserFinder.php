@@ -29,7 +29,8 @@ class UserFinder
     static function byUsername($name)
     {
         $user = User::getByName($name);
-        if ($user->id)
+
+        if ($user && $user->id)
             return $user->id;
 
         return false;

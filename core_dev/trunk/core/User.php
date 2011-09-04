@@ -96,8 +96,10 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-
-
+    static function store($obj)
+    {
+        return SqlObject::store($obj, self::$tbl_name, 'id');
+    }
 
 
 

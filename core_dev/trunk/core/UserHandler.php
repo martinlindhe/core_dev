@@ -83,13 +83,17 @@ class UserHandler  /// XXX rename, UserHelper ??
     {
         $session = SessionHandler::getInstance();
 
-        Sql::pUpdate(
-        'UPDATE tblUsers SET password = ? WHERE id = ?',
-        'si',
-        sha1( $id.sha1( $session->getEncryptKey() ).sha1($pwd) ),
-        $id
-        );
+        $u = User::get($id);
+        $u->password = sha1( $id.sha1( $session->getEncryptKey() ).sha1($pwd) );
+        User::store($u);
+        return true;
+    }
 
+    public static function setUsername($id, $username)
+    {
+        $u = User::get($id);
+        $u->name = $username;
+        User::store($u);
         return true;
     }
 

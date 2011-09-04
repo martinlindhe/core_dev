@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+require_once('XmlDocumentHandler.php');
+
 //STATUS: wip
 
 //TODO in js_reload() & js_redirect(): throw exception if server outputted errors during this page load. how to check that?
@@ -45,7 +47,7 @@ function redir($dst)
 /** @param $url partial url to generate a url relative website base */
 function relurl($url)
 {
-    if (substr($url, 0, 4) == 'http' || substr($url, 0, 1) == '/')
+    if (substr($url, 0, 4) == 'http' || substr($url, 0, 1) == '/' || substr($url, 0, 1) == '?')
         return $url;
 
     $page = XmlDocumentHandler::getInstance();
