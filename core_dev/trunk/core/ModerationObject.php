@@ -29,6 +29,11 @@ class ModerationObject
 
     protected static $tbl_name = 'tblModerationObjects';
 
+    static function get($id)
+    {
+        return SqlObject::getById($id, self::$tbl_name, __CLASS__);
+    }
+
     static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');

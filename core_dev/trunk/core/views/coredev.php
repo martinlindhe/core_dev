@@ -82,6 +82,7 @@ case 'view':
 
     $view = new ViewModel($file);
     $view->registerVar('owner', $this->child);
+    $view->registerVar('child', $this->child2);
     echo $view->render();
     break;
 

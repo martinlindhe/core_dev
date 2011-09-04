@@ -23,6 +23,7 @@ class RequestHandler
     protected $_view = 'default';     ///< /controller/VIEW/owner/        XXX view parameter for the "controller", or later will be the method to run on the controller
     protected $_owner = '';           ///< /controller/view/OWNER/        alphanumeric id
     protected $_child = '';           ///< /controller/view/owner/CHILD/  alphanumeric id
+    protected $_child2 = '';          ///< /controller/view/owner/child/CHILD2/  alphanumeric id
     protected $exclude_session = array();
 
     private function __clone() {}      //singleton: prevent cloning of class
@@ -91,6 +92,12 @@ class RequestHandler
                     die('XXX child');
                 $this->_child = $arr[3];
             }
+
+            if (!empty($arr[4])) {
+                if (!is_alphanumeric($arr[4]))
+                    die('XXX child4');
+                $this->_child2 = $arr[4];
+            }
         }
     }
 
@@ -123,6 +130,7 @@ class RequestHandler
         $view->view   = $this->_view;
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;
+        $view->child2 = $this->_child2;
 
         $page->attach( $view->render() );
 
