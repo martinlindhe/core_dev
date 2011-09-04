@@ -1,5 +1,7 @@
 Autumn 2011 cleanup:
 
+XXX: ability to login using registered email
+
 
 User profile
 WIP * make static User object mapped to tblUsers

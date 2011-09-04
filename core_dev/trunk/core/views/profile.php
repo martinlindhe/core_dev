@@ -27,4 +27,7 @@ if ($session->id && $user_id != $session->id)
 
 echo '&raquo; '.ahref('coredev/view/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
 
+if ($session->id && $user_id == $session->id)
+    echo '&raquo; '.ahref('coredev/view/profile_edit', 'Edit profile').'<br/>';
+
 ?>
