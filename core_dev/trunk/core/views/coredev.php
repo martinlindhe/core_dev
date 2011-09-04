@@ -55,6 +55,8 @@ case 'admin':
     $session->requireSuperAdmin();
 
     echo '<h1>core_dev admin</h1>';
+    echo ahref('coredev/view/moderation', 'Moderation queue').'<br/>';
+    echo '<br/>';
     echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
     echo ahref('coredev/view/manage_usergroups', 'Manage user groups').'<br/>';
     echo '<br/>';

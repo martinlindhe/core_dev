@@ -18,9 +18,6 @@ case 'default':
     break;
 
 case 'username':
-    echo '<h1>Change username</h1>';
-
-    //XXX do user have a pending request for username change??
 
     function handleSubmit($p)
     {
@@ -37,9 +34,15 @@ case 'username':
 
         ModerationObject::store($c);
 
-        echo 'Your request for username change have been submitted and will be handled soon!';
-        return true;
+        echo '<div class="good">Your request for username change have been submitted and will be handled soon!</div>';
     }
+
+    echo '<h1>Change username</h1>';
+
+    echo 'We will review your request to change username as soon as possible!<br/><br/>';
+
+    //XXX do user have a pending request for username change??
+
 
     // XXXX FIXME: use js validation from register view
     $form = new XhtmlForm('chg_user');
