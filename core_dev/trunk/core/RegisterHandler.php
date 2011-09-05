@@ -14,7 +14,7 @@
 
 require_once('User.php');
 
-class RegisterHandler
+class RegisterHandler // XXXX merge with UserHandler?
 {
     static $_instance; ///< singleton
 
@@ -85,10 +85,23 @@ class RegisterHandler
             return false;
         }
 
-        if (!UserHandler::create($username, $pwd1)) {
+        $o = new User();
+        $o->name = $username;
+        $o->type = USER_REGULAR;
+        $o->time_created = sql_datetime( now() );
+        $o->id = User::store($o);
+
+        if (!$o->id) {
             $error->add('Failed to create user');
             return false;
         }
+
+        $o->password = self::encryptPassword($o->id, $password);
+        User::store($o);
+
+        $session = SessionHandler::getInstance();
+
+        dp($session->getUsername().' created user '.$username.' ('.$o->id.') of type '.$type);
 
         if ($this->post_reg_callback)
             call_user_func($this->post_reg_callback, $user->getId());

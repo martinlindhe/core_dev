@@ -10,7 +10,7 @@
 //STATUS: ripped out from User
 // XXX code needs updating in coredev user admin, user registration & user login & user forgot password
 
-class UserHandler  /// XXX rename, UserHelper ??
+class UserHandler  /// XXX merge with RegisterHandler ???
 {
     public static function isOnline($id)
     {
@@ -105,32 +105,6 @@ class UserHandler  /// XXX rename, UserHelper ??
         $u->name = $username;
         User::store($u);
         return true;
-    }
-
-    /**
-     * Creates a new user
-     */
-    public static function create($username, $password, $type = USER_REGULAR)
-    {
-        $username = trim($username);
-
-        if (User::getByName($username))
-            return false;
-
-        $o = new User();
-        $o->name = $username;
-        $o->type = $type;
-        $o->time_created = sql_datetime( now() );
-        $o->id = User::store($o);
-
-        $o->password = self::encryptPassword($o->id, $password);
-        User::store($o);
-
-        $session = SessionHandler::getInstance();
-
-        dp($session->getUsername().' created user '.$username.' ('.$o->id.') of type '.$type);
-
-        return $o->id;
     }
 
 
