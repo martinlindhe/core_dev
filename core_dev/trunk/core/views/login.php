@@ -40,6 +40,10 @@ if ($show_recover_div)
     echo '</div>';
 }
 
+// include js validation snippets
+$view = new ViewModel('views/js_validation.php');
+echo $view->render();
+
 $header->embedCss(
 '.login_box{'.
     'font-size:14px;'.

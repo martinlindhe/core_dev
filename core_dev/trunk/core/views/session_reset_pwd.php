@@ -3,6 +3,11 @@
  *
  */
 
+//STATUS: works (???)
+
+//TODO: use js from views/js_validation.php to check password
+//XXX use XhtmlForm?
+
 require_once('ForgotPasswordHandler.php');
 
 if (!$this->token)
@@ -51,7 +56,7 @@ echo 'Reset password for user <b>'.$user->name.'</b>';
 $header->registerJsFunction(
 'function validate_reset_pwd_form(frm)'.
 '{'.
-    'if (!frm.reset_pwd.value||!frm.reset_pwd2.value)'.//XXX  use js from session_register to check password
+    'if (!frm.reset_pwd.value||!frm.reset_pwd2.value)'.
         'return false;'.
 //    'if (frm.reset_pwd.value!=frm.reset_pwd2.value)'.
 //        'return false;'.
