@@ -8,10 +8,11 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-// TODO FIXME code needs updating in coredev user admin, user forgot password
+//TODO code needs updating in session_forgot_pwd
 
 //TODO: should contain "register user" view with ability to extend registration to contain extra fields (like userdata)
 
+//XXXX: move userlevel & usergroup stuff to separate classes (UserGroupHandler)
 
 require_once('User.php');
 
