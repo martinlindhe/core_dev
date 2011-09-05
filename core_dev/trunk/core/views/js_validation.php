@@ -47,9 +47,12 @@ $header->registerJsFunction(
     'if (fld.value == "") {'.
         'fld.style.background = "Yellow";'.
         'e = "You didn\'t enter a username.\n";'.
-    '} else if ((fld.value.length < 5) || (fld.value.length > 15)) {'. //XXXX read setting from RegisterHandler
+    '} else if (fld.value.length < '.$register->getUsernameMinlen().') {'.
         'fld.style.background = "Yellow";'.
-        'e = "The username is the wrong length.\n";'.
+        'e = "The username is too short (min '.$register->getUsernameMinlen().' characters).\n";'.
+    '} else if (fld.value.length > '.$register->getUsernameMaxlen().') {'.
+        'fld.style.background = "Yellow";'.
+        'e = "The username is too long (max '.$register->getUsernameMaxlen().' characters).\n";'.
     '} else if (illegal.test(fld.value)) {'.
         'fld.style.background = "Yellow";'.
         'e = "The username contains illegal characters.\n";'.

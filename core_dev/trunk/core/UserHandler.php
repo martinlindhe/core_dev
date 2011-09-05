@@ -81,21 +81,58 @@ class UserHandler  /// XXX rename, UserHelper ??
      */
     public static function setPassword($id, $pwd)
     {
-        $session = SessionHandler::getInstance();
-
         $u = User::get($id);
-        $u->password = sha1( $id.sha1( $session->getEncryptKey() ).sha1($pwd) );
+        if (!$u)
+            throw new Exception ('wat');
+
+        $u->password = self::encryptPassword($id, $pwd);
         User::store($u);
         return true;
+    }
+
+    private static function encryptPassword($id, $s)
+    {
+        $session = SessionHandler::getInstance();
+        return sha1( $id.sha1( $session->getEncryptKey() ).sha1($s) );
     }
 
     public static function setUsername($id, $username)
     {
         $u = User::get($id);
+        if (!$u)
+            throw new Exception ('wat');
+
         $u->name = $username;
         User::store($u);
         return true;
     }
+
+    /**
+     * Creates a new user
+     */
+    public static function create($username, $password, $type = USER_REGULAR)
+    {
+        $username = trim($username);
+
+        if (User::getByName($username))
+            return false;
+
+        $o = new User();
+        $o->name = $username;
+        $o->type = $type;
+        $o->time_created = sql_datetime( now() );
+        $o->id = User::store($o);
+
+        $o->password = self::encryptPassword($o->id, $password);
+        User::store($o);
+
+        $session = SessionHandler::getInstance();
+
+        dp($session->getUsername().' created user '.$username.' ('.$o->id.') of type '.$type);
+
+        return $o->id;
+    }
+
 
 /*
     function render() /// XXXX move to a view

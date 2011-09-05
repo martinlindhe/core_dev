@@ -96,6 +96,7 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
+    /** See UserHandler::create() */
     static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
@@ -103,34 +104,14 @@ class User
 
 
 
-    /**
-     * Creates a new user
-     */
-    function create($username, $type = USER_REGULAR)
-    {
-        $username = trim($username);
-
-        if (User::getByName($username))
-            return false;
-
-        $this->name = $username;
-        $this->type = $type;
-
-        $q = 'INSERT INTO tblUsers SET time_created = NOW(), name = ?, type = ?';
-        $this->id = Sql::pInsert($q, 'sis', $this->name, $this->type);
-
-        $session = SessionHandler::getInstance();
-
-        dp($session->getUsername().' created user '.$this->name.' ('.$this->id.') of type '.$this->type);
-
-        return $this->id;
-    }
 
     /**
      * Marks specified user as "deleted"
      */
     function remove()
     {
+        throw new Exception ('XXX update code');
+
         $q = 'UPDATE tblUsers SET time_deleted = NOW() WHERE id = ?';
         Sql::pUpdate($q, 'i', $this->id);
     }

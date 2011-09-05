@@ -21,6 +21,8 @@ class RegisterHandler
     protected $post_reg_callback; ///< function to execute when user registration was complete
 
     protected $username_minlen = 3;
+    protected $username_maxlen = 20;
+
     protected $password_minlen = 6;
 
     private function __clone() {}      //singleton: prevent cloning of class
@@ -35,9 +37,13 @@ class RegisterHandler
     }
 
     function setUsernameMinlen($n) { if (is_numeric($n)) $this->username_minlen = $n; }
+    function setUsernameMaxlen($n) { if (is_numeric($n)) $this->username_maxlen = $n; }
+
     function setPasswordMinlen($n) { if (is_numeric($n)) $this->password_minlen = $n; }
 
     function getUsernameMinlen() { return $this->username_minlen; }
+    function getUsernameMaxlen() { return $this->username_maxlen; }
+
     function getPasswordMinlen() { return $this->password_minlen; }
 
     function setPostRegistrationCallback($s) { $this->post_reg_callback = $s; }
@@ -51,6 +57,11 @@ class RegisterHandler
 
         if (strlen($username) < $this->username_minlen) {
             $error->add('Username must be at least '.$this->username_minlen.' characters long');
+            return false;
+        }
+
+        if (strlen($username) > $this->username_maxlen) {
+            $error->add('Username cant be longer than '.$this->username_maxlen.' characters long');
             return false;
         }
 
@@ -74,14 +85,10 @@ class RegisterHandler
             return false;
         }
 
-        $user = new User();
-        $user->create($username);
-        if (!$user->getId()) {
+        if (!UserHandler::create($username, $pwd1)) {
             $error->add('Failed to create user');
             return false;
         }
-
-        $user->setPassword($pwd1);
 
         if ($this->post_reg_callback)
             call_user_func($this->post_reg_callback, $user->getId());
