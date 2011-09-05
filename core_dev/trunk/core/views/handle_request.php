@@ -1,6 +1,6 @@
 <?php
 
-require_once('RegisterHandler.php');
+require_once('UserHandler.php');
 
 $session->start();
 

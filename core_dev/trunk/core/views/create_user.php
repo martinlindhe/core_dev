@@ -11,9 +11,9 @@ if (!empty($_POST))
         $username = trim($_POST['u_name']);
         $pwd      = trim($_POST['u_pwd']);
 
-        $user = new User();
-        $user->create($username);
-        if (!$user->getId())
+        $user_id = UserHandler::create($username, $pwd);
+
+        if (!$user_id)
             $error->add('Failed to create user');
 
         if ($error->getErrorCount()) {
@@ -21,13 +21,12 @@ if (!empty($_POST))
             return;
         }
 
-        $user->setPassword($pwd);
-        $user->saveSetting('email', $_POST['u_email']);
+        UserSetting::setEmail($user_id, $_POST['u_email']);
 
         if (!empty($_POST['u_grp']))
             $user->addToGroup($_POST['u_grp']);
 
-        echo '<div class="good">New user created. '.ahref('coredev/view/manage_user/'.$user->getId(), $username).'</div>';
+        echo '<div class="good">New user created. '.ahref('coredev/view/manage_user/'.$user_id, $username).'</div>';
     }
 }
 

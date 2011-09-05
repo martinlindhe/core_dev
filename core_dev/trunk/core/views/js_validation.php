@@ -5,7 +5,7 @@
  * javascript based on http://www.webcheatsheet.com/javascript/form_validation.php
  */
 
-$register = RegisterHandler::getInstance();
+$h = UserHandler::getInstance();
 
 $header->registerJsFunction(
 'function validate_reg_form(frm)'.
@@ -47,12 +47,12 @@ $header->registerJsFunction(
     'if (fld.value == "") {'.
         'fld.style.background = "Yellow";'.
         'e = "You didn\'t enter a username.\n";'.
-    '} else if (fld.value.length < '.$register->getUsernameMinlen().') {'.
+    '} else if (fld.value.length < '.$h->getUsernameMinlen().') {'.
         'fld.style.background = "Yellow";'.
-        'e = "The username is too short (min '.$register->getUsernameMinlen().' characters).\n";'.
-    '} else if (fld.value.length > '.$register->getUsernameMaxlen().') {'.
+        'e = "The username is too short (min '.$h->getUsernameMinlen().' characters).\n";'.
+    '} else if (fld.value.length > '.$h->getUsernameMaxlen().') {'.
         'fld.style.background = "Yellow";'.
-        'e = "The username is too long (max '.$register->getUsernameMaxlen().' characters).\n";'.
+        'e = "The username is too long (max '.$h->getUsernameMaxlen().' characters).\n";'.
     '} else if (illegal.test(fld.value)) {'.
         'fld.style.background = "Yellow";'.
         'e = "The username contains illegal characters.\n";'.
@@ -72,8 +72,8 @@ $header->registerJsFunction(
     'if (fld.value == "") {'.
         'fld.style.background = "Yellow";'.
         'e = "You didn\'t enter a password.\n";'.
-    '} else if (fld.value.length < '.$register->getPasswordMinlen().') {'.
-        'e = "The password is too short, minimum '.$register->getPasswordMinlen().' chars.\n";'.
+    '} else if (fld.value.length < '.$h->getPasswordMinlen().') {'.
+        'e = "The password is too short, minimum '.$h->getPasswordMinlen().' chars.\n";'.
         'fld.style.background = "Yellow";'.
     '} else if (illegal.test(fld.value)) {'.
         'e = "The password contains illegal characters.\n";'.

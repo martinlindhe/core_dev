@@ -22,7 +22,7 @@ if (!$superadmin_reg && !$session->allow_registrations)
 // Handle new user registrations
 if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_POST['register_pwd2']))
 {
-    $reg = RegisterHandler::getInstance();
+    $reg = UserHandler::getInstance();
 
     if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']))
         if ($session->login($_POST['register_usr'], $_POST['register_pwd']))
