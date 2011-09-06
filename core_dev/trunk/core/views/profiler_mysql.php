@@ -25,6 +25,7 @@ function print_query($q)
     ' != ',
     'NOW()', ' DATE(',
     ' COUNT(', ' SUM(', ' LENGTH(', ' CHAR_LENGTH(',
+    ' MIN(', ' MAX(',
     );
 
     $decorated = array(
@@ -38,6 +39,7 @@ function print_query($q)
     ' <b>!=</b> ',
     '<b>NOW()</b>', ' <b>DATE</b>(',
     ' <b>COUNT</b>(', ' <b>SUM</b>(', ' <b>LENGTH</b>(', ' <b>CHAR_LENGTH</b>(',
+    ' <b>MIN</b>(',' <b>MAX</b>(',
     );
 
     $query = str_replace($keywords, $decorated, $query);
