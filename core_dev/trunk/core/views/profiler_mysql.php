@@ -24,7 +24,7 @@ function print_query($q)
     ' IS NULL', ' IS NOT NULL', ' DESC', ' ASC',
     ' != ',
     'NOW()', ' DATE(',
-    ' COUNT(', ' SUM(',
+    ' COUNT(', ' SUM(', ' LENGTH(', ' CHAR_LENGTH(',
     );
 
     $decorated = array(
@@ -37,7 +37,7 @@ function print_query($q)
     ' <b>IS NULL</b>', ' <b>IS NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
     ' <b>!=</b> ',
     '<b>NOW()</b>', ' <b>DATE</b>(',
-    ' <b>COUNT</b>(', ' <b>SUM</b>(',
+    ' <b>COUNT</b>(', ' <b>SUM</b>(', ' <b>LENGTH</b>(', ' <b>CHAR_LENGTH</b>(',
     );
 
     $query = str_replace($keywords, $decorated, $query);

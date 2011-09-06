@@ -90,6 +90,19 @@ class SqlObject
     }
 
     /**
+     * Helper function, useful for parsing an object for a XhtmlForm dropdown etc
+     * @return id->name paired array
+     */
+    static function getListAsIdNameArray($arr, $id_name = 'id', $name_name = 'name')   // XXXX rename?
+    {
+        $res = array();
+        foreach ($arr as $o)
+            $res[ $o->$id_name ] = $o->$name_name;
+
+        return $res;
+    }
+
+    /**
      * Creates part of a sql statement out of public properties of $obj
      *
      * @param $obj
