@@ -16,6 +16,7 @@ class XhtmlComponentInput extends XhtmlComponent
     var $id;                ///< xhtml component id
     var $value;             ///< default value
     var $size;              ///< for <input type="text"> the size attribute defines the number of characters that should be visible
+    var $style;
     var $width;             ///< width in pixels
     var $maxlen;
     var $disabled = false;  ///< disable field (make it read only)
@@ -38,6 +39,7 @@ class XhtmlComponentInput extends XhtmlComponent
         ($id ? ' id="'.$id.'"' : '').
         (($this->value || is_string($this->value)) ? ' value="'.$this->value.'"' : '').
         ($this->size ? ' size="'.$this->size.'"': '').
+        ($this->style ? ' style="'.$this->style.'"' : '').
         ($this->maxlen ? ' maxlength="'.$this->maxlen.'"': '').
         ($this->disabled ? ' disabled': '').
         ($this->onchange ? ' onchange="'.$this->onchange.'"': '').

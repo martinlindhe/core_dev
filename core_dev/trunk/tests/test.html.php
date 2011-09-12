@@ -18,7 +18,22 @@ $html =
 
 if (strip_html($html) != 'hello world') echo "FAIL 3\n";
 
-if (relurl('/') != '/')       echo "FAIL 4\n";
-if (relurl('?val') != '?val') echo "FAIL 5\n";
+if (relurl('/') != '/')        echo "FAIL 4\n";
+if (relurl('?val') != '?val')  echo "FAIL 5\n";
+
+if (!is_html_color('#fff'))    echo "FAIL 6\n";
+
+if (!is_html_color('#FFF'))    echo "FAIL 7\n";
+if (!is_html_color('#ff00ff')) echo "FAIL 8\n";
+if (!is_html_color('#FF00FF')) echo "FAIL 9\n";
+
+if (is_html_color('#fft0ff'))  echo "FAIL 10\n";
+
+if (is_html_color('#ff0ff'))   echo "FAIL 11\n";
+if (is_html_color('#ffff'))    echo "FAIL 12\n";
+if (is_html_color('#ff'))      echo "FAIL 13\n";
+if (is_html_color('#f'))       echo "FAIL 14\n";
+if (is_html_color('aff'))      echo "FAIL 15\n";
+
 
 ?>

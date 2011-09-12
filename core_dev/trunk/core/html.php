@@ -13,6 +13,18 @@ require_once('XmlDocumentHandler.php');
 
 //TODO in js_reload() & js_redirect(): throw exception if server outputted errors during this page load. how to check that?
 
+function is_html_color($s)
+{
+    $regexp = '/^\#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/';
+
+    preg_match($regexp, $s, $matches);
+
+    if ($matches && $matches[0] == $s)
+        return true;
+
+    return false;
+}
+
 /**
  * Decodes html entities from input string
  */
