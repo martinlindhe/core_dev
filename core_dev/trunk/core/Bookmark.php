@@ -90,11 +90,11 @@ class Bookmark
 
         $q =
         'DELETE FROM '.self::$tbl_name.
-        ' WHERE owner = '.($owner ? $owner : $session->id).
-        ' AND value = '.$object_id.
-        ' AND type = '.$type;
+        ' WHERE owner = ?'.
+        ' AND value = ?'.
+        ' AND type = ?';
 
-        return Sql::pDelete($q);
+        return Sql::pDelete($q, 'iii', ($owner ? $owner : $session->id), $object_id, $type );
     }
 
 }
