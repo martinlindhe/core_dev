@@ -258,13 +258,17 @@ class XhtmlForm
     }
 
     /** Adds a textarea to the form */
-    function addTextarea($name, $text, $val = '', $width = 0, $height = 0)
+    function addTextarea($name, $text, $val = '', $width = 300, $height = 70)
     {
         $o = new XhtmlComponentTextarea();
         $o->name   = $name;
         $o->value  = $val;
-        $o->width  = $width;
-        $o->height = $height;
+
+        $o->style =
+            'font:14px arial;'.
+            ($width  ? 'width:'.$width.'px;' : '').
+            ($height ? 'height:'.$height.'px;' : '');
+
         $this->add($o, $text);
     }
 

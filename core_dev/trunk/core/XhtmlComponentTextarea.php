@@ -14,12 +14,14 @@ require_once('XhtmlComponent.php');
 class XhtmlComponentTextarea extends XhtmlComponent
 {
     var $value;
+    var $style;
     var $width;
     var $height;
 
     function render()
     {
         return '<textarea name="'.$this->name.'" id="'.$this->name.'"'.
+            ($this->style ? ' style="'.$this->style.'"' : '').
             ($this->width ? ' cols="'.$this->width.'"' : '').
             ($this->height ? ' rows="'.$this->height.'"' : '').
             '>'.$this->value.'</textarea>';
