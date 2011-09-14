@@ -28,7 +28,7 @@ class XhtmlComponentHidden extends XhtmlComponent
         return
         '<input type="hidden"'.
         ' name="'.$this->name.'"'.
-        ' value="'.urlencode($this->value).'"'.
+        ' value="'.htmlspecialchars($this->value).'"'.
         '/>';
     }
 

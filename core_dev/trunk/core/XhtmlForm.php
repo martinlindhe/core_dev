@@ -7,9 +7,9 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method.. only addCaptcha() left!
+//TODO: rework to use OO-captcha, drop all non oo code!
 
-//TODO: if not all form fields is set in a post handling, then dont read any, so callbacks can assume all indexes are set
+//STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method.. only addCaptcha() left!
 
 require_once('ErrorHandler.php');
 require_once('CaptchaRecaptcha.php');
@@ -480,30 +480,30 @@ class XhtmlForm
 
                 if ($e['obj'] instanceof XhtmlComponentHidden) {
                     $res .= $e['obj']->render();
-                } else {
-
-                    if ($e['obj'] instanceof XhtmlComponentCheckbox)
-                    {
-                        if (isset($this->form_data[ $e['obj']->name ]))
-                            $e['obj']->checked = $this->form_data[ $e['obj']->name ];
-                    }
-                    else
-                    {
-                        if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )
-                            $e['obj']->value = $this->form_data[ $e['obj']->name ];
-                    }
-
-                    $res .=
-                    '<tr>'.
-                    ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
-                    $e['obj']->render().'</td>'.
-                    '</tr>';
+                    continue;
                 }
+
+                if ($e['obj'] instanceof XhtmlComponentCheckbox)
+                {
+                    if (isset($this->form_data[ $e['obj']->name ]))
+                        $e['obj']->checked = $this->form_data[ $e['obj']->name ];
+                }
+                else
+                {
+                    if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )
+                        $e['obj']->value = $this->form_data[ $e['obj']->name ];
+                }
+
+                $res .=
+                '<tr>'.
+                ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
+                $e['obj']->render().'</td>'.
+                '</tr>';
+
                 continue;
             }
 
             $res .= '<tr>';
-
 
 
             if (isset($e['value']))

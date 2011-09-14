@@ -15,7 +15,7 @@
 
 		- Can store variables associated with each user for a variety of uses.
 
-		- Editor to modify/delete user settings, using AJAX
+		- Editor to modify/delete user settings
 
 
 ==== Wiki engine ====

@@ -8,6 +8,7 @@
  */
 
 require_once('ISql.php');
+require_once('Sql.php');
 
 //STATUS: wip
 
