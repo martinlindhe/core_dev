@@ -30,6 +30,9 @@ require_once('YuiDateInterval.php');
 require_once('YuiDatePopup.php');
 require_once('YuiRichedit.php');
 
+// other enhanced components:
+require_once('Recaptcha.php');
+
 abstract class XhtmlComponent extends CoreBase
 {
     var $name;

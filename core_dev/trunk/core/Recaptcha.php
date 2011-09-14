@@ -3,30 +3,26 @@
  * $Id$
  *
  * References:
- * http://recaptcha.net/apidocs/captcha/
+ * hhttp://www.google.com/recaptcha/
  * http://code.google.com/p/recaptcha/
  *
  * IMPORTANT:
  * In order to use this web service, you need to register a API key
- * at the following location: http://recaptcha.net/api/getkey
+ * from http://www.google.com/recaptcha/
  *
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
 //STATUS: wip
 
+require_once('XhtmlComponent.php');
 require_once('ErrorHandler.php');
-require_once('Captcha.php');
 require_once('HttpClient.php');
 require_once('html.php');
 
-class CaptchaRecaptcha extends Captcha
+class RecaptchaConfig
 {
     static $_instance;             ///< singleton
-
-    private $api_url        = 'http://www.google.com/recaptcha/api';
-    private $api_url_ssl    = 'https://www.google.com/recaptcha/api';
-    private $api_url_verify = 'http://www.google.com/recaptcha/api/verify';
 
     private $pub_key, $priv_key;
 
@@ -42,15 +38,22 @@ class CaptchaRecaptcha extends Captcha
         return self::$_instance;
     }
 
-    /*
-    * @param $k public recaptcha key
-    */
-    function setPubKey($k) { $this->pub_key = $k; }
+    /* @param $k public recaptcha key */
+    public function setPublicKey($k) { $this->pub_key = $k; }
 
-    /*
-    * @param $k private recaptcha key
-    */
-    function setPrivKey($k) { $this->priv_key = $k; }
+    /* @param $k private recaptcha key */
+    public function setPrivateKey($k) { $this->priv_key = $k; }
+
+    public function getPublicKey() { return $this->pub_key; }
+    public function getPrivateKey() { return $this->priv_key; }
+
+}
+
+class Recaptcha extends XhtmlComponent
+{
+    private $api_url        = 'http://www.google.com/recaptcha/api';
+    private $api_url_ssl    = 'https://www.google.com/recaptcha/api';
+    private $api_url_verify = 'http://www.google.com/recaptcha/api/verify';
 
     /**
      * Verifies a recaptcha
@@ -58,9 +61,11 @@ class CaptchaRecaptcha extends Captcha
      * @param $priv_key private recaptcha key
      * @return true on success
      */
-    function verify()
+    public function verify()
     {
         $error = ErrorHandler::getInstance();
+
+        $conf = RecaptchaConfig::getInstance();
 
         if (empty($_POST['recaptcha_challenge_field']) || empty($_POST['recaptcha_response_field']))
         {
@@ -68,11 +73,11 @@ class CaptchaRecaptcha extends Captcha
             return false;
         }
 
-        if (!$this->pub_key || !$this->priv_key)
+        if (!$conf->getPublicKey() || !$conf->getPrivateKey() )
             die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
 
         $params = array (
-            'privatekey' => $this->priv_key,
+            'privatekey' => $conf->getPrivateKey(),
             'remoteip'   => client_ip(),
             'challenge'  => $_POST['recaptcha_challenge_field'],
             'response'   => $_POST['recaptcha_response_field']
@@ -101,10 +106,12 @@ class CaptchaRecaptcha extends Captcha
      * @param $ssl use SSL to connect to recaptcha.net
      * @return HTML code to display recaptcha
      */
-    function render($ssl = true)
+    public function render($ssl = true)
     {
-        if (!$this->pub_key || !$this->priv_key)
-            die('ERROR - Get Recaptcha API key at http://recaptcha.net/api/getkey');
+        $conf = RecaptchaConfig::getInstance();
+
+        if (!$conf->getPublicKey() || !$conf->getPrivateKey() )
+            die('ERROR - You need a Recaptcha API key');
 
         $server = $ssl ? $this->api_url_ssl : $this->api_url;
 
@@ -135,10 +142,10 @@ class CaptchaRecaptcha extends Captcha
         return
         js_embed('var RecaptchaOptions = { '.$opts.' };').
 
-        '<script type="text/javascript" src="'.$server.'/challenge?k='.$this->pub_key.'"></script>'.
+        '<script type="text/javascript" src="'.$server.'/challenge?k='.$conf->getPublicKey().'"></script>'.
 
         '<noscript>'.
-            '<iframe src="'.$server.'/noscript?k='.$this->pub_key.'" height="300" width="500" frameborder="0"></iframe><br/>'.
+            '<iframe src="'.$server.'/noscript?k='.$conf->getPublicKey().'" height="300" width="500" frameborder="0"></iframe><br/>'.
             '<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>'.
             '<input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>'.
         '</noscript>';

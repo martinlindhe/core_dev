@@ -7,12 +7,9 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//TODO: rework to use OO-captcha, drop all non oo code!
-
-//STATUS: wip  -  in progress:  rewrite internal form field representation to use objects passed to add() method.. only addCaptcha() left!
+//STATUS: wip
 
 require_once('ErrorHandler.php');
-require_once('CaptchaRecaptcha.php');
 require_once('output_xhtml.php');
 
 require_once('constants.php');
@@ -96,11 +93,6 @@ class XhtmlForm
      */
     public function handle()
     {
-        if ($this->using_captcha) {
-            $captcha = CaptchaRecaptcha::getInstance();
-            $captcha->verify();
-        }
-
         $p = array();
 
         // fetch GET parameters before processing POST
@@ -109,9 +101,6 @@ class XhtmlForm
                 foreach ($this->elems as $e)
                 {
                     if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
-                        $p[ $key ] = htmlspecialchars_decode($val);
-
-                    if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
                         $p[ $key ] = htmlspecialchars_decode($val);
                 }
 
@@ -161,37 +150,6 @@ class XhtmlForm
                             } else
                                 $p[ $key ] = htmlspecialchars_decode($val);
                         }
-                        continue;
-                    }
-
-                    //XXX drop the following code when everything is OO:
-
-                    switch ($e['type']) {
-                    default:
-//                        throw new Exception ('blergh '.$e['type']);
-
-                        if (empty($e['name']))
-                            break;
-
-                        if ($e['name'] == $key) {
-                            if (is_array($val)) {
-                                foreach ($val as $idx => $v)
-                                    $val[ $idx ] = htmlspecialchars_decode($v);
-                                $p[ $key ] = $val;
-                            } else
-                                $p[ $key ] = htmlspecialchars_decode($val);
-                        }
-
-                        // handle input arrays
-                        if ($e['name'] == $key.'[]') {
-                            if (is_array($val)) {
-                                foreach ($val as $idx => $v)
-                                    $val[ $idx ] = htmlspecialchars_decode($v);
-                                $p[ $key ] = $val;
-                            } else
-                                $p[ $key ] = htmlspecialchars_decode($val);
-                        }
-                        break;
                     }
                 }
 
@@ -211,6 +169,12 @@ class XhtmlForm
                 // to avoid further processing of this file upload elsewhere
                 unset($_FILES[ $e['obj']->name ]);
             }
+        }
+
+        if ($this->using_captcha && !empty($_POST)) {
+            $captcha = new Recaptcha();
+            if (!$captcha->verify())
+                return false;
         }
 
         if (!$p) return false;
@@ -419,7 +383,9 @@ class XhtmlForm
     function addCaptcha()
     {
         $this->using_captcha = true;
-        $this->elems[] = array('type' => 'CAPTCHA');
+
+        $o = new Recaptcha();
+        $this->add($o);
     }
 
     /** Renders the form in XHTML */
@@ -470,65 +436,32 @@ class XhtmlForm
         // fills in form with previous entered data        XXXXX move into handle() ?
         foreach ($this->elems as $e)
         {
-            if (isset($e['obj']))
-            {
-                if (!is_object($e['obj']))
-                    throw new Exeption ('dont do that');
+            if (!isset($e['obj']))
+                throw new Exception ('ehjohohohoh: '.$e['obj']);
 
-                if (isset($e['obj']->value))
-                    $e['obj']->value = htmlspecialchars($e['obj']->value);
+            if (!is_object($e['obj']))
+                throw new Exeption ('dont do that');
 
-                if ($e['obj'] instanceof XhtmlComponentHidden) {
-                    $res .= $e['obj']->render();
-                    continue;
-                }
+            if (isset($e['obj']->value))
+                $e['obj']->value = htmlspecialchars($e['obj']->value);
 
-                if ($e['obj'] instanceof XhtmlComponentCheckbox)
-                {
-                    if (isset($this->form_data[ $e['obj']->name ]))
-                        $e['obj']->checked = $this->form_data[ $e['obj']->name ];
-                }
-                else
-                {
-                    if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )
-                        $e['obj']->value = $this->form_data[ $e['obj']->name ];
-                }
-
-                $res .=
-                '<tr>'.
-                ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
-                $e['obj']->render().'</td>'.
-                '</tr>';
-
+            if ($e['obj'] instanceof XhtmlComponentHidden) {
+                $res .= $e['obj']->render();
                 continue;
             }
 
-            $res .= '<tr>';
+            if ($e['obj'] instanceof XhtmlComponentCheckbox)
+                if (isset($this->form_data[ $e['obj']->name ]))
+                    $e['obj']->checked = $this->form_data[ $e['obj']->name ];
+            else
+                if (!empty($this->form_data[ $e['obj']->name ]) && property_exists($e['obj'], 'value') )
+                    $e['obj']->value = $this->form_data[ $e['obj']->name ];
 
-
-            if (isset($e['value']))
-                $e['value'] = htmlspecialchars($e['value']);
-
-            // fills in form with previous entered data (old school style.. TODO drop when all is objects)
-            switch ($e['type']) {
-            default:
-                if (!empty($e['name']) && isset($this->form_data[$e['name']]))
-                    $e['default'] = $this->form_data[$e['name']];
-            }
-
-            switch ($e['type']) {
-            case 'CAPTCHA':
-                $captcha = CaptchaRecaptcha::getInstance();
-
-                $res .= '<td colspan="2">';
-                $res .= $captcha->render();
-                $res .= '</td>';
-                break;
-
-            default:
-                throw new Exception ('XhtmlForm type '.$e['type'].' not implemented');
-            }
-            $res .= '</tr>';
+            $res .=
+            '<tr>'.
+            ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
+            $e['obj']->render().'</td>'.
+            '</tr>';
         }
 
         $res .= '</table>';
@@ -536,6 +469,7 @@ class XhtmlForm
         $res .= '</form>';
         return $res;
     }
+
 }
 
 ?>
