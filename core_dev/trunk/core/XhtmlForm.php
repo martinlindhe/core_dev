@@ -109,10 +109,10 @@ class XhtmlForm
                 foreach ($this->elems as $e)
                 {
                     if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
-                        $p[ $key ] = $val;
+                        $p[ $key ] = htmlspecialchars_decode($val);
 
                     if (!empty($e['name']) && !isset($_POST[$e['name']]) && $e['name'] == $key)   //XXX drop this code
-                        $p[ $key ] = $val;
+                        $p[ $key ] = htmlspecialchars_decode($val);
                 }
 
         if (!empty($_POST))
@@ -129,15 +129,12 @@ class XhtmlForm
                             if (is_array($val))
                             {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $v;
+                                    $val[ $idx ] = htmlspecialchars_decode($v);
                                 $p[ $key ] = $val;
                             }
                             else
                             {
-                                if ($e['obj'] instanceof XhtmlComponentHidden)
-                                    $p[ $key ] = urldecode($val);
-                                else
-                                    $p[ $key ] = $val;
+                                $p[ $key ] = htmlspecialchars_decode($val);
                             }
                         }
                         else if ($e['obj'] instanceof YuiDateInterval)
@@ -145,13 +142,13 @@ class XhtmlForm
                             if ($e['obj']->name.'_from' == $key)
                             {
                                 $e['obj']->selectFrom($val);
-                                $p[ $key ] = $val;
+                                $p[ $key ] = htmlspecialchars_decode($val);
                             }
 
                             if ($e['obj']->name.'_to' == $key)
                             {
                                 $e['obj']->selectTo($val);
-                                $p[ $key ] = $val;
+                                $p[ $key ] = htmlspecialchars_decode($val);
                             }
 
                         } else if ($e['obj']->name == $key.'[]')
@@ -159,10 +156,10 @@ class XhtmlForm
                             // handle input arrays
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $v;
+                                    $val[ $idx ] = htmlspecialchars_decode($v);
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $val;
+                                $p[ $key ] = htmlspecialchars_decode($val);
                         }
                         continue;
                     }
@@ -179,20 +176,20 @@ class XhtmlForm
                         if ($e['name'] == $key) {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $v;
+                                    $val[ $idx ] = htmlspecialchars_decode($v);
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $val;
+                                $p[ $key ] = htmlspecialchars_decode($val);
                         }
 
                         // handle input arrays
                         if ($e['name'] == $key.'[]') {
                             if (is_array($val)) {
                                 foreach ($val as $idx => $v)
-                                    $val[ $idx ] = $v;
+                                    $val[ $idx ] = htmlspecialchars_decode($v);
                                 $p[ $key ] = $val;
                             } else
-                                $p[ $key ] = $val;
+                                $p[ $key ] = htmlspecialchars_decode($val);
                         }
                         break;
                     }
@@ -478,6 +475,9 @@ class XhtmlForm
                 if (!is_object($e['obj']))
                     throw new Exeption ('dont do that');
 
+                if (isset($e['obj']->value))
+                    $e['obj']->value = htmlspecialchars($e['obj']->value);
+
                 if ($e['obj'] instanceof XhtmlComponentHidden) {
                     $res .= $e['obj']->render();
                 } else {
@@ -503,6 +503,11 @@ class XhtmlForm
             }
 
             $res .= '<tr>';
+
+
+
+            if (isset($e['value']))
+                $e['value'] = htmlspecialchars($e['value']);
 
             // fills in form with previous entered data (old school style.. TODO drop when all is objects)
             switch ($e['type']) {
