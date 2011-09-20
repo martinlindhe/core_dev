@@ -40,10 +40,6 @@ Moderation
     * (rewrite of atom_moderation.php)
 
 
-Forum
-    * needed?
-
-
 DB CHECKER:
     * all classes that is 1-to-1 mapped to a db table should extend from a common class (SqlObject?)
     * do a checker that includes all core/*.php files and iterates over all known classes and finds

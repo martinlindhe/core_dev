@@ -7,26 +7,44 @@
 
 require_once('SqlObject.php');
 
+define('FILETYPE_PROCESS',            50);
+define('FILETYPE_CLONE_CONVERTED',    51);
+
 class File
 {
-    // XXXX rename db columns
-    var $fileId;
-    var $fileName;
-    var $fileSize;
-    var $fileMime;
-    var $ownerId;
-    var $categoryId;
-    var $uploaderId;
-    var $uploaderIP;
-    var $fileType;
-    var $mediaType;
-    var $timeUploaded;
-    var $timeDeleted;
+    var $id;
+    var $type;
+    var $name;
+    var $size;
+    var $mimetype;
+    var $owner;
+    var $category;
+    var $uploader;
+    var $uploader_ip;
+    var $time_uploaded;
+    var $time_deleted;
 
-    static function get($id)
+    protected static $tbl_name = 'tblFiles';
+
+    public static function get($id)
     {
-        return SqlObject::getById($id, 'tblFiles', 'File', 'fileId');
+        return SqlObject::getById($id, self::$tbl_name, __CLASS__, 'id');
     }
+
+    public static function store($obj)
+    {
+        return SqlObject::store($obj, self::$tbl_name, 'id');
+    }
+
+/*
+    function getByType($type)
+    {
+        $q = 'SELECT * FROM '.self::$tbl_name.' WHERE type = ?';
+        $list = SqlHandler::getInstance()->pSelect($q, 'i', $type);
+
+//XXX return arr of objs
+    }
+*/
 
 }
 

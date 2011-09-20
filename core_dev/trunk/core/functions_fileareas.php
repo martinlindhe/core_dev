@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-die('XXX DEPRECATED see FileList.php ');
+die('XXX DEPRECATED see File.php ');
 
 require_once('atom_rating.php');    //for file rating
 require_once('time.php');           //for ago()

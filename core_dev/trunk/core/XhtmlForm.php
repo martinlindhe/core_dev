@@ -13,7 +13,7 @@ require_once('ErrorHandler.php');
 require_once('output_xhtml.php');
 
 require_once('constants.php');
-require_once('FileList.php');
+require_once('FileHelper.php');
 require_once('XhtmlComponent.php');
 
 class XhtmlForm
@@ -162,7 +162,7 @@ class XhtmlForm
             {
                 $key = $_FILES[ $e['obj']->name ];
 
-                $fileId = FileList::importUpload($e['obj']->type, $key);
+                $fileId = FileHelper::import($e['obj']->type, $key);
 
                 $p[ $e['obj']->name ] = $key;
 
