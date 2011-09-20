@@ -25,9 +25,7 @@ function is_html_color($s)
     return false;
 }
 
-/**
- * Decodes html entities from input string
- */
+/** Decodes html entities from input string */
 function htmlchars_decode($s)
 {
     return html_entity_decode($s, ENT_COMPAT, 'UTF-8');
@@ -46,6 +44,15 @@ function strip_html($s)
 
     $s = htmlchars_decode($s);
     return $s;
+}
+
+/** Like htmlentities() but only handles predefined xml entities */
+function xmlentities($s)
+{
+    $from = array('<',    '>',    "'",      '"',      '&');
+    $to   = array('&lt;', '&gt;', '&apos;', '&quot;', '&amp;');
+
+    return str_replace($from, $to, $s);
 }
 
 /** @param $dst redirects user to destination url relative to website base url */
@@ -141,9 +148,7 @@ function js_reload($ms)
     return js_embed('setTimeout("location.reload();",'.$ms.');');
 }
 
-/**
- * Redirects the user to a different page
- */
+/** Redirects the user to a different page */
 function js_redirect($url)
 {
     if (substr($url, 0, 1) != '/')
@@ -163,9 +168,7 @@ function js_redirect($url)
     }
 }
 
-/**
- * Renders a Unix timestamp in Javascript format (american): MM/DD/YYYY
- */
+/** Renders a Unix timestamp in Javascript format (american): MM/DD/YYYY */
 function js_date($ts)
 {
     return date('m/d/Y', $ts);
