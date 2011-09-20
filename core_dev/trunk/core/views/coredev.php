@@ -7,7 +7,7 @@
 require_once('UserList.php');
 require_once('UserGroupList.php');
 require_once('IconWriter.php');
-require_once('FileInfo.php');
+require_once('FileHelper.php');
 
 switch ($this->view) {
 case 'error':
@@ -40,8 +40,7 @@ case 'selftest':
 
 case 'file':
     // passes thru a file
-    // XXX FIXME: handle w & h parameters inside FileInfo to resize images
-    echo FileInfo::passthru($this->owner);
+    echo FileHelper::passthru($this->owner);
     die;
 
 case 'reset_password':

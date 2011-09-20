@@ -43,26 +43,10 @@ class FileInfo
     'application/pdf'       // Adobe .pdf file
     ); ///<FIXME remove
 
-    static function get($id)
-    {
-        $q = 'SELECT * FROM tblFiles WHERE fileId = ?';
-        return SqlHandler::getInstance()->pSelectRow($q, 'i', $id);
-    }
-
-    /**
-     * @return full local path to uploaded file
-     */
-    static function getUploadPath($id)
-    {
-        $page = XmlDocumentHandler::getInstance();
-
-        return $page->getUploadRoot().'/'.$id;
-    }
-
     /**
      * Updates tblFiles data according to file written on disk
      */
-    static function updateData($id)
+    static function updateData_XXXXXXXXXXXXX($id)
     {
         $file = self::getUploadPath($id);
         if (!file_exists($file))
@@ -99,24 +83,6 @@ class FileInfo
 */
 
     return $x[0];
-    }
-
-    static function passthru($id)
-    {
-        $path = self::getUploadPath($id);
-
-        $data = self::get($id);
-
-        // Displays the file in the browser, and assigns a filename for the browser's "save as..." features
-        header('Content-Disposition: inline; filename="'.basename($data['fileName']).'"');
-    header('Content-Transfer-Encoding: binary');
-
-        header('Content-Type: '.$data['fileMime']);
-
-        if ($data['fileSize'])
-            header('Content-Length: '. $data['fileSize']);
-
-        readfile($path);
     }
 
     static function render($id)

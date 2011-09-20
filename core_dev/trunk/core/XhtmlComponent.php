@@ -9,6 +9,8 @@
 
 require_once('CoreBase.php');
 
+// standard html components:
+require_once('XhtmlComponentAudio.php');
 require_once('XhtmlComponentButton.php');
 require_once('XhtmlComponentCheckbox.php');
 require_once('XhtmlComponentDropdown.php');
@@ -22,6 +24,7 @@ require_once('XhtmlComponentRadio.php');
 require_once('XhtmlComponentSubmit.php');
 require_once('XhtmlComponentText.php');
 require_once('XhtmlComponentTextarea.php');
+
 
 // YUI-javascript enhanced components:
 require_once('YuiAutocomplete.php');
