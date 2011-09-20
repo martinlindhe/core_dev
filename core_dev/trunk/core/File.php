@@ -31,20 +31,26 @@ class File
         return SqlObject::getById($id, self::$tbl_name, __CLASS__, 'id');
     }
 
-    public static function store($obj)
+    public static function getList()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' ORDER BY time_uploaded ASC';
+        return SqlObject::loadObjects($q, __CLASS__);
     }
 
-/*
-    function getByType($type)
+    public static function getByType($type)
     {
         $q = 'SELECT * FROM '.self::$tbl_name.' WHERE type = ?';
         $list = SqlHandler::getInstance()->pSelect($q, 'i', $type);
 
-//XXX return arr of objs
+        return SqlObject::loadObjects($list, __CLASS__);
     }
-*/
+
+    public static function store($obj)
+    {
+        return SqlObject::store($obj, self::$tbl_name, 'id');
+    }
 
 }
 
