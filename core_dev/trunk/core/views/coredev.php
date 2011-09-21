@@ -58,6 +58,7 @@ case 'admin':
     echo '<br/>';
     echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
     echo ahref('coredev/view/manage_usergroups', 'Manage user groups').'<br/>';
+    echo ahref('coredev/view/manage_files', 'Manage files').'<br/>';
     echo '<br/>';
     echo ahref('coredev/view/phpinfo', 'phpinfo()').'<br/>';
     echo ahref('coredev/view/compatiblity', 'Compatibility check').'<br/>';

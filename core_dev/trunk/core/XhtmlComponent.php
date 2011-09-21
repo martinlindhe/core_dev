@@ -16,6 +16,7 @@ require_once('XhtmlComponentCheckbox.php');
 require_once('XhtmlComponentDropdown.php');
 require_once('XhtmlComponentFile.php');
 require_once('XhtmlComponentHidden.php');
+require_once('XhtmlComponentImage.php');
 require_once('XhtmlComponentInput.php');
 require_once('XhtmlComponentListbox.php');
 require_once('XhtmlComponentOpenSearch.php');
