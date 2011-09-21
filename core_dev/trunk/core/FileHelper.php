@@ -80,6 +80,13 @@ class FileHelper
         readfile($path);
     }
 
+    static function delete($id)
+    {
+        File::delete($id);
+        $path = self::getUploadPath($id);
+        unlink($path);
+    }
+
 }
 
 ?>

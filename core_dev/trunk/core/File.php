@@ -54,6 +54,10 @@ class File
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
+    public static function delete($id)
+    {
+        SqlObject::deleteById($id, self::$tbl_name, 'id');
+    }
 }
 
 ?>
