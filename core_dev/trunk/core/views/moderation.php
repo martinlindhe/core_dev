@@ -32,6 +32,10 @@ if ($this->child)
             UserHandler::setUsername($o->owner, $o->data);
             break;
 
+        // marking item approved is all needed
+        case MODERATE_UPLOAD:
+            break;
+
         default:
             throw new Exception ('Unhandled ModerationObject type '.$o->type);
         }
@@ -55,6 +59,15 @@ if ($this->child)
         echo ' &raquo; '.ahref('?deny', 'Deny').'<br/>';
         break;
 
+    case MODERATE_UPLOAD:
+        $u = User::get($o->owner);
+        echo '<h2>'.$u->name.' needs file # '.$o->data.' approved.</h2>';
+
+        echo ' &raquo; '.ahref('?approve', 'Approve').'<br/>';
+
+        echo '<br/>';
+        echo ' &raquo; '.ahref('?deny', 'Deny').'<br/>';
+        break;
     default:
         throw new Exception ('Unhandled ModerationObject type '.$o->type);
     }

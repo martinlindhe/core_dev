@@ -26,13 +26,7 @@ case 'username':
         //XXX see if username is taken, or is ok according to username stuff
 
         // put request on queue for admins
-        $c = new ModerationObject();
-        $c->type         = MODERATE_CHANGE_USERNAME;
-        $c->owner        = $session->id;
-        $c->time_created = sql_datetime( time() );
-        $c->data         = $p['new_user'];
-
-        ModerationObject::store($c);
+        ModerationObject::add(MODERATE_CHANGE_USERNAME, $p['new_user']);
 
         echo '<div class="good">Your request for username change have been submitted and will be handled soon!</div>';
     }

@@ -153,16 +153,12 @@ class XhtmlForm
                     }
                 }
 
-        $page = XmlDocumentHandler::getInstance();
-
         // include FILES uploads
         foreach ($this->elems as $e)
         {
             if (isset($e['obj']) && is_object($e['obj']) && $e['obj'] instanceof XhtmlComponentFile && !empty($_FILES[ $e['obj']->name ]))
             {
                 $key = $_FILES[ $e['obj']->name ];
-
-                $fileId = FileHelper::import($e['obj']->type, $key);
 
                 $p[ $e['obj']->name ] = $key;
 

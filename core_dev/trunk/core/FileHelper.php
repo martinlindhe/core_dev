@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//STATUS: wip
+
 require_once('File.php');
 
 class FileHelper
@@ -40,7 +42,6 @@ class FileHelper
 
         $session = SessionHandler::getInstance();
 
-
         $file = new File();
         $file->type = $type;
         $file->uploader = $session->id;
@@ -60,6 +61,8 @@ class FileHelper
 
         $key['name'] = $dst_file;
         $key['file_id'] = $id;
+
+        return $id;
     }
 
     static function passthru($id)

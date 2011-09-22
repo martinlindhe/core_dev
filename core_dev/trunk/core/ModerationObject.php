@@ -9,11 +9,14 @@
 
 // ModerationObject types:
 define('MODERATE_CHANGE_USERNAME', 1);   // data holds new username
+define('MODERATE_UPLOAD',          2);   // data is a tblFiles.id
+
 
 function getModerationTypes()
 {
     return array(
     MODERATE_CHANGE_USERNAME => 'Change username',
+    MODERATE_UPLOAD          => 'Uploaded file',
     );
 }
 
@@ -48,6 +51,20 @@ class ModerationObject
         ' ORDER BY time_created ASC';
 
         return SqlObject::loadObjects($q, __CLASS__);
+    }
+
+    static function add($type, $data, $data2 = '')
+    {
+        $session = SessionHandler::getInstance();
+
+        $c = new ModerationObject();
+        $c->type         = $type;
+        $c->owner        = $session->id;
+        $c->time_created = sql_datetime( time() );
+        $c->data         = $data;
+        $c->data2        = $data2;
+
+        self::store($c);
     }
 
 }
