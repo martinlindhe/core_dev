@@ -63,6 +63,10 @@ if ($this->child)
         $u = User::get($o->owner);
         echo '<h2>'.$u->name.' needs file # '.$o->data.' approved.</h2>';
 
+        $view = new ViewModel('views/file_details.php');
+        $view->registerVar('owner', $o->data);
+        echo $view->render();
+
         echo ' &raquo; '.ahref('?approve', 'Approve').'<br/>';
 
         echo '<br/>';
