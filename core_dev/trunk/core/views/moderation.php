@@ -9,8 +9,75 @@ require_once('YuiDatatable.php');
 if (!$session->isSuperAdmin)
     return;
 
-if ($this->child)
-{
+if (!$this->owner)
+    $this->owner = 'default';
+
+switch ($this->owner) {
+case 'default':
+    echo '<h1>Unhandled items in Moderation queue</h1>';
+
+    $list = ModerationObject::getUnhandled();
+
+    //d( $list );
+
+    $dt = new YuiDatatable();
+    $dt->addColumn('id',           'Id',    'link', 'coredev/view/moderation/handle/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
+    $dt->addColumn('time_created', 'Created');
+    $dt->addColumn('data',         'Data');
+    $dt->addColumn('data2',        'Data2');
+    $dt->setDataList( $list );
+    echo $dt->render();
+
+    echo '<br/>';
+    echo '&raquo; '.ahref('coredev/view/moderation/approved', 'Show approved objects').'<br/>';
+    echo '&raquo; '.ahref('coredev/view/moderation/denied', 'Show denied objects').'<br/>';
+    break;
+
+case 'approved':
+    echo '<h1>Approved items in Moderation queue</h1>';
+
+    $list = ModerationObject::getApproved();
+    //d( $list );
+
+    $dt = new YuiDatatable();
+    $dt->addColumn('id',           'Id' ); //,    'link', 'coredev/view/moderation/handle/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
+    $dt->addColumn('time_created', 'Created');
+    $dt->addColumn('time_handled', 'Approved');
+    $dt->addColumn('handled_by',   'Approved by', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('data',         'Data');
+    $dt->addColumn('data2',        'Data2');
+    $dt->setDataList( $list );
+    echo $dt->render();
+    break;
+
+case 'denied':
+    echo '<h1>Denied items in Moderation queue</h1>';
+
+    $list = ModerationObject::getDenied();
+    //d( $list );
+
+    $dt = new YuiDatatable();
+    $dt->addColumn('id',           'Id' ); //,    'link', 'coredev/view/moderation/handle/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
+    $dt->addColumn('time_created', 'Created');
+    $dt->addColumn('time_handled', 'Denied');
+    $dt->addColumn('handled_by',   'Denied by', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('data',         'Data');
+    $dt->addColumn('data2',        'Data2');
+    $dt->setDataList( $list );
+    echo $dt->render();
+    break;
+
+
+case 'handle':
+    if (!$this->child)
+        die('SADFGFG');
+
     $o = ModerationObject::get($this->child);
 //    d($o);
 
@@ -18,6 +85,7 @@ if ($this->child)
     {
         $o->handled_by = $session->id;
         $o->time_handled = sql_datetime( time() );
+        $o->approved = isset($_GET['approve']) ? 1 : 0;
         ModerationObject::store($o);
 
         if (!isset($_GET['approve']))
@@ -75,26 +143,13 @@ if ($this->child)
     default:
         throw new Exception ('Unhandled ModerationObject type '.$o->type);
     }
+    break;
 
-    return;
+default:
+    echo 'No handler for view '.$this->owner;
 }
 
-echo '<h1>Moderation queue</h1>';
 
 
-$list = ModerationObject::getUnhandled();
-
-//d( $list );
-
-$dt = new YuiDatatable();
-$dt->addColumn('id',           'Id',    'link', 'coredev/view/moderation/handle/', 'name');
-$dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
-$dt->addColumn('type',         'Type',  'array', getModerationTypes() );
-$dt->addColumn('time_created', 'Created');
-$dt->addColumn('data',         'Data');
-$dt->addColumn('data2',        'Data2');
-$dt->setDataList( $list );
-
-echo $dt->render();
 
 ?>

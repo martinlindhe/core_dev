@@ -28,6 +28,7 @@ class ModerationObject
     var $time_created;
     var $time_handled;
     var $handled_by;
+    var $approved;
     var $data;
     var $data2;
 
@@ -51,6 +52,28 @@ class ModerationObject
         ' ORDER BY time_created ASC';
 
         return SqlObject::loadObjects($q, __CLASS__);
+    }
+
+    static function getApproved()
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE time_handled IS NOT NULL AND approved = ?';
+
+        $list = Sql::pSelect($q, 'i', 1);
+
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    static function getDenied()
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE time_handled IS NOT NULL AND approved = ?';
+
+        $list = Sql::pSelect($q, 'i', 0);
+
+        return SqlObject::loadObjects($list, __CLASS__);
     }
 
     static function add($type, $data, $data2 = '')
