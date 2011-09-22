@@ -197,6 +197,9 @@ function embedFlashAudio($audio_url, $w = 176, $h = 60, $div_id = '', $img = '/c
     if (!$w) $w = 176;
     if (!$h) $h = 60;
 
+    $header = XhtmlHeader::getInstance();
+    $header->includeJs('/core_dev/js/swfobject.js');
+
     $player_url = '/core_dev/api/flash/mediaplayer.swf';
 
     $data = '<p id="'.$div_id.'">';
