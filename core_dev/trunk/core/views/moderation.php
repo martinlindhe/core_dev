@@ -26,7 +26,7 @@ case 'default':
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('data',         'Data');
-    $dt->addColumn('data2',        'Data2');
+    $dt->addColumn('reference',    'Reference');
     $dt->setDataList( $list );
     echo $dt->render();
 
@@ -49,7 +49,7 @@ case 'approved':
     $dt->addColumn('time_handled', 'Approved');
     $dt->addColumn('handled_by',   'Approved by', 'link', 'coredev/view/manage_user/', 'name');
     $dt->addColumn('data',         'Data');
-    $dt->addColumn('data2',        'Data2');
+    $dt->addColumn('reference',    'Reference');
     $dt->setDataList( $list );
     echo $dt->render();
     break;
@@ -68,7 +68,7 @@ case 'denied':
     $dt->addColumn('time_handled', 'Denied');
     $dt->addColumn('handled_by',   'Denied by', 'link', 'coredev/view/manage_user/', 'name');
     $dt->addColumn('data',         'Data');
-    $dt->addColumn('data2',        'Data2');
+    $dt->addColumn('reference',    'Reference');
     $dt->setDataList( $list );
     echo $dt->render();
     break;
@@ -128,8 +128,12 @@ case 'handle':
         break;
 
     case MODERATE_UPLOAD:
-        $u = User::get($o->owner);
-        echo '<h2>'.$u->name.' needs file # '.$o->data.' approved.</h2>';
+        echo '<h2>Moderate file # '.$o->data.'</h2>';
+
+        if ($o->owner) {
+            $u = User::get($o->owner);
+            echo 'Uploaded by '.$u->name;
+        }
 
         $view = new ViewModel('views/file_details.php');
         $view->registerVar('owner', $o->data);

@@ -51,13 +51,24 @@ function file_get_mime_by_suffix($name)
     $ext = file_suffix($name);
     switch ($ext)
     {
+    // images
     case '.jpg': return 'image/jpeg';
     case '.png': return 'image/png';
     case '.gif': return 'image/gif';
     case '.ico': return 'image/vnd.microsoft.icon';
+
+    // documents
     case '.txt': return 'text/plain';
 
+    // video
     case '.mov': return 'video/quicktime';
+
+    // audio
+    case '.wav': return 'audio/wav';
+    case '.mp3': return 'audio/mp3';
+    case '.ogg': return 'audio/ogg';
+    case '.m4a': return 'audio/x-m4a';
+
     default:
         echo 'WARNING: file_get_mime_by_suffix unhandled ext: '.$name."\n";
         return 'application/octet-stream'; //unknown type
@@ -67,7 +78,25 @@ function file_get_mime_by_suffix($name)
 /**
  * @return mimetype of filename
  */
-function file_get_mime_by_content($filename)
+function get_mimetype_of_data($data)
+{
+    $tmp_name = tempnam("/tmp", "mime-check");
+
+    $fp = fopen($tmp_name, "w");
+    fwrite($fp, $data);
+    fclose($fp);
+
+    $res = get_mimetype_of_file($tmp_name);
+
+    unlink($tmp_name);
+
+    return $res;
+}
+
+/**
+ * @return mimetype of filename
+ */
+function get_mimetype_of_file($filename)
 {
     if (!file_exists($filename))
         return false;

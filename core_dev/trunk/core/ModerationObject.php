@@ -30,7 +30,7 @@ class ModerationObject
     var $handled_by;
     var $approved;
     var $data;
-    var $data2;
+    var $reference;   // used to refer to external object id (if needed)
 
     protected static $tbl_name = 'tblModerationObjects';
 
@@ -76,7 +76,27 @@ class ModerationObject
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    static function add($type, $data, $data2 = '')
+    static function getStatusByReference($reference)
+    {
+        $q =
+        'SELECT approved FROM '.self::$tbl_name.
+        ' WHERE reference = ?';
+
+        return Sql::pSelectItem($q, 'i', $reference);
+    }
+
+    static function getByReference($reference)
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE reference = ?';
+
+        $row = Sql::pSelectRow($q, 'i', $reference);
+
+        return SqlObject::loadObject($row, __CLASS__);
+    }
+
+    static function add($type, $data, $reference = '')
     {
         $session = SessionHandler::getInstance();
 
@@ -85,7 +105,7 @@ class ModerationObject
         $c->owner        = $session->id;
         $c->time_created = sql_datetime( time() );
         $c->data         = $data;
-        $c->data2        = $data2;
+        $c->reference    = $reference;
 
         self::store($c);
     }

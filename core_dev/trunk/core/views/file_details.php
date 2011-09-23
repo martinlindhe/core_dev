@@ -11,13 +11,15 @@ echo '<h2>File details</h2>';
 echo 'Name: '.$f->name.'<br/>';
 echo 'Type: '.$f->type.'<br/>';
 echo 'Size: '.byte_count($f->size).'<br/>';
-//    echo 'Mimetype: '.$f->mimetype.'<br/>';
+echo 'Mimetype: '.$f->mimetype.'<br/>';
 echo 'Uploaded: '.$f->time_uploaded.'<br/>';
-//    d($f);
+//d($f);
 
 
 switch ($f->mimetype) {
 case 'audio/wav':   // works in FF6, Chrome, Safari, Opera
+case 'audio/x-wav':
+
 case 'audio/mp3':   // works in IE9, Chrome, Safari, NOT IN FF6
 case 'audio/ogg':   // works in FF6, Chrome, Safari, Opera
 case 'audio/x-m4a': // works in Chrome, NOT IN FF6, ??? in IE9
