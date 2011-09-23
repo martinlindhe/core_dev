@@ -23,6 +23,7 @@ require_once('CoreBase.php');
 require_once('User.php');
 require_once('ErrorHandler.php');
 require_once('Sql.php');
+require_once('SessionStorageHandler.php');
 
 require_once(dirname(__FILE__) . '/../facebook-php-sdk/facebook.php');
 
@@ -209,6 +210,8 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     {
         if (!$this->name)
             throw new Exception ('session name not set');
+
+        $sess_storage = new SessionStorageHandler();
 
         session_name($this->name);
 
