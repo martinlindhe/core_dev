@@ -7,24 +7,29 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-require_once('CoreBase.php');
-require_once('ISql.php');
-
 //STATUS: wip
 //TODO: add something like mysql's getThreadId()
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
-class DatabaseMssql extends CoreBase implements IDB_SQL
+require_once('ISql.php');
+
+class DatabaseMssql implements IDB_SQL
 {
     var $db_handle       = false;       ///< Internal db handle
     var $host            = 'localhost'; ///< Hostname or numeric IP address of the db server
     var $port            = 1433;        ///< Port number
     var $username        = 'root';      ///< Username to use to connect to the database
-    var $password        = '';          ///< Password to use to connect to the database
-    var $database        = '';          ///< Name of the database to connect to
+    var $password;                      ///< Password to use to connect to the database
+    var $database;                      ///< Name of the database to connect to
     var $charset         = 'utf8';      ///< What character set to use
     protected $connected = false;       ///< Are we connected to the db?
+
+    public function __construct()
+    {
+        if (!extension_loaded('mssql'))
+            throw new Exception ('MsSql FAIL: php5-sybase not found');
+    }
 
     function setConfig($conf)
     {
