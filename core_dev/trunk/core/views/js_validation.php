@@ -67,7 +67,8 @@ $header->registerJsFunction(
 'function validate_pwd(fld,fld2)'.
 '{'.
     'var e="";'.
-    'var illegal=/[\W_]/;'. // allow only letters and numbers
+
+//    'var illegal=/\W/;'. // allow letters, numbers, and underscores
 
     'if (fld.value == "") {'.
         'fld.style.background = "Yellow";'.
@@ -75,9 +76,8 @@ $header->registerJsFunction(
     '} else if (fld.value.length < '.$h->getPasswordMinlen().') {'.
         'e = "The password is too short, minimum '.$h->getPasswordMinlen().' chars.\n";'.
         'fld.style.background = "Yellow";'.
-    '} else if (illegal.test(fld.value)) {'.
-        'e = "The password contains illegal characters.\n";'.
-        'fld.style.background = "Yellow";'.
+//    '} else if (illegal.test(fld.value)) {'.
+//        'e = "The password contains illegal characters.\n";'.
     '} else if (!((fld.value.search(/(a-z)+/)) && (fld.value.search(/(0-9)+/)))) {'.
         'e = "The password must contain at least one numeral.\n";'.
         'fld.style.background = "Yellow";'.
