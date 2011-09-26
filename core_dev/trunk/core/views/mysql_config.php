@@ -9,14 +9,13 @@
 
 $session->requireSuperAdmin();
 
-echo '<h1>Default MySQL db information</h1>';
-echo 'Driver: '.get_class($db).'<br/>';
+echo '<h1>'.get_class($db).' information</h1>';
 echo 'Server version: <b>'.$db->db_handle->server_info.'</b><br/>';
 echo 'Client version: <b>'.$db->db_handle->client_info.'</b><br/>';
 echo 'Host: <b>'.$db->host.':'.$db->port.'</b><br/>';
 echo 'Username: <b>'.$db->username.'</b><br/>';
 // echo 'Password: '.($db->password ? $db->password : '(blank)').'<br/>';
-echo 'Database: '.$db->database.'<br/>';
+echo 'Database: <b>'.$db->database.'</b><br/>';
 echo 'Configured charset: <b>'.$db->charset.'</b><br/>';
 echo '<br/>';
 
@@ -48,7 +47,7 @@ echo 'Database time: '.$db_time.'<br/>';
 echo 'Webserver time: '.now().'<br/>';
 
 $uptime = Sql::pSelectRow('SHOW STATUS WHERE Variable_name = ?', 's', 'Uptime');
-echo 'Database uptime: '.elapsed_seconds($uptime['Value']).'<br/>';
+echo 'Database uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
 echo '<br/>';
 

@@ -52,9 +52,9 @@ if ($session->id)
 
     $form->addSubmit('Save');
     $form->setHandler('handleSubmit');
-}
 
-$form->handle();  // force form processing so following Comment::get() is current
+    $form->handle();  // force form processing so following Comment::get() is current
+}
 
 $list = Comment::get($this->type, $this->owner);
 
@@ -68,6 +68,7 @@ foreach ($list as $c)
     echo '<hr/>';
 }
 
-echo $form->render();
+if ($session->id)
+    echo $form->render();
 
 ?>

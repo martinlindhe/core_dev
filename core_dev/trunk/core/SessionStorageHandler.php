@@ -43,8 +43,8 @@ class SessionStorageHandler
     public function read($id)
     {
         $q = 'SELECT session_data FROM tblSessionData WHERE session_id = ? AND expires > ?';
-        return Sql::pSelectItem($q, 'si', $id, sql_datetime( time() ) );
-	}
+        return Sql::pSelectItem($q, 'ss', $id, sql_datetime( time() ) );
+    }
 
     public function write($id, $data)
     {

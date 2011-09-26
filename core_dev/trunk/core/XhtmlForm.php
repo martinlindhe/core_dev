@@ -9,6 +9,10 @@
 
 //STATUS: wip
 
+//XXX: can the "fill form with previous entered data code from render() method move to handle() ????
+
+//XXX: remove need of "using_captcha" variable, it can be figured out by checking object types
+
 require_once('ErrorHandler.php');
 require_once('output_xhtml.php');
 
@@ -108,49 +112,51 @@ class XhtmlForm
             foreach ($_POST as $key => $val)
                 foreach ($this->elems as $e)
                 {
-                    if (isset($e['obj']) && is_object($e['obj']))
+                    if (!is_object($e['obj']))
+                        throw new Exception ('XXX not an obj!');
+
+                    if (!isset($e['obj']->name))
+                        continue;
+
+                    if ($e['obj']->name == $key)
                     {
-                        if (!isset($e['obj']->name))
-                            continue;
-
-                        if ($e['obj']->name == $key)
+                        if (is_array($val))
                         {
-                            if (is_array($val))
-                            {
-                                foreach ($val as $idx => $v)
-                                    $val[ $idx ] = htmlspecialchars_decode($v);
-                                $p[ $key ] = $val;
-                            }
-                            else
-                            {
-                                $p[ $key ] = htmlspecialchars_decode($val);
-                            }
+                            foreach ($val as $idx => $v)
+                                $val[ $idx ] = htmlspecialchars_decode($v);
+                            $p[ $key ] = $val;
                         }
-                        else if ($e['obj'] instanceof YuiDateInterval)
+                        else
                         {
-                            if ($e['obj']->name.'_from' == $key)
-                            {
-                                $e['obj']->selectFrom($val);
-                                $p[ $key ] = htmlspecialchars_decode($val);
-                            }
-
-                            if ($e['obj']->name.'_to' == $key)
-                            {
-                                $e['obj']->selectTo($val);
-                                $p[ $key ] = htmlspecialchars_decode($val);
-                            }
-
-                        } else if ($e['obj']->name == $key.'[]')
-                        {
-                            // handle input arrays
-                            if (is_array($val)) {
-                                foreach ($val as $idx => $v)
-                                    $val[ $idx ] = htmlspecialchars_decode($v);
-                                $p[ $key ] = $val;
-                            } else
-                                $p[ $key ] = htmlspecialchars_decode($val);
+                            $p[ $key ] = htmlspecialchars_decode($val);
                         }
                     }
+                    else if ($e['obj'] instanceof YuiDateInterval)
+                    {
+                        if ($e['obj']->name.'_from' == $key)
+                        {
+                            $e['obj']->selectFrom($val);
+                            $p[ $key ] = htmlspecialchars_decode($val);
+                        }
+
+                        if ($e['obj']->name.'_to' == $key)
+                        {
+                            $e['obj']->selectTo($val);
+                            $p[ $key ] = htmlspecialchars_decode($val);
+                        }
+
+                    } else if ($e['obj']->name == $key.'[]')
+                    {
+                        // handle input arrays
+                        if (is_array($val))
+                        {
+                            foreach ($val as $idx => $v)
+                                $val[ $idx ] = htmlspecialchars_decode($v);
+                            $p[ $key ] = $val;
+                        } else
+                            $p[ $key ] = htmlspecialchars_decode($val);
+                    }
+
                 }
 
         // include FILES uploads
@@ -167,7 +173,8 @@ class XhtmlForm
             }
         }
 
-        if ($this->using_captcha && !empty($_POST)) {
+        if ($this->using_captcha && !empty($_POST))
+        {
             $captcha = new Recaptcha();
             if (!$captcha->verify())
                 return false;
@@ -379,8 +386,8 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
-    /** Adds a captcha */
-    function addCaptcha()
+    /** Adds a recaptcha */
+    function addRecaptcha()
     {
         $this->using_captcha = true;
 

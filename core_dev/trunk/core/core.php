@@ -19,6 +19,9 @@ require_once('html.php');
 require_once('ConvertDatasize.php');
 require_once('XmlDocumentHandler.php');
 
+// required for the string functions to work properly
+mb_internal_encoding('UTF-8');
+
 // PHP_VERSION_ID is available as of PHP 5.2.7, if our
 // version is lower than that, then emulate it
 if (!defined('PHP_VERSION_ID')) {
@@ -404,6 +407,11 @@ function byte_count($s)
 function strtolower_utf8($s)
 {
     return mb_convert_case($s, MB_CASE_LOWER, 'UTF-8');
+}
+
+function strtoupper_utf8($s)
+{
+    return mb_convert_case($s, MB_CASE_UPPER, 'UTF-8');
 }
 
 function ucfirst_utf8($s)
