@@ -21,7 +21,13 @@ case 'username':
 
     function handleSubmit($p)
     {
+        $p['new_user'] = trim($p['new_user']);
+
         $session = SessionHandler::getInstance();
+
+        // dont put empty names or current username on request queue
+        if (!$p['new_user'] || $p['new_user'] == $session->username)
+            return false;
 
         //XXX see if username is taken, or is ok according to username stuff
 
