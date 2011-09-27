@@ -101,15 +101,26 @@ function loginHandler($p)
 $form = new XhtmlForm('login');
 $form->cssTable('');
 
+
+
 $u_img = new XhtmlComponentImage();
-$u_img->src = 'core_dev/gfx/icon_user.png';
+$u_img->src = relurl('core_dev/gfx/icon_user.png');
+
+$i = new XhtmlComponentInput();
+$i->name = 'usr';
+
+$form->add($i, t('Username'), $u_img);
+
 
 $p_img = new XhtmlComponentImage();
-$p_img->src = 'core_dev/gfx/icon_keys.png';
+$p_img->src = relurl('core_dev/gfx/icon_keys.png');
+
+$i = new XhtmlComponentPassword();
+$i->name = 'pwd';
+
+$form->add($i, t('Password'), $p_img);
 
 
-$form->addInput('usr', t('Username'), $u_img);
-$form->addPassword('pwd', t('Password'), $p_img);
 $form->addSubmit('Log in', 'font-weight:bold');
 $form->setFocus('usr');
 $form->onSubmit('return check_login(this);');
