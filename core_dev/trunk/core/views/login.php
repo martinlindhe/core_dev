@@ -100,8 +100,16 @@ function loginHandler($p)
 
 $form = new XhtmlForm('login');
 $form->cssTable('');
-$form->addInput('usr', t('Username'));    // XXXX show image     $page->getCoreDevRoot().'gfx/icon_user.png
-$form->addPassword('pwd', t('Password')); // XXXX show image     $page->getCoreDevRoot().'gfx/icon_keys.png
+
+$u_img = new XhtmlComponentImage();
+$u_img->src = 'core_dev/gfx/icon_user.png';
+
+$p_img = new XhtmlComponentImage();
+$p_img->src = 'core_dev/gfx/icon_keys.png';
+
+
+$form->addInput('usr', t('Username'), $u_img);
+$form->addPassword('pwd', t('Password'), $p_img);
 $form->addSubmit('Log in', 'font-weight:bold');
 $form->setFocus('usr');
 $form->onSubmit('return check_login(this);');
