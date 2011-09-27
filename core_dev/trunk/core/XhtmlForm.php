@@ -205,7 +205,7 @@ class XhtmlForm
     }
 
     /** Adds a object to the form */
-    function add($o, $text = '')
+    function add($o, $text = '', $second_obj = '')
     {
         if (!is_object($o))
             throw new Exception ('not an object');
@@ -213,10 +213,13 @@ class XhtmlForm
         if (!$o instanceof XhtmlComponent)
             throw new exception ('obj must extend from XhtmlComponent');
 
+        if ($second_obj && !($second_obj instanceof XhtmlComponent))
+            throw new exception ('second_obj must extend from XhtmlComponent');
+
         if ($o instanceof XhtmlComponentFile)
             $this->file_upload = true;
 
-        $this->elems[] = array('obj' => $o, 'str' => $text);
+        $this->elems[] = array('obj' => $o, 'str' => $text, 'obj2' => $second_obj);
     }
 
     /** Adds a hidden input field to the form */
@@ -446,8 +449,11 @@ class XhtmlForm
             if (!isset($e['obj']))
                 throw new Exception ('ehjohohohoh: '.$e['obj']);
 
-            if (!is_object($e['obj']))
-                throw new Exeption ('dont do that');
+            if ( !($e['obj'] instanceof XhtmlComponent) )
+                throw new Exeption ('obj not a XhtmlComponent');
+
+            if ( $e['obj2'] && !($e['obj2'] instanceof XhtmlComponent) )
+                throw new Exeption ('obj2 not a XhtmlComponent');
 
             if (isset($e['obj']->value))
                 $e['obj']->value = htmlspecialchars($e['obj']->value);
@@ -467,7 +473,12 @@ class XhtmlForm
             $res .=
             '<tr>'.
             ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
-            $e['obj']->render().'</td>'.
+            $e['obj']->render();
+
+            if ($e['obj2'] instanceof XhtmlComponent)
+                $res .= $e['obj2']->render();
+
+            $res .= '</td>'.
             '</tr>';
         }
 

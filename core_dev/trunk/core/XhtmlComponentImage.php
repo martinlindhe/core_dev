@@ -16,6 +16,9 @@ class XhtmlComponentImage extends XhtmlComponent
     var $title;
     var $width;
     var $height;
+    var $onclick;
+
+    function onClick($js) { $this->onclick = $js; }
 
     function render()
     {
@@ -25,6 +28,7 @@ class XhtmlComponentImage extends XhtmlComponent
         ($this->height ? ' height="'.$this->height.'" ' : '').
         ($this->alt    ? ' alt="'.$this->alt.'" ' : '').
         ($this->title  ? ' title="'.$this->title.'" ' : '').
+        ($this->onclick ? ' onclick="'.$this->onclick.'"' : '').
         '/>';
     }
 
