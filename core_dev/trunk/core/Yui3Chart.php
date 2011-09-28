@@ -80,7 +80,7 @@ class Yui3Chart
 */
         $header = XhtmlHeader::getInstance();
 
-        $header->includeJs('http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js');
+        $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
 
 
         $div_holder = 'yui_chart'.mt_rand();
