@@ -131,7 +131,7 @@ class SqlObject
             if (!$include_unset && !$obj->$col)
                 continue;
 
-            if (is_numeric($obj->$col))
+            if (is_integer($obj->$col))
                 $res->str .= 'i';
             else
                 $res->str .= 's';
