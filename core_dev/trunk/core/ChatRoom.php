@@ -5,6 +5,9 @@
 
 //STATUS: wip
 
+//TODO: admin view to edit / delete chat rooms
+//TODO: ability to lock/unlock a chat room
+
 class ChatRoom
 {
     var $id;
