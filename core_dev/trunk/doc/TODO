@@ -26,8 +26,8 @@ Friends
 
 
 Chat
-    * write 1-on-1 chat code (drop functions_chat1on1.php), store messages as normal Message objects
-    * need chat rooms (+ ability for admin to create new rooms on the fly)
+    * write 1-on-1 chat code, store messages as normal Message objects
+    * need ability for admin to create/edit chat rooms
 
 
 Gallery
