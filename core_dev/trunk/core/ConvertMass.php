@@ -20,6 +20,7 @@ class ConvertMass extends ConvertBase
     'hg' => 100,          //Hectogram
     'kg' => 1000,         //Kilogram
     't'  => 1000000,      //Tonne
+    'kt' => 1000000000,   //Kilotonne
     'oz' => 28.349523125, //Ounce (1/16 lb)
     'lb' => 453.59237,    //Pound
     'st' => 6350.29318,   //Stone (14 lb)
@@ -27,12 +28,11 @@ class ConvertMass extends ConvertBase
 
     protected $lookup = array(
     'gram'      => 'g',
-    'hecto'     => 'hg',
-    'hectogram' => 'hg',
-    'kilogram'  => 'kg',
-    'kilo'      => 'kg',
-    'ton'       => 't',  //"metric tonne"
-    'tonne'     => 't',
+    'hecto'     => 'hg', 'hectogram' => 'hg',
+    'kilo'      => 'kg', 'kilogram'  => 'kg',
+    'ton'       => 't',  'tonne'     => 't',  //"metric tonne"
+    'kilotonne' => 'kt',
+
     'ounce'     => 'oz',    'ounces' => 'oz',
     'pound'     => 'lb',    'pounds' => 'lb', 'lbs'  => 'lb',
     'stone'     => 'st',    'stones' => 'st',
