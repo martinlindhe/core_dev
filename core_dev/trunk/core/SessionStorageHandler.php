@@ -12,11 +12,13 @@
 
 class SessionStorageHandler
 {
-    private $expire_time = 86400; // 24h
+    private $expire_time;
 
     public function __construct()
     {
-//        $this->expire_time = get_cfg_var("session.gc_maxlifetime");
+        $session = SessionHandler::getInstance();
+
+        $this->expire_time = $session->getTimeout();
 
         session_set_save_handler(
             array($this, "open"),

@@ -19,7 +19,6 @@ case 'list':
 
     echo '<br/>';
     echo '&raquo; '.ahref('coredev/view/chatrooms/new', 'New chatroom');
-
     break;
 
 case 'edit':
@@ -44,7 +43,6 @@ case 'edit':
     $x->setHandler('editHandler');
     echo $x->render();
     break;
-
 
 case 'new':
     // child = room id

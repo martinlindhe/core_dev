@@ -90,6 +90,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
     function getUsername() { return $this->username; }
     function getLastActive() { return $this->last_active; }
+    function getTimeout() { return $this->timeout; }
 
     function setUsername($s) { $this->username = $s; }
 
