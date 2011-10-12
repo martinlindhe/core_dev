@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: early wip
+//STATUS: wip
 
 require_once('SqlObject.php');
 
@@ -18,7 +18,6 @@ class Message
     var $to;
     var $time_sent;
     var $time_read;
-//    var $subject;   // quite useless, so removed
     var $body;
 
     protected static $tbl_name = 'tblMessages';
@@ -53,7 +52,6 @@ class Message
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
-
 
 }
 

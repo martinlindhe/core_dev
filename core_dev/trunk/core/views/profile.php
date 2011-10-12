@@ -3,8 +3,7 @@
  * Default view for a user profile
  */
 
-if (!$session->id)
-    die('XXX profile only for logged in users');
+$session->requireLoggedIn();
 
 $user_id = $session->id;
 
@@ -13,6 +12,9 @@ if ($this->owner)
 
 
 $user = User::get($user_id);
+
+if (!$user)
+    die('ECHKKP');
 
 echo '<h1>Profile for '.$user->name.'</h1>';
 
@@ -23,7 +25,7 @@ echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id)
-    echo '&raquo; '.ahref('coredev/view/profile_message/'.$user_id, 'Send message').'<br/>';
+    echo '&raquo; '.ahref('coredev/view/profile_messages/send/'.$user_id, 'Send message').'<br/>';
 
 echo '&raquo; '.ahref('coredev/view/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
 
