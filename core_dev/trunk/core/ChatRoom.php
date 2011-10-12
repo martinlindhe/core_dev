@@ -36,6 +36,11 @@ class ChatRoom
         return SqlObject::loadObjects($q, __CLASS__);
     }
 
+    static function store($o)
+    {
+        return SqlObject::store($o, self::$tbl_name);
+    }
+
 }
 
 ?>
