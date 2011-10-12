@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: early draft. will replace functions_messages.php
+//STATUS: early wip
 
 require_once('SqlObject.php');
 

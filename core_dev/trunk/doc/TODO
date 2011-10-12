@@ -1,22 +1,32 @@
 Autumn 2011 cleanup:
 
-XXX: ability to login using registered email (2x doublecheck that email is unique and verified)
+
+Authentication:
+    * Verify that "forgot password" feature works
+    * ability to login using registered email (2x doublecheck that email is unique and verified)
 
 
 User profile
-    * ability to edit own info (email, profile pic)
-    * ability for more "userdata", like profile picture, home town, gender (revive functions_userdata.php)
+    * ability to edit own info (email, gender)
+    * ability for more "userdata", like gender (revive functions_userdata.php ???)
+    * ability to upload profile picture
+
+    * show a AVATAR if no profile pic is selected
     * link to: chat 1-to-1, see gallery
+    * avability: available for chat?
 
 
 Messages
     * finish Messages class
-    * (drop functions_messages.php)
 
 
 Guestbook
     * finish Guestbook class
     * (drop functions_guestbook.php)
+
+
+Privacy
+    * ability to block another user from contacting you
 
 
 Friends
@@ -28,6 +38,8 @@ Friends
 Chat
     * write 1-on-1 chat code, store messages as normal Message objects
     * need ability for admin to create/edit chat rooms
+    * ability to LOCK/UNLOCK a chatroom from public use
+    * ability to allow anon users in certain chatrooms
 
 
 Gallery
@@ -46,8 +58,6 @@ DB CHECKER:
         those who extend from SqlObject, and does some special code to compare tbl structure vs class properties
     * add this to the coredev/selftest eventually (?) may be heavy operation; if so use a memcached variable to only do it once in a while?
 
-
-sql debugger: ability to test-run sql queries in the browser
 
 ---
 

@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: early wip, will replace functions_guestbook.php
+//STATUS: early wip
 
 class Guestbook
 {
