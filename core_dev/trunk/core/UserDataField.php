@@ -7,13 +7,13 @@
 
 // STATUS: early wip
 
-class UserDataType
+class UserDataField
 {
     var $id;
     var $type;
     var $name;
 
-    protected static $tbl_name = 'tblUserDataTypes';
+    protected static $tbl_name = 'tblUserDataField';
 
     public static function get($id)
     {

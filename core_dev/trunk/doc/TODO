@@ -8,6 +8,7 @@ Authentication:
 
 User profile
     * ability to edit own info (email, gender)
+    * ability to change your password (as a normal user)
     * ability for more "userdata", like gender (revive functions_userdata.php ???)
     * ability to upload profile picture
 
