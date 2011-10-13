@@ -5,6 +5,9 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+die('DEPRECATED'); // SEE UserDataType.php
+
+
 require_once('atom_categories.php');    //for multi-choise userdata types
 require_once('network.php');    //for is_email()
 require_once('validate_ssn.php');    //to validate swedish ssn's

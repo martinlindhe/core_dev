@@ -67,7 +67,9 @@ case 'admin':
     echo '<br/>';
     echo ahref('coredev/view/mysql_config', 'MySQL information').'<br/>';
     echo '<br/>';
-    echo ahref('coredev/view/chatrooms/list', 'Chatrooms ').'<br/>';
+    echo ahref('coredev/view/chatrooms/list', 'Chatrooms').'<br/>';
+    echo '<br/>';
+    echo ahref('coredev/view/userdata/list', 'Userdata types').'<br/>';
     break;
 
 case 'view':
