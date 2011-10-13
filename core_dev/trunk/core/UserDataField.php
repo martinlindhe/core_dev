@@ -33,6 +33,18 @@ class UserDataField
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
+    public static function getTypes()
+    {
+        return array(
+        1 => 'String',
+        2 => 'Textarea',
+        3 => 'E-mail',
+//        4 => 'Image',
+//        5 => 'Checkbox',
+//        6 => 'Radio',  // options stored in tblSettings ??!?=!
+        );
+    }
+
 }
 
 ?>
