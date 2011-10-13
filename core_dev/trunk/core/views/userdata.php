@@ -1,6 +1,6 @@
 <?php
 
-//TODO: ability to edit userdata field
+//TODO: ability to delete userdata field
 
 //TODO: show a user's userdata in manage_user.php
 
@@ -52,10 +52,32 @@ case 'new':
 
 case 'edit':
     // child = field id
+
+    function editSubmit($p)
+    {
+        $f = UserDataField::get($p['id']);
+        $f->name = $p['name'];
+        $f->type = $p['type'];
+        UserDataField::store($f);
+
+        js_redirect('coredev/view/userdata/list');
+    }
+
     echo '<h1>Edit userdata field</h1>';
 
     $field = UserDataField::get($this->child);
-    d($field);
+
+    $form = new XhtmlForm();
+    $form->addHidden('id', $field->id);  /// XXX  hack!
+    $form->addInput('name', 'Name', $field->name);
+    $form->addDropdown('type', 'Type', UserDataField::getTypes(), $field->type );
+
+    $form->addSubmit('Save');
+    $form->setHandler('editSubmit');
+    echo $form->render();
+    break;
+
+
     break;
 
 default:
