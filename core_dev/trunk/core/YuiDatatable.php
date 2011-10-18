@@ -45,7 +45,6 @@ class YuiDatatable
     private $datalist        = array();
     private $caption         = '';        ///< caption for the datatable
     private $xhr_source      = '';        ///< url to retrieve data from XMLHttpRequest
-    private $rows_per_page   = 20;        ///< for the paginator
     private $sort_column     = false;     ///< default to false, because first column idx is 0
     private $sort_order;
     private $embed_arrays    = array();   ///< array with strings for substitution of numeric values in some columns
@@ -55,8 +54,20 @@ class YuiDatatable
     private $pixel_width;                 ///< if set, forces horizontal scrollbar on the datatable
     private $pixel_height;                ///< if set, forces vertical scrollbar on the datatable
 
+    private $rows_per_page   = 20;        ///< default for the paginator
+    private $rpp_opts = array(10, 15, 20, 25, 35, 50, 75, 100, 250, 500, 1000);  ///< available "show rows per page" options
+
     function setCaption($s) { $this->caption = $s; }
-    function setRowsPerPage($n) { $this->rows_per_page = $n; }
+
+    function setRowsPerPage($n)
+    {
+        $this->rows_per_page = $n;
+
+        $this->rpp_opts[] = $n;
+        $this->rpp_opts = array_unique($this->rpp_opts);
+        sort($this->rpp_opts);
+    }
+
     function setWidth($n) { $this->pixel_width = $n; }
     function setHeight($n) { $this->pixel_height = $n; }
 
@@ -245,9 +256,6 @@ class YuiDatatable
         $data_var   = 'yui_dt_data'.mt_rand();
         $pag_holder = 'yui_pag'.mt_rand();
 
-        // available "show rows per page" options
-        $rpp_opts = array(10, 15, 20, 25, 35, 50, 75, 100, 250, 500, 1000);
-
         $res =
         'YAHOO.util.Event.addListener(window, "load", function() {'.
             'YAHOO.example.Basic = function() {'.
@@ -364,7 +372,7 @@ class YuiDatatable
                         'paginator: new YAHOO.widget.Paginator({'.
                             (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
                             'rowsPerPage:'.$this->rows_per_page.','.
-                            'rowsPerPageOptions:['.implode(',', $rpp_opts).'],'.
+                            'rowsPerPageOptions:['.implode(',', $this->rpp_opts).'],'.
                             'containers:["'.$pag_holder.'"],'.
                             'template:"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} &nbsp; {CurrentPageReport} {RowsPerPageDropdown} per page",'.
                             'pageReportTemplate:"Showing items {startRecord} - {endRecord} of {totalRecords}",'.
