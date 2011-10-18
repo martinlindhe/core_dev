@@ -194,21 +194,17 @@ function bt()
 }
 
 /**
- * Debug function. Prints $m as hex + ascii values
+ * Debug function
+ * @return $m as hex + ascii values
  */
 function dh($m, $row_len = 16)
 {
-    $len = strlen($m);
-
-    if ($len >= 10)
-        $len = $len.'/0x'.dechex($len);
-
-    echo '[['.$len.' bytes:]]'.ln();
     $j = 0;
     $bytes = '';
     $hex = '';
+    $res = '';
 
-    for ($i=0; $i < $len; $i++)
+    for ($i=0; $i < strlen($m); $i++)
     {
         $x = substr($m, $i, 1);
 
@@ -221,20 +217,20 @@ function dh($m, $row_len = 16)
 
         if (++$j == $row_len) {
             $j = 0;
-            echo $hex.' '.$bytes.PHP_EOL;
+            $res .= $hex.' '.$bytes.ln();
             $bytes = '';
             $hex = '';
         }
     }
 
     if ($j) {
-        echo $hex.' ';
-        echo str_repeat(' ', ($row_len - strlen($bytes)) * 3);
-        echo $bytes.PHP_EOL;
+        $res .=
+        $hex.' '.
+        str_repeat(' ', ($row_len - strlen($bytes)) * 3).
+        $bytes.ln();
     }
 
-    if ($m)
-        echo 'md5: '.md5($m).PHP_EOL;
+    return $res;
 }
 
 /**
