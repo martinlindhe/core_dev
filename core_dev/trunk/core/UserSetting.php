@@ -9,20 +9,21 @@
 
 require_once('constants.php');
 require_once('Settings.php');
+require_once('UserDataField.php');
 
 class UserSetting
 {
-    static function get($id, $name)
+    static function get($owner, $name)
     {
         $setting = new Settings(USER);
-        $setting->setOwner($id);
+        $setting->setOwner($owner);
         return $setting->get($name);
     }
 
-    static function set($id, $name, $val)
+    static function set($owner, $name, $val)
     {
         $setting = new Settings(USER);
-        $setting->setOwner($id);
+        $setting->setOwner($owner);
         return $setting->set($name, $val);
     }
 

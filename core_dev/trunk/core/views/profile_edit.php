@@ -13,8 +13,36 @@ $view = !$this->owner ? 'default': $this->owner;
 
 switch ($view) {
 case 'default':
+
+    function handleEdit($p)
+    {
+        $session = SessionHandler::getInstance();
+
+        foreach ($p as $idx => $val)
+            UserSetting::set($session->id, $idx, $val);
+
+        js_redirect('coredev/view/profile');
+    }
+
     echo '<h1>Edit your profile</h1>';
-    echo '&raquo; '.ahref('coredev/view/profile_edit/username', 'Change username');
+    echo '<br/>';
+
+
+    $form = new XhtmlForm();
+
+    $fields = UserDataField::getAll();
+    foreach ($fields as $f)
+        $form->addInput( $f->name, $f->name, UserSetting::get($session->id, $f->name) );
+
+    $form->addSubmit('Save');
+    $form->setHandler('handleEdit');
+
+
+    echo $form->render();
+
+    echo '<br/><br/>';
+
+    echo '&raquo; '.ahref('coredev/view/profile_edit/username', 'Change username').'<br/>';
     break;
 
 case 'username':
@@ -45,7 +73,7 @@ case 'username':
 
 
     // XXXX FIXME: use js validation from register view
-    $form = new XhtmlForm('chg_user');
+    $form = new XhtmlForm();
     $form->addInput('new_user', 'New username');
 
     $form->addSubmit('Save');

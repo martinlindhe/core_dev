@@ -2,7 +2,7 @@
 
 //TODO: ability to delete userdata field
 
-//TODO: show a user's userdata in manage_user.php
+//TODO: abiltiy to mark a userdata field as required at registration (such as email)
 
 require_once('UserDataField.php');
 require_once('YuiDatatable.php');
@@ -24,7 +24,6 @@ case 'list':
 
     echo '<br/>';
     echo '&raquo; '.ahref('coredev/view/userdata/new', 'Create new field');
-
     break;
 
 case 'new':
