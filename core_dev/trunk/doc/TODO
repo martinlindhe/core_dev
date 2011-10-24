@@ -7,9 +7,8 @@ Authentication:
 
 
 User profile
-    * ability to edit own info (email, gender)
+    * ability for more "userdata", like gender (radio buttons)
     * ability to change your password (as a normal user)
-    * ability for more "userdata", like gender (revive functions_userdata.php ???)
     * ability to upload profile picture
 
     * show a AVATAR if no profile pic is selected

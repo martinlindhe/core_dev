@@ -12,7 +12,8 @@ echo 'Name: '.$f->name.'<br/>';
 echo 'Type: '.$f->type.'<br/>';
 echo 'Size: '.byte_count($f->size).'<br/>';
 echo 'Mimetype: '.$f->mimetype.'<br/>';
-echo 'Uploaded: '.$f->time_uploaded.'<br/>';
+echo 'Uploaded: '.ago($f->time_uploaded).'<br/>';
+echo '<br/>';
 //d($f);
 
 
