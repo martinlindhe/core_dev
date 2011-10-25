@@ -197,7 +197,7 @@ function bt()
  * Debug function
  * @return $m as hex + ascii values
  */
-function dh($m, $row_len = 16)
+function dh($m, $row_len = 16, $fill_char = ' ')
 {
     $j = 0;
     $bytes = '';
@@ -213,7 +213,7 @@ function dh($m, $row_len = 16)
         else
             $bytes .= '.';
 
-        $hex .= bin2hex($x).' ';
+        $hex .= bin2hex($x).$fill_char;
 
         if (++$j == $row_len) {
             $j = 0;
