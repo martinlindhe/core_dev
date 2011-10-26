@@ -22,6 +22,10 @@ echo 'Last active: '.ago($user->time_last_active).'<br/>';
 echo 'Is online: '. ( UserHandler::isOnline($user_id) ? 'YES' : 'NO').'<br/>';
 echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 
+$gender_id = UserSetting::get($user_id, 'gender');
+$gender = Settings::getById($gender_id);
+echo 'Gender: '.$gender.'<br/>';
+
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id)

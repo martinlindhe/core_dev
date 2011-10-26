@@ -1,8 +1,7 @@
 <?php
 
-//STATUS: very wip, nonfunctional
+//STATUS: wip
 
-// TODO: ability to request name change, which will go to admin moderation queue
 // TODO: ability to change email (+ require verification of new email)
 
 require_once('ModerationObject.php');
@@ -31,12 +30,25 @@ case 'default':
     $form = new XhtmlForm();
 
     $fields = UserDataField::getAll();
-    foreach ($fields as $f)
-        $form->addInput( $f->name, $f->name, UserSetting::get($session->id, $f->name) );
+    foreach ($fields as $f) {
+        switch ($f->type) {
+        case UserDataField::RADIO:
+            $opts = UserDataFieldOption::getAll($f->id);
+
+            $arr = array();
+            foreach ($opts as $o)
+                $arr[ $o['settingId'] ] = $o['settingValue'];
+
+            $form->addRadio( $f->name, $f->name, $arr, UserSetting::get($session->id, $f->name));
+            break;
+
+        default:
+            $form->addInput( $f->name, $f->name, UserSetting::get($session->id, $f->name) );
+        }
+    }
 
     $form->addSubmit('Save');
     $form->setHandler('handleEdit');
-
 
     echo $form->render();
 

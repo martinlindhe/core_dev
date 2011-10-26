@@ -60,6 +60,15 @@ class Settings
         return $default;
     }
 
+    static function getById($id)
+    {
+        $q =
+        'SELECT settingValue FROM tblSettings'.
+        ' WHERE settingId = ?';
+        return Sql::pSelectItem($q, 'i', $id);
+    }
+
+
     function set($name, $val)
     {
         $q =
