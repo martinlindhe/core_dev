@@ -53,9 +53,13 @@ case 'default':
             break;
 
         case UserDataField::IMAGE:
+            echo 'XXXX FIXME: show existing image if any';
             $form->addFile( $f->name, $f->name);
             break;
 
+        case UserDataField::CHECKBOX:
+            $form->addCheckbox( $f->name, $f->name, UserSetting::get($session->id, $f->name));
+            break;
 
         default:
             $form->addInput( $f->name, $f->name, UserSetting::get($session->id, $f->name) );

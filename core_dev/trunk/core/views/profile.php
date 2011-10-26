@@ -29,6 +29,9 @@ $gender = Settings::getById($gender_id);
 echo 'Gender: '.$gender.'<br/>';
 
 
+echo 'E-mail: '.UserSetting::get($user_id, 'email').'<br/>';
+echo 'Want ads?: '.UserSetting::get($user_id, 'want_ads').'<br/>';
+
 echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
 
 $pic_id = UserSetting::get($user_id, 'picture');
