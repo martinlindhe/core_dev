@@ -72,7 +72,7 @@ class Image
             return;
         }
 
-        throw new Exception  ('image resource not found: '. $r);
+        throw new Exception ('image resource not found: '.$r);
     }
 
     function render($type = 'png', $dst_file = '')
@@ -102,6 +102,25 @@ class Image
         imagedestroy($this->resource);
     }
 
+}
+
+function showThumb($id, $title = '', $w = 50, $h = 50)
+{
+    $str = '<img src="'.getThumbUrl($id, $w, $h).'" alt="'.strip_tags($title).'" title="'.strip_tags($title).'"/>';
+    return $str;
+}
+
+function getThumbUrl($id, $width = 50, $height = 50)
+{
+    if (!is_numeric($width) || !is_numeric($height))
+       return;
+
+    if (is_float($width))  $width  = floor($width);
+    if (is_float($height)) $height = floor($height);
+
+    $page = XmlDocumentHandler::getInstance();
+
+    return $page->getRelativeUrl().'coredev/image/'.$id.'?w='.$width.'&h='.$height;
 }
 
 ?>

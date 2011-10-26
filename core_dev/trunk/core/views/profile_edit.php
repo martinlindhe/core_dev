@@ -17,10 +17,13 @@ case 'default':
     {
         $session = SessionHandler::getInstance();
 
-        $fields = UserDataField::getAll();
-        foreach ($fields as $f) {
+        foreach (UserDataField::getAll() as $f)
+        {
             switch ($f->type) {
             case UserDataField::IMAGE:
+                if ($p[$f->name]['error'] == UPLOAD_ERR_NO_FILE)
+                    continue;
+
                 $fileId = FileHelper::import(USER, $p[$f->name]);
                 UserSetting::set($session->id, $f->name, $fileId);
                 break;
@@ -53,7 +56,14 @@ case 'default':
             break;
 
         case UserDataField::IMAGE:
-            echo 'XXXX FIXME: show existing image if any';
+
+            $pic_id = UserSetting::get($session->id, 'picture');
+            if ($pic_id) {
+                $img = new XhtmlComponentImage();
+                $img->src = getThumbUrl($pic_id);
+                $form->add($img, 'Existing picture');
+            }
+
             $form->addFile( $f->name, $f->name);
             break;
 

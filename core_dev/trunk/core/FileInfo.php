@@ -61,31 +61,31 @@ class FileInfo
         return SqlHandler::getInstance()->pInsert($q, 'isi', $size, $mime, $id);
     }
 
-    static function getMimeType($filename)
+    static function getMimeType_XXXXXXXXXXXX($filename)
     {
-    if (!file_exists($filename))
+        if (!file_exists($filename))
             return false;
 
-    $c = 'file -bi '.escapeshellarg($filename);
-    $res = exec($c);
+        $c = 'file -bi '.escapeshellarg($filename);
+        $res = exec($c);
 
         // $ file -bi file.flv
         // video/x-flv; charset=binary
         $x = explode(';', $res);
 
-    //XXX: use mediaprobe to distinguish between wmv/wma files.
-    //FIXME: enhance mediaprobe to handle all media detection and stop use "file"
+        //XXX: use mediaprobe to distinguish between wmv/wma files.
+        //FIXME: enhance mediaprobe to handle all media detection and stop use "file"
 /*
-    if ($x[0] == 'video/x-ms-wmv') {
-        $c = 'mediaprobe '.escapeshellarg($filename);
-        return exec($c);
-    }
+        if ($x[0] == 'video/x-ms-wmv') {
+            $c = 'mediaprobe '.escapeshellarg($filename);
+            return exec($c);
+        }
 */
 
-    return $x[0];
+        return $x[0];
     }
 
-    static function render($id)
+    static function render_XXXXXXXXXXXXXXXX($id)
     {
         $file = self::get($id);
         if (!$file)
@@ -121,18 +121,7 @@ class FileInfo
 
         $res .= '<br/>';
 
-    $res .= CommentViewer::render(FILE, $id);
-
-/*
-        // display checksums, if any
-        $arr = $h->files->checksums($id);
-        echo '<h3>Checksums</h3>';
-        echo '<pre>';
-        echo 'sha1: '.$arr['sha1']."\n";
-        echo 'md5:  '.$arr['md5']."\n";
-        echo '</pre>';
-        echo 'Generated at '.$arr['timeCreated'].' in '.$arr['timeExec'].' sec<br/>';
-*/
+        $res .= CommentViewer::render(FILE, $id);
 
         return $res;
     }
@@ -149,33 +138,5 @@ function makeThumbLink($id, $title = '', $w = 50, $h = 50)
     $str .= '</a>';
     return $str;
 }
-
-function showThumb($id, $title = '', $w = 50, $h = 50)
-{
-    $str = '<img src="'.getThumbUrl($id, $w, $h).'" alt="'.strip_tags($title).'" title="'.strip_tags($title).'"/>';
-    return $str;
-}
-
-function getThumbUrl($id, $width = 50, $height = 50)
-{
-    if (!is_numeric($width) || !is_numeric($height))
-       return;
-
-    if (is_float($width))  $width  = floor($width);
-    if (is_float($height)) $height = floor($height);
-
-    $page = XmlDocumentHandler::getInstance();
-
-    return $page->getRelativeUrl().'coredev/image/'.$id.'?w='.$width.'&h='.$height;
-}
-
-/*
-function makeImageLink($_id, $_title = '')
-{
-    if (!is_numeric($_id)) return false;
-
-    return '<img id="img_'.$_id.'" src="'.coredev_webroot().'api/file.php?id='.$_id.'" alt="Image" title="'.strip_tags($_title).'"/>';
-}
-*/
 
 ?>

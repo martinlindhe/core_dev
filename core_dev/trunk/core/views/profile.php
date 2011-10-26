@@ -3,8 +3,6 @@
  * Default view for a user profile
  */
 
-require_once('FileInfo.php'); ///XXX for showThumb()
-
 $session->requireLoggedIn();
 
 $user_id = $session->id;
@@ -35,7 +33,8 @@ echo 'Want ads?: '.UserSetting::get($user_id, 'want_ads').'<br/>';
 echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
 
 $pic_id = UserSetting::get($user_id, 'picture');
-echo 'Profile picture: '.showThumb($pic_id, 'Profilbild', 50, 50).'<br/>';
+if ($pic_id)
+    echo 'Profile picture: '.showThumb($pic_id, 'Profilbild', 50, 50).'<br/>';
 
 
 
