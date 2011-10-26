@@ -12,19 +12,6 @@ require_once('File.php');
 class FileHelper
 {
     /**
-     * @return full local path to uploaded file
-     */
-    public static function getUploadPath($id)
-    {
-        $page = XmlDocumentHandler::getInstance();
-
-        if (!$page->getUploadRoot())
-            throw new Exception ('No upload root configured!');
-
-        return $page->getUploadRoot().'/'.$id;
-    }
-
-    /**
      * @param $key array from $_FILES entry
      * @return file id
      */
@@ -52,7 +39,7 @@ class FileHelper
         $file->time_uploaded = sql_datetime( time() );
         $id = File::store($file);
 
-        $dst_file = self::getUploadPath($id);
+        $dst_file = File::getUploadPath($id);
 
         if (!move_uploaded_file($key['tmp_name'], $dst_file))
             throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
@@ -67,7 +54,7 @@ class FileHelper
 
     static function passthru($id)
     {
-        $path = self::getUploadPath($id);
+        $path = File::getUploadPath($id);
 
         $f = File::get($id);
 
@@ -75,7 +62,10 @@ class FileHelper
         header('Content-Disposition: inline; filename="'.basename($f->name).'"');
         header('Content-Transfer-Encoding: binary');
 
-        header('Content-Type: '.$f->mimetype);
+        $page = XmlDocumentHandler::getInstance();
+
+        $page->disableDesign();
+        $page->setMimeType( $f->mimetype );
 
         if ($f->size)
             header('Content-Length: '. $f->size);
@@ -86,7 +76,7 @@ class FileHelper
     static function delete($id)
     {
         File::delete($id);
-        $path = self::getUploadPath($id);
+        $path = File::getUploadPath($id);
         unlink($path);
     }
 

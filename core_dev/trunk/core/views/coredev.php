@@ -8,6 +8,7 @@ require_once('UserList.php');
 require_once('UserGroupList.php');
 require_once('IconWriter.php');
 require_once('FileHelper.php');
+require_once('ImageResizer.php');
 
 switch ($this->view) {
 case 'error':
@@ -41,7 +42,17 @@ case 'selftest':
 case 'file':
     // passes thru a file
     echo FileHelper::passthru($this->owner);
-    die;
+    return;
+
+case 'image':
+    // passes thru a image (with optional width & height specified)
+
+    $name = File::getUploadPath($this->owner);
+
+    $x = new ImageResizer($name);
+    $x->resizeAspect($_GET['w'], $_GET['h']);
+    $x->render();
+    return;
 
 case 'reset_password':
     // allows users who lost their password to reset it by following a email-link to this view

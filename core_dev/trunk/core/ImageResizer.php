@@ -7,8 +7,6 @@
 
 //STATUS: wip
 
-//XXX: store thumbs on disk: org file csum + target resolution?
-
 require_once('Image.php');
 
 class ImageResizer extends Image
@@ -67,6 +65,11 @@ class ImageResizer extends Image
             return array($to_width, ceil($x_ratio * $this->height));
 
         return array(ceil($y_ratio * $this->width), $to_height);
+    }
+
+    function render($type = 'jpg', $dst_file = '')
+    {
+        return parent::render($type, $dst_file);
     }
 
 }

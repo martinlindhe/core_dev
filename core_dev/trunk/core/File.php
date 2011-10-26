@@ -28,6 +28,19 @@ class File
 
     protected static $tbl_name = 'tblFiles';
 
+    /**
+     * @return full local path to uploaded file
+     */
+    public static function getUploadPath($id)
+    {
+        $page = XmlDocumentHandler::getInstance();
+
+        if (!$page->getUploadRoot())
+            throw new Exception ('No upload root configured!');
+
+        return $page->getUploadRoot().'/'.$id;
+    }
+
     public static function get($id)
     {
         return SqlObject::getById($id, self::$tbl_name, __CLASS__, 'id');
