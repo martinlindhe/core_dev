@@ -17,8 +17,18 @@ case 'default':
     {
         $session = SessionHandler::getInstance();
 
-        foreach ($p as $idx => $val)
-            UserSetting::set($session->id, $idx, $val);
+        $fields = UserDataField::getAll();
+        foreach ($fields as $f) {
+            switch ($f->type) {
+            case UserDataField::IMAGE:
+                $fileId = FileHelper::import(USER, $p[$f->name]);
+                UserSetting::set($session->id, $f->name, $fileId);
+                break;
+
+            default:
+                UserSetting::set($session->id, $f->name, $p[$f->name]);
+            }
+        }
 
         js_redirect('coredev/view/profile');
     }
@@ -41,6 +51,11 @@ case 'default':
 
             $form->addRadio( $f->name, $f->name, $arr, UserSetting::get($session->id, $f->name));
             break;
+
+        case UserDataField::IMAGE:
+            $form->addFile( $f->name, $f->name);
+            break;
+
 
         default:
             $form->addInput( $f->name, $f->name, UserSetting::get($session->id, $f->name) );

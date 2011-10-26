@@ -3,6 +3,8 @@
  * Default view for a user profile
  */
 
+require_once('FileInfo.php'); ///XXX for showThumb()
+
 $session->requireLoggedIn();
 
 $user_id = $session->id;
@@ -25,6 +27,14 @@ echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 $gender_id = UserSetting::get($user_id, 'gender');
 $gender = Settings::getById($gender_id);
 echo 'Gender: '.$gender.'<br/>';
+
+
+echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
+
+$pic_id = UserSetting::get($user_id, 'picture');
+echo 'Profile picture: '.showThumb($pic_id, 'Profilbild', 50, 50).'<br/>';
+
+
 
 echo '<br/>';
 

@@ -18,6 +18,7 @@ class UserDataField
     const STRING   = 1;
     const TEXTAREA = 2;
     const EMAIL    = 3;
+    const IMAGE    = 4;
     const RADIO    = 6;
 
     protected static $tbl_name = 'tblUserDataField';
@@ -46,7 +47,7 @@ class UserDataField
         self::STRING   => 'String',
         self::TEXTAREA => 'Textarea',
         self::EMAIL    => 'E-mail',
-//        4 => 'Image',
+        self::IMAGE    => 'Image',
 //        5 => 'Checkbox',
         self::RADIO    => 'Radio',  // options stored in tblSettings ??!?=!
         );
