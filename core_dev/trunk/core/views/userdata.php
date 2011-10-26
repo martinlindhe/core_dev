@@ -33,9 +33,12 @@ case 'new':
         $f = new UserDataField();
         $f->name = $p['name'];
         $f->type = $p['type'];
-        UserDataField::store($f);
+        $id = UserDataField::store($f);
 
-        js_redirect('coredev/view/userdata/list');
+        if ($f->type == UserDataField::RADIO)
+            js_redirect('coredev/view/userdata/edit/'.$id);
+        else
+            js_redirect('coredev/view/userdata/list');
     }
 
     echo '<h1>New userdata field</h1>';
@@ -57,7 +60,12 @@ case 'edit':
         $f = UserDataField::get($p['id']);
         $f->name = $p['name'];
         $f->type = $p['type'];
-        UserDataField::store($f);
+        $id = UserDataField::store($f);
+
+        if ($f->type == UserDataField::RADIO)
+            for ($i=1; $i<6; $i++)
+                if (!empty($p['opt'.$i]))
+                    UserDataFieldOption::set($id, 'opt'.$i, $p['opt'.$i]);
 
         js_redirect('coredev/view/userdata/list');
     }
@@ -71,12 +79,19 @@ case 'edit':
     $form->addInput('name', 'Name', $field->name);
     $form->addDropdown('type', 'Type', UserDataField::getTypes(), $field->type );
 
+    if ($field->type == UserDataField::RADIO) {
+
+        for ($i=1; $i<6; $i++) {
+            $opt = 'opt'.$i;
+            $val = UserDataFieldOption::get($field->id, $opt);
+
+            $form->addInput($opt, 'Option '.$i, $val);
+        }
+    }
+
     $form->addSubmit('Save');
     $form->setHandler('editSubmit');
     echo $form->render();
-    break;
-
-
     break;
 
 default:

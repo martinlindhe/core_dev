@@ -51,4 +51,10 @@ class YuiTooltip
 
 }
 
+/*
+    $x = new YuiTooltip();
+    $x->text = 'this is teh tooltip!!!';
+    echo $x->render();
+*/
+
 ?>

@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-//XXX: rework into a static class
+//TODO: rework into a static class
 
 require_once('constants.php');
 
@@ -33,34 +33,28 @@ class Settings
      */
     function getOwner($name, $val)
     {
-        $db = SqlHandler::getInstance();
-
         $q =
         'SELECT ownerId FROM tblSettings'.
         ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
-        return $db->pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
+        return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
     }
 
     function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
 
     function getTimeSaved($name, $val)
     {
-        $db = SqlHandler::getInstance();
-
         $q =
         'SELECT timeSaved FROM tblSettings'.
         ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
-        return $db->pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
+        return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
     }
 
     function get($name, $default = '')
     {
-        $db = SqlHandler::getInstance();
-
         $q =
         'SELECT settingValue FROM tblSettings'.
         ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-        $res = $db->pSelectRow($q, 'iiis', $this->owner, $this->category, $this->type, $name);
+        $res = Sql::pSelectRow($q, 'iiis', $this->owner, $this->category, $this->type, $name);
 
         if ($res) return $res['settingValue'];
         return $default;
@@ -68,34 +62,41 @@ class Settings
 
     function set($name, $val)
     {
-        $db = SqlHandler::getInstance();
-
         $q =
         'SELECT settingId FROM tblSettings'.
         ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-        if ($db->pSelectItem($q, 'iiis', $this->owner, $this->category, $this->type, $name)) {
+        if (Sql::pSelectItem($q, 'iiis', $this->owner, $this->category, $this->type, $name)) {
             $q =
             'UPDATE tblSettings SET timeSaved=NOW(), settingValue = ?'.
             ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-            $db->pUpdate($q, 'siiis', $val, $this->owner, $this->category, $this->type, $name);
+            Sql::pUpdate($q, 'siiis', $val, $this->owner, $this->category, $this->type, $name);
         } else {
             $q =
             'INSERT INTO tblSettings SET timeSaved=NOW(),'.
             'ownerId = ?, categoryId = ?, settingType = ?, settingName = ?, settingValue = ?';
-            $db->pInsert($q, 'iiiss', $this->owner, $this->category, $this->type, $name, $val);
+            Sql::pInsert($q, 'iiiss', $this->owner, $this->category, $this->type, $name, $val);
         }
         return true;
     }
 
     function delete($name)
     {
-        $db = SqlHandler::getInstance();
-
         $q =
         'DELETE FROM tblSettings'.
         ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-        $db->pDelete($q, 'iiis', $this->owner, $this->category, $this->type, $name);
+        Sql::pDelete($q, 'iiis', $this->owner, $this->category, $this->type, $name);
         return true;
+    }
+
+    /**
+     * @return 2d array of all settings for owner
+     */
+    function getAll()
+    {
+        $q =
+        'SELECT settingId, settingName, settingValue, categoryId'.
+        ' FROM tblSettings WHERE settingType = ? AND ownerId = ?';
+        return Sql::pSelect($q, 'ii', $this->type, $this->owner);
     }
 
 }

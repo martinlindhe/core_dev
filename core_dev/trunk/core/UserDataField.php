@@ -2,16 +2,23 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
 // STATUS: early wip
+
+require_once('UserDataFieldOption.php');
 
 class UserDataField
 {
     var $id;
     var $type;
     var $name;
+
+    const STRING   = 1;
+    const TEXTAREA = 2;
+    const EMAIL    = 3;
+    const RADIO    = 6;
 
     protected static $tbl_name = 'tblUserDataField';
 
@@ -36,12 +43,12 @@ class UserDataField
     public static function getTypes()
     {
         return array(
-        1 => 'String',
-        2 => 'Textarea',
-        3 => 'E-mail',
+        self::STRING   => 'String',
+        self::TEXTAREA => 'Textarea',
+        self::EMAIL    => 'E-mail',
 //        4 => 'Image',
 //        5 => 'Checkbox',
-//        6 => 'Radio',  // options stored in tblSettings ??!?=!
+        self::RADIO    => 'Radio',  // options stored in tblSettings ??!?=!
         );
     }
 
