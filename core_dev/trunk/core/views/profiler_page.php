@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * Shows page load time & other information
  */
 

@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * Shows SQL query profiling information
  */
 
