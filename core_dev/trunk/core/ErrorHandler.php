@@ -55,12 +55,13 @@ class ErrorHandler
     function internalShutdownHandler()
     {
         $a = error_get_last();
-        if ($a) {
-            echo '</div>'; // XXX hack to try close opened div
-            echo '<pre>';
-            $this->internalErrorHandler($a['type'], $a['message'], $a['file'], $a['line']);
-            echo '</pre>';
-        }
+        if (!$a)
+            return;
+
+        // clear all previous output in order to avoid having error output hidden in a opened html tag
+        ob_end_clean();
+
+        $this->internalErrorHandler($a['type'], $a['message'], $a['file'], $a['line']);
     }
 
     function internalErrorHandler($errno, $errstr, $errfile, $errline, $errcontext = '')
