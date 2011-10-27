@@ -23,7 +23,7 @@ class UserSetting
         return Settings::set(USER, $owner, $name, $val);
     }
 
-    static function delete($id, $name)
+    static function delete($owner, $name)
     {
         return Settings::delete(USER, $owner, $name);
     }
