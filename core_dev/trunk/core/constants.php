@@ -22,11 +22,12 @@
 // defines possible objects and object owners
 define('USER',       1);  ///< normal, public userfile
 define('NEWS',       2);  ///< news categories
-define('BLOG',       3);  ///< normal, personal blog category
+define('CUSTOMER',   3);  ///< ApiCustomer setting
 define('WIKI',       4);  ///< category for wiki file attachments, to allow better organization if needed
-define('SITE',       5);  ///< for SITE POLLS etc
+define('SITE',       5);  ///< for SITE/APP settings etc
 define('FILE',       6);  ///< comments for a file
 define('TOKEN',      7);  ///< activation tokens etc
+define('BLOG',       8);  ///< normal, personal blog category
 
 define('USERDATA_OPTIONS', 20);  ///< used to hold options in tblSettings for UserDataFieldOptions
 

@@ -13,17 +13,12 @@ require_once('constants.php');
 
 class Settings
 {
-    //default types - use id's from 50 and up for application specified types
-    const APPLICATION = 1;  /// XXXX LATER: drop all these constants. must be in major core_dev bump because all databases will break. some places use USER (from constants.php), orher this
-    const USER        = 2;
-    const CUSTOMER    = 3; ///< ApiCustomer setting
-
     var $id;
     var $owner;
     var $category;
     var $name;
     var $value;
-    var $type;
+    var $type;    ///< use numbers from 50 and up for application specific types
     var $time_saved;
 
     public static function get($type, $owner, $name, $default = '')
@@ -85,16 +80,6 @@ class Settings
 
 class Settings__DEPRECATED
 {
-    protected $type     = 0;
-    protected $category = 0;
-    protected $owner    = 0;
-
-    function __construct($type = 0)
-    {
-        if (is_numeric($type))
-            $this->type = $type;
-    }
-
     /**
      * @return ownerId of the setting with the unique value $val
      */
@@ -114,45 +99,6 @@ class Settings__DEPRECATED
         'SELECT timeSaved FROM tblSettings'.
         ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
         return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
-    }
-
-    function get($name, $default = '')
-    {
-        $q =
-        'SELECT settingValue FROM tblSettings'.
-        ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-        $res = Sql::pSelectRow($q, 'iiis', $this->owner, $this->category, $this->type, $name);
-
-        if ($res) return $res['settingValue'];
-        return $default;
-    }
-
-    function set($name, $val)
-    {
-        $q =
-        'SELECT settingId FROM tblSettings'.
-        ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-        if (Sql::pSelectItem($q, 'iiis', $this->owner, $this->category, $this->type, $name)) {
-            $q =
-            'UPDATE tblSettings SET timeSaved=NOW(), settingValue = ?'.
-            ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-            Sql::pUpdate($q, 'siiis', $val, $this->owner, $this->category, $this->type, $name);
-        } else {
-            $q =
-            'INSERT INTO tblSettings SET timeSaved=NOW(),'.
-            'ownerId = ?, categoryId = ?, settingType = ?, settingName = ?, settingValue = ?';
-            Sql::pInsert($q, 'iiiss', $this->owner, $this->category, $this->type, $name, $val);
-        }
-        return true;
-    }
-
-    function delete($name)
-    {
-        $q =
-        'DELETE FROM tblSettings'.
-        ' WHERE ownerId = ? AND categoryId = ? AND settingType = ? AND settingName = ?';
-        Sql::pDelete($q, 'iiis', $this->owner, $this->category, $this->type, $name);
-        return true;
     }
 
     /**
