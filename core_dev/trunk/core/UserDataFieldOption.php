@@ -13,16 +13,12 @@ class UserDataFieldOption
 {
     static function get($owner, $name)
     {
-        $setting = new Settings(USERDATA_OPTIONS);
-        $setting->setOwner($owner);
-        return $setting->get($name);
+        return Settings::get(USERDATA_OPTIONS, $owner, $name);
     }
 
     static function set($owner, $name, $val)
     {
-        $setting = new Settings(USERDATA_OPTIONS);
-        $setting->setOwner($owner);
-        return $setting->set($name, $val);
+        return Settings::set(USERDATA_OPTIONS, $owner, $name, $val);
     }
 
     /**

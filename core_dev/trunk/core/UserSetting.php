@@ -15,23 +15,17 @@ class UserSetting
 {
     static function get($owner, $name)
     {
-        $setting = new Settings(USER);
-        $setting->setOwner($owner);
-        return $setting->get($name);
+        return Settings::get(USER, $owner, $name);
     }
 
     static function set($owner, $name, $val)
     {
-        $setting = new Settings(USER);
-        $setting->setOwner($owner);
-        return $setting->set($name, $val);
+        return Settings::set(USER, $owner, $name, $val);
     }
 
     static function delete($id, $name)
     {
-        $setting = new Settings(USER);
-        $setting->setOwner($id);
-        return $setting->delete($name);
+        return Settings::delete(USER, $owner, $name);
     }
 
     static function getEmail($id) { self::get($id, 'email'); }
@@ -41,7 +35,7 @@ class UserSetting
     /**
      * @return 1d array of owner id's matching name & value
      */
-    static function getList($name, $value)  //XXXX rename
+    static function getList($name, $value)
     {
         $q =
         'SELECT ownerId FROM tblSettings'.
@@ -52,13 +46,14 @@ class UserSetting
     /**
      * @return 2d array of all settings for owner
      */
-    static function getAll($owner) // XXX rename
+    static function getAll($owner)
     {
         $q =
         'SELECT settingId, settingName, settingValue, categoryId'.
         ' FROM tblSettings WHERE settingType = ? AND ownerId = ?';
         return Sql::pSelect($q, 'ii', USER, $owner);
     }
+
 }
 
 ?>

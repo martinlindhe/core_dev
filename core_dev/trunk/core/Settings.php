@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-//TODO: rework into a static class
+//TODO: use SqlObject stuff
 
 require_once('constants.php');
 
@@ -18,6 +18,73 @@ class Settings
     const USER        = 2;
     const CUSTOMER    = 3; ///< ApiCustomer setting
 
+    var $id;
+    var $owner;
+    var $category;
+    var $name;
+    var $value;
+    var $type;
+    var $time_saved;
+
+    public static function get($type, $owner, $name, $default = '')
+    {
+        $q =
+        'SELECT value FROM tblSettings'.
+        ' WHERE owner = ? AND type = ? AND name = ?';
+        $res = Sql::pSelectRow($q, 'iis', $owner, $type, $name);
+
+        if ($res) return $res['value'];
+        return $default;
+    }
+
+    public static function set($type, $owner, $name, $val)
+    {
+        $q =
+        'SELECT id FROM tblSettings'.
+        ' WHERE owner = ? AND type = ? AND name = ?';
+
+        if (Sql::pSelectItem($q, 'iis', $owner, $type, $name)) {
+            $q =
+            'UPDATE tblSettings SET time_saved = NOW(), value = ?'.
+            ' WHERE owner = ? AND type = ? AND name = ?';
+            Sql::pUpdate($q, 'siis', $val, $owner, $type, $name);
+        } else {
+            $q =
+            'INSERT INTO tblSettings SET time_saved = NOW(),'.
+            'owner = ?, type = ?, name = ?, value = ?';
+            Sql::pInsert($q, 'iiss', $owner, $type, $name, $val);
+        }
+        return true;
+    }
+
+    public static function delete($type, $owner, $name)
+    {
+        throw new Exception ('XXX should work just not testd!');
+
+        $q =
+        'DELETE FROM tblSettings'.
+        ' WHERE owner = ? AND type = ? AND name = ?';
+        Sql::pDelete($q, 'iiis', $owner, $type, $name);
+        return true;
+    }
+
+    public static function getById($id)
+    {
+        $q =
+        'SELECT value FROM tblSettings'.
+        ' WHERE id = ?';
+        return Sql::pSelectItem($q, 'i', $id);
+    }
+
+}
+
+
+
+
+
+
+class Settings__DEPRECATED
+{
     protected $type     = 0;
     protected $category = 0;
     protected $owner    = 0;
@@ -59,15 +126,6 @@ class Settings
         if ($res) return $res['settingValue'];
         return $default;
     }
-
-    static function getById($id)
-    {
-        $q =
-        'SELECT settingValue FROM tblSettings'.
-        ' WHERE settingId = ?';
-        return Sql::pSelectItem($q, 'i', $id);
-    }
-
 
     function set($name, $val)
     {
