@@ -48,9 +48,22 @@ class ErrorHandler
     private function init()
     {
         set_error_handler( array($this, 'internalErrorHandler') );
+        register_shutdown_function( array($this, 'internalShutdownHandler') );
     }
 
-    function internalErrorHandler($errno, $errstr, $errfile, $errline, $errcontext)
+    /** will catch FATAL errors (type = E_ERROR) */
+    function internalShutdownHandler()
+    {
+        $a = error_get_last();
+        if ($a) {
+            echo '</div>'; // XXX hack to try close opened div
+            echo '<pre>';
+            $this->internalErrorHandler($a['type'], $a['message'], $a['file'], $a['line']);
+            echo '</pre>';
+        }
+    }
+
+    function internalErrorHandler($errno, $errstr, $errfile, $errline, $errcontext = '')
     {
         // http://se.php.net/manual/en/errorfunc.constants.php
         switch ($errno) {
