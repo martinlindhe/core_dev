@@ -12,30 +12,33 @@
 
 //STATUS: wip
 
-//TODO: make class static
-
 require_once('constants.php');
 require_once('Setting.php');
 
-class Token extends Settings
+class Token
 {
-    function __construct()
+    public static function exists($name, $val)
     {
-        $this->type = TOKEN;
-    }
-
-    function exists($name, $val)
-    {
-        $id = $this->getOwner($name, $val);
+        $id = self::getOwner($name, $val);
         if ($id)
             return true;
         return false;
     }
 
-    /** @return true if token is expired or dont exists */
-    function isExpired($name, $val, $duration)
+    public static function getOwner($name, $val)
     {
-        $ts = $this->getTimeSaved($name, $val);
+        return Setting::getOwner(TOKEN, $name, $val);
+    }
+
+    public static function delete($owner, $name)
+    {
+        return Setting::delete(TOKEN, $owner, $name);
+    }
+
+    /** @return true if token is expired or dont exists */
+    public static function isExpired($name, $val, $duration)
+    {
+        $ts = Setting::getTimeSaved(TOKEN, $name, $val);
         if (!$ts)
             return true;
 
@@ -49,22 +52,19 @@ class Token extends Settings
      * Creates a new token for specified $name
      * @return newly created token
      */
-    function generate($name)
+    public static function generate($owner, $name)
     {
-        if (!$this->owner)
-            return false;
-
         $session = SessionHandler::getInstance();
 
         do {
             $val = sha1('pOwplopw' . $session->id . mt_rand() . $session->name . 'LAZER!!');
 
-            if (!$this->getOwner($name, $val))
+            if (!Setting::getOwner(TOKEN, $name, $val))
                 break;
 
         } while (1);
 
-        $this->set($name, $val);
+        Setting::set(TOKEN, $owner, $name, $val);
 
         return $val;
     }

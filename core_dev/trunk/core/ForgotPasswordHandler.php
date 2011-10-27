@@ -68,9 +68,7 @@ The link will expire in @EXPIRETIME@';
         if (!$email)
             throw new Exception ('entered email not found');
 
-        $tok = new Token();
-        $tok->setOwner($user_id);
-        $code = $tok->generate('activation_code');
+        $code = Token::generate($user_id, 'activation_code');
 
         $pattern = array(
             '/@USERNAME@/',

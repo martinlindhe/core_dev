@@ -54,7 +54,7 @@ class Setting
 
     public static function delete($type, $owner, $name)
     {
-        throw new Exception ('XXX should work just not testd!');
+        throw new Exception ('XXX should work just not tested!');
 
         $q =
         'DELETE FROM tblSettings'.
@@ -74,7 +74,7 @@ class Setting
     /**
      * @return 2d array of all settings for owner
      */
-    static function getAll($type, $owner)
+    public static function getAll($type, $owner)
     {
         $q =
         'SELECT id, name, value, category'.
@@ -82,32 +82,27 @@ class Setting
         return Sql::pSelect($q, 'ii', $type, $owner);
     }
 
-}
-
-
-
-
-
-
-class Settings__DEPRECATED
-{
     /**
+     * Used by Token class
      * @return ownerId of the setting with the unique value $val
      */
-    function getOwner($name, $val)
+    public static function getOwner($type, $name, $val)
     {
         $q =
-        'SELECT ownerId FROM tblSettings'.
-        ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
-        return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
+        'SELECT owner FROM tblSettings'.
+        ' WHERE type = ? AND name = ? AND value = ?';
+        return Sql::pSelectItem($q, 'iss', $type, $name, $val);
     }
 
-    function getTimeSaved($name, $val)
+    /**
+     * Used by Token class
+     */
+    public static function getTimeSaved($type, $name, $val)
     {
         $q =
-        'SELECT timeSaved FROM tblSettings'.
-        ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
-        return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
+        'SELECT time_saved FROM tblSettings'.
+        ' WHERE type = ? AND name = ? AND value = ?';
+        return Sql::pSelectItem($q, 'iss', $type, $name, $val);
     }
 
 }

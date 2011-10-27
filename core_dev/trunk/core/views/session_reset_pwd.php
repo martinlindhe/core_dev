@@ -13,16 +13,14 @@ require_once('ForgotPasswordHandler.php');
 if (!$this->token)
     return;
 
-$tok = new Token();
-
 $duration = ForgotPasswordHandler::getInstance()->getExpireTime();
-if ($tok->isExpired('activation_code', $this->token, $duration))
+if (Token::isExpired('activation_code', $this->token, $duration))
 {
     echo 'The token is no longer valid.';
     return;
 }
 
-$user_id = $tok->getOwner('activation_code', $this->token);
+$user_id = Token::getOwner('activation_code', $this->token);
 
 if (!$user_id)
     throw new Exception ('token dont exist');
@@ -42,8 +40,7 @@ if (isset($_POST['reset_pwd']) && isset($_POST['reset_pwd2']))
         echo '<div class="okay">Your password has been reset. You have been logged in.</div>';
 
         // delete consumed token
-        $tok->setOwner($user_id);
-        $tok->delete('activation_code');
+        Token::delete($user_id, 'activation_code');
         return;
     } else
         $error->add('The passwords dont match');
