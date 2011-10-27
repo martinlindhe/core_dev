@@ -4,12 +4,11 @@ Autumn 2011 cleanup:
 Authentication:
     * Verify that "forgot password" feature works
     * ability to login using registered email (2x doublecheck that email is unique and verified)
+    * re-implement "reserved username" words from atom_moderation.php
 
 
 User profile
-    * ability for more "userdata", like gender (radio buttons)
     * ability to change your password (as a normal user)
-    * ability to upload profile picture
 
     * show a AVATAR if no profile pic is selected
     * link to: chat 1-to-1, see gallery
@@ -18,11 +17,6 @@ User profile
 
 Messages
     * finish Messages class
-
-
-Guestbook
-    * finish Guestbook class
-    * (drop functions_guestbook.php)
 
 
 Privacy
@@ -42,14 +36,19 @@ Chat
     * ability to allow anon users in certain chatrooms
 
 
-Gallery
-    * use some nice-looking js image viewer
-    * drop / rewrite of functions_fileareas.php
-
-
 Moderation
     * ability for a user to report an unappropriate picture, or an abusive user
     * (rewrite of atom_moderation.php)
+
+
+Guestbook (NOT USED IN RR)
+    * finish Guestbook class
+    * (drop functions_guestbook.php)
+
+
+Gallery (NOT USED IN RR)
+    * use some nice-looking js image viewer
+    * drop / rewrite of functions_fileareas.php
 
 
 DB CHECKER:
@@ -57,6 +56,10 @@ DB CHECKER:
     * do a checker that includes all core/*.php files and iterates over all known classes and finds
         those who extend from SqlObject, and does some special code to compare tbl structure vs class properties
     * add this to the coredev/selftest eventually (?) may be heavy operation; if so use a memcached variable to only do it once in a while?
+
+
+ADMIN:
+    * paginate "manage files" view in admin to 50 objects/page or something
 
 
 ---

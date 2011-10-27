@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: wip! will  replace atom_moderation.php
+//STATUS: wip, will replace atom_moderation.php
 
 // ModerationObject types:
 define('MODERATE_CHANGE_USERNAME', 1);   // data holds new username
@@ -76,24 +76,33 @@ class ModerationObject
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    static function getStatusByReference($reference)
+    static function getStatusByReference($type, $reference)
     {
         $q =
         'SELECT approved FROM '.self::$tbl_name.
-        ' WHERE reference = ?';
+        ' WHERE type = ? AND reference = ?';
 
-        return Sql::pSelectItem($q, 'i', $reference);
+        return Sql::pSelectItem($q, 'ii', $type, $reference);
     }
 
-    static function getByReference($reference)
+    static function getByReference($type, $reference)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE reference = ?';
+        ' WHERE type = ? AND reference = ?';
 
-        $row = Sql::pSelectRow($q, 'i', $reference);
+        $row = Sql::pSelectRow($q, 'ii', $type, $reference);
 
         return SqlObject::loadObject($row, __CLASS__);
+    }
+
+    static function deleteByReference($type, $reference)
+    {
+        $q =
+        'DELETE FROM '.self::$tbl_name.
+        ' WHERE type = ? AND reference = ?';
+
+        return Sql::pDelete($q, 'ii', $type, $reference);
     }
 
     static function add($type, $data, $reference = '')
