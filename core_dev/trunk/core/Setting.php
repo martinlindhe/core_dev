@@ -11,7 +11,7 @@
 
 require_once('constants.php');
 
-class Settings
+class Setting
 {
     var $id;
     var $owner;

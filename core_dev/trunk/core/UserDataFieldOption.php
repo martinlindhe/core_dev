@@ -7,23 +7,25 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-// STATUS: early wip
+// STATUS: wip
+
+require_once('Setting.php');
 
 class UserDataFieldOption
 {
     static function get($owner, $name)
     {
-        return Settings::get(USERDATA_OPTIONS, $owner, $name);
+        return Setting::get(USERDATA_OPTIONS, $owner, $name);
     }
 
     static function set($owner, $name, $val)
     {
-        return Settings::set(USERDATA_OPTIONS, $owner, $name, $val);
+        return Setting::set(USERDATA_OPTIONS, $owner, $name, $val);
     }
 
     static function getAll($owner)
     {
-        return Settings::getAll(USERDATA_OPTIONS, $owner);
+        return Setting::getAll(USERDATA_OPTIONS, $owner);
     }
 
 }

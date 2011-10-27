@@ -8,24 +8,24 @@
  */
 
 require_once('constants.php');
-require_once('Settings.php');
+require_once('Setting.php');
 require_once('UserDataField.php');
 
 class UserSetting
 {
     static function get($owner, $name)
     {
-        return Settings::get(USER, $owner, $name);
+        return Setting::get(USER, $owner, $name);
     }
 
     static function set($owner, $name, $val)
     {
-        return Settings::set(USER, $owner, $name, $val);
+        return Setting::set(USER, $owner, $name, $val);
     }
 
     static function delete($owner, $name)
     {
-        return Settings::delete(USER, $owner, $name);
+        return Setting::delete(USER, $owner, $name);
     }
 
     static function getEmail($id) { self::get($id, 'email'); }
@@ -48,10 +48,7 @@ class UserSetting
      */
     static function getAll($owner)
     {
-        $q =
-        'SELECT settingId, settingName, settingValue, categoryId'.
-        ' FROM tblSettings WHERE settingType = ? AND ownerId = ?';
-        return Sql::pSelect($q, 'ii', USER, $owner);
+        return Setting::getAll(USER, $owner);
     }
 
 }
