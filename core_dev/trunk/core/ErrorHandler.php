@@ -65,38 +65,25 @@ class ErrorHandler
 
     function internalErrorHandler($errno, $errstr, $errfile, $errline, $errcontext = '')
     {
+        $s = $errstr;
+
         // http://se.php.net/manual/en/errorfunc.constants.php
         switch ($errno) {
-        case E_ERROR:
-        case E_USER_ERROR:
-            $type = 'ERROR';
-            $s = $errstr;
-            break;
-
-        case E_WARNING:
-        case E_USER_WARNING:
-            $type = 'WARNING';
-            $s = $errstr;
-            break;
-
-        case E_NOTICE:
-        case E_USER_NOTICE:
-            $type = 'NOTICE';
-            $s = $errstr;
-            break;
-
-        case E_STRICT:
-            $type = 'STRICT';
-            $s = $errstr;
-            break;
+        case E_ERROR:         $type = 'E_ERROR'; break;
+        case E_WARNING:       $type = 'E_WARNING'; break;
+        case E_NOTICE:        $type = 'E_NOTICE'; break;
+        case E_STRICT:        $type = 'E_STRICT'; break;
+        case E_USER_ERROR:    $type = 'E_USER_ERROR'; break;
+        case E_USER_WARNING:  $type = 'E_USER_WARNING'; break;
+        case E_USER_NOTICE:   $type = 'E_USER_NOTICE'; break;
 
         default:
             $type = 'UNKNOWN';
-            $s = "Unknown error type: [$errno] $errstr";
+            $s = 'Unknown error type '.$errno.': '.$errstr;
             break;
         }
 
-        dp('PHP ERROR: '.$type.' '.$s.' on '.$errfile.':'.$errline);
+        dp('PHP ERROR: '.$type.' ('.$errno.') '.$s.' on '.$errfile.':'.$errline);
 
         // Dont display errors that is hidden by error_reporting setting
         if (!(error_reporting() & $errno))
