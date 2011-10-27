@@ -17,6 +17,7 @@ case 'list':
 
     $dt = new YuiDatatable();
     $dt->addColumn('id',    'Name', 'link', 'coredev/view/userdata/edit/', 'name');
+    $dt->addColumn('label', 'Label');
     $dt->addColumn('type',  'Type', 'array', UserDataField::getTypes() );
 
     $dt->setDataList( $list );
@@ -33,6 +34,7 @@ case 'new':
         $f = new UserDataField();
         $f->name = $p['name'];
         $f->type = $p['type'];
+        $f->label = $p['label'];
         $id = UserDataField::store($f);
 
         if ($f->type == UserDataField::RADIO)
@@ -45,6 +47,7 @@ case 'new':
 
     $form = new XhtmlForm();
     $form->addInput('name', 'Name');
+    $form->addInput('label', 'Label');
     $form->addDropdown('type', 'Type', UserDataField::getTypes() );
 
     $form->addSubmit('Create');
@@ -58,8 +61,9 @@ case 'edit':
     function editSubmit($p)
     {
         $f = UserDataField::get($p['id']);
-        $f->name = $p['name'];
-        $f->type = $p['type'];
+        $f->name  = $p['name'];
+        $f->label = $p['label'];
+        $f->type  = $p['type'];
         $id = UserDataField::store($f);
 
         if ($f->type == UserDataField::RADIO)
@@ -77,6 +81,7 @@ case 'edit':
     $form = new XhtmlForm();
     $form->addHidden('id', $field->id);  /// XXX  hack!
     $form->addInput('name', 'Name', $field->name);
+    $form->addInput('label', 'Label', $field->label);
     $form->addDropdown('type', 'Type', UserDataField::getTypes(), $field->type );
 
     if ($field->type == UserDataField::RADIO) {

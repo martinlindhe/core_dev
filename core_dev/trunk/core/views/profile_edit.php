@@ -50,9 +50,9 @@ case 'default':
 
             $arr = array();
             foreach ($opts as $o)
-                $arr[ $o['settingId'] ] = $o['settingValue'];
+                $arr[ $o['id'] ] = $o['value'];
 
-            $form->addRadio( $f->name, $f->name, $arr, UserSetting::get($session->id, $f->name));
+            $form->addRadio( $f->name, $f->label, $arr, UserSetting::get($session->id, $f->name));
             break;
 
         case UserDataField::IMAGE:
@@ -64,15 +64,15 @@ case 'default':
                 $form->add($img, 'Existing picture');
             }
 
-            $form->addFile( $f->name, $f->name);
+            $form->addFile( $f->name, $f->label);
             break;
 
         case UserDataField::CHECKBOX:
-            $form->addCheckbox( $f->name, $f->name, UserSetting::get($session->id, $f->name));
+            $form->addCheckbox( $f->name, $f->label, UserSetting::get($session->id, $f->name));
             break;
 
         default:
-            $form->addInput( $f->name, $f->name, UserSetting::get($session->id, $f->name) );
+            $form->addInput( $f->name, $f->label, UserSetting::get($session->id, $f->name) );
         }
     }
 

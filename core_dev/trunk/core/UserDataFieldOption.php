@@ -21,15 +21,9 @@ class UserDataFieldOption
         return Settings::set(USERDATA_OPTIONS, $owner, $name, $val);
     }
 
-    /**
-     * @return 2d array of all settings for owner
-     */
     static function getAll($owner)
     {
-        $q =
-        'SELECT settingId, settingName, settingValue, categoryId'.
-        ' FROM tblSettings WHERE settingType = ? AND ownerId = ?';
-        return Sql::pSelect($q, 'ii', USERDATA_OPTIONS, $owner);
+        return Settings::getAll(USERDATA_OPTIONS, $owner);
     }
 
 }

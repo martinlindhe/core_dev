@@ -13,7 +13,8 @@ class UserDataField
 {
     var $id;
     var $type;
-    var $name;
+    var $name;   ///< field name (to refer to field in code)
+    var $label;  ///< field label (to show end user)
 
     const STRING   = 1;
     const TEXTAREA = 2;

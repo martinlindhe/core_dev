@@ -71,6 +71,17 @@ class Settings
         return Sql::pSelectItem($q, 'i', $id);
     }
 
+    /**
+     * @return 2d array of all settings for owner
+     */
+    static function getAll($type, $owner)
+    {
+        $q =
+        'SELECT id, name, value, category'.
+        ' FROM tblSettings WHERE type = ? AND owner = ?';
+        return Sql::pSelect($q, 'ii', $type, $owner);
+    }
+
 }
 
 
@@ -91,25 +102,12 @@ class Settings__DEPRECATED
         return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
     }
 
-    function setOwner($n) { if (is_numeric($n)) $this->owner = $n; }
-
     function getTimeSaved($name, $val)
     {
         $q =
         'SELECT timeSaved FROM tblSettings'.
         ' WHERE categoryId = ? AND settingType = ? AND settingName = ? AND settingValue = ?';
         return Sql::pSelectItem($q, 'iiss', $this->category, $this->type, $name, $val);
-    }
-
-    /**
-     * @return 2d array of all settings for owner
-     */
-    function getAll()
-    {
-        $q =
-        'SELECT settingId, settingName, settingValue, categoryId'.
-        ' FROM tblSettings WHERE settingType = ? AND ownerId = ?';
-        return Sql::pSelect($q, 'ii', $this->type, $this->owner);
     }
 
 }
