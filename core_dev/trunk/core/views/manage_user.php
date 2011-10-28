@@ -123,9 +123,9 @@ echo '<tr><th>Name</th><th>Value</th><th>Delete</th></tr>';
 foreach ($settings as $set)
 {
     echo '<tr>';
-    echo '<td>'.xhtmlInput('setting_name_'.$set['settingId'], $set['settingName']).'</td>';
-    echo '<td>'.xhtmlInput('setting_val_'.$set['settingId'], $set['settingValue']).'</td>';
-    echo '<td><a href="'.relurl_add( array('remove_setting'=>$set['settingName']) ).'">Remove</a></td>';
+    echo '<td>'.xhtmlInput('setting_name_'.$set['id'], $set['name']).'</td>';
+    echo '<td>'.xhtmlInput('setting_val_'.$set['id'], $set['value']).'</td>';
+    echo '<td><a href="'.relurl_add( array('remove_setting'=>$set['name']) ).'">Remove</a></td>';
     echo '</tr>';
 }
 echo '</table>';

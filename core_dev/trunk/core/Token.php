@@ -17,6 +17,11 @@ require_once('Setting.php');
 
 class Token
 {
+    public static function get($owner, $name, $default = '')
+    {
+        return Setting::get(TOKEN, $owner, $name, $default);
+    }
+
     public static function exists($name, $val)
     {
         $id = self::getOwner($name, $val);
