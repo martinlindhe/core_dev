@@ -90,7 +90,9 @@ class ErrorHandler
         if (!(error_reporting() & $errno))
             return;
 
-        echo '<b>'.$type.':</b> '.$s." on $errfile:$errline<br/>\n";
+        echo '<pre>';
+        echo '<b>'.$type.':</b> '.$s.' on '.$errfile.':'.$errline;
+        echo '</pre>';
 
         // Don't execute PHP internal error handler
         return true;
