@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-// STATUS: early wip
+// STATUS: wip
 
 require_once('UserDataFieldOption.php');
 

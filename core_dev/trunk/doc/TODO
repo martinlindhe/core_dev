@@ -6,7 +6,7 @@ Autumn 2011 cleanup:
 
 
 Authentication:
-    * Verify that "forgot password" feature works
+    * Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
     * ability to login using registered email (2x doublecheck that email is unique and verified)
     * re-implement "reserved username" words from atom_moderation.php
 
