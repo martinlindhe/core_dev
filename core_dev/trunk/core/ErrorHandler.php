@@ -58,8 +58,14 @@ class ErrorHandler
         if (!$a)
             return;
 
+        $out = ob_get_contents();
+
         // clear all previous output in order to avoid having error output hidden in a opened html tag
         ob_end_clean();
+
+        echo '<pre>';
+        echo strip_tags($out);
+        echo '</pre>';
 
         $this->internalErrorHandler($a['type'], $a['message'], $a['file'], $a['line']);
     }

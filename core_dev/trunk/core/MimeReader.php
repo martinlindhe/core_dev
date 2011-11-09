@@ -9,7 +9,8 @@
 
 //STATUS: WIP
 
-//TODO: decode filenames from windows latin1 encoding (use imap_utf8) !
+//TODO: rework this to a static class
+
 //TODO hmm: make a base mime reader class and extend a EMailReader class from it??
 //FIXME: parseHeader() limitation - multiple keys with same name will just be glued together (Received are one such common header key)
 
@@ -44,7 +45,7 @@ class MimeReader
         return false;
     }
 
-    function getAsEMail($id)
+    function getAsEMail($id) //XXX rework somehow when class is static
     {
         $mail = new EMail();
         $mail->id          = $id;
@@ -52,8 +53,8 @@ class MimeReader
         $mail->headers     = $this->headers;
         $mail->attachments = $this->attachments;
 
-        if (isset($this->headers['Subject']))
-            $mail->subject = $this->headers['Subject'];
+        if (isset($this->headers['subject']))
+            $mail->subject = $this->headers['subject'];
 
         return $mail;
     }
@@ -72,7 +73,7 @@ class MimeReader
         $body = trim(substr($data, $pos + strlen("\r\n\r\n")));
         $this->attachments = $this->parseAttachments($body);
 
-        $from = $this->headers['From'];
+        $from = $this->headers['from'];
         if (is_email($from))
             $this->from_adr = strtolower($from);
         else {
@@ -84,7 +85,8 @@ class MimeReader
             if (is_email($s))
                 $this->from_adr = strtolower($s);
             else
-                echo "XXX FAILED TO extract adr from ".$from."\n"; ///XXX should not be possilbe
+                // XXX should not be possilbe
+                throw new Exception ('FAILED TO extract adr from '.$from);
         }
 
         return true;
@@ -95,31 +97,11 @@ class MimeReader
      */
     function parseHeader($raw_head)
     {
-        $arr = explode("\n", $raw_head);
-        $header = array();
-
-        $decode_headers = array('From', 'Subject');
-
-        foreach ($arr as $row)
-        {
-            $pos = strpos($row, ': ');
-            if ($pos) $curr_key = substr($row, 0, $pos);
-            if (!$curr_key) die('super error');
-            if (empty($header[ $curr_key ]))
-                $header[ $curr_key ] = substr($row, $pos + strlen(': '));
-            else
-                $header[ $curr_key ] .= $row;
-
-            // decode "=?iso-8859-1?Q?Tommy_J=F8nsson?= <tommy@example.com>"
-            if (in_array($curr_key, $decode_headers))
-                $header[ $curr_key ] = imap_utf8($header[ $curr_key ]);
-
-            $header[ $curr_key ] = normalizeString($header[ $curr_key ]);
-        }
-
-        return $header;
+        $headers = iconv_mime_decode_headers($raw_head);
+        
+        // lowercase array keys
+        return array_combine(array_map('strtolower', array_keys($headers)), array_values($headers));
     }
-
 
     /**
      * Parses and decodes attachments
@@ -129,7 +111,7 @@ class MimeReader
         $att = array();
 
         // find multipart separator
-        $content = explode('; ', $this->getHeader('Content-Type') );
+        $content = explode('; ', $this->getHeader('content-type') );
 
         if ($content[0] == 'text/plain')
         {
@@ -152,7 +134,7 @@ class MimeReader
             $pos = strpos($part, '=');
 
             if ($pos === false)
-                throw new Exception ("multipart header error, Content-Type: ".$this->getHeader('Content-Type'));
+                throw new Exception ("multipart header error, Content-Type: ".$this->getHeader('content-type'));
 
             $key = substr($part, 0, $pos);
             $val = substr($part, $pos+1);
@@ -160,6 +142,7 @@ class MimeReader
             switch ($key) {
             case 'boundary':
                 $multipart_id = '--'.str_replace('"', '', $val);
+                d($multipart_id);
                 break;
 
             default:
@@ -179,11 +162,11 @@ class MimeReader
             $p2 = strpos($body, $multipart_id, $p1+strlen($multipart_id));
 
             if ($p1 === false || $p2 === false) {
-                echo "p1: ".$p1.", p2: ".$p2."\n";
+                echo "p1: ".$p1.", p2: ".$p2.", multipart_id: ".$multipart_id."\n";
                 die("error parsing attachment\n");
             }
 
-            //$current contains a whole block with attachment & attachment header
+            // $current contains a whole block with attachment & attachment header
             $current = substr($body, $p1 + strlen($multipart_id), $p2 - $p1 - strlen($multipart_id));
 
             $head_pos = strpos($current, "\r\n\r\n");
@@ -198,11 +181,11 @@ class MimeReader
             $att[ $part_cnt ]['body']   = $a_body;
             $body = substr($body, $p2);
 
-            $params = explode('; ', $this->getHeader('Content-Type', $att[ $part_cnt ]['header']) );
+            $params = explode('; ', $this->getHeader('content-type', $att[ $part_cnt ]['header']) );
             $att[ $part_cnt ]['mimetype'] = $params[0];
 
-            if ($this->getHeader('Content-Location', $att[ $part_cnt ]['header']))
-                $att[ $part_cnt ]['filename'] = $this->getHeader('Content-Location', $att[ $part_cnt ]['header'] );
+            if ($this->getHeader('content-location', $att[ $part_cnt ]['header']))
+                $att[ $part_cnt ]['filename'] = $this->getHeader('content-location', $att[ $part_cnt ]['header'] );
 
             if (empty($att[ $part_cnt ]['filename']))
             {
@@ -218,8 +201,8 @@ class MimeReader
                 continue;
             }
 
-            $enc = $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header']);
-            $enc = strtolower($enc); /// some mail clients sends in uppercase
+            $enc = $this->getHeader('content-transfer-encoding', $att[ $part_cnt ]['header']);
+            $enc = strtolower($enc); /// HACK: Outlook 11 sends in uppercase
 
             switch ($enc) {
             case '7bit': break;
