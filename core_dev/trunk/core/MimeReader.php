@@ -218,8 +218,8 @@ class MimeReader
                 continue;
             }
 
-			$enc = $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header']);
-			$enc = strtolower($enc); /// some mail clients sends in uppercase
+            $enc = $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header']);
+            $enc = strtolower($enc); /// some mail clients sends in uppercase
 
             switch ($enc) {
             case '7bit': break;
