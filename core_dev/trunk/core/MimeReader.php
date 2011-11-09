@@ -142,7 +142,6 @@ class MimeReader
             switch ($key) {
             case 'boundary':
                 $multipart_id = '--'.str_replace('"', '', $val);
-                d($multipart_id);
                 break;
 
             default:
