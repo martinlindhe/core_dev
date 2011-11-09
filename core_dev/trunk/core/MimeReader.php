@@ -218,24 +218,20 @@ class MimeReader
                 continue;
             }
 
-            switch ( $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header']) )
-            {
-            case '7bit':
-                break;
+			$enc = $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header']);
+			$enc = strtolower($enc); /// some mail clients sends in uppercase
 
-            case '8bit':
-                break;
-
-            case 'quoted-printable':
-                break;
+            switch ($enc) {
+            case '7bit': break;
+            case '8bit': break;
+            case 'quoted-printable': break;
 
             case 'base64':
                 $att[ $part_cnt ]['body'] = base64_decode($att[ $part_cnt ]['body']);
                 break;
 
             default:
-                echo "Unknown transfer encoding: '". $this->getHeader('Content-Transfer-Encoding', $att[ $part_cnt ]['header'])."'\n";
-                break;
+                throw new Exception ("Unknown transfer encoding: ".$enc );
             }
 
             $part_cnt++;
