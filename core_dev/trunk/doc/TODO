@@ -1,8 +1,9 @@
 Autumn 2011 cleanup:
 
-* första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
-* fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
+BUGS:
+    * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
+    * fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
 
 Authentication:
@@ -73,7 +74,8 @@ ADMIN:
 BEFORE 1.0 (201?):
 
     * Login with Facebook:
-        - ability to link a Facebook account with a regular account, XXX always give privilegies to regular account
+        - ability to link a Facebook account with a regular account, so that the fb account acts as a child account,
+            - always give privilegies to the regular "owner/main" account
         - ability to "login with facebook" and get logged in to the linked privilegied account
         - if using a linked account, show facebook info on user rendered link
 

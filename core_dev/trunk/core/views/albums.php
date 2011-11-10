@@ -1,11 +1,13 @@
 <?php
-//TODO: close up view on a photo
+//TODO: close up view on a photo with "scrolling", use some fancy js stuff
 //TODO: ability to rotate an uploaded photo
 
 //TODO: ability to delete a photo
 //TODO: ability to delete an empty photo album
 
 //TODO later: move "create system wide albums" to admin panel
+
+//FIXME: reject uploads that is not an image
 
 require_once('PhotoAlbum.php');
 
@@ -68,7 +70,7 @@ case 'show':
     $images = File::getByCategory(USER, $this->child2);
     
     foreach ($images as $im) {
-        echo showThumb($im->id, $im->name, 50, 50).'<br/>';
+        echo showThumb($im->id, $im->name, 50, 50).'<br/><br/>';
     }
 
     if ($session->id == $this->child)
