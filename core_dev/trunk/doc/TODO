@@ -11,6 +11,10 @@ Authentication:
     * ability to login using registered email (2x doublecheck that email is unique and verified)
     * re-implement "reserved username" words from atom_moderation.php
 
+UI:
+    * look at jquery-ui
+    * http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js
+    
 
 User profile
     * show a AVATAR if no profile pic is selected
@@ -40,20 +44,18 @@ Chat
 
 
 Moderation
-    * ability for a user to report an unappropriate picture, or an abusive user
-    * (rewrite of atom_moderation.php)
+    * ability for a user to report an unappropriate photo, or an abusive user- items which ends up in ModerationQueue
 
 
 Guestbook (NOT USED IN RR)
     * finish Guestbook class
-    * (drop functions_guestbook.php)
 
 
 Photo albums (NOT USED IN RR)
     - 2011-11-10: see core/PhotoAlbum.php and core/views/albums.php
     * drop / rewrite of functions_fileareas.php
-    * use some nice-looking js image viewer
-
+    * ability to delete an uploaded photo
+  
 
 DB CHECKER:
     * all classes that is 1-to-1 mapped to a db table should extend from a common class (SqlObject?)

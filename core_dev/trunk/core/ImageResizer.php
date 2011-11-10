@@ -15,7 +15,7 @@ class ImageResizer extends Image
     protected $tmp_dir  = '/tmp/core_dev-images/';
 
     /**
-     * Resizes specified image file to specified dimensions
+     * Resizes image to specified dimensions
      *
      * @param $to_width if set, resize image to this width
      * @param $to_height if set, resize image to this height
@@ -73,49 +73,5 @@ class ImageResizer extends Image
     }
 
 }
-
-
-/**
- * Resizes selected image to $pct percent of orginal image dimensions
- *
- * @param $in_file filename of input image
- * @param $out_file filename of output image
- * @param $_pct percent to resize, relative to orginal image dimensions
- */
-
-/*
-function resizeImage($in_file, $out_file, $_pct)
-{
-    global $h, $config;
-    if (!is_numeric($_pct)) return false;
-
-    $mime = $h->files->lookupMimeType($in_file);
-
-    if (!$h->files->image_convert) return false;
-
-    //Resize with imagemagick
-    switch ($mime) {
-        case 'image/jpeg':
-            $c = 'convert -resize '.$_pct. '% -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/png':
-            $c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/gif':
-            $c = 'convert -resize '.$_pct. '% '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
-            break;
-
-        default:
-            echo 'resizeImage(): Unhandled mimetype "'.$mime.'"<br/>';
-            return false;
-    }
-    //echo 'Executing: '.$c.'<br/>';
-    exec($c);
-    if (!file_exists($out_file)) return false;
-    return true;
-}
-*/
 
 ?>

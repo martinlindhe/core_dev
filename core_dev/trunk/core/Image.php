@@ -101,8 +101,6 @@ class Image
             imagepng($this->resource, $dst_file);
             break;
         }
-
-        imagedestroy($this->resource);
     }
 
 }

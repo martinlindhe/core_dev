@@ -9,57 +9,8 @@
 
 //STATUS: reworking snippets into classes, see ImageResizer
 
-$config['image']['resample_resized'] = true;      ///< use imagecopyresampled() instead of imagecopyresized() to create better-looking thumbnails
-$config['image']['jpeg_quality']     = 75;        ///< 0-100% quality for recompression of very large uploads (like digital camera pictures)
-
 $predef_color['white'] = array(255,255,255);
 $predef_color['black'] = array(0,0,0);
-
-/**
- * Crops selected image to the requested dimensions
- *
- * @param $in_file filename of input image
- * @param $in_file filename of output image
- * @param $x1 coordinate x1
- * @param $y1 coordinate y1
- * @param $x2 coordinate x2
- * @param $y2 coordinate y2
- * @return true on success
- */
-function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
-{
-    global $h, $config;
-    if (!is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
-
-    $mime = $h->files->lookupMimeType($in_file);
-
-    if (!$h->files->image_convert) return false;
-
-    $crop = ($x2-$x1).'x'.($y2-$y1).'+'.$x1.'+'.$y1;
-
-    //Crop with imagemagick
-    switch ($mime) {
-        case 'image/jpeg':
-            $c = 'convert -crop '.$crop. ' -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/png':
-            $c = 'convert -crop '.$crop. ' '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/gif':
-            $c = 'convert -crop '.$crop. ' '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
-            break;
-
-        default:
-            echo 'cropImage(): Unhandled mimetype "'.$mime.'"<br/>';
-            return false;
-    }
-    //echo 'Executing: '.$c.'<br/>';
-    exec($c);
-    if (!file_exists($out_file)) return false;
-    return true;
-}
 
 /**
  * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
@@ -95,70 +46,6 @@ function convertImage($in_file, $out_file, $to_mime)
     exec($c);
     if (!file_exists($out_file)) return false;
     return true;
-}
-
-/**
- * Rotates a image the specified angle. Uses imagemagick if possible
- * The gd function imagerotate() is only available in bundled gd (php windows)
- *
- * @param $in_file input filename
- * @param $out_file output filename
- * @param $_angle %angle to rotate. between -360 and 360
- */
-function rotateImage($in_file, $out_file, $_angle)
-{
-    global $h, $config;
-    if (!is_numeric($_angle)) return false;
-
-    $mime = $h->files->lookupMimeType($in_file);
-
-    if ($h->files->image_convert) {
-        //Rotate with imagemagick
-        switch ($mime) {
-            case 'image/jpeg':
-                $c = 'convert -rotate '.$_angle. ' -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
-                break;
-
-            case 'image/png':
-                $c = 'convert -rotate '.$_angle. ' '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
-                break;
-
-            case 'image/gif':
-                $c = 'convert -rotate '.$_angle. ' '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
-                break;
-
-            default:
-                echo 'rotateImage(): Unhandled mimetype "'.$mime.'"<br/>';
-                return false;
-        }
-        //echo 'Executing: '.$c.'<br/>';
-        exec($c);
-        if (!file_exists($out_file)) return false;
-        return true;
-    }
-
-    if (!function_exists('imagerotate')) {
-        die('CANNOT ROTATE IMAGE. PLEASE INSTALL IMAGEMAGICK OR BUNDLED PHP_GD!');
-    }
-
-    switch ($mime) {
-        case 'image/jpeg': $im = imagecreatefromjpeg($in_file); break;
-        case 'image/png':  $im = imagecreatefrompng($in_file); break;
-        case 'image/gif':  $im = imagecreatefromgif($in_file); break;
-        default: die('Unsupported image type '.$mime);
-    }
-
-    $rotated = imagerotate($im, $_angle, 0);
-    imagedestroy($im);
-
-    switch ($mime) {
-        case 'image/jpeg': imagejpeg($rotated, $filename, $config['image']['jpeg_quality']); break;
-        case 'image/png':  imagepng($rotated, $filename); break;
-        case 'image/gif':  imagegif($rotated, $filename); break;
-        default: die('Unsupported image type '.$mime);
-    }
-
-    imagedestroy($rotated);
 }
 
 /**
