@@ -83,24 +83,6 @@ case 'admin':
     echo ahref('coredev/view/userdata/list', 'Userdata types').'<br/>';
     break;
 
-case 'view':
-    // display a built-in view. owner = name of view in core/views/
-
-    if (!is_alphanumeric($this->owner)) {
-        dp('HACK user '.$session->id.' attempted to use load view: '.$this->owner);
-        die(':-P');
-    }
-
-    $file = $page->getCoreDevInclude().'views/'.$this->owner.'.php';
-    if (!file_exists($file))
-        throw new Exception ('DEBUG: view not found '.$file);
-
-    $view = new ViewModel($file);
-    $view->registerVar('owner', $this->child);
-    $view->registerVar('child', $this->child2);
-    echo $view->render();
-    break;
-
 case 'robots':
     $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
     $page->setMimeType('text/plain');

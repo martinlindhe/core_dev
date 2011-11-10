@@ -28,6 +28,7 @@ define('SITE',       5);  ///< for SITE/APP settings etc
 define('FILE',       6);  ///< comments for a file
 define('TOKEN',      7);  ///< activation tokens etc
 define('BLOG',       8);  ///< normal, personal blog category
+define('EXTERNAL',   9);  ///< setting type relies on some external component
 
 define('USERDATA_OPTIONS', 20);  ///< used to hold options in tblSettings for UserDataFieldOptions
 
@@ -42,8 +43,6 @@ const TODOLIST   =  4; ///< todolist item comments
 const GENERIC    =  5; ///< generic comment type
 const PASTEBIN   =  6; ///< "pastebin" text. anonymous submissions are allowed
 const SCRIBBLE   =  7; ///< scribble board
-const CUSTOMER   =  8; ///< customer comments
-const FILEDESC   =  9; ///< this is a file description, only one per file can exist
 const ADMIN_IP   = 10; ///< a comment on a specific IP number, written by an admin (only shown to admins), ownerId=geoip number
 */
 
