@@ -12,6 +12,8 @@
  */
  
 //STATUS: works
+
+//TODO: expand popup view with links to image
  
 class YuiLightbox
 {
@@ -21,13 +23,13 @@ class YuiLightbox
         
         $page = XmlDocumentHandler::getInstance();
 
-        $header->includeJs('http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js');
+        $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
         $header->includeJs($page->getCoreDevRoot().'js/ext/gallery-lightbox/gallery-lightbox-min.js'); 
 
         $header->includeCss($page->getCoreDevRoot().'js/ext/gallery-lightbox/assets/skins/sam/gallery-lightbox-skin.css');
         
         $js =
-        'YUI().use("gallery-lightbox", '.
+        'YUI().use("gallery-lightbox", "node-deprecated", '.  //XXXX: node-deprecated is added to allow it to work with > YUI 3.0.0
             'function (Y)'.
             '{'.
                 'Y.Lightbox.init();'.

@@ -55,6 +55,7 @@ Photo albums (NOT USED IN RR)
     - 2011-11-10: see core/PhotoAlbum.php and core/views/albums.php
     * drop / rewrite of functions_fileareas.php
     * ability to delete an uploaded photo
+    * expose ImageRotate functionality, to allow user to rotate picture
   
 
 DB CHECKER:

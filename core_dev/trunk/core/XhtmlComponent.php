@@ -10,6 +10,7 @@
 require_once('CoreBase.php');
 
 // standard html components:
+require_once('XhtmlComponentA.php');
 require_once('XhtmlComponentAudio.php');
 require_once('XhtmlComponentButton.php');
 require_once('XhtmlComponentCheckbox.php');

@@ -67,9 +67,12 @@ case 'show':
     $images = File::getByCategory(USER, $this->child2);
     
     foreach ($images as $im) {
-        echo '<a href="'.getThumbUrl($im->id, 0, 0).'" rel="lightbox[album]">';
-        echo showThumb($im->id, $im->name, 150, 150, 'lightbox[album]');
-        echo '</a>';
+        $a = new XhtmlComponentA();
+        $a->href = getThumbUrl($im->id, 0, 0);
+        $a->rel  = 'lightbox[album]';
+        $a->content = showThumb($im->id, $im->name, 150, 150);
+        echo $a->render();
+        echo ahref('xxxxx', 'XXXX FIXME show Photo details');
         echo '<br/><br/>';
     }
 

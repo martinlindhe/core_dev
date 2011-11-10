@@ -93,12 +93,14 @@ function relurl_add($p)
 /** Creates a clickable link */
 function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
-    return
-    '<a href="'.relurl($url).'"'.
-    ($class   ? ' class="'.$class.'"' : '').
-    ($target  ? ' target="'.$target.'"' : '').
-    ($onclick ? ' onclick="'.$onclick.'"' : ''). // executes javascript
-    '>'.$text.'</a>';
+    $a = new XhtmlComponentA();
+    $a->content = $text;
+    $a->href = relurl($url);
+    $a->class = $class;
+    $a->target = $target;
+    $a->onClick($onclick);
+    
+    return $a->render();
 }
 
 /** Creates a clickable link that opens in a new window */
