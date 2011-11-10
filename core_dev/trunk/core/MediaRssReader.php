@@ -56,7 +56,7 @@ class MediaRssReader extends RssReader
                 // http url with a m3u playlist, possibly containing more m3u playlists
                 $m3u = new M3uReader( $this->reader->getAttribute('url') );
 
-echo '<pre>';
+//throw new Exception ('xxxxxxx apple stuff');
                 foreach ( $m3u->getItems() as $m) {
                     if (file_suffix($m->getUrl()) == '.m3u8') {
                         // pl points to another playlist
@@ -66,7 +66,7 @@ echo '<pre>';
                         $item->addMediaItems( $m3u2->getItems() );
                     }
                 }
-                break;
+                return;
             }
 
             $media = new VideoResource();
@@ -92,6 +92,8 @@ echo '<pre>';
 
         while ($this->reader->read()) {
             if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'media:content') {
+
+//                d($media);
                 $item->addMedia($media);
                 return;
             }
@@ -108,7 +110,7 @@ echo '<pre>';
 
             // <media:title>Uppdrag granskning - Del 7 av 16: Kapade nätverk</media:title>
             case 'media:title':
-                $media->title = $this->reader->readValue();
+                $title = $this->reader->readValue();  //XXXX never used!
                 break;
 
             default:

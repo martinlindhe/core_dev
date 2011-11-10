@@ -15,10 +15,10 @@ case 'list':
     $list = ChatRoom::getList();
 
     foreach ($list as $cr)
-        echo ahref('coredev/view/chatrooms/edit/'.$cr->id, $cr->name).'<br/>';
+        echo ahref('iview/chatrooms/edit/'.$cr->id, $cr->name).'<br/>';
 
     echo '<br/>';
-    echo '&raquo; '.ahref('coredev/view/chatrooms/new', 'New chatroom');
+    echo '&raquo; '.ahref('iview/chatrooms/new', 'New chatroom');
     break;
 
 case 'edit':
@@ -30,7 +30,7 @@ case 'edit':
         $o->name = trim($p['name']);
         ChatRoom::store($o);
 
-        js_redirect('coredev/view/chatrooms/list');
+        js_redirect('iview/chatrooms/list');
     }
 
     $o = ChatRoom::get($this->child);
@@ -52,7 +52,7 @@ case 'new':
         $o->name = trim($p['name']);
         ChatRoom::store($o);
 
-        js_redirect('coredev/view/chatrooms/list');
+        js_redirect('iview/chatrooms/list');
     }
 
     echo '<h2>Create new chatroom</h2>';

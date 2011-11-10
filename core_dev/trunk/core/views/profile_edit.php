@@ -33,7 +33,7 @@ case 'default':
             }
         }
 
-        js_redirect('coredev/view/profile');
+        js_redirect('iview/profile');
     }
 
     echo '<h1>Edit your profile</h1>';
@@ -83,7 +83,7 @@ case 'default':
 
     echo '<br/><br/>';
 
-    echo '&raquo; '.ahref('coredev/view/profile_edit/username', 'Change username').'<br/>';
+    echo '&raquo; '.ahref('iview/profile_edit/username', 'Change username').'<br/>';
     break;
 
 case 'username':

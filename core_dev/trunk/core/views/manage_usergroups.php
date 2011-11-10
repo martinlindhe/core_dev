@@ -41,7 +41,7 @@ echo '<tr><th>Name</th><th>Level</th><th>Info</th><th>Created</th></tr>';
 foreach ( UserGroupList::getItems() as $grp)
 {
     echo '<tr>';
-    echo '<td>'.ahref('coredev/view/manage_usergroup/'.$grp->getId(), $grp->getName()).'</td>';
+    echo '<td>'.ahref('iview/manage_usergroup/'.$grp->getId(), $grp->getName()).'</td>';
     echo '<td>'.$grp->getLevelDesc().'</td>';
     echo '<td>'.$grp->getInfo().'</td>';
     echo '<td>'.sql_datetime( $grp->getTimeCreated() ).'</td>';

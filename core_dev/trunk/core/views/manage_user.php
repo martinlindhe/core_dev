@@ -26,7 +26,7 @@ if (!$user->id) {
 
 echo '<h1>User admin for '.$user->name.'</h1>';
 
-echo '&raquo; '.ahref('coredev/view/profile/'.$user->id, 'Show profile').'<br/>';
+echo '&raquo; '.ahref('iview/profile/'.$user->id, 'Show profile').'<br/>';
 
 if ($user->type == USER_FACEBOOK)
 {
@@ -87,7 +87,7 @@ echo 'This user is member of the following groups:<br/>';
 
 foreach (UserHandler::getGroups($user->id) as $g) {
     echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
-    echo ahref('coredev/view/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
+    echo ahref('iview/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
 }
 echo '<br/>';
 

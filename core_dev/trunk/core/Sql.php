@@ -95,6 +95,8 @@ class Sql
 
             if (is_numeric($x2) || $x2 == '"')
             {
+                throw new Exception ('XXX: query is not prepared: (val is '.$x2.') ... '.$old_s);
+
                 echo 'XXX: query is not prepared: (val is '.$x2.') ... '.$old_s.ln();
                 return false;
             }

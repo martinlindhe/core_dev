@@ -64,7 +64,7 @@ case 'send':
         $m->time_sent = sql_datetime( time() );
         Message::store($m);
 
-        js_redirect('coredev/view/profile_messages');
+        js_redirect('iview/profile_messages');
     }
 
     $user = User::get($this->child);

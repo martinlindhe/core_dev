@@ -21,8 +21,8 @@ case 'default':
     //d( $list );
 
     $dt = new YuiDatatable();
-    $dt->addColumn('id',           'Id',    'link', 'coredev/view/moderation/handle/', 'name');
-    $dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('id',           'Id',    'link', 'iview/moderation/handle/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('data',         'Data');
@@ -31,8 +31,8 @@ case 'default':
     echo $dt->render();
 
     echo '<br/>';
-    echo '&raquo; '.ahref('coredev/view/moderation/approved', 'Show approved objects').'<br/>';
-    echo '&raquo; '.ahref('coredev/view/moderation/denied', 'Show denied objects').'<br/>';
+    echo '&raquo; '.ahref('iview/moderation/approved', 'Show approved objects').'<br/>';
+    echo '&raquo; '.ahref('iview/moderation/denied', 'Show denied objects').'<br/>';
     break;
 
 case 'approved':
@@ -42,12 +42,12 @@ case 'approved':
     //d( $list );
 
     $dt = new YuiDatatable();
-    $dt->addColumn('id',           'Id' ); //,    'link', 'coredev/view/moderation/handle/', 'name');
-    $dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('id',           'Id' ); //,    'link', 'iview/moderation/handle/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('time_handled', 'Approved');
-    $dt->addColumn('handled_by',   'Approved by', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('handled_by',   'Approved by', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
     $dt->setDataList( $list );
@@ -61,12 +61,12 @@ case 'denied':
     //d( $list );
 
     $dt = new YuiDatatable();
-    $dt->addColumn('id',           'Id' ); //,    'link', 'coredev/view/moderation/handle/', 'name');
-    $dt->addColumn('owner',        'Owner', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('id',           'Id' ); //,    'link', 'iview/moderation/handle/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('time_handled', 'Denied');
-    $dt->addColumn('handled_by',   'Denied by', 'link', 'coredev/view/manage_user/', 'name');
+    $dt->addColumn('handled_by',   'Denied by', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
     $dt->setDataList( $list );
@@ -89,7 +89,7 @@ case 'handle':
         ModerationObject::store($o);
 
         if (!isset($_GET['approve']))
-            redir('coredev/view/moderation');
+            redir('iview/moderation');
 
         switch ($o->type) {
         case MODERATE_CHANGE_USERNAME:
@@ -108,7 +108,7 @@ case 'handle':
             throw new Exception ('Unhandled ModerationObject type '.$o->type);
         }
 
-        redir('coredev/view/moderation');
+        redir('iview/moderation');
     }
 
     echo '<h1>Moderate object # '.$this->child.'</h1>';

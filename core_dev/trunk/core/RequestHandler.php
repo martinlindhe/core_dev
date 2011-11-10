@@ -117,10 +117,11 @@ class RequestHandler
             $page->attach( $view->render() );
         }
 
-        if ($this->_controller == 'coredev')
-            $file = $page->getCoreDevInclude().'views/coredev.php';
-        else
-            $file = 'views/'.$this->_controller.'.php';
+        switch ($this->_controller) {
+        case 'coredev': $file = $page->getCoreDevInclude().'views/coredev.php'; break;
+        case 'iview':   $file = $page->getCoreDevInclude().'views/iview.php'; break;
+        default: $file = 'views/'.$this->_controller.'.php';
+        }
 
         if (!file_exists($file))
             $file = 'views/error_404.php';

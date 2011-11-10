@@ -14,7 +14,7 @@ switch ($this->view) {
 case 'error':
     $header->setTitle( t('Error message') );
     echo $error->render(true);
-    echo ahref('coredev/view/login', 'Log in').'<br/>';
+    echo ahref('iview/login', 'Log in').'<br/>';
     echo ahref('./', 'Go to start page').'<br/>';
     break;
 
@@ -65,22 +65,22 @@ case 'admin':
     $session->requireSuperAdmin();
 
     echo '<h1>core_dev admin</h1>';
-    echo ahref('coredev/view/moderation', 'Moderation queue').'<br/>';
+    echo ahref('iview/moderation', 'Moderation queue').'<br/>';
     echo '<br/>';
-    echo ahref('coredev/view/manage_users', 'Manage users').'<br/>';
-    echo ahref('coredev/view/manage_usergroups', 'Manage user groups').'<br/>';
-    echo ahref('coredev/view/manage_files', 'Manage files').'<br/>';
+    echo ahref('iview/manage_users', 'Manage users').'<br/>';
+    echo ahref('iview/manage_usergroups', 'Manage user groups').'<br/>';
+    echo ahref('iview/manage_files', 'Manage files').'<br/>';
     echo '<br/>';
-    echo ahref('coredev/view/phpinfo', 'phpinfo()').'<br/>';
-    echo ahref('coredev/view/compatiblity', 'Compatibility check').'<br/>';
-    echo ahref('coredev/view/timezones', 'Time zones').'<br/>';
-    echo ahref('coredev/view/currency', 'Currencies').'<br/>';
+    echo ahref('iview/phpinfo', 'phpinfo()').'<br/>';
+    echo ahref('iview/compatiblity', 'Compatibility check').'<br/>';
+    echo ahref('iview/timezones', 'Time zones').'<br/>';
+    echo ahref('iview/currency', 'Currencies').'<br/>';
     echo '<br/>';
-    echo ahref('coredev/view/mysql_config', 'MySQL information').'<br/>';
+    echo ahref('iview/mysql_config', 'MySQL information').'<br/>';
     echo '<br/>';
-    echo ahref('coredev/view/chatrooms/list', 'Chatrooms').'<br/>';
+    echo ahref('iview/chatrooms/list', 'Chatrooms').'<br/>';
     echo '<br/>';
-    echo ahref('coredev/view/userdata/list', 'Userdata types').'<br/>';
+    echo ahref('iview/userdata/list', 'Userdata types').'<br/>';
     break;
 
 case 'robots':

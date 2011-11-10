@@ -41,14 +41,14 @@ if ($pic_id)
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id)
-    echo '&raquo; '.ahref('coredev/view/profile_messages/send/'.$user_id, 'Send message').'<br/>';
+    echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
 
-echo '&raquo; '.ahref('coredev/view/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
+echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
 echo '&raquo; '.ahref('coredev/view/albums/overview/'.$user_id, 'Photos').'<br/>';
 
 echo '<br/>';
 
 if ($session->id && $user_id == $session->id)
-    echo '&raquo; '.ahref('coredev/view/profile_edit', 'Edit profile').'<br/>';
+    echo '&raquo; '.ahref('iview/profile_edit', 'Edit profile').'<br/>';
 
 ?>
