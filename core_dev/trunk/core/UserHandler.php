@@ -200,10 +200,10 @@ class UserHandler
         return true;
     }
 
-    private static function encryptPassword($id, $s)
+    public static function encryptPassword($id, $pwd)
     {
         $session = SessionHandler::getInstance();
-        return sha1( $id.sha1( $session->getEncryptKey() ).sha1($s) );
+        return sha1( $id . sha1( $session->getEncryptKey() ) . sha1($pwd) );
     }
 
     public static function setUsername($id, $username)

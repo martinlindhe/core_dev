@@ -13,8 +13,6 @@ Authentication:
 
 
 User profile
-    * ability to change your password (as a normal user)
-
     * show a AVATAR if no profile pic is selected
     * link to: chat 1-to-1, see gallery
     * avability: available for chat?

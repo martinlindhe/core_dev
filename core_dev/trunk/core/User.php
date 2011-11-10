@@ -81,7 +81,8 @@ class User
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE time_deleted IS NULL AND id = ?';
+        ' WHERE id = ?'.
+        ' AND time_deleted IS NULL';
         $row = Sql::pSelectRow($q, 'i', $id);
 
         return SqlObject::loadObject($row, __CLASS__);
@@ -89,7 +90,10 @@ class User
 
     public static function getByName($name)
     {
-        $q = 'SELECT * FROM tblUsers WHERE time_deleted IS NULL AND name = ?';
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE name = ?'.
+        ' AND time_deleted IS NULL';
         $row = Sql::pSelectRow($q, 's', $name);
 
         if (!$row) return false;
@@ -102,8 +106,26 @@ class User
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
+    /**
+     * Used by SessionHandler::login() and others
+     */
+    static function getExact($type, $id, $name, $pwd)
+    {
+        $q =
+        'SELECT * FROM tblUsers'.
+        ' WHERE id = ? AND name = ? AND password = ? AND type = ? AND time_deleted IS NULL';
 
+        $row = Sql::pSelectRow($q,
+        'issi',
+        $id,
+        $name,
+        UserHandler::encryptPassword($id, $pwd),
+        $type
+        );
 
+        if (!$row) return false;
+        return SqlObject::loadObject($row, __CLASS__);        
+    }
 
     /**
      * Marks specified user as "deleted"

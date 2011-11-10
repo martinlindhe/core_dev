@@ -193,7 +193,7 @@ class Sql
         $stmt = self::pExecStmt( func_get_args() );
 
         if ($stmt->field_count != 1)
-            throw new Exception ('not 1 column result');
+            throw new Exception ('expected 1 column result, got '.$stmt->field_count.' columns');
 
         $stmt->bind_result($col1);
 

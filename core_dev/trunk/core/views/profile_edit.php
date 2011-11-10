@@ -3,6 +3,7 @@
 //STATUS: wip
 
 // TODO: ability to change email (+ require verification of new email)
+// TODO: check minimum allowed password lenght etc when user changes password
 
 require_once('ModerationObject.php');
 
@@ -40,7 +41,6 @@ case 'default':
 
     echo '<h1>Edit your profile</h1>';
     echo '<br/>';
-
 
     $form = new XhtmlForm();
 
@@ -81,17 +81,17 @@ case 'default':
 
     $form->addSubmit('Save');
     $form->setHandler('handleEdit');
-
     echo $form->render();
 
     echo '<br/><br/>';
 
     echo '&raquo; '.ahref('iview/profile_edit/username', 'Change username').'<br/>';
+    echo '&raquo; '.ahref('iview/profile_edit/password', 'Change password').'<br/>';    
     break;
 
 case 'username':
 
-    function handleSubmit($p)
+    function handleEditUsername($p)
     {
         $p['new_user'] = trim($p['new_user']);
 
@@ -115,17 +115,60 @@ case 'username':
 
     //XXX do user have a pending request for username change??
 
-
     // XXXX FIXME: use js validation from register view
     $form = new XhtmlForm();
     $form->addInput('new_user', 'New username');
 
     $form->addSubmit('Save');
-    $form->setHandler('handleSubmit');
+    $form->setHandler('handleEditUsername');
 
     echo $form->render();
     break;
 
+case 'password':
+
+    function handleEditPassword($p)
+    {
+        $error = ErrorHandler::getInstance();
+        $session = SessionHandler::getInstance();
+
+        $u = User::getExact($session->type, $session->id, $session->username, $p['curr_pwd']);
+        if (!$u) {
+            $error->add('Current password is not correct');
+            return false;
+        }
+        
+        if ($p['new_pwd'] != $p['new_pwd2']) {
+            $error->add('passwords dont match');
+            return false;
+        }
+        
+        if (!$p['new_pwd']) {
+            $error->add('no password entered');
+            return false;
+        }
+        
+        UserHandler::setPassword($session->id, $p['new_pwd']);    
+        
+        js_redirect('iview/profile_edit');
+    }
+
+    echo '<h1>Change password</h1>';
+
+    // XXXX FIXME: use js validation from register view
+    $form = new XhtmlForm();
+    $form->addPassword('curr_pwd', 'Current password');
+
+    $form->addPassword('new_pwd', 'New password');
+    $form->addPassword('new_pwd2', 'New password again');
+
+    $form->addSubmit('Save');
+    $form->setHandler('handleEditPassword');
+
+    echo $form->render();
+    break;
+    
+    
 default:
     echo 'no such view: '.$view;
 }

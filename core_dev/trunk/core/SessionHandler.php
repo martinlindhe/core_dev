@@ -32,7 +32,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     static $_instance;             ///< singleton
 
     var $id;                       ///< internal user id (tblUsers.userId)
-    var $type = 'normal';          ///< 'normal' or 'facebook' session
+    var $type  = USER_REGULAR;     ///< USER_REGULAR or USER_FACEBOOK session
     var $ip;                       ///< current IP address
     var $username;                 ///< stores "facebook id" for facebook users, otherwise unique username
     var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
@@ -118,7 +118,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
      * @param $pwd
      * @return true on success
      */
-    function login($username, $pwd, $type = 'normal')
+    function login($username, $pwd, $type = USER_REGULAR)
     {
         $error   = ErrorHandler::getInstance();
 
@@ -131,11 +131,11 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $pwd      = trim($pwd);
 
         switch ($type) {
-        case 'normal':
+        case USER_REGULAR:
             $user = User::getByName($username);
             break;
 
-        case 'facebook':
+        case USER_FACEBOOK:
             $user = new FacebookUser($username);
             break;
         default: throw new Exception ('hmm '.$type);
@@ -146,18 +146,8 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             return false;
         }
 
-        $q =
-        'SELECT COUNT(*) FROM tblUsers'.
-        ' WHERE id = ? AND name = ? AND password = ? AND type = ? AND time_deleted IS NULL';
-
-        $x = Sql::pSelectItem($q,
-        'issi',
-        $user->id,
-        $username,
-        sha1( $user->id . sha1($this->encrypt_key) . sha1($pwd) ),  // encrypted password
-        $user->type
-        );
-
+        $x = User::getExact($type, $user->id, $username, $pwd);        
+        
         if (!$x) {
             dp('Failed login attempt: username '.$username);
             $error->add('Login failed - user not found2');
