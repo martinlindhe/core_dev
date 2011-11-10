@@ -83,6 +83,8 @@ class ErrorHandler
         case E_USER_ERROR:    $type = 'E_USER_ERROR'; break;
         case E_USER_WARNING:  $type = 'E_USER_WARNING'; break;
         case E_USER_NOTICE:   $type = 'E_USER_NOTICE'; break;
+        case E_RECOVERABLE_ERROR: $type = 'E_RECOVERABLE_ERROR'; break;
+        case E_DEPRECATED:    $type = 'E_DEPRECATED'; break;
 
         default:
             $type = 'UNKNOWN';

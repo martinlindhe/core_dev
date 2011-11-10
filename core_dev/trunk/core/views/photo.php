@@ -3,11 +3,11 @@
  * details of an uploaded user photo
  */
 
-//TODO: ability to rotate an uploaded photo
 //TODO: ability to edit description of photo
 //TODO: add comments to photo
 
 require_once('Image.php'); // for getThumbUrl()
+require_once('ImageRotator.php');
 require_once('YuiLightbox.php');
 
 switch ($this->owner) {
@@ -30,8 +30,36 @@ d($im);
     $lb = new YuiLightbox();
     echo $lb->render().'<br/>';
 
-    if ($session->id && $session->id == $im->uploader)
-        echo '&raquo; '.ahref('iview/photo/delete/'.$im->id, 'Delete photo');
+    if ($session->id && $session->id == $im->uploader) {
+        echo '&raquo; '.ahref('iview/photo/rotate/'.$im->id.'/90', 'Rotate left').'<br/>';
+        echo '&raquo; '.ahref('iview/photo/rotate/'.$im->id.'/270', 'Rotate right').'<br/>';
+        echo '<br/>';
+        echo '&raquo; '.ahref('iview/photo/delete/'.$im->id, 'Delete photo').'<br/>';
+    }
+    break;
+
+case 'rotate':
+    // child = file id
+    // child2 = rotate %
+    
+    $allowed = array(90, 270);
+    if (!in_array($this->child2, $allowed)) {
+        dp('HACK: odd rotate %: '.$this->child2);
+        return;
+    }
+    
+    $session->requireLoggedIn();
+    $f = File::get($this->child);
+    if ($session->id != $f->uploader) {
+        dp('HACK: tried to rotate photo '.$this->child.' which is not uploaded by user '.$session->id);
+        return;
+    }
+    
+    $im = new ImageRotator($f);
+
+    $im->rotate($this->child2);
+    $im->render( $im->mimetype, File::getUploadPath($f->id) );
+    js_redirect('iview/photo/show/'.$f->id);  
     break;
 
 case 'delete':

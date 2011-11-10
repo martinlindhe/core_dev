@@ -16,8 +16,8 @@ class Image
     protected $resource;   ///< holds gd image resource
 
     var $width, $height;
+    var $mimetype;
     protected $jpeg_quality = 80;
-    protected $mimetype;
     protected $sha1;
 
     /**
@@ -41,11 +41,15 @@ class Image
     }
 
     function getResource() { return $this->resource; }
-
+  
     function load($r)
     {
+        if ($r instanceof File)
+            $r = File::getUploadPath($r->id);
+        
         if (is_resource($r) && get_resource_type($r) == 'gd')
         {
+            dp($r);
             $this->resource = $r;
             $this->width  = imagesx($r);
             $this->height = imagesy($r);
@@ -84,22 +88,30 @@ class Image
         $page->disableDesign();
 
         switch ($type) {
+        case 'image/gif':
         case 'gif':
-            $page->setMimeType('image/gif');
+            if (!$dst_file)
+                $page->setMimeType('image/gif');
             imagegif($this->resource, $dst_file);
             break;
 
+        case 'image/jpeg':
         case 'jpg':
         case 'jpeg':
-            $page->setMimeType('image/jpeg');
+            if (!$dst_file)
+                $page->setMimeType('image/jpeg');
             imagejpeg($this->resource, $dst_file, $this->jpeg_quality);
             break;
 
+        case 'image/png':
         case 'png':
-        default:
-            $page->setMimeType('image/png');
+            if (!$dst_file)
+                $page->setMimeType('image/png');
             imagepng($this->resource, $dst_file);
             break;
+
+        default:
+            throw new Exception ('odd render type '.$type);
         }
     }
 
