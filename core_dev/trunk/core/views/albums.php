@@ -1,6 +1,4 @@
 <?php
-//TODO: ability to rotate an uploaded photo
-//TODO: ability to delete a photo
 
 //TODO later: move "create system wide albums" to admin panel
 
@@ -10,10 +8,6 @@ require_once('Image.php'); // for showThumb()
 
 require_once('YuiLightbox.php');
  
-
-if (!$session->id)
-    die('XXX gb only for logged in users');
-
 switch ($this->owner) {
 case 'overview':
     // shows the users photo albums
@@ -72,7 +66,7 @@ case 'show':
         $a->rel  = 'lightbox[album]';
         $a->content = showThumb($im->id, $im->name, 150, 150);
         echo $a->render();
-        echo ahref('xxxxx', 'XXXX FIXME show Photo details');
+        echo ahref('iview/photo/show/'.$im->id, 'Photo details');
         echo '<br/><br/>';
     }
 
@@ -89,6 +83,7 @@ case 'show':
     break;
 
 case 'delete':
+    $session->requireLoggedIn();
     if ($this->child && confirmed('Are you sure you want to delete this photo album?')) {
 
         // verify that the owner of the album is current session id
@@ -105,7 +100,8 @@ case 'delete':
     
 case 'upload':
     // child = album id
-
+    $session->requireLoggedIn();
+    
     function handleUpload($p)
     {
         $session = SessionHandler::getInstance();
@@ -146,6 +142,7 @@ case 'upload':
     break;
     
 case 'new':
+    $session->requireLoggedIn();
     // create new photo album
     echo '<h1>Create a new photo album</h1>';
 

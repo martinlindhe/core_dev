@@ -56,7 +56,10 @@ class File
 
     public static function getByType($type)
     {
-        $q = 'SELECT * FROM '.self::$tbl_name.' WHERE type = ?';
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE type = ?'.
+        ' AND time_deleted IS NULL';
         $list = SqlHandler::getInstance()->pSelect($q, 'i', $type);
 
         return SqlObject::loadObjects($list, __CLASS__);
@@ -64,7 +67,11 @@ class File
 
     public static function getByCategory($type, $cat)
     {
-        $q = 'SELECT * FROM '.self::$tbl_name.' WHERE type = ? AND category = ?';
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE type = ?'.
+        ' AND category = ?'.
+        ' AND time_deleted IS NULL';
         $list = SqlHandler::getInstance()->pSelect($q, 'ii', $type, $cat);
 
         return SqlObject::loadObjects($list, __CLASS__);
@@ -75,9 +82,14 @@ class File
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
+    /** marks the file as deleted */
     public static function delete($id)
     {
-        SqlObject::deleteById($id, self::$tbl_name, 'id');
+        $q =
+        'UPDATE tblFiles'.
+        ' SET time_deleted = NOW()'.
+        ' WHERE id = ?';
+        Sql::pUpdate($q, 'i', $id);
     }
 }
 

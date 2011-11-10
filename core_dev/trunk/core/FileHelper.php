@@ -15,7 +15,7 @@ class FileHelper
      * @param $key array from $_FILES entry
      * @return file id
      */
-    static function import($type, &$key, $category = 0)
+    public static function import($type, &$key, $category = 0)
     {
         // ignore empty file uploads
         if (!$key['name'])
@@ -53,7 +53,7 @@ class FileHelper
         return $id;
     }
 
-    static function passthru($id)
+    public static function passthru($id)
     {
         $path = File::getUploadPath($id);
 
@@ -74,7 +74,7 @@ class FileHelper
         readfile($path);
     }
 
-    static function delete($id)
+    public static function delete($id)
     {
         File::delete($id);
         $path = File::getUploadPath($id);
