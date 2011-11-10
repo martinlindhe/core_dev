@@ -41,7 +41,7 @@ class ReservedWord
 
         $q =
         'SELECT COUNT(*) FROM '.self::$tbl_name.
-        '  WHERE type = ? '.
+        ' WHERE type = ?'.
         ' AND value = ?';
         $val = Sql::pSelectItem($q, 'is', RESERVED_USERNAME, $s);
         if ($val)

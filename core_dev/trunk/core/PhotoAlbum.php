@@ -38,6 +38,11 @@ class PhotoAlbum
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
     
+    public static function delete($id)
+    {
+        return SqlObject::deleteById($id, self::$tbl_name, 'id');
+    }
+    
 }
 
 ?>

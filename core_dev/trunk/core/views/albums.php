@@ -3,7 +3,6 @@
 //TODO: ability to rotate an uploaded photo
 
 //TODO: ability to delete a photo
-//TODO: ability to delete an empty photo album
 
 //TODO later: move "create system wide albums" to admin panel
 
@@ -73,11 +72,29 @@ case 'show':
         echo showThumb($im->id, $im->name, 50, 50).'<br/><br/>';
     }
 
+    if (!$images && $album->owner)
+        echo '&raquo; '.ahref('iview/albums/delete/'.$this->child2, 'Delete empty album').'<br/>';
+    
     if ($session->id == $this->child)
         echo '&raquo; '.ahref('iview/albums/upload/'.$this->child2, 'Upload photo').'<br/>';
-    
+
     break;
 
+case 'delete':
+    if ($this->child && confirmed('Are you sure you want to delete this photo album?')) {
+
+        // verify that the owner of the album is current session id
+        $album = PhotoAlbum::get($this->child);
+        if (!$album->owner || $album->owner != $session->id) {
+            dp('HACK: tried to delete photo album '.$this->child.' which is not owned by user '.$session->id);
+            return;
+        }
+
+        PhotoAlbum::delete($this->child);
+        js_redirect('iview/albums/overview');
+    }   
+    break;
+    
 case 'upload':
     // child = album id
 
