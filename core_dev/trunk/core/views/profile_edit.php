@@ -6,6 +6,8 @@
 
 require_once('ModerationObject.php');
 
+require_once('Image.php'); // for getThumbUrl()
+
 $session->requireLoggedIn();
 
 $view = !$this->owner ? 'default': $this->owner;
@@ -43,7 +45,8 @@ case 'default':
     $form = new XhtmlForm();
 
     $fields = UserDataField::getAll();
-    foreach ($fields as $f) {
+    foreach ($fields as $f) 
+    {
         switch ($f->type) {
         case UserDataField::RADIO:
             $opts = UserDataFieldOption::getAll($f->id);
@@ -56,8 +59,8 @@ case 'default':
             break;
 
         case UserDataField::IMAGE:
-
             $pic_id = UserSetting::get($session->id, 'picture');
+
             if ($pic_id) {
                 $img = new XhtmlComponentImage();
                 $img->src = getThumbUrl($pic_id);

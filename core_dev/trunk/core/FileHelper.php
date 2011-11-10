@@ -15,7 +15,7 @@ class FileHelper
      * @param $key array from $_FILES entry
      * @return file id
      */
-    static function import($type, &$key)
+    static function import($type, &$key, $category = 0)
     {
         // ignore empty file uploads
         if (!$key['name'])
@@ -36,6 +36,7 @@ class FileHelper
         $file->size = $key['size'];
         $file->name = $key['name'];
         $file->mimetype = $key['type'];
+        $file->category = $category;
         $file->time_uploaded = sql_datetime( time() );
         $id = File::store($file);
 

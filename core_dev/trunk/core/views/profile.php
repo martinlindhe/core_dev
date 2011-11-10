@@ -3,6 +3,8 @@
  * Default view for a user profile
  */
 
+require_once('Image.php'); // for showThumb()
+ 
 $session->requireLoggedIn();
 
 $user_id = $session->id;
@@ -44,7 +46,7 @@ if ($session->id && $user_id != $session->id)
     echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
 
 echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
-echo '&raquo; '.ahref('coredev/view/albums/overview/'.$user_id, 'Photos').'<br/>';
+echo '&raquo; '.ahref('iview/albums/overview/'.$user_id, 'Photos').'<br/>';
 
 echo '<br/>';
 

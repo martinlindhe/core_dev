@@ -62,6 +62,14 @@ class File
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
+    public static function getByCategory($type, $cat)
+    {
+        $q = 'SELECT * FROM '.self::$tbl_name.' WHERE type = ? AND category = ?';
+        $list = SqlHandler::getInstance()->pSelect($q, 'ii', $type, $cat);
+
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
     public static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');

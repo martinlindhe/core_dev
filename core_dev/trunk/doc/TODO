@@ -50,9 +50,10 @@ Guestbook (NOT USED IN RR)
     * (drop functions_guestbook.php)
 
 
-Gallery (NOT USED IN RR)
-    * use some nice-looking js image viewer
+Photo albums (NOT USED IN RR)
+    - 2011-11-10: see core/PhotoAlbum.php and core/views/albums.php
     * drop / rewrite of functions_fileareas.php
+    * use some nice-looking js image viewer
 
 
 DB CHECKER:
