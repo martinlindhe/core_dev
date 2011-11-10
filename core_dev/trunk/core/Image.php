@@ -60,7 +60,7 @@ class Image
             case 'image/jpeg': $im = imagecreatefromjpeg($r); break;
             case 'image/png':  $im = imagecreatefrompng($r); break;
             case 'image/gif':  $im = imagecreatefromgif($r); break;
-            default: die('Unsupported image type for '.$r);
+            default: throw new Exception ('Unsupported image type for '.$r);
             }
 
             $this->resource = $im;
@@ -77,6 +77,9 @@ class Image
 
     function render($type = 'png', $dst_file = '')
     {
+        if (!$this->resource)
+            throw new Exception ('no image resource loaded');        
+
         $page = XmlDocumentHandler::getInstance();
         $page->disableDesign();
 
@@ -106,8 +109,12 @@ class Image
 
 function showThumb($id, $title = '', $w = 50, $h = 50)
 {
-    $str = '<img src="'.getThumbUrl($id, $w, $h).'" alt="'.strip_tags($title).'" title="'.strip_tags($title).'"/>';
-    return $str;
+    $i = new XhtmlComponentImage();
+    $i->src = getThumbUrl($id, $w, $h);
+    $i->alt = strip_tags($title);
+    $i->title = strip_tags($title);
+    
+    return $i->render();
 }
 
 function getThumbUrl($id, $width = 50, $height = 50)
@@ -120,7 +127,10 @@ function getThumbUrl($id, $width = 50, $height = 50)
 
     $page = XmlDocumentHandler::getInstance();
 
-    return $page->getRelativeUrl().'coredev/image/'.$id.'?w='.$width.'&h='.$height;
+    return
+        $page->getRelativeUrl().'coredev/image/'.$id.
+        ($width ? '?w='.$width : '').
+        ($height ? '&h='.$height : '');
 }
 
 ?>

@@ -49,9 +49,14 @@ case 'image':
 
     $name = File::getUploadPath($this->owner);
 
-    $x = new ImageResizer($name);
-    $x->resizeAspect($_GET['w'], $_GET['h']);
-    $x->render();
+    if (!empty($_GET['w']) && !empty($_GET['h'])) {
+        $im = new ImageResizer($name);
+        $im->resizeAspect($_GET['w'], $_GET['h']);
+    } else {
+        $im = new Image($name);
+    }
+    $im->render();
+
     return;
 
 case 'reset_password':

@@ -1,7 +1,5 @@
 <?php
-//TODO: close up view on a photo with "scrolling", use some fancy js stuff
 //TODO: ability to rotate an uploaded photo
-
 //TODO: ability to delete a photo
 
 //TODO later: move "create system wide albums" to admin panel
@@ -9,6 +7,8 @@
 require_once('PhotoAlbum.php');
 
 require_once('Image.php'); // for showThumb()
+
+require_once('YuiLightbox.php');
  
 
 if (!$session->id)
@@ -67,9 +67,16 @@ case 'show':
     $images = File::getByCategory(USER, $this->child2);
     
     foreach ($images as $im) {
-        echo showThumb($im->id, $im->name, 50, 50).'<br/><br/>';
+        echo '<a href="'.getThumbUrl($im->id, 0, 0).'" rel="lightbox[album]">';
+        echo showThumb($im->id, $im->name, 150, 150, 'lightbox[album]');
+        echo '</a>';
+        echo '<br/><br/>';
     }
 
+    $lb = new YuiLightbox();
+    echo $lb->render();
+    
+    
     if (!$images && $album->owner)
         echo '&raquo; '.ahref('iview/albums/delete/'.$this->child2, 'Delete empty album').'<br/>';
     

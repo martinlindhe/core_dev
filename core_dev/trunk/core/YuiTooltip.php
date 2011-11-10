@@ -19,12 +19,11 @@ class YuiTooltip
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css');
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css');
-
-        // utility Dependencies
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
         $header->includeJs('http://yui.yahooapis.com/2.9.0/build/container/container-min.js');
+
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css');
+        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css');
 
         $tt_id = 'tt_'.mt_rand();
 

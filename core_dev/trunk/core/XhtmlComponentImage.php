@@ -26,13 +26,13 @@ class XhtmlComponentImage extends XhtmlComponent
     {
         return
         '<img src="'.$this->src.'"'.
-        ($this->width  ? ' width="'.$this->width.'" ' : '').
-        ($this->height ? ' height="'.$this->height.'" ' : '').
-        ($this->alt    ? ' alt="'.$this->alt.'" ' : '').
-        ($this->title  ? ' title="'.$this->title.'" ' : '').
+        ($this->width  ? ' width="'.$this->width.'"' : '').
+        ($this->height ? ' height="'.$this->height.'"' : '').
+        ($this->alt    ? ' alt="'.$this->alt.'"' : '').
+        ($this->title  ? ' title="'.$this->title.'"' : '').
         ($this->onclick ? ' onclick="'.$this->onclick.'"' : '').
-        ($this->class ? ' class="'.$this->class.'"' : '').
-        ($this->style ? ' style="'.$this->style.'"' : '').
+        ($this->class  ? ' class="'.$this->class.'"' : '').
+        ($this->style  ? ' style="'.$this->style.'"' : '').
         '/>';
     }
 
