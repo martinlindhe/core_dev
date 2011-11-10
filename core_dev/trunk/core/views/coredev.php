@@ -70,6 +70,7 @@ case 'admin':
     echo ahref('iview/manage_users', 'Manage users').'<br/>';
     echo ahref('iview/manage_usergroups', 'Manage user groups').'<br/>';
     echo ahref('iview/manage_files', 'Manage files').'<br/>';
+    echo ahref('iview/reserved_words', 'Reserved words').'<br/>';
     echo '<br/>';
     echo ahref('iview/phpinfo', 'phpinfo()').'<br/>';
     echo ahref('iview/compatiblity', 'Compatibility check').'<br/>';

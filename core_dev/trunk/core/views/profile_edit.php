@@ -95,13 +95,24 @@ case 'username':
     {
         $p['new_user'] = trim($p['new_user']);
 
+        $error = ErrorHandler::getInstance();
         $session = SessionHandler::getInstance();
 
         // dont put empty names or current username on request queue
-        if (!$p['new_user'] || $p['new_user'] == $session->username)
+        if (!$p['new_user'] || $p['new_user'] == $session->username) {
+            $error->add('Useless request');
             return false;
+        }
 
-        //XXX see if username is taken, or is ok according to username stuff
+        if (User::getByName($p['new_user'])) {
+            $error->add('Username taken');
+            return false;
+        }
+        
+        if (ReservedWord::isReservedUsername($p['new_user'])) {
+            $error->add('Username is reserved');
+            return false;
+        }        
 
         // put request on queue for admins
         ModerationObject::add(MODERATE_CHANGE_USERNAME, $p['new_user']);

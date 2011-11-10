@@ -15,6 +15,7 @@
 //XXXX: move userlevel & usergroup stuff to separate classes (UserGroupHandler)
 
 require_once('User.php');
+require_once('ReservedWord.php');
 
 class UserHandler
 {
@@ -84,6 +85,11 @@ class UserHandler
 
         if (User::getByName($username)) {
             $error->add('Username taken');
+            return false;
+        }
+        
+        if (ReservedWord::isReservedUsername($username)) {
+            $error->add('Username is reserved');
             return false;
         }
 
