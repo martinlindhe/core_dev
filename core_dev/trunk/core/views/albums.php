@@ -6,8 +6,6 @@
 
 //TODO later: move "create system wide albums" to admin panel
 
-//FIXME: reject uploads that is not an image
-
 require_once('PhotoAlbum.php');
 
 require_once('Image.php'); // for showThumb()
@@ -101,7 +99,17 @@ case 'upload':
     function handleUpload($p)
     {
         $session = SessionHandler::getInstance();
+        $error   = ErrorHandler::getInstance();
         
+        switch ($p['img']['type']) {
+        case 'image/jpeg': break;
+        case 'image/png': break;
+        case 'image/gif': break;
+        default:
+            $error->add('Uploaded file is not an image = '.$p['img']['type']);
+            return false;
+        }
+
         $fileId = FileHelper::import(USER, $p['img'], $p['album']);
         
         js_redirect('iview/albums/show/'.$session->id.'/'.$p['album']);
