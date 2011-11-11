@@ -2,12 +2,15 @@
 /**
  * $Id$
  *
- * A bookmark owned by a user, which points to a resource of some kind, such as another user (friend list)
+ * A bookmark owned by a user, which points to a resource of some kind,
+ * such as another user (favorites), blocked users
  *
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
 //STATUS: wip
+
+define('BOOKMARK_USERBLOCK', 1);
 
 // use these, or any numbers >= 100 for application specific needs
 define('BOOKMARK_CUSTOM',  100);

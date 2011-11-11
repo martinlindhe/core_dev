@@ -4,7 +4,7 @@
  */
 
 require_once('Image.php'); // for showThumb()
- 
+
 $session->requireLoggedIn();
 
 $user_id = $session->id;
@@ -43,6 +43,7 @@ if ($pic_id)
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id) {
+    echo '&raquo; '.ahref('iview/block/'.$user_id, 'Block user').'<br/>';
     echo '&raquo; '.ahref('iview/report/user/'.$user_id, 'Report user').'<br/>';
     echo '<br/>';
     echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';

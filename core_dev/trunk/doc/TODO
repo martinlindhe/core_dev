@@ -28,7 +28,8 @@ Messages
 
 
 Privacy
-    * ability to block another user from contacting you
+    * enfoce user block on profile view, send message, guestbook
+    * ability to see / edit "blocked users" list
 
 
 Friends
