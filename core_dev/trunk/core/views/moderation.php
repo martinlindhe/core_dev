@@ -100,8 +100,9 @@ case 'handle':
             UserHandler::setUsername($o->owner, $o->data);
             break;
 
-        // marking item approved is all needed
+        // marking item approved is all that's needed
         case MODERATE_UPLOAD:
+        case MODERATE_USER:
             break;
 
         default:
@@ -119,16 +120,16 @@ case 'handle':
         echo '<h2>'.$u->name.' wants to change username to '.$o->data.'</h2>';
 
         if (UserFinder::byUsername($o->data))
-            echo 'Username is taken!<br/><br/>';
+            echo 'Username is taken!<br/>';
         else
-            echo ' &raquo; '.ahref('?approve', 'Approve').'<br/>';
+            echo '&raquo; '.ahref('?approve', 'Approve').'<br/>';
 
         echo '<br/>';
-        echo ' &raquo; '.ahref('?deny', 'Deny').'<br/>';
+        echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
         break;
 
     case MODERATE_UPLOAD:
-        echo '<h2>Moderate file # '.$o->data.'</h2>';
+        echo '<h2>Moderate file # '.$o->reference.'</h2>';
 
         if ($o->owner) {
             $u = User::get($o->owner);
@@ -136,24 +137,39 @@ case 'handle':
         }
 
         $view = new ViewModel('views/file_details.php');
-        $view->registerVar('owner', $o->data);
+        $view->registerVar('owner', $o->reference);
         echo $view->render();
 
-        echo ' &raquo; '.ahref('?approve', 'Approve').'<br/>';
+        echo '<br/>';
+        echo '&raquo; '.ahref('?approve', 'Approve').'<br/>';
+        echo '<br/>';
+        echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
+
+        break;
+
+    case MODERATE_USER:
+        //XXXX: combine all current (in moderation queue) & past (moderated) "user reports" here as quick overview
+        $reporter = User::get($o->owner);
+        $u = User::get($o->reference);
+        echo '<h2>Reported user: '.$u->name.'</h2>';
+        echo 'Reported by '.$reporter->name.'<br/>';
+        echo 'Reason: '.$o->data.'<br/>';
 
         echo '<br/>';
-        echo ' &raquo; '.ahref('?deny', 'Deny').'<br/>';
+        echo '&raquo; '.ahref('?approve', 'Approve XXXX RENAME TITLES').'<br/>';
+        echo '<br/>';
+        echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
+
         break;
+
     default:
         throw new Exception ('Unhandled ModerationObject type '.$o->type);
     }
+
     break;
 
 default:
     echo 'No handler for view '.$this->owner;
 }
-
-
-
 
 ?>

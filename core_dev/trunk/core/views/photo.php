@@ -6,6 +6,8 @@
 //TODO: ability to edit description of photo
 //TODO: add comments to photo
 
+//XXXX: show image dimensions on 'show' view
+
 require_once('Image.php'); // for getThumbUrl()
 require_once('ImageRotator.php');
 require_once('YuiLightbox.php');
@@ -14,27 +16,27 @@ switch ($this->owner) {
 case 'show':
     // child = id
 
-    $im = File::get($this->child);
+    $f = File::get($this->child);
 
-    echo '<h1>Photo details for '.$im->name.'</h1>';
+    echo '<h1>Photo details for '.$f->name.'</h1>';
     
-d($im);
+d($f);
 
     // shows the photo
     $a = new XhtmlComponentA();
-    $a->href = getThumbUrl($im->id, 0, 0);
+    $a->href = getThumbUrl($f->id, 0, 0);
     $a->rel  = 'lightbox';
-    $a->content = showThumb($im->id, $im->name, 150, 150);
+    $a->content = showThumb($f->id, $f->name, 150, 150);
     echo $a->render();
 
     $lb = new YuiLightbox();
     echo $lb->render().'<br/>';
 
-    if ($session->id && $session->id == $im->uploader) {
-        echo '&raquo; '.ahref('iview/photo/rotate/'.$im->id.'/90', 'Rotate left').'<br/>';
-        echo '&raquo; '.ahref('iview/photo/rotate/'.$im->id.'/270', 'Rotate right').'<br/>';
+    if ($session->id && $session->id == $f->uploader) {
+        echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/90', 'Rotate left').'<br/>';
+        echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/270', 'Rotate right').'<br/>';
         echo '<br/>';
-        echo '&raquo; '.ahref('iview/photo/delete/'.$im->id, 'Delete photo').'<br/>';
+        echo '&raquo; '.ahref('iview/photo/delete/'.$f->id, 'Delete photo').'<br/>';
     }
     break;
 

@@ -42,8 +42,11 @@ if ($pic_id)
 
 echo '<br/>';
 
-if ($session->id && $user_id != $session->id)
+if ($session->id && $user_id != $session->id) {
+    echo '&raquo; '.ahref('iview/report/user/'.$user_id, 'Report user').'<br/>';
+    echo '<br/>';
     echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
+}
 
 echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
 echo '&raquo; '.ahref('iview/albums/overview/'.$user_id, 'Photos').'<br/>';

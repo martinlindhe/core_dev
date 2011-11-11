@@ -44,7 +44,7 @@ Chat
 
 
 Moderation
-    * ability for a user to report an unappropriate photo, or an abusive user- items which ends up in ModerationQueue
+    * ability for a user to report an unappropriate photo, which ends up in ModerationQueue
 
 
 Guestbook (NOT USED IN RR)
@@ -53,10 +53,7 @@ Guestbook (NOT USED IN RR)
 
 Photo albums (NOT USED IN RR)
     - 2011-11-10: see core/PhotoAlbum.php and core/views/albums.php
-    * drop / rewrite of functions_fileareas.php
-    * ability to delete an uploaded photo
-    * expose ImageRotate functionality, to allow user to rotate picture
-  
+    * FIX: resize uploaded images to max allowed dimensions (1000x1000)
 
 DB CHECKER:
     * all classes that is 1-to-1 mapped to a db table should extend from a common class (SqlObject?)

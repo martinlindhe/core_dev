@@ -15,6 +15,8 @@
 //XXXX: move userlevel & usergroup stuff to separate classes (UserGroupHandler)
 
 require_once('User.php');
+require_once('UserGroup.php');
+require_once('UserGroupList.php');
 require_once('ReservedWord.php');
 
 class UserHandler

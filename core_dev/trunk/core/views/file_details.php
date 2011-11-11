@@ -6,6 +6,8 @@
 $fileId = $this->owner;
 
 $f = File::get($fileId);
+if (!$f)
+    throw new Exception ('file not found: '.$fileId);
 
 echo '<h2>File details</h2>';
 echo 'Name: '.$f->name.'<br/>';

@@ -9,7 +9,8 @@
 
 // ModerationObject types:
 define('MODERATE_CHANGE_USERNAME', 1);   // data holds new username
-define('MODERATE_UPLOAD',          2);   // data is a tblFiles.id
+define('MODERATE_UPLOAD',          2);   // reference is a tblFiles.id
+define('MODERATE_USER',            3);   // reported user, reference is a tblUsers.id
 
 
 function getModerationTypes()
@@ -17,6 +18,7 @@ function getModerationTypes()
     return array(
     MODERATE_CHANGE_USERNAME => 'Change username',
     MODERATE_UPLOAD          => 'Uploaded file',
+    MODERATE_USER            => 'Reported user',
     );
 }
 
@@ -29,8 +31,8 @@ class ModerationObject
     var $time_handled;
     var $handled_by;
     var $approved;
-    var $data;
-    var $reference;   // used to refer to external object id (if needed)
+    var $data;          ///< text
+    var $reference;     ///< (numeric) used to refer to external object id (if needed)
 
     protected static $tbl_name = 'tblModerationObjects';
 
@@ -105,7 +107,7 @@ class ModerationObject
         return Sql::pDelete($q, 'ii', $type, $reference);
     }
 
-    static function add($type, $data, $reference = '')
+    static function add($type, $reference = 0, $data = '')
     {
         $session = SessionHandler::getInstance();
 

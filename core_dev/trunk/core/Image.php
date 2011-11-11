@@ -42,6 +42,11 @@ class Image
 
     function getResource() { return $this->resource; }
   
+    /**
+     * Initializes object from an resource
+     *
+     * @param $r can be a full filename, a GD resource or a File object
+     */
     function load($r)
     {
         if ($r instanceof File)
