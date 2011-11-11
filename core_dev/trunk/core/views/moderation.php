@@ -157,9 +157,7 @@ case 'handle':
         echo 'Reason: '.$o->data.'<br/>';
 
         echo '<br/>';
-        echo '&raquo; '.ahref('?approve', 'Approve XXXX RENAME TITLES').'<br/>';
-        echo '<br/>';
-        echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
+        echo '&raquo; '.ahref('?approve', 'Discard').'<br/>';
         break;
 
     case MODERATE_PHOTO:
@@ -170,9 +168,7 @@ case 'handle':
         echo 'Reason: '.$o->data.'<br/>';
 
         echo '<br/>';
-        echo '&raquo; '.ahref('?approve', 'Approve XXXX RENAME TITLES').'<br/>';
-        echo '<br/>';
-        echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
+        echo '&raquo; '.ahref('?approve', 'Discard').'<br/>';
         break;
 
     default:

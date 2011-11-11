@@ -5,6 +5,7 @@
 require_once('PhotoAlbum.php');
 
 require_once('Image.php'); // for showThumb()
+require_once('ImageResizer.php');
 
 require_once('YuiLightbox.php');
  
@@ -117,6 +118,15 @@ case 'upload':
         }
 
         $fileId = FileHelper::import(USER, $p['img'], $p['album']);
+        
+        $im = new ImageResizer( File::get($fileId) );
+
+        // FIXME: make these configurable
+        if ($im->width > 1000 || $im->height > 1000) {
+            $im->resizeAspect(1000, 1000);
+            $im->render( $im->mimetype, File::getUploadPath($fileId) );
+            //FIXME: update tblFiles.size
+        }
         
         js_redirect('iview/albums/show/'.$session->id.'/'.$p['album']);
     }

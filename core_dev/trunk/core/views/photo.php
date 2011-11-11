@@ -71,6 +71,7 @@ case 'rotate':
 
     $im->rotate($this->child2);
     $im->render( $im->mimetype, File::getUploadPath($f->id) );
+    //FIXME: update tblFiles.size
     js_redirect('iview/photo/show/'.$f->id);  
     break;
 
