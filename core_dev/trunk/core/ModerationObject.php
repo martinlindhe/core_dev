@@ -11,6 +11,7 @@
 define('MODERATE_CHANGE_USERNAME', 1);   // data holds new username
 define('MODERATE_UPLOAD',          2);   // reference is a tblFiles.id
 define('MODERATE_USER',            3);   // reported user, reference is a tblUsers.id
+define('MODERATE_PHOTO',           4);   // reported photo, reference is a tblFiles.id
 
 
 function getModerationTypes()
@@ -19,6 +20,7 @@ function getModerationTypes()
     MODERATE_CHANGE_USERNAME => 'Change username',
     MODERATE_UPLOAD          => 'Uploaded file',
     MODERATE_USER            => 'Reported user',
+    MODERATE_PHOTO           => 'Reported photo',
     );
 }
 

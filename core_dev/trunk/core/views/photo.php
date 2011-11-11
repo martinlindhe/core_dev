@@ -39,6 +39,9 @@ d($f);
     $lb = new YuiLightbox();
     echo $lb->render().'<br/>';
 
+    if ($session->id && $session->id != $f->uploader)
+        echo '&raquo; '.ahref('iview/report/photo/'.$f->id, 'Report photo').'<br/>';
+    
     if ($session->id && $session->id == $f->uploader) {
         echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/90', 'Rotate left').'<br/>';
         echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/270', 'Rotate right').'<br/>';

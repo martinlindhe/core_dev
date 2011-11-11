@@ -103,6 +103,7 @@ case 'handle':
         // marking item approved is all that's needed
         case MODERATE_UPLOAD:
         case MODERATE_USER:
+        case MODERATE_PHOTO:
             break;
 
         default:
@@ -159,7 +160,19 @@ case 'handle':
         echo '&raquo; '.ahref('?approve', 'Approve XXXX RENAME TITLES').'<br/>';
         echo '<br/>';
         echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
+        break;
 
+    case MODERATE_PHOTO:
+        $reporter = User::get($o->owner);
+
+        echo '<h2>Reported photo: '.$o->reference.'</h2>';
+        echo 'Reported by '.$reporter->name.'<br/>';
+        echo 'Reason: '.$o->data.'<br/>';
+
+        echo '<br/>';
+        echo '&raquo; '.ahref('?approve', 'Approve XXXX RENAME TITLES').'<br/>';
+        echo '<br/>';
+        echo '&raquo; '.ahref('?deny', 'Deny').'<br/>';
         break;
 
     default:
