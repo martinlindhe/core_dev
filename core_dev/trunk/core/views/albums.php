@@ -8,7 +8,7 @@ require_once('Image.php'); // for showThumb()
 require_once('ImageResizer.php');
 
 require_once('YuiLightbox.php');
- 
+
 switch ($this->owner) {
 case 'overview':
     // shows the users photo albums
@@ -122,10 +122,13 @@ case 'upload':
         $im = new ImageResizer( File::get($fileId) );
 
         // FIXME: make these configurable
-        if ($im->width > 1000 || $im->height > 1000) {
-            $im->resizeAspect(1000, 1000);
+        $max_width = 800;
+        $max_height = 800;
+        
+        if ($im->width > $max_width || $im->height > $max_height) {
+            $im->resizeAspect($max_width, $max_height);
             $im->render( $im->mimetype, File::getUploadPath($fileId) );
-            //FIXME: update tblFiles.size
+            FileHelper::sync($fileId); //updates tblFiles.size
         }
         
         js_redirect('iview/albums/show/'.$session->id.'/'.$p['album']);

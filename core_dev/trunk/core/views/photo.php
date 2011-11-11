@@ -20,15 +20,16 @@ case 'show':
 
     echo '<h1>Photo details for '.$f->name.'</h1>';
     
-d($f);
-
+//d($f);
 
     $size = getimagesize( File::getUploadPath($this->child) );
 //    d($size);
+    echo 'Name: '.$f->name.'<br/>';
+    echo 'Uploaded: '.ago($f->time_uploaded).' by '.$f->uploader.'<br/>';
     echo 'Resolution: '.$size[0].'x'.$size[1].'<br/>';
+    echo 'Size: '.byte_count($f->size).'<br/>';
     echo '<br/>';
     
-
     // shows the photo
     $a = new XhtmlComponentA();
     $a->href = getThumbUrl($f->id, 0, 0);
@@ -71,7 +72,7 @@ case 'rotate':
 
     $im->rotate($this->child2);
     $im->render( $im->mimetype, File::getUploadPath($f->id) );
-    //FIXME: update tblFiles.size
+    FileHelper::sync($fileId); //updates tblFiles.size
     js_redirect('iview/photo/show/'.$f->id);  
     break;
 

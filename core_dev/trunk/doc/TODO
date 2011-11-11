@@ -14,11 +14,12 @@ Authentication:
 UI:
     * look at jquery-ui
     * http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js
-    
+    * hover popup-box, to quickly show user info etc
+
 
 User profile
     * show a AVATAR if no profile pic is selected
-    * link to: chat 1-to-1, see gallery
+    * link to: chat 1-to-1
     * avability: available for chat?
 
 
@@ -38,13 +39,12 @@ Friends
 
 Chat
     * write 1-on-1 chat code, store messages as normal Message objects
-    * need ability for admin to create/edit chat rooms
     * ability to LOCK/UNLOCK a chatroom from public use
     * ability to allow anon users in certain chatrooms
 
 
 Moderation
-    * ability for a user to report an unappropriate photo, which ends up in ModerationQueue
+    * ...
 
 
 Guestbook (NOT USED IN RR)
