@@ -5,7 +5,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: early wip
+//STATUS: wip
 
 class Guestbook
 {

@@ -6,8 +6,6 @@
 //TODO: ability to edit description of photo
 //TODO: add comments to photo
 
-//XXXX: show image dimensions on 'show' view
-
 require_once('Image.php'); // for getThumbUrl()
 require_once('ImageRotator.php');
 require_once('YuiLightbox.php');
@@ -17,10 +15,19 @@ case 'show':
     // child = id
 
     $f = File::get($this->child);
+    if (!$f)
+        die('MECKLPSP');
 
     echo '<h1>Photo details for '.$f->name.'</h1>';
     
 d($f);
+
+
+    $size = getimagesize( File::getUploadPath($this->child) );
+//    d($size);
+    echo 'Resolution: '.$size[0].'x'.$size[1].'<br/>';
+    echo '<br/>';
+    
 
     // shows the photo
     $a = new XhtmlComponentA();

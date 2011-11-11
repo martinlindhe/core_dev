@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO: mark message as read
+
 require_once('SqlObject.php');
 
 class Message

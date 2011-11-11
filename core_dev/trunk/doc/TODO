@@ -9,8 +9,8 @@ BUGS:
 Authentication:
     * Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
     * ability to login using registered email (2x doublecheck that email is unique and verified)
-    * re-implement "reserved username" words from atom_moderation.php
 
+    
 UI:
     * look at jquery-ui
     * http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js
@@ -23,7 +23,7 @@ User profile
 
 
 Messages
-    * finish Messages class
+    * ...
 
 
 Privacy
@@ -48,12 +48,13 @@ Moderation
 
 
 Guestbook (NOT USED IN RR)
-    * finish Guestbook class
+    * ...
 
 
-Photo albums (NOT USED IN RR)
-    - 2011-11-10: see core/PhotoAlbum.php and core/views/albums.php
+Photo albums: core/PhotoAlbum.php, core/views/albums.php
+    * report photo
     * FIX: resize uploaded images to max allowed dimensions (1000x1000)
+
 
 DB CHECKER:
     * all classes that is 1-to-1 mapped to a db table should extend from a common class (SqlObject?)
