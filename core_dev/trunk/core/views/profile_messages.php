@@ -52,6 +52,10 @@ case 'default':
 
 case 'send':
     // child = send to user id
+    if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $this->chuild)) {
+        echo 'User has blocked you from access';
+        return;
+    }
 
     function msgSubmit($p)
     {

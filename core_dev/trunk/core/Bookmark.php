@@ -42,17 +42,18 @@ class Bookmark
 
         $list = Sql::pSelect($q, 'ii', $owner, $type);
 
-        return SqlObject::loadObjects($list, __CLASS__); // XXX pselect?
+        return SqlObject::loadObjects($list, __CLASS__);
     }
 
     /**
      * Check if an object (owner id & type) is already bookmarked
      */
-    static function exists($owner, $type)
+    static function exists($value, $type, $owner = 0) // XXX rearrange params
     {
         $o = new Bookmark();
         $o->type  = $type;
-        $o->value = $owner;
+        $o->value = $value;
+        $o->owner = $owner;
 
         return SqlObject::exists($o, self::$tbl_name);
     }

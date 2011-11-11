@@ -17,6 +17,13 @@ if (!$this->owner)
 
 
 $user = User::get($user_id);
+if (!$user)
+    die('ECK');
+
+if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $user_id)) {
+    echo 'User has blocked you from access';
+    return;
+}
 
 echo '<h1>Guestbook for '.$user->name.'</h1>';
 

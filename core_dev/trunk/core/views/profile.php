@@ -4,6 +4,7 @@
  */
 
 require_once('Image.php'); // for showThumb()
+require_once('Bookmark.php');
 
 $session->requireLoggedIn();
 
@@ -12,11 +13,15 @@ $user_id = $session->id;
 if ($this->owner)
     $user_id = $this->owner;
 
-
 $user = User::get($user_id);
 
 if (!$user)
     die('ECHKKP');
+
+if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $user_id)) {
+    echo 'User has blocked you from access';
+    return;
+}
 
 echo '<h1>Profile for '.$user->name.'</h1>';
 
@@ -43,7 +48,11 @@ if ($pic_id)
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id) {
-    echo '&raquo; '.ahref('iview/block/'.$user_id, 'Block user').'<br/>';
+    if (Bookmark::exists($user_id, BOOKMARK_USERBLOCK, $session->id)) {
+        echo '<b>THIS USER IS BLOCKED FROM CONTACTING YOU</b><br/>';
+    } else {
+        echo '&raquo; '.ahref('iview/block/'.$user_id, 'Block user').'<br/>';
+    }
     echo '&raquo; '.ahref('iview/report/user/'.$user_id, 'Report user').'<br/>';
     echo '<br/>';
     echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
