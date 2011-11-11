@@ -27,7 +27,7 @@ case 'default':
                 if ($p[$f->name]['error'] == UPLOAD_ERR_NO_FILE)
                     continue;
 
-                $fileId = FileHelper::import(USER, $p[$f->name]);
+                $fileId = File::import(USER, $p[$f->name]);
                 UserSetting::set($session->id, $f->name, $fileId);
                 break;
 
@@ -45,7 +45,7 @@ case 'default':
     $form = new XhtmlForm();
 
     $fields = UserDataField::getAll();
-    foreach ($fields as $f) 
+    foreach ($fields as $f)
     {
         switch ($f->type) {
         case UserDataField::RADIO:
@@ -86,7 +86,7 @@ case 'default':
     echo '<br/><br/>';
 
     echo '&raquo; '.ahref('iview/profile_edit/username', 'Change username').'<br/>';
-    echo '&raquo; '.ahref('iview/profile_edit/password', 'Change password').'<br/>';    
+    echo '&raquo; '.ahref('iview/profile_edit/password', 'Change password').'<br/>';
     break;
 
 case 'username':
@@ -108,11 +108,11 @@ case 'username':
             $error->add('Username taken');
             return false;
         }
-        
+
         if (ReservedWord::isReservedUsername($p['new_user'])) {
             $error->add('Username is reserved');
             return false;
-        }        
+        }
 
         // put request on queue for admins
         ModerationObject::add(MODERATE_CHANGE_USERNAME, $p['new_user']);
@@ -148,19 +148,19 @@ case 'password':
             $error->add('Current password is not correct');
             return false;
         }
-        
+
         if ($p['new_pwd'] != $p['new_pwd2']) {
             $error->add('passwords dont match');
             return false;
         }
-        
+
         if (!$p['new_pwd']) {
             $error->add('no password entered');
             return false;
         }
-        
-        UserHandler::setPassword($session->id, $p['new_pwd']);    
-        
+
+        UserHandler::setPassword($session->id, $p['new_pwd']);
+
         js_redirect('iview/profile_edit');
     }
 
@@ -178,8 +178,8 @@ case 'password':
 
     echo $form->render();
     break;
-    
-    
+
+
 default:
     echo 'no such view: '.$view;
 }

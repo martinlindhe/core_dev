@@ -10,7 +10,7 @@ Authentication:
     * Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
     * ability to login using registered email (2x doublecheck that email is unique and verified)
 
-    
+
 UI:
     * look at jquery-ui
     * http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js

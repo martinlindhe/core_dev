@@ -17,7 +17,7 @@ require_once('ErrorHandler.php');
 require_once('output_xhtml.php');
 
 require_once('constants.php');
-require_once('FileHelper.php');
+require_once('File.php');
 require_once('XhtmlComponent.php');
 
 class XhtmlForm

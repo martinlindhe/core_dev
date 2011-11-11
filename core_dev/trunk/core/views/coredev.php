@@ -7,7 +7,7 @@
 require_once('UserList.php');
 require_once('UserGroupList.php');
 require_once('IconWriter.php');
-require_once('FileHelper.php');
+require_once('File.php');
 require_once('ImageResizer.php');
 
 switch ($this->view) {
@@ -41,7 +41,7 @@ case 'selftest':
 
 case 'file':
     // passes thru a file
-    echo FileHelper::passthru($this->owner);
+    echo File::passthru($this->owner);
     return;
 
 case 'image':

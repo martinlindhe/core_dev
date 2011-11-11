@@ -19,7 +19,7 @@ case 'show':
         die('MECKLPSP');
 
     echo '<h1>Photo details for '.$f->name.'</h1>';
-    
+
 //d($f);
 
     $size = getimagesize( File::getUploadPath($this->child) );
@@ -29,7 +29,7 @@ case 'show':
     echo 'Resolution: '.$size[0].'x'.$size[1].'<br/>';
     echo 'Size: '.byte_count($f->size).'<br/>';
     echo '<br/>';
-    
+
     // shows the photo
     $a = new XhtmlComponentA();
     $a->href = getThumbUrl($f->id, 0, 0);
@@ -42,7 +42,7 @@ case 'show':
 
     if ($session->id && $session->id != $f->uploader)
         echo '&raquo; '.ahref('iview/report/photo/'.$f->id, 'Report photo').'<br/>';
-    
+
     if ($session->id && $session->id == $f->uploader) {
         echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/90', 'Rotate left').'<br/>';
         echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/270', 'Rotate right').'<br/>';
@@ -54,26 +54,26 @@ case 'show':
 case 'rotate':
     // child = file id
     // child2 = rotate %
-    
+
     $allowed = array(90, 270);
     if (!in_array($this->child2, $allowed)) {
         dp('HACK: odd rotate %: '.$this->child2);
         return;
     }
-    
+
     $session->requireLoggedIn();
     $f = File::get($this->child);
     if ($session->id != $f->uploader) {
         dp('HACK: tried to rotate photo '.$this->child.' which is not uploaded by user '.$session->id);
         return;
     }
-    
+
     $im = new ImageRotator($f);
 
     $im->rotate($this->child2);
     $im->render( $im->mimetype, File::getUploadPath($f->id) );
-    FileHelper::sync($fileId); //updates tblFiles.size
-    js_redirect('iview/photo/show/'.$f->id);  
+    File::sync($fileId); //updates tblFiles.size
+    js_redirect('iview/photo/show/'.$f->id);
     break;
 
 case 'delete':
@@ -89,7 +89,7 @@ case 'delete':
 
         File::delete($this->child);
         js_redirect('iview/albums/overview');
-    }   
+    }
     break;
 
 default:

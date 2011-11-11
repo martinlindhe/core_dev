@@ -33,11 +33,11 @@ case 'overview':
     }
 
     echo '<br/>';
-    
+
     if ($user_id == $session->id)
         echo '&raquo; '.ahref('iview/albums/new', 'New album');
 
-    break;  
+    break;
 
 case 'show':
     // shows an user album
@@ -47,7 +47,7 @@ case 'show':
     if (!$this->child || !$this->child2)
         die('XXX wrong album params');
 
-    $user = User::get($this->child);    
+    $user = User::get($this->child);
     if (!$user)
         die('XXX NO SUCH USER');
 
@@ -57,10 +57,10 @@ case 'show':
 
     echo '<h1>Photo album '.$album->name.' by user #'.$this->child.'</h1>';
     d($album);
-    
+
     // shows album content
     $images = File::getByCategory(USER, $this->child2);
-    
+
     foreach ($images as $im) {
         $a = new XhtmlComponentA();
         $a->href = getThumbUrl($im->id, 0, 0);
@@ -73,11 +73,11 @@ case 'show':
 
     $lb = new YuiLightbox();
     echo $lb->render();
-    
-    
+
+
     if (!$images && $album->owner)
         echo '&raquo; '.ahref('iview/albums/delete/'.$this->child2, 'Delete empty album').'<br/>';
-    
+
     if ($session->id == $this->child)
         echo '&raquo; '.ahref('iview/albums/upload/'.$this->child2, 'Upload photo').'<br/>';
 
@@ -96,18 +96,18 @@ case 'delete':
 
         PhotoAlbum::delete($this->child);
         js_redirect('iview/albums/overview');
-    }   
+    }
     break;
-    
+
 case 'upload':
     // child = album id
     $session->requireLoggedIn();
-    
+
     function handleUpload($p)
     {
         $session = SessionHandler::getInstance();
         $error   = ErrorHandler::getInstance();
-        
+
         switch ($p['img']['type']) {
         case 'image/jpeg': break;
         case 'image/png': break;
@@ -117,30 +117,30 @@ case 'upload':
             return false;
         }
 
-        $fileId = FileHelper::import(USER, $p['img'], $p['album']);
-        
+        $fileId = File::import(USER, $p['img'], $p['album']);
+
         $im = new ImageResizer( File::get($fileId) );
 
         // FIXME: make these configurable
         $max_width = 800;
         $max_height = 800;
-        
+
         if ($im->width > $max_width || $im->height > $max_height) {
             $im->resizeAspect($max_width, $max_height);
             $im->render( $im->mimetype, File::getUploadPath($fileId) );
-            FileHelper::sync($fileId); //updates tblFiles.size
+            File::sync($fileId); //updates tblFiles.size
         }
-        
+
         js_redirect('iview/albums/show/'.$session->id.'/'.$p['album']);
     }
-    
+
     if (!$this->child)
         die('XXX no album specified');
 
     $album = PhotoAlbum::get($this->child);
     if ($album->owner != 0 && $album->owner != $session->id)
-        throw new Exception ('epic HACK attempt');        
-    
+        throw new Exception ('epic HACK attempt');
+
     echo '<h1>Upload photo to album '.$album->name.'</h1>';
 
     $form = new XhtmlForm();
@@ -153,7 +153,7 @@ case 'upload':
 
     echo $form->render();
     break;
-    
+
 case 'new':
     $session->requireLoggedIn();
     // create new photo album
@@ -162,26 +162,26 @@ case 'new':
     function handleNew($p)
     {
         $session = SessionHandler::getInstance();
-        
+
         $o = new PhotoAlbum();
         $o->owner        = $session->id;
         $o->name         = $p['name'];
         $o->time_created = sql_datetime( time() );
 
-        if ($session->isSuperAdmin && $p['system'])        
+        if ($session->isSuperAdmin && $p['system'])
             $o->owner = 0; // create a system wide album
 
         PhotoAlbum::store($o);
-        
+
         js_redirect('iview/albums/overview');
     }
-    
+
     $form = new XhtmlForm();
     $form->addInput('name', 'Name');
 
     if ($session->isSuperAdmin)
         $form->addCheckbox('system', 'System wide album? (SUPERADMIN)');
-    
+
     $form->addSubmit('Save');
     $form->setHandler('handleNew');
     echo $form->render();
