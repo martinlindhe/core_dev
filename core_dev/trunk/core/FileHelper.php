@@ -74,20 +74,14 @@ class FileHelper
         readfile($path);
     }
 
-    public static function delete($id)
-    {
-        File::delete($id);
-        $path = File::getUploadPath($id);
-        unlink($path);
-    }
-    
+
     /** Updates tblFiles entry with current file size & mime type, useful after Image resize / rotate etc */
     public static function sync($id)
     {
         $name = File::getUploadPath($id);
         if (!file_exists($name))
             throw new Exception ('cant sync nonexisting file, what do???');
-    
+
         $size = filesize($name);
         $mime = get_mimetype_of_file($name);
 

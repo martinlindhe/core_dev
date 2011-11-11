@@ -11,7 +11,7 @@
 
 //STATUS: wip
 
-//TODO: parse more os & arch from HttpUserAgent into WebBrowser
+//TODO: parse os & arch for IE, Opera, Firefox, Chrome
 
 /* XXX Android Webkit browser
 

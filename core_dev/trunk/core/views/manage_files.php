@@ -11,8 +11,8 @@
 $session->requireAdmin();
 
 
-if (!empty($_GET['delete'])) {
-    FileHelper::delete($_GET['delete']);
+if (!empty($_GET['unlink'])) {
+    File::unlink($_GET['unlink']);
 }
 
 echo '<h1>All uploaded files</h1>';
@@ -25,7 +25,7 @@ foreach ($list as $f)
     $view->registerVar('owner', $f->id);
     echo $view->render();
     echo '<br/>';
-    echo '&raquo; '.ahref('?delete='.$f->id, 'Delete file').'<br/>';
+    echo '&raquo; '.ahref('?unlink='.$f->id, 'Permanently delete file').'<br/>';
     echo '<br/>';
 
 }

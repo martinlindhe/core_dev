@@ -91,6 +91,15 @@ class File
         ' WHERE id = ?';
         Sql::pUpdate($q, 'i', $id);
     }
+
+    /** permanently deletes the file from disk */
+    public static function unlink($id)
+    {
+        SqlObject::deleteById($id, self::$tbl_name, 'id');
+        $path = self::getUploadPath($id);
+        unlink($path);
+    }
+
 }
 
 ?>
