@@ -11,15 +11,7 @@
 
 //STATUS: wip
 
-//TODO: parse os & arch from HttpUserAgent into WebBrowser
-
-/* XXX Mobile Safari (ipod, ipad, iphone)
-
-Mozilla/5.0 (iPhone; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.10
-Mozilla/5.0 (iPad;U;CPU OS 3_2_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B500 Safari/531.21.10
-Mozilla/5.0 (iPod; U; CPU iPhone OS 4_3_3 like Mac OS X; ja-jp) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5
-*/
-
+//TODO: parse more os & arch from HttpUserAgent into WebBrowser
 
 /* XXX Android Webkit browser
 
@@ -60,8 +52,10 @@ class WebBrowser
     var $vendor;    ///< string "Microsoft", "Google", "Mozilla"
     var $name;      ///< string "Chrome", "Firefox", "Internet Explorer"
     var $version;   ///< string "13.0.782.112", "6.0"
-//    var $os;        ///< string "Linux", "Windows", "MacOS X"
-//    var $arch;      ///< string "x86_64"
+    var $os;        ///< string "Linux", "Windows", "Macintosh", "iPhone", "iPad", "iPod"
+//    var $os_version; // string
+    var $arch;      ///< string "x86_64", "CPU OS 3_2 like Mac OS X"
+    var $language;  ///< "en", "en-us"
 }
 
 class HttpUserAgent
@@ -72,6 +66,18 @@ class HttpUserAgent
     public static function isSmartphone($s)
     {
         throw new Exception ('FIXME implement');
+    }
+
+    /**
+     * @return true if UA is a iOS device
+     */
+    public static function isIOS($s)
+    {
+        $b = self::getBrowser($s);
+        if ($b->os == 'iPhone' || $b->os == 'iPod' || $b->os == 'iPad')
+            return true;
+
+        return false;
     }
 
     public static function getBrowser($s)
@@ -126,6 +132,24 @@ class HttpUserAgent
                 case '419.3':  $o->version = '2.0.4'; break;
                 default: $o->version = 'build '.$y[0].' (unknown version)';
                 }
+            }
+
+            $tok1 = 'Mozilla/5.0 (';
+            $p1 = strpos($s, $tok1);
+            if ($p1 !== false) {
+                $s1 = substr($s, $p1 + strlen($tok1) );
+
+                $p2 = strpos($s1, ')');
+                $s2 = substr($s1, 0, $p2);
+
+                $x = explode(';', $s2);
+
+                // (iPhone; U; CPU OS 3_2 like Mac OS X; en-us)
+                // (Macintosh; U; Intel Mac OS X; en)
+                // (Windows; U; Windows NT 6.1; en-US)
+                $o->os   = trim($x[0]);
+                $o->arch = trim($x[2]);
+                $o->language = strtolower(trim($x[3]));
             }
         }
         else if (instr($s, 'Opera'))

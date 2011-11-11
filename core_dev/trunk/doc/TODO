@@ -52,7 +52,7 @@ Guestbook (NOT USED IN RR)
 
 
 Photo albums: core/PhotoAlbum.php, core/views/albums.php
-    * ...
+    * multiple file uploads with progress bars, see http://yuilibrary.com/yui/docs/uploader/uploader-multiple.html
 
 
 DB CHECKER:
