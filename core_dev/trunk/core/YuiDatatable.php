@@ -227,7 +227,19 @@ class YuiDatatable
      * Configures the datatable to load data from a callback url
      * Cannot be used with setDataList()
      */
-    function setDataSource($url) { $this->xhr_source = $url; }
+    function setDataSource($url)
+    {
+        if (is_array($url))
+        {
+            $this->setDataList($url);
+            return;
+        }
+
+        if (!is_url($url))
+            throw new Exception ('not an url: '.$url);
+
+        $this->xhr_source = $url;
+    }
 
     function render()
     {
