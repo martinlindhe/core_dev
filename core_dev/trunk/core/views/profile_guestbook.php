@@ -3,7 +3,7 @@
 //TODO: mark entries as read, see number of unread entries
 
 require_once('Guestbook.php');
-
+require_once('Bookmark.php');
 require_once('YuiDatatable.php');
 
 if (!$session->id)

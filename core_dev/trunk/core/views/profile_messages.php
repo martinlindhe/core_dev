@@ -9,7 +9,7 @@
 //TODO: ability to mark a message as "DELETED". really useful? will require 2 copies of each msg, or else if user 1 deletes the msg, user2 also wont see it
 
 require_once('Message.php');
-
+require_once('Bookmark.php');
 require_once('YuiDatatable.php');
 
 $session->requireLoggedIn();
@@ -52,7 +52,7 @@ case 'default':
 
 case 'send':
     // child = send to user id
-    if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $this->chuild)) {
+    if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $this->child)) {
         echo 'User has blocked you from access';
         return;
     }
