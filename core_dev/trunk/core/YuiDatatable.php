@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO SOON!!!! merge setDataList into setDataSource and drop setDataList'
+
 //TODO WIP: finish conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
 //          current code is half-working... multiple rules dont work well together, only integer comparisions???
 
@@ -407,11 +409,11 @@ class YuiDatatable
                 $tbl_type = ($this->pixel_width || $this->pixel_height) ? 'ScrollingDataTable' : 'DataTable';
 
                 $res .=
-                'myDataTable = new YAHOO.widget.'.$tbl_type.'("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
+                'tbl = new YAHOO.widget.'.$tbl_type.'("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
                 ($this->xhr_source ?
                     // Update totalRecords on the fly with value from the XHR request, needed for paginator
-                    'myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
+                    'tbl.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
                         'oPayload.totalRecords = oResponse.meta.totalRecords;'.
                         'return oPayload;'.
                     '};'
@@ -420,12 +422,12 @@ class YuiDatatable
                 ).
 
                 // Enable row highlighting, more examples: http://developer.yahoo.com/yui/examples/datatable/dt_highlighting.html
-                'myDataTable.subscribe("rowMouseoverEvent", myDataTable.onEventHighlightRow);'.
-                'myDataTable.subscribe("rowMouseoutEvent", myDataTable.onEventUnhighlightRow);'.
+                'tbl.subscribe("rowMouseoverEvent", tbl.onEventHighlightRow);'.
+                'tbl.subscribe("rowMouseoutEvent", tbl.onEventUnhighlightRow);'.
 
                 'return {'.
                     'oDS: myDataSource,'.
-                    'oDT: myDataTable'.
+                    'oDT: tbl'.
                 '};'.
             '}();'.
         '});';
