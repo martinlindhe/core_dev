@@ -149,7 +149,7 @@ $dt->addColumn('timeCreated',     'Timestamp');
 $dt->addColumn('IP',              'IP');
 $dt->addColumn('userAgent',       'User agent');
 $dt->setSortOrder('timeCreated', 'desc');
-$dt->setDataList( UserHandler::getLoginHistory($user->id) );
+$dt->setDataSource( UserHandler::getLoginHistory($user->id) );
 $dt->setRowsPerPage( 10 );
 echo $dt->render();
 

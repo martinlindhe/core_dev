@@ -208,7 +208,7 @@ class YuiDatatable
         {
             $res = array();
 
-            foreach ($arr as $row)
+            foreach ($url as $row)
             {
                 $inc_row = array();
                 foreach ($row as $key => $val)

@@ -27,7 +27,7 @@ case 'default':
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
-    $dt->setDataList( $list );
+    $dt->setDataSource( $list );
     echo $dt->render();
 
     echo '<br/>';
@@ -50,7 +50,7 @@ case 'approved':
     $dt->addColumn('handled_by',   'Approved by', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
-    $dt->setDataList( $list );
+    $dt->setDataSource( $list );
     echo $dt->render();
     break;
 
@@ -69,7 +69,7 @@ case 'denied':
     $dt->addColumn('handled_by',   'Denied by', 'link', 'iview/manage_user/', 'name');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
-    $dt->setDataList( $list );
+    $dt->setDataSource( $list );
     echo $dt->render();
     break;
 

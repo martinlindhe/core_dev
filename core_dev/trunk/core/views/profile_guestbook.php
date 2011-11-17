@@ -46,7 +46,7 @@ $dt->addColumn('creator',         'Written by');    /// XXXX show username, show
 $dt->addColumn('time_created',    'When');
 $dt->addColumn('body',            'Msg');
 $dt->setSortOrder('time_created', 'desc');
-$dt->setDataList( $list );
+$dt->setDataSource( $list );
 echo $dt->render();
 
 

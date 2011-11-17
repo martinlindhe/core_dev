@@ -20,7 +20,7 @@ case 'list':
     $dt->addColumn('label', 'Label');
     $dt->addColumn('type',  'Type', 'array', UserDataField::getTypes() );
 
-    $dt->setDataList( $list );
+    $dt->setDataSource( $list );
     echo $dt->render();
 
     echo '<br/>';

@@ -32,7 +32,7 @@ case 'default':
     $dt->addColumn('time_sent',    'Sent');
     $dt->addColumn('body',         'Msg');
     $dt->setSortOrder('time_sent', 'desc');
-    $dt->setDataList( $list );
+    $dt->setDataSource( $list );
     echo $dt->render();
 
 
@@ -46,7 +46,7 @@ case 'default':
     $dt->addColumn('time_sent',    'Sent');
     $dt->addColumn('body',         'Msg');
     $dt->setSortOrder('time_sent', 'desc');
-    $dt->setDataList( $list );
+    $dt->setDataSource( $list );
     echo $dt->render();
     break;
 

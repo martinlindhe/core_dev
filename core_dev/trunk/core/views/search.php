@@ -16,7 +16,7 @@ case 'user':
         $dt = new YuiDatatable();
         $dt->addColumn('id',    'Username', 'link', 'iview/profile/', 'name');
         $dt->addColumn('time_last_active',  'Last active');
-        $dt->setDataList($list);
+        $dt->setDataSource($list);
 
         echo $dt->render();
     }
