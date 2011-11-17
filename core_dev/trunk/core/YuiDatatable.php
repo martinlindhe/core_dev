@@ -9,8 +9,6 @@
 
 //STATUS: wip
 
-//TODO SOON!!!! merge setDataList into setDataSource and drop setDataList'
-
 //TODO WIP: finish conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
 //          current code is half-working... multiple rules dont work well together, only integer comparisions???
 
@@ -44,9 +42,10 @@ class YuiDatatable
 {
     private $columns         = array();
     private $response_fields = array();
-    private $datalist        = array();
+
+    private $data_source;                 ///< array or url to retrieve data from XMLHttpRequest
+
     private $caption         = '';        ///< caption for the datatable
-    private $xhr_source      = '';        ///< url to retrieve data from XMLHttpRequest
     private $sort_column     = false;     ///< default to false, because first column idx is 0
     private $sort_order;
     private $embed_arrays    = array();   ///< array with strings for substitution of numeric values in some columns
@@ -200,47 +199,38 @@ class YuiDatatable
     }
 
     /**
-     * Loads the datatable with a static array of data
-     * Only includes registered array keys
-     * Cannot be used with setDataSource()
-     */
-    function setDataList($arr)
-    {
-        if (!is_array($arr))
-            throw new Exception ('YuiDatatable->setDataList() needs an array');
-
-        $res = array();
-
-        foreach ($arr as $row)
-        {
-            $inc_row = array();
-            foreach ($row as $key => $val)
-                foreach ($this->columns as $inc_col)
-                    if ($inc_col->key == $key)
-                        $inc_row[$key] = $val;
-
-            $res[] = $inc_row;
-        }
-
-        $this->datalist = $res;
-    }
-
-    /**
-     * Configures the datatable to load data from a callback url
-     * Cannot be used with setDataList()
+     * Configures the datatable to load data from a callback url (XHR),
+     * or a static array of data (only includes registered array keys)
      */
     function setDataSource($url)
     {
         if (is_array($url))
         {
-            $this->setDataList($url);
+            $res = array();
+
+            foreach ($arr as $row)
+            {
+                $inc_row = array();
+                foreach ($row as $key => $val)
+                    foreach ($this->columns as $inc_col)
+                        if ($inc_col->key == $key)
+                            $inc_row[$key] = $val;
+
+                $res[] = $inc_row;
+            }
+
+            $this->data_source = $res;
+
             return;
         }
-
+/*
         if (!is_url($url))
             throw new Exception ('not an url: '.$url);
+*/
+        if (!is_string($url))
+            throw new Exception ('really bad input: '.$url);
 
-        $this->xhr_source = $url;
+        $this->data_source = $url;
     }
 
     function render()
@@ -331,9 +321,15 @@ class YuiDatatable
                 'YAHOO.widget.DataTable.Formatter.formatBool = this.formatBool;'.
 
                 'myColumnDefs = '.JSON::encode($this->columns).';'."\n".
-                ($this->xhr_source ?
+                (is_array($this->data_source) ?
+                    //embedded js-array
+                    'var '.$data_var.' = '.JSON::encode($this->data_source).';'."\n".
+                    'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
+                    'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'. // XXX whats difference of JSARRAY and JSON types?
+                    'myDataSource.responseSchema = { fields:'.JSON::encode($this->response_fields, false).'};'
+                :
                     //rpc
-                    'var myDataSource = new YAHOO.util.DataSource("'.$this->xhr_source.'");'.
+                    'var myDataSource = new YAHOO.util.DataSource("'.$this->data_source.'");'.
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;'.
                     //'myDataSource.connXhrMode = "queueRequests";'. //XXX ???
                     'myDataSource.responseSchema = {'.
@@ -341,12 +337,6 @@ class YuiDatatable
                         'fields: '.JSON::encode($this->response_fields, false).','.
                         'metaFields: { totalRecords:"totalRecords" }'. // mapped to XhrResponse "totalRecords" field, needed for paginator
                     '};'
-                :
-                    //embedded js-array
-                    'var '.$data_var.' = '.JSON::encode($this->datalist).';'."\n".
-                    'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
-                    'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'. // XXX whats difference of JSARRAY and JSON types?
-                    'myDataSource.responseSchema = { fields:'.JSON::encode($this->response_fields, false).'};'
                 );
 
                 if ($this->color_rows) {
@@ -384,7 +374,7 @@ class YuiDatatable
                     ( $this->color_rows ? 'formatRow: myRowFormatter,' : '').
                     ($this->show_paginator ?
                         'paginator: new YAHOO.widget.Paginator({'.
-                            (!$this->xhr_source ? 'totalRecords:'.count($this->datalist).',' : '').
+                            (is_array($this->data_source) ? 'totalRecords:'.count($this->data_source).',' : '').
                             'rowsPerPage:'.$this->rows_per_page.','.
                             'rowsPerPageOptions:['.implode(',', $this->rpp_opts).'],'.
                             'containers:["'.$pag_holder.'"],'.
@@ -395,7 +385,7 @@ class YuiDatatable
                         ''
                     )
                     .
-                    ($this->xhr_source ?
+                    (!is_array($this->data_source) ?
                         'dynamicData:true,'.
                         'initialRequest:"startIndex=0'.
                             ($this->sort_column !== false ? '&sort='.$this->columns[ $this->sort_column ]->key : '').
@@ -411,7 +401,7 @@ class YuiDatatable
                 $res .=
                 'tbl = new YAHOO.widget.'.$tbl_type.'("'.$div_holder.'",myColumnDefs, myDataSource, myConfigs);'.
 
-                ($this->xhr_source ?
+                (!is_array($this->data_source) ?
                     // Update totalRecords on the fly with value from the XHR request, needed for paginator
                     'tbl.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {'.
                         'oPayload.totalRecords = oResponse.meta.totalRecords;'.
