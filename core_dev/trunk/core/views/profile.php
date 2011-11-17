@@ -51,7 +51,7 @@ if ($session->id && $user_id != $session->id) {
     if (Bookmark::exists($user_id, BOOKMARK_USERBLOCK, $session->id)) {
         echo '<b>THIS USER IS BLOCKED FROM CONTACTING YOU</b><br/>';
     } else {
-        echo '&raquo; '.ahref('iview/block/'.$user_id, 'Block user').'<br/>';
+        echo '&raquo; '.ahref('iview/block/user/'.$user_id, 'Block user').'<br/>';
     }
     echo '&raquo; '.ahref('iview/report/user/'.$user_id, 'Report user').'<br/>';
     echo '<br/>';

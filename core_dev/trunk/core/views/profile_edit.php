@@ -87,6 +87,8 @@ case 'default':
 
     echo '&raquo; '.ahref('iview/profile_edit/username', 'Change username').'<br/>';
     echo '&raquo; '.ahref('iview/profile_edit/password', 'Change password').'<br/>';
+
+    echo '&raquo; '.ahref('iview/block/manage', 'Manage blocked users').'<br/>';
     break;
 
 case 'username':

@@ -6,6 +6,17 @@ BUGS:
     * fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
 
+Views:
+    * reorganize:
+        - move trunk/core/views to trunk/views
+        - split to subdirs:
+            views/admin
+            views/core     = iview.php, coredev.php
+            views/xxxx
+
+    * drop/port all code from trunk/admin_old/
+
+
 Authentication:
     * Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
     * ability to login using registered email (2x doublecheck that email is unique and verified)
@@ -24,7 +35,7 @@ User profile
 
 
 User search
-    * find user by partial username
+    * ...
 
 
 Messages
@@ -32,7 +43,7 @@ Messages
 
 
 Privacy
-    * ability to see / edit "blocked users" list
+    * ability to edit "blocked users" list
 
 
 Friends

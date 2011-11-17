@@ -31,7 +31,7 @@ class Bookmark
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    static function getList($owner, $type)
+    static function getList($type, $owner)
     {
         if (!is_numeric($owner) || !is_numeric($type))
             throw new Exception ('noo');
