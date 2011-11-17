@@ -19,7 +19,6 @@ Views:
 
 Authentication:
     * Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
-    * ability to login using registered email (2x doublecheck that email is unique and verified)
 
 
 UI:
@@ -47,9 +46,12 @@ Privacy
 
 
 Friends
-    * The "Bookmark" class cant be used, it is more like a "favourite users bookmarks"
-    * write a proper Friend class using functions_contacts.php logic (1:send friend request, 2:approve, 3:both persons are friends)
-    * write a "friend list" view (for Friend class)
+    * First one "add favorite users", using Bookmark class...
+
+    later a proper Friend class with friend requests etc:
+        - The "Bookmark" class cant be used, it is more like a "favourite users bookmarks"
+        - write a proper Friend class using functions_contacts.php logic (1:send friend request, 2:approve, 3:both persons are friends)
+        - write a "friend list" view (for Friend class)
 
 
 Chat
