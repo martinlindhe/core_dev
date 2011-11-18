@@ -52,7 +52,7 @@ case 'default':
 
 case 'send':
     // child = send to user id
-    if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $this->child)) {
+    if (Bookmark::exists(BOOKMARK_USERBLOCK, $session->id, $this->child)) {
         echo 'User has blocked you from access';
         return;
     }

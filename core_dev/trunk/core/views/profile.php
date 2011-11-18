@@ -18,7 +18,7 @@ $user = User::get($user_id);
 if (!$user)
     die('ECHKKP');
 
-if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $user_id)) {
+if (Bookmark::exists(BOOKMARK_USERBLOCK, $session->id, $user_id)) {
     echo 'User has blocked you from access';
     return;
 }
@@ -50,14 +50,14 @@ echo '<br/>';
 if ($session->id && $user_id != $session->id) {
     echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
 
-    if (Bookmark::exists($user_id, BOOKMARK_FAVORITEUSER, $session->id)) {
+    if (Bookmark::exists(BOOKMARK_FAVORITEUSER, $user_id, $session->id)) {
         echo '&raquo; '.ahref('iview/bookmark/removeuser/'.$user_id, 'Remove favorite').'<br/>';
     } else {
         echo '&raquo; '.ahref('iview/bookmark/adduser/'.$user_id, 'Add favorite').'<br/>';
     }
     echo '<br/>';
 
-    if (Bookmark::exists($user_id, BOOKMARK_USERBLOCK, $session->id)) {
+    if (Bookmark::exists(BOOKMARK_USERBLOCK, $user_id, $session->id)) {
         echo '<b>THIS USER IS BLOCKED FROM CONTACTING YOU</b><br/>';
     } else {
         echo '&raquo; '.ahref('iview/block/user/'.$user_id, 'Block user').'<br/>';

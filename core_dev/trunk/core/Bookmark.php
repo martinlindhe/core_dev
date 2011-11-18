@@ -49,7 +49,7 @@ class Bookmark
     /**
      * Check if an object (owner id & type) is already bookmarked
      */
-    static function exists($value, $type, $owner = 0) // XXX rearrange params
+    static function exists($type, $value, $owner = 0)
     {
         $o = new Bookmark();
         $o->type  = $type;

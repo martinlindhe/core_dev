@@ -20,7 +20,7 @@ $user = User::get($user_id);
 if (!$user)
     die('ECK');
 
-if (Bookmark::exists($session->id, BOOKMARK_USERBLOCK, $user_id)) {
+if (Bookmark::exists(BOOKMARK_USERBLOCK, $session->id, $user_id)) {
     echo 'User has blocked you from access';
     return;
 }
