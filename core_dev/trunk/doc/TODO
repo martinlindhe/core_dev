@@ -46,8 +46,6 @@ Privacy
 
 
 Friends
-    * show "favorite users"... + link to remove favorite user
-
     later a proper Friend class with friend requests etc:
         - The "Bookmark" class cant be used, it is more like a "favourite users bookmarks"
         - write a proper Friend class using functions_contacts.php logic (1:send friend request, 2:approve, 3:both persons are friends)
