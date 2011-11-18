@@ -10,7 +10,8 @@
 
 //STATUS: wip
 
-define('BOOKMARK_USERBLOCK', 1);
+define('BOOKMARK_USERBLOCK',    1);  ///< blocked user
+define('BOOKMARK_FAVORITEUSER', 2);  ///< "favorite user" (like friends but no friend-request)
 
 // use these, or any numbers >= 100 for application specific needs
 define('BOOKMARK_CUSTOM',  100);

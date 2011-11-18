@@ -41,21 +41,28 @@ echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
 
 $pic_id = UserSetting::get($user_id, 'picture');
 if ($pic_id)
-    echo 'Profile picture: '.showThumb($pic_id, 'Profilbild', 50, 50).'<br/>';
+    echo 'Profile picture: '.showThumb($pic_id, 'Profilbild', 100, 100).'<br/>';
 
 
 
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id) {
+    echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
+
+    if (Bookmark::exists($user_id, BOOKMARK_FAVORITEUSER, $session->id)) {
+        echo '&raquo; '.ahref('iview/bookmark/removeuser/'.$user_id, 'Remove favorite').'<br/>';
+    } else {
+        echo '&raquo; '.ahref('iview/bookmark/adduser/'.$user_id, 'Add favorite').'<br/>';
+    }
+    echo '<br/>';
+
     if (Bookmark::exists($user_id, BOOKMARK_USERBLOCK, $session->id)) {
         echo '<b>THIS USER IS BLOCKED FROM CONTACTING YOU</b><br/>';
     } else {
         echo '&raquo; '.ahref('iview/block/user/'.$user_id, 'Block user').'<br/>';
     }
     echo '&raquo; '.ahref('iview/report/user/'.$user_id, 'Report user').'<br/>';
-    echo '<br/>';
-    echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
 }
 
 echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';

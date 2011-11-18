@@ -46,7 +46,7 @@ Privacy
 
 
 Friends
-    * First one "add favorite users", using Bookmark class...
+    * show "favorite users"... + link to remove favorite user
 
     later a proper Friend class with friend requests etc:
         - The "Bookmark" class cant be used, it is more like a "favourite users bookmarks"

@@ -24,7 +24,7 @@ case 'user':
     $form = new XhtmlForm();
 
     $form->addInput('q', 'Username search');
-
+    $form->setFocus('q');
     $form->addSubmit('Search');
     $form->setHandler('handleSearch');
 
