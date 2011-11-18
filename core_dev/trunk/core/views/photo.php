@@ -88,7 +88,7 @@ case 'delete':
         }
 
         File::delete($this->child);
-        js_redirect('iview/albums/overview');
+        js_redirect('iview/album/overview');
     }
     break;
 

@@ -27,7 +27,7 @@ case 'overview':
 
     foreach ($albums as $album) {
         // TODO: show number of pics in each album
-        echo ahref('iview/albums/show/'.$user_id.'/'.$album->id, $album->name);
+        echo ahref('iview/album/show/'.$user_id.'/'.$album->id, $album->name);
         if (!$album->owner) echo ' (global)';
         echo '<br/>';
     }
@@ -35,7 +35,7 @@ case 'overview':
     echo '<br/>';
 
     if ($user_id == $session->id)
-        echo '&raquo; '.ahref('iview/albums/new', 'New album');
+        echo '&raquo; '.ahref('iview/album/new', 'New album');
 
     break;
 
@@ -59,7 +59,7 @@ case 'show':
     d($album);
 
     // shows album content
-    $images = File::getByCategory(USER, $this->child2);
+    $images = File::getByCategory(USER, $this->child2, $this->child);
 
     foreach ($images as $im) {
         $a = new XhtmlComponentA();
@@ -76,10 +76,10 @@ case 'show':
 
 
     if (!$images && $album->owner)
-        echo '&raquo; '.ahref('iview/albums/delete/'.$this->child2, 'Delete empty album').'<br/>';
+        echo '&raquo; '.ahref('iview/album/delete/'.$this->child2, 'Delete empty album').'<br/>';
 
     if ($session->id == $this->child)
-        echo '&raquo; '.ahref('iview/albums/upload/'.$this->child2, 'Upload photo').'<br/>';
+        echo '&raquo; '.ahref('iview/album/upload/'.$this->child2, 'Upload photo').'<br/>';
 
     break;
 
@@ -95,7 +95,7 @@ case 'delete':
         }
 
         PhotoAlbum::delete($this->child);
-        js_redirect('iview/albums/overview');
+        js_redirect('iview/album/overview');
     }
     break;
 
@@ -131,7 +131,7 @@ case 'upload':
             File::sync($fileId); //updates tblFiles.size
         }
 
-        js_redirect('iview/albums/show/'.$session->id.'/'.$p['album']);
+        js_redirect('iview/album/show/'.$session->id.'/'.$p['album']);
     }
 
     if (!$this->child)
@@ -173,7 +173,7 @@ case 'new':
 
         PhotoAlbum::store($o);
 
-        js_redirect('iview/albums/overview');
+        js_redirect('iview/album/overview');
     }
 
     $form = new XhtmlForm();

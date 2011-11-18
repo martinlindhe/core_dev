@@ -66,7 +66,7 @@ if ($session->id && $user_id != $session->id) {
 }
 
 echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
-echo '&raquo; '.ahref('iview/albums/overview/'.$user_id, 'Photos').'<br/>';
+echo '&raquo; '.ahref('iview/album/overview/'.$user_id, 'Photos').'<br/>';
 
 echo '<br/>';
 

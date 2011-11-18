@@ -65,14 +65,15 @@ class File
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    public static function getByCategory($type, $cat)
+    public static function getByCategory($type, $cat, $uploader)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE type = ?'.
         ' AND category = ?'.
+        ' AND uploader = ?'.
         ' AND time_deleted IS NULL';
-        $list = SqlHandler::getInstance()->pSelect($q, 'ii', $type, $cat);
+        $list = SqlHandler::getInstance()->pSelect($q, 'iii', $type, $cat, $uploader);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
@@ -116,7 +117,6 @@ class File
         ' WHERE id = ?';
         Sql::pUpdate($q, 'isi', $size, $mime, $id);
     }
-
 
     public static function passthru($id)
     {
