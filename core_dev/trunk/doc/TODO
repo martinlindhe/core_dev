@@ -35,7 +35,6 @@ UI:
 User profile
     * show a AVATAR if no profile pic is selected
     * link to: chat 1-to-1
-    * avability: available for chat?
 
 
 User search
@@ -67,7 +66,7 @@ Moderation
     * ...
 
 
-Guestbook (NOT USED IN RR)
+Guestbook
     * ...
 
 

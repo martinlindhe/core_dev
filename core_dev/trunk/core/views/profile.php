@@ -36,7 +36,7 @@ echo 'Gender: '.$gender.'<br/>';
 
 
 echo 'E-mail: '.UserSetting::get($user_id, 'email').'<br/>';
-echo 'Want ads?: '.UserSetting::get($user_id, 'want_ads').'<br/>';
+echo 'Otillgänglig för chat?: '.UserSetting::get($user_id, 'chat_off').'<br/>';
 
 echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
 

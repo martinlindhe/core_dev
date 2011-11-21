@@ -51,7 +51,9 @@ case 'image':
 
     if (!empty($_GET['w']) && !empty($_GET['h'])) {
         $im = new ImageResizer($name);
-        $im->resizeAspect($_GET['w'], $_GET['h']);
+
+        if ($_GET['w'] <= $im->getWidth() && $_GET['h'] <= $im->getHeight())
+            $im->resizeAspect($_GET['w'], $_GET['h']);
     } else {
         $im = new Image($name);
     }
