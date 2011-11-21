@@ -8,7 +8,7 @@
 require_once('ModerationObject.php');
 
 require_once('Image.php'); // for getThumbUrl()
-require_once('ImageResizer.php');
+require_once('PhotoAlbum.php');
 
 $session->requireLoggedIn();
 
@@ -23,28 +23,20 @@ case 'default':
 
         foreach (UserDataField::getAll() as $f)
         {
+            if (!empty($p['remove_'.$f->id])) {
+                UserSetting::set($session->id, $f->name, 0);
+                continue;
+            }
+
             switch ($f->type) {
             case UserDataField::IMAGE:
                 if ($p[$f->name]['error'] == UPLOAD_ERR_NO_FILE)
                     continue;
 
-                $album = 1; /// XXXX global "Profile pictures" album
+                $album = PhotoAlbum::getProfileAlbumId();
 
-                $fileId = File::import(USER, $p[$f->name], $album);
+                $fileId = File::importImage(USER, $p[$f->name], $album);
                 UserSetting::set($session->id, $f->name, $fileId);
-
-                $im = new ImageResizer( File::get($fileId) );
-
-                // FIXME: make these configurable
-                $max_width  = 800;
-                $max_height = 800;
-
-                if ($im->width >= $max_width || $im->height >= $max_height) {
-                    $im->resizeAspect($max_width, $max_height);
-                    $im->render( $im->mimetype, File::getUploadPath($fileId) );
-                    File::sync($fileId); //updates tblFiles.size
-                }
-
                 break;
 
             default:
@@ -82,7 +74,7 @@ case 'default':
                 $img->src = getThumbUrl($pic_id);
                 $form->add($img, 'Existing picture');
 
-                $form->addCheckbox('xx', 'Remove picture XXX IMPLEMENT');
+                $form->addCheckbox('remove_'.$f->id, 'Remove photo');
             }
 
             $form->addFile( $f->name, $f->label);

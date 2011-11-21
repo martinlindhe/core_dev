@@ -6,7 +6,7 @@
  */
 
 //STATUS: early wip
- 
+
 class PhotoAlbum
 {
     var $id;
@@ -22,9 +22,9 @@ class PhotoAlbum
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE owner = ? OR owner = ?'.
         ' ORDER BY owner ASC, name ASC';
-        
+
         $res = Sql::pSelect($q, 'ii', 0, $id);
-        
+
         return SqlObject::loadObjects($res, __CLASS__);
     }
 
@@ -32,17 +32,22 @@ class PhotoAlbum
     {
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
-    
+
     public static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
-    
+
     public static function delete($id)
     {
         return SqlObject::deleteById($id, self::$tbl_name, 'id');
     }
-    
+
+    public static function getProfileAlbumId()
+    {
+        return 1; /// XXXX global "Profile pictures" album
+    }
+
 }
 
 ?>

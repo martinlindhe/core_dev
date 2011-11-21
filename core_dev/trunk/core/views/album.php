@@ -117,19 +117,7 @@ case 'upload':
             return false;
         }
 
-        $fileId = File::import(USER, $p['img'], $p['album']);
-
-        $im = new ImageResizer( File::get($fileId) );
-
-        // FIXME: make these configurable
-        $max_width  = 800;
-        $max_height = 800;
-
-        if ($im->width >= $max_width || $im->height >= $max_height) {
-            $im->resizeAspect($max_width, $max_height);
-            $im->render( $im->mimetype, File::getUploadPath($fileId) );
-            File::sync($fileId); //updates tblFiles.size
-        }
+        $fileId = File::importImage(USER, $p['img'], $p['album']);
 
         js_redirect('iview/album/show/'.$session->id.'/'.$p['album']);
     }

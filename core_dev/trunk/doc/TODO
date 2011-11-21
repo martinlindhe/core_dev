@@ -33,8 +33,6 @@ UI:
 
 
 User profile
-    * new profile picture should automatically be stored in the "profile pics" global album
-    * ability to remove profile picture
     * show a AVATAR if no profile pic is selected
     * link to: chat 1-to-1
     * avability: available for chat?

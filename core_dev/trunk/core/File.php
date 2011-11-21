@@ -8,6 +8,7 @@
 //STATUS: wip
 
 require_once('SqlObject.php');
+require_once('ImageResizer.php');
 
 define('FILETYPE_PROCESS',            50);
 define('FILETYPE_CLONE_CONVERTED',    51);
@@ -179,6 +180,28 @@ class File
         $key['file_id'] = $id;
 
         return $id;
+    }
+
+    /**
+     * Helper function that imports a image file and shrinks it to max allowed dimensions
+     */
+    public static function importImage($type, &$key, $category = 0)
+    {
+        $fileId = self::import($type, $key, $category);
+
+        $im = new ImageResizer( File::get($fileId) );
+
+        // FIXME: make these configurable
+        $max_width  = 800;
+        $max_height = 800;
+
+        if ($im->width >= $max_width || $im->height >= $max_height) {
+            $im->resizeAspect($max_width, $max_height);
+            $im->render( $im->mimetype, self::getUploadPath($fileId) );
+            self::sync($fileId); //updates tblFiles.size
+        }
+
+        return $fileId;
     }
 
 }
