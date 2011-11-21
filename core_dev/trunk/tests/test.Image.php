@@ -12,13 +12,14 @@ $x = new Image('/devel/web/fmf/pearl/cthulhu_eat.jpg'); // 300x115
 $x->render('gif', 'xxx.gif');
 */
 
-/*
-$x = new ImageResizer('/devel/web/fmf/pearl/cthulhu_eat.jpg'); // 300x115
 
-$x->resizeAspect(100, 50);
+$x = new ImageResizer('/home/ml/Desktop/YJZLx.jpg'); // 1280x800
+
+$x->resizeAspect(800, 800);
 $x->render('gif', 'x50.gif');
 echo "resized to ".$x->getWidth()."x".$x->getHeight()."\n";
-*/
+
+die;
 
 
 $x = new ImageRotator('/devel/cs/admin-ivr.unicorn.se/uploads/363');

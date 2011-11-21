@@ -5,6 +5,7 @@
 
 require_once('Image.php'); // for showThumb()
 require_once('Bookmark.php');
+require_once('YuiLightbox.php');
 
 $session->requireLoggedIn();
 
@@ -39,10 +40,22 @@ echo 'Want ads?: '.UserSetting::get($user_id, 'want_ads').'<br/>';
 
 echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
 
+
 $pic_id = UserSetting::get($user_id, 'picture');
 if ($pic_id)
-    echo 'Profile picture: '.showThumb($pic_id, 'Profilbild', 100, 100).'<br/>';
+{
+    echo 'Profile picture:<br/>';
 
+    // shows the photo
+    $a = new XhtmlComponentA();
+    $a->href = getThumbUrl($pic_id, 0, 0);
+    $a->rel  = 'lightbox';
+    $a->content = showThumb($pic_id, 'Profilbild', 150, 150);
+    echo $a->render();
+
+    $lb = new YuiLightbox();
+    echo $lb->render().'<br/>';
+}
 
 
 echo '<br/>';

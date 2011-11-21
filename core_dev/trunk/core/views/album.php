@@ -122,10 +122,10 @@ case 'upload':
         $im = new ImageResizer( File::get($fileId) );
 
         // FIXME: make these configurable
-        $max_width = 800;
+        $max_width  = 800;
         $max_height = 800;
 
-        if ($im->width > $max_width || $im->height > $max_height) {
+        if ($im->width >= $max_width || $im->height >= $max_height) {
             $im->resizeAspect($max_width, $max_height);
             $im->render( $im->mimetype, File::getUploadPath($fileId) );
             File::sync($fileId); //updates tblFiles.size
