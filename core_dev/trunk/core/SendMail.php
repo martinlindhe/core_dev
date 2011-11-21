@@ -70,6 +70,8 @@ class SendMail extends CoreBase
 
     function getServer() { return $this->server_host; }
 
+    function getRecipients() { return self::$to_adr; }
+
     protected static function resetInstance()
     {
 //        self::$from_adr = '';
@@ -145,18 +147,6 @@ class SendMail extends CoreBase
         self::$rply_name = $n;
     }
 
-    function addRecipient($s)
-    {
-        $s = trim($s);
-        if (!$s)
-            return;
-
-        if (!is_email($s))
-            throw new Exception ('Cant add invalid recipient '.$s);
-
-        self::$to_adr[] = $s;
-    }
-
     function addCc($s)
     {
         $s = trim($s);
@@ -175,6 +165,18 @@ class SendMail extends CoreBase
         self::$bcc_adr[] = $s;
     }
 
+    function addRecipient($s)
+    {
+        $s = trim($s);
+        if (!$s)
+            return;
+
+        if (!is_email($s))
+            throw new Exception ('Cant add invalid recipient '.$s);
+
+        self::$to_adr[] = $s;
+    }
+
     /**
      * Adds a list of recipients
      * @param $a is a array or string (separated by comma/semicolon/newlines/whitespace) of mail addresses
@@ -182,12 +184,11 @@ class SendMail extends CoreBase
     function addRecipients($a)
     {
         if (!is_array($a)) {
-            $a = trim($a);
-            $a = str_replace("\n", ' ', $a);
-            $a = str_replace("\r", ' ', $a);
+            $a = reduce_whitespace($a);
             $a = str_replace(';', ',', $a);
+            $a = str_replace(' ', ',', $a);
 
-            //translate comma-separated string to array
+            // translate comma-separated string to array
             $a = explode(',', $a);
         }
 

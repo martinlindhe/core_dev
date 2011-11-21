@@ -456,12 +456,15 @@ function strip_spaces($s)
 function reduce_whitespace($s)
 {
     $s = htmlchars_decode($s);
-    $s = str_replace("\t",     ' ', $s); //tabs -> spaces
+    $s = str_replace("\t", ' ', $s); //tabs -> spaces
+    $s = str_replace("\n", ' ', $s); //linefeed -> spaces
+    $s = str_replace("\r", ' ', $s); //linefeed -> spaces
     do {
         $tmp = $s;
         $s = str_replace('  ', ' ', $s);
     } while ($s != $tmp);
-    return $s;
+
+    return trim($s);
 }
 
 /**

@@ -20,9 +20,12 @@ $msg ='abc åäö 123';
 
 
 //$arr = array('martin@unicorn.se', 'ml@unicorn.se');
-$arr = 'martin@unicorn.se, ml@unicorn.se';
-
+$arr = 'martin@unicorn.se, ml@unicorn.se kalle@ba.com';
 $mail->addRecipients($arr);
+
+if (count($mail->getRecipients()) != 3) echo "FAIL 1\n";
+
+
 
 $mail->setSubject('message åäö subject');
 $mail->attachFile('/home/ml/Desktop/bilder/167968_193900863954437_140855739258950_730662_4411055_n.jpg');
