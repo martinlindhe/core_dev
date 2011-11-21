@@ -20,7 +20,9 @@ $msg ='abc åäö 123';
 
 
 //$arr = array('martin@unicorn.se', 'ml@unicorn.se');
-$arr = 'martin@unicorn.se, ml@unicorn.se kalle@ba.com';
+$arr = "eva-lena@unicorn.se\r\n
+goran.utbult@gmail.com\r\n
+";
 $mail->addRecipients($arr);
 
 if (count($mail->getRecipients()) != 3) echo "FAIL 1\n";

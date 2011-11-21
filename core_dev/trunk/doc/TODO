@@ -3,7 +3,7 @@ Autumn 2011 cleanup:
 
 BUGS:
     * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
-    * fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
+    * later: fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
 
 Views:
