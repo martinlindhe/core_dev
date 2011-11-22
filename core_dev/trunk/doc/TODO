@@ -33,7 +33,6 @@ UI:
 
 
 User profile
-    * show a AVATAR if no profile pic is selected
     * link to: chat 1-to-1
 
 
@@ -97,7 +96,7 @@ BEFORE 1.0 (201?):
 
     * make a script that updates tables to current structure by adding / renaming columns & changing datatypes from a description
     * identify core modules, write some docs
-    * rewrite/finish/cleanup core modules: blog / news, users, forum, file uploading
+    * rewrite/finish/cleanup core modules: blog / news, forum
     * all non-prepared sql should be removed & non-prepared DatabaseMysql methods removed
     * some infrastructure to handle scheduling of jobs?
 

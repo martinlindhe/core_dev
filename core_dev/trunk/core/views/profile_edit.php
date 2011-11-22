@@ -66,6 +66,21 @@ case 'default':
             $form->addRadio( $f->name, $f->label, $arr, UserSetting::get($session->id, $f->name));
             break;
 
+        case UserDataField::AVATAR:
+            $opts = UserDataFieldOption::getAll($f->id);
+
+            $arr = array();
+            foreach ($opts as $o) {
+
+                $img = new XhtmlComponentImage();
+                $img->src = getThumbUrl($o['value']);
+                $arr[ $o['id'] ] = $img->render();
+            }
+
+            $form->addRadio( $f->name, $f->label, $arr, UserSetting::get($session->id, $f->name));
+            break;
+
+
         case UserDataField::IMAGE:
             $pic_id = UserSetting::get($session->id, 'picture');
 

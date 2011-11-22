@@ -66,10 +66,26 @@ case 'edit':
         $f->type  = $p['type'];
         $id = UserDataField::store($f);
 
-        if ($f->type == UserDataField::RADIO)
+        switch ($f->type) {
+        case UserDataField::RADIO:
             for ($i=1; $i<6; $i++)
-                if (!empty($p['opt'.$i]))
-                    UserDataFieldOption::set($id, 'opt'.$i, $p['opt'.$i]);
+                if (!empty($p['opt_'.$i]))
+                    UserDataFieldOption::set($id, 'opt_'.$i, $p['opt_'.$i]);
+            break;
+
+        case UserDataField::AVATAR:
+            for ($i=1; $i<6; $i++)
+                if (!empty($p['avatar_'.$i])) {
+
+                    if ($p['avatar_'.$i]['error'] == UPLOAD_ERR_NO_FILE)
+                        continue;
+
+                    $fileId = File::importImage(SITE, $p['avatar_'.$i]);
+                    UserDataFieldOption::set($id, 'avatar_'.$i, $fileId);
+                }
+            break;
+
+        }
 
         js_redirect('iview/userdata/list');
     }
@@ -84,14 +100,33 @@ case 'edit':
     $form->addInput('label', 'Label', $field->label);
     $form->addDropdown('type', 'Type', UserDataField::getTypes(), $field->type );
 
-    if ($field->type == UserDataField::RADIO) {
 
+    switch ($field->type) {
+    case UserDataField::RADIO:
         for ($i=1; $i<6; $i++) {
-            $opt = 'opt'.$i;
+            $opt = 'opt_'.$i;
             $val = UserDataFieldOption::get($field->id, $opt);
 
             $form->addInput($opt, 'Option '.$i, $val);
         }
+        break;
+
+    case UserDataField::AVATAR:
+        for ($i=1; $i<6; $i++) {
+            $opt = 'avatar_'.$i;
+            $val = UserDataFieldOption::get($field->id, $opt);
+
+            if ($val) {
+                $img = new XhtmlComponentImage();
+                $img->src = getThumbUrl($val);
+                $form->add($img, 'Existing picture '.$i);
+
+//                $form->addCheckbox('remove_'.$f->id, 'Remove photo');
+            }
+
+            $form->addFile($opt, 'Avatar '.$i, $val);
+        }
+        break;
     }
 
     $form->addSubmit('Save');

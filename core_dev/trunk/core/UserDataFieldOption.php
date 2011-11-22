@@ -18,6 +18,12 @@ class UserDataFieldOption
         return Setting::get(USERDATA_OPTIONS, $owner, $name);
     }
 
+    static function getById($id)
+    {
+        return Setting::getById(USERDATA_OPTIONS, $id);
+    }
+
+
     static function set($owner, $name, $val)
     {
         return Setting::set(USERDATA_OPTIONS, $owner, $name, $val);

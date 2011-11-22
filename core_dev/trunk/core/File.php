@@ -10,6 +10,7 @@
 require_once('SqlObject.php');
 require_once('ImageResizer.php');
 
+// normal file types defined in constants.php
 define('FILETYPE_PROCESS',            50);
 define('FILETYPE_CLONE_CONVERTED',    51);
 

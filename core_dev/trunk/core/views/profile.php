@@ -31,7 +31,7 @@ echo 'Is online: '. ( UserHandler::isOnline($user_id) ? 'YES' : 'NO').'<br/>';
 echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 
 $gender_id = UserSetting::get($user_id, 'gender');
-$gender = Setting::getById($gender_id);
+$gender = Setting::getById(USERDATA_OPTIONS, $gender_id);
 echo 'Gender: '.$gender.'<br/>';
 
 
@@ -39,7 +39,6 @@ echo 'E-mail: '.UserSetting::get($user_id, 'email').'<br/>';
 echo 'Otillgänglig för chat?: '.UserSetting::get($user_id, 'chat_off').'<br/>';
 
 echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
-
 
 $pic_id = UserSetting::get($user_id, 'picture');
 if ($pic_id)
@@ -55,6 +54,24 @@ if ($pic_id)
 
     $lb = new YuiLightbox();
     echo $lb->render().'<br/>';
+} else {
+
+    $avatar_opt = UserSetting::get($session->id, 'avatar');
+
+    // XXX: get pic id from avatar_id
+    $avatar_id = UserDataFieldOption::getById($avatar_opt);
+
+    if ($avatar_id) {
+        // shows the photo
+        $a = new XhtmlComponentA();
+        $a->href = getThumbUrl($avatar_id, 0, 0);
+        $a->rel  = 'lightbox';
+        $a->content = showThumb($avatar_id, 'Avatar', 150, 150);
+        echo $a->render();
+
+        $lb = new YuiLightbox();
+        echo $lb->render().'<br/>';
+    }
 }
 
 

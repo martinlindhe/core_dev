@@ -41,7 +41,7 @@ class Image
     }
 
     function getResource() { return $this->resource; }
-  
+
     /**
      * Initializes object from an resource
      *
@@ -51,7 +51,7 @@ class Image
     {
         if ($r instanceof File)
             $r = File::getUploadPath($r->id);
-        
+
         if (is_resource($r) && get_resource_type($r) == 'gd')
         {
             dp($r);
@@ -69,7 +69,7 @@ class Image
             case 'image/jpeg': $im = imagecreatefromjpeg($r); break;
             case 'image/png':  $im = imagecreatefrompng($r); break;
             case 'image/gif':  $im = imagecreatefromgif($r); break;
-            default: throw new Exception ('Unsupported image type for '.$r);
+            default: throw new Exception ('Unsupported image type '.$info['mime'].' for '.$r);
             }
 
             $this->resource = $im;
@@ -87,7 +87,7 @@ class Image
     function render($type = 'png', $dst_file = '')
     {
         if (!$this->resource)
-            throw new Exception ('no image resource loaded');        
+            throw new Exception ('no image resource loaded');
 
         $page = XmlDocumentHandler::getInstance();
         $page->disableDesign();
@@ -128,7 +128,7 @@ function showThumb($id, $title = '', $w = 50, $h = 50)
     $i->src = getThumbUrl($id, $w, $h);
     $i->alt = strip_tags($title);
     $i->title = strip_tags($title);
-    
+
     return $i->render();
 }
 

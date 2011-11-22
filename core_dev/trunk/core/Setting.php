@@ -63,12 +63,12 @@ class Setting
         return true;
     }
 
-    public static function getById($id)
+    public static function getById($type, $id)
     {
         $q =
         'SELECT value FROM tblSettings'.
-        ' WHERE id = ?';
-        return Sql::pSelectItem($q, 'i', $id);
+        ' WHERE type = ? AND id = ?';
+        return Sql::pSelectItem($q, 'ii', $type, $id);
     }
 
     /**

@@ -22,6 +22,7 @@ class UserDataField
     const IMAGE    = 4;
     const CHECKBOX = 5;
     const RADIO    = 6;
+    const AVATAR   = 7;
 
     protected static $tbl_name = 'tblUserDataField';
 
@@ -51,7 +52,8 @@ class UserDataField
         self::EMAIL    => 'E-mail',
         self::IMAGE    => 'Image',
         self::CHECKBOX => 'Checkbox',
-        self::RADIO    => 'Radio',  // options stored in tblSettings ??!?=!
+        self::RADIO    => 'Radio',  // options stored in tblSettings
+        self::AVATAR   => 'Avatar', // let user select one of multiple avatar images provided by the site
         );
     }
 
