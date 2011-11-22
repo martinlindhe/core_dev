@@ -5,13 +5,14 @@
 
 //STATUS: wip
 
-//TODO: admin view to edit / delete chat rooms
-//TODO: ability to lock/unlock a chat room
+//VIEW: core/views/chatroom.php
 
 class ChatRoom
 {
     var $id;
     var $name;
+    var $locked_by;   ///< tblUsers.id
+    var $time_locked;
 
     protected static $tbl_name = 'tblChatRooms';
 

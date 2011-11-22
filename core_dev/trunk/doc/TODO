@@ -58,7 +58,6 @@ Friends
 
 Chat
     * write 1-on-1 chat code, store messages as normal Message objects
-    * ability to LOCK/UNLOCK a chatroom from public use
     * ability to allow anon users in certain chatrooms
 
 

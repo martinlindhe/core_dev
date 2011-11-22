@@ -5,6 +5,8 @@
 //TODO: ability to LOCK a chatroom so it cant be used
 //TODO: ability to configure a chatroom to allow anonymous users
 
+//TODO: delete chat rooms
+
 $session->requireSuperAdmin();
 
 switch ($this->owner) {
@@ -14,8 +16,12 @@ case 'list':
 
     $list = ChatRoom::getList();
 
-    foreach ($list as $cr)
-        echo ahref('iview/chatrooms/edit/'.$cr->id, $cr->name).'<br/>';
+    foreach ($list as $cr) {
+        echo ahref('iview/chatrooms/edit/'.$cr->id, $cr->name);
+        if ($cr->locked_by)
+            echo ' locked by '.$cr->locked_by.', '.ago($cr->time_locked);
+        echo '<br/>';
+    }
 
     echo '<br/>';
     echo '&raquo; '.ahref('iview/chatrooms/new', 'New chatroom');
@@ -28,17 +34,25 @@ case 'edit':
         $o = new ChatRoom();
         $o->id = $p['roomid'];
         $o->name = trim($p['name']);
+
+        if ($p['locked']) {
+            $session = SessionHandler::getInstance();
+            $o->locked_by = $session->id;
+            $o->time_locked = sql_datetime( time() );
+        }
         ChatRoom::store($o);
 
         js_redirect('iview/chatrooms/list');
     }
 
     $o = ChatRoom::get($this->child);
+
     echo '<h2>Edit chatroom '.$o->name.'</h2>';
 
     $x = new XhtmlForm();
     $x->addHidden('roomid', $o->id); //XXX haxx
     $x->addInput('name', 'Name', $o->name, 40);
+    $x->addCheckbox('locked', 'Lock chatroom (read only)', $o->locked_by ? 1 : 0);
     $x->addSubmit('Save');
     $x->setHandler('editHandler');
     echo $x->render();
