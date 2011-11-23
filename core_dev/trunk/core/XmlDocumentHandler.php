@@ -175,12 +175,12 @@ class XmlDocumentHandler extends CoreBase
      */
     private function sendHeaders()
     {
-        if (!$this->enable_headers)
-            return;
-
         if (!$this->mimetype)
             // "text/html" should be "application/xhtml+xml" but IE8 still cant even understand such a page
             $this->mimetype = 'text/html';
+
+        if (!$this->enable_headers)
+            return;
 
         header('Content-Type: '.$this->mimetype);
 

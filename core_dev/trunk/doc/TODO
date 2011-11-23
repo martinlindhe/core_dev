@@ -23,7 +23,7 @@ Views:
 
 
 Authentication:
-    * Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
+    * PRIO: Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
 
 
 UI:
@@ -33,7 +33,7 @@ UI:
 
 
 User profile
-    * link to: chat 1-to-1
+    * PRIO: link to: chat 1-to-1
 
 
 User search
@@ -55,8 +55,13 @@ Friends
         - write a "friend list" view (for Friend class)
 
 
-Chat
-    * write 1-on-1 chat code, store messages as normal Message objects
+1-to-1 chat:
+    * PRIO: write 1-on-1 chat code, store messages as normal Message objects
+    * ajax poller to check for new messages
+    * xhr postback (?) + js to paint the new msg
+
+
+Chat rooms:
     * ability to allow anon users in certain chatrooms
 
 

@@ -45,7 +45,6 @@ if ($pic_id)
 {
     echo 'Profile picture:<br/>';
 
-    // shows the photo
     $a = new XhtmlComponentA();
     $a->href = getThumbUrl($pic_id, 0, 0);
     $a->rel  = 'lightbox';
@@ -57,12 +56,12 @@ if ($pic_id)
 } else {
 
     $avatar_opt = UserSetting::get($session->id, 'avatar');
-
-    // XXX: get pic id from avatar_id
+    // get pic id from avatar_id
     $avatar_id = UserDataFieldOption::getById($avatar_opt);
 
     if ($avatar_id) {
-        // shows the photo
+        echo 'Avatar:<br/>';
+
         $a = new XhtmlComponentA();
         $a->href = getThumbUrl($avatar_id, 0, 0);
         $a->rel  = 'lightbox';
