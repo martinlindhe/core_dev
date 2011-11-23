@@ -9,15 +9,17 @@
 
 //STATUS: early wip
 
+//VIEW: core/views/chatroom.php "update"
+
 class ChatRoomUpdater
 {
-    function render()
+    public static function init()
     {
         $header = XhtmlHeader::getInstance();
         $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
 
         $header->registerJsFunction(
-        'function xxx(id)'.
+        'function chatroom_update(id,target)'.
         '{'.
             'YUI().use("io-base", function(Y)'.
             '{'.
@@ -32,7 +34,11 @@ class ChatRoomUpdater
                 'function complete(id, o, args)'.
                 '{'.
                     'var data = o.responseText;'. // response data
-                    'alert(data);'.
+//                    'alert(data);'.
+
+                    'var t=get_el(target);'.
+                    't.innerHTML=data;'.
+//                    'alert (t);'.
                 '};'.
 
                 // subscribe to event io:complete

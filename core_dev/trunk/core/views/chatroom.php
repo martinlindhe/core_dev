@@ -17,14 +17,19 @@ case 'list':
     break;
 
 case 'update':
-    // XHR - returns last 30 msg from chatroom
-    if ($this->child == 'new') {
+    // XHR - returns last 50 msg from chatroom
+    // child = room id
+
+    if ($this->child2 == 'new') {
         // XXX implement: only return the new messages (since previous call)
     }
 
     $page->setMimeType('text/plain');
 
-    echo "aaa=123";
+    $msgs = ChatMessage::getRecent($this->child, 50);
+    //XXX OPTIMIZATION: strip room id from response
+    // XXX TODO: inject username in response
+    echo json_encode($msgs);
     break;
 
 case 'chat':
