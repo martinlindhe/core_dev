@@ -7,7 +7,7 @@ $session->requireLoggedIn();
 
 switch ($this->owner) {
 case 'list':
-    echo '<h2>Välj chattrum</h2>';
+    echo '<h2>Select chatroom</h2>';
 
     $list = ChatRoom::getList();
 
@@ -26,10 +26,16 @@ case 'update':
 
     $page->setMimeType('text/plain');
 
-    $msgs = ChatMessage::getRecent($this->child, 50);
+
+    $res = array();
+
     //XXX OPTIMIZATION: strip room id from response
     // XXX TODO: inject username in response
-    echo json_encode($msgs);
+    $list = ChatMessage::getRecent($this->child, 50);
+    $res['m'] = $list;
+//    $res['cnt'] = count($list);
+
+    echo json_encode($res);
     break;
 
 case 'chat':
@@ -55,7 +61,7 @@ case 'chat':
 
     $cr = ChatRoom::get($this->child);
 
-    echo '<h2>Chatta i '.$cr->name.'</h2>';
+    echo '<h2>Chat in '.$cr->name.'</h2>';
 
     $msgs = ChatMessage::getRecent($this->child, 50);
 
@@ -66,7 +72,7 @@ case 'chat':
     }
 
     if ($cr->locked_by) {
-        echo 'Chatten är låst!';
+        echo 'The chatroom is locked!';
         return;
     }
 

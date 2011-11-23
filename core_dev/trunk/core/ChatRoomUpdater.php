@@ -21,24 +21,31 @@ class ChatRoomUpdater
         $header->registerJsFunction(
         'function chatroom_update(id,target)'.
         '{'.
-            'YUI().use("io-base", function(Y)'.
+            'YUI().use("io-base", "node", "json-parse", function(Y)'.
             '{'.
                 'var uri = "/iview/chatroom/update/" + id;'.
 
-                /**
-                 * Handles the response data
-                 * id = Transaction ID
-                 * o = The response object
-                 * args = Object containing an array (XXXX for mapping data...
-                 **/
-                'function complete(id, o, args)'.
+                'function complete(id, o)'.
                 '{'.
                     'var data = o.responseText;'. // response data
-//                    'alert(data);'.
 
-                    'var t=get_el(target);'.
-                    't.innerHTML=data;'.
-//                    'alert (t);'.
+                    'var node = Y.one("#"+target);'.
+                    'node.setContent("");'. // clears div
+
+'
+                    try {
+                        var data = Y.JSON.parse(data);
+                    }
+                    catch (e) {
+                        alert("Invalid data");
+                    }
+
+                    for (var i = data.m.length - 1; i >= 0; --i) {
+                        var p = data.m[i];
+                        node.append("<p>" + p.microtime + ", " + p.from + " said: " + p.msg + "</p>");
+                    }
+'.
+
                 '};'.
 
                 // subscribe to event io:complete
