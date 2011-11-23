@@ -15,6 +15,7 @@ require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
 require_once('html.php');
+require_once('HttpUserAgent.php');
 
 class FeedDescription
 {
@@ -152,25 +153,20 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->meta_tags[] = $o;
     }
 
-    /** Detects User Agent and adjusts output accordingly */
+    /** Set extra headers for special browsers */
     private function adjustApperance()
     {
-        // XXX maybe this is useless?
+        if (!HttpUserAgent::isIOS($_SERVER['HTTP_USER_AGENT']))
+            return;
 
-        // XXX TODO use HttpUserAgent to detect browsers... class dont detect mobile browsers yet
-/*
-        // ios, android
+        // mobile viewport
         $this->setMeta('viewport', 'width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;');
 
-        // also supported by Android devices running software version 1.5 (Cupcake) or newer:
-        //<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-
         // enable full-screen mode
-        $this->setMeta('apple-mobile-web-app-capable', 'yes');
+        //$this->setMeta('apple-mobile-web-app-capable', 'yes');
 
         // controls the appearance of the status bar in full-screen mode
-        $this->setMeta('apple-mobile-web-app-status-bar-style', 'black');
-*/
+        //$this->setMeta('apple-mobile-web-app-status-bar-style', 'black');
     }
 
     public function render()
