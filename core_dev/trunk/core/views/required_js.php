@@ -5,6 +5,8 @@
  * defines a minimal set of core functions
  */
 
+//HINT: use console.log() to log text in Firebug
+
 $header->registerJsFunction(
 // @return reference to html element with id s
 'function get_el(s)'.

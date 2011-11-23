@@ -3,6 +3,8 @@
  * For normal users usage of chatrooms
  */
 
+require_once('ChatRoomUpdater.php');
+
 $session->requireLoggedIn();
 
 switch ($this->owner) {
@@ -16,26 +18,33 @@ case 'list':
 
     break;
 
-case 'update':
-    // XHR - returns last 50 msg from chatroom
-    // child = room id
+case 'xhr':
+    switch ($this->child) {
+    case 'init':
+        // returns recent messages in chatroom
+        // child2 = room id
 
-    if ($this->child2 == 'new') {
-        // XXX implement: only return the new messages (since previous call)
+        //XXX OPTIMIZATION: strip room id from response
+        // XXX TODO: inject username in response
+        $res = ChatMessage::getRecent($this->child2, 40);
+
+        $page->setMimeType('text/plain');
+        echo json_encode($res);
+        break;
+
+    case 'update':
+        // returns messages in chatroom since last call
+
+        // XXXX IMPLEMENT!!!
+        $res = array();
+
+        $page->setMimeType('text/plain');
+        echo json_encode($res);
+        break;
+
+    default:
+        echo 'No XHR handler for view '.$this->child;
     }
-
-    $page->setMimeType('text/plain');
-
-
-    $res = array();
-
-    //XXX OPTIMIZATION: strip room id from response
-    // XXX TODO: inject username in response
-    $list = ChatMessage::getRecent($this->child, 50);
-    $res['m'] = $list;
-//    $res['cnt'] = count($list);
-
-    echo json_encode($res);
     break;
 
 case 'chat':
@@ -56,13 +65,13 @@ case 'chat':
         $m->microtime = microtime(true);
         ChatMessage::store($m);
 
-        js_redirect('chatroom/chat/'.$p['room']);
+        js_redirect('iview/chatroom/chat/'.$p['room']);
     }
 
     $cr = ChatRoom::get($this->child);
 
     echo '<h2>Chat in '.$cr->name.'</h2>';
-
+/*
     $msgs = ChatMessage::getRecent($this->child, 50);
 
     foreach ($msgs as $m) {
@@ -70,11 +79,22 @@ case 'chat':
         echo sql_time($m->microtime).' by '.ahref('iview/profile/'.$user->id, $user->name).': ';
         echo $m->msg.'<br/>';
     }
-
+*/
     if ($cr->locked_by) {
         echo 'The chatroom is locked!';
         return;
     }
+
+    ChatRoomUpdater::init(); // registers the chatroom_init() js function
+
+    $div_name = 'chatroom_txt';
+
+    // returns recent msgs from chatroom on page load
+    $js = 'chatroom_init('.$this->child.',"'.$div_name.'");';
+
+    echo '<div id="'.$div_name.'"></div>';
+
+    echo js_embed($js);
 
     $form = new XhtmlForm();
     $form->addInput('msg', 'Msg');
