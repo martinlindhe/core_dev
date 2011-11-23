@@ -120,7 +120,17 @@ class XmlDocumentHandler extends CoreBase
         $this->app_root = realpath($s);
     }
 
-    function setMimeType($s) { $this->mimetype = $s; }
+    function setMimeType($s)
+    {
+        switch ($s) {
+        case 'text/plain':
+            // removes XhtmlHeader, designHead & designFoot for this request
+            $this->disableDesign();
+            break;
+        }
+
+        $this->mimetype = $s;
+    }
 
     function setCoreDevInclude($path)
     {
