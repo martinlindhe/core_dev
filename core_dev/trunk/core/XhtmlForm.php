@@ -29,7 +29,7 @@ class XhtmlForm
     protected $form_data      = array();
     protected $elems          = array();
     protected $url_handler;              ///< sends form to a different url
-    protected $autocomplete   = true;    ///< tell browser not to suggest autocomplete data of this form
+    protected $autocomplete   = true;
 
     protected $file_upload    = false;
     protected $handled        = false;   ///< true when form data has been processed by callback function
@@ -55,6 +55,7 @@ class XhtmlForm
     function onSubmit($s) { $this->js_onsubmit = $s; }
     function cssTable($s) { $this->css_table = $s; }
 
+    /** tell browser not to suggest autocomplete data of this form */
     function disableAutocomplete() { $this->autocomplete = false; }
 
     /**
@@ -232,12 +233,12 @@ class XhtmlForm
     }
 
     /** Adds a input field to the form */
-    function addInput($name, $text, $val = '', $size = 0, $maxlen = 0)
+    function addInput($name, $text, $val = '', $width = 0, $maxlen = 0)
     {
         $o = new XhtmlComponentInput();
         $o->name   = $name;
         $o->value  = $val;
-        $o->size   = $size;
+        $o->width  = $width;
         $o->maxlen = $maxlen;
         $this->add($o, $text);
    }

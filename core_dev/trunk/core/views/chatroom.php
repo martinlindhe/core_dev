@@ -96,9 +96,8 @@ case 'show':
 
     $form = new XhtmlForm();
     $form->setId($form_id);
-    $form->addInput('msg', 'Msg');
+    $form->addInput('msg', 'Msg', '', 450);
     $form->setFocus('msg');
-    $form->addSubmit('Send');
     $form->disableAutocomplete();
 
     echo $form->render();
