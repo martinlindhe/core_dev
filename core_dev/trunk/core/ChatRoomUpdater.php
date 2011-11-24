@@ -78,7 +78,7 @@ class ChatRoomUpdater
                     'try {'.
                         'var data = Y.JSON.parse(data);'.
                     '} catch (e) {'.
-                        'alert("Invalid data from " + uri);'.
+                        'console.log("invalid data from " + uri);'.
                         'return;'.
                     '}'.
 

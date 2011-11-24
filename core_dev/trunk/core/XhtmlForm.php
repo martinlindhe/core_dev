@@ -270,11 +270,9 @@ class XhtmlForm
         $o = new XhtmlComponentTextarea();
         $o->name   = $name;
         $o->value  = $val;
-
-        $o->style =
-            'font:14px arial;'.
-            ($width  ? 'width:'.$width.'px;' : '').
-            ($height ? 'height:'.$height.'px;' : '');
+        $o->width  = $width;
+        $o->height = $height;
+        $o->style  = 'font:14px arial;';
 
         $this->add($o, $text);
     }

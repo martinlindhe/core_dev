@@ -15,15 +15,21 @@ class XhtmlComponentTextarea extends XhtmlComponent
 {
     var $value;
     var $style;
-    var $width;
-    var $height;
+
+    var $width, $height;  ///< specifies dimensions in pixels
+    var $cols, $rows;     ///< .. in cols, rows
 
     function render()
     {
+        $css =
+            $this->style.
+            ($this->width  ? 'width:'.$this->width.'px;' : '').
+            ($this->height ? 'height:'.$this->height.'px;' : '');
+
         return '<textarea name="'.$this->name.'" id="'.$this->name.'"'.
-            ($this->style ? ' style="'.$this->style.'"' : '').
-            ($this->width ? ' cols="'.$this->width.'"' : '').
-            ($this->height ? ' rows="'.$this->height.'"' : '').
+            ($css ? ' style="'.$css.'"' : '').
+            ($this->cols ? ' cols="'.$this->cols.'"' : '').
+            ($this->rows ? ' rows="'.$this->rows.'"' : '').
             '>'.$this->value.'</textarea>';
     }
 
