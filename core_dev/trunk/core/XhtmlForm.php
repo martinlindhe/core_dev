@@ -29,6 +29,7 @@ class XhtmlForm
     protected $form_data      = array();
     protected $elems          = array();
     protected $url_handler;              ///< sends form to a different url
+    protected $autocomplete   = true;    ///< tell browser not to suggest autocomplete data of this form
 
     protected $file_upload    = false;
     protected $handled        = false;   ///< true when form data has been processed by callback function
@@ -53,6 +54,8 @@ class XhtmlForm
     function setId($s) { $this->id = $s; }
     function onSubmit($s) { $this->js_onsubmit = $s; }
     function cssTable($s) { $this->css_table = $s; }
+
+    function disableAutocomplete() { $this->autocomplete = false; }
 
     /**
      * Defines the function/object->method that will handle form submit processing
@@ -424,6 +427,7 @@ class XhtmlForm
         ' action="'.$this->url_handler.'"'.
         ' method="post"'.
         ' name="'.$this->name.'"'.
+        (!$this->autocomplete ? ' autocomplete="off"' : '').
         ($this->id          ? ' id="'.$this->id.'"' : '').
         ($this->file_upload ? ' enctype="multipart/form-data"' : '').
         ($this->js_onsubmit ? ' onsubmit="'.$this->js_onsubmit.'"' : '').

@@ -99,6 +99,7 @@ case 'show':
     $form->addInput('msg', 'Msg');
     $form->setFocus('msg');
     $form->addSubmit('Send');
+    $form->disableAutocomplete();
 
     echo $form->render();
     break;
