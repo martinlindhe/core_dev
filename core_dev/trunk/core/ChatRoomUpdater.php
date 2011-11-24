@@ -23,15 +23,20 @@ class ChatRoomUpdater
         $header->registerJsFunction(
         // id = room id
         // target = div
-        // keep = set to 0 to init, 1 to not clear target div
-        'function chatroom_init(id,target,keep)'.
+        // ts = set to 0 to init, microtime to fetch newer items
+        'function chatroom_init(room,target,ts)'.
         '{'.
+
+            'var latest;'.
+
             'YUI().use("io-base","node","json-parse", function(Y)'.
             '{'.
-                'var uri = "/iview/chatroom/xhr/update/" + id;'.
 
-                'if (typeof keep === "undefined")'.
-                    'var uri = "/iview/chatroom/xhr/init/" + id;'.
+                'if (typeof ts === "undefined") {'.
+                    'var uri = "/iview/chatroom/xhr/init/" + room;'.
+                '} else {'.
+                    'var uri = "/iview/chatroom/xhr/update/" + room + "?ts=" + ts;'.
+                '}'.
 
                 'function complete(id, o)'.
                 '{'.
@@ -45,15 +50,25 @@ class ChatRoomUpdater
                         'return;'.
                     '}'.
 
-                    'if (typeof keep === "undefined")'.
+                    'if (typeof ts === "undefined") {'.
                         'node.setContent("");'. // clears div
-
-                    'node.append("chat log:<br/>");'.
+                    '}'.
 
                     'for (var i = data.length-1; i >= 0; --i) {'.
                         'var p = data[i];'.
                         'node.append(p.microtime + ", " + p.from + " said: " + p.msg + "<br/>");'.
                     '}'.
+
+                    'if (data[0]) {'.
+                        'latest = data[0].microtime;'. // XXX what do if room is empty???
+                    '} else {'.
+                        'latest = ts;'.
+                    '}'.
+
+                    // registers a timer function
+                    'var t=setTimeout("chatroom_init("+room+",\'"+target+"\',"+latest+")",2000);'.
+
+                    'console.log("chat refreshed");'.
                 '};'.
 
                 // subscribe to event io:complete
@@ -62,9 +77,6 @@ class ChatRoomUpdater
                 // make the request
                 'var request = Y.io(uri);'.
             '});'.
-
-            // registers a timer function
-            'var t=setTimeout("chatroom_init("+id+",\'"+target+"\',1)",5000);'.
 
         '}');
     }

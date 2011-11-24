@@ -16,15 +16,15 @@ class ChatMessage
 
     protected static $tbl_name = 'tblChat';
 
-    public static function getRecent($room, $limit)
+    public static function getRecent($room, $microtime, $limit)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE room = ?'.
+        ' WHERE room = ? AND microtime > ?'.
         ' ORDER BY microtime DESC'.
         ' LIMIT ?';
 
-        $list = Sql::pSelect($q, 'ii', $room, $limit);
+        $list = Sql::pSelect($q, 'idi', $room, $microtime, $limit);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }

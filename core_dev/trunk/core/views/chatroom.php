@@ -26,7 +26,7 @@ case 'xhr':
 
         //XXX OPTIMIZATION: strip room id from response
         // XXX TODO: inject username in response
-        $res = ChatMessage::getRecent($this->child2, 40);
+        $res = ChatMessage::getRecent($this->child2, 0, 40);
 
         $page->setMimeType('text/plain');
         echo json_encode($res);
@@ -34,9 +34,10 @@ case 'xhr':
 
     case 'update':
         // returns messages in chatroom since last call
+        if (!is_numeric($_GET['ts']))
+            die('MEH');
 
-        // XXXX IMPLEMENT!!!
-        $res = array();
+        $res = ChatMessage::getRecent($this->child2, $_GET['ts'], 40);
 
         $page->setMimeType('text/plain');
         echo json_encode($res);
@@ -71,15 +72,7 @@ case 'chat':
     $cr = ChatRoom::get($this->child);
 
     echo '<h2>Chat in '.$cr->name.'</h2>';
-/*
-    $msgs = ChatMessage::getRecent($this->child, 50);
 
-    foreach ($msgs as $m) {
-        $user = User::get($m->from);
-        echo sql_time($m->microtime).' by '.ahref('iview/profile/'.$user->id, $user->name).': ';
-        echo $m->msg.'<br/>';
-    }
-*/
     if ($cr->locked_by) {
         echo 'The chatroom is locked!';
         return;
@@ -98,11 +91,11 @@ case 'chat':
 
     $form = new XhtmlForm();
     $form->addInput('msg', 'Msg');
+    $form->setFocus('msg');
     $form->addHidden('room', $this->child);  // XXX hack
     $form->addSubmit('Send');
     $form->setHandler('chatSubmit');
     echo $form->render();
-
     break;
 
 default:
