@@ -1,4 +1,0 @@
-A sample site that exposes as many as possible of the different features of the core_dev platform, at the same time used
-as the development platform for the project, to try out each feature.
-
-tightly tied to the dbSample db structure

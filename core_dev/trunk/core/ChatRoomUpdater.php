@@ -57,7 +57,7 @@ class ChatRoomUpdater
                     'for (var i = data.length-1; i >= 0; --i) {'.
                         'var p = data[i];'.
 
-                        'var t = new Date( p.microtime * 1000 );'.
+                        'var t = new Date(p.microtime*1000);'. // to milliseconds
 
                         // XXX if msg is from today, show time. else show full date
                         'var when = t.toUTCString();'.
