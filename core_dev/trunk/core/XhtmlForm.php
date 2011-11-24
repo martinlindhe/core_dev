@@ -185,7 +185,7 @@ class XhtmlForm
 
         $error = ErrorHandler::getInstance();
 
-        if (!$error->getErrorCount())
+        if (!$error->getErrorCount() && $this->post_handler)
             if (call_user_func($this->post_handler, $this->form_data, $this))
                 $this->handled = true;
 
@@ -396,10 +396,10 @@ class XhtmlForm
     function render()
     {
         if (!function_exists($this->post_handler) && !$this->js_onsubmit)
-            throw new Exception ('FATAL: XhtmlForm no post handler or js handler set!');
+            throw new Exception ('FATAL: XhtmlForm no post handler or js handler set');
 
         if (!$this->name)
-            throw new Exception ('We need a form name!');
+            throw new Exception ('need a form name');
 
         if (!$this->handled)
             $this->handle();

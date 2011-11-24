@@ -56,7 +56,8 @@ Friends
 
 
 Chat rooms:
-    * PRIO: send new message using xhr to avoid page reload of chatroom
+    * PRIO: show correct time of messages you send in chat (get microtime)
+
     * PRIO: stuff content in a div with scroll bar to the right
     * ability to allow anon users in certain chatrooms
 

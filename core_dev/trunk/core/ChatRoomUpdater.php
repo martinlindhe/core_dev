@@ -20,13 +20,16 @@ class ChatRoomUpdater
         $header = XhtmlHeader::getInstance();
         $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
 
+        $session = SessionHandler::getInstance();
+
+        $interval = 20 * 1000; // milliseconds
+
         $header->registerJsFunction(
         // id = room id
         // target = div
         // ts = set to 0 to init, microtime to fetch newer items
         'function chatroom_init(room,target,ts)'.
         '{'.
-
             'var latest;'.
 
             'YUI().use("io-base","node","json-parse", function(Y)'.
@@ -57,11 +60,8 @@ class ChatRoomUpdater
                     'for (var i = data.length-1; i >= 0; --i) {'.
                         'var p = data[i];'.
 
-                        'var t = new Date(p.microtime*1000);'. // to milliseconds
-
-                        // XXX if msg is from today, show time. else show full date
-                        'var when = t.toUTCString();'.
-                        'node.append( when + ", " + p.from + " said: " + p.msg + "<br/>");'.
+                        'if ((typeof ts === "undefined") || p.from != '.$session->id.')'.
+                            'node.append( chatmsg_render(p) );'.
                     '}'.
 
                     'if (data[0]) {'.
@@ -71,7 +71,7 @@ class ChatRoomUpdater
                     '}'.
 
                     // registers a timer function
-                    'var t=setTimeout("chatroom_init("+room+",\'"+target+"\',"+latest+")",2000);'.
+                    'var t=setTimeout("chatroom_init("+room+",\'"+target+"\',"+latest+")",'.$interval.');'.
 
 //                    'console.log("chat refreshed");'.
                 '};'.
@@ -84,6 +84,40 @@ class ChatRoomUpdater
             '});'.
 
         '}');
+
+        $header->registerJsFunction(
+        'function chatmsg_render(p)'.
+        '{'.
+            'var t = new Date(p.microtime*1000);'. // to milliseconds
+
+            // XXX if msg is from today, show time. else show full date
+            'var when = t.toUTCString();'.
+
+            'return when + ", " + p.from + " said: " + p.msg + "<br/>";'.
+        '}');
+
+        $header->registerJsFunction(
+        'function chatroom_send(frm,room,target)'.
+        '{'.
+            'if (!frm.msg.value)'.
+                'return false;'.
+
+            'YUI().use("io-form","node", function(Y)'.
+            '{'.
+                'var uri = "/iview/chatroom/send/" + room + "?m=" + frm.msg.value;'.
+
+                'var request = Y.io(uri);'.
+
+                'var node = Y.one("#"+target);'.
+
+                // append sent message to <div>
+                'var p = {"from":'.$session->id.',"msg":frm.msg.value,"microtime":"1423232320"};'.
+                'node.append( chatmsg_render(p) );'.
+            '});'.
+
+            'return false;'. // never return true! so form wont refresh
+        '}');
+
     }
 
 }

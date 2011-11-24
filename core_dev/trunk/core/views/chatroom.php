@@ -14,7 +14,7 @@ case 'list':
     $list = ChatRoom::getList();
 
     foreach ($list as $cr)
-        echo ahref('iview/chatroom/chat/'.$cr->id, $cr->name).'<br/>';
+        echo ahref('iview/chatroom/show/'.$cr->id, $cr->name).'<br/>';
 
     break;
 
@@ -31,37 +31,36 @@ case 'update':
 
     //XXX OPTIMIZATION: strip room id from response
     // XXX TODO: inject username in response
-    $res = ChatMessage::getRecent($this->child, $ts, 5);
+    $res = ChatMessage::getRecent($this->child, $ts, 25);
 
     $page->setMimeType('text/plain');
     echo json_encode($res);
     break;
 
-case 'chat':
+case 'send':
+    // XHR - writes a message to chatroom
     // child = room id
+    // $_GET['m'] = message
+    if (!$this->child || !is_numeric($this->child) || empty($_GET['m']))
+        die('hey');
 
-/*
-    function chatSubmit($p)
-    {
-        if (!$p['msg'])
-            return;
+    $cr = ChatRoom::get($this->child);
+    if ($cr->locked_by)
+        die('hey3');
 
-        $session = SessionHandler::getInstance();
+    $m = new ChatMessage();
+    $m->room = $this->child;
+    $m->from = $session->id;
+    $m->msg  = $_GET['m'];
+    $m->microtime = microtime(true);
+    ChatMessage::store($m);
 
-        $cr = ChatRoom::get($p['room']);
-        if ($cr->locked_by)
-            return false;
+    $page->setMimeType('text/plain');
+    echo 'OK';
+    break;
 
-        $m = new ChatMessage();
-        $m->room = $p['room'];
-        $m->from = $session->id;
-        $m->msg  = $p['msg'];
-        $m->microtime = microtime(true);
-        ChatMessage::store($m);
-
-        js_redirect('iview/chatroom/chat/'.$p['room']);
-    }
-*/
+case 'show':
+    // child = room id
 
     $cr = ChatRoom::get($this->child);
 
@@ -72,7 +71,7 @@ case 'chat':
         return;
     }
 
-    ChatRoomUpdater::init(); // registers the chatroom_init() js function
+    ChatRoomUpdater::init(); // registers the chatroom_init(), chatroom_send() js functions
 
     $div_name = 'chatroom_txt';
 
@@ -86,21 +85,9 @@ case 'chat':
     $form = new XhtmlForm();
     $form->addInput('msg', 'Msg');
     $form->setFocus('msg');
-    $form->addHidden('room', $this->child);  // XXX hack
     $form->addSubmit('Send');
-//    $form->setHandler('chatSubmit');
 
-    $header->registerJsFunction(
-    'function chatroom_send(frm)'.   //XXXX move function to ChatRoomUpdater
-    '{'.
-        'if (!frm.msg.value)'.
-            'return false;'.
-
-'alert(frm.msg.value);'.
-        'return false;'. // never return true! so form wont refresh
-    '}'
-    );
-    $form->onSubmit('return chatroom_send(this);');
+    $form->onSubmit("return chatroom_send(this,".$this->child.",'".$div_name."');");
 
     echo $form->render();
     break;
