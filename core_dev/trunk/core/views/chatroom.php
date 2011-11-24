@@ -71,10 +71,9 @@ case 'show':
         return;
     }
 
-
-
     $div_name = 'chatroom_txt';
-    ChatRoomUpdater::init($this->child, $div_name); // registers the chatroom_send() js functions
+    $form_id = 'chatfrm';
+    ChatRoomUpdater::init($this->child, $div_name, $form_id); // registers the chatroom_send() js functions
 
     $css =
     'width:500px;'.
@@ -85,11 +84,13 @@ case 'show':
     echo '<div id="'.$div_name.'" style="'.$css.'"></div>';
 
     $form = new XhtmlForm();
+    $form->setId($form_id);
     $form->addInput('msg', 'Msg');
     $form->setFocus('msg');
     $form->addSubmit('Send');
 
-    $form->onSubmit("return chatroom_send(this,".$this->child.",'".$div_name."');");
+//XXXX: send dont work!!!! how to call this one
+//    $form->onSubmit("return ChatRoom.chatroom_send(this,".$this->child.",'".$div_name."');");
 
     echo $form->render();
     break;

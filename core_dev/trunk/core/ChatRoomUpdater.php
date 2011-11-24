@@ -6,6 +6,7 @@
  * http://yuilibrary.com/yui/docs/node/
  * http://yuilibrary.com/yui/docs/json/
  * http://yuilibrary.com/yui/docs/datatype/
+ * http://yuilibrary.com/yui/docs/event/
  *
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
@@ -14,9 +15,11 @@
 
 //VIEW: core/views/chatroom.php "update"
 
+//TODO: dont hardcode locale to sv-SE
+
 class ChatRoomUpdater
 {
-    public static function init($room_id, $div_name)
+    public static function init($room_id, $div_name, $form_id)
     {
         $header = XhtmlHeader::getInstance();
         $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
@@ -53,12 +56,11 @@ class ChatRoomUpdater
 
             'Y.on("load", function() {'.
                 // initialize chat room
-                'console.log("init1");'.
-                'chatroom_init();'.
+                'Init();'.
             '});'.
 
             // ts = set to 0 to init, microtime to fetch newer items
-            'function chatroom_init(ts)'.
+            'function Init(ts)'.
             '{'.
                 'var latest;'.
 
@@ -87,36 +89,45 @@ class ChatRoomUpdater
                         'var p = data[i];'.
 
                         'if ((typeof ts === "undefined") || p.from != '.$session->id.')'.
-                            'node.append( chatmsg_render(p) );'.
+                            'node.append(chatmsg_render(p));'.
                     '}'.
 
-                    'scroll_to_bottom("'.$div_name.'");'.
+                    'if (data.length)'.
+                        'scroll_to_bottom("'.$div_name.'");'.
 
                     'latest = data[0] ? data[0].microtime : ts;'.
 
                     // registers a timer function
-                    'var t=setTimeout(chatroom_init, '.$interval.', latest);'.
+                    'var t=setTimeout(Init,'.$interval.',latest);'.
 
 //                    'console.log("completed " + id);'.
                 '};'.
 
                 // subscribe once to event io:complete
-                'Y.once("io:complete", complete, Y);'.
+                'Y.once("io:complete",complete,Y);'.
 
                 // make the request
                 'var request = Y.io(uri);'.
             '}'.
 
-            'function chatroom_send(frm,room,target)'.
+            'Y.one("#'.$form_id.'").on("submit", function(e)'.
             '{'.
+                // Stop the event's default behavior
+                'e.preventDefault();'.
+
+                // Stop the event from bubbling up the DOM tree
+                'e.stopPropagation();'.
+
+                'frm = get_el( this.get("id") );'.
+
                 'if (!frm.msg.value)'.
                     'return false;'.
 
-                'var uri = "/iview/chatroom/send/" + room + "?m=" + frm.msg.value;'.
+                'var uri = "/iview/chatroom/send/" + '.$room_id.' + "?m=" + frm.msg.value;'.
 
                 'var request = Y.io(uri);'.
 
-                'var node = Y.one("#"+target);'.
+                'var node = Y.one("#'.$div_name.'");'.
 
                 // append sent message to <div>
                 'var p = {'.
@@ -126,12 +137,12 @@ class ChatRoomUpdater
                 '};'.
                 'node.append(chatmsg_render(p));'.
 
-                'scroll_to_bottom(target);'.
+                'scroll_to_bottom("'.$div_name.'");'.
 
                 'frm.msg.value = "";'.
 
                 'return false;'. // never return true! so form wont refresh
-            '}'.
+            '});'.
 
             // renders a chat message
             'function chatmsg_render(p)'.

@@ -23,13 +23,15 @@ require_once('XhtmlComponent.php');
 
 class XhtmlForm
 {
-    protected $file_upload    = false;
-    protected $handled        = false;   ///< true when form data has been processed by callback function
     protected $name;                     ///< form name
+    protected $id;                       ///< form id
     protected $post_handler;             ///< function to call as POST callback
     protected $form_data      = array();
     protected $elems          = array();
     protected $url_handler;              ///< sends form to a different url
+
+    protected $file_upload    = false;
+    protected $handled        = false;   ///< true when form data has been processed by callback function
     protected $using_captcha  = false;
     protected $focus_element;
 
@@ -48,8 +50,8 @@ class XhtmlForm
 
     function getName() { return $this->name; }
 
+    function setId($s) { $this->id = $s; }
     function onSubmit($s) { $this->js_onsubmit = $s; }
-
     function cssTable($s) { $this->css_table = $s; }
 
     /**
@@ -107,56 +109,57 @@ class XhtmlForm
                         $p[ $key ] = htmlspecialchars_decode($val);
                 }
 
-        if (!empty($_POST))
-            foreach ($_POST as $key => $val)
-                foreach ($this->elems as $e)
+        if (empty($_POST))
+            return;
+
+        foreach ($_POST as $key => $val)
+            foreach ($this->elems as $e)
+            {
+                if (!is_object($e['obj']))
+                    throw new Exception ('XXX not an obj!');
+
+                if (!isset($e['obj']->name))
+                    continue;
+
+                if ($e['obj']->name == $key)
                 {
-                    if (!is_object($e['obj']))
-                        throw new Exception ('XXX not an obj!');
-
-                    if (!isset($e['obj']->name))
-                        continue;
-
-                    if ($e['obj']->name == $key)
+                    if (is_array($val))
                     {
-                        if (is_array($val))
-                        {
-                            foreach ($val as $idx => $v)
-                                $val[ $idx ] = htmlspecialchars_decode($v);
-                            $p[ $key ] = $val;
-                        }
-                        else
-                        {
-                            $p[ $key ] = htmlspecialchars_decode($val);
-                        }
+                        foreach ($val as $idx => $v)
+                            $val[ $idx ] = htmlspecialchars_decode($v);
+                        $p[ $key ] = $val;
                     }
-                    else if ($e['obj'] instanceof YuiDateInterval)
+                    else
                     {
-                        if ($e['obj']->name.'_from' == $key)
-                        {
-                            $e['obj']->selectFrom($val);
-                            $p[ $key ] = htmlspecialchars_decode($val);
-                        }
-
-                        if ($e['obj']->name.'_to' == $key)
-                        {
-                            $e['obj']->selectTo($val);
-                            $p[ $key ] = htmlspecialchars_decode($val);
-                        }
-
-                    } else if ($e['obj']->name == $key.'[]')
-                    {
-                        // handle input arrays
-                        if (is_array($val))
-                        {
-                            foreach ($val as $idx => $v)
-                                $val[ $idx ] = htmlspecialchars_decode($v);
-                            $p[ $key ] = $val;
-                        } else
-                            $p[ $key ] = htmlspecialchars_decode($val);
+                        $p[ $key ] = htmlspecialchars_decode($val);
                     }
-
                 }
+                else if ($e['obj'] instanceof YuiDateInterval)
+                {
+                    if ($e['obj']->name.'_from' == $key)
+                    {
+                        $e['obj']->selectFrom($val);
+                        $p[ $key ] = htmlspecialchars_decode($val);
+                    }
+
+                    if ($e['obj']->name.'_to' == $key)
+                    {
+                        $e['obj']->selectTo($val);
+                        $p[ $key ] = htmlspecialchars_decode($val);
+                    }
+
+                } else if ($e['obj']->name == $key.'[]')
+                {
+                    // handle input arrays
+                    if (is_array($val))
+                    {
+                        foreach ($val as $idx => $v)
+                            $val[ $idx ] = htmlspecialchars_decode($v);
+                        $p[ $key ] = $val;
+                    } else
+                        $p[ $key ] = htmlspecialchars_decode($val);
+                }
+            }
 
         // include FILES uploads
         foreach ($this->elems as $e)
@@ -395,8 +398,8 @@ class XhtmlForm
     /** Renders the form in XHTML */
     function render()
     {
-        if (!function_exists($this->post_handler) && !$this->js_onsubmit)
-            throw new Exception ('FATAL: XhtmlForm no post handler or js handler set');
+//        if (!function_exists($this->post_handler) && !$this->js_onsubmit)
+  //          throw new Exception ('FATAL: XhtmlForm no post handler or js handler set');
 
         if (!$this->name)
             throw new Exception ('need a form name');
@@ -421,7 +424,8 @@ class XhtmlForm
         ' action="'.$this->url_handler.'"'.
         ' method="post"'.
         ' name="'.$this->name.'"'.
-        ($this->file_upload ? ' enctype="multipart/form-data"'     : '').
+        ($this->id          ? ' id="'.$this->id.'"' : '').
+        ($this->file_upload ? ' enctype="multipart/form-data"' : '').
         ($this->js_onsubmit ? ' onsubmit="'.$this->js_onsubmit.'"' : '').
         '>';
 
