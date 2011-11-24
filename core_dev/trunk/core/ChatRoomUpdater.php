@@ -111,8 +111,10 @@ class ChatRoomUpdater
                 'var node = Y.one("#"+target);'.
 
                 // append sent message to <div>
-                'var p = {"from":'.$session->id.',"msg":frm.msg.value,"microtime":"1423232320"};'.
+                'var p = {"from":'.$session->id.',"msg":frm.msg.value,"microtime": new Date().getTime()/1000 };'.
                 'node.append( chatmsg_render(p) );'.
+
+                'frm.msg.value = "";'.
             '});'.
 
             'return false;'. // never return true! so form wont refresh
