@@ -18,6 +18,8 @@
 //TODO: dont hardcode locale to sv-SE
 //XXX: can YUI scroll focus to bottom? use that & drop scroll_to_bottom() in that case
 
+require_once('YuiTooltip.php');
+
 class ChatRoomUpdater
 {
     public static function init($room_id, $div_name, $form_id)
@@ -89,7 +91,7 @@ class ChatRoomUpdater
                         'var p = data[i];'.
 
                         'if ((typeof ts === "undefined") || p.from != '.$session->id.')'.
-                            'node.append(chatmsg_render(p));'.
+                            'msg_render(p,node);'.
                     '}'.
 
                     'if (data.length)'.
@@ -135,7 +137,7 @@ class ChatRoomUpdater
                     '"msg":frm.msg.value,'.
                     '"ts":new Date().getTime()/1000'.
                 '};'.
-                'node.append(chatmsg_render(p));'.
+                'msg_render(p,node);'.
 
                 'scroll_to_bottom("'.$div_name.'");'.
 
@@ -145,7 +147,7 @@ class ChatRoomUpdater
             '});'.
 
             // renders a chat message
-            'function chatmsg_render(p)'.
+            'function msg_render(p,node)'.
             '{'.
                 'var d = new Date(p.ts*1000);'.  // to milliseconds
 
@@ -153,14 +155,31 @@ class ChatRoomUpdater
 
                 // http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format
                 'if (d >= today) {'.
-                    'return Y.DataType.Date.format(d, {format:"%H:%M"}) + ", <a href=\"/iview/profile/"+p.from+"\" target=\"_blank\">"+p.name+"</a> said: "+p.msg+"<br/>";'.
+                    'node.append( Y.DataType.Date.format(d, {format:"%H:%M"}) );'.
                 '} else {'.
-                    'return Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) + ", <a href=\"/iview/profile/"+p.from+"\" target=\"_blank\">"+p.name+"</a> said: "+p.msg+"<br/>";'.
+                    'node.append( Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) );'.
                 '}'.
+
+                'node.append(", ");'.
+
+//XXXX: tooltip dont trigger on these ones...?! need to register tt on new tooltips after they was created
+                'var who = Y.Node.create("<span id=\"tt_usr_"+p.from+"\">"+p.name+"</span>");'.
+
+                'who.addClass("yui3-hastooltip");'.
+                'node.append(who);'.
+
+//                'attach_tt("tt_usr_"+p.from);'. // XXX Tooltip
+//                'Y.fire("tooltipupdate");'.
+
+                'node.append(" said: "+p.msg+"<br/>");'.
             '}'.
 
         '});'
         );
+
+        YuiTooltip::init();
+
+
     }
 
 }

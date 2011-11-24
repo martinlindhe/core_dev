@@ -6,23 +6,23 @@
  *
  */
 
-//STATUS: early wip
+//STATUS: wip
 
-//TODO: load window content with XHR
+//TODO: rename class...
+
+/**
+ *
+ * Name tooltip id="tt_usr_123" where 123 is user id to make a "user" infobox appear
+ *
+ */
 
 class YuiTooltip
 {
-    var $text; ///< tooltip text
-
-    function render()
+    /** registers tooltips on all tags with class="yui3-hastooltip" */
+    public static function init()
     {
-        if (!$this->text)
-            throw new Exception ('no tooltip set');
-
         $header = XhtmlHeader::getInstance();
         $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
-
-        $tt_id = 'tt_'.mt_rand();
 
         $header->embedCss(
         '.yui3-tooltip {'.
@@ -43,8 +43,8 @@ class YuiTooltip
         '}'
         );
 
-        $js =
-        'YUI().use("event-mouseenter", "widget", "widget-position", "widget-stack", function(Y)
+        $header->embedJs(
+        'YUI().use("event-mouseenter","event-custom","io-base","widget","widget-position","widget-stack", function(Y)
         {
             var Lang = Y.Lang,
                 Node = Y.Node,
@@ -472,29 +472,76 @@ class YuiTooltip
                         value:[OX, OY]
                     }
                 }
+            });'.
+
+//XXXX varför är Y inte defined nu då?
+            '
+            Y.on("tooltipupdate", function()
+            {
+                console.log("event fired");
+
+                var tt = new Tooltip({
+                    triggerNodes:".yui3-hastooltip",
+                    delegate:el,
+                    shim:false,
+                    zIndex:2
+                });
+                tt.render();
+
+
+                tt.on("triggerEnter", function(e)
+                {
+                    var node = e.node;
+                    if (!node) {
+                        console.log("XXX failed to get node");
+                        return;
+                    }
+
+                    var node_id = node.get("id");
+
+                    var p1 = node_id.substr(0,7);
+                    var p2 = node_id.substr(7,20);
+                    if (!isNumber(p2)) {
+                        console.log("XXX p2 not a number: " +p2);
+                        return;
+                    }
+
+                    this.setTriggerContent("loading ...");
+
+                    switch (p1) {
+                    case "tt_usr_":
+    //                    console.log("show user "+p2);
+                        var uri = "/iview/user/tooltip/"+p2;
+
+                        // subscribe once to event io:complete
+                        Y.once("io:complete", function (id, o)'.
+                        '{'.
+                            'var data = o.responseText;'. // response data
+                            'this.setTriggerContent(data);'.
+                        '}'.
+                        ',this);'.
+
+                        // make the request
+                        'var request = Y.io(uri);
+                        break;
+
+                    default:
+                        console.log("unknown form "+p1);
+                        return;
+                    }
+
+                });
             });
 
-            var tt = new Tooltip({
-                triggerNodes:".yui3-hastooltip",
-                shim:false,
-                zIndex:2
-            });
-            tt.render();
+        });'
+        );
 
-            tt.on("triggerEnter", function(e) {
-                var node = e.node;
-                // if (node && node.get("id") == "tt2")
-                    this.setTriggerContent("Tooltip from triggerEvent of " + node.get("id") + "<br>wkwkw");
-
-            });
-
-        });';
 
         $header->embedCss(
         'span.yui3-hastooltip {'.
             'border:1px solid #243356;'.
             'background-color:#406ED9;'.
-            'color:#ffffff;'.
+            'color:#fff;'.
             'width:25em;'.
             'margin:20px 0px;'.
             'padding:5px;'.
@@ -502,16 +549,7 @@ class YuiTooltip
         '}'
         );
 
-echo '
-<br/>
-    <span class="yui3-hastooltip" id="tt_usr_27">Tooltip martin</span>
-    <span class="yui3-hastooltip" id="tt_usr_32">Tooltip kotte</span>
 
-';
-
-
-        return
-        js_embed($js);
     }
 
 }

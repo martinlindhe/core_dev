@@ -76,15 +76,16 @@ class ErrorHandler
 
         // http://se.php.net/manual/en/errorfunc.constants.php
         switch ($errno) {
-        case E_ERROR:         $type = 'E_ERROR'; break;
-        case E_WARNING:       $type = 'E_WARNING'; break;
-        case E_NOTICE:        $type = 'E_NOTICE'; break;
-        case E_STRICT:        $type = 'E_STRICT'; break;
-        case E_USER_ERROR:    $type = 'E_USER_ERROR'; break;
-        case E_USER_WARNING:  $type = 'E_USER_WARNING'; break;
-        case E_USER_NOTICE:   $type = 'E_USER_NOTICE'; break;
+        case E_ERROR:             $type = 'E_ERROR'; break;
+        case E_WARNING:           $type = 'E_WARNING'; break;
+        case E_PARSE:             $type = 'E_PARSE'; break;
+        case E_NOTICE:            $type = 'E_NOTICE'; break;
+        case E_USER_ERROR:        $type = 'E_USER_ERROR'; break;
+        case E_USER_WARNING:      $type = 'E_USER_WARNING'; break;
+        case E_USER_NOTICE:       $type = 'E_USER_NOTICE'; break;
+        case E_STRICT:            $type = 'E_STRICT'; break;
         case E_RECOVERABLE_ERROR: $type = 'E_RECOVERABLE_ERROR'; break;
-        case E_DEPRECATED:    $type = 'E_DEPRECATED'; break;
+        case E_DEPRECATED:        $type = 'E_DEPRECATED'; break;
 
         default:
             $type = 'UNKNOWN';

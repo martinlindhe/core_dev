@@ -5,7 +5,16 @@
  * defines a minimal set of core functions
  */
 
-//HINT: use console.log() to log text in Firebug
+//HINT: use console.log() to log text in Webkit browsers (or Firebug)
+
+$header->registerJsFunction(
+// @return true if input is numeric
+'function isNumber(n)'.
+'{'.
+    'return !isNaN(parseFloat(n)) && isFinite(n);'.
+'}'
+);
+
 
 $header->registerJsFunction(
 // @return reference to html element with id s
