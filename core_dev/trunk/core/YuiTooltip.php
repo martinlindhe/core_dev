@@ -476,13 +476,9 @@ class YuiTooltip
 
 //XXXX varför är Y inte defined nu då?
             '
-            Y.on("tooltipupdate", function()
-            {
-                console.log("event fired");
-
                 var tt = new Tooltip({
                     triggerNodes:".yui3-hastooltip",
-                    delegate:el,
+//                    delegate:document.body,  /// XXXX useful??!
                     shim:false,
                     zIndex:2
                 });
@@ -531,7 +527,6 @@ class YuiTooltip
                     }
 
                 });
-            });
 
         });'
         );
@@ -544,7 +539,7 @@ class YuiTooltip
             'color:#fff;'.
             'width:25em;'.
             'margin:20px 0px;'.
-            'padding:5px;'.
+            'padding:2px;'.
             'cursor:default;'.
         '}'
         );
