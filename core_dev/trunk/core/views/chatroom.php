@@ -92,11 +92,13 @@ case 'show':
     'background-color:#eee;'.
     'overflow:auto;';
 
+
+
     echo '<div id="'.$div_name.'" style="'.$css.'"></div>';
 
     $form = new XhtmlForm();
     $form->setId($form_id);
-    $form->addInput('msg', 'Msg', '', 450);
+    $form->addInput('msg', 'Msg', '', 445);
     $form->setFocus('msg');
     $form->disableAutocomplete();
 
