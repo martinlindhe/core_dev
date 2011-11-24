@@ -21,19 +21,29 @@ case 'list':
 case 'update':
     // JSON - returns messages in chatroom (since ts)
     // child = room id
+
+    $page->setMimeType('text/plain');
+
     if (!$this->child || !is_numeric($this->child))
         die('hey');
 
     $ts = 0;
 
-    if (isset($_GET['ts']) && is_numeric($_GET['ts']))
+    if (isset($_GET['ts']) && is_numeric($_GET['ts'])) {
         $ts = $_GET['ts'];
+        $max_age = parse_duration('7d');
+
+        // empty json string on old queries
+        if ($ts < microtime(true) - $max_age) {
+            echo '[]';
+            return;
+        }
+    }
 
     //XXX OPTIMIZATION: strip room id from response
     // XXX TODO: inject username in response
     $res = ChatMessage::getRecent($this->child, $ts, 25);
 
-    $page->setMimeType('text/plain');
     echo json_encode($res);
     break;
 
@@ -73,7 +83,7 @@ case 'show':
 
     $div_name = 'chatroom_txt';
     $form_id = 'chatfrm';
-    ChatRoomUpdater::init($this->child, $div_name, $form_id); // registers the chatroom_send() js functions
+    ChatRoomUpdater::init($this->child, $div_name, $form_id);
 
     $css =
     'width:500px;'.
@@ -88,9 +98,6 @@ case 'show':
     $form->addInput('msg', 'Msg');
     $form->setFocus('msg');
     $form->addSubmit('Send');
-
-//XXXX: send dont work!!!! how to call this one
-//    $form->onSubmit("return ChatRoom.chatroom_send(this,".$this->child.",'".$div_name."');");
 
     echo $form->render();
     break;

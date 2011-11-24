@@ -16,6 +16,7 @@
 //VIEW: core/views/chatroom.php "update"
 
 //TODO: dont hardcode locale to sv-SE
+//XXX: can YUI scroll focus to bottom? use that & drop scroll_to_bottom() in that case
 
 class ChatRoomUpdater
 {
@@ -27,11 +28,10 @@ class ChatRoomUpdater
         $session = SessionHandler::getInstance();
 
         $interval = 5 * 1000; // milliseconds
-
+        $locale = 'sv-SE';
 
         $header->registerJsFunction(
         // scrolls focus to bottom of a <div style="overflow:auto">
-        // XXX can YUI scroll focus to bottom?
         'function scroll_to_bottom(div)'.
         '{'.
             'var elm = get_el(div);'.
@@ -51,7 +51,7 @@ class ChatRoomUpdater
 
 
         $header->embedJs(
-        'YUI({lang:"sv-SE"}).use("io-form","node","json-parse","datatype-date", function(Y)'.
+        'YUI({lang:"'.$locale.'"}).use("io-form","node","json-parse","datatype-date", function(Y)'.
         '{'.
 
             'Y.on("load", function() {'.
@@ -97,9 +97,8 @@ class ChatRoomUpdater
 
                     'latest = data[0] ? data[0].microtime : ts;'.
 
-                    // registers a timer function
-                    'var t=setTimeout(Init,'.$interval.',latest);'.
-
+                    // registers timer
+                    'setTimeout(Init,'.$interval.',latest);'.
 //                    'console.log("completed " + id);'.
                 '};'.
 
@@ -112,10 +111,10 @@ class ChatRoomUpdater
 
             'Y.one("#'.$form_id.'").on("submit", function(e)'.
             '{'.
-                // Stop the event's default behavior
+                // stop the event's default behavior
                 'e.preventDefault();'.
 
-                // Stop the event from bubbling up the DOM tree
+                // stop the event from bubbling up the DOM tree
                 'e.stopPropagation();'.
 
                 'frm = get_el( this.get("id") );'.
@@ -141,7 +140,7 @@ class ChatRoomUpdater
 
                 'frm.msg.value = "";'.
 
-                'return false;'. // never return true! so form wont refresh
+                'return false;'. // return false so form dont refresh
             '});'.
 
             // renders a chat message
@@ -151,17 +150,16 @@ class ChatRoomUpdater
 
                 'var today = new Date( new Date().getFullYear(), new Date().getMonth(), new Date().getDate(),0,0,0);'.
 
+                // http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format
                 'if (d >= today) {'.
-                    // today
-                    'return Y.DataType.Date.format(d, {format:"%X"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
+                    'return Y.DataType.Date.format(d, {format:"%H:%M"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
                 '} else {'.
-                    'return Y.DataType.Date.format(d, {format:"%x %X"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
+                    'return Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
                 '}'.
             '}'.
 
         '});'
         );
-
     }
 
 }
