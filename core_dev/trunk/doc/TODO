@@ -59,7 +59,6 @@ Friends
 
 Chat rooms:
     * PRIO: show "user has joined... ", "user has left" events
-    * PRIO: show js timestamp in local timezone
     * LATER: ability to allow anon users in certain chatrooms
 
 

@@ -71,12 +71,10 @@ case 'show':
         return;
     }
 
-    ChatRoomUpdater::init(); // registers the chatroom_init(), chatroom_send() js functions
+
 
     $div_name = 'chatroom_txt';
-
-    // returns recent msgs from chatroom on page load
-    $js = 'chatroom_init('.$this->child.',"'.$div_name.'");';
+    ChatRoomUpdater::init($this->child, $div_name); // registers the chatroom_send() js functions
 
     $css =
     'width:500px;'.
@@ -85,8 +83,6 @@ case 'show':
     'overflow:auto;';
 
     echo '<div id="'.$div_name.'" style="'.$css.'"></div>';
-
-    echo js_embed($js);
 
     $form = new XhtmlForm();
     $form->addInput('msg', 'Msg');

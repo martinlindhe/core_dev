@@ -5,6 +5,7 @@
  * http://yuilibrary.com/yui/docs/io/
  * http://yuilibrary.com/yui/docs/node/
  * http://yuilibrary.com/yui/docs/json/
+ * http://yuilibrary.com/yui/docs/datatype/
  *
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
@@ -15,7 +16,7 @@
 
 class ChatRoomUpdater
 {
-    public static function init()
+    public static function init($room_id, $div_name)
     {
         $header = XhtmlHeader::getInstance();
         $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
@@ -27,6 +28,7 @@ class ChatRoomUpdater
 
         $header->registerJsFunction(
         // scrolls focus to bottom of a <div style="overflow:auto">
+        // XXX can YUI scroll focus to bottom?
         'function scroll_to_bottom(div)'.
         '{'.
             'var elm = get_el(div);'.
@@ -44,26 +46,32 @@ class ChatRoomUpdater
             '}'.
         '}');
 
-        $header->registerJsFunction(
-        // id = room id
-        // target = div
-        // ts = set to 0 to init, microtime to fetch newer items
-        'function chatroom_init(room,target,ts)'.
-        '{'.
-            'var latest;'.
 
-            'YUI().use("io-base","node","json-parse", function(Y)'.
+        $header->embedJs(
+        'YUI({lang:"sv-SE"}).use("io-form","node","json-parse","datatype-date", function(Y)'.
+        '{'.
+
+            'Y.on("load", function() {'.
+                // initialize chat room
+                'console.log("init1");'.
+                'chatroom_init();'.
+            '});'.
+
+            // ts = set to 0 to init, microtime to fetch newer items
+            'function chatroom_init(ts)'.
             '{'.
+                'var latest;'.
+
                 'if (typeof ts === "undefined") {'.
-                    'var uri = "/iview/chatroom/update/" + room;'.
+                    'var uri = "/iview/chatroom/update/" + '.$room_id.';'.
                 '} else {'.
-                    'var uri = "/iview/chatroom/update/" + room + "?ts=" + ts;'.
+                    'var uri = "/iview/chatroom/update/" + '.$room_id.' + "?ts=" + ts;'.
                 '}'.
 
                 'function complete(id, o)'.
                 '{'.
                     'var data = o.responseText;'. // response data
-                    'var node = Y.one("#"+target);'.
+                    'var node = Y.one("#'.$div_name.'");'.
 
                     'try {'.
                         'var data = Y.JSON.parse(data);'.
@@ -82,44 +90,28 @@ class ChatRoomUpdater
                             'node.append( chatmsg_render(p) );'.
                     '}'.
 
-                    'scroll_to_bottom(target);'. //XXX can YUI scroll focus to bottom?
+                    'scroll_to_bottom("'.$div_name.'");'.
 
                     'latest = data[0] ? data[0].microtime : ts;'.
 
                     // registers a timer function
-                    'var t=setTimeout("chatroom_init("+room+",\'"+target+"\',"+latest+")",'.$interval.');'.
+                    'var t=setTimeout(chatroom_init, '.$interval.', latest);'.
 
-//                    'console.log("chat refreshed");'.
+//                    'console.log("completed " + id);'.
                 '};'.
 
-                // subscribe to event io:complete
-                'Y.on("io:complete", complete, Y);'.
+                // subscribe once to event io:complete
+                'Y.once("io:complete", complete, Y);'.
 
                 // make the request
                 'var request = Y.io(uri);'.
-            '});'.
+            '}'.
 
-        '}');
-
-        $header->registerJsFunction(
-        'function chatmsg_render(p)'.
-        '{'.
-            'var t = new Date(p.microtime*1000);'. // to milliseconds
-
-            // XXX if msg is from today, show time. else show full date
-            'var when = t.toUTCString();'.
-
-            'return when + ", " + p.from + " said: " + p.msg + "<br/>";'.
-        '}');
-
-        $header->registerJsFunction(
-        'function chatroom_send(frm,room,target)'.
-        '{'.
-            'if (!frm.msg.value)'.
-                'return false;'.
-
-            'YUI().use("io-form","node", function(Y)'.
+            'function chatroom_send(frm,room,target)'.
             '{'.
+                'if (!frm.msg.value)'.
+                    'return false;'.
+
                 'var uri = "/iview/chatroom/send/" + room + "?m=" + frm.msg.value;'.
 
                 'var request = Y.io(uri);'.
@@ -127,16 +119,37 @@ class ChatRoomUpdater
                 'var node = Y.one("#"+target);'.
 
                 // append sent message to <div>
-                'var p = {"from":'.$session->id.',"msg":frm.msg.value,"microtime": new Date().getTime()/1000 };'.
-                'node.append( chatmsg_render(p) );'.
+                'var p = {'.
+                    '"from":'.$session->id.','.
+                    '"msg":frm.msg.value,'.
+                    '"microtime":new Date().getTime()/1000'.
+                '};'.
+                'node.append(chatmsg_render(p));'.
 
-                'scroll_to_bottom(target);'. //XXX can YUI scroll focus to bottom?
+                'scroll_to_bottom(target);'.
 
                 'frm.msg.value = "";'.
-            '});'.
 
-            'return false;'. // never return true! so form wont refresh
-        '}');
+                'return false;'. // never return true! so form wont refresh
+            '}'.
+
+            // renders a chat message
+            'function chatmsg_render(p)'.
+            '{'.
+                'var d = new Date(p.microtime*1000);'.  // to milliseconds
+
+                'var today = new Date( new Date().getFullYear(), new Date().getMonth(), new Date().getDate(),0,0,0);'.
+
+                'if (d >= today) {'.
+                    // today
+                    'return Y.DataType.Date.format(d, {format:"%X"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
+                '} else {'.
+                    'return Y.DataType.Date.format(d, {format:"%x %X"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
+                '}'.
+            '}'.
+
+        '});'
+        );
 
     }
 
