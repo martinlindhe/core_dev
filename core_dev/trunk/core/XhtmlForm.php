@@ -24,7 +24,7 @@ require_once('XhtmlComponent.php');
 class XhtmlForm
 {
     protected $file_upload    = false;
-    protected $handled        = false;   ///< is set to true when form data has been processed by callback function
+    protected $handled        = false;   ///< true when form data has been processed by callback function
     protected $name;
     protected $post_handler;             ///< function to call as POST callback
     protected $form_data      = array();
@@ -34,7 +34,6 @@ class XhtmlForm
     protected $focus_element;
 
     protected $css_table      = 'border:1px solid;';
-
     protected $js_onsubmit;              ///< js to execute on form submit
 
     function __construct($name = '', $url_handler = '')
@@ -396,13 +395,8 @@ class XhtmlForm
     /** Renders the form in XHTML */
     function render()
     {
-        if (!$this->url_handler && !function_exists($this->post_handler))
-        {
-            if (!function_exists($this->post_handler))
-                throw new Exception ('FATAL: XhtmlForm post handler: function "'.$this->post_handler.'" is not declared!');
-
-            throw new Exception ('FATAL: XhtmlForm does not have a defined data handler');
-        }
+        if (!function_exists($this->post_handler) && !$this->js_onsubmit)
+            throw new Exception ('FATAL: XhtmlForm no post handler or js handler set!');
 
         if (!$this->name)
             throw new Exception ('We need a form name!');

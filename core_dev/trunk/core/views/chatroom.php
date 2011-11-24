@@ -40,6 +40,7 @@ case 'update':
 case 'chat':
     // child = room id
 
+/*
     function chatSubmit($p)
     {
         if (!$p['msg'])
@@ -60,6 +61,7 @@ case 'chat':
 
         js_redirect('iview/chatroom/chat/'.$p['room']);
     }
+*/
 
     $cr = ChatRoom::get($this->child);
 
@@ -86,7 +88,20 @@ case 'chat':
     $form->setFocus('msg');
     $form->addHidden('room', $this->child);  // XXX hack
     $form->addSubmit('Send');
-    $form->setHandler('chatSubmit');
+//    $form->setHandler('chatSubmit');
+
+    $header->registerJsFunction(
+    'function chatroom_send(frm)'.   //XXXX move function to ChatRoomUpdater
+    '{'.
+        'if (!frm.msg.value)'.
+            'return false;'.
+
+'alert(frm.msg.value);'.
+        'return false;'. // never return true! so form wont refresh
+    '}'
+    );
+    $form->onSubmit('return chatroom_send(this);');
+
     echo $form->render();
     break;
 
