@@ -18,34 +18,23 @@ case 'list':
 
     break;
 
-case 'xhr':
-    switch ($this->child) {
-    case 'init':
-        // returns recent messages in chatroom
-        // child2 = room id
+case 'update':
+    // JSON - returns messages in chatroom (since ts)
+    // child = room id
+    if (!$this->child || !is_numeric($this->child))
+        die('hey');
 
-        //XXX OPTIMIZATION: strip room id from response
-        // XXX TODO: inject username in response
-        $res = ChatMessage::getRecent($this->child2, 0, 40);
+    $ts = 0;
 
-        $page->setMimeType('text/plain');
-        echo json_encode($res);
-        break;
+    if (isset($_GET['ts']) && is_numeric($_GET['ts']))
+        $ts = $_GET['ts'];
 
-    case 'update':
-        // returns messages in chatroom since last call
-        if (!is_numeric($_GET['ts']))
-            die('MEH');
+    //XXX OPTIMIZATION: strip room id from response
+    // XXX TODO: inject username in response
+    $res = ChatMessage::getRecent($this->child, $ts, 5);
 
-        $res = ChatMessage::getRecent($this->child2, $_GET['ts'], 40);
-
-        $page->setMimeType('text/plain');
-        echo json_encode($res);
-        break;
-
-    default:
-        echo 'No XHR handler for view '.$this->child;
-    }
+    $page->setMimeType('text/plain');
+    echo json_encode($res);
     break;
 
 case 'chat':
@@ -53,6 +42,9 @@ case 'chat':
 
     function chatSubmit($p)
     {
+        if (!$p['msg'])
+            return;
+
         $session = SessionHandler::getInstance();
 
         $cr = ChatRoom::get($p['room']);
@@ -62,7 +54,7 @@ case 'chat':
         $m = new ChatMessage();
         $m->room = $p['room'];
         $m->from = $session->id;
-        $m->msg = $p['msg'];
+        $m->msg  = $p['msg'];
         $m->microtime = microtime(true);
         ChatMessage::store($m);
 

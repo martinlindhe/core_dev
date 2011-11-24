@@ -33,9 +33,9 @@ class ChatRoomUpdater
             '{'.
 
                 'if (typeof ts === "undefined") {'.
-                    'var uri = "/iview/chatroom/xhr/init/" + room;'.
+                    'var uri = "/iview/chatroom/update/" + room;'.
                 '} else {'.
-                    'var uri = "/iview/chatroom/xhr/update/" + room + "?ts=" + ts;'.
+                    'var uri = "/iview/chatroom/update/" + room + "?ts=" + ts;'.
                 '}'.
 
                 'function complete(id, o)'.
@@ -56,7 +56,12 @@ class ChatRoomUpdater
 
                     'for (var i = data.length-1; i >= 0; --i) {'.
                         'var p = data[i];'.
-                        'node.append(p.microtime + ", " + p.from + " said: " + p.msg + "<br/>");'.
+
+                        'var t = new Date( p.microtime * 1000 );'.
+
+                        // XXX if msg is from today, show time. else show full date
+                        'var when = t.toUTCString();'.
+                        'node.append( when + ", " + p.from + " said: " + p.msg + "<br/>");'.
                     '}'.
 
                     'if (data[0]) {'.
@@ -68,7 +73,7 @@ class ChatRoomUpdater
                     // registers a timer function
                     'var t=setTimeout("chatroom_init("+room+",\'"+target+"\',"+latest+")",2000);'.
 
-                    'console.log("chat refreshed");'.
+//                    'console.log("chat refreshed");'.
                 '};'.
 
                 // subscribe to event io:complete
