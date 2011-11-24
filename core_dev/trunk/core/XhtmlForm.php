@@ -25,7 +25,7 @@ class XhtmlForm
 {
     protected $file_upload    = false;
     protected $handled        = false;   ///< true when form data has been processed by callback function
-    protected $name;
+    protected $name;                     ///< form name
     protected $post_handler;             ///< function to call as POST callback
     protected $form_data      = array();
     protected $elems          = array();
@@ -421,8 +421,8 @@ class XhtmlForm
         ' action="'.$this->url_handler.'"'.
         ' method="post"'.
         ' name="'.$this->name.'"'.
-        ($this->file_upload ? '" enctype="multipart/form-data"'     : '').
-        ($this->js_onsubmit ? '" onsubmit="'.$this->js_onsubmit.'"' : '').
+        ($this->file_upload ? ' enctype="multipart/form-data"'     : '').
+        ($this->js_onsubmit ? ' onsubmit="'.$this->js_onsubmit.'"' : '').
         '>';
 
         $res .=
