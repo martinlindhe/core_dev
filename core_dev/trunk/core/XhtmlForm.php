@@ -9,9 +9,10 @@
 
 //STATUS: wip
 
+//FIXME: "fill form from previous submit" code is broken!
 //XXX: can the "fill form with previous entered data code from render() method move to handle() ????
 
-//XXX: remove need of "using_captcha" variable, it can be figured out by checking object types
+//TODO low prio: remove need of "using_captcha" variable, it can be figured out by checking object types
 
 require_once('ErrorHandler.php');
 require_once('output_xhtml.php');
@@ -22,20 +23,19 @@ require_once('XhtmlComponent.php');
 
 class XhtmlForm
 {
-    protected $file_upload      = false;
-    protected $handled          = false;   ///< is set to true when form data has been processed by callback function
+    protected $file_upload    = false;
+    protected $handled        = false;   ///< is set to true when form data has been processed by callback function
     protected $name;
-    protected $post_handler;               ///< function to call as POST callback
-    protected $objectinstance   = false;
-    protected $form_data        = array();
-    protected $elems            = array();
-    protected $url_handler;                ///< sends form to a different url
-    protected $using_captcha    = false;
+    protected $post_handler;             ///< function to call as POST callback
+    protected $form_data      = array();
+    protected $elems          = array();
+    protected $url_handler;              ///< sends form to a different url
+    protected $using_captcha  = false;
     protected $focus_element;
 
-    protected $css_table        = 'border:1px solid;';
+    protected $css_table      = 'border:1px solid;';
 
-    protected $js_onsubmit;                ///< js to execute on form submit
+    protected $js_onsubmit;              ///< js to execute on form submit
 
     function __construct($name = '', $url_handler = '')
     {
@@ -59,17 +59,17 @@ class XhtmlForm
      * to fetch GET/POST parameters from previous page view
      *
      * @param $f function/method name to process form data
-     * @param $objectinstance for objects
+     * @param $o object
      */
-    function setHandler($f, $objectinstance = false)
+    function setHandler($f, $o = false)
     {
         if ($this->url_handler)
             throw new Exception ('Cant use setHandler together with a separate url_handler');
 
-        $this->post_handler = $f;
-
-        if (is_object($objectinstance))
-            $this->objectinstance = $objectinstance;
+        if (is_object($o))
+            $this->post_handler = array($o, $f);
+        else
+            $this->post_handler = $f;
     }
 
     /** Activates javascript that auto-focuses on specified input field */
@@ -184,15 +184,10 @@ class XhtmlForm
 
         $this->form_data = $p;
 
-        if ($this->objectinstance)
-            $call = array($this->objectinstance, $this->post_handler);
-        else
-            $call = $this->post_handler;
-
         $error = ErrorHandler::getInstance();
 
         if (!$error->getErrorCount())
-            if (call_user_func($call, $this->form_data, $this))
+            if (call_user_func($this->post_handler, $this->form_data, $this))
                 $this->handled = true;
 
         if ($error->getErrorCount())
@@ -401,7 +396,7 @@ class XhtmlForm
     /** Renders the form in XHTML */
     function render()
     {
-        if (!$this->url_handler && !$this->objectinstance && !function_exists($this->post_handler))
+        if (!$this->url_handler && !function_exists($this->post_handler))
         {
             if (!function_exists($this->post_handler))
                 throw new Exception ('FATAL: XhtmlForm post handler: function "'.$this->post_handler.'" is not declared!');
