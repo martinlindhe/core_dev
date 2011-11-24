@@ -40,11 +40,12 @@ case 'update':
         }
     }
 
-    //XXX OPTIMIZATION: strip room id from response
-    // XXX TODO: inject username in response
     $res = ChatMessage::getRecent($this->child, $ts, 25);
+    $out = array();
+    foreach ($res as $r)
+        $out[] = array('name'=>User::get($r->from)->name,'from'=>$r->from,'msg'=>$r->msg,'ts'=>$r->microtime);
 
-    echo json_encode($res);
+    echo json_encode($out);
     break;
 
 case 'send':

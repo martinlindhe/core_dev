@@ -130,9 +130,10 @@ class ChatRoomUpdater
 
                 // append sent message to <div>
                 'var p = {'.
+                    '"name":'.$session->name.','.
                     '"from":'.$session->id.','.
                     '"msg":frm.msg.value,'.
-                    '"microtime":new Date().getTime()/1000'.
+                    '"ts":new Date().getTime()/1000'.
                 '};'.
                 'node.append(chatmsg_render(p));'.
 
@@ -146,15 +147,15 @@ class ChatRoomUpdater
             // renders a chat message
             'function chatmsg_render(p)'.
             '{'.
-                'var d = new Date(p.microtime*1000);'.  // to milliseconds
+                'var d = new Date(p.ts*1000);'.  // to milliseconds
 
                 'var today = new Date( new Date().getFullYear(), new Date().getMonth(), new Date().getDate(),0,0,0);'.
 
                 // http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format
                 'if (d >= today) {'.
-                    'return Y.DataType.Date.format(d, {format:"%H:%M"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
+                    'return Y.DataType.Date.format(d, {format:"%H:%M"}) + ", "+p.name+" said: "+p.msg+"<br/>";'.
                 '} else {'.
-                    'return Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) + ", "+p.from+" said: "+p.msg+"<br/>";'.
+                    'return Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) + ", "+p.name+" said: "+p.msg+"<br/>";'.
                 '}'.
             '}'.
 

@@ -58,6 +58,9 @@ Friends
 
 
 Chat rooms:
+    * hover effect to show little info box of chat nick
+
+    * ability to post pics & videos to chat room
     * PRIO: show "user has joined... ", "user has left" events
     * LATER: ability to allow anon users in certain chatrooms
 
