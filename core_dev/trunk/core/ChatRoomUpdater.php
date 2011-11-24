@@ -95,7 +95,7 @@ class ChatRoomUpdater
                     'if (data.length)'.
                         'scroll_to_bottom("'.$div_name.'");'.
 
-                    'latest = data[0] ? data[0].microtime : ts;'.
+                    'latest = data[0] ? data[0].ts : ts;'.
 
                     // registers timer
                     'setTimeout(Init,'.$interval.',latest);'.
@@ -130,7 +130,7 @@ class ChatRoomUpdater
 
                 // append sent message to <div>
                 'var p = {'.
-                    '"name":'.$session->name.','.
+                    '"name":"'.$session->username.'",'.
                     '"from":'.$session->id.','.
                     '"msg":frm.msg.value,'.
                     '"ts":new Date().getTime()/1000'.

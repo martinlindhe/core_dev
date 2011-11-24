@@ -67,7 +67,7 @@ Chat rooms:
 
 1-to-1 chat:
     * adapt chatroom code
-    * PRIO: write 1-on-1 chat code, store messages as normal Message objects
+    * store messages as normal Message objects
 
 
 Moderation
