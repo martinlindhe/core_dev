@@ -55,7 +55,7 @@ if ($pic_id)
     echo $lb->render().'<br/>';
 } else {
 
-    $avatar_opt = UserSetting::get($session->id, 'avatar');
+    $avatar_opt = UserSetting::get($user_id, 'avatar');
     // get pic id from avatar_id
     $avatar_id = UserDataFieldOption::getById($avatar_opt);
 

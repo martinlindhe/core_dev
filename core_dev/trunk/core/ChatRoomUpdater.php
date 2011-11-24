@@ -153,9 +153,9 @@ class ChatRoomUpdater
 
                 // http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format
                 'if (d >= today) {'.
-                    'return Y.DataType.Date.format(d, {format:"%H:%M"}) + ", "+p.name+" said: "+p.msg+"<br/>";'.
+                    'return Y.DataType.Date.format(d, {format:"%H:%M"}) + ", <a href=\"/iview/profile/"+p.from+"\" target=\"_blank\">"+p.name+"</a> said: "+p.msg+"<br/>";'.
                 '} else {'.
-                    'return Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) + ", "+p.name+" said: "+p.msg+"<br/>";'.
+                    'return Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) + ", <a href=\"/iview/profile/"+p.from+"\" target=\"_blank\">"+p.name+"</a> said: "+p.msg+"<br/>";'.
                 '}'.
             '}'.
 
