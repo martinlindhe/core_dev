@@ -9,7 +9,7 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
-//STATUS: early wip
+//STATUS: wip
 
 //VIEW: core/views/chatroom.php "update"
 
@@ -22,7 +22,27 @@ class ChatRoomUpdater
 
         $session = SessionHandler::getInstance();
 
-        $interval = 20 * 1000; // milliseconds
+        $interval = 5 * 1000; // milliseconds
+
+
+        $header->registerJsFunction(
+        // scrolls focus to bottom of a <div style="overflow:auto">
+        'function scroll_to_bottom(div)'.
+        '{'.
+            'var elm = get_el(div);'.
+            'try {'.
+                'elm.scrollTop = elm.scrollHeight;'.
+            '} catch(e) {'.
+                // for older browsers
+                'var f = document.createElement("input");'.
+                'if (f.setAttribute) f.setAttribute("type","text");'.
+                'if (elm.appendChild) elm.appendChild(f);'.
+                'f.style.width = "0px";'.
+                'f.style.height = "0px";'.
+                'if (f.focus) f.focus();'.
+                'if (elm.removeChild) elm.removeChild(f);'.
+            '}'.
+        '}');
 
         $header->registerJsFunction(
         // id = room id
@@ -34,7 +54,6 @@ class ChatRoomUpdater
 
             'YUI().use("io-base","node","json-parse", function(Y)'.
             '{'.
-
                 'if (typeof ts === "undefined") {'.
                     'var uri = "/iview/chatroom/update/" + room;'.
                 '} else {'.
@@ -53,9 +72,8 @@ class ChatRoomUpdater
                         'return;'.
                     '}'.
 
-                    'if (typeof ts === "undefined") {'.
+                    'if (typeof ts === "undefined")'.
                         'node.setContent("");'. // clears div
-                    '}'.
 
                     'for (var i = data.length-1; i >= 0; --i) {'.
                         'var p = data[i];'.
@@ -64,11 +82,9 @@ class ChatRoomUpdater
                             'node.append( chatmsg_render(p) );'.
                     '}'.
 
-                    'if (data[0]) {'.
-                        'latest = data[0].microtime;'. // XXX what do if room is empty???
-                    '} else {'.
-                        'latest = ts;'.
-                    '}'.
+                    'scroll_to_bottom(target);'. //XXX can YUI scroll focus to bottom?
+
+                    'latest = data[0] ? data[0].microtime : ts;'.
 
                     // registers a timer function
                     'var t=setTimeout("chatroom_init("+room+",\'"+target+"\',"+latest+")",'.$interval.');'.
@@ -113,6 +129,8 @@ class ChatRoomUpdater
                 // append sent message to <div>
                 'var p = {"from":'.$session->id.',"msg":frm.msg.value,"microtime": new Date().getTime()/1000 };'.
                 'node.append( chatmsg_render(p) );'.
+
+                'scroll_to_bottom(target);'. //XXX can YUI scroll focus to bottom?
 
                 'frm.msg.value = "";'.
             '});'.

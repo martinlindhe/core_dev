@@ -78,7 +78,13 @@ case 'show':
     // returns recent msgs from chatroom on page load
     $js = 'chatroom_init('.$this->child.',"'.$div_name.'");';
 
-    echo '<div id="'.$div_name.'"></div>';
+    $css =
+    'width:500px;'.
+    'height:300px;'.
+    'background-color:#eee;'.
+    'overflow:auto;';
+
+    echo '<div id="'.$div_name.'" style="'.$css.'"></div>';
 
     echo js_embed($js);
 

@@ -5,6 +5,8 @@ BUGS:
     * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
     * later: fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
+    * core_dev error 404 handler funkar ej på admin.ivr?     http://admin-ivr.unicorn.se/ivi33ew/
+    * core_dev: sub-views ska inte behöva använda child, child2 osv..!!
 
 
 Config:
@@ -56,8 +58,9 @@ Friends
 
 
 Chat rooms:
-    * PRIO: stuff content in a div with scroll bar to the right
-    * ability to allow anon users in certain chatrooms
+    * PRIO: show "user has joined... ", "user has left" events
+    * PRIO: show js timestamp in local timezone
+    * LATER: ability to allow anon users in certain chatrooms
 
 
 1-to-1 chat:
