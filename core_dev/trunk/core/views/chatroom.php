@@ -101,8 +101,15 @@ case 'show':
     $form->addInput('msg', 'Msg', '', 445);
     $form->setFocus('msg');
     $form->disableAutocomplete();
-
     echo $form->render();
+
+
+
+    YuiTooltip::init();
+
+echo UserLink::render(27, "martin");
+echo UserLink::render(32, "kotte");
+
     break;
 
 default:

@@ -163,22 +163,16 @@ class ChatRoomUpdater
                 'node.append(", ");'.
 
 //XXXX: tooltip dont trigger on these ones...?! need to register tt on new tooltips after they was created
-                'var who = Y.Node.create("<span id=\"tt_usr_"+p.from+"\">"+p.name+"</span>");'.
+                'var who = Y.Node.create("<span class=\"yui3-hastooltip\" id=\"tt_usr_"+p.from+"\">"+p.name+"</span>");'.
 
                 'who.addClass("yui3-hastooltip");'.
                 'node.append(who);'.
-
-//                'attach_tt("tt_usr_"+p.from);'. // XXX Tooltip
-//                'Y.fire("tooltipupdate");'.
 
                 'node.append(" said: "+p.msg+"<br/>");'.
             '}'.
 
         '});'
         );
-
-        YuiTooltip::init();
-
 
     }
 

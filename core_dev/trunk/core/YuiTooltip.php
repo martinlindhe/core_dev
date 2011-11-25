@@ -474,11 +474,11 @@ class YuiTooltip
                 }
             });'.
 
-//XXXX varför är Y inte defined nu då?
+//XXXX how to make Tooltip work on dynamically created <span>:s, done after trigger is added ?
             '
                 var tt = new Tooltip({
                     triggerNodes:".yui3-hastooltip",
-//                    delegate:document.body,  /// XXXX useful??!
+                    delegate:document.body,  /// XXXX useful??!
                     shim:false,
                     zIndex:2
                 });
@@ -528,9 +528,8 @@ class YuiTooltip
 
                 });
 
-        });'
-        );
-
+        });
+            ');
 
         $header->embedCss(
         'span.yui3-hastooltip {'.

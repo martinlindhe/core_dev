@@ -26,8 +26,14 @@ if (Bookmark::exists(BOOKMARK_USERBLOCK, $session->id, $user_id)) {
 
 echo '<h1>Profile for '.$user->name.'</h1>';
 
-echo 'Last active: '.ago($user->time_last_active).'<br/>';
-echo 'Is online: '. ( UserHandler::isOnline($user_id) ? 'YES' : 'NO').'<br/>';
+if (UserHandler::isOnline($user_id)) {
+    echo 'Is online<br/>';
+    echo 'Last active: '.ago($user->time_last_active).'<br/>';
+    echo 'Otillgänglig för chat?: '.UserSetting::get($user_id, 'chat_off').'<br/>';
+} else {
+    echo 'Is offline<br/>';
+}
+
 echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 
 $gender_id = UserSetting::get($user_id, 'gender');
@@ -36,9 +42,9 @@ echo 'Gender: '.$gender.'<br/>';
 
 
 echo 'E-mail: '.UserSetting::get($user_id, 'email').'<br/>';
-echo 'Otillgänglig för chat?: '.UserSetting::get($user_id, 'chat_off').'<br/>';
-
-echo 'Presentation: '.UserSetting::get($user_id, 'presentation').'<br/>';
+$pres = UserSetting::get($user_id, 'presentation');
+if ($pres)
+    echo 'Presentation: '.$pres.'<br/>';
 
 $pic_id = UserSetting::get($user_id, 'picture');
 if ($pic_id)

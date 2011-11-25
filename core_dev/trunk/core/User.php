@@ -48,6 +48,15 @@ function getUserTypes()
     );
 }
 
+/** XXX WIP: these links should be auto decorated by YuiTooltip */
+class UserLink
+{
+    public static function render($id, $name)
+    {
+        return '<span class="yui3-hastooltip" id="tt_usr_'.$id.'">'.$name.'</span>';
+    }
+}
+
 class FacebookUser extends User
 {
     function __construct($fbid)
@@ -124,7 +133,7 @@ class User
         );
 
         if (!$row) return false;
-        return SqlObject::loadObject($row, __CLASS__);        
+        return SqlObject::loadObject($row, __CLASS__);
     }
 
     /**
