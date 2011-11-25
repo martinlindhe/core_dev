@@ -52,7 +52,7 @@ function file_get_mime_by_suffix($name)
     switch ($ext)
     {
     // images
-    case '.jpg': return 'image/jpeg';
+    case '.jpg': case '.jpeg': return 'image/jpeg';
     case '.png': return 'image/png';
     case '.gif': return 'image/gif';
     case '.ico': return 'image/vnd.microsoft.icon';

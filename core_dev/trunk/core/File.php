@@ -149,7 +149,7 @@ class File
     {
         // ignore empty file uploads
         if (!$key['name'])
-            return;
+            return false;
 
         if (!is_uploaded_file($key['tmp_name'])) {
             throw new Exception ('Upload failed for file '.$key['name'] );
@@ -168,9 +168,11 @@ class File
         $file->mimetype = $key['type'];
         $file->category = $category;
         $file->time_uploaded = sql_datetime( time() );
-        $id = self::store($file);
+        $fileId = self::store($file);
+        if (!$fileId)
+            return false;
 
-        $dst_file = self::getUploadPath($id);
+        $dst_file = self::getUploadPath($fileId);
 
         if (!move_uploaded_file($key['tmp_name'], $dst_file))
             throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
@@ -178,9 +180,9 @@ class File
         chmod($dst_file, 0777);
 
         $key['name'] = $dst_file;
-        $key['file_id'] = $id;
+        $key['file_id'] = $fileId;
 
-        return $id;
+        return $fileId;
     }
 
     /**
@@ -190,18 +192,19 @@ class File
     {
         $error = ErrorHandler::getInstance();
 
-        // need to read from disk because $key['mime'] is sent by client & can be anything
-        $mime = get_mimetype_of_file($key['tmp_name']);
-        switch ($mime) {
+        $info = getimagesize($key['tmp_name']);
+        switch ($info['mime']) {
         case 'image/jpeg': break;
         case 'image/png': break;
         case 'image/gif': break;
         default:
-            $error->add('Uploaded file '.$key['name'].' is not an image (mimetype '.$key['type'].')');
+            $error->add('Uploaded file '.$key['name'].' is not an image (mimetype '.$info['mime'].')');
             return false;
         }
 
         $fileId = self::import($type, $key, $category);
+        if (!$fileId)
+            return false;
 
         $im = new ImageResizer( File::get($fileId) );
 

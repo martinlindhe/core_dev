@@ -54,6 +54,10 @@ $header->embedCss(
         float: left;
         margin-left: 10px;
     }
+    .addedIMG {
+        width: 100px;
+        height: 100px;
+    }
     ');
         $res =
         '<div id="box">'.

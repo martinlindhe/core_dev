@@ -51,14 +51,14 @@ Privacy
 
 
 Friends
-    later a proper Friend class with friend requests etc:
+    * LATER: a proper Friend class with friend requests etc:
         - The "Bookmark" class cant be used, it is more like a "favourite users bookmarks"
         - write a proper Friend class using functions_contacts.php logic (1:send friend request, 2:approve, 3:both persons are friends)
         - write a "friend list" view (for Friend class)
 
 
 Chat rooms:
-    * hover effect to show little info box of chat nick
+    * WIP: hover effect to show little info box of chat nick.. not yet working on dynamically created content
 
     * ability to post pics & videos to chat room
     * PRIO: show "user has joined... ", "user has left" events
@@ -79,7 +79,9 @@ Guestbook
 
 
 Photo albums: core/PhotoAlbum.php, core/views/albums.php
-    * multiple file uploads with progress bars, see http://yuilibrary.com/yui/docs/uploader/uploader-multiple.html
+    * drag and drop file upload: http://www.thebuzzmedia.com/html5-drag-and-drop-and-file-api-tutorial/
+
+    * later: .. multiple file uploads with progress bars, see http://yuilibrary.com/yui/docs/uploader/uploader-multiple.html
 
 
 DB CHECKER:

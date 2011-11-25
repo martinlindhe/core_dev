@@ -13,18 +13,13 @@ case 'album':
     // XXX verify im the owner of album
     // XXX allow only images
 
-    echo "woowo ".$this->child;
-
     //XXX SECURITY: verify that destination album is owned by current user
 
     // If the browser supports sendAsBinary () can use the array $_FILES
     if(count($_FILES)>0)
     {
-        foreach ($_FILES as $f)
-        {
-            $fileId = File::importImage(USER, $f, $this->child);
-//            d($fileId);
-        }
+        $fileId = File::importImage(USER, $_FILES['upload'], $this->child);
+        echo 'OK:'.$fileId;
     }
     else if(isset($_GET['up']))
     {
