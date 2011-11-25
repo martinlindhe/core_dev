@@ -153,14 +153,17 @@ class ChatRoomUpdater
 
                 'var today = new Date( new Date().getFullYear(), new Date().getMonth(), new Date().getDate(),0,0,0);'.
 
+                'node.append("[");'.
+
                 // http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format
                 'if (d >= today) {'.
                     'node.append( Y.DataType.Date.format(d, {format:"%H:%M"}) );'.
                 '} else {'.
+                    //FIXME: show "yesterday, time"
                     'node.append( Y.DataType.Date.format(d, {format:"%a %d %b %H:%M"}) );'.
                 '}'.
 
-                'node.append(", ");'.
+                'node.append("]&nbsp;");'.
 
 //XXXX: tooltip dont trigger on these ones...?! need to register tt on new tooltips after they was created
                 'var who = Y.Node.create("<span class=\"yui3-hastooltip\" id=\"tt_usr_"+p.from+"\">"+p.name+"</span>");'.
@@ -168,7 +171,7 @@ class ChatRoomUpdater
                 'who.addClass("yui3-hastooltip");'.
                 'node.append(who);'.
 
-                'node.append(" said: "+p.msg+"<br/>");'.
+                'node.append(": "+p.msg+"<br/>");'.
             '}'.
 
         '});'

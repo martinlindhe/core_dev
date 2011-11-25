@@ -92,13 +92,11 @@ case 'show':
     'background-color:#eee;'.
     'overflow:auto;';
 
-
-
     echo '<div id="'.$div_name.'" style="'.$css.'"></div>';
 
     $form = new XhtmlForm();
     $form->setId($form_id);
-    $form->addInput('msg', 'Msg', '', 445);
+    $form->addInput('msg', $session->username.':', '', 445);
     $form->setFocus('msg');
     $form->disableAutocomplete();
     echo $form->render();
@@ -107,7 +105,7 @@ case 'show':
 
     YuiTooltip::init();
 
-echo UserLink::render(27, "martin");
+echo UserLink::render(27, "martin").' ';
 echo UserLink::render(32, "kotte");
 
     break;

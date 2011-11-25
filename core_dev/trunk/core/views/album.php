@@ -56,10 +56,16 @@ case 'show':
         throw new Exception ('epic HACK attempt');
 
     echo '<h1>Photo album '.$album->name.' by user #'.$this->child.'</h1>';
-    d($album);
+    echo 'Created '.ago($album->time_created).'<br/>';
 
     // shows album content
     $images = File::getByCategory(USER, $this->child2, $this->child);
+
+    if (!$images && $album->owner)
+        echo '&raquo; '.ahref('iview/album/delete/'.$this->child2, 'Delete empty album').'<br/>';
+
+    if ($session->id == $this->child)
+        echo '&raquo; '.ahref('iview/album/upload/'.$this->child2, 'Add photos').'<br/>';
 
     foreach ($images as $im) {
         $a = new XhtmlComponentA();
@@ -67,20 +73,12 @@ case 'show':
         $a->rel  = 'lightbox[album]';
         $a->content = showThumb($im->id, $im->name, 150, 150);
         echo $a->render();
-        echo ahref('iview/photo/show/'.$im->id, 'Photo details');
+        echo ahref('iview/photo/show/'.$im->id, 'Details');
         echo '<br/><br/>';
     }
 
     $lb = new YuiLightbox();
     echo $lb->render();
-
-
-    if (!$images && $album->owner)
-        echo '&raquo; '.ahref('iview/album/delete/'.$this->child2, 'Delete empty album').'<br/>';
-
-    if ($session->id == $this->child)
-        echo '&raquo; '.ahref('iview/album/upload/'.$this->child2, 'Upload photo').'<br/>';
-
     break;
 
 case 'delete':
@@ -130,9 +128,10 @@ case 'upload':
     $form->setHandler('handleUpload');
     echo $form->render();
 
-
-    echo Html5Uploader::albumUploader($this->child);
-
+    // only enable Html5Uploader for supported browsers
+    $b = HttpUserAgent::getBrowser();
+    if ($b->name == 'Firefox' || $b->name == 'Chrome')
+        echo Html5Uploader::albumUploader($this->child);
 
     break;
 
@@ -153,13 +152,14 @@ case 'new':
         if ($session->isSuperAdmin && $p['system'])
             $o->owner = 0; // create a system wide album
 
-        PhotoAlbum::store($o);
+        $album_id = PhotoAlbum::store($o);
 
-        js_redirect('iview/album/overview');
+        js_redirect('iview/album/show/'.$session->id.'/'.$album_id);
     }
 
     $form = new XhtmlForm();
     $form->addInput('name', 'Name');
+    $form->setFocus('name');
 
     if ($session->isSuperAdmin)
         $form->addCheckbox('system', 'System wide album? (SUPERADMIN)');

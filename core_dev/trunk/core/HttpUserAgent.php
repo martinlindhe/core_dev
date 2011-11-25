@@ -80,8 +80,11 @@ class HttpUserAgent
         return false;
     }
 
-    public static function getBrowser($s)
+    public static function getBrowser($s = '')
     {
+        if (!$s)
+            $s = $_SERVER['HTTP_USER_AGENT'];
+
         $o = new WebBrowser();
 
         $o->vendor  = 'Unknown vendor';

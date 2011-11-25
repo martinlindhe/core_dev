@@ -120,7 +120,7 @@ class File
         Sql::pUpdate($q, 'isi', $size, $mime, $id);
     }
 
-    public static function passthru($id)
+    public static function passthru($id) /// XXX enable this in a view instead, it dont belong here
     {
         $path = self::getUploadPath($id);
 
@@ -142,7 +142,7 @@ class File
     }
 
     /**
-     * @param $key array from $_FILES entry
+     * @param $key array from a $_FILES entry
      * @param $blind dont verify if is_uploaded_file(), useful when importing files from other means than HTTP uploads
      * @return file id
      */

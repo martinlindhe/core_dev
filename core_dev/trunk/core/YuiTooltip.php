@@ -43,6 +43,15 @@ class YuiTooltip
         '}'
         );
 
+        $header->embedCss(
+        'span.yui3-hastooltip {'.
+            'border:1px solid #243356;'.
+            'background-color:#406ED9;'.
+            'color:#fff;'.
+            'cursor:pointer;'.
+        '}'
+        );
+
         $header->embedJs(
         'YUI().use("event-mouseenter","event-custom","io-base","widget","widget-position","widget-stack", function(Y)
         {
@@ -480,6 +489,7 @@ class YuiTooltip
                     triggerNodes:".yui3-hastooltip",
                     delegate:document.body,  /// XXXX useful??!
                     shim:false,
+                    showDelay:500,           // 0.5s
                     autoHideDelay:30000,     /// 30s
                     zIndex:2
                 });
@@ -531,19 +541,6 @@ class YuiTooltip
 
         });
             ');
-
-        $header->embedCss(
-        'span.yui3-hastooltip {'.
-            'border:1px solid #243356;'.
-            'background-color:#406ED9;'.
-            'color:#fff;'.
-            'width:25em;'.
-            'margin:20px 0px;'.
-            'padding:2px;'.
-            'cursor:default;'.
-        '}'
-        );
-
 
     }
 

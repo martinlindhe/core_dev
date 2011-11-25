@@ -156,6 +156,8 @@ function elapsed_seconds($s, $precision = 1)
     if ($s < 60)
         return $s.' seconds';
 
+//TODO: show singular units if its "1"
+//XXXX FIXME is the rounding code used incorrectly here ... ???
     if ($s < (60 * 60))
         return round($s / 60, $precision).' minutes';
 

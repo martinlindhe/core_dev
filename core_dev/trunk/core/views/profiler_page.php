@@ -129,7 +129,7 @@ if (function_exists('apc_cache_info')) {
     echo '<br/>';
 }
 
-$client = HttpUserAgent::getBrowser($_SERVER['HTTP_USER_AGENT']);
+$client = HttpUserAgent::getBrowser();
 echo
  'Client: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
 ' using '.
