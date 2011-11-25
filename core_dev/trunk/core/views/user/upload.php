@@ -11,7 +11,6 @@ case 'album':
     // upload multiple images to photo album
     // child = album id
     // XXX verify im the owner of album
-    // XXX allow only images
 
     //XXX SECURITY: verify that destination album is owned by current user
 
@@ -19,7 +18,7 @@ case 'album':
     if(count($_FILES)>0)
     {
         $fileId = File::importImage(USER, $_FILES['upload'], $this->child);
-        echo 'OK:'.$fileId;
+        echo 'OK-1:'.$fileId; // XXX debug output
     }
     else if(isset($_GET['up']))
     {
@@ -31,12 +30,19 @@ case 'album':
         }
 
         $headers = getallheaders();
-        $headers = array_change_key_case($headers, CASE_UPPER);
-d($headers);
-throw new Exception ('XXX anyone need this still?');
-        //if(file_put_contents($upload_folder.'/'.$headers['UP-FILENAME'], $content)) {
-        //  echo 'done';
-        //}
+
+        $tmp_file = tempnam('/tmp', 'fileup-');
+        file_put_contents($tmp_file, $content);
+
+        $key = array(
+            'tmp_name'=>$tmp_file,
+            'name'=>$headers['UP-FILENAME'],
+            'type'=>$headers['UP-TYPE'],
+            'size'=>$headers['UP-SIZE']
+        );
+
+        $fileId = File::importImage(USER, $key, $this->child, true);
+        echo 'OK-2:'.$fileId; // XXX debug output
     }
     break;
 

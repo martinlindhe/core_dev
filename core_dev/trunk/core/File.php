@@ -143,15 +143,16 @@ class File
 
     /**
      * @param $key array from $_FILES entry
+     * @param $blind dont verify if is_uploaded_file(), useful when importing files from other means than HTTP uploads
      * @return file id
      */
-    public static function import($type, &$key, $category = 0)
+    public static function import($type, &$key, $category = 0, $blind = false)
     {
         // ignore empty file uploads
         if (!$key['name'])
             return false;
 
-        if (!is_uploaded_file($key['tmp_name'])) {
+        if (!$blind && !is_uploaded_file($key['tmp_name'])) {
             throw new Exception ('Upload failed for file '.$key['name'] );
             //$error->add('Upload failed for file '.$key['name'] );
             //return;
@@ -174,7 +175,9 @@ class File
 
         $dst_file = self::getUploadPath($fileId);
 
-        if (!move_uploaded_file($key['tmp_name'], $dst_file))
+        if ($blind)
+            rename($key['tmp_name'], $dst_file);
+        else if (!move_uploaded_file($key['tmp_name'], $dst_file))
             throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
 
         chmod($dst_file, 0777);
@@ -188,7 +191,7 @@ class File
     /**
      * Helper function that imports a image file and shrinks it to max allowed dimensions
      */
-    public static function importImage($type, &$key, $category = 0, $max_width = 800, $max_height = 800)
+    public static function importImage($type, &$key, $category = 0, $blind, $max_width = 800, $max_height = 800)
     {
         $error = ErrorHandler::getInstance();
 
@@ -202,7 +205,7 @@ class File
             return false;
         }
 
-        $fileId = self::import($type, $key, $category);
+        $fileId = self::import($type, $key, $category, $blind);
         if (!$fileId)
             return false;
 
