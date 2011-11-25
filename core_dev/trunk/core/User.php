@@ -51,9 +51,30 @@ function getUserTypes()
 /** XXX WIP: these links should be auto decorated by YuiTooltip */
 class UserLink
 {
-    public static function render($id, $name)
+    public static function render($id)
     {
-        return '<span class="yui3-hastooltip" id="tt_usr_'.$id.'">'.$name.'</span>';
+        $u = User::get($id);
+        if (!$u)
+            return 'no such user';
+
+        $res = '';
+
+        switch ($u->type) {
+        case USER_REGULAR:
+            //$res .= '(reg)';
+            break;
+        case USER_FACEBOOK:
+//            '<fb:name uid="'.$u->name.'" useyou="false"></fb:name>';
+            //$pic = UserSetting::get($u->id, 'fb_picture');
+            $name = UserSetting::get($u->id, 'fb_name');
+            $res .= $name.' (facebook)';
+            break;
+        default: throw new Exception ('hm');
+        }
+
+        $res .= '<span class="yui3-hastooltip" id="tt_usr_'.$u->id.'">'.$u->name.'</span>';
+
+        return $res;
     }
 }
 

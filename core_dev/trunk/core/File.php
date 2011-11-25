@@ -188,6 +188,19 @@ class File
      */
     public static function importImage($type, &$key, $category = 0, $max_width = 800, $max_height = 800)
     {
+        $error = ErrorHandler::getInstance();
+
+        // need to read from disk because $key['mime'] is sent by client & can be anything
+        $mime = get_mimetype_of_file($key['tmp_name']);
+        switch ($mime) {
+        case 'image/jpeg': break;
+        case 'image/png': break;
+        case 'image/gif': break;
+        default:
+            $error->add('Uploaded file '.$key['name'].' is not an image (mimetype '.$key['type'].')');
+            return false;
+        }
+
         $fileId = self::import($type, $key, $category);
 
         $im = new ImageResizer( File::get($fileId) );

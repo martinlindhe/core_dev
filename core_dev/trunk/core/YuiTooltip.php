@@ -480,6 +480,7 @@ class YuiTooltip
                     triggerNodes:".yui3-hastooltip",
                     delegate:document.body,  /// XXXX useful??!
                     shim:false,
+                    autoHideDelay:30000,     /// 30s
                     zIndex:2
                 });
                 tt.render();

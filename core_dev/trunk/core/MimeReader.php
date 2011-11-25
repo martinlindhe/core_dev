@@ -98,9 +98,9 @@ class MimeReader
     function parseHeader($raw_head)
     {
         $headers = iconv_mime_decode_headers($raw_head);
-        
+
         // lowercase array keys
-        return array_combine(array_map('strtolower', array_keys($headers)), array_values($headers));
+        return array_change_key_case($headers, CASE_LOWER);
     }
 
     /**

@@ -113,6 +113,7 @@ class RequestHandler
         if (class_exists('SessionHandler') && !in_array($this->_controller, $this->exclude_session))
         {
             // resume session & handle login/logout/register requests to any page
+            //XXXX CLEANUP: move these to built in views
             $view = new ViewModel('views/handle_request.php', $this);
             $page->attach( $view->render() );
         }
@@ -120,7 +121,10 @@ class RequestHandler
         switch ($this->_controller) {
         case 'coredev': $file = $page->getCoreDevInclude().'views/coredev.php'; break;
         case 'iview':   $file = $page->getCoreDevInclude().'views/iview.php'; break;
-        default: $file = 'views/'.$this->_controller.'.php';
+
+        case 'a':       $file = $page->getCoreDevInclude().'views/admin/'.$this->_view.'.php'; break;
+        case 'u':       $file = $page->getCoreDevInclude().'views/user/'.$this->_view.'.php'; break;
+        default:        $file = 'views/'.$this->_controller.'.php';
         }
 
         if (!file_exists($file))
@@ -128,6 +132,10 @@ class RequestHandler
 
         // expose request params for the view
         $view = new ViewModel($file);
+        // XXX BUG: naming should be set correctly according to the hierarchy of the url, in reverse,
+        // like: views/user/upload.php takes album/id parameters
+        // so then in upload.php, "album" should be in the view param, and id in the owner param
+        // -- now "album" is in owner, and "id" in child
         $view->view   = $this->_view;
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;

@@ -6,8 +6,8 @@ require_once('PhotoAlbum.php');
 
 require_once('Image.php'); // for showThumb()
 require_once('ImageResizer.php');
-
 require_once('YuiLightbox.php');
+require_once('Html5Uploader.php');
 
 switch ($this->owner) {
 case 'overview':
@@ -106,20 +106,12 @@ case 'upload':
     function handleUpload($p)
     {
         $session = SessionHandler::getInstance();
-        $error   = ErrorHandler::getInstance();
-
-        switch ($p['img']['type']) {
-        case 'image/jpeg': break;
-        case 'image/png': break;
-        case 'image/gif': break;
-        default:
-            $error->add('Uploaded file is not an image = '.$p['img']['type']);
-            return false;
-        }
-
+//XXX SECURITY: verify that destination album is owned by current user
         $fileId = File::importImage(USER, $p['img'], $p['album']);
+        if ($fileId)
+            js_redirect('iview/album/show/'.$session->id.'/'.$p['album']);
 
-        js_redirect('iview/album/show/'.$session->id.'/'.$p['album']);
+        return false;
     }
 
     if (!$this->child)
@@ -132,14 +124,16 @@ case 'upload':
     echo '<h1>Upload photo to album '.$album->name.'</h1>';
 
     $form = new XhtmlForm();
-
     $form->addHidden('album', $this->child);
     $form->addFile('img', 'Select file');
-
     $form->addSubmit('Save');
     $form->setHandler('handleUpload');
-
     echo $form->render();
+
+
+    echo Html5Uploader::albumUploader($this->child);
+
+
     break;
 
 case 'new':

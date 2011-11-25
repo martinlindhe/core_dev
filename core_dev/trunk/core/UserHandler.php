@@ -89,7 +89,7 @@ class UserHandler
             $error->add('Username taken');
             return false;
         }
-        
+
         if (ReservedWord::isReservedUsername($username)) {
             $error->add('Username is reserved');
             return false;
@@ -224,27 +224,6 @@ class UserHandler
         User::store($u);
         return true;
     }
-
-
-/*
-    function render() /// XXXX move to a view
-    {
-        if (!$this->id)
-            return t('Anonymous');
-
-        switch ($this->type) {
-        case USER_REGULAR: return $this->name;
-        case USER_FACEBOOK:
-            $name = UserSetting::get($this->id, 'fb_name');
-            //$pic = UserSetting::get($this->id, 'fb_picture');
-            return $name.' (facebook)';
-//            return '<fb:name uid="'.$this->name.'" useyou="false"></fb:name>';
-
-        default: throw new Exception ('hm');
-        }
-    }
-*/
-
 
 }
 

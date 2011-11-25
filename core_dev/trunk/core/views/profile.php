@@ -27,11 +27,10 @@ if (Bookmark::exists(BOOKMARK_USERBLOCK, $session->id, $user_id)) {
 echo '<h1>Profile for '.$user->name.'</h1>';
 
 if (UserHandler::isOnline($user_id)) {
-    echo 'Is online<br/>';
-    echo 'Last active: '.ago($user->time_last_active).'<br/>';
+    echo 'Last active '.ago($user->time_last_active).'<br/>';
     echo 'Otillgänglig för chat?: '.UserSetting::get($user_id, 'chat_off').'<br/>';
 } else {
-    echo 'Is offline<br/>';
+    echo 'Offline<br/>';
 }
 
 echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
