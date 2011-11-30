@@ -19,8 +19,8 @@ Views:
             views/core     = iview.php, coredev.php
             views/tools    = portcheck.php, ipcheck.php
 
-            views/user     =
-            views/admin
+            views/admin    = phpinfo.php, userdata.php
+            views/user     = login.php, register.php, upload.php
 
 
 Authentication:

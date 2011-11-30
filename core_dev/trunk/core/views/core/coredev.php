@@ -14,7 +14,7 @@ switch ($this->view) {
 case 'error':
     $header->setTitle( t('Error message') );
     echo $error->render(true);
-    echo ahref('iview/login', 'Log in').'<br/>';
+    echo ahref('u/login', 'Log in').'<br/>';
     echo ahref('./', 'Go to start page').'<br/>';
     break;
 
@@ -61,13 +61,6 @@ case 'image':
 
     return;
 
-case 'reset_password':
-    // allows users who lost their password to reset it by following a email-link to this view
-    $view = new ViewModel('views/session_reset_pwd.php');
-    $view->registerVar('token', $this->owner);
-    echo $view->render();
-    break;
-
 case 'admin':
     $session->requireSuperAdmin();
 
@@ -88,7 +81,7 @@ case 'admin':
     echo '<br/>';
     echo ahref('iview/chatrooms/list', 'Chatrooms').'<br/>';
     echo '<br/>';
-    echo ahref('iview/userdata/list', 'Userdata types').'<br/>';
+    echo ahref('a/userdata/list', 'Userdata types').'<br/>';
     break;
 
 case 'robots':

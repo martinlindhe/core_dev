@@ -81,7 +81,7 @@ The link will expire in @EXPIRETIME@';
 
         $page = XmlDocumentHandler::getInstance();
 
-        $url = $page->getUrl().'coredev/reset_password/'.$code;
+        $url = $page->getUrl().'u/reset_pwd/'.$code;
 
         $replacement = array(
             $user->getName(),

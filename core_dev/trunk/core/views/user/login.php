@@ -29,14 +29,14 @@ if ($show_reg_div)
 {
     // this must be included here so registration handling can happen first
     echo '<div id="'.$reg_div.'" style="display:none;">';
-    include('session_register.php');
+    include('register.php');
     echo '</div>';
 }
 
 if ($show_recover_div)
 {
     echo '<div id="'.$recover_div.'" style="display:none;">';
-    include('session_forgot_pwd.php');
+    include('forgot_pwd.php');
     echo '</div>';
 }
 

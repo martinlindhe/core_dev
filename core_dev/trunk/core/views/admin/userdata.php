@@ -16,7 +16,7 @@ case 'list':
     $list = UserDataField::getAll();
 
     $dt = new YuiDatatable();
-    $dt->addColumn('id',    'Name', 'link', 'iview/userdata/edit/', 'name');
+    $dt->addColumn('id',    'Name', 'link', 'a/userdata/edit/', 'name');
     $dt->addColumn('label', 'Label');
     $dt->addColumn('type',  'Type', 'array', UserDataField::getTypes() );
 
@@ -24,7 +24,7 @@ case 'list':
     echo $dt->render();
 
     echo '<br/>';
-    echo '&raquo; '.ahref('iview/userdata/new', 'Create new field');
+    echo '&raquo; '.ahref('a/userdata/new', 'Create new field');
     break;
 
 case 'new':
@@ -38,9 +38,9 @@ case 'new':
         $id = UserDataField::store($f);
 
         if ($f->type == UserDataField::RADIO)
-            js_redirect('iview/userdata/edit/'.$id);
+            js_redirect('a/userdata/edit/'.$id);
         else
-            js_redirect('iview/userdata/list');
+            js_redirect('a/userdata/list');
     }
 
     echo '<h1>New userdata field</h1>';
@@ -87,7 +87,7 @@ case 'edit':
 
         }
 
-        js_redirect('iview/userdata/list');
+        js_redirect('a/userdata/list');
     }
 
     echo '<h1>Edit userdata field</h1>';
