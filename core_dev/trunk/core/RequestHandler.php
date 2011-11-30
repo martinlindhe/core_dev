@@ -119,8 +119,8 @@ class RequestHandler
         }
 
         switch ($this->_controller) {
-        case 'coredev': $file = $page->getCoreDevInclude().'views/coredev.php'; break;
-        case 'iview':   $file = $page->getCoreDevInclude().'views/iview.php'; break;
+        case 'coredev': $file = $page->getCoreDevInclude().'views/core/coredev.php'; break;
+        case 'iview':   $file = $page->getCoreDevInclude().'views/core/iview.php'; break;
 
         case 'a':       $file = $page->getCoreDevInclude().'views/admin/'.$this->_view.'.php'; break;
         case 'u':       $file = $page->getCoreDevInclude().'views/user/'.$this->_view.'.php'; break;

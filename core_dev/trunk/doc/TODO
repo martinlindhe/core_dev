@@ -16,10 +16,11 @@ Views:
     * reorganize:
         - move trunk/core/views to trunk/views
         - split to subdirs:
+            views/core     = iview.php, coredev.php
             views/tools    = portcheck.php, ipcheck.php
 
+            views/user     =
             views/admin
-            views/core     = iview.php, coredev.php
 
 
 Authentication:
