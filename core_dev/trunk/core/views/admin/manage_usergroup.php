@@ -42,6 +42,6 @@ echo '<br/><br/>';
 echo '<h1>Group members</h1>';
 
 foreach ($grp->getMembers() as $user)
-    echo ahref('iview/manage_user/'.$user->id, $user->name).'<br/>';
+    echo ahref('a/manage_user/'.$user->id, $user->name).'<br/>';
 
 ?>

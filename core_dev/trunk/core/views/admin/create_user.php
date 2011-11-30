@@ -26,7 +26,7 @@ if (!empty($_POST))
         if (!empty($_POST['u_grp']))
             $user->addToGroup($_POST['u_grp']);
 
-        echo '<div class="good">New user created. '.ahref('iview/manage_user/'.$user_id, $username).'</div>';
+        echo '<div class="good">New user created. '.ahref('a/manage_user/'.$user_id, $username).'</div>';
     }
 }
 

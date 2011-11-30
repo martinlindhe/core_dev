@@ -5,15 +5,15 @@
 
 //TODO: fix up row coloring with YuiDatatable
 
-require_once('UserList.php');
-require_once('YuiDatatable.php');
-
 if (!$session->isAdmin)
     return;
 
+require_once('UserList.php');
+require_once('YuiDatatable.php');
+
 echo '<h1>Manage users</h1>';
-echo 'All users: '.ahref('iview/manage_users/', UserList::getCount()).'<br/>';
-echo 'Users online: '.ahref('iview/manage_users/?online', UserList::onlineCount()).'<br/>';
+echo 'All users: '.ahref('a/manage_users/', UserList::getCount()).'<br/>';
+echo 'Users online: '.ahref('a/manage_users/?online', UserList::onlineCount()).'<br/>';
 
 $filter = '';
 if (!empty($_POST['usearch'])) $filter = $_POST['usearch'];
@@ -42,7 +42,7 @@ if ($filter)
 echo ' ('.count($list).' hits)</h2>';
 
 $dt = new YuiDatatable();
-$dt->addColumn('id',    'Username', 'link', 'iview/manage_user/', 'name');
+$dt->addColumn('id',    'Username', 'link', 'a/manage_user/', 'name');
 $dt->addColumn('email',             'E-mail');
 $dt->addColumn('time_last_active',  'Last active');
 $dt->addColumn('last_ip',           'Last IP');
@@ -74,6 +74,6 @@ echo '<br/>';
 
 
 if ($session->isSuperAdmin)
-    echo '&raquo; '.ahref('iview/create_user/', 'Create new user');
+    echo '&raquo; '.ahref('a/create_user/', 'Create new user');
 
 ?>

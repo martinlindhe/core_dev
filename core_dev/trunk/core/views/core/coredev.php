@@ -65,11 +65,11 @@ case 'admin':
     $session->requireSuperAdmin();
 
     echo '<h1>core_dev admin</h1>';
-    echo ahref('iview/moderation', 'Moderation queue').'<br/>';
+    echo ahref('a/moderation', 'Moderation queue').'<br/>';
     echo '<br/>';
-    echo ahref('iview/manage_users', 'Manage users').'<br/>';
-    echo ahref('iview/manage_usergroups', 'Manage user groups').'<br/>';
-    echo ahref('iview/manage_files', 'Manage files').'<br/>';
+    echo ahref('a/manage_users', 'Manage users').'<br/>';
+    echo ahref('a/manage_usergroups', 'Manage user groups').'<br/>';
+    echo ahref('a/manage_files', 'Manage files').'<br/>';
     echo ahref('a/reserved_words', 'Reserved words').'<br/>';
     echo '<br/>';
     echo ahref('a/phpinfo', 'phpinfo()').'<br/>';

@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-// see views/comments.php for a default comment list view
+// see views/user/comments.php for a default comment list view
 
 require_once('SqlObject.php');
 require_once('constants.php');
@@ -16,7 +16,7 @@ class CommentViewer
 {
     public static function render($type, $owner)
     {
-        $view = new ViewModel('views/comments.php');
+        $view = new ViewModel('views/user/comments.php');
         $view->registerVar('type', $type);
         $view->registerVar('owner', $owner);
         return $view->render();

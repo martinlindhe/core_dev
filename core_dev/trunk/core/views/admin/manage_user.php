@@ -88,7 +88,7 @@ echo 'This user is member of the following groups:<br/>';
 
 foreach (UserHandler::getGroups($user->id) as $g) {
     echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
-    echo ahref('iview/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
+    echo ahref('a/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
 }
 echo '<br/>';
 
