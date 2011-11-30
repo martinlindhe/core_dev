@@ -80,6 +80,7 @@ class ErrorHandler
         case E_WARNING:           $type = 'E_WARNING'; break;
         case E_PARSE:             $type = 'E_PARSE'; break;
         case E_NOTICE:            $type = 'E_NOTICE'; break;
+        case E_COMPILE_ERROR:     $type = 'E_COMPILE_ERROR'; break;
         case E_USER_ERROR:        $type = 'E_USER_ERROR'; break;
         case E_USER_WARNING:      $type = 'E_USER_WARNING'; break;
         case E_USER_NOTICE:       $type = 'E_USER_NOTICE'; break;

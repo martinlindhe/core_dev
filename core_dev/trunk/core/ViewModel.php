@@ -45,7 +45,7 @@ class ViewModel extends ArrayObject
         $caller = $this->caller;
 
         ob_start();
-        include($this->template);
+        require($this->template);
         return ob_get_clean();
     }
 }
