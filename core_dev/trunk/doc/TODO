@@ -26,6 +26,7 @@ Views:
 
             views/admin    = phpinfo.php, userdata.php
             views/user     = login.php, register.php, upload.php
+            views/profiler = page, memcached, mysql profilers
 
 
 Authentication:

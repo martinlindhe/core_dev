@@ -273,7 +273,7 @@ class XmlDocumentHandler extends CoreBase
             }
 
             if ($this->enable_profiler) {
-                $view = new ViewModel('views/profiler_page.php');
+                $view = new ViewModel('views/profiler/page.php');
                 $out .= $view->render();
             }
         }
