@@ -29,7 +29,7 @@ class ChatRoomUpdater
 
         $session = SessionHandler::getInstance();
 
-        $interval = 5 * 1000; // milliseconds
+        $interval = 1000 * parse_duration('1s'); // milliseconds
         $locale = 'sv-SE';
 
         $header->registerJsFunction(

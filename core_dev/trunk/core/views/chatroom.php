@@ -101,8 +101,6 @@ case 'show':
     $form->disableAutocomplete();
     echo $form->render();
 
-
-
     YuiTooltip::init();
 
 echo UserLink::render(27, "martin").' ';

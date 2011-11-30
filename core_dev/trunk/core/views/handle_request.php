@@ -12,8 +12,6 @@ if ($session->id && $session->ip && ($session->ip != client_ip()) )
     dp($msg);
     $session->end();
 
-    throw new exception ( $msg );
-
 //    $session->errorPage();
 }
 else if ($session->id && $session->getLastActive() < (time() - $session->timeout))

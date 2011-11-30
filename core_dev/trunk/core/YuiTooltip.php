@@ -53,7 +53,7 @@ class YuiTooltip
         );
 
         $header->embedJs(
-        'YUI().use("event-mouseenter","event-custom","io-base","widget","widget-position","widget-stack", function(Y)
+        'YUI().use("event-mouseenter","event-custom","io-base","widget","widget-position","widget-stack","node-event-delegate","event-key", function(Y)
         {
             var Lang = Y.Lang,
                 Node = Y.Node,
@@ -487,7 +487,6 @@ class YuiTooltip
             '
                 var tt = new Tooltip({
                     triggerNodes:".yui3-hastooltip",
-                    delegate:document.body,  /// XXXX useful??!
                     shim:false,
                     showDelay:500,           // 0.5s
                     autoHideDelay:30000,     /// 30s
