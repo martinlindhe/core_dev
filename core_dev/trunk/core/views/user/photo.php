@@ -41,13 +41,13 @@ case 'show':
     echo $lb->render().'<br/>';
 
     if ($session->id && $session->id != $f->uploader)
-        echo '&raquo; '.ahref('iview/report/photo/'.$f->id, 'Report photo').'<br/>';
+        echo '&raquo; '.ahref('u/report/photo/'.$f->id, 'Report photo').'<br/>';
 
     if ($session->id && $session->id == $f->uploader) {
-        echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/90', 'Rotate left').'<br/>';
-        echo '&raquo; '.ahref('iview/photo/rotate/'.$f->id.'/270', 'Rotate right').'<br/>';
+        echo '&raquo; '.ahref('u/photo/rotate/'.$f->id.'/90', 'Rotate left').'<br/>';
+        echo '&raquo; '.ahref('u/photo/rotate/'.$f->id.'/270', 'Rotate right').'<br/>';
         echo '<br/>';
-        echo '&raquo; '.ahref('iview/photo/delete/'.$f->id, 'Delete photo').'<br/>';
+        echo '&raquo; '.ahref('u/photo/delete/'.$f->id, 'Delete photo').'<br/>';
     }
     break;
 
@@ -73,7 +73,7 @@ case 'rotate':
     $im->rotate($this->child2);
     $im->render( $im->mimetype, File::getUploadPath($f->id) );
     File::sync($fileId); //updates tblFiles.size
-    js_redirect('iview/photo/show/'.$f->id);
+    js_redirect('u/photo/show/'.$f->id);
     break;
 
 case 'delete':
@@ -88,7 +88,7 @@ case 'delete':
         }
 
         File::delete($this->child);
-        js_redirect('iview/album/show/'.$session->id.'/'.$im->category);
+        js_redirect('u/album/show/'.$session->id.'/'.$im->category);
     }
     break;
 

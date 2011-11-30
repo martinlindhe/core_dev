@@ -96,11 +96,11 @@ if ($session->id && $user_id != $session->id) {
     } else {
         echo '&raquo; '.ahref('iview/block/user/'.$user_id, 'Block user').'<br/>';
     }
-    echo '&raquo; '.ahref('iview/report/user/'.$user_id, 'Report user').'<br/>';
+    echo '&raquo; '.ahref('u/report/user/'.$user_id, 'Report user').'<br/>';
 }
 
 echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
-echo '&raquo; '.ahref('iview/album/overview/'.$user_id, 'Photos').'<br/>';
+echo '&raquo; '.ahref('u/album/overview/'.$user_id, 'Photos').'<br/>';
 
 echo '<br/>';
 

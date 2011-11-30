@@ -27,7 +27,7 @@ case 'overview':
 
     foreach ($albums as $album) {
         // TODO: show number of pics in each album
-        echo ahref('iview/album/show/'.$user_id.'/'.$album->id, $album->name);
+        echo ahref('u/album/show/'.$user_id.'/'.$album->id, $album->name);
         if (!$album->owner) echo ' (global)';
         echo '<br/>';
     }
@@ -35,7 +35,7 @@ case 'overview':
     echo '<br/>';
 
     if ($user_id == $session->id)
-        echo '&raquo; '.ahref('iview/album/new', 'New album');
+        echo '&raquo; '.ahref('u/album/new', 'New album');
 
     break;
 
@@ -62,10 +62,10 @@ case 'show':
     $images = File::getByCategory(USER, $this->child2, $this->child);
 
     if (!$images && $album->owner)
-        echo '&raquo; '.ahref('iview/album/delete/'.$this->child2, 'Delete empty album').'<br/>';
+        echo '&raquo; '.ahref('u/album/delete/'.$this->child2, 'Delete empty album').'<br/>';
 
     if ($session->id == $this->child)
-        echo '&raquo; '.ahref('iview/album/upload/'.$this->child2, 'Add photos').'<br/>';
+        echo '&raquo; '.ahref('u/album/upload/'.$this->child2, 'Add photos').'<br/>';
 
     foreach ($images as $im) {
         $a = new XhtmlComponentA();
@@ -73,7 +73,7 @@ case 'show':
         $a->rel  = 'lightbox[album]';
         $a->content = showThumb($im->id, $im->name, 150, 150);
         echo $a->render();
-        echo ahref('iview/photo/show/'.$im->id, 'Details');
+        echo ahref('u/photo/show/'.$im->id, 'Details');
         echo '<br/><br/>';
     }
 
@@ -93,7 +93,7 @@ case 'delete':
         }
 
         PhotoAlbum::delete($this->child);
-        js_redirect('iview/album/overview');
+        js_redirect('u/album/overview');
     }
     break;
 
@@ -107,7 +107,7 @@ case 'upload':
 //XXX SECURITY: verify that destination album is owned by current user
         $fileId = File::importImage(USER, $p['img'], $p['album']);
         if ($fileId)
-            js_redirect('iview/album/show/'.$session->id.'/'.$p['album']);
+            js_redirect('u/album/show/'.$session->id.'/'.$p['album']);
 
         return false;
     }
@@ -154,7 +154,7 @@ case 'new':
 
         $album_id = PhotoAlbum::store($o);
 
-        js_redirect('iview/album/show/'.$session->id.'/'.$album_id);
+        js_redirect('u/album/show/'.$session->id.'/'.$album_id);
     }
 
     $form = new XhtmlForm();
