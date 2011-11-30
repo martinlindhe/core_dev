@@ -5,7 +5,7 @@
 
 //STATUS: works (???)
 
-//TODO: use js from views/js_validation.php to check password
+//TODO: use js from views/core/js_validation.php to check password
 //XXX use XhtmlForm?
 
 require_once('ForgotPasswordHandler.php');

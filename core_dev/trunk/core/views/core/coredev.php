@@ -79,7 +79,7 @@ case 'admin':
     echo ahref('iview/manage_files', 'Manage files').'<br/>';
     echo ahref('iview/reserved_words', 'Reserved words').'<br/>';
     echo '<br/>';
-    echo ahref('iview/phpinfo', 'phpinfo()').'<br/>';
+    echo ahref('a/phpinfo', 'phpinfo()').'<br/>';
     echo ahref('iview/compatiblity', 'Compatibility check').'<br/>';
     echo ahref('iview/timezones', 'Time zones').'<br/>';
     echo ahref('iview/currency', 'Currencies').'<br/>';

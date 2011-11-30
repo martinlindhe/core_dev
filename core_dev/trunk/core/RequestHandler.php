@@ -114,7 +114,7 @@ class RequestHandler
         {
             // resume session & handle login/logout/register requests to any page
             //XXXX CLEANUP: move these to built in views
-            $view = new ViewModel('views/handle_request.php', $this);
+            $view = new ViewModel('views/core/handle_request.php', $this);
             $page->attach( $view->render() );
         }
 

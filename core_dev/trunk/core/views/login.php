@@ -41,7 +41,7 @@ if ($show_recover_div)
 }
 
 // include js validation snippets
-$view = new ViewModel('views/js_validation.php');
+$view = new ViewModel('views/core/js_validation.php');
 echo $view->render();
 
 $header->embedCss(
