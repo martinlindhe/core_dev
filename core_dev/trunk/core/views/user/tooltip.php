@@ -1,7 +1,7 @@
 <?php
 
 switch ($this->owner) {
-case 'tooltip';
+case 'user';
     // returns little box of html to show in tooltip userinfo, fetched as a XHR
     // child = user id
     $page->disableDesign();

@@ -137,7 +137,7 @@ case 'handle':
             echo 'Uploaded by '.$u->name;
         }
 
-        $view = new ViewModel('views/file_details.php');
+        $view = new ViewModel('views/user/file_details.php');
         $view->registerVar('owner', $o->reference);
         echo $view->render();
 

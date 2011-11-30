@@ -517,7 +517,7 @@ class YuiTooltip
                     switch (p1) {
                     case "tt_usr_":
     //                    console.log("show user "+p2);
-                        var uri = "/iview/user/tooltip/"+p2;
+                        var uri = "/u/tooltip/user/"+p2;
 
                         // subscribe once to event io:complete
                         Y.once("io:complete", function (id, o)'.

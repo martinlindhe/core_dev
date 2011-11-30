@@ -112,7 +112,7 @@ class PollManager extends PollWidget
 
     function render()
     {
-        $view = new ViewModel('views/admin_PollManager.php', $this);
+        $view = new ViewModel('views/admin/polls.php', $this);
         return $view->render();
     }
 

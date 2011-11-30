@@ -27,7 +27,7 @@ if (!$user->id) {
 
 echo '<h1>User admin for '.$user->name.'</h1>';
 
-echo '&raquo; '.ahref('iview/profile/'.$user->id, 'Show profile').'<br/>';
+echo '&raquo; '.ahref('u/profile/'.$user->id, 'Show profile').'<br/>';
 
 if ($user->type == USER_FACEBOOK)
 {

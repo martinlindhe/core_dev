@@ -129,7 +129,7 @@ class RequestHandler
         }
 
         if (!file_exists($file))
-            $file = 'views/error_404.php';
+            $file = 'views/error/404.php';
 
         // expose request params for the view
         $view = new ViewModel($file);

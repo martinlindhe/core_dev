@@ -17,7 +17,7 @@ case 'user':
     {
         ModerationObject::add(MODERATE_USER, $p['id'], $p['reason']);
 
-        js_redirect('iview/profile/'.$p['id']);
+        js_redirect('u/profile/'.$p['id']);
     }
 
     $u = User::get($this->child);

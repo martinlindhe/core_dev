@@ -44,7 +44,7 @@ case 'default':
             }
         }
 
-        js_redirect('iview/profile');
+        js_redirect('u/profile');
     }
 
     echo '<h1>Edit your profile</h1>';
@@ -110,8 +110,8 @@ case 'default':
 
     echo '<br/><br/>';
 
-    echo '&raquo; '.ahref('iview/profile_edit/username', 'Change username').'<br/>';
-    echo '&raquo; '.ahref('iview/profile_edit/password', 'Change password').'<br/>';
+    echo '&raquo; '.ahref('u/profile_edit/username', 'Change username').'<br/>';
+    echo '&raquo; '.ahref('u/profile_edit/password', 'Change password').'<br/>';
 
     echo '&raquo; '.ahref('u/block/manage', 'Manage blocked users').'<br/>';
     break;
@@ -188,7 +188,7 @@ case 'password':
 
         UserHandler::setPassword($session->id, $p['new_pwd']);
 
-        js_redirect('iview/profile_edit');
+        js_redirect('u/profile_edit');
     }
 
     echo '<h1>Change password</h1>';

@@ -14,7 +14,7 @@ case 'user':
         echo ' ('.count($list).' hits)</h2>';
 
         $dt = new YuiDatatable();
-        $dt->addColumn('id',    'Username', 'link', 'iview/profile/', 'name');
+        $dt->addColumn('id',    'Username', 'link', 'u/profile/', 'name');
         $dt->addColumn('time_last_active',  'Last active');
         $dt->setDataSource($list);
 

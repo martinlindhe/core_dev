@@ -21,7 +21,7 @@ $list = File::getList();
 
 foreach ($list as $f)
 {
-    $view = new ViewModel('views/file_details.php');
+    $view = new ViewModel('views/user/file_details.php');
     $view->registerVar('owner', $f->id);
     echo $view->render();
     echo '<br/>';

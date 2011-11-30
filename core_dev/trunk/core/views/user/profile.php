@@ -82,7 +82,7 @@ if ($pic_id)
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id) {
-    echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
+    echo '&raquo; '.ahref('u/messages/send/'.$user_id, 'Send message').'<br/>';
 
     if (Bookmark::exists(BOOKMARK_FAVORITEUSER, $user_id, $session->id)) {
         echo '&raquo; '.ahref('u/bookmark/removeuser/'.$user_id, 'Remove favorite').'<br/>';
@@ -99,12 +99,12 @@ if ($session->id && $user_id != $session->id) {
     echo '&raquo; '.ahref('u/report/user/'.$user_id, 'Report user').'<br/>';
 }
 
-echo '&raquo; '.ahref('iview/profile_guestbook/'.$user_id, 'Guestbook').'<br/>';
+echo '&raquo; '.ahref('u/guestbook/'.$user_id, 'Guestbook').'<br/>';
 echo '&raquo; '.ahref('u/album/overview/'.$user_id, 'Photos').'<br/>';
 
 echo '<br/>';
 
 if ($session->id && $user_id == $session->id)
-    echo '&raquo; '.ahref('iview/profile_edit', 'Edit profile').'<br/>';
+    echo '&raquo; '.ahref('u/profile_edit', 'Edit profile').'<br/>';
 
 ?>

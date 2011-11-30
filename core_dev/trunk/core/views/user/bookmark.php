@@ -25,7 +25,7 @@ case 'listusers':
     foreach ($bookmarks as $bm)
     {
         $u = User::get($bm->value);
-        echo ahref('iview/profile/'.$u->id, $u->name);
+        echo ahref('u/profile/'.$u->id, $u->name);
         echo ' ';
         echo ahref('u/bookmark/removeuser/'.$u->id, 'Remove');
         echo '<br/>';
