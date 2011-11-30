@@ -105,6 +105,6 @@ echo '&raquo; '.ahref('u/album/overview/'.$user_id, 'Photos').'<br/>';
 echo '<br/>';
 
 if ($session->id && $user_id == $session->id)
-    echo '&raquo; '.ahref('u/profile_edit', 'Edit profile').'<br/>';
+    echo '&raquo; '.ahref('u/edit', 'Edit profile').'<br/>';
 
 ?>

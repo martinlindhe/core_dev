@@ -110,8 +110,8 @@ case 'default':
 
     echo '<br/><br/>';
 
-    echo '&raquo; '.ahref('u/profile_edit/username', 'Change username').'<br/>';
-    echo '&raquo; '.ahref('u/profile_edit/password', 'Change password').'<br/>';
+    echo '&raquo; '.ahref('u/edit/username', 'Change username').'<br/>';
+    echo '&raquo; '.ahref('u/edit/password', 'Change password').'<br/>';
 
     echo '&raquo; '.ahref('u/block/manage', 'Manage blocked users').'<br/>';
     break;
@@ -188,7 +188,7 @@ case 'password':
 
         UserHandler::setPassword($session->id, $p['new_pwd']);
 
-        js_redirect('u/profile_edit');
+        js_redirect('u/edit');
     }
 
     echo '<h1>Change password</h1>';
