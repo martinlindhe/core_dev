@@ -8,13 +8,13 @@ switch ($this->owner) {
 case 'adduser':
     // child = user id
     Bookmark::create(BOOKMARK_FAVORITEUSER, $this->child);
-    js_redirect('iview/bookmark/listusers');
+    js_redirect('u/bookmark/listusers');
     break;
 
 case 'removeuser':
     // child = user id
     Bookmark::remove(BOOKMARK_FAVORITEUSER, $this->child);
-    js_redirect('iview/bookmark/listusers');
+    js_redirect('u/bookmark/listusers');
     break;
 
 
@@ -27,7 +27,7 @@ case 'listusers':
         $u = User::get($bm->value);
         echo ahref('iview/profile/'.$u->id, $u->name);
         echo ' ';
-        echo ahref('iview/bookmark/removeuser/'.$u->id, 'Remove');
+        echo ahref('u/bookmark/removeuser/'.$u->id, 'Remove');
         echo '<br/>';
     }
     break;

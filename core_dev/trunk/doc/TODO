@@ -1,6 +1,11 @@
 Autumn 2011 cleanup:
 
 
+LOGOUT handling: move to a separate view in views/user/logout.php  (from views/core/request_handler.php)
+
+
+
+
 BUGS:
     * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
     * later: fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)

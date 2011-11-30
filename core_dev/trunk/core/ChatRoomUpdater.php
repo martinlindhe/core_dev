@@ -67,9 +67,9 @@ class ChatRoomUpdater
                 'var latest;'.
 
                 'if (typeof ts === "undefined") {'.
-                    'var uri = "/iview/chatroom/update/" + '.$room_id.';'.
+                    'var uri = "/u/chatroom/update/" + '.$room_id.';'.
                 '} else {'.
-                    'var uri = "/iview/chatroom/update/" + '.$room_id.' + "?ts=" + ts;'.
+                    'var uri = "/u/chatroom/update/" + '.$room_id.' + "?ts=" + ts;'.
                 '}'.
 
                 'function complete(id, o)'.
@@ -124,7 +124,7 @@ class ChatRoomUpdater
                 'if (!frm.msg.value)'.
                     'return false;'.
 
-                'var uri = "/iview/chatroom/send/" + '.$room_id.' + "?m=" + frm.msg.value;'.
+                'var uri = "/u/chatroom/send/" + '.$room_id.' + "?m=" + frm.msg.value;'.
 
                 'var request = Y.io(uri);'.
 

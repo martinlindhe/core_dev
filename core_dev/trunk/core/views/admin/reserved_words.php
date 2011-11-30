@@ -1,7 +1,11 @@
 <?php
 
+//STATUS: early wip!
+
 //TODO: ability to add new word
 //TODO: ability to remove a word
+
+$session->requireSuperAdmin();
 
 require_once('ReservedWord.php');
 

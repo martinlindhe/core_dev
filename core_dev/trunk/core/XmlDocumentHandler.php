@@ -237,7 +237,7 @@ class XmlDocumentHandler extends CoreBase
             $out .= $view->render();
         }
 
-        $view = new ViewModel('views/required_js.php');
+        $view = new ViewModel('views/core/required_js.php');
         $out .= $view->render();
 
         foreach ($this->objs as $obj)

@@ -17,14 +17,14 @@ case 'list':
     $list = ChatRoom::getList();
 
     foreach ($list as $cr) {
-        echo ahref('iview/chatrooms/edit/'.$cr->id, $cr->name);
+        echo ahref('a/chatroom/edit/'.$cr->id, $cr->name);
         if ($cr->locked_by)
             echo ' locked by '.$cr->locked_by.', '.ago($cr->time_locked);
         echo '<br/>';
     }
 
     echo '<br/>';
-    echo '&raquo; '.ahref('iview/chatrooms/new', 'New chatroom');
+    echo '&raquo; '.ahref('a/chatroom/new', 'New chatroom');
     break;
 
 case 'edit':
@@ -42,7 +42,7 @@ case 'edit':
         }
         ChatRoom::store($o);
 
-        js_redirect('iview/chatrooms/list');
+        js_redirect('a/chatroom/list');
     }
 
     $o = ChatRoom::get($this->child);
@@ -51,7 +51,7 @@ case 'edit':
 
     $x = new XhtmlForm();
     $x->addHidden('roomid', $o->id); //XXX haxx
-    $x->addInput('name', 'Name', $o->name, 40);
+    $x->addInput('name', 'Name', $o->name, 200);
     $x->addCheckbox('locked', 'Lock chatroom (read only)', $o->locked_by ? 1 : 0);
     $x->addSubmit('Save');
     $x->setHandler('editHandler');
@@ -66,7 +66,7 @@ case 'new':
         $o->name = trim($p['name']);
         ChatRoom::store($o);
 
-        js_redirect('iview/chatrooms/list');
+        js_redirect('a/chatroom/list');
     }
 
     echo '<h2>Create new chatroom</h2>';

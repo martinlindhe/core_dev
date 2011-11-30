@@ -14,7 +14,7 @@ case 'list':
     $list = ChatRoom::getList();
 
     foreach ($list as $cr)
-        echo ahref('iview/chatroom/show/'.$cr->id, $cr->name).'<br/>';
+        echo ahref('u/chatroom/show/'.$cr->id, $cr->name).'<br/>';
 
     break;
 

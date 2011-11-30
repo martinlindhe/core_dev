@@ -85,16 +85,16 @@ if ($session->id && $user_id != $session->id) {
     echo '&raquo; '.ahref('iview/profile_messages/send/'.$user_id, 'Send message').'<br/>';
 
     if (Bookmark::exists(BOOKMARK_FAVORITEUSER, $user_id, $session->id)) {
-        echo '&raquo; '.ahref('iview/bookmark/removeuser/'.$user_id, 'Remove favorite').'<br/>';
+        echo '&raquo; '.ahref('u/bookmark/removeuser/'.$user_id, 'Remove favorite').'<br/>';
     } else {
-        echo '&raquo; '.ahref('iview/bookmark/adduser/'.$user_id, 'Add favorite').'<br/>';
+        echo '&raquo; '.ahref('u/bookmark/adduser/'.$user_id, 'Add favorite').'<br/>';
     }
     echo '<br/>';
 
     if (Bookmark::exists(BOOKMARK_USERBLOCK, $user_id, $session->id)) {
         echo '<b>THIS USER IS BLOCKED FROM CONTACTING YOU</b><br/>';
     } else {
-        echo '&raquo; '.ahref('iview/block/user/'.$user_id, 'Block user').'<br/>';
+        echo '&raquo; '.ahref('u/block/user/'.$user_id, 'Block user').'<br/>';
     }
     echo '&raquo; '.ahref('u/report/user/'.$user_id, 'Report user').'<br/>';
 }

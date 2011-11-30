@@ -19,7 +19,7 @@ case 'user':
 case 'remove':
     // child = user id
     Bookmark::remove(BOOKMARK_USERBLOCK, $this->child);
-    js_redirect('iview/block/manage');
+    js_redirect('u/block/manage');
     break;
 
 case 'manage':
@@ -29,7 +29,7 @@ case 'manage':
 
     foreach ($list as $o) {
         echo ahref('iview/profile/'.$o->value, User::get($o->value)->name).' ';
-        echo ahref('iview/block/remove/'.$o->value, 'Remove block').'<br/>';
+        echo ahref('u/block/remove/'.$o->value, 'Remove block').'<br/>';
     }
     break;
 
