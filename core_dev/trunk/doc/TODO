@@ -5,7 +5,6 @@ BUGS:
     * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
     * later: fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
-    * core_dev error 404 handler funkar ej på admin.ivr?     http://admin-ivr.unicorn.se/ivi33ew/
     * core_dev: sub-views ska inte behöva använda child, child2 osv..!!
 
 
@@ -48,6 +47,16 @@ Messages
 
 Privacy
     * ...
+
+
+FAQ module:
+    * ...
+    * update admin view?
+
+
+User feedback:
+    * LATER: implement
+
 
 
 Friends
