@@ -4,4 +4,4 @@ facebook-php-sdk from: https://github.com/facebook/php-sdk/
 
   + only kept "src" dir files facebook.php and fb_ca_chain_bundle.crt
 
-last synced at 2011.08.08
+last synced at 2011.11.30
