@@ -14,6 +14,7 @@
 */
 
 require_once('YuiDatatable.php');
+require_once('LoginEntry.php');
 
 if (!$this->owner || !$session->isSuperAdmin)
     return;
@@ -149,7 +150,7 @@ $dt->addColumn('timeCreated',     'Timestamp');
 $dt->addColumn('IP',              'IP');
 $dt->addColumn('userAgent',       'User agent');
 $dt->setSortOrder('timeCreated', 'desc');
-$dt->setDataSource( UserHandler::getLoginHistory($user->id) );
+$dt->setDataSource( LoginEntry::getHistory($user->id) );
 $dt->setRowsPerPage( 10 );
 echo $dt->render();
 

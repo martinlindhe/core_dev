@@ -10,6 +10,7 @@
 // see views/comments.php for a default comment list view
 
 require_once('SqlObject.php');
+require_once('constants.php');
 
 class CommentViewer
 {
@@ -25,7 +26,7 @@ class CommentViewer
 class Comment
 {
     var $id;
-    var $type;
+    var $type;          ///< see constants.php
     var $msg;
     var $private;       ///< bool
     var $time_created;

@@ -12,7 +12,6 @@
 //TODO: pagination? or auto-hide some comments
 //TODO: ability to create private comments (tbl flag is there)
 //TODO: allow anon comments with Captcha (?)
-//TODO: smaller input box
 
 
 

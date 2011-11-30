@@ -185,12 +185,6 @@ class UserHandler
         return true;
     }
 
-    public static function getLoginHistory($id)
-    {
-        $q = 'SELECT * FROM tblLogins WHERE userId = ? ORDER BY timeCreated DESC';
-        return Sql::pSelect($q, 'i', $id);
-    }
-
     /**
      * Sets a new password for the user
      *

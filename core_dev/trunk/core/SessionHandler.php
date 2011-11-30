@@ -24,6 +24,7 @@ require_once('User.php');
 require_once('ErrorHandler.php');
 require_once('Sql.php');
 require_once('SessionStorageHandler.php');
+require_once('LoginEntry.php');
 
 require_once(dirname(__FILE__) . '/../facebook-php-sdk/facebook.php');
 
@@ -146,8 +147,8 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             return false;
         }
 
-        $x = User::getExact($type, $user->id, $username, $pwd);        
-        
+        $x = User::getExact($type, $user->id, $username, $pwd);
+
         if (!$x) {
             dp('Failed login attempt: username '.$username);
             $error->add('Login failed - user not found2');
@@ -171,8 +172,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
         Sql::pUpdate($q, 'si', client_ip(), $this->id);
 
-        $q = 'INSERT INTO tblLogins SET timeCreated = NOW(), userId = ?, IP = ?, userAgent = ?';
-        Sql::pInsert($q, 'iss', $this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
+        LoginEntry::add($this->id, client_ip(), $_SERVER['HTTP_USER_AGENT'] );
 
         $_SESSION['id']           = $this->id;
         $_SESSION['username']     = $this->username;

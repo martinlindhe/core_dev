@@ -1,10 +1,9 @@
 <?php
 /**
- * $Id$
+ * port checker
  */
 
-require_once('find_config.php');
-$h->session->requireSuperAdmin();
+$session->requireSuperAdmin();
 
 $error = '';
 $port = 0;
@@ -18,8 +17,6 @@ if (!empty($_POST['i'])) $ip = strip_tags($_POST['i']);
 $geoip = IPv4_to_GeoIP($ip);
 
 $timeout = 5;
-
-require('design_admin_head.php');
 
 echo '<h1>Port checker</h1>';
 
@@ -60,5 +57,4 @@ echo xhtmlInput('p', $port, 5).'<br/>';
 echo xhtmlSubmit('Test');
 echo '</form>';
 
-require('design_admin_foot.php');
 ?>

@@ -29,6 +29,7 @@ define('FILE',       6);  ///< comments for a file
 define('TOKEN',      7);  ///< activation tokens etc
 define('BLOG',       8);  ///< normal, personal blog category
 define('EXTERNAL',   9);  ///< setting type relies on some external component
+define('IP',        10);  ///< setting is associated with an IP address, such as a comment (TODO: or a ip block)
 
 define('USERDATA_OPTIONS', 20);  ///< used to hold options in tblSettings for UserDataFieldOptions
 
