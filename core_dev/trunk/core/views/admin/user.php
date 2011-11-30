@@ -13,11 +13,10 @@
 
 */
 
+$session->requireSuperAdmin();
+
 require_once('YuiDatatable.php');
 require_once('LoginEntry.php');
-
-if (!$this->owner || !$session->isSuperAdmin)
-    return;
 
 $user = User::get($this->owner);
 if (!$user->id) {
@@ -88,7 +87,7 @@ echo 'This user is member of the following groups:<br/>';
 
 foreach (UserHandler::getGroups($user->id) as $g) {
     echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
-    echo ahref('a/manage_usergroup/'.$g->getId(), $g->getName()).'<br/>';
+    echo ahref('a/usergroup/'.$g->getId(), $g->getName()).'<br/>';
 }
 echo '<br/>';
 

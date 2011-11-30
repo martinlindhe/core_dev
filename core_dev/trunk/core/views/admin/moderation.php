@@ -22,7 +22,7 @@ case 'default':
 
     $dt = new YuiDatatable();
     $dt->addColumn('id',           'Id',    'link', 'a/moderation/handle/', 'name');
-    $dt->addColumn('owner',        'Owner', 'link', 'a/manage_user/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'a/user/', 'name');
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('data',         'Data');
@@ -43,11 +43,11 @@ case 'approved':
 
     $dt = new YuiDatatable();
     $dt->addColumn('id',           'Id' ); //,    'link', 'a/moderation/handle/', 'name');
-    $dt->addColumn('owner',        'Owner', 'link', 'a/manage_user/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'a/user/', 'name');
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('time_handled', 'Approved');
-    $dt->addColumn('handled_by',   'Approved by', 'link', 'a/manage_user/', 'name');
+    $dt->addColumn('handled_by',   'Approved by', 'link', 'a/user/', 'name');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
     $dt->setDataSource( $list );
@@ -62,11 +62,11 @@ case 'denied':
 
     $dt = new YuiDatatable();
     $dt->addColumn('id',           'Id' ); //,    'link', 'a/moderation/handle/', 'name');
-    $dt->addColumn('owner',        'Owner', 'link', 'a/manage_user/', 'name');
+    $dt->addColumn('owner',        'Owner', 'link', 'a/user/', 'name');
     $dt->addColumn('type',         'Type',  'array', getModerationTypes() );
     $dt->addColumn('time_created', 'Created');
     $dt->addColumn('time_handled', 'Denied');
-    $dt->addColumn('handled_by',   'Denied by', 'link', 'a/manage_user/', 'name');
+    $dt->addColumn('handled_by',   'Denied by', 'link', 'a/user/', 'name');
     $dt->addColumn('data',         'Data');
     $dt->addColumn('reference',    'Reference');
     $dt->setDataSource( $list );
