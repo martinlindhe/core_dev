@@ -3,8 +3,6 @@
  * show info of ip address
  */
 
-//TODO: show all registered users associated with a IP
-//TODO: allow to search for username and see all their used IP addresses
 //TODO: ability to add IP ban from here
 
 $session->requireSuperAdmin();
@@ -45,14 +43,12 @@ case 'ip':
     echo '<h1>'.$ip.' ('.gethostbyaddr($ip).')</h1>';
     echo '<br/><br/>';
 
-/*
-    $list = Users::byIP($geoip);
+    $list = LoginEntry::getUsersByIP($ip);
 
     echo 'This IP is associated with '.count($list).' registered users:<br/>';
-    foreach ($list as $row) {
-        echo Users::link($row['userId'], $row['userName']).'<br/>';
-    }
-*/
+    foreach ($list as $user_ip)
+        echo UserLink::render($user_ip).'<br/>';
+
     echo '<hr/>';
     echo '<a href="http://www.dnsstuff.com/tools/whois.ch?ip='.$ip.'" target="_blank">Perform whois lookup</a><br/>';
     echo '<a href="http://www.dnsstuff.com/tools/tracert.ch?ip='.$ip.'" target="_blank">Perform traceroute</a><br/>';
@@ -77,19 +73,15 @@ case 'user':
 
     echo '<h1>Query IP information of user '.$user->name.'</h1>';
 
-    $ips = Users::getIPByUser($user->id);
+    $ips = LoginEntry::getIPsByUser($user->id);
 
     echo '<table>';
     echo '<tr>';
     echo '<th>IP</th>';
-    echo '<th>Tid</th>';
-    echo '<th>&nbsp;</th>';
     echo '</tr>';
     foreach ($ips as $ip) {
         echo '<tr>';
-            echo '<td>'.GeoIP_to_IPv4($ip['IP']).'</td>';
-            echo '<td>'.$ip['time'].'</td>';
-            echo '<td><a href="'.$_SERVER['PHP_SELF'].'?block&ip='.GeoIP_to_IPv4($ip['IP']).'">Blockera</a></td>';
+            echo '<td>'.$ip.'</td>';
         echo '</tr>';
     }
     echo '</table>';
