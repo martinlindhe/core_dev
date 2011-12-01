@@ -37,11 +37,6 @@ else if (!$session->id && $session->facebook_app_id)
     // Handle facebook login
     $session->handleFacebookLogin();
 }
-else if ($session->id && isset($_GET['logout']))
-{
-    // Logged in: Check for a logout request. Send GET parameter 'logout' to any page to log out
-    $session->logout();
-}
 else if ($session->id)
 {
     $session->setLastActive();
