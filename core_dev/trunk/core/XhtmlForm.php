@@ -244,25 +244,14 @@ class XhtmlForm
    }
 
     /** Adds a password field to the form */
-    function addPassword($name, $text, $size = 0, $maxlen = 0)
+    function addPassword($name, $text, $width = 0, $maxlen = 0)
     {
         $o = new XhtmlComponentPassword();
         $o->name   = $name;
-        $o->size   = $size;
+        $o->width  = $size;
         $o->maxlen = $maxlen;
         $this->add($o, $text);
    }
-
-    /** Adds a checkbox field to the form */
-    function addCheckbox($name, $text, $checked = false, $val = '1')
-    {
-        $o = new XhtmlComponentCheckbox();
-        $o->name  = $name;
-        $o->title = $text;
-        $o->value = $val;
-        $o->checked = $checked;
-        $this->add($o);
-    }
 
     /** Adds a textarea to the form */
     function addTextarea($name, $text, $val = '', $width = 300, $height = 70)
@@ -277,21 +266,15 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
-    /** Adds a richedit textarea to the form */
-    function addRichedit($name, $text, $val = '', $width = 0, $height = 0)
+    /** Adds a checkbox field to the form */
+    function addCheckbox($name, $text, $checked = false, $val = '1')
     {
-        if (!$width)
-            $width = 440;
-
-        if (!$height)
-            $height = 200;
-
-        $o = new YuiRichedit();
-        $o->name   = $name;
-        $o->value  = $val;
-        $o->width  = $width;
-        $o->height = $height;
-        $this->add($o, $text);
+        $o = new XhtmlComponentCheckbox();
+        $o->name    = $name;
+        $o->title   = $text;
+        $o->value   = $val;
+        $o->checked = $checked;
+        $this->add($o);
     }
 
     /** Adds a text string to the form */
@@ -352,6 +335,23 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
+    /** Adds a richedit textarea to the form */
+    function addRichedit($name, $text, $val = '', $width = 0, $height = 0)
+    {
+        if (!$width)
+            $width = 440;
+
+        if (!$height)
+            $height = 200;
+
+        $o = new YuiRichedit();
+        $o->name   = $name;
+        $o->value  = $val;
+        $o->width  = $width;
+        $o->height = $height;
+        $this->add($o, $text);
+    }
+    
     function addAutocomplete($name, $text, $url, $result_fields)
     {
         $o = new YuiAutocomplete();
