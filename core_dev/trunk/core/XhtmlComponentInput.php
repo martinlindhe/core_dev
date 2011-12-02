@@ -33,17 +33,18 @@ class XhtmlComponentInput extends XhtmlComponent
         if (!is_alphanumeric($id))
             throw new Exception ('no: '.$id );
 
+        $style = $this->style . ($this->width ? 'width:'.$this->width.'px;': '');
+            
         $res =
         '<input type="text"'.
         ' name="'.$this->name.'"'.
         ($id ? ' id="'.$id.'"' : '').
+        ($style ? ' style="'.$style.'"' : '').
         (($this->value || is_string($this->value)) ? ' value="'.$this->value.'"' : '').
         ($this->size ? ' size="'.$this->size.'"': '').
-        ($this->style ? ' style="'.$this->style.'"' : '').
         ($this->maxlen ? ' maxlength="'.$this->maxlen.'"': '').
         ($this->disabled ? ' disabled': '').
         ($this->onchange ? ' onchange="'.$this->onchange.'"': '').
-        ($this->width ? ' style="width:'.$this->width.'px"': '').
         '/>';
 
         return $res;
