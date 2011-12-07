@@ -21,7 +21,7 @@ class Html5Uploader
 
         $page = XmlDocumentHandler::getInstance();
 
-        $header->includeJs($page->getCoreDevRoot().'js/ext/html5uploader.js');
+        $header->includeJs($page->getRelativeCoreDevUrl().'js/ext/html5uploader.js');
 
         $header->embedJsOnload(
         "new uploader('drop', 'status', '/u/upload/album/".$id."', 'list');"

@@ -44,8 +44,19 @@ class ViewModel extends ArrayObject
         // make reference to calling object available in the namespace of the view
         $caller = $this->caller;
 
+        $file = $page->getCoreDevPath().$this->template;
+
+        if (!file_exists($file)) {
+            // if not built in view, look in app dir
+            $file = $this->template;
+            if (!file_exists($file))
+                throw new Exception ('no such view '.$file);
+        }
+
+//echo $file."<br>";
+//return;
         ob_start();
-        require($this->template);
+        require($file);
         return ob_get_clean();
     }
 }

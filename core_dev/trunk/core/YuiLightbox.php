@@ -8,26 +8,26 @@
  * Grouping: You just need to add a grouping to the rel attribute with the grouping in brackets.
  *           So rel="lightbox" becomes rel="lightbox[grouping]"
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org> 
+ * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
- 
+
 //STATUS: works
 
 //TODO: expand popup view with links to image
- 
+
 class YuiLightbox
 {
     function render()
     {
         $header = XhtmlHeader::getInstance();
-        
+
         $page = XmlDocumentHandler::getInstance();
 
         $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
-        $header->includeJs($page->getCoreDevRoot().'js/ext/gallery-lightbox/gallery-lightbox-min.js'); 
+        $header->includeJs($page->getRelativeCoreDevUrl().'js/ext/gallery-lightbox/gallery-lightbox-min.js');
 
-        $header->includeCss($page->getCoreDevRoot().'js/ext/gallery-lightbox/assets/skins/sam/gallery-lightbox-skin.css');
-        
+        $header->includeCss($page->getRelativeCoreDevUrl().'js/ext/gallery-lightbox/assets/skins/sam/gallery-lightbox-skin.css');
+
         $js =
         'YUI().use("gallery-lightbox", "node-deprecated", '.  //XXXX: node-deprecated is added to allow it to work with > YUI 3.0.0
             'function (Y)'.
@@ -37,7 +37,7 @@ class YuiLightbox
         ');';
 
         return js_embed($js);
-        
+
     }
 }
 

@@ -24,7 +24,7 @@ case 'selftest':
     // and warn if result != "STATUS:OK"
     $status = 'OK';
 
-    $dir = $page->getUploadRoot();
+    $dir = $page->getUploadPath();
     if ($dir) {
         if (!is_dir($dir))
             $status = 'ERROR: upload dir dont exist';
@@ -96,7 +96,7 @@ case 'favicon':
     $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
     $page->setMimeType('image/vnd.microsoft.icon');
 
-    $f = $page->getApplicationRoot().$header->getFavicon();
+    $f = $page->getApplicationPath().$header->getFavicon();
     if (!file_exists($f))
         throw new Exception ('favicon.ico generation failed, file not found '.$f);
 

@@ -37,10 +37,10 @@ class File
     {
         $page = XmlDocumentHandler::getInstance();
 
-        if (!$page->getUploadRoot())
-            throw new Exception ('No upload root configured!');
+        if (!$page->getUploadPath())
+            throw new Exception ('No upload path configured!');
 
-        return $page->getUploadRoot().'/'.$id;
+        return $page->getUploadPath().'/'.$id;
     }
 
     public static function get($id)

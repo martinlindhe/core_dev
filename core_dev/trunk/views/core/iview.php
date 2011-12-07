@@ -9,7 +9,7 @@ if (!is_alphanumeric($this->view)) {
     die(':-P');
 }
 
-$file = $page->getCoreDevInclude().'views/'.$this->view.'.php';
+$file = $page->getCoreDevPath().'views/'.$this->view.'.php';
 if (!file_exists($file))
     throw new Exception ('DEBUG: view not found '.$file);
 

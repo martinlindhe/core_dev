@@ -119,12 +119,12 @@ class RequestHandler
         }
 
         switch ($this->_controller) {
-        case 'coredev': $file = $page->getCoreDevInclude().'views/core/coredev.php'; break;
-        case 'iview':   $file = $page->getCoreDevInclude().'views/core/iview.php'; break;
+        case 'coredev': $file = $page->getCoreDevPath().'views/core/coredev.php'; break;
+        case 'iview':   $file = $page->getCoreDevPath().'views/core/iview.php'; break;
 
-        case 'a':       $file = $page->getCoreDevInclude().'views/admin/'.$this->_view.'.php'; break;
-        case 'u':       $file = $page->getCoreDevInclude().'views/user/'.$this->_view.'.php'; break;
-        case 't':       $file = $page->getCoreDevInclude().'views/tools/'.$this->_view.'.php'; break;
+        case 'a':       $file = $page->getCoreDevPath().'views/admin/'.$this->_view.'.php'; break;
+        case 'u':       $file = $page->getCoreDevPath().'views/user/'.$this->_view.'.php'; break;
+        case 't':       $file = $page->getCoreDevPath().'views/tools/'.$this->_view.'.php'; break;
         default:        $file = 'views/'.$this->_controller.'.php';
         }
 

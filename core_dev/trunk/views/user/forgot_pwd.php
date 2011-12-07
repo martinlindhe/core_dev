@@ -56,7 +56,7 @@ echo
     '<tr>'.
         '<td>E-mail:</td>'.
         '<td>'.xhtmlInput('forgot_pwd', '', 26).' '.
-        xhtmlImage( $page->getCoreDevRoot().'gfx/icon_mail.png', t('E-mail')).
+        xhtmlImage( $page->getRelativeCoreDevUrl().'gfx/icon_mail.png', t('E-mail')).
         '</td>'.
     '</tr>'.
     '</table><br/>';

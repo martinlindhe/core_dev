@@ -31,7 +31,7 @@ class XmlDocumentHandler extends CoreBase
     private $attachment_name;                ///< name of file attachment (force user to save file)
     private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
     private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
-    private $coredev_root;                   ///< web path to core_dev for ajax api calls
+    private $coredev_root = 'core_dev/';     ///< web path to core_dev for ajax api calls
     private $upload_root;                    ///< root directory for file uploads
     private $app_root;                       ///< application root directory, currently only used to locate favicon.png for auto conversion to favicon.ico
     private $ts_initial;                     ///< used to measure page load time
@@ -60,6 +60,12 @@ class XmlDocumentHandler extends CoreBase
         $this->xmlns[ $ns ] = $uri;
     }
 
+    /**
+     * Sets base/root URL for current website
+     * @param $s base url, e.g. http://www.example.com/  (with ending / )
+     */
+    function setUrl($s) { $this->Url = new Url($s); }
+
     /** @return relative URL for current website */
     function getRelativeUrl() { return $this->Url->getPath(); }
 
@@ -72,17 +78,10 @@ class XmlDocumentHandler extends CoreBase
     /** @return "http" or "https" */
     function getScheme() { return $this->Url->getScheme(); }
 
-    function getCoreDevInclude()
-    {
-        if (!$this->coredev_inc)
-            throw new Exception ('setCoreDevInclude not configured');
+    /** @return web root of core_dev installation */
+    function getRelativeCoreDevUrl() { return $this->coredev_root; }
 
-        return $this->coredev_inc;
-    }
-
-    function getCoreDevRoot() { return $this->coredev_root; }
-
-    function setCoreDevRoot($s)
+    function setRelativeCoreDevUrl($s)
     {
         if (substr($s, 0, 1) != '/')
             $s = $this->getRelativeUrl().$s;
@@ -94,31 +93,53 @@ class XmlDocumentHandler extends CoreBase
     function getCoreDevUrl()
     {
         $t = new Url( $this->getUrl() );
-        $t->setPath( $this->getCoreDevRoot() );
+        $t->setPath( $this->getRelativeCoreDevUrl() );
         return $t->get();
     }
 
-    function getApplicationRoot() { return $this->app_root; }
-    function getUploadRoot() { return $this->upload_root; }
-    function getMimeType() { return $this->mimetype; }
+    /** @return full path to upload directory */
+    function getUploadPath() { return $this->upload_root; }
 
-    function getStartTime() { return $this->ts_initial; }
-
-    function setUploadRoot($s)
+    function setUploadPath($s)
     {
         if (!is_dir($s))
-            throw new Exception ('setUploadRoot: directory dont exist: '.$s);
+            throw new Exception ('setUploadPath: directory dont exist: '.$s);
 
         $this->upload_root = realpath($s);
     }
 
-    function setApplicationRoot($s = './')
+    /** @return full path to application directory */
+    function getApplicationPath() { return $this->app_root; }
+
+    function setApplicationPath($s = './')
     {
         if (!is_dir($s))
             throw new Exception ('setApplicationRoot: directory dont exist: '.$s);
 
         $this->app_root = realpath($s);
     }
+
+    /** @return full path to core_dev installation */
+    function getCoreDevPath()
+    {
+        if (!$this->coredev_inc)
+            throw new Exception ('setCoreDevPath not configured');
+
+        return $this->coredev_inc;
+    }
+
+    function setCoreDevPath($path)
+    {
+        ///XXX peka på "/path/to/core_dev/core/" katalogen, hör egentligen inte till page handlern men den hör inte till något bra objekt... separat core-dev handler????
+        if (!is_dir($path))
+            throw new Exception ('path not found '.$path);
+
+        $this->coredev_inc = $path;
+    }
+
+    function getStartTime() { return $this->ts_initial; }
+
+    function getMimeType() { return $this->mimetype; }
 
     function setMimeType($s)
     {
@@ -131,21 +152,6 @@ class XmlDocumentHandler extends CoreBase
 
         $this->mimetype = $s;
     }
-
-    function setCoreDevInclude($path)
-    {
-        ///XXX peka på "/path/to/core_dev/core/" katalogen, hör egentligen inte till page handlern men den hör inte till något bra objekt... separat core-dev handler????
-        if (!is_dir($path))
-            throw new Exception ('path not found '.$path);
-
-        $this->coredev_inc = $path;
-    }
-
-    /**
-     * Sets base/root URL for current website
-     * @param $s base url, e.g. http://www.example.com/  (with ending / )
-     */
-    function setUrl($s) { $this->Url = new Url($s); }
 
     /**
      * Sends HTTP headers that prompts the client browser to download the page content with given name

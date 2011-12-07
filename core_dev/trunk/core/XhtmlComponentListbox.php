@@ -47,7 +47,7 @@ class XhtmlComponentListbox extends XhtmlComponent
 
         $out .= '</select>';
 
-        $out .= '<a href="#" onclick="toggle_multi_opt(\''.$el_id.'\'); return false;" style="vertical-align: bottom;"><img src="'.$page->getCoreDevRoot().'gfx/bullet_toggle_plus.png"/></a>';
+        $out .= '<a href="#" onclick="toggle_multi_opt(\''.$el_id.'\'); return false;" style="vertical-align: bottom;"><img src="'.$page->getRelativeCoreDevUrl().'gfx/bullet_toggle_plus.png"/></a>';
 
         return $out;
     }
