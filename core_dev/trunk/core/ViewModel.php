@@ -53,8 +53,6 @@ class ViewModel extends ArrayObject
                 throw new Exception ('no such view '.$file);
         }
 
-//echo $file."<br>";
-//return;
         ob_start();
         require($file);
         return ob_get_clean();

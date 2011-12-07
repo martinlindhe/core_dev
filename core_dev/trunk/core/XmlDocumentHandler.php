@@ -123,18 +123,20 @@ class XmlDocumentHandler extends CoreBase
     function getCoreDevPath()
     {
         if (!$this->coredev_inc)
-            throw new Exception ('setCoreDevPath not configured');
+            throw new Exception('setCoreDevPath not configured');
 
         return $this->coredev_inc;
     }
 
     function setCoreDevPath($path)
     {
-        ///XXX peka på "/path/to/core_dev/core/" katalogen, hör egentligen inte till page handlern men den hör inte till något bra objekt... separat core-dev handler????
-        if (!is_dir($path))
-            throw new Exception ('path not found '.$path);
+        $real = realpath($path);
 
-        $this->coredev_inc = $path;
+        if (!is_dir($real))
+            throw new Exception ('path not found '.$path.' (expanded to '.$real.')');
+
+        // make sure this function returns path name with ending /
+        $this->coredev_inc = $real.'/';
     }
 
     function getStartTime() { return $this->ts_initial; }
