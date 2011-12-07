@@ -1,7 +1,7 @@
 <?php
 //IMPORTANT: the current directory must contain a symlink to core_dev/trunk base directory
-$coredev_inc = readlink(dirname(__FILE__).'/core_dev').'/core/';
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/inc'. PATH_SEPARATOR . $coredev_inc);
+$coredev_inc = readlink(dirname(__FILE__).'/core_dev');
+set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/inc'. PATH_SEPARATOR . $coredev_inc.'/core/');
 
 $config['debug'] = true;
 
@@ -28,7 +28,7 @@ $page->designHead( dirname(__FILE__).'/design_head.php');
 $page->designFoot( dirname(__FILE__).'/design_foot.php');
 $page->setUrl('http://processtest.x/');
 $page->setCoreDevInclude($coredev_inc); ///XXX peka på "/path/to/core_dev/core/" katalogen, hör egentligen inte till page handlern men den hör inte till något bra objekt... separat core-dev handler????
-$page->setApplicationRoot();
+$page->setApplicationPath();
 
 $db = SqlFactory::factory('mysql', true); // enable profiler
 SqlHandler::addInstance($db); //registers the created database connection as the one to use by SqlHandler
@@ -49,10 +49,9 @@ $session->allowLogins(true);
 $session->allowRegistrations(false);
 
 
-$page->setUploadRoot('/devel/projects/process/uploads/'); //XXX ska denna verkligen vara i page objektet... ?
+$page->setUploadPath('/devel/projects/process/uploads/');
 
 $header = XhtmlHeader::getInstance();
-$header->setCoreDevRoot('core_dev/');
 //$header->setFavicon('favicon.png');
 $header->setTitle('process server');
 $header->includeCss('css/site.css');
