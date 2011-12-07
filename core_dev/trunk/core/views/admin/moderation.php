@@ -130,7 +130,7 @@ case 'handle':
         break;
 
     case MODERATE_UPLOAD:
-        echo '<h2>Moderate file # '.$o->reference.'</h2>';
+        echo '<h2>Moderate file with reference '.$o->reference.'</h2>';
 
         if ($o->owner) {
             $u = User::get($o->owner);

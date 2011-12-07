@@ -1,8 +1,10 @@
 Autumn 2011 cleanup:
 
 
-LOGOUT handling: move to a separate view in views/user/logout.php  (from views/core/request_handler.php)
+FIX tooltip userinfo bug: http://yuilibrary.com/forum/viewtopic.php?p=29083#p29083
 
+
+---
 
 
 
@@ -30,6 +32,7 @@ Views:
 
 
 Authentication:
+    * Facebook Connect ("connect anon with facebook"-let the user choose a nickname for our site)
     * PRIO: Verify that "forgot password" feature works (also verify that Token works, token also used in textfeed+tvguide)
 
 
@@ -75,6 +78,8 @@ Friends
 Chat rooms:
     * WIP: hover effect to show little info box of chat nick.. not yet working on dynamically created content
 
+    * ADMIN: ability to fully empty a chatroom from previous text
+    * ADMIN: ability to permanently delete a chatroom
     * ability to post pics & videos to chat room
     * PRIO: show "user has joined... ", "user has left" events
     * LATER: ability to allow anon users in certain chatrooms
@@ -96,6 +101,11 @@ Guestbook
 Photo albums: core/PhotoAlbum.php, core/views/albums.php
     * PRIO: proper default "album view" show 5 images each row,
             click to enhance and see details + comments+ability to comment.. drop lightbox?
+
+Special:
+    * vote for "best movie of the week"
+    * ability to send Gifts to other users
+
 
 
 DB CHECKER:

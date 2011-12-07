@@ -33,7 +33,7 @@ class ModerationObject
     var $time_handled;
     var $handled_by;
     var $approved;
-    var $data;          ///< text
+    var $data;          ///< text  (for UPLOAD=fileId)
     var $reference;     ///< (numeric) used to refer to external object id (if needed)
 
     protected static $tbl_name = 'tblModerationObjects';
