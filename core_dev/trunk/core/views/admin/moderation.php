@@ -138,7 +138,7 @@ case 'handle':
         }
 
         $view = new ViewModel('views/user/file_details.php');
-        $view->registerVar('owner', $o->reference);
+        $view->registerVar('owner', $o->data);
         echo $view->render();
 
         echo '<br/>';
