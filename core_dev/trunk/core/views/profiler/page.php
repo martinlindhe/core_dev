@@ -18,15 +18,15 @@ $header->embedJs( // code will be in <head>
 'window.onload=loadtime;'
 );
 
-$container_id = 'cd_c_'.mt_rand();
+$container_id = 'cdc_'.mt_rand();
+$wrapper_id   = 'cdw_'.mt_rand();
 
 $header->embedCss(
-'#'.$container_id.
+'#'.$wrapper_id.
 '{'.
     'position:fixed;'.
     'right:0;'.
     'bottom:0;'.
-    'text-align:right;'.
     'margin:2px;'.
     'padding:2px;'.
     'padding-top:0px;'.
@@ -34,7 +34,6 @@ $header->embedCss(
     'color:#000;'.
     'background-color:#fafafa;'.
     'font:9px verdana;'.
-    'text-align:left;'.
 '}'.
 'a.closebtn'.
 '{'.
@@ -49,14 +48,34 @@ $header->embedCss(
 'a.closebtn:hover'.
 '{'.
     'background-position:0px -7px;'.
+'}'.
+
+'a.expandbtn'.
+'{'.
+    'display:block;'.
+    'float:left;'.
+    'width:7px;'.
+    'height:7px;'.
+    'margin-right:4px;'.
+    'margin-top:4px;'.
+    'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
+    'background-position:0px -28px;'.
+'}'.
+'a.expandbtn:hover'.
+'{'.
+//    'background-position:0px -21px;'.  //TOODO: add lighter version of expander icon tile for hover
 '}'
+
 );
 
-echo '<div id="'.$container_id.'">';
 
-echo ahref_js('', "return hide_el('".$container_id."');", 'closebtn');
 
-echo 'core_dev 0.2-svn ';
+echo '<div id="'.$wrapper_id.'">'; // outer wrapper
+
+echo ahref_js('', "return toggle_el('".$container_id."');", 'expandbtn');
+echo 'core_dev';
+
+echo '<div id="'.$container_id.'" style="display:none;">';  // inner container
 
 if (class_exists('SqlHandler')) {
     $view = new ViewModel('views/profiler/mysql.php');
@@ -145,6 +164,11 @@ echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 echo '</div>'; // closing $prof_id
 
 echo ' | <span id="span_rendertime">0.00</span>s render';
-echo '</div>'; // closing $container_id
+
+echo ahref_js('', "return hide_el('".$wrapper_id."');", 'closebtn');
+
+echo '</div>'; // closing inner $container_id
+
+echo '</div>'; // closing outer wrapper
 
 ?>

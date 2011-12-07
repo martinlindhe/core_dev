@@ -104,7 +104,7 @@ Photo albums: core/PhotoAlbum.php, core/views/albums.php
 
 Special:
     * vote for "best movie of the week"
-    * ability to send Gifts to other users
+    * ability to send Gifts to other users (give away 1 month membership etc)
 
 
 
