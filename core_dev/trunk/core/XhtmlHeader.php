@@ -9,8 +9,6 @@
 
 //STATUS: ok
 
-//FIXME all code should use registerJsFunction instead of embedJs!!!
-
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
@@ -50,7 +48,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     protected $meta_tags       = array();
     protected $opensearch      = array();
-
+    
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
 
     private function __construct() { }
@@ -153,26 +151,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->meta_tags[] = $o;
     }
 
-    /** Set extra headers for special browsers */
-    private function adjustApperance()
-    {
-        if (!HttpUserAgent::isIOS($_SERVER['HTTP_USER_AGENT']))
-            return;
-
-        // mobile viewport
-        $this->setMeta('viewport', 'width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;');
-
-        // enable full-screen mode
-        //$this->setMeta('apple-mobile-web-app-capable', 'yes');
-
-        // controls the appearance of the status bar in full-screen mode
-        //$this->setMeta('apple-mobile-web-app-status-bar-style', 'black');
-    }
-
     public function render()
     {
-        $this->adjustApperance();
-
         $res = '<head>';
 
         if ($this->title)
@@ -238,5 +218,19 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
 }
+    
+/*  How to set extra headers for special browsers:
+
+// set mobile viewport for iOS devices
+if (HttpUserAgent::isIOS($_SERVER['HTTP_USER_AGENT']))
+    $header->setMeta('viewport', 'width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;');
+
+// enable full-screen mode
+$header->setMeta('apple-mobile-web-app-capable', 'yes');
+
+// controls the appearance of the status bar in full-screen mode
+$header->setMeta('apple-mobile-web-app-status-bar-style', 'black');
+
+*/
 
 ?>
