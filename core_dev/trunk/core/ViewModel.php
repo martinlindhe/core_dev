@@ -50,7 +50,7 @@ class ViewModel extends ArrayObject
             // if not built in view, look in app dir
             $file = $this->template;
             if (!file_exists($file))
-                throw new Exception ('no such view '.$file);
+                throw new Exception ('cannot find '.$this->template);
         }
 
         ob_start();

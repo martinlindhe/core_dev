@@ -1,0 +1,8 @@
+Views:
+    views/core     = iview.php, coredev.php
+    views/tools    = portcheck.php, ipcheck.php
+
+    views/admin    = phpinfo.php, userdata.php
+    views/user     = login.php, register.php, upload.php
+    views/profiler = page, memcached, mysql profilers
+
