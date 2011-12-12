@@ -41,10 +41,10 @@ echo 'Last IP: '.$user->last_ip.'<br/>';
 echo '<br/>';
 
 if ($session->id != $this->owner && isset($_GET['remove'])) {
-    //if (confirmed('Are you sure you want to remove this user?')) {  //XXX fix so confirmation works here
+    if (confirmed('Are you sure you want to remove this user?')) {
         $user->remove();
         echo '<div class="item">User removed</div>';
-    //}
+    }
     return;
 }
 

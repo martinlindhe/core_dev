@@ -162,8 +162,6 @@ class User
      */
     function remove()
     {
-        throw new Exception ('XXX update code');
-
         $q = 'UPDATE tblUsers SET time_deleted = NOW() WHERE id = ?';
         Sql::pUpdate($q, 'i', $this->id);
     }
