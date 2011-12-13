@@ -47,7 +47,7 @@ case 'show':
     '}'
     );
 
-    $header->includeJs('http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js');
+    $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
 
     $header->embedJs(
     'function submit_poll(id,opt)'.
@@ -55,20 +55,13 @@ case 'show':
         'YUI().use("io-base", function(Y) {'.
             'var uri = "'.relurl('').'u/polls/vote/" + id + "/" + opt;'.
 
-            // Define a function to handle the response data
-            ' complete(id, o, args) {'.
+            // Subscribe to event "io:complete"
+            'Y.on("io:complete", function(id,o){'.
                 'var id = id;'.               // Transaction ID
                 'var data = o.responseText;'. // Response data
-                'var args = args[1];'.
                 'if (data==1) return;'.
                 'alert("Voting error " + data);'.
-            '};'.
-
-            // Subscribe to event "io:complete", and pass an array
-            // as an argument to the event handler "complete", since
-            // "complete" is global.   At this point in the transaction
-            // lifecycle, success or failure is not yet known.
-            'Y.on("io:complete", complete, Y, ["lorem", "ipsum"]);'.
+            '});'.
 
             // Make request
             'var request = Y.io(uri);'.
