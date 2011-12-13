@@ -81,12 +81,16 @@ Guestbook
     * ...
 
 
+Files:
+    * paginate admin file view, its terribly slow now
+
+
 Photo albums: core/PhotoAlbum.php, core/views/albums.php
     * PRIO: proper default "album view" show 5 images each row,
             click to enhance and see details + comments+ability to comment.. drop lightbox?
 
 Polls:
-    * rewrite core/PollItem.php make user&admin views
+    * FIX: rename tblPolls columns & fix up PollItem
     * rewrite&cleanup core/Categories (used by polls)
     * rewrite & cleranup tblRatings stuff (used by polls)
     * Poll/Vote for "best movie of the week" etc, duration based

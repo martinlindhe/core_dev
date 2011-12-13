@@ -9,10 +9,8 @@
 
 //STATUS: wip
 
-//TODO: rework how addPoll handles start modes
-
-//TODO later: ability to export results (csv, xls, ...?)
-//TODO later: allow anonymous polls? then allow 1 vote from each IP
+//TODO: cleanup internal class to use SqlObject
+//TODO: rename table columns
 
 require_once('constants.php');
 
@@ -40,7 +38,7 @@ class PollItem
     {
         $q  =
         'SELECT t1.categoryName, '.
-            '(SELECT COUNT(*) FROM tblRatings  WHERE voteId=t1.categoryId) AS cnt'.
+            '(SELECT COUNT(*) FROM tblRatings WHERE value=t1.categoryId) AS cnt'.
         ' FROM tblCategories AS t1'.
         ' WHERE t1.ownerId = ?';
         return Sql::pSelectMapped($q, 'i', $id);
@@ -60,13 +58,18 @@ class PollItem
         return false;
     }
 
-    static function addPollVote($type, $id, $value)
+    /** Votes for a poll */
+    static function addVote($id, $value)
     {
+        $session = SessionHandler::getInstance();
+        if (!$session->id)
+            return false;
+
         if (self::hasAnsweredPoll($id))
             return false;
 
         $q = 'INSERT INTO tblRatings SET type = ?, owner = ?, userId = ?, value = ?, timestamp = NOW()';
-        Sql::pInsert($q, 'iiii', $type, $id, $session->id, $value);
+        Sql::pInsert($q, 'iiii', POLL, $id, $session->id, $value);
         return true;
     }
 
