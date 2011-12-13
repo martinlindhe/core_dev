@@ -7,9 +7,9 @@
 
 require_once('IHash.php');
 
-class Sha1Hash implements IHash
+class HashMd5 implements IHash
 {
-    /** @return 40-character string */
+    /** @return 32-character string */
     public static function CalcFile($file)
     {
         if (!file_exists($file))
@@ -18,13 +18,13 @@ class Sha1Hash implements IHash
         if (is_dir($file))
             return false;
 
-        return sha1_file($file);
+        return md5_file($file);
     }
 
-    /** @return 40-character string */
+    /** @return 32-character string */
     public static function CalcString($s)
     {
-        return sha1($s);
+        return md5($s);
     }
 
 }

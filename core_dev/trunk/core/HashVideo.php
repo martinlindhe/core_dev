@@ -19,7 +19,7 @@
 require_once('IHash.php');
 require_once('TempStore.php');
 
-class VideoHash implements IHash
+class HashVideo implements IHash
 {
     /** @return 16-character string */
     public static function CalcFile($file)
