@@ -12,7 +12,6 @@ require_once('Rating.php');
 //FIXME: ratings:ratingChange js event  never triggers!
 
 //XXX: make it read-only after you clicked it once
-//XXX later: ability to have different scales of the rating, like 1-5, 0-5, 1-10 etc? needs a better js widget
 
 
 switch ($this->view) {
@@ -30,49 +29,48 @@ case 'handle':
 
     $widget_id = 'rate_'.mt_rand();
 
+    $max_stars = 5;
+
     $js =
     'YUI({'.
         'modules:{'.
-        '"gallery-ratings":{'.
-            //'fullpath:"'.relurl( $page->getRelativeCoreDevUrl() ).'js/ext/gallery-ratings/gallery-ratings-min.js",'.
-            'fullpath:"'.relurl( $page->getRelativeCoreDevUrl() ).'js/ext/gallery-ratings/gallery-ratings.js",'.
-            'requires:["base","widget"]'.
-        '}'.
-    '},'.
-
-    '}).use("gallery-ratings", "event", "io-base", function(Y) {'.
+            '"gallery-ratings":{'.
+                'fullpath:"'.relurl( $page->getRelativeCoreDevUrl() ).'js/ext/gallery-ratings/gallery-ratings-min.js",'.
+                'requires:["base","widget"]'.
+            '}'.
+        '},'.
+        'filter: "raw"'.
+    '}).use("gallery-ratings", function(Y){'.
         'var ratings = new Y.Ratings({'.
-//            'inline: true,'.
-            'skin: "small",'.
+            // inline: true,
+            // 'allowClearRating: true,'. // shows a "clear rating" button
+            // titles: ["1 boot", "2 boots", "3 Feet", "Extra Good", "Great"],
+            // 'skin: "small",'.
+            'max:'.$max_stars.','.  // total number of stars (default = 5)
             'srcNode: "#'.$widget_id.'"'.
         '});'.
 
-/*
-        'Y.on("ratings:ratingChange",function(e){'.
-            'alert("www");'.
-            'var id = e.target.get("contentBox").get("id");'.
-            'Y.log(id+" New Value: "+e.newVal+" was: "+e.prevVal);'.
-        '});'.
-*/
+        'Y.log("rator created");'.
 
         'Y.on("ratings:ratingChange",function(e){'.
-            'var uri = "u/rate/vote/'.$type.'/'.$id.'/" + e.newVal;'.
-            'alert(uri);'.
 
-            // Subscribe to event "io:complete", and pass an array
-            // as an argument to the event handler "complete", since
-            // "complete" is global.   At this point in the transaction
-            // lifecycle, success or failure is not yet known.
-            'Y.on("io:complete", function(id, o, args){'.
-                'var id = id;'.               // Transaction ID
-                'var data = o.responseText;'. // Response data
-                'var args = args[1];'.
-                'if (data==1) return;'.
-                'alert("Voting error " + data);'.
+            'Y.log("ww2");'.
+
+            'YUI().use("io-base", function(Y){'.
+                'var uri = "u/rate/vote/'.$type.'/'.$id.'/" + e.newVal;'.
+                'Y.log(uri);'.
+
+                // Subscribe to event "io:complete"
+                'Y.on("io:complete", function(id,o){'.
+                    'var id = id;'.               // Transaction ID
+                    'var data = o.responseText;'. // Response data
+                    'if (data==1) return;'.
+                    'alert("Voting error " + data);'.
+                '});'.
+
+                // Make request
+                'var request = Y.io(uri);'.
             '});'.
-
-            // Make request
-            'var request = Y.io(uri);'.
         '});'.
 
     '});';
