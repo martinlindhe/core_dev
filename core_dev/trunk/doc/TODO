@@ -63,8 +63,6 @@ Friends
 
 Chat rooms:
     * WIP: hover effect to show little info box of chat nick.. not yet working on dynamically created content
-
-    * ADMIN: ability to fully empty a chatroom from previous text
     * ability to post pics & videos to chat room
     * LATER: show "user has joined... ", "user has left" events
     * LATER: ability to allow anon users to write in certain chatrooms

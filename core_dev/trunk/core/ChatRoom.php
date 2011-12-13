@@ -5,7 +5,7 @@
 
 //STATUS: wip
 
-//VIEW: core/views/chatroom.php
+require_once('ChatMessage.php');
 
 class ChatRoom
 {

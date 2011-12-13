@@ -55,6 +55,8 @@ case 'edit':
     $x->setHandler('editHandler');
     echo $x->render();
     echo '<br/>';
+    echo '&raquo; '.ahref('a/chatroom/empty/'.$this->child, 'Empty chatroom of messages').'<br/>';
+    echo '<br/>';
     echo '&raquo; '.ahref('a/chatroom/remove/'.$this->child, 'Remove chatroom').'<br/>';
     break;
 
@@ -64,6 +66,14 @@ case 'remove':
         js_redirect('a/chatroom/list');
     }
     break;
+
+case 'empty':
+    if (confirmed('Are you sure you want to remove all messages from this chatroom?')) {
+        ChatMessage::deleteByRoom($this->child);
+        js_redirect('a/chatroom/list');
+    }
+    break;
+
 
 case 'new':
     // child = room id

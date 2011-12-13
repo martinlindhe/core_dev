@@ -29,9 +29,20 @@ class ChatMessage
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    static function store($obj)
+    public static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
+    }
+
+    /**
+     * Removes all chat messages from a chatroom
+     */
+    public static function deleteByRoom($id)
+    {
+        $q =
+        'DELETE FROM '.self::$tbl_name.
+        ' WHERE room = ?';
+        Sql::pDelete($q, 'i', $id);
     }
 
 }
