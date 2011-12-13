@@ -45,5 +45,15 @@ if (!is_hms('00:26:36,595'))                              echo "FAIL 55\n";
 if (!is_hms('00:00:0,500'))                               echo "FAIL 56\n";
 
 if (parse_duration('4h') != 14400)                        echo "FAIL 60\n";
+if (parse_duration('-4h') != -14400)                      echo "FAIL 61\n";
+
+if (num_days('2010-03-04', '2010-03-04') !=  1)           echo "FAIL 70\n";
+if (num_days('2010-03-04', '2010-03-06') !=  3)           echo "FAIL 71\n";
+if (num_days('2010-01-01', '2010-02-24') != 55)           echo "FAIL 72\n";
+if (num_days('2010-03-01', '2010-03-31') != 31)           echo "FAIL 73\n";
+if (num_years('1980-05-26', '1990-02-12') != 9)           echo "FAIL 74\n";
+
+if (ts(0)  != 0)    echo "FAIL 80\n";
+if (ts('') != 0)    echo "FAIL 81\n";
 
 ?>
