@@ -1,8 +1,6 @@
 <?php
 
 //TODO: fix ability to edit poll
-//TODO: fix ability to add new poll
-
 
 require_once('PollItem.php');
 require_once('YuiDatatable.php');
@@ -47,7 +45,7 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
             PollItem::updatePoll($pollId, $_POST['poll_q'], '', $_POST['poll_te']);
         }
 
-        $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
+        $cats = new CategoryList( POLL );
         $cats->setOwner($pollId);
 
         foreach ($cats->getItems() as $i => $opt)
@@ -57,7 +55,7 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
             }
 
         if (!empty($_POST['poll_new_a'])) {
-            $item = new CategoryItem( CategoryItem::POLL_OPTIONS );
+            $item = new CategoryItem( POLL );
             $item->owner = $pollId;
             $item->title = $_POST['poll_new_a'];
             $item->store();
@@ -90,7 +88,7 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
     echo '<br/>';
 
     if ($poll) {
-        $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
+        $cats = new CategoryList( POLL );
         $cats->setOwner($this->child);
 
         foreach ($cats->getItems() as $i => $opt)
@@ -125,61 +123,69 @@ case 'stats':
 case 'remove':
     if (confirmed('Are you sure you want to remove this site poll?') ) {
         PollItem::removePoll($this->child);
+        js_redirect('a/polls/list');
     }
     break;
 
 case 'add':
-/*
-if (!empty($_POST['poll_q'])) {
-    if (!empty($_POST['poll_start_man'])) {
-        $pollId = $caller::addPollExactPeriod(SITE, $owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
-    } else {
-        $pollId = PollItem::add(SITE, $owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
-    }
 
-    for ($i=1; $i<=$answer_fields; $i++) {
-        if (!empty($_POST['poll_a'.$i])) {
-            $item = new CategoryItem( CategoryItem::POLL_OPTIONS );
+    function addPoll($p)
+    {
+        if (empty($p['poll_q']))
+            return;
+
+        if (!empty($p['poll_start_man'])) {
+            $pollId = PollItem::addPollExactPeriod(SITE, 0, $p['poll_q'], $p['poll_start_man'], $p['poll_end_man']);
+        } else {
+            $pollId = PollItem::add(SITE, 0, $p['poll_q'], $p['poll_dur'], $p['poll_start']);
+        }
+
+        for ($i=1; $i<=8; $i++) {
+            if (empty($p['poll_a'.$i]))
+                continue;
+
+            $item = new CategoryItem(POLL);
             $item->owner = $pollId;
-            $item->title = $_POST['poll_a'.$i];
+            $item->title = $p['poll_a'.$i];
             $item->store();
         }
+
+        js_redirect('a/polls/list');
     }
-}
-*/
+
     echo '<h2>Add new poll</h2>';
 
-    echo '<form method="post" action="">';
-    echo 'Question: '.xhtmlInput('poll_q', '', 30).'<br/>';
+    $frm = new XhtmlForm();
+    $frm->addInput('poll_q', 'Question');
 
-    echo '<div id="poll_period_selector">';
-    echo 'Duration of the poll: ';
-    echo '<select name="poll_dur">';
-    echo '<option value="1d">1 day</option>';
-    echo '<option value="1w" selected="selected">1 week</option>';
-    echo '<option value="1m">1 month</option>';
-    echo '</select><br/>';
 
-    echo 'Poll start: ';
-    echo '<select name="poll_start">';
-    echo '<option value="thismonday">monday this week</option>';
-    echo '<option value="nextmonday">monday next week</option>';
-    echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
-    echo '</select><br/>';
-    echo '<a href="#" onclick="hide_el(\'poll_period_selector\');show_el(\'poll_period_manual\')">Enter dates manually</a>';
-    echo '</div>';
-    echo '<div id="poll_period_manual" style="display: none;">';
-        echo 'Start time: '.xhtmlInput('poll_start_man').' (format YYYY-MM-DD HH:MM)<br/>';
-        echo 'End time: '.xhtmlInput('poll_end_man').'<br/>';
-        echo '<a href="#" onclick="hide_el(\'poll_period_manual\');show_el(\'poll_period_selector\')">Use dropdown menus instead</a>';
-    echo '</div>';
+//    echo '<div id="poll_period_selector">';
+
+    $dur = array('1d'=>'1 day', '1w'=>'1 week','1m'=>'1 month');
+    $frm->addDropdown('poll_dur', 'Duration', $dur, '1w');
+
+    $start = array(
+    'thismonday'=>'monday this week',
+    'nextmonday'=>'monday next week',
+    'nextfree'  =>'next free time'
+    );
+    $frm->addDropdown('poll_start', 'Starting', $start, 'nextmonday');
+
+//    echo '<a href="#" onclick="hide_el(\'poll_period_selector\');show_el(\'poll_period_manual\')">Enter dates manually</a>';
+//    echo '</div>';
+//    echo '<div id="poll_period_manual" style="display: none;">';
+//        echo 'Start time: '.xhtmlInput('poll_start_man').' (format YYYY-MM-DD HH:MM)<br/>';
+//        echo 'End time: '.xhtmlInput('poll_end_man').'<br/>';
+//        echo '<a href="#" onclick="hide_el(\'poll_period_manual\');show_el(\'poll_period_selector\')">Use dropdown menus instead</a>';
+//    echo '</div>';
     echo '<br/><br/>';
 
     for ($i=1; $i<=8; $i++)
-        echo 'Answer '.$i.': '.xhtmlInput('poll_a'.$i, '', 30).'<br/>';
+        $frm->addInput('poll_a'.$i,  'Answer '.$i);
 
-    echo xhtmlSubmit('Create');
-    echo '</form>';
+    $frm->addSubmit('Create');
+    $frm->setHandler('addPoll');
+    echo $frm->render();
     break;
 
 default:

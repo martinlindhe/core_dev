@@ -1,5 +1,7 @@
 <?php
 
+//STATUS: broken!! cleanup
+
 /*
     static function renderActivePolls($type)
     {
@@ -109,7 +111,7 @@
 
         if ($session->id && $active && !self::hasAnsweredPoll($id))
         {
-            $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
+            $cats = new CategoryList( POLL );
             $cats->setOwner($id);
 
             $list = $cats->getItems();

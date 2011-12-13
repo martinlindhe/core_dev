@@ -130,7 +130,7 @@ class PollItem
         'INSERT INTO tblPolls SET type = ?, ownerId = ?,'.
         ' createdBy = ?, pollText = ?, timeStart = ?,'.
         ' timeEnd = ?, timeCreated=NOW()';
-        Sql::pInsert($q, 'iiisss', $type, $owner, $session->id, trim($text), sql_datetime($time_start), sql_datetime($time_end));
+        return Sql::pInsert($q, 'iiisss', $type, $owner, $session->id, trim($text), sql_datetime($time_start), sql_datetime($time_end));
     }
 
     static function removePoll($id)

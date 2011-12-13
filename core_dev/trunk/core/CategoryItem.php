@@ -5,15 +5,12 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip, used in PollManager
+//STATUS: wip, used by polls
 
 require_once('constants.php');
 
 class CategoryItem
 {
-    // category types
-    const POLL_OPTIONS = 1;  ///< used by PollWidget where it is a list of poll options
-
     var $id;
     var $type;                           ///< type as defined in constants.php
     var $owner;
