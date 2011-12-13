@@ -86,8 +86,12 @@ Photo albums: core/PhotoAlbum.php, core/views/albums.php
             click to enhance and see details + comments+ability to comment.. drop lightbox?
 
 Polls:
-    * rewrite core/PollManager.php, core/PollWidget.php make user&admin views
+    * rewrite core/PollItem.php make user&admin views
+    * rewrite&cleanup core/Categories (used by polls)
+    * rewrite & cleranup tblRatings stuff (used by polls)
     * Poll/Vote for "best movie of the week" etc, duration based
+
+
 
 Rating:
     * rewrite core/RateWidget.php

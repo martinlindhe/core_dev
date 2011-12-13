@@ -1,44 +1,51 @@
 <?php
 
+//TODO: fix ability to edit poll
+//TODO: fix ability to add new poll
+
+
+require_once('PollItem.php');
+require_once('YuiDatatable.php');
+
 $session->requireAdmin();
 
-$header->embedJs(
-//Makes element with name "n" invisible in browser
-'function hide_element(n)'.
-'{'.
-    'var e = document.getElementById(n);'.
-    'e.style.display = "none";'.
-'}'.
+if (!$this->owner)
+    $this->owner = 'list';
 
-//Makes element with name "n" visible in browser
-'function show_element(n)'.
-'{'.
-    'var e = document.getElementById(n);'.
-    'e.style.display = "";'.
-'}'.
-//Toggles element with name "n" between visible and hidden
-'function toggle_element(n)'.
-'{'.
-    'var e = document.getElementById(n);'.
-    'e.style.display = (e.style.display?"":"none");'.
-'}'
-);
+switch ($this->owner) {
+case 'list':
+echo '<h1>Polls</h1>';
+    $list = PollItem::getPolls(SITE);
 
-$answer_fields = 8;
+    $dt = new YuiDatatable();
+    $dt->addColumn('pollId',     '#', 'link', 'a/polls/edit/', 'title');
+    $dt->addColumn('timeStart', 'Starts');
+    $dt->addColumn('timeEnd',   'Ends');
+    $dt->addColumn('timeCreated', 'Created');
+    $dt->setDataSource( $list );
+    echo $dt->render();
+    echo '<br/>';
+    echo ahref('a/polls/add', 'Add new poll');
+    break;
 
+case 'edit':
+    // child = poll id
+
+
+
+/*
 if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
     $pollId = $_GET['poll_edit'];
 
     if (!empty($_POST['poll_q'])) {
-        $caller::updatePoll($pollId, $_POST['poll_q']);
+        PollItem::updatePoll($pollId, $_POST['poll_q']);
 
         if (!empty($_POST['poll_ts'])) {
-            $caller::updatePoll($pollId, $_POST['poll_q'], $_POST['poll_ts']);
+            PollItem::updatePoll($pollId, $_POST['poll_q'], $_POST['poll_ts']);
         }
         if (!empty($_POST['poll_te'])) {
-            $caller::updatePoll($pollId, $_POST['poll_q'], '', $_POST['poll_te']);
+            PollItem::updatePoll($pollId, $_POST['poll_q'], '', $_POST['poll_te']);
         }
-
 
         $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
         $cats->setOwner($pollId);
@@ -56,28 +63,10 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
             $item->store();
         }
     }
+}
+*/
 
-    if (isset($_GET['delete']) && confirmed('Are you sure you want to delete this site poll?') ) {
-        $caller::removePoll($pollId);
-        return;
-    }
-
-    $poll = $caller::getPoll($pollId);
-
-    if (!empty($_GET['poll_stats'])) {
-        echo '<h1>Poll stats</h1>';
-
-        $votes = getPollStats($pollId);
-        $tot_votes = 0;
-        foreach ($votes as $row) $tot_votes += $row['cnt'];
-
-        foreach ($votes as $row) {
-            $pct = 0;
-            if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
-            echo $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes<br/>';
-        }
-        return;
-    }
+    $poll = PollItem::get($this->child);
 
     echo '<h1>Edit poll</h1>';
 
@@ -102,7 +91,7 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
 
     if ($poll) {
         $cats = new CategoryList( CategoryItem::POLL_OPTIONS );
-        $cats->setOwner($pollId);
+        $cats->setOwner($this->child);
 
         foreach ($cats->getItems() as $i => $opt)
             echo 'Answer '.($i+1).': <input type="text" size="30" name="poll_a'.$i.'" value="'.$opt->title.'"/><br/>';
@@ -111,21 +100,41 @@ if (!empty($_GET['poll_edit']) && is_numeric($_GET['poll_edit'])) {
     }
 
     echo xhtmlSubmit('Save changes');
-    echo '</form><br/>';
 
-//    echo '<a href="'.URLadd('poll_stats', $pollId).'">Poll stats</a><br/>';
-    echo '<a href="?poll_edit='.$pollId.'&delete">Delete poll</a><br/>';
+    echo '<br/>';
+    echo ahref('a/polls/stats/'.$this->child, 'Poll stats').'<br/>';
+    echo '<br/>';
+    echo ahref('a/polls/remove/'.$this->child, 'Remove poll').'<br/>';
+    break;
 
-    return;
-}
+case 'stats':
+    echo '<h1>Poll stats</h1>';
 
-$owner = 0;
+    $votes = PollItem::getPollStats($this->child);
+    $tot_votes = 0;
+    foreach ($votes as $row)
+        $tot_votes += $row['cnt'];
 
+    foreach ($votes as $row) {
+        $pct = 0;
+        if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
+        echo $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes<br/>';
+    }
+    break;
+
+case 'remove':
+    if (confirmed('Are you sure you want to remove this site poll?') ) {
+        PollItem::removePoll($this->child);
+    }
+    break;
+
+case 'add':
+/*
 if (!empty($_POST['poll_q'])) {
     if (!empty($_POST['poll_start_man'])) {
         $pollId = $caller::addPollExactPeriod(SITE, $owner, $_POST['poll_q'], $_POST['poll_start_man'], $_POST['poll_end_man']);
     } else {
-        $pollId = $caller::addPoll(SITE, $owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
+        $pollId = PollItem::add(SITE, $owner, $_POST['poll_q'], $_POST['poll_dur'], $_POST['poll_start']);
     }
 
     for ($i=1; $i<=$answer_fields; $i++) {
@@ -137,81 +146,46 @@ if (!empty($_POST['poll_q'])) {
         }
     }
 }
+*/
+    echo '<h2>Add new poll</h2>';
 
-echo '<h2 onclick="toggle_element(\'new_poll_form\')">Add new poll</h2>';
-echo '<div id="new_poll_form" style="display: none;">';
-echo '<form method="post" action="">';
-echo 'Question: '.xhtmlInput('poll_q', '', 30).'<br/>';
+    echo '<form method="post" action="">';
+    echo 'Question: '.xhtmlInput('poll_q', '', 30).'<br/>';
 
-echo '<div id="poll_period_selector">';
-echo 'Duration of the poll: ';
-echo '<select name="poll_dur">';
-echo '<option value="day">1 day</option>';
-echo '<option value="week" selected="selected">1 week</option>';
-echo '<option value="month">1 month</option>';
-echo '</select><br/>';
+    echo '<div id="poll_period_selector">';
+    echo 'Duration of the poll: ';
+    echo '<select name="poll_dur">';
+    echo '<option value="1d">1 day</option>';
+    echo '<option value="1w" selected="selected">1 week</option>';
+    echo '<option value="1m">1 month</option>';
+    echo '</select><br/>';
 
-echo 'Poll start: ';
-echo '<select name="poll_start">';
-echo '<option value="thismonday">monday this week</option>';
-echo '<option value="nextmonday">monday next week</option>';
-echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
-echo '</select><br/>';
-echo '<a href="#" onclick="hide_element(\'poll_period_selector\');show_element(\'poll_period_manual\')">Enter dates manually</a>';
-echo '</div>';
-echo '<div id="poll_period_manual" style="display: none;">';
-    echo 'Start time: '.xhtmlInput('poll_start_man').' (format YYYY-MM-DD HH:MM)<br/>';
-    echo 'End time: '.xhtmlInput('poll_end_man').'<br/>';
-    echo '<a href="#" onclick="hide_element(\'poll_period_manual\');show_element(\'poll_period_selector\')">Use dropdown menus instead</a>';
-echo '</div>';
-echo '<br/><br/>';
+    echo 'Poll start: ';
+    echo '<select name="poll_start">';
+    echo '<option value="thismonday">monday this week</option>';
+    echo '<option value="nextmonday">monday next week</option>';
+    echo '<option value="nextfree"'.(count($list)?' selected="selected"':'').'>next free time</option>';
+    echo '</select><br/>';
+    echo '<a href="#" onclick="hide_el(\'poll_period_selector\');show_el(\'poll_period_manual\')">Enter dates manually</a>';
+    echo '</div>';
+    echo '<div id="poll_period_manual" style="display: none;">';
+        echo 'Start time: '.xhtmlInput('poll_start_man').' (format YYYY-MM-DD HH:MM)<br/>';
+        echo 'End time: '.xhtmlInput('poll_end_man').'<br/>';
+        echo '<a href="#" onclick="hide_el(\'poll_period_manual\');show_el(\'poll_period_selector\')">Use dropdown menus instead</a>';
+    echo '</div>';
+    echo '<br/><br/>';
 
-for ($i=1; $i<=$answer_fields; $i++)
-    echo t('Answer').' '.$i.': '.xhtmlInput('poll_a'.$i, '', 30).'<br/>';
+    for ($i=1; $i<=8; $i++)
+        echo 'Answer '.$i.': '.xhtmlInput('poll_a'.$i, '', 30).'<br/>';
 
-echo xhtmlSubmit('Create');
-echo '</form>';
-echo '</div>';
+    echo xhtmlSubmit('Create');
+    echo '</form>';
+    break;
 
-echo '<h1>polls</h1>';
-
-$list = $caller::getPolls(SITE);
-if (count($list)) {
-    echo '<table>';
-    echo '<tr>';
-    echo '<th>Title</th>';
-    echo '<th>Starts</th>';
-    echo '<th>Ends</th>';
-    echo '</tr>';
+default:
+    throw new Exception ('no such view: '.$this->owner);
 }
 
-foreach ($list as $row)
-{
-    $expired = $active = false;
 
-    if (time()  > ts($row['timeEnd']))
-        $expired = true;
-
-    if (time() >= ts($row['timeStart']) && !$expired)
-        $active = true;
-
-    if ($expired) {
-        echo '<tr style="font-style: italic">';
-    } else if ($active) {
-        echo '<tr style="font-weight: bold">';
-    } else {
-        echo '<tr>';
-    }
-
-    echo '<td><a href="?poll_edit='. $row['pollId'].'">'.$row['pollText'].'</a></td>';
-
-    echo '<td>'.$row['timeStart'].'</td>';
-    echo '<td>'.$row['timeEnd'].'</td>';
-
-    echo '</tr>';
-}
-
-if (count($list)) echo '</table>';
-echo '<br/>';
 
 ?>
