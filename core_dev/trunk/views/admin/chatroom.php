@@ -5,8 +5,6 @@
 //TODO: ability to LOCK a chatroom so it cant be used
 //TODO: ability to configure a chatroom to allow anonymous users
 
-//TODO: delete chat rooms
-
 $session->requireSuperAdmin();
 
 switch ($this->owner) {
@@ -56,6 +54,15 @@ case 'edit':
     $x->addSubmit('Save');
     $x->setHandler('editHandler');
     echo $x->render();
+    echo '<br/>';
+    echo '&raquo; '.ahref('a/chatroom/remove/'.$this->child, 'Remove chatroom').'<br/>';
+    break;
+
+case 'remove':
+    if (confirmed('Are you sure you want to remove this chatroom?')) {
+        ChatRoom::remove($this->child);
+        js_redirect('a/chatroom/list');
+    }
     break;
 
 case 'new':

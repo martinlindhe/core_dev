@@ -42,6 +42,11 @@ class ChatRoom
         return SqlObject::store($o, self::$tbl_name);
     }
 
+    public static function remove($id)
+    {
+        return SqlObject::deleteById($id, self::$tbl_name);
+    }
+
 }
 
 ?>
