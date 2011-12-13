@@ -90,15 +90,13 @@ Photo albums: core/PhotoAlbum.php, core/views/albums.php
             click to enhance and see details + comments+ability to comment.. drop lightbox?
 
 Polls:
-    * FIX: rename tblPolls columns & fix up PollItem
-    * rewrite & cleranup tblRatings stuff (used by polls)   untangle from PollItem class
-    * rewrite&cleanup core/Categories (used by polls)
-    * Poll/Vote for "best movie of the week" etc, duration based
-
+    * ...
 
 
 Rating:
-    * rewrite core/RateWidget.php
+    * FIXME: ratings:ratingChange js event never triggers!
+    * FIXME: make ability to rate user photo work
+
 
 Special:
     * ability to send Gifts to other users (give away 1 month membership etc)

@@ -36,10 +36,10 @@ case 'show':
     $a->rel  = 'lightbox';
     $a->content = showThumb($f->id, $f->name, 150, 150);
     echo $a->render();
-
+/*
     $lb = new YuiLightbox();
     echo $lb->render().'<br/>';
-
+*/
     if ($session->id && $session->id != $f->uploader)
         echo '&raquo; '.ahref('u/report/photo/'.$f->id, 'Report photo').'<br/>';
 
@@ -49,6 +49,14 @@ case 'show':
         echo '<br/>';
         echo '&raquo; '.ahref('u/photo/delete/'.$f->id, 'Delete photo').'<br/>';
     }
+    echo '<br/>';
+
+    $view = new ViewModel('views/user/rate.php');
+    $view->registerVar('view', 'handle');
+    $view->registerVar('owner', FILE);
+    $view->registerVar('child', $f->id);
+    echo 'Rate photo:<br/>';
+    echo $view->render();
     break;
 
 case 'rotate':

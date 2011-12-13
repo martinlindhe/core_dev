@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-//TODO: untangle tblRatings stuff from here
+//TODO later: untangle tblRatings stuff from here (PollItem is only user)
 
 require_once('constants.php');
 
