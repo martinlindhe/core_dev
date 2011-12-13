@@ -4,6 +4,7 @@ $session->requireSuperAdmin();
 
 echo '<h1>core_dev admin</h1>';
 echo ahref('a/moderation', 'Moderation queue').'<br/>';
+echo ahref('a/feedback',   'User feedback').'<br/>';
 echo '<br/>';
 echo ahref('a/users',          'Users').'<br/>';
 echo ahref('a/usergroups',     'User groups').'<br/>';

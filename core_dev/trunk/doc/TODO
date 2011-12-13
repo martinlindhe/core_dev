@@ -6,8 +6,6 @@ FIX tooltip userinfo bug: http://yuilibrary.com/forum/viewtopic.php?p=29083#p290
 
 ---
 
-
-
 BUGS:
     * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
     * later: fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
@@ -49,11 +47,10 @@ Privacy
 
 FAQ module:
     * ...
-    * update admin view?
 
 
 User feedback:
-    * implement possibility for user to give feedback. DONT put this in same queue as moderation queue
+    * finish view/admin/feedback.php so admin can delete item & send message to user
     * LATER: add ability for user to give video feedback
 
 
@@ -92,8 +89,14 @@ Photo albums: core/PhotoAlbum.php, core/views/albums.php
     * PRIO: proper default "album view" show 5 images each row,
             click to enhance and see details + comments+ability to comment.. drop lightbox?
 
+Polls:
+    * rewrite core/PollManager.php, core/PollWidget.php make user&admin views
+    * Poll/Vote for "best movie of the week" etc, duration based
+
+Rating:
+    * rewrite core/RateWidget.php
+
 Special:
-    * vote for "best movie of the week"
     * ability to send Gifts to other users (give away 1 month membership etc)
 
 
@@ -110,6 +113,9 @@ ADMIN:
 
 
 ---
+BEFORE 0.3:
+    * ViewHandler child, child2 mess should be solved
+    * more admin & user views
 
 
 BEFORE 1.0 (201?):
