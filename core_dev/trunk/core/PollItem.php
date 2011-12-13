@@ -9,8 +9,7 @@
 
 //STATUS: wip
 
-//TODO: cleanup internal class to use SqlObject
-//TODO: rename table columns
+//TODO: untangle tblRatings stuff from here
 
 require_once('constants.php');
 
@@ -19,17 +18,32 @@ require_once('Yui3PieChart.php');
 
 class PollItem
 {
+    var $id;
+    var $type;  ///< currently only SITE is used
+    var $text;
+    var $time_start;
+    var $time_end;
+    var $time_created;
+    var $time_deleted;
+    var $owner;   ///< XXX currently unused
+    var $created_by;
+    var $deleted_by;
+
+    protected static $tbl_name = 'tblPolls';
+
     static function get($id)
     {
-        $q = 'SELECT * FROM tblPolls WHERE pollId = ? AND deletedBy = ?';
-        return Sql::pSelectRow($q, 'ii', $id, 0);
+        $q = 'SELECT * FROM tblPolls WHERE id = ? AND deleted_by = ?';
+        $row = Sql::pSelectRow($q, 'ii', $id, 0);
+
+        return SqlObject::loadObject($row, __CLASS__);
     }
 
     static function getPolls($type, $ownerId = 0)
     {
         $q =
-        'SELECT * FROM tblPolls WHERE type = ? AND ownerId = ? AND deletedBy = ?'.
-        ' ORDER BY timeStart ASC,pollText ASC';
+        'SELECT * FROM tblPolls WHERE type = ? AND owner = ? AND deleted_by = ?'.
+        ' ORDER BY time_start ASC,text ASC';
         return Sql::pSelect($q, 'iii', $type, $ownerId, 0);
     }
 
@@ -77,9 +91,11 @@ class PollItem
     {
         $q =
         'SELECT * FROM tblPolls'.
-        ' WHERE type = ? AND ownerId = ? AND deletedBy = ? AND NOW() BETWEEN timeStart AND timeEnd'.
-        ' ORDER BY timeStart ASC,pollText ASC';
-        return Sql::pSelect($q, 'iii', $type, $ownerId, 0);
+        ' WHERE type = ? AND owner = ? AND deleted_by = ? AND NOW() BETWEEN time_start AND time_end'.
+        ' ORDER BY time_start ASC,text ASC';
+        $list = Sql::pSelect($q, 'iii', $type, $ownerId, 0);
+
+        return SqlObject::loadObjects($list, __CLASS__);
     }
 
     /**
@@ -108,9 +124,9 @@ class PollItem
 
         case 'nextfree':
             $q =
-            'SELECT timeEnd FROM tblPolls'.
-            ' WHERE ownerId = ? AND deletedBy = ?'.
-            ' ORDER BY timeStart DESC'.
+            'SELECT time_end FROM tblPolls'.
+            ' WHERE owner = ? AND deleted_by = ?'.
+            ' ORDER BY time_start DESC'.
             ' LIMIT 1';
             $data = Sql::pSelectRow($q, 'ii', $ownerId, 0);
 
@@ -130,16 +146,16 @@ class PollItem
         $session = SessionHandler::getInstance();
 
         $q =
-        'INSERT INTO tblPolls SET type = ?, ownerId = ?,'.
-        ' createdBy = ?, pollText = ?, timeStart = ?,'.
-        ' timeEnd = ?, timeCreated=NOW()';
+        'INSERT INTO tblPolls SET type = ?, owner = ?,'.
+        ' created_by = ?, text = ?, time_start = ?,'.
+        ' time_end = ?, time_created = NOW()';
         return Sql::pInsert($q, 'iiisss', $type, $owner, $session->id, trim($text), sql_datetime($time_start), sql_datetime($time_end));
     }
 
     static function removePoll($id)
     {
         $session = SessionHandler::getInstance();
-        $q = 'UPDATE tblPolls SET deletedBy = ?, timeDeleted=NOW() WHERE pollId = ?';
+        $q = 'UPDATE tblPolls SET deleted_by = ?, time_deleted = NOW() WHERE id = ?';
         Sql::pUpdate($q, 'ii', $session->id, $id);
     }
 
@@ -147,11 +163,11 @@ class PollItem
     {
         $add_string = '';
 
-        if (!empty($timestart)) $add_string .= ', timeStart = "'.$timestart.'"';
-        if (!empty($timeend)) $add_string .= ', timeEnd = "'.$timeend.'"';
+        if (!empty($timestart)) $add_string .= ', time_start = "'.$timestart.'"';
+        if (!empty($timeend)) $add_string .= ', time_end = "'.$timeend.'"';
 
         $db = SqlHandler::getInstance();
-        $q = 'UPDATE tblPolls SET pollText="'.$db->escape($_text).'"'.$add_string.' WHERE pollId='.$id;
+        $q = 'UPDATE tblPolls SET text="'.$db->escape($_text).'"'.$add_string.' WHERE id='.$id;
         $db->update($q);
     }
 

@@ -10,7 +10,7 @@ case 'active':
     $list = PollItem::getActivePolls(SITE);
 //    d($list);
     foreach ($list as $p) {
-        echo ahref('u/polls/show/'.$p['pollId'], $p['pollText']).'<br/>';
+        echo ahref('u/polls/show/'.$p->id, $p->text).'<br/>';
     }
     break;
 
@@ -20,8 +20,8 @@ case 'show':
     if (!$this->child)
         throw new Exception ('no id set');
 
-    $data = PollItem::get($this->child);
-    if (!$data)
+    $poll = PollItem::get($this->child);
+    if (!$poll)
         die('meh');
 
     if (!empty($_GET['poll_vote']) && !empty($_GET['opt']))
@@ -80,21 +80,21 @@ case 'show':
     );
 
     $active = false;
-    if (time() >= ts($data['timeStart']) && time() <= ts($data['timeEnd']))
+    if (time() >= ts($poll->time_start) && time() <= ts($poll->time_end))
         $active = true;
 
-    if (!$data['timeStart'])
+    if (!$poll->time_start)
         $active = true;
 
     echo '<div class="item">';
     if ($active)
         echo 'Active poll: ';
 
-    echo $data['pollText'].'<br/><br/>';
+    echo $poll->text.'<br/><br/>';
 
     echo '<div id="poll'.$this->child.'">';
-    if ($data['timeStart'])
-        echo 'Starts: '.$data['timeStart'].', ends '.$data['timeEnd'].'<br/>';
+    if ($poll->time_start)
+        echo 'Starts: '.$poll->time_start.', ends '.$poll->time_end.'<br/>';
 
     if ($session->id && $active && !PollItem::hasAnsweredPoll($this->child))
     {

@@ -16,10 +16,10 @@ echo '<h1>Manage polls</h1>';
     $list = PollItem::getPolls(SITE);
 
     $dt = new YuiDatatable();
-    $dt->addColumn('pollId',     '#', 'link', 'a/polls/edit/', 'title');
-    $dt->addColumn('timeStart', 'Starts');
-    $dt->addColumn('timeEnd',   'Ends');
-    $dt->addColumn('timeCreated', 'Created');
+    $dt->addColumn('id',     '#', 'link', 'a/polls/edit/', 'text');
+    $dt->addColumn('time_start', 'Starts');
+    $dt->addColumn('time_end',   'Ends');
+    $dt->addColumn('time_created', 'Created');
     $dt->setDataSource( $list );
     echo $dt->render();
     echo '<br/>';
@@ -66,18 +66,18 @@ case 'edit':
 
     $frm = new XhtmlForm();
     $frm->addHidden('poll', $this->child);
-    $frm->addInput('poll_q', 'Question', $poll['pollText']);
+    $frm->addInput('poll_q', 'Question', $poll->text);
 
-    if (datetime_to_timestamp($poll['timeStart']) < time()) {
-        $frm->addText($poll['timeStart'], 'Poll starts');
+    if (ts($poll->time_start) < time()) {
+        $frm->addText($poll->time_start, 'Poll starts');
     } else {
-        $frm->addInput('poll_ts', 'Poll starts', $poll['timeStart']);
+        $frm->addInput('poll_ts', 'Poll starts', $poll->time_start);
     }
 
-    if (datetime_to_timestamp($poll['timeEnd']) < time()) {
-        $frm->addText($poll['timeEnd'], 'Poll ends');
+    if (ts($poll->time_end) < time()) {
+        $frm->addText($poll->time_end, 'Poll ends');
     } else {
-        $frm->addInput('poll_te', 'Poll ends', $poll['timeEnd']);
+        $frm->addInput('poll_te', 'Poll ends', $poll->time_end);
     }
 
     if ($poll) {
@@ -104,15 +104,28 @@ case 'stats':
     echo '<h1>Poll stats</h1>';
 
     $votes = PollItem::getPollStats($this->child);
-    $tot_votes = 0;
-    foreach ($votes as $row)
-        $tot_votes += $row['cnt'];
 
-    foreach ($votes as $row) {
+    $tot_votes = 0;
+    foreach ($votes as $cnt)
+        $tot_votes += $cnt;
+
+    $list = array();
+    foreach ($votes as $title => $cnt) {
         $pct = 0;
-        if ($tot_votes) $pct = (($row['cnt'] / $tot_votes)*100);
-        echo $row['categoryName'].' got '.$row['cnt'].' ('.$pct.'%) votes<br/>';
+        if ($tot_votes)
+            $pct = (($cnt / $tot_votes)*100);
+        echo ' &bull; '.$title.' got '.$cnt.' votes ('.$pct.'%)<br/>';
+
+        $list[] = array('name' => $title, 'value' => $cnt);
     }
+
+    $pie = new Yui3PieChart();
+    $pie->setWidth(100);
+    $pie->setHeight(100);
+    $pie->setCategoryKey('name');
+    $pie->setDataSource($list);
+
+    echo $pie->render();
     break;
 
 case 'remove':
