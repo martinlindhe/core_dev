@@ -39,12 +39,12 @@ class PollItem
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-    static function getPolls($type, $ownerId = 0)
+    static function getPolls($type, $owner = 0)
     {
         $q =
         'SELECT * FROM tblPolls WHERE type = ? AND owner = ? AND deleted_by = ?'.
         ' ORDER BY time_start ASC,text ASC';
-        return Sql::pSelect($q, 'iii', $type, $ownerId, 0);
+        return Sql::pSelect($q, 'iii', $type, $owner, 0);
     }
 
     /** Get statistics for specified poll */
@@ -87,13 +87,13 @@ class PollItem
         return true;
     }
 
-    static function getActivePolls($type, $ownerId = 0)
+    static function getActivePolls($type, $owner = 0)
     {
         $q =
         'SELECT * FROM tblPolls'.
         ' WHERE type = ? AND owner = ? AND deleted_by = ? AND NOW() BETWEEN time_start AND time_end'.
         ' ORDER BY time_start ASC,text ASC';
-        $list = Sql::pSelect($q, 'iii', $type, $ownerId, 0);
+        $list = Sql::pSelect($q, 'iii', $type, $owner, 0);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
@@ -101,7 +101,7 @@ class PollItem
     /**
      * @param $duration_mode "1d", "2w", "2m"
      */
-    static function add($type, $ownerId, $text, $duration_mode = '', $start_mode = '')
+    static function add($type, $owner, $text, $duration_mode = '', $start_mode = '')
     {
         $length = parse_duration($duration_mode);
         if (!$length)
@@ -128,7 +128,7 @@ class PollItem
             ' WHERE owner = ? AND deleted_by = ?'.
             ' ORDER BY time_start DESC'.
             ' LIMIT 1';
-            $data = Sql::pSelectRow($q, 'ii', $ownerId, 0);
+            $data = Sql::pSelectRow($q, 'ii', $owner, 0);
 
             $timeStart = $data ? ts($data['timeEnd']) : time();
             break;
@@ -138,7 +138,7 @@ class PollItem
         }
 
         $timeEnd = $timeStart + $length;
-        return self::addPollExactPeriod($type, $ownerId, $text, $timeStart, $timeEnd);
+        return self::addPollExactPeriod($type, $owner, $text, $timeStart, $timeEnd);
     }
 
     static function addPollExactPeriod($type, $owner, $text, $time_start, $time_end)
@@ -159,15 +159,15 @@ class PollItem
         Sql::pUpdate($q, 'ii', $session->id, $id);
     }
 
-    static function updatePoll($id, $_text, $timestart = '', $timeend = '')
+    static function updatePoll($id, $text, $time_start = '', $time_end = '')
     {
         $add_string = '';
 
-        if (!empty($timestart)) $add_string .= ', time_start = "'.$timestart.'"';
-        if (!empty($timeend)) $add_string .= ', time_end = "'.$timeend.'"';
+        if (!empty($time_start)) $add_string .= ', time_start = "'.$time_start.'"';
+        if (!empty($time_end)) $add_string .= ', time_end = "'.$time_end.'"';
 
         $db = SqlHandler::getInstance();
-        $q = 'UPDATE tblPolls SET text="'.$db->escape($_text).'"'.$add_string.' WHERE id='.$id;
+        $q = 'UPDATE tblPolls SET text="'.$db->escape($text).'"'.$add_string.' WHERE id='.$id;
         $db->update($q);
     }
 
