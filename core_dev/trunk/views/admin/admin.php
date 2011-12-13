@@ -11,6 +11,7 @@ echo ahref('a/files',          'Files').'<br/>';
 echo ahref('a/chatroom/list',  'Chatrooms').'<br/>';
 echo ahref('a/userdata/list',  'Userdata types').'<br/>';
 echo ahref('a/reserved_words', 'Reserved words').'<br/>';
+echo ahref('a/faq',            'FAQ').'<br/>';
 echo '<br/>';
 echo ahref('a/phpinfo',        'phpinfo()').'<br/>';
 echo ahref('a/compatiblity',   'Compatibility check').'<br/>';
