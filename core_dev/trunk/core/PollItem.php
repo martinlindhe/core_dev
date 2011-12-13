@@ -9,12 +9,11 @@
 
 //STATUS: wip
 
-//TODO later: untangle tblRatings stuff from here (PollItem is only user)
-
 require_once('constants.php');
 
 require_once('CategoryList.php');
 require_once('Yui3PieChart.php');
+require_once('Rating.php');
 
 class PollItem
 {
@@ -45,46 +44,6 @@ class PollItem
         'SELECT * FROM tblPolls WHERE type = ? AND owner = ? AND deleted_by = ?'.
         ' ORDER BY time_start ASC,text ASC';
         return Sql::pSelect($q, 'iii', $type, $owner, 0);
-    }
-
-    /** Get statistics for specified poll */
-    static function getPollStats($id)
-    {
-        $q  =
-        'SELECT t1.categoryName, '.
-            '(SELECT COUNT(*) FROM tblRatings WHERE value=t1.categoryId) AS cnt'.
-        ' FROM tblCategories AS t1'.
-        ' WHERE t1.ownerId = ?';
-        return Sql::pSelectMapped($q, 'i', $id);
-    }
-
-    /** Has current user answered specified poll? */
-    static function hasAnsweredPoll($id)
-    {
-        $session = SessionHandler::getInstance();
-        if (!$session->id)
-            return true;
-
-        $q = 'SELECT owner FROM tblRatings WHERE userId = ? AND owner = ?';
-        if (Sql::pSelectItem($q, 'ii', $session->id, $id))
-            return true;
-
-        return false;
-    }
-
-    /** Votes for a poll */
-    static function addVote($id, $value)
-    {
-        $session = SessionHandler::getInstance();
-        if (!$session->id)
-            return false;
-
-        if (self::hasAnsweredPoll($id))
-            return false;
-
-        $q = 'INSERT INTO tblRatings SET type = ?, owner = ?, userId = ?, value = ?, timestamp = NOW()';
-        Sql::pInsert($q, 'iiii', POLL, $id, $session->id, $value);
-        return true;
     }
 
     static function getActivePolls($type, $owner = 0)

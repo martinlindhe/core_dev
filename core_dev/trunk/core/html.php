@@ -99,7 +99,7 @@ function ahref($url, $text, $target = '', $onclick = '', $class = '')
     $a->class = $class;
     $a->target = $target;
     $a->onClick($onclick);
-    
+
     return $a->render();
 }
 

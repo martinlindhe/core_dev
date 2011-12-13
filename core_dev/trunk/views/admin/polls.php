@@ -103,7 +103,7 @@ case 'edit':
 case 'stats':
     echo '<h1>Poll stats</h1>';
 
-    $votes = PollItem::getPollStats($this->child);
+    $votes = Rating::getStats(POLL, $this->child);
 
     $tot_votes = 0;
     foreach ($votes as $cnt)

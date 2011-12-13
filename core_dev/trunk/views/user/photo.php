@@ -101,7 +101,7 @@ case 'delete':
     break;
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    echo 'no such view: '.$this->owner;
 }
 
 ?>

@@ -90,20 +90,23 @@ case 'vote':
     // child2 = option id
 
     echo 'WOWOWsls';
-        if (!empty($_GET['rate_vote']) && !empty($_GET['opt']))
-        {
-            if (!$session->id || !is_numeric($_GET['opt']))
-                die('XXX');
+    if (!empty($_GET['rate_vote']) && !empty($_GET['opt']))
+    {
+        if (!$session->id || !is_numeric($_GET['opt']))
+            die('XXX');
 
-            $page->disableDesign();
+        $page->disableDesign();
 
-            self::addPollVote($type, $_GET['rate_vote'], $_GET['opt']);
+        Rating::addVote($type, $_GET['rate_vote'], $_GET['opt']);
 
-            ob_clean(); // XXX hack.. removes previous output
-            die('1');
-        }
+        ob_clean(); // XXX hack.. removes previous output
+        die('1');
+    }
     break;
 
+default:
+    echo 'no such view: '.$this->owner;
 }
+
 
 ?>

@@ -14,6 +14,19 @@ case 'active':
     }
     break;
 
+case 'vote':
+    // child = vote id
+    // child2 = option id
+
+    if (!$session->id || !is_numeric($this->child) || !is_numeric($this->child2))
+        throw new Exception ('XXX');
+
+    Rating::addVote(POLL, $this->child, $this->child2);
+
+    $page->disableDesign();
+    echo '1';
+    break;
+
 case 'show':
     //child = poll id
 
@@ -23,19 +36,6 @@ case 'show':
     $poll = PollItem::get($this->child);
     if (!$poll)
         die('meh');
-
-    if (!empty($_GET['poll_vote']) && !empty($_GET['opt']))
-    {
-        if (!$session->id || !is_numeric($_GET['poll_vote']) || !is_numeric($_GET['opt']))
-            throw new Exception ('XXX');
-
-        $page->disableDesign();
-
-        PollItem::addVote($_GET['poll_vote'], $_GET['opt']);
-
-        ob_clean(); // XXX hack.. removes previous output
-        die('1');
-    }
 
     $header = XhtmlHeader::getInstance();
 
@@ -53,10 +53,10 @@ case 'show':
     'function submit_poll(id,opt)'.
     '{'.
         'YUI().use("io-base", function(Y) {'.
-            'var uri = "?poll_vote=" + id + "&opt=" + opt;'.
+            'var uri = "'.relurl('').'u/polls/vote/" + id + "/" + opt;'.
 
             // Define a function to handle the response data
-            'function complete(id, o, args) {'.
+            ' complete(id, o, args) {'.
                 'var id = id;'.               // Transaction ID
                 'var data = o.responseText;'. // Response data
                 'var args = args[1];'.
@@ -96,7 +96,7 @@ case 'show':
     if ($poll->time_start)
         echo 'Starts: '.$poll->time_start.', ends '.$poll->time_end.'<br/>';
 
-    if ($session->id && $active && !PollItem::hasAnsweredPoll($this->child))
+    if ($session->id && $active && !Rating::hasAnswered(POLL, $this->child))
     {
         $cats = new CategoryList( POLL );
         $cats->setOwner($this->child);
@@ -123,8 +123,8 @@ case 'show':
             }
         }
 
-        $votes = PollItem::getPollStats($this->child);
-
+        $votes = Rating::getStats(POLL, $this->child);
+//d($votes);
         $tot_votes = 0;
         foreach ($votes as $cnt)
             $tot_votes += $cnt;
