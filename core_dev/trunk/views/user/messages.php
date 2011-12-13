@@ -59,15 +59,7 @@ case 'send':
 
     function msgSubmit($p)
     {
-        $session = SessionHandler::getInstance();
-
-        $m = new Message();
-        $m->to = $p['to'];
-        $m->from = $session->id;
-        $m->body = $p['msg'];
-        $m->time_sent = sql_datetime( time() );
-        Message::store($m);
-
+        Message::send($p['to'], $p['msg']);
         js_redirect('u/messages');
     }
 

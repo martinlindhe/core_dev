@@ -24,13 +24,13 @@ class Message
 
     protected static $tbl_name = 'tblMessages';
 
-    static function store($obj)
+    public static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
     /** @return all messages in the Inbox of $id */
-    static function getInbox($id)
+    public static function getInbox($id)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -43,7 +43,7 @@ class Message
     }
 
     /** @return all messages in the Outbox of $id */
-    static function getOutbox($id)
+    public static function getOutbox($id)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -53,6 +53,21 @@ class Message
         $list = Sql::pSelect($q, 'i', $id);
 
         return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    /**
+     * @return message id
+     */
+    public static function send($to, $msg)
+    {
+        $session = SessionHandler::getInstance();
+
+        $m = new Message();
+        $m->to = $to;
+        $m->from = $session->id;
+        $m->body = $msg;
+        $m->time_sent = sql_datetime( time() );
+        return self::store($m);
     }
 
 }

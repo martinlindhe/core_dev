@@ -1,7 +1,7 @@
 <?php
-// XXX implement handling of feedback!!!
 
 require_once('FeedbackItem.php');
+require_once('Message.php');
 require_once('YuiDatatable.php');
 
 $session->requireAdmin();
@@ -25,9 +25,44 @@ case 'default':
 
 case 'handle':
     // child = tblFeedback.id
-    $fb = FeedbackItem::get($this->child);
 
-    d($fb);
+    function fbHandle($p)
+    {
+        $msg_id = Message::send($p['to'], $p['msg']);
+        FeedbackItem::markHandled($p['owner'], $msg_id);
+        js_redirect('a/feedback/default');
+    }
+
+    $fb = FeedbackItem::get($this->child);
+    if (!$fb)
+        die('Eppp');
+
+    $from = User::get($fb->from);
+
+    echo '<h2>Feedback from '.$from->name.'</h2>';
+    echo 'Subject: '.$fb->subject.'<br/>';
+    echo 'Message: '.nl2br($fb->body);
+    echo '<br/>';
+
+    $msg = "In response to your feedback:\n\n".$fb->body;
+
+    $frm = new XhtmlForm();
+    $frm->addHidden('owner', $this->child);
+    $frm->addHidden('to', $fb->from);
+    $frm->addTextarea('msg', 'Reply', $msg);
+    $frm->addSubmit('Send');
+    $frm->setHandler('fbHandle');
+    echo $frm->render();
+
+
+    echo '<br/>';
+    echo ahref('a/feedback/markhandled/'.$this->child, 'Mark as handled');
+    break;
+
+case 'markhandled':
+    // child = tblFeedback.id
+    FeedbackItem::markHandled($this->child);
+    js_redirect('a/feedback/default');
     break;
 
 default:
