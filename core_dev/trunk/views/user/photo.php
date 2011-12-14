@@ -36,10 +36,10 @@ case 'show':
     $a->rel  = 'lightbox';
     $a->content = showThumb($f->id, $f->name, 150, 150);
     echo $a->render();
-/*
+
     $lb = new YuiLightbox();
     echo $lb->render().'<br/>';
-*/
+
     if ($session->id && $session->id != $f->uploader)
         echo '&raquo; '.ahref('u/report/photo/'.$f->id, 'Report photo').'<br/>';
 

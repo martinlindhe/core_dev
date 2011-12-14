@@ -8,7 +8,7 @@ echo ahref('a/feedback',   'User feedback').'<br/>';
 echo '<br/>';
 echo ahref('a/users',          'Users').'<br/>';
 echo ahref('a/usergroups',     'User groups').'<br/>';
-echo ahref('a/files',          'Files').'<br/>';
+echo ahref('a/files/list',     'Files').'<br/>';
 echo ahref('a/polls',          'Polls').'<br/>';
 echo ahref('a/chatroom/list',  'Chatrooms').'<br/>';
 echo ahref('a/userdata/list',  'Userdata types').'<br/>';

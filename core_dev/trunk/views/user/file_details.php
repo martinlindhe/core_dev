@@ -32,6 +32,8 @@ case 'audio/x-m4a': // works in Chrome, NOT IN FF6, ??? in IE9
     break;
 
 case 'image/jpeg':
+case 'image/png':
+case 'image/gif':
     $i = new XhtmlComponentImage();
     $i->title = $f->name;
     $i->src = '/coredev/file/'.$f->id;
