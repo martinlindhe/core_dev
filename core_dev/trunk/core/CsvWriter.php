@@ -26,6 +26,8 @@ class CsvWriter
 
     function setData($data) { $this->data = $data; }
 
+    function setSeparator($s) { $this->separator = $s; }
+
     /**
      * Escapes data if nessecary
      * @param $force force escaping?
@@ -50,7 +52,7 @@ class CsvWriter
         return $s;
     }
 
-    function render()
+    function render($filename = '')
     {
         $res = '';
 
@@ -71,7 +73,10 @@ class CsvWriter
             $res .= implode($this->separator, $line).$this->eol;
         }
 
-        return $res;
+        if ($filename)
+            file_put_contents($filename, $res);
+        else
+            return $res;
     }
 }
 
