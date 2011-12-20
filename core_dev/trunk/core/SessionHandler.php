@@ -33,7 +33,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     static $_instance;             ///< singleton
 
     var $id;                       ///< internal user id (tblUsers.userId)
-    var $type  = USER_REGULAR;     ///< USER_REGULAR or USER_FACEBOOK session
+    var $type  = SESSION_REGULAR;  ///< SESSION_REGULAR or SESSION_FACEBOOK session
     var $ip;                       ///< current IP address
     var $username;                 ///< stores "facebook id" for facebook users, otherwise unique username
     var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
@@ -119,7 +119,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
      * @param $pwd
      * @return true on success
      */
-    function login($username, $pwd, $type = USER_REGULAR)
+    function login($username, $pwd, $type = SESSION_REGULAR)
     {
         $error   = ErrorHandler::getInstance();
 
@@ -132,11 +132,11 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $pwd      = trim($pwd);
 
         switch ($type) {
-        case USER_REGULAR:
+        case SESSION_REGULAR:
             $user = User::getByName($username);
             break;
 
-        case USER_FACEBOOK:
+        case SESSION_FACEBOOK:
             $user = new FacebookUser($username);
             break;
         default: throw new Exception ('hmm '.$type);
@@ -231,7 +231,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $this->type         = &$_SESSION['type'];
         $this->last_active  = &$_SESSION['last_active'];
 
-        if ($this->type == 'facebook')
+        if ($this->type == SESSION_FACEBOOK)
             $this->facebook_id = $this->username;
     }
 
@@ -395,11 +395,11 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             return false;
         }
 
-        $this->type = 'facebook';
+        $this->type = SESSION_FACEBOOK;
         $this->username    = $this->fb_handle->getUser();
         $this->facebook_id = $this->fb_handle->getUser();
 
-        if (!$this->login($this->facebook_id, '', 'facebook'))
+        if (!$this->login($this->facebook_id, '', $this->type))
             return false;
 
         // store email from this result

@@ -23,7 +23,7 @@ case 'user';
     echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
 
     $gender_id = UserSetting::get($user_id, 'gender');
-    $gender = Setting::getById(USERDATA_OPTIONS, $gender_id);
+    $gender = Setting::getById(USERDATA_OPTION, $gender_id);
     echo 'Gender: '.$gender.'<br/>';
 
     $pres = UserSetting::get($user_id, 'presentation');

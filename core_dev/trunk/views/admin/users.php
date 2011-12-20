@@ -48,7 +48,7 @@ $dt->addColumn('time_last_active',  'Last active');
 $dt->addColumn('last_ip',           'Last IP');
 $dt->addColumn('time_created',      'Created');
 $dt->addColumn('is_online',         'Online?');
-$dt->addColumn('type',              'Type', 'array', getUserTypes() );
+$dt->addColumn('type',              'Type', 'array', getSessionTypes() );
 // $dt->addColumn('userlevel',         'User level', 'array', getUserLevels() );
 
 

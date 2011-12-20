@@ -106,7 +106,7 @@ class UserHandler
         return true;
     }
 
-    public static function create($username, $password, $type = USER_REGULAR)
+    public static function create($username, $password, $type = SESSION_REGULAR)
     {
         $username = trim($username);
 

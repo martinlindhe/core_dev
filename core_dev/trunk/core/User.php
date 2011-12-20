@@ -7,46 +7,12 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip. REWRITE using static User object
+//STATUS: wip
 
-//XXX: move all group stuff to a UserHandler
-
+require_once('constants.php');
 require_once('SqlObject.php');
-
 require_once('UserHandler.php');
 require_once('UserSetting.php');
-
-define('USERLEVEL_NORMAL',      0);
-define('USERLEVEL_WEBMASTER',   1);
-define('USERLEVEL_ADMIN',       2);
-define('USERLEVEL_SUPERADMIN',  3);
-
-define('USER_REGULAR',  1);
-define('USER_FACEBOOK', 2);
-
-function getUserLevels()
-{
-    return array(
-    USERLEVEL_NORMAL     => 'Normal',
-    USERLEVEL_WEBMASTER  => 'Webmaster',
-    USERLEVEL_ADMIN      => 'Admin',
-    USERLEVEL_SUPERADMIN => 'Super Admin',
-    );
-}
-
-function getUserLevelName($n)
-{
-    $x = getUserLevels();
-    return $x[ $n ];
-}
-
-function getUserTypes()
-{
-    return array(
-    USER_REGULAR   => 'Regular',
-    USER_FACEBOOK  => 'Facebook',
-    );
-}
 
 /** XXX WIP: these links should be auto decorated by YuiTooltip */
 class UserLink
@@ -60,10 +26,10 @@ class UserLink
         $res = '';
 
         switch ($u->type) {
-        case USER_REGULAR:
+        case SESSION_REGULAR:
             //$res .= '(reg)';
             break;
-        case USER_FACEBOOK:
+        case SESSION_FACEBOOK:
 //            '<fb:name uid="'.$u->name.'" useyou="false"></fb:name>';
             //$pic = UserSetting::get($u->id, 'fb_picture');
             $name = UserSetting::get($u->id, 'fb_name');
@@ -82,11 +48,11 @@ class FacebookUser extends User
 {
     function __construct($fbid)
     {
-        $this->type = USER_FACEBOOK;
-        if (!$this->loadByName($fbid)) // tblUsers.userName = facebook id
+        $this->type = SESSION_FACEBOOK;
+        if (!$this->getByName($fbid)) // tblUsers.userName = facebook id
         {
             // create a new user entry for this facebook id
-            $this->create($fbid, USER_FACEBOOK);
+            $this->create($fbid, $this->type);
             $this->setPassword('');
         }
     }
@@ -95,15 +61,15 @@ class FacebookUser extends User
 class User
 {
     var $id;
-    var $type = USER_REGULAR;  ///< user type USER_REGULAR or USER_FACEBOOK
-    var $name;                 ///< username
+    var $type = SESSION_REGULAR; ///< user type, SESSION_REGULAR or SESSION_FACEBOOK
+    var $name;                   ///< username
     var $password;
     var $time_created;
     var $time_last_login;
     var $time_last_active;
     var $time_last_logout;
     var $time_deleted;
-    var $last_ip;              ///< the IP address used for the most recent login
+    var $last_ip;                ///< the IP address used for the most recent login
 
     protected static $tbl_name = 'tblUsers';
 
@@ -130,7 +96,6 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-    /** See UserHandler::create() */
     static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
