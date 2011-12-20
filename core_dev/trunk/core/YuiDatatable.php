@@ -50,7 +50,7 @@ class YuiDatatable
     private $sort_order;
     private $embed_arrays    = array();   ///< array with strings for substitution of numeric values in some columns
     private $color_rows      = array();
-    private $show_paginator = true;
+    private $show_paginator  = true;
 
     private $pixel_width;                 ///< if set, forces horizontal scrollbar on the datatable
     private $pixel_height;                ///< if set, forces vertical scrollbar on the datatable
@@ -62,10 +62,18 @@ class YuiDatatable
 
     function setRowsPerPage($n)
     {
-        $this->rows_per_page = $n;
+        if (!is_numeric($n))
+            throw new Execption ('not numeric: '.$n);
 
-        $this->rpp_opts[] = $n;
-        $this->rpp_opts = array_unique($this->rpp_opts);
+        $this->rows_per_page = $n;
+    }
+
+    function setRowsPerPageOptions($a)
+    {
+        if (!is_array($a))
+            throw new Exception ('not array: '.$a);
+
+        $this->rpp_opts = array_unique($n);
         sort($this->rpp_opts);
     }
 
