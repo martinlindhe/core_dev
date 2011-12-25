@@ -8,6 +8,7 @@
  * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Time
  * http://en.wikipedia.org/wiki/Leap_year
+ * http://en.wiktionary.org/wiki/kiloyear
  *
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
@@ -31,6 +32,7 @@ class ConvertDuration extends ConvertBase
     'mo'   => 2592000,        // 30 days
     'yr'   => 31556952,       // 365.2425 days (gregorian year), modern more exact measurement
     'jyr'  => 31557600,       // 365.25 days (julian year), still used sometimes as a simple estimate of a "year"
+    'ky'   => 31556952000,    // kilo-year
     );
 
     protected $lookup = array(
@@ -48,6 +50,7 @@ class ConvertDuration extends ConvertBase
     'month'       => 'mo',  'months'       => 'mo',
     'year'        => 'yr',  'years'        => 'yr',  'gregorian year' => 'yr',
     'julian year' => 'jyr',
+    'kyr'         => 'ky',  'kyrs'         => 'ky',
     );
 
     function conv($from, $to, $val)

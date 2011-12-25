@@ -23,5 +23,6 @@ if ($d->convLiteral('2 microsecond',  'millisecond') != 0.002) echo "FAIL 11\n";
 if ($d->convLiteral('2 nanosecond',   'microsecond') != 0.002) echo "FAIL 12\n";
 if ($d->convLiteral('2 picosecond',   'nanosecond')  != 0.002) echo "FAIL 13\n";
 
+if ($d->convLiteral('2 ky', 'year') != 2000)                   echo "FAIL 14\n";
 
 ?>
