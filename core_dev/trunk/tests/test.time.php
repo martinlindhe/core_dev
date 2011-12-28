@@ -56,4 +56,8 @@ if (num_years('1980-05-26', '1990-02-12') != 9)           echo "FAIL 74\n";
 if (ts(0)  != 0)    echo "FAIL 80\n";
 if (ts('') != 0)    echo "FAIL 81\n";
 
+if (!is_ymd('2011-12-31')) echo "FAIL 90\n";
+if (is_ymd('2011-12-32'))  echo "FAIL 91\n";
+if (is_ymd('2011-13-01'))  echo "FAIL 92\n";
+
 ?>

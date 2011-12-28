@@ -250,6 +250,20 @@ function is_hms($s)
     return false;
 }
 
+/**
+ * @return true if input string is a YYYY-MM-DD date string
+ */
+function is_ymd($s)
+{
+    $regexp =
+    '/^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$/';
+    preg_match_all($regexp, $s, $matches);
+    if ($matches && $matches[0] && $matches[0][0] == $s)
+        return true;
+
+    return false;
+}
+
 /** Returns current time of day as a formatted 24-hour timestamp "HH:MM:SS" */
 function time_of_day()
 {
