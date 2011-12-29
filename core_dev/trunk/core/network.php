@@ -304,7 +304,7 @@ function url_query($arr, $separator = '&', $safe = true)
  * true for reserved characters: encoding a character reserved for a
  * particular scheme may change the semantics of a URL.
  *
- * Thus, only alphanumerics, the special characters "$-_.+!*'(),", and
+ * Thus, only alphanumerics, the special characters $-_.+!*'(), and
  * reserved characters used for their reserved purposes may be used
  * unencoded within a URL.
  */
@@ -316,6 +316,7 @@ function coredev_urlencode($s)
         switch ($c) {
         case '+': $c = '%2B'; break;
         case ':': $c = '%3A'; break;
+        case '"': $c = '%22'; break;
         case ' ': $c = '+'; break;
         }
         if (ord($c) >= 128 || ord($c) <= 15)
