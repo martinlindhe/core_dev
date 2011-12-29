@@ -73,8 +73,12 @@ class XhtmlForm
 
         if (is_object($o))
             $this->post_handler = array($o, $f);
-        else
+        else {
+            if ($f && !function_exists($f))
+                throw new Exception ('function '.$f.' is not defined');
+
             $this->post_handler = $f;
+        }
     }
 
     /** Activates javascript that auto-focuses on specified input field */
@@ -351,7 +355,7 @@ class XhtmlForm
         $o->height = $height;
         $this->add($o, $text);
     }
-    
+
     function addAutocomplete($name, $text, $url, $result_fields)
     {
         $o = new YuiAutocomplete();
