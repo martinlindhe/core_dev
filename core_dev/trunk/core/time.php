@@ -264,6 +264,35 @@ function is_ymd($s)
     return false;
 }
 
+/**
+ * @return true if input is a valid year range between 1900 and 2099, like 1977-81 or 1974-2011
+ */
+function is_year_period($s)
+{
+    // match YYYY-YY, YYYY-YYYY
+    $regexp = '/^((19|20)\d\d)[-](\d+)$/';
+    preg_match_all($regexp, $s, $matches);
+
+    if ($matches && $matches[0] && $matches[0][0] == $s) {
+        $year1 = $matches[1][0];
+        if (strlen($matches[3][0]) == 2)
+            $year2 = substr($year1, 0, 2).$matches[3][0];
+        else
+            $year2 = $matches[3][0];
+    } else
+        return false;
+
+//    echo 'year1: '.$year1.', year2: '.$year2."\n";
+
+    if (!intval($year1) || !intval($year2))
+        throw new Exception ('years not numbers, hmm?!?'); // should not be possible with above regexp
+
+    if ($year2 <= $year1)
+        throw new Exception ('period end is less than start: '.$s.', y1: '.$year1.', y2: '.$year2);
+
+    return true;
+}
+
 /** Returns current time of day as a formatted 24-hour timestamp "HH:MM:SS" */
 function time_of_day()
 {

@@ -60,4 +60,7 @@ if (!is_ymd('2011-12-31')) echo "FAIL 90\n";
 if (is_ymd('2011-12-32'))  echo "FAIL 91\n";
 if (is_ymd('2011-13-01'))  echo "FAIL 92\n";
 
+if (!is_year_period('1945-53'))   echo "FAIL 100\n";
+if (!is_year_period('1993-2008')) echo "FAIL 101\n";
+
 ?>
