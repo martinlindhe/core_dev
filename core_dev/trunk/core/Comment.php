@@ -34,7 +34,7 @@ class Comment
     var $deleted_by;
     var $owner;         ///< object that the comment belongs to
     var $creator;       ///< userId of creator
-    var $creator_ip;    ///< IP of creator
+    var $creator_ip;    ///< IP of creator (string)
 
     protected static $tbl_name = 'tblComments';
 
@@ -50,6 +50,23 @@ class Comment
 
         $list = Sql::pSelect($q, 'ii', $type, $owner);
         return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    /**
+     * Helper function to create new comments
+     */
+    public static function create($type, $owner, $msg, $private = false)
+    {
+        $session = SessionHandler::getInstance();
+        $c = new Comment();
+        $c->type = $type;
+        $c->owner = $owner;
+        $c->msg = $msg;
+        $c->private = $private;
+        $c->creator = $session->id;
+        $c->creator_ip = client_ip();
+        $c->time_created = sql_datetime( time() );
+        self::store($c);
     }
 
     public static function store($obj)

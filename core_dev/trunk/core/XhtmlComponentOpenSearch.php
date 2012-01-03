@@ -4,6 +4,8 @@
  *
  * Implements a OpenSearch compatible search engine
  *
+ * http://www.opensearch.org/Specifications/OpenSearch/1.1
+ *
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
