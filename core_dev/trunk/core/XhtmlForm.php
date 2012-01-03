@@ -4,7 +4,7 @@
  *
  * Class to generate XHTML compilant forms
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -109,16 +109,18 @@ class XhtmlForm
         $p = array();
 
         // fetch GET parameters before processing POST
-        if (!empty($_GET))
-            foreach ($_GET as $key => $val)
-                foreach ($this->elems as $e)
-                {
-                    if (isset($e['obj']) && is_object($e['obj']) && $e['obj']->name == $key)
-                        $p[ $key ] = htmlspecialchars_decode($val);
-                }
+        foreach ($_GET as $key => $val)
+            foreach ($this->elems as $e)
+            {
+                if (!is_object($e['obj']))
+                    throw new Exception ('XXX not an obj!');
 
-        if (empty($_POST))
-            return;
+                if (!isset($e['obj']->name))
+                    continue;
+
+                if ($e['obj']->name == $key)
+                    $p[ $key ] = htmlspecialchars_decode($val);
+            }
 
         foreach ($_POST as $key => $val)
             foreach ($this->elems as $e)
@@ -190,7 +192,8 @@ class XhtmlForm
                 return false;
         }
 
-        if (!$p) return false;
+        if (!$p)
+            return false;
 
         $this->form_data = $p;
 
@@ -203,10 +206,7 @@ class XhtmlForm
         if ($error->getErrorCount())
             return false;
 
-        if ($this->handled)
-            return true;
-
-        return false;
+        return $this->handled;
     }
 
     /** Adds a object to the form */
@@ -443,7 +443,7 @@ class XhtmlForm
         ($this->css_table ? ' style="'.$this->css_table.'"' : '').
         '>';
 
-        // fills in form with previous entered data        XXXXX move into handle() ?
+        // fills in form with previous entered data        XXXXX merge some code with handle()
         foreach ($this->elems as $e)
         {
             if (!isset($e['obj']))
