@@ -58,6 +58,7 @@ class Comment
     public static function create($type, $owner, $msg, $private = false)
     {
         $session = SessionHandler::getInstance();
+
         $c = new Comment();
         $c->type = $type;
         $c->owner = $owner;
@@ -72,6 +73,17 @@ class Comment
     public static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
+    }
+
+    public static function deleteByOwner($type, $owner)
+    {
+        $session = SessionHandler::getInstance();
+
+        $q =
+        'UPDATE '.self::$tbl_name.
+        ' SET deleted_by = ?, time_deleted = NOW()'.
+        ' WHERE type = ? AND owner = ?';
+        Sql::pUpdate($q, 'iii', $session->id, $type, $owner);
     }
 
 }
