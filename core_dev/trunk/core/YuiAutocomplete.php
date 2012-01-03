@@ -28,7 +28,7 @@ class YuiAutocomplete extends XhtmlComponent
 
     protected $result_fields    = array();
 
-    protected $query_delay      = 0.1;         // Bump up the query delay to reduce server load
+    protected $query_delay      = 0.4;         // Bump up the query delay to reduce server load
 
     function setXhrUrl($s) { $this->xhr_url = relurl($s); }
 

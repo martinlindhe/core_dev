@@ -29,7 +29,7 @@ class XhtmlForm
     protected $form_data      = array();
     protected $elems          = array();
     protected $url_handler;              ///< sends form to a different url
-    protected $autocomplete   = true;
+    protected $autocomplete   = true;    ///< tell browser to suggest autocomplete data of this form?
 
     protected $file_upload    = false;
     protected $handled        = false;   ///< true when form data has been processed by callback function
@@ -55,7 +55,6 @@ class XhtmlForm
     function onSubmit($s) { $this->js_onsubmit = $s; }
     function cssTable($s) { $this->css_table = $s; }
 
-    /** tell browser not to suggest autocomplete data of this form */
     function disableAutocomplete() { $this->autocomplete = false; }
 
     /**
@@ -356,12 +355,16 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
-    function addAutocomplete($name, $text, $url, $result_fields)
+    /**
+     * Adds a YuiAutocomplete powered input field
+     */
+    function addAutocomplete($name, $text, $url, $rf, $js = '')
     {
         $o = new YuiAutocomplete();
         $o->setName($name);
         $o->setXhrUrl($url);
-        $o->setResultFields( $result_fields );
+        $o->setResultFields($rf);
+        $o->setJsFormatResult($js);
         $this->add($o, $text);
     }
 
