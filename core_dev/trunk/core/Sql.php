@@ -56,7 +56,8 @@ class Sql
         if ($params)
             $res = call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));
 
-        $stmt->execute();
+        if (!$stmt->execute())
+            throw new Exception ('XXX query failed: '.$args[0]);
 
         if ($db instanceof DatabaseMysqlProfiler)
         {
