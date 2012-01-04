@@ -21,6 +21,7 @@ echo ahref('t/timezones',      'Time zones').'<br/>';
 echo ahref('t/currency',       'Currencies').'<br/>';
 echo '<br/>';
 echo ahref('a/mysql_config',   'MySQL information').'<br/>';
+echo ahref('a/geoip',          'GeoIP information').'<br/>';
 echo '<br/>';
 
 ?>

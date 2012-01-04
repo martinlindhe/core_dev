@@ -11,8 +11,4 @@ print_r(  GeoIp::getRecord('www.google.com')  );
 
 print_r( GeoIp::getRecord('31.9.15.73') );
 
-
-echo "db version: \n";
-print_r( GeoIp::getDatabaseVersions() );
-
 ?>

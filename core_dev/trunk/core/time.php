@@ -156,24 +156,33 @@ function elapsed_seconds($s, $precision = 1)
     if ($s < 60)
         return $s.' seconds';
 
-//TODO: show singular units if its "1"
-//XXXX FIXME is the rounding code used incorrectly here ... ???
-    if ($s < (60 * 60))
-        return round($s / 60, $precision).' minutes';
+    if ($s < (60 * 60)) {
+        $r = round($s / 60, $precision);
+        return $r.($r > 1 ? ' minutes' : ' minute');
+    }
 
-    if ($s < (60 * 60 * 24))
-        return round($s / 60 / 60, $precision).' hours';
+    if ($s < (60 * 60 * 24)) {
+        $r = round($s / 60 / 60, $precision);
+        return $r.($r > 1 ? ' hours' : ' hour');
+    }
 
-    if ($s < (60 * 60 * 24 * 14)) // rather show "13 days" than "1.5 weeks"
-        return round($s / 60 / 60 / 24, $precision).' days';
+    if ($s < (60 * 60 * 24 * 14)) {// rather show "13 days" than "1.5 weeks"
+        $r = round($s / 60 / 60 / 24, $precision);
+        return $r.($r > 1 ? ' days' : ' day');
+    }
 
-    if ($s < (60 * 60 * 24 * 28))
-        return round($s / 60 / 60 / 24 / 7, $precision).' weeks';
+    if ($s < (60 * 60 * 24 * 28)) {
+        $r = round($s / 60 / 60 / 24 / 7, $precision);
+        return $r.($r > 1 ? ' weeks' : ' week');
+    }
 
-    if ($s < (60 * 60 * 24 * 30 * 12))
-        return round($s / 60 / 60 / 24 / 30, $precision).' months';
+    if ($s < (60 * 60 * 24 * 30 * 12)) {
+        $r = round($s / 60 / 60 / 24 / 30, $precision);
+        return $r.($r > 1 ? ' months' : ' month');
+    }
 
-    return round($s / 60 / 60 / 24 / 365, $precision).' years';
+    $r = round($s / 60 / 60 / 24 / 365, $precision);
+    return $r.($r > 1 ? ' years' : ' year');
 }
 
 /**
