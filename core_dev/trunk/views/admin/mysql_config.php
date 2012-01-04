@@ -9,7 +9,8 @@
 
 $session->requireSuperAdmin();
 
-echo '<h1>'.get_class($db).' information</h1>';
+echo '<h1>MySQL information</h1>';
+echo 'Driver: <b>'.get_class($db).'</b><br/>';
 echo 'Server version: <b>'.$db->db_handle->server_info.'</b><br/>';
 echo 'Client version: <b>'.$db->db_handle->client_info.'</b><br/>';
 echo 'Host: <b>'.$db->host.':'.$db->port.'</b><br/>';
@@ -17,6 +18,10 @@ echo 'Username: <b>'.$db->username.'</b><br/>';
 // echo 'Password: '.($db->password ? $db->password : '(blank)').'<br/>';
 echo 'Database: <b>'.$db->database.'</b><br/>';
 echo 'Configured charset: <b>'.$db->charset.'</b><br/>';
+
+echo 'Connection charset: <b>'.$db->db_handle->character_set_name().'</b><br/>';
+echo 'Host info: <b>'.$db->db_handle->host_info.'</b><br/>';
+
 echo '<br/>';
 
 
@@ -41,7 +46,7 @@ echo'<br/>';
 
 
 
-echo '<h2>Database time</h2>';
+echo '<h2>Time</h2>';
 $db_time = Sql::pSelectItem('SELECT NOW()');
 echo 'Database time: '.$db_time.'<br/>';
 echo 'Webserver time: '.now().'<br/>';
@@ -51,12 +56,6 @@ echo 'Database uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
 echo '<br/>';
 
-echo '<h2>Driver specific settings</h2>';
-echo 'Host info: '.$db->db_handle->host_info.'<br/>';
-echo 'Connection character set: '.$db->db_handle->character_set_name().'<br/>';
-echo 'Last error: '.$db->db_handle->error.'<br/>';
-echo 'Last errno: '.$db->db_handle->errno.'<br/>';
-echo '<br/>';
 
 // show MySQL query cache settings
 
@@ -64,7 +63,7 @@ $data = Sql::pSelectMapped('SHOW VARIABLES LIKE "%query_cache%"');
 
 if ($data['have_query_cache'] == 'YES')
 {
-    echo '<h2>MySQL query cache settings</h2>';
+    echo '<h2>Query cache settings</h2>';
     echo 'Type: '. $data['query_cache_type'].'<br/>';        //valid values: ON, OFF or DEMAND
     echo 'Size: '. formatDataSize($data['query_cache_size']).' (total size)<br/>';
     echo 'Limit: '. formatDataSize($data['query_cache_limit']).' (per query)<br/>';
@@ -74,7 +73,7 @@ if ($data['have_query_cache'] == 'YES')
     // current query cache status
     $data = Sql::pSelectMapped('SHOW STATUS LIKE "%Qcache%"');
 
-    echo '<h2>MySQL query cache status</h2>';
+    echo '<h2>Query cache status</h2>';
     echo 'Hits: '. formatNumber($data['Qcache_hits']).'<br/>';
     echo 'Inserts: '. formatNumber($data['Qcache_inserts']).'<br/>';
     echo 'Queries in cache: '. formatNumber($data['Qcache_queries_in_cache']).'<br/>';
