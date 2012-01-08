@@ -34,6 +34,10 @@ array("instr('abc', 'aa')",                false),
 array("instr('a', 'aa')",                  false),
 array("instr('aa', 'a')",                  true),
 array("strip_spaces(' h  ell o  ')",       'hello'),
+array("numbers_only('123')",                true),
+array("numbers_only('12a')",                false),
+array("numbers_only('12.0')",               false),
+array("numbers_only('')",                   false),
 ));
 
 ?>

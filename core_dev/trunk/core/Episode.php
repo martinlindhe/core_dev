@@ -15,7 +15,7 @@ require_once('CoreProperty.php');
 
 class Episode extends CoreProperty
 {
-    protected $season, $episode;
+    var $season, $episode;
 
     function __construct($s = '')
     {

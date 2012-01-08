@@ -239,6 +239,7 @@ class HttpClient extends CoreBase
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, 0);
         }
 
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->connection_timeout);
         curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->connection_timeout);
         curl_setopt($this->ch, CURLOPT_USERAGENT, $this->user_agent);
 

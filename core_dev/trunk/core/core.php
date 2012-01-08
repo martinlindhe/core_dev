@@ -294,6 +294,9 @@ function randstr($len)
  */
 function numbers_only($s) //XXXX FIXME use a regexp
 {
+    if (!trim($s))
+        return false;
+
     $ok = array('0','1','2','3','4','5','6','7','8','9');
     for ($i=0; $i<strlen($s); $i++) {
         $c = substr($s, $i, 1);
