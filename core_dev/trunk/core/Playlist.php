@@ -136,21 +136,37 @@ class Playlist extends CoreList
             $this->format = $format;
         }
 
+        $page = XmlDocumentHandler::getInstance();
+
         switch ($this->format) {
         case 'xspf':
-            if ($this->headers) header('Content-type: application/xspf+xml');
+            if ($this->headers) {
+                $page->setMimeType('application/xspf+xml');
+                $page->disableDesign();
+            }
             return $this->renderXSPF();
 
         case 'm3u':
-            if ($this->headers) header('Content-type: audio/x-mpegurl');
+            if ($this->headers) {
+                $page->setMimeType('audio/x-mpegurl');
+                $page->disableDesign();
+
+            }
             return $this->renderM3U();
 
         case 'pls':
-            if ($this->headers) header('Content-type: audio/x-scpls');
+            if ($this->headers) {
+                $page->setMimeType('audio/x-scpls');
+                $page->disableDesign();
+
+            }
             return $this->renderPLS();
 
         case 'sh':
-            if ($this->headers) header('Content-type: text/plain');
+            if ($this->headers) {
+                $page->setMimeType('text/plain; charset=utf-8');
+                $page->disableDesign();
+            }
             return $this->renderSh();
 
         case 'xhtml':
@@ -216,10 +232,6 @@ class Playlist extends CoreList
 
     private function renderM3U()
     {
-        $page = XmlDocumentHandler::getInstance();
-        $page->disableDesign();
-        $page->setMimeType('text/plain');
-
         $res = "#EXTM3U\n";
         foreach ($this->getItems() as $item)
         {
@@ -233,10 +245,6 @@ class Playlist extends CoreList
 
     private function renderPLS()
     {
-        $page = XmlDocumentHandler::getInstance();
-        $page->disableDesign();
-        $page->setMimeType('text/plain');
-
         $res =
         "[playlist]\n".
         "NumberOfEntries=".count($this->items)."\n".
@@ -261,10 +269,6 @@ class Playlist extends CoreList
      */
     private function renderSh()
     {
-        $page = XmlDocumentHandler::getInstance();
-        $page->disableDesign();
-        $page->setMimeType('text/plain');
-
         $res = "# shell script downloader\n\n";
         foreach ($this->getItems() as $item)
         {
@@ -276,6 +280,7 @@ class Playlist extends CoreList
                 $c = 'wget '.$item->Url;
                 break;
             case 'rtmp':
+            case 'rtmpe':
                 $c = 'rtmpdump -r '.$item->Url.' -o '.basename($item->Url);
                 break;
             default:
