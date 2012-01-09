@@ -195,7 +195,7 @@ function bt()
 
 /**
  * Debug function
- * @return $m as hex + ascii values
+ * @return string of hex + ascii values
  */
 function dh($m, $row_len = 16, $fill_char = ' ')
 {
@@ -228,6 +228,23 @@ function dh($m, $row_len = 16, $fill_char = ' ')
         $hex.' '.
         str_repeat(' ', ($row_len - strlen($bytes)) * 3).
         $bytes.ln();
+    }
+
+    return $res;
+}
+
+/**
+ * Debug function
+ * @return string of printed human readable hex
+ */
+function hexstr($s, $fill_char = ' ')
+{
+    $res = '';
+
+    for ($i=0; $i < strlen($s); $i++)
+    {
+        $x = substr($s, $i, 1);
+        $res .= bin2hex($x).$fill_char;
     }
 
     return $res;
