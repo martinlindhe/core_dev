@@ -36,13 +36,12 @@ class Timestamp extends CoreProperty
      */
     function set($ts)
     {
-        if (is_string($ts))
-            $ts = strtotime($ts);
-
-        if (!is_numeric($ts))
+        if ($ts instanceof Timestamp)
+            $this->value = $ts->get();
+        else if (is_string($ts))
+            $this->value = strtotime($ts);
+        else if (!is_numeric($ts))
             return false;
-
-        $this->value = $ts;
     }
 
     /**

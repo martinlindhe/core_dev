@@ -149,6 +149,10 @@ class Playlist extends CoreList
             if ($this->headers) header('Content-type: audio/x-scpls');
             return $this->renderPLS();
 
+        case 'sh':
+            if ($this->headers) header('Content-type: text/plain');
+            return $this->renderSh();
+
         case 'xhtml':
         case 'html':
             $res = '';
@@ -212,6 +216,10 @@ class Playlist extends CoreList
 
     private function renderM3U()
     {
+        $page = XmlDocumentHandler::getInstance();
+        $page->disableDesign();
+        $page->setMimeType('text/plain');
+
         $res = "#EXTM3U\n";
         foreach ($this->getItems() as $item)
         {
@@ -225,9 +233,13 @@ class Playlist extends CoreList
 
     private function renderPLS()
     {
+        $page = XmlDocumentHandler::getInstance();
+        $page->disableDesign();
+        $page->setMimeType('text/plain');
+
         $res =
         "[playlist]\n".
-        "NumberOfEntries=".count($this->entries)."\n".
+        "NumberOfEntries=".count($this->items)."\n".
         "\n";
 
         $i = 0;
@@ -241,6 +253,37 @@ class Playlist extends CoreList
             "\n";
         }
         $res .= "Version=2\n";
+        return $res;
+    }
+
+    /**
+     * Creates BASH Shell script compatible download code, using wget, rtmpdump
+     */
+    private function renderSh()
+    {
+        $page = XmlDocumentHandler::getInstance();
+        $page->disableDesign();
+        $page->setMimeType('text/plain');
+
+        $res = "# shell script downloader\n\n";
+        foreach ($this->getItems() as $item)
+        {
+            $res .=
+            "# ".($item->title ? $item->title : 'Untitled track')."\n";
+
+            switch (get_protocol($item->Url)) {
+            case 'http':
+                $c = 'wget '.$item->Url;
+                break;
+            case 'rtmp':
+                $c = 'rtmpdump -r '.$item->Url.' -o '.basename($item->Url);
+                break;
+            default:
+                throw new Exception ('unhandled protocol: '.get_protocol($item->Url) );
+            }
+            $res .= $c."\n\n";
+        }
+
         return $res;
     }
 
