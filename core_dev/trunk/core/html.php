@@ -90,7 +90,10 @@ function relurl_add($p)
     return $u->getPath();
 }
 
-/** Creates a clickable link */
+/**
+ * Creates a clickable link
+ @param $target example "_blank"
+ */
 function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
     $a = new XhtmlComponentA();

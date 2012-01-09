@@ -52,7 +52,7 @@ class ConvertDatasize extends ConvertBase
     'yottabit' => 'ybit', 'yottabits' => 'ybit',
 
     // byte counts
-    'byte'      => 'b',
+    'byte'      => 'b',  'bytes' => 'b',
     'kilobyte'  => 'kb', 'kbyte' => 'kb', 'kib' => 'kb', 'k' => 'kb',
     'megabyte'  => 'mb', 'mbyte' => 'mb', 'mib' => 'mb', 'm' => 'mb',
     'gigabyte'  => 'gb', 'gbyte' => 'gb', 'gib' => 'gb', 'g' => 'gb',

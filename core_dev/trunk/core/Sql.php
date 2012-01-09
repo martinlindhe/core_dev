@@ -19,7 +19,7 @@ class Sql
 {
     /** Executes a prepared statement and binds parameters
      * @param $args[0]    sql query
-     * @param $args[1]    prepared statement string (isii)..
+     * @param $args[1]    prepared statement string (isdb)..
      * @param $args[2..n] query parameters, or all params is an array in $args[2]
      */
     protected static function pExecStmt($args)
