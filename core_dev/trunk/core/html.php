@@ -92,7 +92,7 @@ function relurl_add($p)
 
 /**
  * Creates a clickable link
- @param $target example "_blank"
+ * @param $target example "_blank"
  */
 function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {

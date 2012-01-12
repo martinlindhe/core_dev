@@ -323,6 +323,22 @@ function numbers_only($s) //XXXX FIXME use a regexp
     return true;
 }
 
+
+/**
+ * Similar to is_year_period() but accepts any 2 numbers,
+ * like "2-0" (sport score), "20-25" etc
+ */
+function is_number_range($s)
+{
+    $regexp = '/^(\d+)[-](\d+)$/';
+    preg_match_all($regexp, $s, $matches);
+
+    if ($matches && $matches[0] && $matches[0][0] == $s)
+        return true;
+
+    return false;
+}
+
 /**
  * Rounds a number to exactly $precision number of decimals, padding with zeros if nessecary
  */

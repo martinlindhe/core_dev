@@ -6,7 +6,6 @@ require_once('core.php');
 
 require_once('RegressionTest.php');
 
-
 RegressionTest::check(__FILE__, array(
 array("strpre_exact('4523', 8, '0')",     '00004523'),
 array("strpre_exact('4523', 3, '0')",     '523'),
@@ -38,6 +37,9 @@ array("numbers_only('123')",                true),
 array("numbers_only('12a')",                false),
 array("numbers_only('12.0')",               false),
 array("numbers_only('')",                   false),
+array("is_number_range('2-0')",             true),
+array("is_number_range('2000-3000')",       true),
 ));
+
 
 ?>

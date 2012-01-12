@@ -30,15 +30,13 @@ class SqlObject
      */
     static function loadObject($q, $classname)
     {
-        $db = SqlHandler::getInstance();
-
         if (!$q) {
             return false;
 //            return new $classname();
 //            throw new Exception ('no query');
         }
 
-        $row = is_array($q) ? $q : $db->pSelect($q);
+        $row = is_array($q) ? $q : Sql::pSelect($q);
 
         if (!is_array($row))
             throw new Exception ('loadObject fail, need array of rows, got: '.$row);
@@ -52,8 +50,10 @@ class SqlObject
             $n = $prop->getName();
 
             if (!array_key_exists($n, $row)) {
+                echo 'ERROR: array key dont exist:<br/>';
+                d($n);
                 d( $row);
-                throw new Exception ('loadObject fail, db column named "'.$n.'" dont exist');
+                throw new Exception ('loadObject fail, class '.$classname.', db column named "'.$n.'" dont exist');
             }
             $obj->$n = $row[ $n ];
         }
