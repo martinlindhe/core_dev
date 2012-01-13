@@ -274,6 +274,20 @@ function is_ymd($s)
 }
 
 /**
+ * @return true if input string is a DD/MM date string
+ */
+function is_dm($s)
+{
+    $regexp =
+    '/^(0?[1-9]|[12][0-9]|3[01])[\/](0?[1-9]|1[012])$/';
+    preg_match_all($regexp, $s, $matches);
+    if ($matches && $matches[0] && $matches[0][0] == $s)
+        return true;
+
+    return false;
+}
+
+/**
  * @return true if input is a valid year range between 1900 and 2099, like 1977-81 or 1974-2011
  */
 function is_year_period($s)

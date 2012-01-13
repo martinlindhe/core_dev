@@ -64,4 +64,11 @@ if (is_ymd('2011-13-01'))  echo "FAIL 92\n";
 if (!is_year_period('1945-53'))   echo "FAIL 100\n";
 if (!is_year_period('1993-2008')) echo "FAIL 101\n";
 
+if (!is_dm('1/1'))          echo "FAIL 110\n";
+if (!is_dm('31/12'))        echo "FAIL 111\n"; // december 31:st
+if (is_dm('32/12'))         echo "FAIL 112\n";
+if (is_dm('12/13'))         echo "FAIL 113\n";
+if (is_dm('0/1'))           echo "FAIL 114\n";
+if (is_dm('1/0'))           echo "FAIL 115\n";
+
 ?>
