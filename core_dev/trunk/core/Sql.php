@@ -8,6 +8,9 @@
  *
  *   $id = Sql:pInsert($q, 'i', $val);
  *
+ * Prepared statement format:
+ *  (isdb), integer, string, double/float, binary
+ *
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 

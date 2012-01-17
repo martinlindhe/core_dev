@@ -59,7 +59,11 @@ $list = Comment::get($this->type, $this->owner);
 
 foreach ($list as $c)
 {
-    echo User::get($c->creator)->name.' wrote: ';
+    $user = User::get($c->creator);
+    if ($user)
+        echo $user->name.' wrote: ';
+    else
+        echo 'user id '.$c->creator.' wrote: ';
 
     echo nl2br($c->msg).'<br/>';
 

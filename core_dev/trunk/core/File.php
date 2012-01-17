@@ -18,7 +18,7 @@ class File
 {
     var $id;
     var $type;
-    var $name;
+    var $name;          ///< orginal filename
     var $size;
     var $mimetype;
     var $owner;
