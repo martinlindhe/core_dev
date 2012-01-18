@@ -139,6 +139,17 @@ class UserHandler
         return false;
     }
 
+    public static function setUsername($id, $username)
+    {
+        $u = User::get($id);
+        if (!$u)
+            throw new Exception ('wat');
+
+        $u->name = $username;
+        User::store($u);
+        return true;
+    }
+
     /**
      * Sets a new password for the user
      *
@@ -152,33 +163,7 @@ class UserHandler
         if (!$u)
             throw new Exception ('wat');
 
-        $u->password = $algo.':'.self::encryptPassword($id, $pwd, $algo);
-        User::store($u);
-        return true;
-    }
-
-    public static function encryptPassword($id, $pwd, $algo)
-    {
-        $session = SessionHandler::getInstance();
-        switch ($algo) {
-        case 'sha1':
-        case 'sha224':
-        case 'sha256':
-        case 'sha384':
-        case 'sha512':
-            return hash($algo, $id . hash($algo, $session->getEncryptKey()) . hash($algo, $pwd));
-        default:
-            throw new Exception ('unknown method: '.$method);
-        }
-    }
-
-    public static function setUsername($id, $username)
-    {
-        $u = User::get($id);
-        if (!$u)
-            throw new Exception ('wat');
-
-        $u->name = $username;
+        $u->password = $algo.':'.Password::encrypt($id, $pwd, $algo);
         User::store($u);
         return true;
     }

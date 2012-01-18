@@ -13,6 +13,7 @@ require_once('constants.php');
 require_once('SqlObject.php');
 require_once('UserHandler.php');
 require_once('UserSetting.php');
+require_once('Password.php');
 
 /** XXX WIP: these links should be auto decorated by YuiTooltip */
 class UserLink
@@ -122,15 +123,15 @@ class User
 
         $x = explode(':', $row['password']);
         if (count($x) == 2) {
-            $method   = $x[0];
-            $password = $x[1];
+            $algo = $x[0];
+            $pwd2 = $x[1];
         } else {
             // auto fallback to old default (sha1)
-            $method   = 'sha1';
-            $password = $row['password'];
+            $algo = 'sha1';
+            $pwd2 = $row['password'];
         }
 
-        if (!UserHandler::encryptPassword($id, $pwd, $method) == $password)
+        if (!Password::encrypt($id, $pwd, $algo) == $pwd2)
             return false;
 
         return SqlObject::loadObject($row, __CLASS__);

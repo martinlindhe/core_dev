@@ -106,11 +106,11 @@ echo xhtmlFormClose().'<br/><br/>';
 
 echo '<h2>Password</h2>';
 
-echo t('Change password').'<br/>';
-echo xhtmlForm('pwd');
-echo xhtmlPassword('change_pwd').' ';
-echo xhtmlSubmit('Change');
-echo xhtmlFormClose().'<br/><br/>';
+$form = new XhtmlForm('pwd');
+$form->disableAutocomplete();
+$form->addPassword('change_pwd', 'Change password');
+$form->addSubmit('Change');
+echo $form->render().'<br/><br/>';
 
 
 echo '<h2>User settings</h2>';
