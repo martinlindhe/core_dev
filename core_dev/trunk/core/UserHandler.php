@@ -188,29 +188,31 @@ class UserHandler
     /**
      * Sets a new password for the user
      *
-     * @param $_id user id
-     * @param $_pwd password to set
+     * @param $id user id
+     * @param $pwd password to set
+     * @param $algo hash algorithm to use
      */
-    public static function setPassword($id, $pwd, $method = 'sha512')
+    public static function setPassword($id, $pwd, $algo = 'sha512')
     {
         $u = User::get($id);
         if (!$u)
             throw new Exception ('wat');
 
-        $u->password = $method.':'.self::encryptPassword($id, $pwd, $method);
+        $u->password = $algo.':'.self::encryptPassword($id, $pwd, $algo);
         User::store($u);
         return true;
     }
 
-    public static function encryptPassword($id, $pwd, $method)
+    public static function encryptPassword($id, $pwd, $algo)
     {
         $session = SessionHandler::getInstance();
-        switch ($method) {
+        switch ($algo) {
         case 'sha1':
+        case 'sha224':
         case 'sha256':
         case 'sha384':
         case 'sha512':
-            return hash($method, $id . hash($method, $session->getEncryptKey() ) . hash($method, $pwd) );
+            return hash($algo, $id . hash($algo, $session->getEncryptKey()) . hash($algo, $pwd));
         default:
             throw new Exception ('unknown method: '.$method);
         }
