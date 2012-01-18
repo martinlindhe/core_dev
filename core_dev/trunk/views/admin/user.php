@@ -85,7 +85,7 @@ if (!empty($_GET['rm_grp'])) {
 echo '<h2>Group membership</h2>';
 echo 'This user is member of the following groups:<br/>';
 
-foreach (UserHandler::getGroups($user->id) as $g) {
+foreach (UserGroupHandler::getGroups($user->id) as $g) {
     echo '<a href="'.relurl_add( array('rm_grp' => $g->getId())).'">'.coreButton('Delete').'</a> ';
     echo ahref('a/usergroup/'.$g->getId(), $g->getName()).'<br/>';
 }

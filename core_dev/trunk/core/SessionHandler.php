@@ -21,6 +21,7 @@
 
 require_once('CoreBase.php');
 require_once('User.php');
+require_once('UserGroupHandler.php');
 require_once('ErrorHandler.php');
 require_once('Sql.php');
 require_once('SessionStorageHandler.php');
@@ -36,7 +37,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     var $type  = SESSION_REGULAR;  ///< SESSION_REGULAR or SESSION_FACEBOOK session (derived from User->type)
     var $ip;                       ///< current IP address
     var $username;                 ///< stores "facebook id" for facebook users, otherwise unique username
-    var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin
+    var $usermode;                 ///< 0=normal user, 1=webmaster, 2=admin, 3=super admin
     var $referer;                  ///< return to this page after login (if user is browsing a part of the site that is blocked by $this->requireLoggedIn() then logs in)
     var $timeout        = 86400;   ///< 24h - max allowed idle time (in seconds) before session times out and user needs to log in again
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
@@ -160,7 +161,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $this->username = $username;
         $this->type = $type;
 
-        $this->usermode = UserHandler::getUserLevel($user->id);
+        $this->usermode = UserGroupHandler::getUserLevel($user->id);
 
         if ($this->usermode >= USERLEVEL_WEBMASTER)  $this->isWebmaster  = true;
         if ($this->usermode >= USERLEVEL_ADMIN)      $this->isAdmin      = true;
