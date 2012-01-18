@@ -251,7 +251,7 @@ class XhtmlForm
     {
         $o = new XhtmlComponentPassword();
         $o->name   = $name;
-        $o->width  = $size;
+        $o->width  = $width;
         $o->maxlen = $maxlen;
         $this->add($o, $text);
    }

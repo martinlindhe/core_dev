@@ -5,7 +5,7 @@
  * Singleton class to perform user registration and user handling.
  * Allows for additonal registration steps to be attached to base class
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //TODO code needs updating in session_forgot_pwd
@@ -191,7 +191,7 @@ class UserHandler
      * @param $_id user id
      * @param $_pwd password to set
      */
-    public static function setPassword($id, $pwd, $method = 'sha1')
+    public static function setPassword($id, $pwd, $method = 'sha512')
     {
         $u = User::get($id);
         if (!$u)
@@ -207,7 +207,10 @@ class UserHandler
         $session = SessionHandler::getInstance();
         switch ($method) {
         case 'sha1':
-            return sha1( $id . sha1( $session->getEncryptKey() ) . sha1($pwd) );
+        case 'sha256':
+        case 'sha384':
+        case 'sha512':
+            return hash($method, $id . hash($method, $session->getEncryptKey() ) . hash($method, $pwd) );
         default:
             throw new Exception ('unknown method: '.$method);
         }
