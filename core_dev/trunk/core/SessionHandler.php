@@ -33,7 +33,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     static $_instance;             ///< singleton
 
     var $id;                       ///< internal user id (tblUsers.userId)
-    var $type  = SESSION_REGULAR;  ///< SESSION_REGULAR or SESSION_FACEBOOK session
+    var $type  = SESSION_REGULAR;  ///< SESSION_REGULAR or SESSION_FACEBOOK session (derived from User->type)
     var $ip;                       ///< current IP address
     var $username;                 ///< stores "facebook id" for facebook users, otherwise unique username
     var $usermode;                 ///< 0=normal user. 1=webmaster, 2=admin, 3=super admin

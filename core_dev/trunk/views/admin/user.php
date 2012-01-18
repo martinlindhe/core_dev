@@ -28,7 +28,7 @@ echo '<h1>User admin for '.$user->name.'</h1>';
 
 echo '&raquo; '.ahref('u/profile/'.$user->id, 'Show profile').'<br/>';
 
-if ($user->type == USER_FACEBOOK)
+if ($user->type == SESSION_FACEBOOK)
 {
     echo '<h2>Facebook account</h2>';
     echo 'Fb username: '.UserSetting::get($user->id, 'fb_name').'<br/>';

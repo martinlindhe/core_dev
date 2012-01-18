@@ -191,21 +191,26 @@ class UserHandler
      * @param $_id user id
      * @param $_pwd password to set
      */
-    public static function setPassword($id, $pwd)
+    public static function setPassword($id, $pwd, $method = 'sha1')
     {
         $u = User::get($id);
         if (!$u)
             throw new Exception ('wat');
 
-        $u->password = self::encryptPassword($id, $pwd);
+        $u->password = $method.':'.self::encryptPassword($id, $pwd, $method);
         User::store($u);
         return true;
     }
 
-    public static function encryptPassword($id, $pwd)
+    public static function encryptPassword($id, $pwd, $method)
     {
         $session = SessionHandler::getInstance();
-        return sha1( $id . sha1( $session->getEncryptKey() ) . sha1($pwd) );
+        switch ($method) {
+        case 'sha1':
+            return sha1( $id . sha1( $session->getEncryptKey() ) . sha1($pwd) );
+        default:
+            throw new Exception ('unknown method: '.$method);
+        }
     }
 
     public static function setUsername($id, $username)

@@ -108,17 +108,31 @@ class User
     {
         $q =
         'SELECT * FROM tblUsers'.
-        ' WHERE id = ? AND name = ? AND password = ? AND type = ? AND time_deleted IS NULL';
+        ' WHERE id = ? AND name = ? AND type = ? AND time_deleted IS NULL';
 
         $row = Sql::pSelectRow($q,
-        'issi',
+        'isi',
         $id,
         $name,
-        UserHandler::encryptPassword($id, $pwd),
         $type
         );
 
-        if (!$row) return false;
+        if (!$row)
+            return false;
+
+        $x = explode(':', $row['password']);
+        if (count($x) == 2) {
+            $method   = $x[0];
+            $password = $x[1];
+        } else {
+            // auto fallback to old default (sha1)
+            $method   = 'sha1';
+            $password = $row['password'];
+        }
+
+        if (!UserHandler::encryptPassword($id, $pwd, $method) == $password)
+            return false;
+
         return SqlObject::loadObject($row, __CLASS__);
     }
 
