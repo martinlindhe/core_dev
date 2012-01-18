@@ -149,10 +149,11 @@ if (function_exists('apc_cache_info')) {
 }
 
 $client = HttpUserAgent::getBrowser();
+
 echo
  'Client: <b>'.$_SERVER['REMOTE_ADDR'].'</b>'.
 ' using '.
-' <span title="'.$_SERVER['HTTP_USER_AGENT'].'" style="font-weight:bold">'.$client->name.' '.$client->version.'</span><br/>';
+' <span title="'.$_SERVER['HTTP_USER_AGENT'].'" style="font-weight:bold">'.$client->name.' '.$client->version.' ('.$client->os.', '.$client->arch.')</span><br/>';
 echo '<br/>';
 
 echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b><br/>';

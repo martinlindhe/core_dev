@@ -11,7 +11,7 @@
 
 //STATUS: wip
 
-//TODO: parse os & arch for IE, Opera, Firefox, Chrome
+//TODO: parse os & arch for IE, Opera, Chrome
 
 /* XXX Android Webkit browser
 
@@ -95,6 +95,22 @@ class HttpUserAgent
         {
             $o->vendor = 'Mozilla';
             $o->name   = 'Firefox';
+
+            $tok1 = 'Mozilla/5.0 (';
+            $p1 = strpos($s, $tok1);
+            if ($p1 !== false) {
+                $s1 = substr($s, $p1 + strlen($tok1) );
+
+                $p2 = strpos($s1, ')');
+                $s2 = substr($s1, 0, $p2);
+
+                $x = explode(';', $s2);
+
+                // (X11; Linux x86_64; rv:6.0)
+                // (Windows NT 6.1; WOW64; rv:9.0.1)
+                $o->os   = trim($x[0]);
+                $o->arch = trim($x[1]);
+            }
 
             // XXX FIXME use a regexp
             $x = explode('Firefox/', $s, 2);
@@ -183,10 +199,6 @@ class HttpUserAgent
             $x = explode('MSIE ', $s, 2);
             $y = explode(';', $x[1]);
             $o->version = $y[0];
-        }
-        else
-        {
-//            dp('XXX unrecognized UA string: '.$s);
         }
 
         return $o;
