@@ -157,9 +157,9 @@ class HttpClient extends CoreBase
     function getUrl() { return $this->Url->get(); }
 
     /**
-     * @param $s cache time in seconds; max 2592000 (30 days)
+     * @param $s cache time in seconds or as string "4h", max 2592000 (30 days)
      */
-    function setCacheTime($s) { $this->cache_time = $s; }
+    function setCacheTime($s) { $this->cache_time = parse_duration($s); }
 
     function setUserAgent($ua) { $this->user_agent = $ua; }
 

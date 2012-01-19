@@ -281,7 +281,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
     function getUserLevelName()
     {
-        return getUserLevelName( UserHandler::getUserLevel($this->id) );
+        return getUserLevelName( UserGroupHandler::getUserLevel($this->id) );
     }
 
     /**
