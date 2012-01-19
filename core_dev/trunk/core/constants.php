@@ -78,4 +78,22 @@ function getUserLevelName($n)
     return $x[ $n ];
 }
 
+// ISO 639-2 naming: http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+define('LANG_SWE', 1);
+define('LANG_ENG', 2);
+
+function getLanguages()
+{
+    return array(
+    LANG_SWE => 'Swedish',
+    LANG_ENG => 'English',
+    );
+}
+
+function language($n)
+{
+    $x = getLanguages();
+    return $x[ $n ];
+}
+
 ?>

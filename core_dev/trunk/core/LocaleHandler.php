@@ -155,25 +155,4 @@ function country_2_to_3_letters($s)
     return $s;
 }
 
-// ISO 639-2 naming: http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
-define('LANG_SWE', 1);
-define('LANG_ENG', 2);
-
-function language($n)
-{
-    switch ($n) {
-    case LANG_SWE: return 'Swedish';
-    case LANG_ENG: return 'English';
-    default: throw new Exception ('language unknown: '.$n);
-    }
-}
-
-function getLanguages()
-{
-    return array(
-    LANG_SWE => 'Swedish',
-    LANG_ENG => 'English',
-    );
-}
-
 ?>
