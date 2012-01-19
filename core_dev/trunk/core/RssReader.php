@@ -6,7 +6,7 @@
  *
  * http://www.rssboard.org/rss-specification
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
  */
 
 //STATUS: good
@@ -55,7 +55,7 @@ class RssReader extends CoreBase
             switch ($this->reader->name) {
             case 'rss':
                 if ($this->reader->getAttribute('version') != '2.0')
-                    die('XXX FIXME unsupported RSS version '.$this->reader->getAttribute('version') );
+                    throw new Exception ('unsupported RSS version '.$this->reader->getAttribute('version') );
                 break;
 
             case 'channel':
@@ -63,8 +63,7 @@ class RssReader extends CoreBase
                 break;
 
             default:
-                echo 'bad top entry '.$this->reader->name.ln();
-                break;
+                throw new Exception ('bad top entry '.$this->reader->name);
             }
         }
 
@@ -93,9 +92,9 @@ class RssReader extends CoreBase
             case 'pubdate': break;
             case 'generator': break;
             case 'webmaster': break;
-            case 'lastbuilddate': break; //<lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
-            //case 'docs': break; //<docs>http://blogs.law.harvard.edu/tech/rss</docs>
-            //case 'managingeditor': break; //<managingEditor>editor@example.com</managingEditor>
+            case 'lastbuilddate': break;    // <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+            case 'docs': break;             // <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+            case 'managingeditor': break;   // <managingEditor>editor@example.com</managingEditor>
 
             case 'item':
                 $this->parseItem();
@@ -104,9 +103,9 @@ class RssReader extends CoreBase
             default:
                 if (in_array($key, $this->ext_tags)) {
                     $this->pluginParseTag($key);
-// d($key); die;
-                } else
+                } else {
                     // echo 'unknown channel entry '.$key.ln();
+                }
                 break;
             }
         }
