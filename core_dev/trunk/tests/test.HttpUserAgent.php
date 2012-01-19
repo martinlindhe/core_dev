@@ -36,11 +36,15 @@ $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '12.0.742.113')
     echo 'FAIL 11: '.$s;
 
-$s = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1'; // latest stable as of 2011-08-25
+$s = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1';
 $b = HttpUserAgent::getBrowser($s);
-if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '13.0.782.112')
+if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '13.0.782.112' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
     echo 'FAIL 12: '.$s;
 
+$s = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7';  // latest stable as of 2012-01-19
+$b = HttpUserAgent::getBrowser($s);
+if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '16.0.912.75' || $b->os != 'Windows NT 6.1' || $b->arch != 'WOW64')
+    echo 'FAIL 13: '.$s;
 
 
 

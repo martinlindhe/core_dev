@@ -11,7 +11,7 @@
 
 //STATUS: wip
 
-//TODO: parse os & arch for IE, Opera, Chrome
+//TODO: parse os & arch for IE, Opera
 
 /* XXX Android Webkit browser
 
@@ -122,6 +122,23 @@ class HttpUserAgent
         {
             $o->vendor = 'Google';
             $o->name   = 'Chrome';
+
+            $tok1 = 'Mozilla/5.0 (';
+            $p1 = strpos($s, $tok1);
+            if ($p1 !== false) {
+                $s1 = substr($s, $p1 + strlen($tok1) );
+
+                $p2 = strpos($s1, ')');
+                $s2 = substr($s1, 0, $p2);
+
+                $x = explode('; ', $s2);
+
+                // (Windows NT 6.1; WOW64)
+                // (X11; Linux x86_64)
+                $o->os   = trim($x[0]);
+                if (isset($x[1]))
+                    $o->arch = trim($x[1]);
+            }
 
             // XXX FIXME use a regexp
             $x = explode('Chrome/', $s, 2);

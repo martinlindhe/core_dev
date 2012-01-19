@@ -107,9 +107,10 @@ echo '<br/>';
 
 echo 'Server: <b>'.$db->getHost().'</b><br/>';
 echo 'Software: <b>MySQL '.$db->db_handle->server_info.'</b><br/>';
-echo 'Local time: <b>'.$db_time.'</b><br/>';
-echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
+echo 'Database server time: <b>'.$db_time.'</b><br/>';
+echo 'Web server time: <b>'.sql_datetime( time() ).'</b><br/>';
+echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 
 if (is_client_localhost())
 {

@@ -159,8 +159,8 @@ echo '<br/>';
 echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b><br/>';
 echo 'Software: <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b>PHP '.phpversion().'</b><br/>';
 
-echo 'Local time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
-echo 'Uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
+echo 'Webserver time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
+echo 'System uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
 
