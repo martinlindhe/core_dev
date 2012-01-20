@@ -114,7 +114,7 @@ define('URL_REGEXP',
     '(/'.            // optional url parameters must begin with /
         '('.
             // 0 or more alphanumeric and/or: _-'?=&;+*#%.,:~()
-            '[\w/_\-\'\?\|\=\&\;\+\*\#\%\.\,\:\~\(\)]*'.
+            '[\w/_\-\'\!\?\|\=\&\;\+\*\#\%\.\,\:\~\(\)]*'.
         ')?'.
     ')?'.
 ')'

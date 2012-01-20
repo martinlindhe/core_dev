@@ -7,7 +7,7 @@
  * http://www.atomenabled.org/developers/syndication/
  * http://en.wikipedia.org/wiki/Atom_(standard)
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
  */
 
 //STATUS: good
@@ -36,7 +36,6 @@ class AtomReader extends CoreBase
     {
         if (is_url($data)) {
             $u = new HttpClient($data);
-            $u->setCacheTime(60 * 60); //1h
             $data = $u->getBody();
 
             //FIXME check http client return code for 404
@@ -57,7 +56,7 @@ class AtomReader extends CoreBase
             switch ($this->reader->name) {
             case 'feed':
                 if ($this->reader->getAttribute('xmlns') != 'http://www.w3.org/2005/Atom')
-                    die('error unknown atom xmlns: '.$this->reader->getAttribute('xmlns') );
+                    throw new Exception ('Unknown atom xmlns: '.$this->reader->getAttribute('xmlns') );
                 break;
 
             case 'entry':
@@ -140,7 +139,7 @@ class AtomReader extends CoreBase
                         break;
 
                     default:
-                        die('AtomReader->parseEntry() unknown enclosure mime: '.$this->reader->getAttribute('type') );
+                        throw new Exception ('unknown enclosure mime: '.$this->reader->getAttribute('type') );
                     }
                     break;
 
@@ -154,7 +153,7 @@ class AtomReader extends CoreBase
                         break;
 
                     default:
-                        die('AtomReader->parseEntry() unknown image mime: '.$this->reader->getAttribute('type') );
+                        throw new Exception ('unknown image mime: '.$this->reader->getAttribute('type') );
                     }
                     break;
 
@@ -165,7 +164,7 @@ class AtomReader extends CoreBase
                 case 'self': //XXX ???
                     break;
                 default:
-                    die('AtomReader->parseEntry() unknown link type: '.$this->reader->getAttribute('rel') );
+                    throw new Exception ('unknown link type: '.$this->reader->getAttribute('rel') );
                 }
                 break;
 

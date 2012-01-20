@@ -43,6 +43,7 @@ $valid_urls = array(
 'http://username@server.com/path?arg=value',
 'http://username:password@server.com/path?arg=value',
 'http://digg.com/submit?phase=2&url=http&#37;3A&#37;2F&#37;2Fexample.com%2Fpath%2F2on%2F%3Fdomain%3Dp1&p2=text%3A+string',
+'http://en.wikipedia.org/wiki/Yahoo!',
 );
 
 foreach ($valid_urls as $url)
