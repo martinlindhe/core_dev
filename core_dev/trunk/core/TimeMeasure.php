@@ -17,12 +17,19 @@ class TimeMeasure
         $this->time_start = microtime(true);
     }
 
+    function setPrecision($n) { $this->precision = $n; }
+
+
     /**
      * @return elapsed time since the class was initiated
      */
     function getElapsedTime()
     {
-        return round(microtime(true) - $this->time_start, $this->precision);
+        $t = microtime(true) - $this->time_start;
+        if ($this->precision)
+            return round($t, $this->precision);
+
+        return $t;
     }
 
     /**

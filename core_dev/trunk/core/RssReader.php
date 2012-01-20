@@ -152,6 +152,10 @@ class RssReader extends CoreBase
                 $item->guid = $this->reader->readValue();
                 break;
 
+            case 'category':
+                $item->category = $this->reader->readValue();
+                break;
+
             default:
                 if (in_array($key, $this->ext_tags)) {
                     $this->pluginParseTag($key, $item);

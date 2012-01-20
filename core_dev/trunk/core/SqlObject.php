@@ -229,7 +229,7 @@ class SqlObject
         return self::getByField($id, $tblname, $classname, $field_name);
     }
 
-    static function getByField($val, $tblname, $classname, $field_name = 'id')
+    static function getByField($val, $tblname, $classname, $field_name)
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
@@ -242,7 +242,10 @@ class SqlObject
         $q =
          'SELECT * FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
+
         $row = Sql::pSelectRow($q, $format, $val);
+        if (!$row)
+            return false;
 
         return SqlObject::loadObject($row, $classname);
     }

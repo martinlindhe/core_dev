@@ -4,7 +4,7 @@
  *
  * IMPORTANT! DONT CHANGE NUMBERS, IT WILL BREAK TEH DATABASES!
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip

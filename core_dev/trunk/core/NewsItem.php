@@ -10,8 +10,8 @@ class NewsItem extends CoreBase
     var $title;
     var $desc;
     var $author;
-
     var $guid;
+    var $category;        ///< text description
 
     protected $Duration;  ///< video duration
     protected $Timestamp;
@@ -87,8 +87,8 @@ class NewsItem extends CoreBase
      */
     function getThumbnailLink()
     {
+        throw new Exception ('implement me!');
     }
-
 
 }
 

@@ -9,7 +9,7 @@
  * ISO 639-2 (language codes): http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
  * ISO 3166-1 (country codes): http://en.wikipedia.org/wiki/ISO_3166-1
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
 //STATUS: WIP
