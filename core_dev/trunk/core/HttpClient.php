@@ -89,6 +89,32 @@ class HttpClient extends CoreBase
         return $this->get();
     }
 
+    /**
+     * Returns page body converted to UTF-8
+     */
+    function getBodyUtf8()
+    {
+        $data = $this->get();
+
+        $ct = $this->getResponseHeader('content-type');
+
+        foreach (explode('; ', $ct) as $p) {
+            $k = explode('=', $p);
+
+            if ($k[0] == 'charset') {
+                switch ($k[1]) {
+                //XXX finish up this function to convert other non-utf8 formats
+                case 'iso-8859-1':
+                    return mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
+                default:
+                    throw new Exception ('unhandled encoding: '.$k[1]);
+                }
+            }
+        }
+
+        return $data;
+    }
+
     function post($params)
     {
         return $this->get($params);

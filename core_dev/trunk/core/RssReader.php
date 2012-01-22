@@ -63,7 +63,7 @@ class RssReader extends CoreBase
                 break;
 
             default:
-                throw new Exception ('bad top entry '.$this->reader->name);
+                throw new Exception ('bad top entry: '.$this->reader->name);
             }
         }
 

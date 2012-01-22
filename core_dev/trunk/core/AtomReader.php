@@ -40,7 +40,8 @@ class AtomReader extends CoreBase
 
             //FIXME check http client return code for 404
             if (strpos($data, '<feed ') === false) {
-                dp('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
+                //dp('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
+                throw new Exception ('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
                 return false;
             }
         }
@@ -75,7 +76,7 @@ class AtomReader extends CoreBase
 
             default:
                 //XXX: may include openSearch:itemsPerPage (twitter does for example)
-                //echo 'bad top entry '.$this->reader->name.ln();
+                // echo 'bad top entry '.$this->reader->name.ln();
                 break;
             }
         }
@@ -109,9 +110,19 @@ class AtomReader extends CoreBase
                 $item->desc = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
                 break;
 
+            case 'content':
+                $this->reader->read();
+                $item->body = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
+                break;
+
             case 'updated':
                 $this->reader->read();
                 $item->setTimestamp( $this->reader->value );
+                break;
+
+            case 'name': ///XXX :hack to avoid 2-level parsing of <author><name>Sveriges Radio</name></author>
+                $this->reader->read();
+                $item->author = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
                 break;
 
             case 'id':
@@ -162,14 +173,16 @@ class AtomReader extends CoreBase
                     break;
                 case 'edit': //XXX ???
                 case 'self': //XXX ???
+                case '': // no "rel" attribute exists
                     break;
                 default:
+                    d($item);
                     throw new Exception ('unknown link type: '.$this->reader->getAttribute('rel') );
                 }
                 break;
 
             default:
-                //echo 'unknown entry entry '.$this->reader->name.ln();
+                // echo 'unknown entry entry: '.$this->reader->name.ln();
                 break;
             }
         }

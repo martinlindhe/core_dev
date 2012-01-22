@@ -8,7 +8,8 @@
 class NewsItem extends CoreBase
 {
     var $title;
-    var $desc;
+    var $desc;            ///< article summary / intro
+    var $body;            ///< main article
     var $author;
     var $guid;
     var $category;        ///< text description
