@@ -100,6 +100,7 @@ function client_ip()
     return $ip = $_SERVER['REMOTE_ADDR'];
 }
 
+// http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
 define('URL_REGEXP',
 '('.
     '(https?|ftps?|rtmpe?|mms|rtsp){1}'. // protocol
@@ -113,8 +114,8 @@ define('URL_REGEXP',
     '(:\d+)?'.       // optional port number
     '(/'.            // optional url parameters must begin with /
         '('.
-            // 0 or more alphanumeric and/or: _-'!?=&;+*#%.,:~()
-            '[\w/_\-\'\!\?\|\=\&\;\+\*\#\%\.\,\:\~\(\)]*'.
+            // 0 or more alphanumeric and/or: _-'!?=&@;+*#%.,:~()
+            '[\w/_\-\'\!\?\|\=\&\@\;\+\*\#\%\.\,\:\~\(\)]*'.
         ')?'.
     ')?'.
 ')'
