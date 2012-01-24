@@ -121,7 +121,7 @@ class UserHandler
         if (!$o->id)
             return false;
 
-        $o->password = $algo.':'.Password::encrypt($o->id, $password, $algo);
+        $o->password = Password::encrypt($o->id, $password, $algo);
         User::store($o);
 
         $session = SessionHandler::getInstance();
@@ -165,7 +165,7 @@ class UserHandler
         if (!$u)
             throw new Exception ('wat');
 
-        $u->password = $algo.':'.Password::encrypt($id, $pwd, $algo);
+        $u->password = Password::encrypt($id, $pwd, $algo);
         User::store($u);
         return true;
     }

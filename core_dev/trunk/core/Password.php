@@ -7,7 +7,7 @@
 
 class Password
 {
-    public static function encrypt($salt1, $pwd, $algo = 'sha512')
+    public static function encrypt($salt1, $pwd, $algo)
     {
         $session = SessionHandler::getInstance();
         $salt2 = $session->getEncryptKey();
@@ -18,7 +18,7 @@ class Password
         case 'sha256':
         case 'sha384':
         case 'sha512':
-            return hash($algo, $salt1 . hash($algo, $salt2) . hash($algo, $pwd));
+            return $algo.':'.hash($algo, $salt1 . hash($algo, $salt2) . hash($algo, $pwd));
         default:
             throw new Exception ('unknown method: '.$method);
         }
