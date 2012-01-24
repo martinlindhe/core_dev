@@ -16,6 +16,7 @@ require_once('User.php');
 require_once('UserGroup.php');
 require_once('UserGroupList.php');
 require_once('ReservedWord.php');
+require_once('Password.php');
 
 class UserHandler
 {
@@ -119,7 +120,7 @@ class UserHandler
         if (!$o->id)
             return false;
 
-        $o->password = self::encryptPassword($o->id, $password);
+        $o->password = Password::encrypt($o->id, $password);
         User::store($o);
 
         $session = SessionHandler::getInstance();
