@@ -34,7 +34,7 @@ class BlogEntry
     }
 
     /**
-     * @return list of most recent blogs
+     * @return list of most recent blogs (by publish time)
      */
     public static function getRecent($count)
     {
@@ -43,7 +43,8 @@ class BlogEntry
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' ORDER BY time_created DESC'.
+        ' WHERE time_published IS NOT NULL'.
+        ' ORDER BY time_published DESC'.
         ' LIMIT '.$count;
 
         $list = Sql::pSelect($q);

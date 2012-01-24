@@ -17,10 +17,11 @@ case 'new':
         $session = SessionHandler::getInstance();
 
         $o = new BlogEntry();
-        $o->owner = $session->id;
-        $o->subject = trim($p['subject']);
-        $o->body = trim($p['body']);
-        $o->time_created = sql_datetime( time() );
+        $o->owner          = $session->id;
+        $o->subject        = trim($p['subject']);
+        $o->body           = trim($p['body']);
+        $o->time_created   = sql_datetime( time() );
+        $o->time_published = sql_datetime( time() );
 
         BlogEntry::store($o);
 
@@ -35,9 +36,6 @@ case 'new':
     $x->addSubmit('Create');
     $x->setHandler('createHandler');
     echo $x->render();
-    break;
-
-
     break;
 
 default:
