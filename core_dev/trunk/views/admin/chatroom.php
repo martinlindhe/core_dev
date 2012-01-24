@@ -76,7 +76,6 @@ case 'empty':
 
 
 case 'new':
-    // child = room id
     function createHandler($p)
     {
         $o = new ChatRoom();

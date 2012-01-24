@@ -51,6 +51,11 @@ class BlogEntry
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
+    public static function store($obj)
+    {
+        return SqlObject::store($obj, self::$tbl_name, 'id');
+    }
+
 }
 
 ?>
