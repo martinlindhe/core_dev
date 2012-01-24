@@ -2,91 +2,53 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
 
-require_once('Timestamp.php');
+require_once('SqlObject.php');
 
 class BlogEntry
 {
-    private $id;
-    private $owner;
-    private $category;
+    var $id;
+    var $owner;
+    var $category;
 
-    public $timeCreated, $timeUpdated, $timeDeleted; ///< Timestamp objects
-    private $isPrivate = false;
-    private $subject;
-    private $body;
-    private $deletedBy;
-    private $rating;
-    private $countRatings, $countReads;
+    var $subject;
+    var $body;
 
-    function isDeleted() { return $this->deletedBy ? true : false; }
-    function isUpdated() { return $this->timeUpdated->get() ? true : false; }
+    var $time_created;
+    var $time_published;
+    var $time_updated;
+    var $time_deleted;
+    var $deleted_by;
 
-    function setId($id)
+    var $private;   ///< is entry private?
+
+    protected static $tbl_name = 'tblBlogs';
+
+    public static function get($id)
     {
-        if (!is_numeric($id)) return false;
-        $this->id = $id;
+        return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    function setOwner($id)
+    /**
+     * @return list of most recent blogs
+     */
+    public static function getRecent($count)
     {
-        if (!is_numeric($id)) return false;
-        $this->owner = $id;
-    }
-
-    function setCategory($id)
-    {
-        if (!is_numeric($id)) return false;
-        $this->category = $id;
-    }
-
-    function setSubject($s) { $this->subject = $s; }
-    function setBody($s) { $this->body = $s; }
-
-    function getId() { return $this->id; }
-    function getOwner() { return $this->owner; }
-    function getCategory() { return $this->category; }
-    function getSubject() { return $this->subject; }
-    function getBody() { return $this->body; }
-
-    function get()
-    {
-        global $db;
-
-        if (!$this->id) return false;
+        if (!is_numeric($count))
+            return false;
 
         $q =
-        'SELECT * FROM tblBlogs'.
-        ' WHERE blogId='.$this->id;
-        if ($this->owner) $q .= ' AND userId='.$this->owner;
-        $row = $db->getOneRow($q);
-        if (!$row) return false;
+        'SELECT * FROM '.self::$tbl_name.
+        ' ORDER BY time_created DESC'.
+        ' LIMIT '.$count;
 
-        $this->owner       = $row['userId']; //XXX rename to ownerId
-        $this->category    = $row['categoryId'];
-        $this->isPrivate   = $row['isPrivate'];
-        $this->subject     = $row['subject'];
-        $this->body        = $row['body'];
-        $this->timeCreated = new Timestamp($row['timeCreated']);
-        $this->timeUpdated = new Timestamp($row['timeUpdated']);
-        $this->timeDeleted = new Timestamp($row['timeDeleted']);
-        $this->deletedBy   = $row['deletedBy'];
-        $this->rating      = $row['rating'];
-        $this->countRatings= $row['ratingCnt'];
-        $this->countReads  = $row['readCnt'];
+        $list = Sql::pSelect($q);
 
-        return $this;
-    }
-
-    function update()
-    {
-        global $db;
-        $q = 'UPDATE tblBlogs SET subject="'.$db->escape($this->subject).'",body="'.$db->escape($this->body).'",categoryId='.$this->category.' WHERE blogId='.$this->id;
-        $db->update($q);
+        return SqlObject::loadObjects($list, __CLASS__);
     }
 
 }
