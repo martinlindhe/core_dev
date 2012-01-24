@@ -36,7 +36,7 @@ class ConvertLength extends ConvertBase
     protected $lookup = array(
     'picometer'    => 'pm',
     'nanometer'    => 'nm',
-    'micrometer'   => 'microm', 'micrometre' => 'microm', 'µm' => 'microm',
+    'micrometer'   => 'microm', 'micrometre' => 'microm', 'µm' => 'microm', 'micron' => 'microm', 'microns' => 'microm',
     'millimeter'   => 'mm',
     'centimeter'   => 'cm',
     'decimeter'    => 'dm',
