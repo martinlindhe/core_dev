@@ -5,7 +5,6 @@
 //TODO: separate these to their own files
 
 require_once('UserList.php');
-require_once('UserGroupList.php');
 require_once('IconWriter.php');
 require_once('File.php');
 require_once('ImageResizer.php');

@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -106,6 +106,35 @@ class UserGroup
 
         return $this->id;
     }
+
+    static function getAll()
+    {
+        $arr = array();
+
+        foreach (Sql::pSelect('SELECT * FROM tblUserGroups') as $row)
+        {
+            $item = new UserGroup();
+            $item->loadFromSql($row);
+
+            $arr[] = $item;
+        }
+
+        return $arr;
+    }
+
+    /**
+     * @return array of id=>name pairs
+     */
+    static function getIndexedList()
+    {
+        $res = array();
+
+        foreach (self::getItems() as $i)
+            $res[ $i->getId() ] = $i->getName();
+
+        return $res;
+    }
+
 
 }
 

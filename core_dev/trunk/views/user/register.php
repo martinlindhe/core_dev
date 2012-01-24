@@ -25,10 +25,18 @@ if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_PO
     $reg = UserHandler::getInstance();
 
     if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']))
-        if ($session->login($_POST['register_usr'], $_POST['register_pwd']))
-            $session->showStartPage();
+        if ($session->login($_POST['register_usr'], $_POST['register_pwd'])) {
 
-    // after form submit, put focus back to the register form
+            if ($superadmin_reg) {
+                // If no UserGroup:s exist, create them
+
+                // Add this user to Super Admin group
+            }
+
+            $session->showStartPage();
+        }
+
+    // after form submit failed, put focus back to the register form <div> to show error
     $header->embedJsOnload('show_reg_form();');
 }
 

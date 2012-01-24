@@ -43,7 +43,7 @@ echo 'User group: ';
 
 $x = new XhtmlComponentDropdown();
 $x->name = 'u_grp';
-$x->options = UserGroupList::getIndexedList();
+$x->options = UserGroup::getIndexedList();
 echo $x->render();
 
 echo '<br/>';

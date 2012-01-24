@@ -38,7 +38,7 @@ echo '<h2>Existing groups</h2>';
 
 echo '<table>';
 echo '<tr><th>Name</th><th>Level</th><th>Info</th><th>Created</th></tr>';
-foreach ( UserGroupList::getItems() as $grp)
+foreach ( UserGroup::getAll() as $grp)
 {
     echo '<tr>';
     echo '<td>'.ahref('a/usergroup/'.$grp->getId(), $grp->getName()).'</td>';

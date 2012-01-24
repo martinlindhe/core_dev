@@ -14,7 +14,6 @@
 
 require_once('User.php');
 require_once('UserGroup.php');
-require_once('UserGroupList.php');
 require_once('ReservedWord.php');
 require_once('Password.php');
 

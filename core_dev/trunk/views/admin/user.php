@@ -96,7 +96,7 @@ echo xhtmlForm('grp');
 
 $x = new XhtmlComponentDropdown();
 $x->name = 'grp_id';
-$x->options = UserGroupList::getIndexedList();
+$x->options = UserGroup::getIndexedList();
 
 echo $x->render().' ';
 
