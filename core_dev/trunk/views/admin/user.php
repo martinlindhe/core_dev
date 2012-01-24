@@ -75,11 +75,11 @@ if (!empty($_POST)) {
 
 
 if (!empty($_POST['grp_id'])) {
-    UserHandler::addToGroup($user->id, $_POST['grp_id']);
+    UserGroupHandler::addToGroup($user->id, $_POST['grp_id']);
 }
 
 if (!empty($_GET['rm_grp'])) {
-    UserHandler::removeFromGroup($user->id, $_GET['rm_grp']);
+    UserGroupHandler::removeFromGroup($user->id, $_GET['rm_grp']);
 }
 
 echo '<h2>Group membership</h2>';

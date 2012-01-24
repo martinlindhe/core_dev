@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-//XXXX TODO make this static map to tblUserGroups
+//XXXX TODO rework this as a static class & map to tblUserGroups
 
 require_once('User.php');
 
@@ -58,6 +58,12 @@ class UserGroup
         $q = 'SELECT * FROM tblUserGroups WHERE groupId = ?';
         $row = Sql::pSelectRow($q, 'i', $n);
         $this->loadFromSql($row);
+    }
+
+    public static function getByName($s)
+    {
+        $q = 'SELECT * FROM tblUserGroups WHERE name = ?';
+        return Sql::pSelectRow($q, 's', $s);
     }
 
     function loadFromSql($row)
@@ -122,6 +128,14 @@ class UserGroup
         return $arr;
     }
 
+    static function create($name, $level)
+    {
+        $session = SessionHandler::getInstance();
+
+        $q = 'INSERT INTO tblUserGroups SET createdBy = ?, timeCreated = NOW(), name = ?, level = ?';
+        return Sql::pInsert($q, 'isi', $session->id, $name, $level);
+    }
+
     /**
      * @return array of id=>name pairs
      */
@@ -129,7 +143,7 @@ class UserGroup
     {
         $res = array();
 
-        foreach (self::getItems() as $i)
+        foreach (self::getAll() as $i)
             $res[ $i->getId() ] = $i->getName();
 
         return $res;

@@ -24,17 +24,28 @@ if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_PO
 {
     $reg = UserHandler::getInstance();
 
-    if ($reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']))
-        if ($session->login($_POST['register_usr'], $_POST['register_pwd'])) {
+    $user_id = $reg->register($_POST['register_usr'], $_POST['register_pwd'], $_POST['register_pwd2']);
 
-            if ($superadmin_reg) {
+    if ($user_id)
+    {
+        if ($superadmin_reg) {
+            if (!UserGroup::getAll()) {
                 // If no UserGroup:s exist, create them
-
-                // Add this user to Super Admin group
+                UserGroup::create('Webmasters', 1);
+                UserGroup::create('Admins', 2);
+                $sadmin_id = UserGroup::create('Super Admins', 3);
+            } else {
+                $grp = UserGroup::getByName('Super Admins');
+                $sadmin_id = $grp['groupId'];
             }
 
-            $session->showStartPage();
+            // Add this user to Super Admin group
+            UserGroupHandler::addToGroup($user_id, $sadmin_id);
         }
+
+        if ($session->login($_POST['register_usr'], $_POST['register_pwd']))
+            $session->showStartPage();
+    }
 
     // after form submit failed, put focus back to the register form <div> to show error
     $header->embedJsOnload('show_reg_form();');

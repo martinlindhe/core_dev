@@ -7,7 +7,6 @@ FIX tooltip userinfo bug: http://yuilibrary.com/forum/viewtopic.php?p=29083#p290
 ---
 
 BUGS:
-    * första skapade användaren blir INTE superadmin! plus efter create new first user form submit så blir det tom sida
     * later: fixa tvguide YuiAutocomplete användnign... genom att döda YuiAutocomplete och färdigställa Yui3Autocomplete (ersättaren)
 
     * core_dev: sub-views ska inte behöva använda child, child2 osv..!!

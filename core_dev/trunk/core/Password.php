@@ -7,7 +7,7 @@
 
 class Password
 {
-    public static function encrypt($salt1, $pwd, $algo)
+    public static function encrypt($salt1, $pwd, $algo = 'sha512')
     {
         $session = SessionHandler::getInstance();
         $salt2 = $session->getEncryptKey();

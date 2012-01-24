@@ -93,18 +93,20 @@ class UserHandler
             return false;
         }
 
-        if (!self::create($username, $pwd1)) {
+        $user_id = self::create($username, $pwd1);
+
+        if (!$user_id) {
             $error->add('Failed to create user');
             return false;
         }
 
         if ($this->post_reg_callback)
-            call_user_func($this->post_reg_callback, $user->getId());
+            call_user_func($this->post_reg_callback, $user_id);
 
-        return true;
+        return $user_id;
     }
 
-    public static function create($username, $password, $type = SESSION_REGULAR)
+    public static function create($username, $password, $type = SESSION_REGULAR, $algo = 'sha512')
     {
         $username = trim($username);
 
@@ -119,7 +121,7 @@ class UserHandler
         if (!$o->id)
             return false;
 
-        $o->password = Password::encrypt($o->id, $password);
+        $o->password = $algo.':'.Password::encrypt($o->id, $password, $algo);
         User::store($o);
 
         $session = SessionHandler::getInstance();
