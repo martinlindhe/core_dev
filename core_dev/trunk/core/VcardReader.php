@@ -13,7 +13,6 @@
 
 require_once('HttpClient.php');
 require_once('VcardAddress.php');
-require_once('functions_phones.php'); // for formatMSID()
 
 class VcardReader
 {

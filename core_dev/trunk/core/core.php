@@ -514,4 +514,23 @@ function utf8_strip_bom($s)
     return $s;
 }
 
+/**
+ * Returns input phone number in MSID format
+ * Defaults to Sweden (+46) in case of missing country code
+ *
+ * @param $anr user typed phone number
+ * @param $cc country code
+ * @return MSID formatted phone number (46707123456)
+ */
+function formatMSID($anr, $cc = '46')
+{
+    $anr = str_replace(array("\t", ' ', '-', '+'), '', $anr);
+
+    // numer without country code
+    if (substr($anr, 0, 1) == '0' && strlen($anr) >= 6 )
+        $anr = $cc.substr($anr, 1);
+
+    return $anr;
+}
+
 ?>
