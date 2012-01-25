@@ -104,13 +104,15 @@ function get_mimetype_of_file($filename)
     $c = 'file --brief --mime-type '.escapeshellarg($filename);
     $res = exec($c);
 
-    //XXX: use mediaprobe to distinguish between wmv/wma files.
-    //FIXME: enhance mediaprobe to handle all media detection and stop use "file"
+    //TODO: use ffprobe to distinguish between wmv/wma files
+    //  or if not works, use mediaprobe
+
+/*
     if ($res == 'video/x-ms-wmv' || $res == 'video/x-ms-asf') {
         $c = 'mediaprobe '.escapeshellarg($filename);
         $res = exec($c);
     }
-
+*/
     if (!$res)
         throw new Exception ('file_get_mime FAIL on '.$filename);
 
