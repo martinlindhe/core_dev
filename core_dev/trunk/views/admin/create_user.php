@@ -1,7 +1,6 @@
 <?php
 
-if (!$session->isSuperAdmin)
-    return;
+$session->requireSuperAdmin();
 
 // process updates
 if (!empty($_POST))

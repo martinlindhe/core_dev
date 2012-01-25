@@ -6,8 +6,7 @@ require_once('ModerationObject.php');
 require_once('UserFinder.php');
 require_once('YuiDatatable.php');
 
-if (!$session->isSuperAdmin)
-    return;
+$session->requireSuperAdmin();
 
 if (!$this->owner)
     $this->owner = 'default';

@@ -3,8 +3,7 @@
  * This is the user group manager
  */
 
-if (!$session->isAdmin)
-    return;
+$session->requireAdmin();
 
 function addUserGroupSubmit($p)
 {

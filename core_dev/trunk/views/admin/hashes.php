@@ -2,6 +2,8 @@
 
 require_once('YuiDatatable.php');
 
+$session->requireAdmin();
+
 echo '<h1>Available hash functions</h1>';
 
 $data = "The quick brown fox jumps over the lazy dog";

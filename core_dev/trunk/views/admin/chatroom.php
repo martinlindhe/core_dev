@@ -5,6 +5,8 @@
 //TODO: ability to LOCK a chatroom so it cant be used
 //TODO: ability to configure a chatroom to allow anonymous users
 
+require_once('ChatRoom.php');
+
 $session->requireSuperAdmin();
 
 switch ($this->owner) {

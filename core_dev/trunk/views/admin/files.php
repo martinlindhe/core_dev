@@ -12,8 +12,6 @@ require_once('YuiDatatable.php');
 
 $session->requireAdmin();
 
-
-
 if (!$this->owner)
     $this->owner = 'list';
 

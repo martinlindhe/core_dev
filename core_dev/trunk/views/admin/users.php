@@ -5,8 +5,7 @@
 
 //TODO: fix up row coloring with YuiDatatable
 
-if (!$session->isAdmin)
-    return;
+$session->requireAdmin();
 
 require_once('UserList.php');
 require_once('YuiDatatable.php');

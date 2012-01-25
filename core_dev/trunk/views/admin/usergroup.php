@@ -5,9 +5,7 @@
 
 //TODO: ability to remove a empty usergroup
 
-
-if (!$session->isAdmin)
-    return;
+$session->requireAdmin();
 
 $grp = new UserGroup($this->owner);
 
