@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -15,6 +15,21 @@
 //     examples: http://sv.wiktionary.org/wiki/bestick
 //               http://en.wikipedia.org/wiki/Cutlery
 //       regexp: http(s)://lang.host.tld/wiki/utf8
+
+/**
+TODO: utf8 5.0 support
+    - currently only "utf8 3.0" strings are handled (due to db backend)
+
+mariadb:
+    * handle 4-byte utf8. mariadb/mysql 5.5 will support this with data type "utf8mb4":
+        http://dev.mysql.com/doc/refman/5.5/en/charset-unicode-utf8mb4.html
+    * some utf8 5.0 (4-byte) sequences i found at got.wikipedia.org (ancient gothic)
+        \xF0\x90\x8C\xB7\xF0\x90
+        \xF0\x90\x8C\xBC\xF0\x90
+        \xF0\x90\x8D\x86\xF0\x90
+
+        http://www.utf8-chartable.de/
+*/
 
 
 require_once('HttpClient.php');
@@ -41,9 +56,6 @@ class MediaWikiPage
 
     public static function store($o)
     {
-        if (!$o->time_saved)
-            $o->time_saved = sql_datetime( time() );
-
 // XXXX: delete all articles with same $url before storing (?)
         return SqlObject::store($o, self::$tbl_name, 'url');
     }
@@ -133,19 +145,27 @@ class MediaWikiClient
 
             $o = new MediaWikiPage();
 
-            $o->url     = $full_url;
-            $o->lang    = self::getArticleLanguage($full_url);
-            $o->title   = $p->title;
-            $o->pageid  = $p->pageid;
-            $o->content = $p->revisions[0]->{'*'};
+            $o->url        = $full_url;
+            $o->lang       = self::getArticleLanguage($full_url);
+            $o->title      = $p->title;
+            $o->pageid     = $p->pageid;
+            $o->content    = $p->revisions[0]->{'*'};
+            $o->time_saved = sql_datetime( time() );
 
             $pages[] = $o;
         }
         $res = $pages[0]; // XXX only exports first article
 
-        if ($use_db_cache)
-            MediaWikiPage::store($res);
-        else
+        if ($use_db_cache) {
+            $utf8_5 = strpos($res->content, "\xF0\x90");
+            if ($utf8_5 === false)
+                MediaWikiPage::store($res);
+            else {
+                //FIXME can be handled with mariadb/mysql 5.5 using "utf8mb4" data type
+                echo '<div class="critical">WARNING: cannot store article to db because its using utf8-v5 strings</div>';
+                return $res;
+            }
+        } else
             $temp->set($key, serialize($res), '24h');
 
         return $res;

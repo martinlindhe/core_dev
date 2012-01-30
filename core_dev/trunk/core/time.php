@@ -311,7 +311,8 @@ function is_year_period($s)
         throw new Exception ('years not numbers, hmm?!?'); // should not be possible with above regexp
 
     if ($year2 <= $year1)
-        throw new Exception ('period end is less than start: '.$s.', y1: '.$year1.', y2: '.$year2);
+        return false;
+        // throw new Exception ('period end is less than start: '.$s.', y1: '.$year1.', y2: '.$year2);
 
     return true;
 }

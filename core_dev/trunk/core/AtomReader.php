@@ -23,7 +23,8 @@ class AtomReader extends CoreBase
 {
     private $items = array();
     private $reader;            ///< XMLReader object
-    private $title;             ///< title of the feed
+    private $title;             ///< feed title
+    private $category;          ///< feed category
 
     /**
      * @return array of NewsItem objects
@@ -31,6 +32,8 @@ class AtomReader extends CoreBase
     function getItems() { return $this->items; }
 
     function getTitle() { return $this->title; }
+
+    function getCategory() { return $this->category; }
 
     function parse($data)
     {
@@ -68,6 +71,10 @@ class AtomReader extends CoreBase
             case 'title':
                 $this->reader->read();
                 $this->title = html_entity_decode($this->reader->value, ENT_QUOTES, 'UTF-8');
+                break;
+
+            case 'category': // <category term="Nyheter" />
+                $this->category = $this->reader->getAttribute('term');
                 break;
 
             case 'link': break;
