@@ -97,11 +97,11 @@ function relurl_add($p)
 function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
     $a = new XhtmlComponentA();
-    $a->content = $text;
     $a->href = relurl($url);
-    $a->class = $class;
+    $a->content = $text;
     $a->target = $target;
     $a->onClick($onclick);
+    $a->class = $class;
 
     return $a->render();
 }
@@ -148,7 +148,7 @@ function confirmed($text)
 function js_reload($ms)
 {
     if (!is_numeric($ms))
-        throw new Exception ('js_reload() requires numeric: '.$ms);
+        throw new Exception ('not a numeric: '.$ms);
 
     return js_embed('setTimeout("location.reload();",'.$ms.');');
 }

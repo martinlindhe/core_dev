@@ -24,9 +24,9 @@ mariadb:
     * handle 4-byte utf8. mariadb/mysql 5.5 will support this with data type "utf8mb4":
         http://dev.mysql.com/doc/refman/5.5/en/charset-unicode-utf8mb4.html
     * some utf8 5.0 (4-byte) sequences i found at got.wikipedia.org (ancient gothic)
-        \xF0\x90\x8C\xB7\xF0\x90
-        \xF0\x90\x8C\xBC\xF0\x90
-        \xF0\x90\x8D\x86\xF0\x90
+        \xF0\x90\x8C\xB7
+        \xF0\x90\x8C\xBC
+        \xF0\x90\x8D\x86
 
         http://www.utf8-chartable.de/
 */
@@ -94,7 +94,7 @@ class MediaWikiClient
      * @param $use_db_cache false to disable; set to a time period, like "6m" or "6 months" to cache articles in local db
      * @return raw unparsed article
      */
-    public static function getArticle($full_url, $use_db_cache = '6 months')
+    public static function getArticle($full_url, $use_db_cache = '30 days')
     {
         if (!is_url($full_url) || !is_mediawiki_url($full_url))
             throw new Exception ('need a mediawiki url... '.$full_url);
@@ -121,14 +121,12 @@ class MediaWikiClient
             if ($res)
                 return $res;
         }
-        else
-        {
-            $key = 'MediaWikiClient/'.sha1( $url->get() );
-            $temp = TempStore::getInstance();
-            $res = $temp->get($key);
-            if ($res)
-                return unserialize($res);
-        }
+
+        $key = 'MediaWikiClient/'.sha1( $url->get() );
+        $temp = TempStore::getInstance();
+        $res = $temp->get($key);
+        if ($res)
+            return unserialize($res);
 
         $http = new HttpClient($url);
 
@@ -156,6 +154,8 @@ class MediaWikiClient
         }
         $res = $pages[0]; // XXX only exports first article
 
+        $temp->set($key, serialize($res), '24h');
+
         if ($use_db_cache) {
             $utf8_5 = strpos($res->content, "\xF0\x90");
             if ($utf8_5 === false)
@@ -163,10 +163,8 @@ class MediaWikiClient
             else {
                 //FIXME can be handled with mariadb/mysql 5.5 using "utf8mb4" data type
                 echo '<div class="critical">WARNING: cannot store article to db because its using utf8-v5 strings</div>';
-                return $res;
             }
-        } else
-            $temp->set($key, serialize($res), '24h');
+        }
 
         return $res;
     }
