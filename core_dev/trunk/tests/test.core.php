@@ -39,7 +39,9 @@ array("numbers_only('12.0')",               false),
 array("numbers_only('')",                   false),
 array("is_number_range('2-0')",             true),
 array("is_number_range('2000-3000')",       true),
+array("str_between('--abcxx', '--', 'xx')", 'abc'),
+array("str_between('-- abc xx', '--', 'xx')", ' abc '),
+array("str_between('-1-', '-', '-')",         '1'),
 ));
-
 
 ?>

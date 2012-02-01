@@ -487,6 +487,22 @@ function strip_spaces($s)
 }
 
 /**
+ * @return string between $needle1 and $needle2 or false if not found
+ */
+function str_between($s, $needle1, $needle2)
+{
+    $p1 = strpos($s, $needle1);
+    if ($p1 === false)
+        throw new Exception ('didnt find paragraph p1');
+
+    $p2 = strpos($s, $needle2, $p1);
+    if ($p2 === false)
+        throw new Exception ('didnt find paragraph p2');
+
+    return substr($s, $p1 + strlen($needle1), $p2 - $p1 - strlen($needle1));
+}
+
+/**
  * reduce excessive whitespace to a single space
  */
 function reduce_whitespace($s)
