@@ -13,6 +13,8 @@
 
 //TODO: rewrite to use simplexml ?
 
+//WIP: handle <rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+
 require_once('CoreBase.php');
 require_once('NewsItem.php');
 
@@ -129,14 +131,18 @@ class RssReader extends CoreBase
 
             switch ($key) {
             case 'title':
-                $item->setTitle( html_entity_decode($this->reader->readValue(), ENT_QUOTES, 'UTF-8') );
+                $item->setTitle( $this->reader->readValue() );
                 break;
 
             case 'description':
-                $item->desc = trim( html_entity_decode($this->reader->readValue(), ENT_QUOTES, 'UTF-8') );
+                $item->desc = trim($this->reader->readValue());
+                break;
+            case 'content:encoded': // XXX non standard tag
+                $item->body = trim($this->reader->readValue());
                 break;
 
             case 'author':
+            case 'dc:creator': // XXX non standard tag
                 $item->author = $this->reader->readValue();
                 break;
 
@@ -145,6 +151,7 @@ class RssReader extends CoreBase
                 break;
 
             case 'pubdate':
+            case 'dc:date': // XXX non standard tag, <dc:date>2012-02-01 05:50:00</dc:date>
                 $item->setTimestamp( $this->reader->readValue() );
                 break;
 
@@ -160,7 +167,7 @@ class RssReader extends CoreBase
                 if (in_array($key, $this->ext_tags)) {
                     $this->pluginParseTag($key, $item);
                 } else {
-                    //echo 'unknown item entry ' .$this->reader->name.ln();
+                    // echo 'unknown item entry ' .$this->reader->name.ln();
                 }
                 break;
             }
