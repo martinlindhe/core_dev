@@ -493,11 +493,11 @@ function str_between($s, $needle1, $needle2)
 {
     $p1 = strpos($s, $needle1);
     if ($p1 === false)
-        throw new Exception ('didnt find paragraph p1');
+        return false;
 
     $p2 = strpos($s, $needle2, $p1);
     if ($p2 === false)
-        throw new Exception ('didnt find paragraph p2');
+        return false;
 
     return substr($s, $p1 + strlen($needle1), $p2 - $p1 - strlen($needle1));
 }
