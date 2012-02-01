@@ -22,13 +22,6 @@ require_once('XmlDocumentHandler.php');
 // required for the string functions to work properly
 mb_internal_encoding('UTF-8');
 
-// PHP_VERSION_ID is available as of PHP 5.2.7, if our
-// version is lower than that, then emulate it
-if (!defined('PHP_VERSION_ID')) {
-    $version = explode('.', PHP_VERSION);
-    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
-}
-
 /**
  * PHP version check
  *
@@ -322,7 +315,6 @@ function numbers_only($s) //XXXX FIXME use a regexp
     }
     return true;
 }
-
 
 /**
  * Similar to is_year_period() but accepts any 2 numbers,
