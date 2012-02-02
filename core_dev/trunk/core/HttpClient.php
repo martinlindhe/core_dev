@@ -16,7 +16,10 @@
 
 //STATUS: wip
 
-//TODO: extend from Url ???
+//TODO: parse expire time from expiring cookies:   Set-Cookie: Vizzit=/rp3KjkkMk+37+ynumEJxA==:1328174026; expires=Sat, 02-Feb-2013 08:13:45 GMT; path=/
+
+
+
 
 //FIXME header parsing should preserve all fields, ex:
 /*
@@ -197,6 +200,41 @@ class HttpClient extends CoreBase
         file_put_contents($out_file, $data);
     }
 
+    function encodeCookies()
+    {
+        $res = '';
+        foreach ($this->cookies as $key => $val) {
+            $res .= $key.'='.$val.'; ';
+        }
+
+        //HACK: remove last "; "
+        $res = trim($res);
+        if (substr($res, -1, 1) == ';')
+            $res = substr($res, 0, -1);
+
+        return $res;
+    }
+
+    /**
+     * Parses a HTTP header "set-cookie" string into array
+     */
+    static function decodeCookies($raw)
+    {
+        $out = array();
+
+        $pairs = explode(';', $raw);
+
+        foreach ($pairs as $key => $val) {
+            $x = explode('=', $val, 2);
+
+            if (isset($x[1]))
+                $out[ $x[0] ] = $x[1];
+            else
+                $out[ $x[0] ] = true;
+        }
+        return $out;
+    }
+
     /**
      * Fetches the data of the web resource
      * uses HTTP AUTH if username is set
@@ -229,7 +267,8 @@ class HttpClient extends CoreBase
 
         $headers = array(
         ($this->content_type ? 'Content-Type: '.$this->content_type : ''),
-        'Accept-Encoding: gzip,deflate'
+        'Accept-Encoding: gzip,deflate',
+        'Expect:',  // HACK to disable cURL default to send "100-continue"
         );
 
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
@@ -274,8 +313,8 @@ class HttpClient extends CoreBase
         }
 
         if ($this->cookies) {
-            if ($this->getDebug()) echo "http->get() sending cookies: ".encode_cookie_string($this->cookies).ln();
-            curl_setopt($this->ch, CURLOPT_COOKIE, encode_cookie_string($this->cookies));
+            if ($this->getDebug()) echo "http->get() sending cookies: ".$this->encodeCookies().ln();
+            curl_setopt($this->ch, CURLOPT_COOKIE, $this->encodeCookies());
         }
 
         if (!empty($post_params)) {
@@ -355,7 +394,7 @@ class HttpClient extends CoreBase
             $body = gzinflate($body);
             break;
 
-	case 'identity':
+	    case 'identity':
         case '':
             break;
 
@@ -368,9 +407,8 @@ class HttpClient extends CoreBase
 
         // store cookies sent from the server in our cookie pool for possible manipulation
         $raw_cookies = $this->getResponseHeader('set-cookie');
-
         if ($raw_cookies)
-            $this->setCookies( decode_cookie_string($raw_cookies) );
+            $this->setCookies( self::decodeCookies($raw_cookies) );
 
         $auth = $this->getResponseHeader('www-authenticate');
         if ($auth)

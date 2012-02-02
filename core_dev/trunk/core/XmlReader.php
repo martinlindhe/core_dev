@@ -19,6 +19,7 @@ class CoreXmlReader extends XMLReader
     {
         if (is_url($data)) {
             $http = new HttpClient($data);
+            $http->setCacheTime('30m');
             $data = $http->getBody();
 
             //FIXME check http client return code for 404

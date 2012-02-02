@@ -205,43 +205,6 @@ function decode_raw_http_params($raw)
 }
 
 /**
- * Parses a HTTP header "set-cookie" string into array
- */
-function decode_cookie_string($raw)
-{
-    $out = array();
-
-    $pairs = explode(';', $raw);
-    foreach ($pairs as $key => $val) {
-        $x = explode('=', $val);
-
-        if (isset($x[1]))
-            $out[ $x[0] ] = $x[1];
-        else
-            $out[ $x[0] ] = true;
-    }
-    return $out;
-}
-
-/**
- * Encodes array from decode_cookie_string() into a HTTP "cookie" header string: "fruit=apple; colour=red"
- */
-function encode_cookie_string($arr)
-{
-    $res = '';
-    foreach ($arr as $key => $val) {
-        $res .= $key.'='.$val.'; ';
-    }
-
-    //HACK: remove last "; "
-    $res = trim($res);
-    if (substr($res, -1, 1) == ';')
-        $res = substr($res, 0, -1);
-
-    return $res;
-}
-
-/**
  * Returns true if client ip is localhost
  */
 function is_client_localhost()
