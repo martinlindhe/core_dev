@@ -1,4 +1,4 @@
-<?php
+ï»¿<?php
 /**
  * $Id$
  *
@@ -150,11 +150,11 @@ class RssReader extends CoreBase
                 $url = $this->reader->readValue();
                 // UGLY HACKS - FIX invalid URLs
                 // no need to do this if value was not parsed to a Url object
-                // http://www.metrojobb.se/artikel/256/luncha-dig-till-nya-jobbnätverk
+                // http://www.metrojobb.se/artikel/256/luncha-dig-till-nya-jobbnÃ¤tverk
                 // http://www.metrojobb.se/artikel/256/luncha-dig-till-nya-jobbn%C3%A4tverk
-                $url = str_replace("\xC3\xA4", '%C3%A4', $url); // ä
-                $url = str_replace("\xC3\xA5", '%C3%A5', $url); // å
-                $url = str_replace("\xC3\xB6", '%C3%B6', $url); // ö
+                $url = str_replace("\xC3\xA4", '%C3%A4', $url); // Ã¤
+                $url = str_replace("\xC3\xA5", '%C3%A5', $url); // Ã¥
+                $url = str_replace("\xC3\xB6", '%C3%B6', $url); // Ã¶
                 $item->setUrl( $url );
                 break;
 
