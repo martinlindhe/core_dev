@@ -23,6 +23,13 @@ class ReflectedObject
 
 class SqlObject
 {
+    public static function stringForm($s)
+    {
+        if (numbers_only($s))
+            return 'i';
+        return 's';
+    }
+
     /**
      * Creates one object $objname
      * @param $q a sql select query resulting in one row, or a indexed array
@@ -131,10 +138,7 @@ class SqlObject
             if (!$include_unset && !$obj->$col)
                 continue;
 
-            if (is_integer($obj->$col))
-                $res->str .= 'i';
-            else
-                $res->str .= 's';
+            $res->str = self::stringForm($obj->$col);
 
             $res->vals[] = $obj->$col;
 
@@ -156,10 +160,7 @@ class SqlObject
         'SELECT COUNT(*) FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
 
-        if (is_numeric($id))
-            $form = 'i';
-        else
-            $form = 's';
+        $form = self::stringForm($id);
 
         return Sql::pSelectItem($q, $form, $id) ? true : false;
     }
@@ -234,16 +235,13 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        if (is_numeric($val))
-            $format = 'i';
-        else
-            $format = 's';
+        $form = self::stringForm($val);
 
         $q =
          'SELECT * FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
 
-        $row = Sql::pSelectRow($q, $format, $val);
+        $row = Sql::pSelectRow($q, $form, $val);
         if (!$row)
             return false;
 
