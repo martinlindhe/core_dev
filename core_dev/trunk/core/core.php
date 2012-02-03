@@ -302,7 +302,7 @@ function randstr($len)
 /**
  * Checks if a string contains only numbers 0-9
  */
-function numbers_only($s) //XXXX FIXME use a regexp
+function numbers_only($s) //XXXX FIXME use a regexp   FIXME rename to is_digits()
 {
     if (!trim($s))
         return false;

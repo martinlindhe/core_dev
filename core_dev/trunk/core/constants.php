@@ -96,4 +96,7 @@ function language($n)
     return $x[ $n ];
 }
 
+define('COUNTRY_SE', 1); // Sweden
+define('COUNTRY_UK', 2); // United Kingdoms
+
 ?>

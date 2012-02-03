@@ -147,7 +147,7 @@ class SqlObject
             else
                 $res->cols[] = $col.' = ?';
         }
-
+        //d($res);
         return $res;
     }
 
