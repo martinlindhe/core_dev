@@ -42,6 +42,7 @@ array("is_number_range('2000-3000')",       true),
 array("str_between('--abcxx', '--', 'xx')", 'abc'),
 array("str_between('-- abc xx', '--', 'xx')", ' abc '),
 array("str_between('-1-', '-', '-')",         '1'),
+array("str_between('a1aa', 'a', 'a')",        '1'),
 ));
 
 ?>

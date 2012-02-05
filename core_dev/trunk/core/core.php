@@ -487,7 +487,7 @@ function str_between($s, $needle1, $needle2)
     if ($p1 === false)
         return false;
 
-    $p2 = strpos($s, $needle2, $p1);
+    $p2 = strpos($s, $needle2, $p1 + strlen($needle1));
     if ($p2 === false)
         return false;
 
