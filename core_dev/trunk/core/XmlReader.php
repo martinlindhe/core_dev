@@ -24,6 +24,9 @@ class CoreXmlReader extends XMLReader
             $raw = $h->getBody();
 //            d( $h->getResponseHeaders() );
 
+            if ( $h->getStatus() == 404) // not found
+                return false;
+
             if ( $h->getStatus() == 302) // redirect
             {
                 $redir = $h->getResponseHeader('location');
@@ -35,7 +38,6 @@ class CoreXmlReader extends XMLReader
                 $raw = $h->getBody();
             }
 
-            //FIXME check http client return code for 404
             if (strpos($raw, '<?xml ') === false) {
                 throw new Exception ('RssReader->parse FAIL: cant parse feed from '.$url );
                 return false;

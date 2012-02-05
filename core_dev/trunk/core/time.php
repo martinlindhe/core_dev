@@ -21,7 +21,7 @@ require_once('sql_misc.php');
  */
 function ago($sql_time)
 {
-    $old_time  = strtotime($sql_time);
+    $old_time  = ts( sql_datetime($sql_time) );
     $curr_time = time();
 
     if ($curr_time == $old_time)
@@ -30,8 +30,7 @@ function ago($sql_time)
     if ($curr_time >= $old_time)
         return elapsed_seconds($curr_time - $old_time, 0).' ago';
 
-    return elapsed_seconds($old_time - $curr_time, 0).' in the future';
-
+    return 'in '.elapsed_seconds($old_time - $curr_time, 0);
 }
 
 /**

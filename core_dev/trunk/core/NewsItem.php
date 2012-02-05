@@ -75,7 +75,7 @@ class NewsItem extends CoreBase
 
         foreach ($this->media as $m)
             if ($m instanceof VideoResource)
-                if ($m->video_width > $best_w) {
+                if ($m->video_width >= $best_w) {
                     $best_w = $m->video_width;
                     $best = $m;
                 }

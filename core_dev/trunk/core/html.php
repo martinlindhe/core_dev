@@ -28,7 +28,7 @@ function is_html_color($s)
 /** Decodes html entities from input string */
 function htmlchars_decode($s)
 {
-    return html_entity_decode($s, ENT_COMPAT, 'UTF-8');
+    return html_entity_decode($s, ENT_QUOTES, 'UTF-8');
 }
 
 /** similar to strip_tags() but also removes all javascript / css inside <script> or <style> tags */

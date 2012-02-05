@@ -36,5 +36,6 @@ if (is_html_color('#f'))       echo "FAIL 14\n";
 if (is_html_color('aff'))      echo "FAIL 15\n";
 if (is_html_color(''))         echo "FAIL 16\n";
 
+if (htmlchars_decode('&#039;') != "'") echo "FAIL 17\n";
 
 ?>

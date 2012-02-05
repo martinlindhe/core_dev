@@ -162,7 +162,7 @@ class MediaWikiClient
                 MediaWikiPage::store($res);
             else {
                 //FIXME can be handled with mariadb/mysql 5.5 using "utf8mb4" data type
-                echo '<div class="critical">WARNING: cannot store article to db because its using utf8-v5 strings</div>';
+                echo '<div class="critical">WARNING: cannot store article to db because its using utf8-v5 strings</div>'."\n";
             }
         }
 
