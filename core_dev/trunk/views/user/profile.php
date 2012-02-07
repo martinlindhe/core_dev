@@ -33,7 +33,7 @@ if (UserHandler::isOnline($user_id)) {
     echo 'Offline<br/>';
 }
 
-echo 'User level: '.UserHandler::getUserLevel($user_id).'<br/>';
+echo 'User level: '.UserGroupHandler::getUserLevel($user_id).'<br/>';
 
 $gender_id = UserSetting::get($user_id, 'gender');
 $gender = Setting::getById(USERDATA_OPTION, $gender_id);

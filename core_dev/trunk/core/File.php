@@ -191,7 +191,7 @@ class File
     /**
      * Helper function that imports a image file and shrinks it to max allowed dimensions
      */
-    public static function importImage($type, &$key, $category = 0, $blind, $max_width = 800, $max_height = 800)
+    public static function importImage($type, &$key, $category = 0, $blind = false, $max_width = 800, $max_height = 800)
     {
         $error = ErrorHandler::getInstance();
 
