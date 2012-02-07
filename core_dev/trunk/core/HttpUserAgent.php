@@ -103,17 +103,14 @@ class HttpUserAgent
                 // (X11; Linux x86_64; rv:6.0)
                 // (Windows NT 6.1; WOW64; rv:9.0.1)
                 // (X11; Ubuntu; Linux x86_64; rv:10.0)
+                // (Macintosh; Intel Mac OS X 10.7; rv:10.0)
                 foreach ($x as $tok) {
-                    switch ($tok) {
-                    case 'X11':
-                    case 'Windows NT 5.1':
-                    case 'Windows NT 6.1':
+                    if (stripos($tok, 'X11') !== false || stripos($tok, 'Windows') !== false || stripos($tok, 'Macintosh') !== false) {
                         $o->os = $tok;
-                        break;
-                    case 'WOW64':
-                    case 'Linux x86_64':
+                    } else if (stripos($tok, 'WOW64') !== false || stripos($tok, 'x86') !== false || stripos($tok, 'Mac OS') !== false) {
                         $o->arch = $tok;
-                        break;
+                    } else {
+                        // echo "unknown tok: ".$tok."\n";
                     }
                 }
             }

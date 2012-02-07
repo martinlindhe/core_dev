@@ -27,10 +27,19 @@ $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '9.0.1' || $b->os != 'Windows NT 6.1' || $b->arch != 'WOW64')
     echo 'FAIL 4: '.$s;
 
-$s = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0';  // latest stable as of 2012-02-07
+$s = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '10.0' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
     echo 'FAIL 5: '.$s;
+
+$s = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:10.0) Gecko/20100101 Firefox/10.0';  // latest stable as of 2012-02-07
+$b = HttpUserAgent::getBrowser($s);
+if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '10.0' || $b->os != 'Macintosh' || $b->arch != 'Intel Mac OS X 10.7')
+    echo 'FAIL 6: '.$s;
+
+
+//$s = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.53.11 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10';
+//$s = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7';
 
 
 
@@ -55,6 +64,7 @@ $s = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.7 (KHTML, like Gecko) Chro
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '16.0.912.77' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
     echo 'FAIL 13: '.$s;
+
 
 
 
