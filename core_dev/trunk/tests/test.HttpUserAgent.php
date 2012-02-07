@@ -4,6 +4,8 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('HttpUserAgent.php');
 
+
+// FIREFOX:
 $s = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; it; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '2.0.0.11')
@@ -19,13 +21,20 @@ $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '6.0' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
     echo 'FAIL 3: '.$s;
 
-$s = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1'; // latest stable as of 2012-01-18
+
+$s = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '9.0.1' || $b->os != 'Windows NT 6.1' || $b->arch != 'WOW64')
     echo 'FAIL 4: '.$s;
 
+$s = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0';  // latest stable as of 2012-02-07
+$b = HttpUserAgent::getBrowser($s);
+if ($b->vendor != 'Mozilla' || $b->name != 'Firefox' || $b->version != '10.0' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
+    echo 'FAIL 5: '.$s;
 
 
+
+// CHROME:
 $s = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_7) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.68 Safari/534.24';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '11.0.696.68')
@@ -36,18 +45,21 @@ $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '12.0.742.113')
     echo 'FAIL 11: '.$s;
 
-$s = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1';
-$b = HttpUserAgent::getBrowser($s);
-if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '13.0.782.112' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
-    echo 'FAIL 12: '.$s;
-
-$s = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7';  // latest stable as of 2012-01-19
+$s = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.75 Safari/535.7';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '16.0.912.75' || $b->os != 'Windows NT 6.1' || $b->arch != 'WOW64')
+    echo 'FAIL 12: '.$s;
+
+
+$s = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7'; // latest stable as of 2012-02-07
+$b = HttpUserAgent::getBrowser($s);
+if ($b->vendor != 'Google' || $b->name != 'Chrome' || $b->version != '16.0.912.77' || $b->os != 'X11' || $b->arch != 'Linux x86_64')
     echo 'FAIL 13: '.$s;
 
 
 
+
+// SAFARI:
 $s = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Apple' || $b->name != 'Safari' || $b->version != '2.0.4')
@@ -86,6 +98,8 @@ if ($b->vendor != 'Apple' || $b->name != 'Safari' || $b->os != 'iPod')
 
 
 
+
+// INTERNET EXPLORER:
 $s = 'Mozilla/4.0 (compatible; MSIE 4.01; Windows 98)';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Microsoft' || $b->name != 'Internet Explorer' || $b->version != '4.01')
@@ -118,6 +132,7 @@ if ($b->vendor != 'Microsoft' || $b->name != 'Internet Explorer' || $b->version 
 
 
 
+// OPERA:
 $s = 'Opera/9.00 (Windows NT 5.1; U; en)';
 $b = HttpUserAgent::getBrowser($s);
 if ($b->vendor != 'Opera Software' || $b->name != 'Opera' || $b->version != '9.00')
