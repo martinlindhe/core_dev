@@ -49,7 +49,6 @@ class WebBrowser
     var $os;        ///< string "Linux", "Windows", "Macintosh", "iPhone", "iPad", "iPod"
 //    var $os_version; // string
     var $arch;      ///< string "x86_64", "CPU OS 3_2 like Mac OS X"
-    var $language;  ///< "en", "en-us"
 }
 
 class HttpUserAgent
@@ -98,13 +97,12 @@ class HttpUserAgent
                 $p2 = strpos($s1, ')');
                 $s2 = substr($s1, 0, $p2);
 
-                $x = explode('; ', $s2);
-//                d($x);
                 // (X11; Linux x86_64; rv:6.0)
                 // (Windows NT 6.1; WOW64; rv:9.0.1)
                 // (X11; Ubuntu; Linux x86_64; rv:10.0)
                 // (Macintosh; Intel Mac OS X 10.7; rv:10.0)
-                foreach ($x as $tok) {
+                foreach (explode(';', $s2) as $tok) {
+                    $tok = trim($tok);
                     if (stripos($tok, 'X11') !== false || stripos($tok, 'Windows') !== false || stripos($tok, 'Macintosh') !== false) {
                         $o->os = $tok;
                     } else if (stripos($tok, 'WOW64') !== false || stripos($tok, 'x86') !== false || stripos($tok, 'Mac OS') !== false) {
@@ -181,14 +179,22 @@ class HttpUserAgent
                 $p2 = strpos($s1, ')');
                 $s2 = substr($s1, 0, $p2);
 
-                $x = explode(';', $s2);
-
                 // (iPhone; U; CPU OS 3_2 like Mac OS X; en-us)
+                // (iPad;U;CPU OS 3_2_2 like Mac OS X; en-us)
                 // (Macintosh; U; Intel Mac OS X; en)
                 // (Windows; U; Windows NT 6.1; en-US)
-                $o->os   = trim($x[0]);
-                $o->arch = trim($x[2]);
-                $o->language = strtolower(trim($x[3]));
+                // (Macintosh; Intel Mac OS X 10_7_3)
+                // (iPhone; CPU iPhone OS 5_0_1 like Mac OS X)
+                foreach (explode(';', $s2) as $tok) {
+                    $tok = trim($tok);
+                    if ($tok == 'Windows' || $tok == 'Macintosh' || $tok == 'iPhone' || $tok == 'iPad' || $tok == 'iPod') {
+                        $o->os = $tok;
+                    } else if (stripos($tok, 'Windows NT') !== false || stripos($tok, 'Mac OS') !== false) {
+                        $o->arch = $tok;
+                    } else {
+                        // echo "unknown tok: ".$tok."\n";
+                    }
+                }
             }
         }
         else if (instr($s, 'Opera'))
@@ -210,6 +216,30 @@ class HttpUserAgent
                 $y = explode(' ', $x[1]);
                 $o->version = $y[0];
             }
+
+            $x = explode(' (', $s, 2);
+
+            $sub_s = $x[1];
+
+            $p1 = strpos($sub_s, ')');
+            $s2 = substr($sub_s, 0, $p1);
+
+            // (Windows NT 5.1; U; en)
+            // (Macintosh; Intel Mac OS X; U; en)
+            // (X11; Linux x86_64; U; en)
+            // (Windows NT 6.0; U; en)
+            // (Windows NT 6.1; U; en)
+            foreach (explode(';', $s2) as $tok) {
+                $tok = trim($tok);
+                if (stripos($tok, 'X11') !== false || stripos($tok, 'Windows') !== false || stripos($tok, 'Macintosh') !== false) {
+                    $o->os = $tok;
+                } else if (stripos($tok, 'x86') !== false || stripos($tok, 'Mac OS') !== false) {
+                    $o->arch = $tok;
+                } else {
+                    // echo "unknown tok: ".$tok."\n";
+                }
+            }
+
         }
         else if (instr($s, 'MSIE'))
         {
