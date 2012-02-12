@@ -104,16 +104,15 @@ $form->cssTable('');
 
 
 $u_img = new XhtmlComponentImage();
-$u_img->src = relurl('core_dev/gfx/icon_user.png');
+$u_img->src = $page->getRelativeCoreDevUrl().'gfx/icon_user.png';
 
 $i = new XhtmlComponentInput();
 $i->name = 'usr';
 
 $form->add($i, t('Username'), $u_img);
 
-
 $p_img = new XhtmlComponentImage();
-$p_img->src = relurl('core_dev/gfx/icon_keys.png');
+$p_img->src = $page->getRelativeCoreDevUrl().'gfx/icon_keys.png';
 
 $i = new XhtmlComponentPassword();
 $i->name = 'pwd';

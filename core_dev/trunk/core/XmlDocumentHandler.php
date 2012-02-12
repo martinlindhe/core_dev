@@ -31,7 +31,7 @@ class XmlDocumentHandler extends CoreBase
     private $attachment_name;                ///< name of file attachment (force user to save file)
     private $inline_name;                    ///< name of inlined file (will set correct name if user chooses to save file)
     private $coredev_inc;                    ///< if set, points to "/path/to/core_dev/core/"   XXXX move to own handler class?
-    private $coredev_root = 'core_dev/';     ///< web path to core_dev for ajax api calls
+    private $coredev_root;                   ///< web path to core_dev for ajax api calls
     private $upload_root;                    ///< root directory for file uploads
     private $app_root;                       ///< application root directory, currently only used to locate favicon.png for auto conversion to favicon.ico
     private $ts_initial;                     ///< used to measure page load time
@@ -64,7 +64,13 @@ class XmlDocumentHandler extends CoreBase
      * Sets base/root URL for current website
      * @param $s base url, e.g. http://www.example.com/  (with ending / )
      */
-    function setUrl($s) { $this->Url = new Url($s); }
+    function setUrl($s)
+    {
+        $this->Url = new Url($s);
+        
+        if (!$this->coredev_root)
+            $this->setRelativeCoreDevUrl('core_dev/');
+    }
 
     /** @return relative URL for current website */
     function getRelativeUrl() { return $this->Url->getPath(); }
