@@ -26,21 +26,23 @@ case 'inbox':
     echo ahref('u/messages/outbox', 'Show outbox').'<br/>';
 
     foreach ($list as $msg) {
-        $from = User::get($msg->from);
+//        $from = User::get($msg->from);
 
-        echo 'From '.$from->name.', '.ago($msg->time_sent).'<br/>';
+        echo 'From '.UserLink::render($msg->from).', '.ago($msg->time_sent).'<br/>';
 //        echo 'Read: '.ago($msg->time_read).'<br/>';  // XXX FIXME mark msgs as read!!!
         switch ($msg->type) {
         case PRIV_MSG:
-            echo $msg->body;
+            echo nl2br($msg->body);
             break;
         case RECORDING_MSG:
             echo 'VIDEO MSG!!!<br/>';
-            echo embed_flv($msg->body);
+            echo embed_flv($msg->body).'<br/>';
             break;
         default:
             throw new Exception ('eh');
         }
+        echo ahref('u/messages/send/'.$msg->from, 'Reply with message').'<br/>';
+        echo ahref('videomsg/send/'.$msg->from, 'Reply with video message').'<br/>';
         echo '<hr/>';
     }
 
@@ -72,7 +74,7 @@ case 'send':
     function msgSubmit($p)
     {
         Message::send($p['to'], $p['msg']);
-        js_redirect('u/messages');
+        js_redirect('u/messages/inbox');
     }
 
     $user = User::get($this->child);
