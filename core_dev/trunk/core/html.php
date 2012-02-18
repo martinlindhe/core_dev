@@ -208,4 +208,22 @@ function css_size($s)
     //TODO: handle "40.5em"
 }
 
+/**
+ * Embeds SWF using js/swfobject.js, see http://code.google.com/p/swfobject/
+ * @flashvars array of key=>val pairs
+ */
+function js_swfobject($swf, $render_div, $width = 300, $height = 120, $flashvars, $min_version = '9.0.0')
+{
+    $page = XmlDocumentHandler::getInstance();
+    
+    $header = XhtmlHeader::getInstance();
+    $header->includeJs( $page->getRelativeCoreDevUrl().'js/swfobject.js');
+
+    $js =
+    'var flashvars = '.json_encode($flashvars).';'.
+    'swfobject.embedSWF("'.$swf.'", "'.$render_div.'", "'.$width.'", "'.$height.'", "'.$min_version.'", "expressInstall.swf", flashvars);';
+
+    return js_embed($js);
+}
+
 ?>

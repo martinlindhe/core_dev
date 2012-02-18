@@ -28,6 +28,8 @@ define('IP',              10);  ///< setting is associated with an IP address, s
 define('POLL',            11);  ///< category is owned by a poll
 define('USERDATA_OPTION', 20);  ///< used to hold options in tblSettings for UserDataFieldOptions
 
+define('RECORDING_PRES',  30);  ///< stream recording of a user presentation
+define('RECORDING_MSG',   31);  ///< stream recording of a private message
 
 /**
  * tblCategory.permissions
