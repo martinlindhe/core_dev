@@ -31,6 +31,7 @@ case 'default':
     $dt->addColumn('from',         'From');    /// XXXX show username, show link to user page
     $dt->addColumn('time_sent',    'Sent');
     $dt->addColumn('body',         'Msg');
+    $dt->addColumn('type',         'Type');
     $dt->setSortOrder('time_sent', 'desc');
     $dt->setDataSource( $list );
     echo $dt->render();
@@ -45,6 +46,7 @@ case 'default':
     $dt->addColumn('to',           'To');    /// XXXX show username, show link to user page
     $dt->addColumn('time_sent',    'Sent');
     $dt->addColumn('body',         'Msg');
+    $dt->addColumn('type',         'Type');
     $dt->setSortOrder('time_sent', 'desc');
     $dt->setDataSource( $list );
     echo $dt->render();
