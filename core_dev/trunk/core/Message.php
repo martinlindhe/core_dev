@@ -21,6 +21,7 @@ class Message
     var $time_sent;
     var $time_read;
     var $body;
+    var $type;     /// PRIV_MSG or RECORDING_MSG (video msg, where body = video fileId)
 
     protected static $tbl_name = 'tblMessages';
 
@@ -69,7 +70,7 @@ class Message
     /**
      * @return message id
      */
-    public static function send($to, $msg)
+    public static function send($to, $msg, $type = PRIV_MSG)
     {
         $session = SessionHandler::getInstance();
 
@@ -77,6 +78,7 @@ class Message
         $m->to = $to;
         $m->from = $session->id;
         $m->body = $msg;
+        $m->type = $type;
         $m->time_sent = sql_datetime( time() );
         return self::store($m);
     }
