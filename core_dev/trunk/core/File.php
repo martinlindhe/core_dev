@@ -140,7 +140,7 @@ class File
 
         readfile($path);
     }
-    
+
     public static function importFromDisk($type, $filename, $category = 0)
     {
         if (!file_exists($filename))
@@ -189,9 +189,10 @@ class File
         $dst_file = self::getUploadPath($fileId);
 
         if ($blind) {
-            if (!rename($key['tmp_name'], $dst_file)) {
-                throw new Exception ('rename() failed');
-            }
+            // HACK: currently gives a E_WARNING: "Operation not permitted" error even though the rename suceeds!?!?!?
+            if (! (@rename($key['tmp_name'], $dst_file)) )
+                throw new Exception ('rename failed');
+
         } else if (!move_uploaded_file($key['tmp_name'], $dst_file))
             throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
 
