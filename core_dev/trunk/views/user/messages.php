@@ -24,15 +24,17 @@ case 'inbox':
     $list = Message::getInbox($session->id);
     //d($list);
     echo ahref('u/messages/outbox', 'Show outbox').'<br/>';
+    echo '<br/>';
 
-    foreach ($list as $msg) {
+    foreach ($list as $msg)
+    {
 //        $from = User::get($msg->from);
 
         echo 'From '.UserLink::render($msg->from).', '.ago($msg->time_sent).'<br/>';
 //        echo 'Read: '.ago($msg->time_read).'<br/>';  // XXX FIXME mark msgs as read!!!
         switch ($msg->type) {
         case PRIV_MSG:
-            echo nl2br($msg->body);
+            echo nl2br($msg->body).'<br/>';
             break;
         case RECORDING_MSG:
             echo 'VIDEO MSG!!!<br/>';
@@ -53,15 +55,24 @@ case 'outbox':
     $list = Message::getOutbox($session->id);
     //d($list);
     echo ahref('u/messages/inbox', 'Show inbox').'<br/>';
+    echo '<br/>';
 
-    $dt = new YuiDatatable();
-    $dt->addColumn('to',           'To');    /// XXXX show username, show link to user page
-    $dt->addColumn('time_sent',    'Sent');
-    $dt->addColumn('body',         'Msg');
-    $dt->addColumn('type',         'Type');
-    $dt->setSortOrder('time_sent', 'desc');
-    $dt->setDataSource( $list );
-    echo $dt->render();
+    foreach ($list as $msg)
+    {
+        echo 'To '.UserLink::render($msg->to).', '.ago($msg->time_sent).'<br/>';
+        switch ($msg->type) {
+        case PRIV_MSG:
+            echo nl2br($msg->body).'<br/>';
+            break;
+        case RECORDING_MSG:
+            echo 'VIDEO MSG!!!<br/>';
+            echo embed_flv($msg->body).'<br/>';
+            break;
+        default:
+            throw new Exception ('eh');
+        }
+        echo '<hr/>';
+    }
     break;
 
 case 'send':
