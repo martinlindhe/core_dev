@@ -78,20 +78,13 @@ if ($pic_id)
     }
 }
 
-
-$pres_id = UserSetting::get($user_id, 'video_pres');
-if ($pres_id)
-{
-    echo 'Presentation:<br/>';
-
-    echo embed_pres($pres_id);  //XXXX move  this to rr-project!
-}
-
-
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id) {
     echo '&raquo; '.ahref('u/messages/send/'.$user_id, 'Send message').'<br/>';
+
+    //XXX: FIXME move to rr-project view
+    echo '&raquo; '.ahref('videomsg/send/'.$user_id, 'Send video message').'<br/>';
 
     if (Bookmark::exists(BOOKMARK_FAVORITEUSER, $user_id, $session->id)) {
         echo '&raquo; '.ahref('u/bookmark/removeuser/'.$user_id, 'Remove favorite').'<br/>';

@@ -189,7 +189,7 @@ class File
         $dst_file = self::getUploadPath($fileId);
 
         if ($blind) {
-            // HACK: currently gives a E_WARNING: "Operation not permitted" error even though the rename suceeds!?!?!?
+            // UGLY HACK using "@": currently gives a E_WARNING: "Operation not permitted" error even though the rename suceeds!?!?!?
             if (! (@rename($key['tmp_name'], $dst_file)) )
                 throw new Exception ('rename failed');
 

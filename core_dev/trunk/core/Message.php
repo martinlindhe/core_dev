@@ -29,28 +29,39 @@ class Message
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
-    /** @return all messages in the Inbox of $id */
-    public static function getInbox($id)
+    /** @return number of unread messages in the Inbox */
+    public static function getUnreadCount($user_id)
+    {
+        $q =
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE `to` = ? AND time_read IS NULL'.
+        ' ORDER BY time_sent DESC';
+
+        return Sql::pSelectItem($q, 'i', $user_id);
+    }
+
+    /** @return all messages in the Inbox */
+    public static function getInbox($user_id)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE `to` = ?'.
         ' ORDER BY time_sent DESC';
 
-        $list = Sql::pSelect($q, 'i', $id);
+        $list = Sql::pSelect($q, 'i', $user_id);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    /** @return all messages in the Outbox of $id */
-    public static function getOutbox($id)
+    /** @return all messages in the Outbox */
+    public static function getOutbox($user_id)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE `from` = ?'.
         ' ORDER BY time_sent DESC';
 
-        $list = Sql::pSelect($q, 'i', $id);
+        $list = Sql::pSelect($q, 'i', $user_id);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }

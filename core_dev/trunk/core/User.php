@@ -39,7 +39,8 @@ class UserLink
         default: throw new Exception ('hm');
         }
 
-        $res .= '<span class="yui3-hastooltip" id="tt_usr_'.$u->id.'">'.$u->name.'</span>';
+        // $res .= '<span class="yui3-hastooltip" id="tt_usr_'.$u->id.'">'.$u->name.'</span>';
+        $res .= ahref('u/profile/'.$u->id, $u->name);
 
         return $res;
     }
