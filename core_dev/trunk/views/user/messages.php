@@ -25,14 +25,25 @@ case 'inbox':
     //d($list);
     echo ahref('u/messages/outbox', 'Show outbox').'<br/>';
 
-    $dt = new YuiDatatable();
-    $dt->addColumn('from',         'From');    /// XXXX show username, show link to user page
-    $dt->addColumn('time_sent',    'Sent');
-    $dt->addColumn('body',         'Msg');
-    $dt->addColumn('type',         'Type');
-    $dt->setSortOrder('time_sent', 'desc');
-    $dt->setDataSource( $list );
-    echo $dt->render();
+    foreach ($list as $msg) {
+        $from = User::get($msg->from);
+
+        echo 'From '.$from->name.', '.ago($msg->time_sent).'<br/>';
+//        echo 'Read: '.ago($msg->time_read).'<br/>';  // XXX FIXME mark msgs as read!!!
+        switch ($msg->type) {
+        case PRIV_MSG:
+            echo $msg->body;
+            break;
+        case RECORDING_MSG:
+            echo 'VIDEO MSG!!!<br/>';
+            echo embed_flv($msg->body);
+            break;
+        default:
+            throw new Exception ('eh');
+        }
+        echo '<hr/>';
+    }
+
     break;
 
 case 'outbox':
