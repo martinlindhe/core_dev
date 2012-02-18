@@ -101,8 +101,6 @@ function loginHandler($p)
 $form = new XhtmlForm('login');
 $form->cssTable('');
 
-
-
 $u_img = new XhtmlComponentImage();
 $u_img->src = $page->getRelativeCoreDevUrl().'gfx/icon_user.png';
 

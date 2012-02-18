@@ -4,7 +4,7 @@
  *
  * Stores errors in a $_SESSION array to keep them persistent
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -63,6 +63,7 @@ class ErrorHandler
         // clear all previous output in order to avoid having error output hidden in a opened html tag
         ob_end_clean();
 
+        echo '</div>'; // HACK to not end up inside a <div style="display:none">
         echo '<pre>';
         echo strip_tags($out);
         echo '</pre>';
@@ -100,6 +101,7 @@ class ErrorHandler
         if (!(error_reporting() & $errno))
             return;
 
+        echo '</div>'; // HACK to not end up inside a <div style="display:none">
         echo '<pre>';
         echo '<b>'.$type.':</b> '.$s.' on '.$errfile.':'.$errline;
         echo '</pre>';

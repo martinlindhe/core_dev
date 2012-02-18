@@ -150,16 +150,16 @@ class RssReader extends CoreBase
                 $url = $this->reader->readValue();
                 // UGLY HACKS - FIX invalid URLs
                 // no need to do this if value was not parsed to a Url object
-                // http://www.metrojobb.se/artikel/256/luncha-dig-till-nya-jobbnätverk
-                // http://idgmedia.idg.se/2.3276/1.376155/internetworlds-succé-event-webbdagarna-kommer-till-lulea-i-maj
+                $url = str_replace("\xC2\xA0", '%C2%A0', $url); // non-breaking space
+
                 $url = str_replace("\xC3\xA4", '%C3%A4', $url); // ä
                 $url = str_replace("\xC3\xA5", '%C3%A5', $url); // å
                 $url = str_replace("\xC3\xA9", '%C3%A9', $url); // é
                 $url = str_replace("\xC3\xB6", '%C3%B6', $url); // ö
+                $url = str_replace("\xC3\xBC", '%C3%BC', $url); // ü
                 $item->setUrl( $url );
                 break;
- //http://idgmedia.idg.se/2.3276/1.376155/internetworlds-succé-event-webbdagarna-kommer-till-lulea-i-maj
- //http://idgmedia.idg.se/2.3276/1.376155/internetworlds-succ%C3%A9-event-webbdagarna-kommer-till-lulea-i-maj
+  
             case 'pubdate':
             case 'dc:date': // XXX non standard tag, <dc:date>2012-02-01 05:50:00</dc:date>
                 $item->setTimestamp( $this->reader->readValue() );
