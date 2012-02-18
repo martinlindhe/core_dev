@@ -140,6 +140,19 @@ class File
 
         readfile($path);
     }
+    
+    public static function importFromDisk($type, $filename, $category = 0)
+    {
+        if (!file_exists($filename))
+            return false;
+
+        $key = array();
+        $key['size'] = filesize($filename);
+        $key['name'] = basename($filename);
+        $key['tmp_name'] = $filename;
+        $key['type'] = get_mimetype_of_file($filename);
+        return self::import($type, $key, $category, true);
+    }
 
     /**
      * @param $key array from a $_FILES entry
@@ -175,9 +188,11 @@ class File
 
         $dst_file = self::getUploadPath($fileId);
 
-        if ($blind)
-            rename($key['tmp_name'], $dst_file);
-        else if (!move_uploaded_file($key['tmp_name'], $dst_file))
+        if ($blind) {
+            if (!rename($key['tmp_name'], $dst_file)) {
+                throw new Exception ('rename() failed');
+            }
+        } else if (!move_uploaded_file($key['tmp_name'], $dst_file))
             throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
 
         chmod($dst_file, 0777);

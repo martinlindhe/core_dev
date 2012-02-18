@@ -62,6 +62,7 @@ function file_get_mime_by_suffix($name)
 
     // video
     case '.mov': return 'video/quicktime';
+    case '.flv': return 'video/x-flv';
 
     // audio
     case '.wav': return 'audio/wav';

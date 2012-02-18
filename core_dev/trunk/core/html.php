@@ -212,16 +212,20 @@ function css_size($s)
  * Embeds SWF using js/swfobject.js, see http://code.google.com/p/swfobject/
  * @flashvars array of key=>val pairs
  */
-function js_swfobject($swf, $render_div, $width = 300, $height = 120, $flashvars, $min_version = '9.0.0')
+function js_swfobject($swf, $render_div, $width = 300, $height = 120, $flashvars = '', $params = '', $attributes = '')
 {
     $page = XmlDocumentHandler::getInstance();
     
     $header = XhtmlHeader::getInstance();
     $header->includeJs( $page->getRelativeCoreDevUrl().'js/swfobject.js');
+    
+    $min_version = '9.0.115'; // first version to support MP4
 
     $js =
     'var flashvars = '.json_encode($flashvars).';'.
-    'swfobject.embedSWF("'.$swf.'", "'.$render_div.'", "'.$width.'", "'.$height.'", "'.$min_version.'", "expressInstall.swf", flashvars);';
+    'var params = '.json_encode($params).';'.
+    'var attributes = '.json_encode($attributes).';'.
+    'swfobject.embedSWF("'.$swf.'", "'.$render_div.'", "'.$width.'", "'.$height.'", "'.$min_version.'", "false", flashvars, params, attributes);';
 
     return js_embed($js);
 }

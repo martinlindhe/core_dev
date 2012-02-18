@@ -79,6 +79,26 @@ if ($pic_id)
 }
 
 
+$pres_id = UserSetting::get($user_id, 'video_pres');
+if ($pres_id)
+{
+    echo 'Presentation:<br/>';
+
+    $pres_div = 'pres_div'.mt_rand();
+
+// flashvars:      'image':  '/thumbs/bunny.jpg'   XXX FOR THUMBNAIL!!!
+
+    // XXX JWPlayer workaround using htaccess: http://www.longtailvideo.com/support/forums/jw-player/setup-issues-and-embedding/25111/jwplayer-thinks-flv-file-is-a-playlist-fails-to-play-it
+    $flashvars  = array('file' => '/video/'.$pres_id.'.flv'); // , 'autostart' => 'true' );
+    $params     = array('allowfullscreen' => 'false', 'allowscriptaccess' => 'always' );
+    //$attributes = array('id' => 'player1', 'name' => 'player1' );
+
+    echo js_swfobject('/jwplayer.swf', $pres_div, 250, 200, $flashvars, $params); // , $attributes);
+    
+    echo '<div id="'.$pres_div.'"></div>';
+}
+
+
 echo '<br/>';
 
 if ($session->id && $user_id != $session->id) {
