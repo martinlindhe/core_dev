@@ -23,7 +23,7 @@ if (!empty($_POST))
         UserSetting::setEmail($user_id, $_POST['u_email']);
 
         if (!empty($_POST['u_grp']))
-            UserGroupHandler::addToGroup($_POST['u_grp']);
+            UserGroupHandler::addToGroup($user_id, $_POST['u_grp']);
 
         echo '<div class="good">New user created. '.ahref('a/user/'.$user_id, $username).'</div>';
     }
