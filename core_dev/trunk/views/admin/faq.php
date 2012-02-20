@@ -28,7 +28,7 @@ case 'add':
     function createHandler($p)
     {
         $session = SessionHandler::getInstance();
-        
+
         $o = new FaqItem();
         $o->question = $p['q'];
         $o->answer   = $p['a'];
@@ -54,7 +54,7 @@ case 'edit':
     function editHandler($p)
     {
         $session = SessionHandler::getInstance();
-        
+
         $o = new FaqItem();
         $o->id       = $p['id'];
         $o->question = $p['q'];
@@ -67,7 +67,7 @@ case 'edit':
     }
 
     echo '<h2>Edit FAQ</h2>';
-    
+
     $faq = FaqItem::get($this->child);
 
     $x = new XhtmlForm();
