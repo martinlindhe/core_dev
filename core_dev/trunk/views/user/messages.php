@@ -37,14 +37,13 @@ case 'inbox':
             echo nl2br($msg->body).'<br/>';
             break;
         case RECORDING_MSG:
-            echo 'VIDEO MSG!!!<br/>';
             echo embed_flv($msg->body).'<br/>';
             break;
         default:
             throw new Exception ('eh');
         }
-        echo ahref('u/messages/send/'.$msg->from, 'Reply with message').'<br/>';
-        echo ahref('videomsg/send/'.$msg->from, 'Reply with video message').'<br/>';
+        echo ahref('videomsg/send/'.$msg->from, 'Reply with video').'<br/>';
+        echo ahref('u/messages/send/'.$msg->from, 'Reply with text').'<br/>';
         echo '<hr/>';
     }
 

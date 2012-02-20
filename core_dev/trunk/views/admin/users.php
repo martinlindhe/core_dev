@@ -65,7 +65,7 @@ $header->embedCss(
 $dt->colorRow('is_online', '!=', false, 'green_mark');
 */
 
-$dt->setSortOrder('time_last_active', 'desc');
+// $dt->setSortOrder('time_last_active', 'desc');
 $dt->setDataSource( $list );
 //$dt->setRowsPerPage(10);
 echo $dt->render();
