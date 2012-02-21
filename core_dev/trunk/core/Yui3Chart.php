@@ -31,7 +31,10 @@ class Yui3Chart
 
     protected $x_type = ''; ///< is the X-axis a timestamp?
 
-    function setDataSource($arr)
+    /**
+     * @param $include_keys array with key names to include
+     */
+    function setDataSource($arr, $include_keys = false)
     {
         if (!$this->category_key)
             throw new Exception ('category_key must be set before data source');
@@ -45,10 +48,12 @@ class Yui3Chart
         {
             $x = array($this->category_key => $idx);
             if (is_array($vals))
-                foreach ($vals as $idx => $val)
-                    $x[$idx] = $val;
-            else
-                $x['value'] = $vals;
+                foreach ($vals as $idx => $val) {
+                    if (!$include_keys || in_array($idx, $include_keys))
+                        $x[$idx] = $val;
+                } else {
+                    $x['value'] = $vals;
+                }
 
             $this->data_source[] = $x;
         }
