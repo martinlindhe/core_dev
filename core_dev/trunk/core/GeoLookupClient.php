@@ -10,12 +10,11 @@
 
 //STATUS: wip
 
-require_once('Coordinate.php');
 require_once('GeonamesClient.php');
 require_once('GoogleMapsClient.php');
 require_once('TempStore.php');
 
-class GeoLookupResult
+class GeoLookupResult  //XXX FIXME merge with GeoCodeResult from GoogleMapsClient
 {
     var $description;   ///< description of the location
     var $country_code;  ///< 2 letter code, such as "SE"
@@ -27,8 +26,11 @@ class GeoLookupResult
     var $accuracy; ///< numeric 0-9 where 9 is best accuracy
 }
 
-class GeoLookupClient extends Coordinate   //XXXX rename class to something like ReverseLookupClient, CoordinateLookupClient ?
+class GeoLookupClient  //XXXX rename class to something like ReverseLookupClient, CoordinateLookupClient ?
 {
+    var $latitude;
+    var $longitude;
+
     function get()
     {
         $temp = TempStore::getInstance();
@@ -52,7 +54,7 @@ class GeoLookupClient extends Coordinate   //XXXX rename class to something like
         $res->sunrise      = $geonames->sunrise;
         $res->sunset       = $geonames->sunset;
 
-        $temp->set($key, serialize($res));
+        $temp->set($key, serialize($res), '1h');
 
         return $res;
     }

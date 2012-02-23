@@ -4,13 +4,12 @@
  *
  * Methods for querying the query.yahooapis.com service
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
 
 require_once('JSON.php');
-require_once('Coordinate.php');
 require_once('TempStore.php');
 
 require_once('GeonamesClient.php'); // to lookup timezone for location
@@ -22,6 +21,19 @@ class YahooGeocodeResult
     var $woeid;    ///< Yahoo woeid for location
     var $area;     ///< holds multiple coordinates
     var $timezone;
+}
+
+class YahooQueryCoordinate
+{
+    var $latitude;  // 59.332169 = stockholm,sweden
+    var $longitude; // 18.062429 = stockholm,sweden
+
+    function __construct($lat, $long)
+    {
+        $this->latitude  = $lat;
+        $this->longitude = $long;
+    }
+
 }
 
 class YahooQueryClient
@@ -67,9 +79,9 @@ admin2: {
 */
         $res->woeid = $item->woeid;
         $res->area = new StdClass();
-        $res->area->center = new Coordinate($item->centroid->latitude, $item->centroid->longitude);
-        $res->area->sw = new Coordinate($item->boundingBox->southWest->latitude, $item->boundingBox->southWest->longitude);
-        $res->area->ne = new Coordinate($item->boundingBox->northEast->latitude, $item->boundingBox->northEast->longitude);
+        $res->area->center = new YahooQueryCoordinate($item->centroid->latitude, $item->centroid->longitude);
+        $res->area->sw = new YahooQueryCoordinate($item->boundingBox->southWest->latitude, $item->boundingBox->southWest->longitude);
+        $res->area->ne = new YahooQueryCoordinate($item->boundingBox->northEast->latitude, $item->boundingBox->northEast->longitude);
 
 
         //XXX this is a ugly hack until yahoo returns timezone with their response

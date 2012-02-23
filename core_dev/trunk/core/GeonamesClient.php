@@ -13,8 +13,8 @@
  */
 
 //STATUS: wip
+//XXX: merge with GeoLoopupClient ???
 
-require_once('Coordinate.php');
 require_once('HttpClient.php');
 require_once('TempStore.php');
 
@@ -49,7 +49,7 @@ class GeonamesClient
         $res->sunrise      = strval($xml->timezone->sunrise);
         $res->sunset       = strval($xml->timezone->sunset);
 
-        $temp->set($key, serialize($res), '30d');
+        $temp->set($key, serialize($res), '1h');
 
         return $res;
     }

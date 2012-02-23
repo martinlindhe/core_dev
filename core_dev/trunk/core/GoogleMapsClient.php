@@ -13,12 +13,12 @@
  *
  * Google Geocoding HTTP API documentation:
  * http://code.google.com/apis/maps/documentation/services.html#Geocoding
- * http://code.google.com/intl/sv-SE/apis/maps/documentation/geocoding/index.html#GeocodingResponses
+ * http://code.google.com/apis/maps/documentation/geocoding/index.html#GeocodingResponses
  *
  * Google Static Maps HTTP API documentation:
  * http://code.google.com/apis/maps/documentation/staticmaps/
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -28,8 +28,10 @@
 require_once('JSON.php');
 require_once('TempStore.php');
 
-class GeoCodeResult
+class GeoCodeResult  //XXXX MERGE WITH GeoLookupResult into GeoResult !
 {
+    var $country;     ///< 2 letter country code
+    var $name;        ///< eg. "Motala", "Sweden"
     var $latitude;
     var $longitude;
     var $accuracy;
@@ -55,7 +57,8 @@ class GoogleMapsClient
 
         $json = JSON::decode($url);
 //d($json);
-        if ($json->Status->code != 200) return false;
+        if ($json->Status->code != 200)
+            return false;
 
         $item = $json->Placemark[0];
 
@@ -63,7 +66,7 @@ class GoogleMapsClient
         $res->accuracy     = $item->AddressDetails->Accuracy;
         $res->description  = $item->address;
         $res->country_code = $item->AddressDetails->Country->CountryNameCode;
-        $res->country_name = $item->AddressDetails->Country->CountryName;     ///XXX google returns local name (Sverige, instead of Sweden)
+        $res->country_name = $item->AddressDetails->Country->CountryName;
 
 //XXX not returned from google lookup:
 //        $res->timezone     = strval($xml->timezone->timezoneId);
@@ -85,10 +88,11 @@ class GoogleMapsClient
         $temp = TempStore::getInstance();
         $key = 'googlemaps/geocode//'.$address;
 
+/*
         $data = $temp->get($key);
         if ($data)
             return unserialize($data);
-
+*/
         $url =
         'http://maps.google.com/maps/geo?q='.urlencode(trim($address)).
         '&key='.self::$api_key.
@@ -96,16 +100,25 @@ class GoogleMapsClient
 
         $json = JSON::decode($url);
 //d($json);
-        if ($json->Status->code != 200) return false;
+        if ($json->Status->code != 200)
+            return false;
 
         $item = $json->Placemark[0];
 
         $res = new GeoCodeResult();
-        $res->latitude  = $item->Point->coordinates[1];
-        $res->longitude = $item->Point->coordinates[0];
         $res->accuracy  = $item->AddressDetails->Accuracy; // 0 (worst) to 9 (best)
 
-        $temp->set($key, serialize($res));
+
+        if ($res->accuracy <= 1) { // country level.. just guessing.... TODO lookup their dox
+            $res->name = $item->address;
+        } else {
+            $res->name = $item->AddressDetails->Country->SubAdministrativeArea->Locality->LocalityName;
+        }
+        $res->country   = $item->AddressDetails->Country->CountryNameCode;
+        $res->latitude  = $item->Point->coordinates[1];
+        $res->longitude = $item->Point->coordinates[0];
+
+        $temp->set($key, serialize($res), '1h');
         return $res;
     }
 
