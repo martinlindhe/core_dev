@@ -88,11 +88,10 @@ class GoogleMapsClient
         $temp = TempStore::getInstance();
         $key = 'googlemaps/geocode//'.$address;
 
-/*
         $data = $temp->get($key);
         if ($data)
             return unserialize($data);
-*/
+
         $url =
         'http://maps.google.com/maps/geo?q='.urlencode(trim($address)).
         '&key='.self::$api_key.
@@ -100,6 +99,7 @@ class GoogleMapsClient
 
         $json = JSON::decode($url);
 //d($json);
+
         if ($json->Status->code != 200)
             return false;
 
@@ -108,13 +108,24 @@ class GoogleMapsClient
         $res = new GeoCodeResult();
         $res->accuracy  = $item->AddressDetails->Accuracy; // 0 (worst) to 9 (best)
 
-
-        if ($res->accuracy <= 1) { // country level.. just guessing.... TODO lookup their dox
-            $res->name = $item->address;
-        } else {
+        if       (isset($item->AddressDetails->Country->AdministrativeArea->Locality->LocalityName))
+            $res->name = $item->AddressDetails->Country->AdministrativeArea->Locality->LocalityName;
+        else if (isset($item->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName))
+            $res->name = $item->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName;
+        else if (isset($item->AddressDetails->Country->SubAdministrativeArea->Locality->LocalityName))
             $res->name = $item->AddressDetails->Country->SubAdministrativeArea->Locality->LocalityName;
+        else if (isset($item->AddressDetails->Country->CountryName))
+            $res->name = $item->AddressDetails->Country->CountryName;
+        else if (isset($item->address))
+            $res->name = $item->address;
+        else {
+            d($json);
+            throw new exception ('ERRORZZZ');
         }
-        $res->country   = $item->AddressDetails->Country->CountryNameCode;
+
+        if (isset($item->AddressDetails->Country->CountryNameCode))
+            $res->country   = $item->AddressDetails->Country->CountryNameCode;
+
         $res->latitude  = $item->Point->coordinates[1];
         $res->longitude = $item->Point->coordinates[0];
 
