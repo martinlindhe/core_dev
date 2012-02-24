@@ -68,9 +68,10 @@ if (!empty($_GET['remove_setting'])) {
 if (!empty($_POST)) {
     $settings = UserSetting::getAll($user->id);
 
-    foreach ($settings as $set)
-        if (!empty($_POST['setting_name_'.$set['settingId']]))
-            UserSetting::set($user->id, $_POST['setting_name_'.$set['settingId']], $_POST['setting_val_'.$set['settingId']]);
+    foreach ($settings as $set) {
+        if (!empty($_POST['setting_name_'.$set['id']]))
+            UserSetting::set($user->id, $_POST['setting_name_'.$set['id']], $_POST['setting_val_'.$set['id']]);
+    }
 }
 
 

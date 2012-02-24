@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -54,12 +54,10 @@ class Setting
 
     public static function delete($type, $owner, $name)
     {
-        throw new Exception ('XXX should work just not tested!');
-
         $q =
         'DELETE FROM tblSettings'.
         ' WHERE owner = ? AND type = ? AND name = ?';
-        Sql::pDelete($q, 'iiis', $owner, $type, $name);
+        Sql::pDelete($q, 'iis', $owner, $type, $name);
         return true;
     }
 
