@@ -148,13 +148,15 @@ function getCountryName($s)
     }
 
     $c3 = array(
-    'EUR' => 'European Union',
     'SWE' => 'Sweden',
     'NOR' => 'Norway',
+    'DNK' => 'Denmark',
+    'FIN' => 'Finland',
     'USA' => 'United States of America',
     'GBR' => 'United Kingdom',
     'DEU' => 'Germany',
-    'DNK' => 'Denmark',
+
+    'EUR' => 'European Union',
     );
 
     if (!isset($c3[$s]))

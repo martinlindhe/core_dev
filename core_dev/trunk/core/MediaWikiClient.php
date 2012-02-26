@@ -157,13 +157,10 @@ class MediaWikiClient
         $temp->set($key, serialize($res), '24h');
 
         if ($use_db_cache) {
-            $utf8_5 = strpos($res->content, "\xF0\x90");
-            if ($utf8_5 === false)
-                MediaWikiPage::store($res);
-            else {
-                //FIXME can be handled with mariadb/mysql 5.5 using "utf8mb4" data type
-                echo '<div class="critical">WARNING: cannot store article to db because its using utf8-v5 strings</div>'."\n";
-            }
+            if (strpos($res->content, "\xF0\x90") !== false)
+                echo '<div class="critical">WARNING: This MediaWiki article contains utf8-v5 string, requires mysql5.5 / utf8mb4 data type</div>'."\n";
+
+            MediaWikiPage::store($res);
         }
 
         return $res;
