@@ -300,20 +300,29 @@ function coreButton($name, $link = '', $title = '')
     return $out;
 }
 
-function countryFlag($code)
+function countryFlag($s)
 {
-    if (strlen($code) == 2)
-        $code = country_2_to_3_letters($code);
+    if (is_numeric($s))
+        $s = getCountryCode($s);
+    else
+    {
+        if (!is_alphanumeric($s))
+            throw new Exception ('hey');
 
-    $code = strtoupper($code);
+        if (strlen($s) == 2)
+            $s = country_2_to_3_letters($s);
+
+        $s = strtoupper($s);
+    }
 
     $locale = LocaleHandler::getInstance();
 
-    $title = $locale->getCountryName($code);
-    if (!$title)
-        throw new Exception ('unhandled country flag code '.$code);
+    $title = getCountryName($s);
 
-    return '<img src="'.relurl('core_dev/gfx/flags/'.$code.'.png').'" alt="'.$title.'" title="'.$title.'"/>';
+    if (!$title)
+        throw new Exception ('unhandled country flag code '.$s);
+
+    return '<img src="'.relurl('core_dev/gfx/flags/'.$s.'.png').'" alt="'.$title.'" title="'.$title.'"/>';
 }
 
 /**

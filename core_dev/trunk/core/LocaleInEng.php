@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-class LocaleInEng extends CoreLocale
+class LocaleInEng
 {
     var $month_long = array(
         'January', 'February', 'March',
@@ -32,16 +32,6 @@ class LocaleInEng extends CoreLocale
     var $weekday_1char = array(
         'S', 'M', 'T', 'W', 'T', 'F', 'S');
 
-    var $country_3char = array(
-    'EUR' => 'European Union',
-    'SWE' => 'Sweden',
-    'NOR' => 'Norway',
-    'USA' => 'United States of America',
-    'GBR' => 'United Kingdom',
-    'DEU' => 'Germany',
-    'DNK' => 'Denmark',
-    );
-
     var $durations = array( //XXX this array can be removed if translateDuration in LocaleHandler can be overridden, need LocaleHandler class nesting fixed first
     'second' =>'second',    'seconds'=>'seconds',
     'minute' =>'minute',    'minutes'=>'minutes',
@@ -56,8 +46,6 @@ class LocaleInEng extends CoreLocale
     {
         die('formatCurrency ENG TODO');
     }
-
-    function getLanguageCode() { return 'en'; }
 
     function getSkycondition($s) { return $s; }
 

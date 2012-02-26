@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-class LocaleInSwe extends CoreLocale
+class LocaleInSwe
 {
     var $month_long = array(
         'Januari', 'Februari', 'Mars',
@@ -33,16 +33,6 @@ class LocaleInSwe extends CoreLocale
 
     var $weekday_1char = array(
         'S', 'M', 'T', 'O', 'T', 'F', 'S');
-
-    var $country_3char = array(
-    'EUR' => 'Europeiska Unionen',
-    'SWE' => 'Sverige',
-    'NOR' => 'Norge',
-    'USA' => 'Amerikas förenta stater',
-    'GBR' => 'Storbritannien',
-    'DEU' => 'Tyskland',
-    'DNK' => 'Danmark',
-    );
 
     var $durations = array(
     'second' =>'sekund',    'seconds'=>'sekunder',
@@ -86,8 +76,6 @@ class LocaleInSwe extends CoreLocale
     {
         return number_format($n / 100, 2, '.', ' ');
     }
-
-    function getLanguageCode() { return 'sv'; }
 
 }
 

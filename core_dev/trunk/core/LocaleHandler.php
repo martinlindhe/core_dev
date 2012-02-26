@@ -20,17 +20,6 @@ require_once('LocaleInSwe.php');
 require_once('LocaleInEng.php');
 require_once('LocaleInGer.php');
 
-abstract class CoreLocale
-{
-    abstract function formatCurrency($n);
-
-    /** @return 2-letter language code, as specified in ISO 639 */
-    abstract function getLanguageCode();
-
-    /** translate skycondition from english to current language */
-    abstract function getSkycondition($s);
-}
-
 class LocaleHandler
 {
     static  $_instance;    ///< singleton
@@ -86,23 +75,6 @@ class LocaleHandler
 
     function getSkycondition($s) { return $this->handle->getSkycondition($s); }
 
-    /** @param $s 3-letter country code (SWE, NOR) */
-    function getCountryName($s)
-    {
-        $s = strtoupper($s);
-
-        if (strlen($s) == 2)
-            $s = country_2_to_3_letters($s);
-
-        if (!isset($this->handle->country_3char[$s]))
-            throw new Exception ('Unknown country name '.$s);
-
-        return $this->handle->country_3char[$s];
-    }
-
-    function getLanguageCode() { return $this->handle->getLanguageCode(); }
-
-
     /**
      * @param $s duration (in english), translates to current locale
      */
@@ -137,22 +109,6 @@ function t($s)
 
     return $t;
 
-}
-
-/**
- * Translates ISO 3166-1 (2 letter country code) to 3 letter country code
- */
-function country_2_to_3_letters($s)
-{
-    switch (strtoupper($s)) {
-    case 'EU': return 'EUR';
-    case 'US': return 'USA';
-    case 'GB': case 'UK': return 'GBR';  // GB is official 2-letter code, altough UK is also used & reserved for other use in ISO
-    case 'SE': return 'SWE';
-    case 'NO': return 'NOR';
-    case 'DE': return 'DEU';
-    }
-    return $s;
 }
 
 ?>

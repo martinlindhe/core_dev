@@ -35,6 +35,8 @@ class XmlDocumentHandler extends CoreBase
     private $upload_root;                    ///< root directory for file uploads
     private $app_root;                       ///< application root directory, currently only used to locate favicon.png for auto conversion to favicon.ico
     private $ts_initial;                     ///< used to measure page load time
+    private $language_code = 'sv';           /// FIXME make this unset by default & force it to be set in config.php
+
     private $xmlns = array();                ///< registered XML namespaces
 
     private $objs = array();                 ///< IXmlComponent objects
@@ -67,7 +69,7 @@ class XmlDocumentHandler extends CoreBase
     function setUrl($s)
     {
         $this->Url = new Url($s);
-        
+
         if (!$this->coredev_root)
             $this->setRelativeCoreDevUrl('core_dev/');
     }
@@ -335,13 +337,12 @@ class XmlDocumentHandler extends CoreBase
 
         if ($this->enable_design)
         {
-            $lang = LocaleHandler::getInstance()->getLanguageCode();
             echo
             '<?xml version="1.0" encoding="UTF-8"?>'."\n".
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
 
             echo
-            '<html xml:lang="'.$lang.'" lang="'.$lang.'"'.
+            '<html xml:lang="'.$this->language_code.'" lang="'.$this->language_code.'"'.
             ' xmlns="http://www.w3.org/1999/xhtml"';
 
             foreach ($this->xmlns as $name => $uri)

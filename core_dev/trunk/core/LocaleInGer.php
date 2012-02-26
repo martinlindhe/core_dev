@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-class LocaleInGer extends CoreLocale
+class LocaleInGer
 {
     var $month_long = array(
         'Januar', 'Februar', 'März',
@@ -32,22 +32,10 @@ class LocaleInGer extends CoreLocale
     var $weekday_1char = array(
         'S', 'M', 'D', 'M', 'D', 'F', 'S');
 
-    var $country_3char = array(
-    'EUR' => 'Europäische Union',
-    'SWE' => 'Schweden',
-    'NOR' => 'Norwegen',
-    'USA' => 'Vereinigte Staaten von Amerika',
-    'GBR' => 'Vereinigte Königreich',
-    'DEU' => 'Deutschland',
-    'DNK' => 'Dänemark',
-    );
-
     function formatCurrency($n)
     {
         die('formatCurrency GER TODO');
     }
-
-    function getLanguageCode() { return 'de'; }
 
     function getSkycondition($s)
     {

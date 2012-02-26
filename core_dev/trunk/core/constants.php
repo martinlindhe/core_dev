@@ -81,7 +81,7 @@ function getUserLevelName($n)
     return $x[ $n ];
 }
 
-// ISO 639-2 naming: http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+// ISO 639-2 naming (language names): http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
 define('LANG_SWE', 1);
 define('LANG_ENG', 2);
 
@@ -99,7 +99,93 @@ function language($n)
     return $x[ $n ];
 }
 
-define('COUNTRY_SE', 1); // Sweden
-define('COUNTRY_UK', 2); // United Kingdoms
+// ISO 3166-1 alpha-3 naming (country names): http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
+define('COUNTRY_SWE', 1); // Sweden
+define('COUNTRY_GBR', 2); // United Kingdoms
+
+function getCountries()
+{
+    return array(
+    COUNTRY_SWE => 'SWE',
+    COUNTRY_GBR => 'GBR',
+    );
+}
+
+function getCountryCode($n)
+{
+    $x = getCountries();
+    return $x[ $n ];
+}
+
+/**
+ * Translates
+ * from "ISO 3166-1 alpha-2"
+ * to   "ISO 3166-1 alpha-3"
+ */
+function country_2_to_3_letters($s)
+{
+    switch (strtoupper($s)) {
+    case 'EU': return 'EUR';
+    case 'US': return 'USA';
+    case 'GB': case 'UK': return 'GBR';  // GB is official 2-letter code, altough UK is also used & reserved for other use in ISO
+    case 'SE': return 'SWE';
+    case 'NO': return 'NOR';
+    case 'DE': return 'DEU';
+    }
+    return $s;
+}
+
+/** @param $s 3-letter country code (SWE, NOR) */
+function getCountryName($s)
+{
+    if (is_numeric($s))
+        $s = getCountryCode($s);
+    else {
+        $s = strtoupper($s);
+
+        if (strlen($s) == 2)
+            $s = country_2_to_3_letters($s);
+    }
+
+    $c3 = array(
+    'EUR' => 'European Union',
+    'SWE' => 'Sweden',
+    'NOR' => 'Norway',
+    'USA' => 'United States of America',
+    'GBR' => 'United Kingdom',
+    'DEU' => 'Germany',
+    'DNK' => 'Denmark',
+    );
+
+    if (!isset($c3[$s]))
+        throw new Exception ('Unknown country name '.$s);
+
+    return $c3[$s];
+}
+
+
+/*
+// german
+    var $country_3char = array(
+    'EUR' => 'Europäische Union',
+    'SWE' => 'Schweden',
+    'NOR' => 'Norwegen',
+    'USA' => 'Vereinigte Staaten von Amerika',
+    'GBR' => 'Vereinigte Königreich',
+    'DEU' => 'Deutschland',
+    'DNK' => 'Dänemark',
+    );
+
+// Swedish
+    var $country_3char = array(
+    'EUR' => 'Europeiska Unionen',
+    'SWE' => 'Sverige',
+    'NOR' => 'Norge',
+    'USA' => 'Amerikas förenta stater',
+    'GBR' => 'Storbritannien',
+    'DEU' => 'Tyskland',
+    'DNK' => 'Danmark',
+    );
+*/
 
 ?>
