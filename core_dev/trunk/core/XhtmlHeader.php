@@ -48,7 +48,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     protected $meta_tags       = array();
     protected $opensearch      = array();
-    
+
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
 
     private function __construct() { }
@@ -132,13 +132,13 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->js_functions[$fn[0]] = $code;
     }
 
-    /** CSS snippets to be added inside <head> */
+    /** CSS to be added inside <head> */
     function embedCss($s = '') { $this->embed_css .= $s; }
 
-    /** JavaScript snippets to be added inside <head> (js functions is available before page load event is completed) */
+    /** JavaScript to be added inside <head> (js functions is available before page load event is completed) */
     function embedJs($s) { $this->embed_js[] = $s; }
 
-    /** JavaScript snippets to be added to the <body onload=""> tag (js code will execute when page loads) */
+    /** JavaScript to run when page loaded DOM event fires */
     function embedJsOnload($s) { $this->embed_js_onload[] = $s; }
 
     /** Set META tag */
@@ -201,6 +201,18 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if ($this->embed_js)
             $js .= implode('', $this->embed_js);
 
+/*
+        // XXX this seems to make the code run at same time as rest of the js in this block,
+        //     not at same time as <body onload="">
+        //     making the views/profiler/page.php "page render" timer count to "0.00s" always  //feb 2012
+        if ($this->embed_js_onload) {
+            $js .=
+                'function onload()'.
+                '{'.implode('', $this->embed_js_onload).'} '.
+                'window.onload=onload();';  //FIXME: use anonymous function... how u do that in js?
+        }
+*/
+
         if ($js)
             $res .= js_embed($js);
 
@@ -218,7 +230,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
 }
-    
+
 /*  How to set extra headers for special browsers:
 
 // set mobile viewport for iOS devices
