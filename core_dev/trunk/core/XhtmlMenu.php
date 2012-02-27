@@ -52,7 +52,7 @@ class XhtmlMenu extends CoreBase
             else
                 $res .= '<li>';
 
-            if ($item['link']) $res .= '<a href="'.$item['link'].'">'.$item['title'].'</a>';
+            if ($item['link']) $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title']).'</a>';
             else $res .= $item['title'];
             $res .= '</li>';
         }
