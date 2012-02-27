@@ -39,7 +39,7 @@ class GeoCodeResult  //XXXX MERGE WITH GeoLookupResult into GeoResult !
 
 class GoogleMapsClient
 {
-    static $api_key = 'ABQIAAAAZb_xLTALhJppDDNbAvv61RTTk3jw-XtFtPS4v2-kipB51_4ySRQsE9iSridKaiJXVTQ5msdyWyuhRw'; //XXXXX
+//    static $api_key = 'ABQIAAAAZb_xLTALhJppDDNbAvv61RTTk3jw-XtFtPS4v2-kipB51_4ySRQsE9iSridKaiJXVTQ5msdyWyuhRw'; //XXXXX
 
     static function reverse($latitude, $longitude)
     {
@@ -52,7 +52,7 @@ class GoogleMapsClient
 
         $url =
         'http://maps.google.com/maps/geo?ll='.$latitude.','.$longitude.
-        '&key='.self::$api_key.
+//        '&key='.self::$api_key.
         '&output=json'; //XXX "output=xml" returns prettified street address & more info if needed
 
         $json = JSON::decode($url);
@@ -94,7 +94,7 @@ class GoogleMapsClient
 
         $url =
         'http://maps.google.com/maps/geo?q='.urlencode(trim($address)).
-        '&key='.self::$api_key.
+//        '&key='.self::$api_key.
         '&output=json';    //XXX "output=xml" returns prettified street address & more info if needed
 
         $json = JSON::decode($url);
@@ -160,12 +160,13 @@ class GoogleMapsClient
             return false;
 
         $url =
-        'http://maps.google.com/staticmap?center='.$lat.','.$long.
-        '&key='.self::$api_key.
+        'http://maps.googleapis.com/maps/api/staticmap?'.
+        '?center='.$lat.','.$long.
         ($zoom == 'auto' ? '' : '&zoom='.$zoom).
         '&size='.$width.'x'.$height.
         '&format='.urlencode($format).
-        '&maptype='.urlencode($maptype);
+        '&maptype='.urlencode($maptype).
+        '&sensor=false';
 
         $cols = array('red', 'green', 'blue', 'orange', 'purple', 'brown', 'yellow', 'gray', 'black', 'white');
 
