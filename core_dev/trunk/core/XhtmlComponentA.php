@@ -30,7 +30,7 @@ class XhtmlComponentA extends XhtmlComponent
         ($this->class   ? ' class="'.$this->class.'"' : '').
         ($this->style   ? ' style="'.$this->style.'"' : '').
         ($this->onclick ? ' onclick="'.$this->onclick.'"' : '').
-        '/>'.$this->content.'</a>';
+        '>'.$this->content.'</a>';
     }
 
 }
