@@ -13,10 +13,10 @@ $header->registerJsFunction(
 '}'
 );
 
-$header->embedJs( // code will be in <head>
-'var beforeload=new Date();'.
-'window.onload=loadtime;'
-);
+$header->embedJs('var beforeload=new Date();');
+
+$header->embedJsOnload('loadtime();');
+
 
 $container_id = 'cdc_'.mt_rand();
 $wrapper_id   = 'cdw_'.mt_rand();
