@@ -40,6 +40,7 @@ class GeoCodeResult  //XXXX MERGE WITH GeoLookupResult into GeoResult !
 class GoogleMapsClient
 {
 //    static $api_key = 'ABQIAAAAZb_xLTALhJppDDNbAvv61RTTk3jw-XtFtPS4v2-kipB51_4ySRQsE9iSridKaiJXVTQ5msdyWyuhRw'; //XXXXX
+//    static $api_key = 'AIzaSyBvieGWbFsNYanbECPYyQEtxRYY9ofuYug';
 
     static function reverse($latitude, $longitude)
     {
@@ -140,7 +141,7 @@ class GoogleMapsClient
      * @param $long longitude (-180.0 to 180.0) vertical
      * @param $width up to 640 pixels
      * @param $height up to 640 pixels
-     * @param $zoom 0 (whole world) to 19 (very detailed view) or "auto" to autozoom
+     * @param $zoom 0 (whole world) to 21 (showing buildings)
      * @param $maptype mobile, satellite, terrain, hybrid
      * @param $format png8, png32, jpg, jpg-baseline or gif
      * @return URL to static map or false
@@ -148,19 +149,19 @@ class GoogleMapsClient
     static function staticMap($lat, $long, $markers = array(), $path = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
     {
         if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height))
-            return false;
+            throw new Exception ('bad input');
 
         if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0)
-            return false;
+            throw new Exception ('odd coords');
 
         if ($width < 0 || $width > 640 || $height < 0 || $height > 640)
-            return false;
+            throw new Exception ('odd sizes');
 
-        if ((is_numeric($zoom) && ($zoom < 0 || $zoom > 19)) || is_string($zoom) && $zoom != 'auto')
-            return false;
+        if ($zoom < 0 || $zoom > 21)
+            throw new Exception ('odd zoom');
 
         $url =
-        'http://maps.googleapis.com/maps/api/staticmap?'.
+        'http://maps.googleapis.com/maps/api/staticmap'.
         '?center='.$lat.','.$long.
         ($zoom == 'auto' ? '' : '&zoom='.$zoom).
         '&size='.$width.'x'.$height.

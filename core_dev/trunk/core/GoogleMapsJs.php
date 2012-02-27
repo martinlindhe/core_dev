@@ -13,7 +13,7 @@
  * Examples:
  * http://code.google.com/apis/maps/documentation/javascript/examples/index.html
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -38,19 +38,19 @@ class GoogleMapMarker
 
 class GoogleMapsJs
 {
-    protected $latitude;
+    protected $latitude;                ///< OR use detect_location
     protected $longitude;
     protected $lang;                    ///< 2-letter language code, eg "en". if unset, it will autodetect
     protected $region;                  ///< ("US", or "SE") in order to force maps to assume it is viewed from this region, rather than detected region
 
-    protected $detect_location = false; ///< shall google maps try to detect location of the user? .. XXX WHY??? whats the benefit of setting this?
-    protected $zoom = 1;                ///< 1 (whole world) to 20 (max zoom)
+    protected $detect_location = false; ///< shall google maps try to detect location of the user? instead of specifying coordinates
+    protected $zoom = 3;                ///< 1 (whole world) to 20 (max zoom)
 
     protected $width;
     protected $height;
     protected $markers = array();
 
-    protected $api_version = '3.2';
+    protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';
 
     function __construct($lat = 0, $lng = 0)
     {
@@ -84,27 +84,26 @@ class GoogleMapsJs
     {
         $url =
         'http://maps.google.com/maps/api/js'.
-        '?sensor='.sbool($this->detect_location).
-        '&v='.$this->api_version.
+        '?key='.$this->api_key.
         ($this->lang   ? '&language='.$this->lang : '').
-        ($this->region ? '&region='.$this->region : '');
+        ($this->region ? '&region='.$this->region : '').
+        '&sensor='.sbool($this->detect_location);
 
         $header = XhtmlHeader::getInstance();
         $header->includeJs($url);
 
-        $div_id = 'gm_map_'.mt_rand();
+        $div_id = 'gmap_'.mt_rand();
 
          $header->embedCss(
         '#'.$div_id.' {'.
-            ($this->width  ? 'width:'.css_size($this->width).';' : '' ).
-            ($this->height ? 'height:'.css_size($this->height).';' : '').
+            ($this->width  ? 'width:'.$this->width.'px;' : '' ).
+            ($this->height ? 'height:'.$this->height.'px;' : '').
         '}'
         );
 
         $res =
-        'var ll = new google.maps.LatLng('.$this->latitude.','.$this->longitude.');'.
         'var myOptions = {'.
-            'center: ll,'.
+            'center: new google.maps.LatLng('.$this->latitude.','.$this->longitude.'),'.
             'zoom: '.$this->zoom.','.
             'mapTypeId: google.maps.MapTypeId.ROADMAP'.
         '};'.
@@ -120,9 +119,13 @@ class GoogleMapsJs
                     'map:myMap'.
                 '});'."\n";
 
+//        js_embed($res)
+
+        $header->embedJsOnload($res);
+
         return
-        '<div id="'.$div_id.'"/>'.
-        js_embed($res);
+        '<div id="'.$div_id.'"/>';
+//        '<br style="clear:both"/>';
     }
 
 }
