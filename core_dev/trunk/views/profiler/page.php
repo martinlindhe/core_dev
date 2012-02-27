@@ -5,6 +5,7 @@
 
 require_once('HttpUserAgent.php');
 
+/*
 $header->registerJsFunction(
 'function loadtime()'.
 '{'.
@@ -12,11 +13,15 @@ $header->registerJsFunction(
     'document.getElementById("span_rendertime").innerHTML=s;'.
 '}'
 );
+*/
 
+// measure time at page "start execute" event
 $header->embedJs('var beforeload=new Date();');
 
-$header->embedJsOnload('loadtime();');
-
+// measure time when page finished loading
+$header->embedJsOnload(
+'document.getElementById("span_rendertime").innerHTML=(new Date()-beforeload)/1000;'
+);
 
 $container_id = 'cdc_'.mt_rand();
 $wrapper_id   = 'cdw_'.mt_rand();
@@ -164,7 +169,7 @@ echo 'System uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
 
 echo '</div>'; // closing $prof_id
 
-echo ' | <span id="span_rendertime">0.00</span>s render';
+echo ' | <span id="span_rendertime">9.99</span>s render';
 
 echo ahref_js('', "return hide_el('".$wrapper_id."');", 'closebtn');
 

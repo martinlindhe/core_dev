@@ -4,7 +4,7 @@
  *
  * Generates a XHTML 1.x compilant header
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //STATUS: ok
@@ -201,27 +201,19 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if ($this->embed_js)
             $js .= implode('', $this->embed_js);
 
-/*
-        // XXX this seems to make the code run at same time as rest of the js in this block,
-        //     not at same time as <body onload="">
-        //     making the views/profiler/page.php "page render" timer count to "0.00s" always  //feb 2012
-        if ($this->embed_js_onload) {
+        if ($this->embed_js_onload)
             $js .=
-                'function onload()'.
-                '{'.implode('', $this->embed_js_onload).'} '.
-                'window.onload=onload();';  //FIXME: use anonymous function... how u do that in js?
-        }
-*/
+            'window.onload=function()'.
+            '{'.
+                implode('', $this->embed_js_onload).
+            '}';
 
         if ($js)
             $res .= js_embed($js);
 
         $res .= '</head>';
 
-        $res .= '<body class="yui-skin-sam"'; // required for YUI
-        if ($this->embed_js_onload)
-            $res .= ' onload="'.implode('', $this->embed_js_onload).'"';
-        $res .= '>'."\n";
+        $res .= '<body class="yui-skin-sam">'."\n"; // required for YUI
 
         if ($this->reload_time)
             $res .= js_reload($this->reload_time * 1000);
@@ -230,19 +222,5 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
 }
-
-/*  How to set extra headers for special browsers:
-
-// set mobile viewport for iOS devices
-if (HttpUserAgent::isIOS($_SERVER['HTTP_USER_AGENT']))
-    $header->setMeta('viewport', 'width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;');
-
-// enable full-screen mode
-$header->setMeta('apple-mobile-web-app-capable', 'yes');
-
-// controls the appearance of the status bar in full-screen mode
-$header->setMeta('apple-mobile-web-app-status-bar-style', 'black');
-
-*/
 
 ?>
