@@ -2,13 +2,13 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
 
 require_once('CoreBase.php');
-require_once('network.php'); //For get_protocol()
+require_once('network.php');   // for get_protocol()
 
 class XhtmlMenu extends CoreBase
 {
@@ -40,9 +40,7 @@ class XhtmlMenu extends CoreBase
 
         foreach ($this->items as $item)
         {
-            if (!$item)
-            {
-                // spacer
+            if (!$item) {
                 $res .= '<li>&nbsp;</li>';
                 continue;
             }
@@ -52,8 +50,11 @@ class XhtmlMenu extends CoreBase
             else
                 $res .= '<li>';
 
-            if ($item['link']) $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title']).'</a>';
-            else $res .= $item['title'];
+            if ($item['link'])
+                $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title']).'</a>';
+            else
+                $res .= $item['title'];
+
             $res .= '</li>';
         }
         $res .= '</ul>';
