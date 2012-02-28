@@ -18,8 +18,6 @@
 
 //STATUS: wip
 
-//XXXX: map div messes up page
-
 //FIXME: add title text to map markers
 //TODO: make default mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
 //TODO: ability to use "css sprite" images somehow
@@ -32,6 +30,13 @@ class GoogleMapMarker
     var $longitude;
     var $tooltip;
     var $icon;
+
+    function __construct($lat = 0, $lng = 0)
+    {
+        $this->latitude  = $lat;
+        $this->longitude = $lng;
+    }
+
 }
 
 class GoogleMapsJs
@@ -108,7 +113,7 @@ class GoogleMapsJs
         $header->embedJsOnload($res);
 
         return
-        '<div id="'.$div_id.'" style="width:'.$this->width.'px;height:'.$this->height.'px;"/>';
+        '<div id="'.$div_id.'" style="width:'.$this->width.'px;height:'.$this->height.'px;"></div>';
 //        '<br style="clear:both"/>';
     }
 
