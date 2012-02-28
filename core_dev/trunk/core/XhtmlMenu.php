@@ -41,7 +41,7 @@ class XhtmlMenu extends CoreBase
         foreach ($this->items as $item)
         {
             if (!$item) {
-                $res .= '<li>&nbsp;</li>';
+                $res .= '<br/>';
                 continue;
             }
 
