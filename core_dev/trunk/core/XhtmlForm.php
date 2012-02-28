@@ -447,6 +447,8 @@ class XhtmlForm
         ($this->css_table ? ' style="'.$this->css_table.'"' : '').
         '>';
 
+        $hidden = '';
+
         // fills in form with previous entered data        XXXXX merge some code with handle()
         foreach ($this->elems as $e)
         {
@@ -463,7 +465,7 @@ class XhtmlForm
                 $e['obj']->value = htmlspecialchars($e['obj']->value);
 
             if ($e['obj'] instanceof XhtmlComponentHidden) {
-                $res .= $e['obj']->render();
+                $hidden .= $e['obj']->render();
                 continue;
             }
 
@@ -486,9 +488,11 @@ class XhtmlForm
             '</tr>';
         }
 
-        $res .= '</table>';
+        $res .=
+        '</table>'.
+        $hidden.
+        '</form>';
 
-        $res .= '</form>';
         return $res;
     }
 
