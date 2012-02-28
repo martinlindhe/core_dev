@@ -122,7 +122,7 @@ class XmlDocumentHandler extends CoreBase
     function setApplicationPath($s = './')
     {
         if (!is_dir($s))
-            throw new Exception ('setApplicationRoot: directory dont exist: '.$s);
+            throw new Exception ('setApplicationPath: directory dont exist: '.$s);
 
         $this->app_root = realpath($s);
     }
