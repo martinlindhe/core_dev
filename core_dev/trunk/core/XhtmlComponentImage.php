@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -26,9 +26,9 @@ class XhtmlComponentImage extends XhtmlComponent
     {
         return
         '<img src="'.$this->src.'"'.
+        ' alt="'.$this->alt.'"'.
         ($this->width  ? ' width="'.$this->width.'"' : '').
         ($this->height ? ' height="'.$this->height.'"' : '').
-        ($this->alt    ? ' alt="'.$this->alt.'"' : '').
         ($this->title  ? ' title="'.$this->title.'"' : '').
         ($this->onclick ? ' onclick="'.$this->onclick.'"' : '').
         ($this->class  ? ' class="'.$this->class.'"' : '').
