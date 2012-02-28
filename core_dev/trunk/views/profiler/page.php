@@ -5,16 +5,6 @@
 
 require_once('HttpUserAgent.php');
 
-/*
-$header->registerJsFunction(
-'function loadtime()'.
-'{'.
-    'var s=(new Date()-beforeload)/1000;'.
-    'document.getElementById("span_rendertime").innerHTML=s;'.
-'}'
-);
-*/
-
 // measure time at page "start execute" event
 $header->embedJs('var beforeload=new Date();');
 
