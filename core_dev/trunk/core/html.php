@@ -185,6 +185,12 @@ function js_embed($s)
     return '<script type="text/javascript">'.$s.'</script>';
 }
 
+/** Embeds string as a CDATA block */
+function cdata_embed($s)
+{
+    return '//<![CDATA['.$s.'//]]>';
+}
+
 function css_embed($s)
 {
     return '<style type="text/css">'.$s.'</style>';
@@ -215,10 +221,10 @@ function css_size($s)
 function js_swfobject($swf, $render_div, $width = 300, $height = 120, $flashvars = '', $params = '', $attributes = '')
 {
     $page = XmlDocumentHandler::getInstance();
-    
+
     $header = XhtmlHeader::getInstance();
     $header->includeJs( $page->getRelativeCoreDevUrl().'js/swfobject.js');
-    
+
     $min_version = '9.0.115'; // first version to support MP4
 
     $js =
