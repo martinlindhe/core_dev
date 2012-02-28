@@ -24,7 +24,7 @@ abstract class MediaResource extends CoreBase  //XXXX delete this class
     function getUrl() { return $this->Url->get(); }
     function setMimetype($s) { $this->mimetype = $s; }
 
-    function setTitle($s) { $this->title = htmlentities($s); }
+    function setTitle($s) { $this->title = htmlentities($s, ENT_QUOTES, 'UTF-8'); }
     function getTitle() { return $this->title; }
 }
 

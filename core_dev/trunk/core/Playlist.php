@@ -22,7 +22,7 @@
  * SMPlayer 0.67: dont support xspf playlists: https://sourceforge.net/tracker/index.php?func=detail&aid=1920553&group_id=185512&atid=913576
  * XBMC dont support xspf playlists: http://xbmc.org/trac/ticket/4763
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //STATUS: ok
