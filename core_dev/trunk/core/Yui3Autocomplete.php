@@ -80,8 +80,8 @@ class Yui3Autocomplete
 
         return
         '<div id="demo">'.
-            '<label for="ac-input">Tags:</label><br>'.
-            '<input id="ac-input" type="text">'.
+            '<label for="ac-input">Tags:</label><br/>'.
+            '<input id="ac-input" type="text"/>'.
         '</div>'.
         js_embed($res);
     }
