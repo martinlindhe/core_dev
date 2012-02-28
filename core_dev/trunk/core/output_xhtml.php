@@ -7,6 +7,8 @@
   * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//WIP - deprecate all functions, see html.php
+
 require_once('LocaleHandler.php');
 require_once('XhtmlHeader.php');
 require_once('html.php');
@@ -272,7 +274,6 @@ function xhtmlSelectCategory__XXX_DEPRECATED($_type, $_owner = 0, $selectName = 
 
     return $out;
 }
-
 
 /**
  * Generates XML tags from an array of values

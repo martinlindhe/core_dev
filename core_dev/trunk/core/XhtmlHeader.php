@@ -209,7 +209,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             '}';
 
         if ($js)
-            $res .= js_embed( cdata_embed($js) );
+            $res .= js_embed($js);
 
         $res .= '</head>';
 
