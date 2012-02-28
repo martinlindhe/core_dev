@@ -101,12 +101,14 @@ function language($n)
 
 // ISO 3166-1 alpha-3 naming (country names): http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 define('COUNTRY_SWE', 1); // Sweden
-define('COUNTRY_GBR', 2); // United Kingdoms
+define('COUNTRY_NOR', 2); // Norway
+define('COUNTRY_GBR', 3); // United Kingdoms
 
 function getCountries()
 {
     return array(
     COUNTRY_SWE => 'SWE',
+    COUNTRY_NOR => 'NOR',
     COUNTRY_GBR => 'GBR',
     );
 }
