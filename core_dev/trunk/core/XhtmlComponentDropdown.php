@@ -14,13 +14,13 @@ require_once('XhtmlComponent.php');
 class XhtmlComponentDropdown extends XhtmlComponent
 {
     var        $value;               ///< default value
-    protected $options = array();  ///<  array of available options
+    private   $options = array();  ///<  array of available options
     protected $js_onchange = '';
 
     function setOptions($a)
     {
-        foreach ($a as $o)
-            $this->options[] = htmlentities($o);
+        foreach ($a as $idx => $o)
+            $this->options[$idx] = htmlentities($o, ENT_QUOTES, 'UTF-8');
     }
 
     function setJsOnChange($s) { $this->js_onchange = $s; }

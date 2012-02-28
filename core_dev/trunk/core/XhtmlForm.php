@@ -306,7 +306,7 @@ class XhtmlForm
         $o = new XhtmlComponentDropdown();
         $o->name    = $name;
         $o->value   = $selected;
-        $o->options = $arr;
+        $o->setOptions($arr);
         $this->add($o, $text);
     }
 
