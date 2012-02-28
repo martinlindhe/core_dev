@@ -94,7 +94,7 @@ class YuiTreeview
                     //YAHOO.log(oResponse.responseText);
                     'var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);'.
                     'if((oResults.records) && (oResults.records.length)) {'.
-                        'for (var i=0, j=oResults.records.length; i<j; i++) {'.
+                        'for (var i=0; j=oResults.records.length; i++) {'.
                             'var newNode = new YAHOO.widget.'.$node_type.'({label:oResults.records[i].name,id:oResults.records[i].id}, node, false);'.
                         '}'.
                     '}'.
