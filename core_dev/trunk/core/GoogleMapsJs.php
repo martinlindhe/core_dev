@@ -2,10 +2,10 @@
 /**
  * $Id$
  *
- * Google Maps Javascript API
+ * Google Maps Javascript API V3
  *
- * Currently based on version 3.2 of the API, which is
- * the latest release version as of 2011-02-12
+ * Currently based on version "V3" of the API, which is
+ * the latest release version as of 2012/02
  *
  * Tutorial:
  * http://code.google.com/apis/maps/documentation/javascript/tutorial.html
@@ -18,12 +18,10 @@
 
 //STATUS: wip
 
-//FIXME: add title text to map markers
-
 //XXXX: map div messes up page
 
-//TODO: make mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
-
+//FIXME: add title text to map markers
+//TODO: make default mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
 //TODO: ability to use "css sprite" images somehow
 
 require_once('html.php');
@@ -46,8 +44,8 @@ class GoogleMapsJs
     protected $detect_location = false; ///< shall google maps try to detect location of the user? instead of specifying coordinates
     protected $zoom = 3;                ///< 1 (whole world) to 20 (max zoom)
 
-    protected $width;
-    protected $height;
+    protected $width  = 500;
+    protected $height = 300;
     protected $markers = array();
 
     protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';
@@ -58,13 +56,9 @@ class GoogleMapsJs
         $this->longitude = $lng;
     }
 
-    /** set to "3" for current "V3 trunk" api */
-    function setApiVersion($s) { $this->api_version = $s; }
-
     function setZoomLevel($n) { $this->zoom = $n; }
     function setWidth($n) { $this->width = $n; }
     function setHeight($n) { $this->height = $n; }
-
 
     function addMarkers($arr)
     {
@@ -82,49 +76,39 @@ class GoogleMapsJs
 
     function render()
     {
-        $url =
-        'http://maps.google.com/maps/api/js'.
-        '?key='.$this->api_key.
-        ($this->lang   ? '&language='.$this->lang : '').
-        ($this->region ? '&region='.$this->region : '').
-        '&sensor='.sbool($this->detect_location);
-
         $header = XhtmlHeader::getInstance();
-        $header->includeJs($url);
+        $header->includeJs(
+            'http://maps.google.com/maps/api/js'.
+            '?key='.$this->api_key.
+            ($this->lang   ? '&language='.$this->lang : '').
+            ($this->region ? '&region='.$this->region : '').
+            '&sensor='.sbool($this->detect_location)
+        );
 
         $div_id = 'gmap_'.mt_rand();
 
-         $header->embedCss(
-        '#'.$div_id.' {'.
-            ($this->width  ? 'width:'.$this->width.'px;' : '' ).
-            ($this->height ? 'height:'.$this->height.'px;' : '').
-        '}'
-        );
-
         $res =
-        'var myOptions = {'.
-            'center: new google.maps.LatLng('.$this->latitude.','.$this->longitude.'),'.
-            'zoom: '.$this->zoom.','.
-            'mapTypeId: google.maps.MapTypeId.ROADMAP'.
+        'var myOptions={'.
+            'center:new google.maps.LatLng('.$this->latitude.','.$this->longitude.'),'.
+            'zoom:'.$this->zoom.','.
+            'mapTypeId:google.maps.MapTypeId.ROADMAP'.
         '};'.
-        'var myMap = new google.maps.Map(document.getElementById("'.$div_id.'"), myOptions);';
+        'var myMap=new google.maps.Map(document.getElementById("'.$div_id.'"),myOptions);';
 
         if ($this->markers)
             foreach ($this->markers as $idx => $m)
                 $res .=
-                'var mk'.$idx.' = new google.maps.Marker({'.
+                'var mk'.$idx.'=new google.maps.Marker({'.
                     'position:new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
                     ($m->icon ? 'icon:"'.$m->icon.'",' : '').
                     ($m->tooltip ? 'title:"'.$m->tooltip.'",' : '').
                     'map:myMap'.
-                '});'."\n";
-
-//        js_embed($res)
+                '});';
 
         $header->embedJsOnload($res);
 
         return
-        '<div id="'.$div_id.'"/>';
+        '<div id="'.$div_id.'" style="width:'.$this->width.'px;height:'.$this->height.'px;"/>';
 //        '<br style="clear:both"/>';
     }
 

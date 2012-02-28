@@ -77,6 +77,7 @@ class Playlist extends CoreList
         switch (get_class($i)) {
         case 'VideoResource':
             $item = $i;
+//            d($item);
             break;
 
         default:
@@ -204,7 +205,7 @@ class Playlist extends CoreList
             $res .= '<track>';
             $title = ($item->Timestamp ? $item->Timestamp->render().' ' : '').$item->title;
             //if ($item->desc) $title .= ' - '.$item->desc;
-            $res .= '<title><![CDATA['.trim($title).']]></title>';
+            $res .= '<title>'.cdata_embed($title).'</title>';
 
             $res .= '<location>'.$item->Url.'</location>';
 
@@ -295,15 +296,15 @@ class Playlist extends CoreList
         if ($this->org_url)
             $res .= '<a href="'.$this->org_url.'" target="_blank">Show orginal feed</a><br/><br/>';
 
-        $res .= '<table border="1">';
+        $res .= '<table summary="" border="1">';
 
         foreach ($this->getItems() as $item)
         {
             $title = $item->Timestamp ? $item->Timestamp->render().' ' : '';
 
             $title .=
-                ($item->Url ? '<a href="'.$item->Url.'">' : '').
-                ($item->title ? $item->title : 'Untitled entry').
+                ($item->Url ? '<a href="'.htmlentities($item->Url).'">' : '').
+                ($item->getTitle() ? $item->getTitle() : 'Untitled entry').
                 ($item->Url ? '</a>' : '');
 
             $res .=
@@ -314,6 +315,8 @@ class Playlist extends CoreList
             ($item->Duration ? t('Duration').': '.$item->Duration->render().'<br/>' : '').
             '</td></tr>';
         }
+
+        $res .= '</table>';
 
         return $res;
     }

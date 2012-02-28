@@ -98,7 +98,7 @@ function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
     $a = new XhtmlComponentA();
     $a->href = relurl($url);
-    $a->content = $text;
+    $a->content = htmlspecialchars($text);
     $a->target = $target;
     $a->onClick($onclick);
     $a->class = $class;
@@ -185,10 +185,10 @@ function js_embed($s)
     return '<script type="text/javascript">'.$s.'</script>';
 }
 
-/** Embeds string as a CDATA block */
+/** Embeds string as a XHTML CDATA block */
 function cdata_embed($s)
 {
-    return '//<![CDATA['.$s.'//]]>';
+    return '<![CDATA['.trim($s).']]>';
 }
 
 function css_embed($s)
@@ -228,10 +228,10 @@ function js_swfobject($swf, $render_div, $width = 300, $height = 120, $flashvars
     $min_version = '9.0.115'; // first version to support MP4
 
     $js =
-    'var flashvars = '.json_encode($flashvars).';'.
-    'var params = '.json_encode($params).';'.
-    'var attributes = '.json_encode($attributes).';'.
-    'swfobject.embedSWF("'.$swf.'", "'.$render_div.'", "'.$width.'", "'.$height.'", "'.$min_version.'", "false", flashvars, params, attributes);';
+    'var flashvars='.json_encode($flashvars).';'.
+    'var params='.json_encode($params).';'.
+    'var attributes='.json_encode($attributes).';'.
+    'swfobject.embedSWF("'.$swf.'","'.$render_div.'","'.$width.'","'.$height.'","'.$min_version.'","false",flashvars,params,attributes);';
 
     return js_embed($js);
 }

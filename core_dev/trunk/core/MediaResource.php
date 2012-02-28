@@ -13,7 +13,7 @@ abstract class MediaResource extends CoreBase  //XXXX delete this class
 {
     var $track_id;
     var $album_id;
-    var $title;
+    protected $title;
 
     var $mimetype;           ///< mimetype of media
     var $desc;               ///< description
@@ -23,6 +23,9 @@ abstract class MediaResource extends CoreBase  //XXXX delete this class
     function setUrl($n) { $this->Url = new Url($n); }
     function getUrl() { return $this->Url->get(); }
     function setMimetype($s) { $this->mimetype = $s; }
+
+    function setTitle($s) { $this->title = htmlentities($s); }
+    function getTitle() { return $this->title; }
 }
 
 class AudioResource extends MediaResource  //XXX stop extending MediaResource
