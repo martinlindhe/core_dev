@@ -171,14 +171,7 @@ class Playlist extends CoreList
 
         case 'xhtml':
         case 'html':
-            $res = '';
-            if ($this->headers) {
-                $header = XhtmlHeader::getInstance();
-                $header->setTitle($this->title);
-                $res = $header->render();
-            }
-
-            return $res . $this->renderXHTML();
+            return $this->renderXHTML();
 
         case 'atom':
             $feed = new NewsFeed();
