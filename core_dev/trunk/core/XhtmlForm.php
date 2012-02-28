@@ -441,6 +441,7 @@ class XhtmlForm
 
         $res .=
         '<table'.
+        ' summary=""'.
         ' cellpadding="6"'.
         ' cellspacing="0"'.
         ($this->css_table ? ' style="'.$this->css_table.'"' : '').

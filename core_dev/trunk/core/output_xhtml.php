@@ -273,57 +273,6 @@ function xhtmlSelectCategory__XXX_DEPRECATED($_type, $_owner = 0, $selectName = 
     return $out;
 }
 
-/**
- * Displays one of core_dev's default action buttons
- */
-function coreButton($name, $link = '', $title = '')
-{
-    switch ($name) {
-        case 'Edit':   $img = 'icon_create.png'; break;
-        case 'Create': $img = 'icon_create.png'; break;
-        case 'Delete': $img = 'icon_delete.png'; break;
-        case 'Folder': $img = 'icon_folder.png'; break;
-        case 'Add':    $img = 'icon_add.png'; break;
-        case 'Error':  $img = 'icon_error.png'; break;
-
-        default:
-            echo '<h1>ERROR unknown coreButton '.$name.'</h1>';
-            return;
-    }
-
-    $out = '';
-    if ($link) $out .= '<a href="'.$link.'">';
-    if (!$title) $title = t($name);
-
-    $out .= '<img src="'.relurl('core_dev/gfx/'.$img).'" alt="'.$title.'" title="'.$title.'"/>';
-    if ($link) $out .= '</a>';
-    return $out;
-}
-
-function countryFlag($s)
-{
-    if (is_numeric($s))
-        $s = getCountryCode($s);
-    else
-    {
-        if (!is_alphanumeric($s))
-            throw new Exception ('hey');
-
-        if (strlen($s) == 2)
-            $s = country_2_to_3_letters($s);
-
-        $s = strtoupper($s);
-    }
-
-    $locale = LocaleHandler::getInstance();
-
-    $title = getCountryName($s);
-
-    if (!$title)
-        throw new Exception ('unhandled country flag code '.$s);
-
-    return '<img src="'.relurl('core_dev/gfx/flags/'.$s.'.png').'" alt="'.$title.'" title="'.$title.'"/>';
-}
 
 /**
  * Generates XML tags from an array of values

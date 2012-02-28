@@ -63,7 +63,7 @@ class M3uReader
             case '#EXTINF':
                 $x = explode(',', $p[1], 2);
                 $ent->setDuration($x[0] != '-1' ? $x[0] : '');
-                $ent->title  = $x[1];
+                $ent->setTitle($x[1]);
                 break;
 
             // multiple quality streams for same media can exist
