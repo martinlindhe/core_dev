@@ -350,10 +350,10 @@ class XmlDocumentHandler extends CoreBase
 
             echo '>'."\n";
 
+            echo $header->render();
+
             if ($enable_fb)
                 echo '<div id="fb-root"></div>'; // required for Facebook API
-
-            echo $header->render();
         }
 
         echo $out;
