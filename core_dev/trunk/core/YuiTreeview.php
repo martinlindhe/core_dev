@@ -93,8 +93,8 @@ class YuiTreeview
 //                  'YAHOO.log("XHR transaction was successful.", "info", "example");'.
                     //YAHOO.log(oResponse.responseText);
                     'var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);'.
-                    'if((oResults.records) && (oResults.records.length)) {'.
-                        'for (var i=0; j=oResults.records.length; i++) {'.
+                    'if (oResults.records && oResults.records.length) {'.
+                        'for (var i=0; i<oResults.records.length; i++) {'.
                             'var newNode = new YAHOO.widget.'.$node_type.'({label:oResults.records[i].name,id:oResults.records[i].id}, node, false);'.
                         '}'.
                     '}'.
