@@ -51,7 +51,7 @@ class XhtmlMenu extends CoreBase
                 $res .= '<li>';
 
             if ($item['link'])
-                $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title']).'</a>';
+                $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title'], ENT_QUOTES, 'UTF-8').'</a>';
             else
                 $res .= $item['title'];
 
