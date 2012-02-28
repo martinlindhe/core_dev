@@ -4,10 +4,10 @@
  *
  * Creates a select-dropdown list from a indexed array
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: ok
 
 require_once('XhtmlComponent.php');
 
@@ -31,11 +31,11 @@ class XhtmlComponentDropdown extends XhtmlComponent
             throw new Exception ('options not an array: '.$this->options);
 
         $out =
-        '<select name="'.strip_tags($this->name).'"'.
-        ($this->js_onchange ? ' onchange="'.$this->js_onchange.'"' : '').
-        '>';
-
-        $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
+        '<select '.
+            'name="'.strip_tags($this->name).'"'.
+            ($this->js_onchange ? ' onchange="'.$this->js_onchange.'"' : '').
+        '>'.
+        '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
 
         foreach ($this->options as $id => $title)
             $out .= '<option value="'.$id.'"'.($this->value == $id ? ' selected="selected"':'').'>'.$title.'</option>';

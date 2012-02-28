@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -77,7 +77,7 @@ class XhtmlCalendar
     {
         $loc = LocaleHandler::getInstance();
 
-        $res = '<table border="1">';
+        $res = '<table summary="" border="1">';
 
         for ($i=1; $i<=$this->days_in_month; $i++)
         {
@@ -89,8 +89,12 @@ class XhtmlCalendar
             if ($i == date('j') && date('m', $this->date) == date('m') && date('Y', $this->date) == date('Y')) {
                 $res .= '<tr style="background-color:#77ee77">';
                 $focus = true;
-            } else if ($weekday==0 || $weekday==6)
+            } else if ($weekday==0 || $weekday==6) {
+                // weekend (sat, sun)
                 $res .= '<tr style="background-color:#aaa">';
+            } else {
+                $res .= '<tr>';
+            }
 
             $res .=
             '<td valign="top" align="right">'.
@@ -100,7 +104,7 @@ class XhtmlCalendar
 
             foreach ($this->events as $e)
                 if ($e->getDate() == $ts)
-                    $res .= $e->title.'<br/>';
+                    $res .= $e->getTitle().'<br/>';
 
             $res .=
             '</td>'.
