@@ -164,7 +164,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             $res .= '<meta name="'.$o->name.'" content="'.$o->val.'"/>';
 
         foreach ($this->include_css as $css)
-            $res .= '<link rel="stylesheet" href="'.$css.'"/>';
+            $res .= '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
 
         if ($this->favicon)
             $res .= '<link rel="icon" type="'.file_get_mime_by_suffix($this->favicon).'" href="'.$this->favicon.'"/>';
