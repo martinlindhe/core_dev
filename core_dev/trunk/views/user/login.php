@@ -167,8 +167,6 @@ if ($show_recover_div)
     echo $x->render();
 }
 
-echo xhtmlFormClose();
-
 echo '</div>';
 
 ?>
