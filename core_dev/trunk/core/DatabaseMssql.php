@@ -204,7 +204,7 @@ class DatabaseMssql implements IDB_SQL
             return false;
         }
 
-        if (mssql_rows_affected($db->handle) > 1) {
+        if (mssql_rows_affected($this->db_handle) > 1) {
             echo "ERROR: DB_MSSQL::getOneRow() returned ".mssql_rows_affected($this->db_handle)." rows!\n";
             if ($this->getDebug()) echo "Query: ".$q."\n";
             die;
