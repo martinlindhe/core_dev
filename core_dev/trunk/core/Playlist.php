@@ -267,7 +267,7 @@ class Playlist extends CoreList
         foreach ($this->getItems() as $item)
         {
             $res .=
-            "# ".($item->title ? $item->title : 'Untitled track')."\n";
+            "# ".($item->getTitle() ? $item->getTitle() : 'Untitled track')."\n";
 
             switch (get_protocol($item->Url)) {
             case 'http':

@@ -315,6 +315,7 @@ function numbers_only($s) //XXXX FIXME use a regexp   FIXME rename to is_digits(
     }
     return true;
 }
+function is_digit($s) { return numbers_only($s); }
 
 /**
  * Similar to is_year_period() but accepts any 2 numbers,

@@ -20,7 +20,7 @@ class CoreXmlReader extends XMLReader
         if (is_url($raw)) {
             $url = $raw;
             $h = new HttpClient($url);
-            $h->setCacheTime('30m');
+//            $h->setCacheTime('30m');
             $raw = $h->getBody();
 //            d( $h->getResponseHeaders() );
 
