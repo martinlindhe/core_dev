@@ -119,13 +119,11 @@ class Timestamp extends CoreProperty
     /**
      * Presents the time in relative form
      *
-     * @example "2 weeks ago", "yesterday at 9:40"
+     * @example "2 weeks ago", "5 days ago"
      */
     function getRelative()
     {
-        $dur = new Duration();
-        $dur->set( time() - $this->value );
-        return $dur->renderRelative();
+        return ago( $this->value );
     }
 
     function render()

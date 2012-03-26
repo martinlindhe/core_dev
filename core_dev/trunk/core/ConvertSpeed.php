@@ -19,7 +19,6 @@ require_once('ConvertBase.php');
 
 class ConvertSpeed extends ConvertBase
 {
-
     protected $scale = array( ///< unit scale to m/s
     'm/s'  => 1,         // meters per second
     'km/h' => 0.277778,  // kilometers per hour
