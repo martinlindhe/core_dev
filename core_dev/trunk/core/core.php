@@ -92,6 +92,18 @@ function ds($s)
         return htmlentities($s);
 }
 
+/**
+ * Displays a debug timestamp
+ */
+function dts($s = '')
+{
+    //FIXME: show millisecond precision
+    echo 'dts ['.sql_datetime( time() ).']';
+    if ($s)
+        echo ' '.$s;
+    echo "\n";
+}
+
 function is_cli()
 {
     $page = XmlDocumentHandler::getInstance();
