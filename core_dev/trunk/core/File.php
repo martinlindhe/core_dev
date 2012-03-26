@@ -17,7 +17,7 @@ define('FILETYPE_CLONE_CONVERTED',    51);
 class File
 {
     var $id;
-    var $type;
+    var $type;          ///< in constants.php
     var $name;          ///< orginal filename
     var $size;
     var $mimetype;
@@ -210,6 +210,9 @@ class File
     public static function importImage($type, &$key, $category = 0, $blind = false, $max_width = 800, $max_height = 800)
     {
         $error = ErrorHandler::getInstance();
+
+        if (!file_exists($key['tmp_name']))
+            throw new Exception ('file '.$key['tmp_name'].' dont exist!');
 
         $info = getimagesize($key['tmp_name']);
         switch ($info['mime']) {

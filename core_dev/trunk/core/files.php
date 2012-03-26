@@ -270,4 +270,44 @@ function expand_arg_files($in, $haystack = array() )
     throw new Exception ('Unknown input: '.$in);
 }
 
+/**
+ * Generates image thumbnails from specified video file
+ */
+function generate_video_thumb($fileId, $where = '10%')
+{
+    if (!is_numeric($fileId))
+        return false;
+
+    if (!file_exists(File::getUploadPath($fileId)))
+        throw new Exception ('file '.File::getUploadPath($fileId).' dont exist!');
+
+    $c = 'avprobe '.File::getUploadPath($fileId).' 2>&1 | /bin/grep Duration | cut -d, -f1'; // returns: "Duration: 00:00:08.50"
+    //echo "Executing: ".$c."\n";
+
+    $x = exec($c);
+    $xx = explode(': ', $x);
+    $duration = in_seconds($xx[1]); // 00:00:08.50   => 8.5
+
+    $pos_val = intval($where) / 10;
+
+    $pos = $duration * $pos_val;
+
+    $tmpimg = tempnam('/tmp', 'vid-thumb');
+
+    $c = 'avconv -i '.File::getUploadPath($fileId).' -ss '.$pos.' -vframes 1 -f image2 '.$tmpimg.' 2> /dev/null';
+//    echo "$ ".$c."\n";
+    exec($c);
+
+    $key = array(
+        'tmp_name'=>$tmpimg,
+        'name'=>'thumbnail',
+        'type'=>'image/jpeg', /// XXXX: force jpeg output in above avconv command
+        'size'=>filesize($tmpimg)
+    );
+
+    $thumbId = File::importImage(THUMB, $key, $fileId, true);
+    return $thumbId;
+}
+
+
 ?>
