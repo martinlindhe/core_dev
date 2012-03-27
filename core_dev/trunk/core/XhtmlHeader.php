@@ -29,6 +29,14 @@ class MetaDescription
     var $val;
 }
 
+class LinkRel
+{
+    var $rel_type;
+    var $href;
+    var $mime_type;
+    var $title;
+}
+
 class XhtmlHeader extends CoreBase implements IXmlComponent
 {
     static $_instance;                     ///< singleton class
@@ -48,6 +56,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     protected $meta_tags       = array();
     protected $opensearch      = array();
+
+    protected $rel             = array(); ///< <link rel=""> tags
 
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
 
@@ -151,6 +161,21 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->meta_tags[] = $o;
     }
 
+    function addRel($rel_type, $href, $mime_type = '', $title = '')
+    {
+        //   <link rel="apple-touch-icon" href="iphon_tetris_icon.png"/>
+
+
+        $o = new LinkRel();
+        $o->rel_type  = $rel_type;
+        $o->href      = $href;
+        $o->mime_type = $mime_type;
+        $o->title     = $title;
+        $this->rel[] = $o;
+
+        //TODO: use this for all other rel types... css,icon,. rss
+    }
+
     public function render()
     {
         $res = '<head>';
@@ -177,6 +202,14 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         foreach ($this->opensearch as $o)
             $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
+
+        foreach ($this->rel as $o)
+            $res .=
+                '<link rel="'.$o->rel_type.'"'.
+                ' href="'.$o->href.'"'.
+                ($o->mime_type ? ' type="'.$o->mime_type.'"' : '').
+                ($o->title ? ' title="'.$o->title.'"' : '').
+                '/>';
 
         // margin and padding on body element can introduce errors in determining element position and are not recommended
         // height:100% is needed for google maps js widget
