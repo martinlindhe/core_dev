@@ -11,6 +11,8 @@
 require_once('UserList.php');
 require_once('SendMail.php');
 
+require_once('XhtmlForm.php');
+
 if ($session->id || $session->facebook_id)
     return;
 
