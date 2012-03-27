@@ -4,12 +4,6 @@ http://cubiq.org/add-to-home-screen
 
 
 
-<link rel="stylesheet" href="path/to/add2home.css">
-<script type="application/javascript" src="path/to/add2home.js"></script>
-
-
-
-
 
 <script type="text/javascript">
 var addToHomeConfig = {
@@ -22,3 +16,4 @@ var addToHomeConfig = {
 };
 </script>
 <script type="application/javascript" src="js/add2home.js"></script>
+<link rel="stylesheet" href="path/to/add2home.css">
