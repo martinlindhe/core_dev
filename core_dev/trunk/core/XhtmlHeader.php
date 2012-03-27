@@ -15,14 +15,6 @@ require_once('XmlDocumentHandler.php');  // for relurl()
 require_once('html.php');
 require_once('HttpUserAgent.php');
 
-class FeedDescription
-{
-    var $title;
-    var $url;
-}
-
-class OpenSearchDescription extends FeedDescription { }
-
 class MetaDescription
 {
     var $name;
@@ -42,22 +34,14 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     static $_instance;                     ///< singleton class
 
     protected $title;
-    protected $favicon;
 
     protected $embed_js        = array();
     protected $embed_js_onload = array();
-    protected $embed_css;
-
+    protected $embed_css       = '';
     protected $include_js      = array();
-    protected $include_css     = array();
-    protected $include_feed    = array();
-
     protected $js_functions    = array();
-
     protected $meta_tags       = array();
-    protected $opensearch      = array();
-
-    protected $rel             = array(); ///< <link rel=""> tags
+    protected $rel             = array(); ///< <link rel=""> tags for external resources: css, icon, rss, opensearch
 
     protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
 
@@ -73,17 +57,27 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     public function handlePost($p) {}
 
-    function getFavicon() { return $this->favicon; }
+    /** Add a <meta name="" content=""> tag */
+    function setMeta($name, $val)
+    {
+        $o = new MetaDescription();
+        $o->name = $name;
+        $o->val  = $val;
+        $this->meta_tags[] = $o;
+    }
+
+    /** Add a <link rel="" href=""> tag */
+    function addRel($rel_type, $href, $mime_type = '', $title = '')
+    {
+        $o = new LinkRel();
+        $o->rel_type  = $rel_type;
+        $o->href      = $href;
+        $o->mime_type = $mime_type;
+        $o->title     = $title;
+        $this->rel[] = $o;
+    }
 
     function setTitle($t) { $this->title = $t; }
-
-    function setFavicon($uri)
-    {
-        if (substr($uri, 0, 1) != '/')
-            $uri = relurl($uri);
-
-        $this->favicon = $uri;
-    }
 
     function setReloadTime($secs) { $this->reload_time = $secs; }
 
@@ -98,19 +92,15 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
     function includeCss($uri)
     {
-        if (substr($uri, 0, 1) == '/')
-            $this->include_css[] = $uri;
-        else
-            $this->include_css[] = relurl($uri);
+        if (substr($uri, 0, 1) != '/')
+            $uri = relurl($uri);
+
+        $this->addRel('stylesheet', $uri, 'text/css');
     }
 
     function includeFeed($url, $title = '')
     {
-        $o = new FeedDescription();
-        $o->title = $title;
-        $o->url   = $url;
-
-        $this->include_feed[] = $o;
+        $this->addRel('alternate', $url, 'application/rss+xml', $title);
     }
 
     function includeOpenSearch($url, $title)
@@ -118,11 +108,15 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if (substr($url, 0, 1) != '/')
             $uri = relurl($url);
 
-        $o = new OpenSearchDescription();
-        $o->title = $title;
-        $o->url   = $url;
+        $this->addRel('search', $url, 'application/opensearchdescription+xml', $title);
+    }
 
-        $this->opensearch[] = $o;
+    function setFavicon($uri)
+    {
+        if (substr($uri, 0, 1) != '/')
+            $uri = relurl($uri);
+
+        $this->addRel('icon', $uri, file_get_mime_by_suffix($uri));
     }
 
     /** Registers a javascript function */
@@ -151,31 +145,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     /** JavaScript to run when page loaded DOM event fires */
     function embedJsOnload($s) { $this->embed_js_onload[] = $s; }
 
-    /** Set META tag */
-    function setMeta($name, $val)
-    {
-        // TODO: see if meta tag already exists
-        $o = new MetaDescription();
-        $o->name = $name;
-        $o->val  = $val;
-        $this->meta_tags[] = $o;
-    }
-
-    function addRel($rel_type, $href, $mime_type = '', $title = '')
-    {
-        //   <link rel="apple-touch-icon" href="iphon_tetris_icon.png"/>
-
-
-        $o = new LinkRel();
-        $o->rel_type  = $rel_type;
-        $o->href      = $href;
-        $o->mime_type = $mime_type;
-        $o->title     = $title;
-        $this->rel[] = $o;
-
-        //TODO: use this for all other rel types... css,icon,. rss
-    }
-
     public function render()
     {
         $res = '<head>';
@@ -188,20 +157,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         foreach ($this->meta_tags as $o)
             $res .= '<meta name="'.$o->name.'" content="'.$o->val.'"/>';
 
-        foreach ($this->include_css as $css)
-            $res .= '<link rel="stylesheet" type="text/css" href="'.$css.'"/>';
-
-        if ($this->favicon)
-            $res .= '<link rel="icon" type="'.file_get_mime_by_suffix($this->favicon).'" href="'.$this->favicon.'"/>';
-
         foreach ($this->include_js as $uri)
             $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
-
-        foreach ($this->include_feed as $o)
-            $res .= '<link rel="alternate" type="application/rss+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
-
-        foreach ($this->opensearch as $o)
-            $res .= '<link rel="search" type="application/opensearchdescription+xml" href="'.$o->url.'" title="'.$o->title.'"/>';
 
         foreach ($this->rel as $o)
             $res .=
