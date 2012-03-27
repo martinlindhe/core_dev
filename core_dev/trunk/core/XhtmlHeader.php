@@ -39,6 +39,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     protected $embed_js_onload = array();
     protected $embed_css       = '';
     protected $include_js      = array();
+    protected $include_js_last = array();  /// HACK to enable to include js after some js snippet has been embedded
     protected $js_functions    = array();
     protected $meta_tags       = array();
     protected $rel             = array(); ///< <link rel=""> tags for external resources: css, icon, rss, opensearch
@@ -88,6 +89,15 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
             $uri = relurl($uri);
 
         $this->include_js[] = $uri;
+    }
+
+    /** Adds a js file include to the end of the header */
+    function includeJsLast($uri)
+    {
+        if (substr($uri, 0, 1) != '/')
+            $uri = relurl($uri);
+
+        $this->include_js_last[] = $uri;
     }
 
     function includeCss($uri)
@@ -200,6 +210,9 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
 
         if ($js)
             $res .= js_embed($js);
+
+        foreach ($this->include_js_last as $uri)
+            $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
 
         $res .= '</head>';
 
