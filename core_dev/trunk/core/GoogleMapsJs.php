@@ -55,7 +55,7 @@ class GoogleMapsJs
 
     protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';
 
-    function __construct($lat = 0, $lng = 0)
+    function __construct($lat = false, $lng = false)
     {
         $this->latitude  = $lat;
         $this->longitude = $lng;
@@ -81,6 +81,9 @@ class GoogleMapsJs
 
     function render()
     {
+        if ($this->latitude === false || $this->longitude === false)
+            throw new Exception ('initial center coords required but not set!');
+
         $header = XhtmlHeader::getInstance();
         $header->includeJs(
             'http://maps.google.com/maps/api/js'.
