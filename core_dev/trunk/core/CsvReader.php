@@ -9,7 +9,7 @@
 
 //STATUS: wip
 
-//TODO: simplify & speed up by using php's str_getcsv(), fgetcsv() 
+//TODO: simplify & speed up by using php's str_getcsv(), fgetcsv()
 
 class CsvReader
 {
@@ -85,6 +85,7 @@ class CsvReader
     {
         if (strpos($row, $delimiter) === false) {
             echo "FATAL: csvParseRow() got bad input\n";
+            d($row);
             return false;
         }
 
