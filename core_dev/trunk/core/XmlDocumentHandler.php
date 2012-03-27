@@ -338,11 +338,13 @@ class XmlDocumentHandler extends CoreBase
         if ($this->enable_design)
         {
             echo
-            '<?xml version="1.0" encoding="UTF-8"?>'."\n".
+//            '<!DOCTYPE html>'."\n";  //HTML 5
             '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
 
             echo
-            '<html xml:lang="'.$this->language_code.'" lang="'.$this->language_code.'"'.
+            '<html'.
+//            ' manifest="cache.manifest"'.   // The "HTML5" manifest="cache.manifest" property on the <html> tag is how the browser knows that we want to cache this web page offline.
+            ' xml:lang="'.$this->language_code.'" lang="'.$this->language_code.'"'.
             ' xmlns="http://www.w3.org/1999/xhtml"';
 
             foreach ($this->xmlns as $name => $uri)
