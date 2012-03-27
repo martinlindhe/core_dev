@@ -1,0 +1,170 @@
+tblUsers
+    id
+    type
+    name
+    password          text datatype for long pwd hashes
+    time_created
+    time_last_login
+    time_last_active
+    time_last_logout
+    time_deleted
+    last_ip
+
+
+tblUserGroups
+
+Some user groups should be pre-defined in a default setup, corresponding to "Normal user", "Admin", "Webmaster", and "Super Admin"
+
+    groupId
+    name
+    level     - user level
+
+
+
+
+tblGroupMembers
+
+Holds relations of what user is in which groups
+
+    entryId
+    userId
+    groupId
+
+
+
+tblSettings (core/Settings.php)
+
+Holds different types of settings
+
+    id
+    owner
+    category
+    name
+    value
+    type
+    time_saved
+
+
+tblBookmarks (core/Shortcut.php)
+
+USED BY: fmf/snabbsvar
+
+stores "shortcuts" for a user to other objects, example: friendlist
+
+    id
+    owner  (userId)
+    type   (data type)
+    value  (id of object to jump to)
+
+
+
+tblComments (core/Comment.php)
+
+stores comments owned by any object. the comment type defines what kind of object is the owner
+
+    id
+    type
+    msg
+    private       // bool
+    time_created
+    time_deleted
+    deleted_by
+    owner         ///< object that the comment belongs to
+    creator       ///< userId of creator
+    creator_ip    ///< IP of creator
+
+
+
+tblMessages   (core/Message.php)
+
+    id
+    from
+    to
+    time_sent
+    time_read
+    body
+
+
+tblGuestbook  (core/Guestbook.php)
+
+    id
+    owner
+    creator
+    time_created
+    body
+
+
+tblModerationObjects (core/ModerationObject.php)
+
+    id
+    type
+    owner
+    time_created
+    time_handled
+    handled_by
+    approved           set to 1 if it is approved, 0 if not
+    data
+    reference           used to refer to external object id (if needed)
+
+
+tblFiles (see core/File.php)
+
+    id
+    type
+    name
+    size
+    mimetype
+    owner
+    category                XXXX used for tblPhotoAlbums.id, or type=THUMB then its tblFile.id
+    uploader
+    uploader_ip
+    time_uploaded
+    time_deleted
+
+
+
+tblSessionData
+
+    session_id
+    session_data
+    expires
+
+
+
+
+tblUserDataField (core/UserDataField.php)
+
+holds all userdata fields that exists (as UserSetting) for the site
+
+    id
+    type    = EMAIL, CHECKBOX, RADIO, IMAGE
+    name
+
+
+
+tblPhotoAlbums
+
+holds all photo album names
+
+    id           0 = system wide, else it is tblUsers.id
+    owner
+    name
+
+
+
+tblReservedWords
+
+holds words that is not allowed in usernames
+
+    id
+    type
+    value
+
+
+tblHttpCache
+
+    id
+    url
+    time_saved
+    raw
+

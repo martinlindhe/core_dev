@@ -5,8 +5,6 @@
  * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
-//TODO document db struct in redmine wiki
-
 class HttpCache
 {
     var $id;
