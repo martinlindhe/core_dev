@@ -165,5 +165,24 @@ function grid_to_geodetic($x, $y)
     $lon = $lon_radian * 180.0 / M_PI;
     return array($lat, $lon);
 }
+/**
+ * Calculates distance between two WGS84 coordinates
+ * based on: http://www.codecodex.com/wiki/Calculate_distance_between_two_points_on_a_globe
+ * @return distance in kilometers
+ */
+function getDistanceWGS84($latitude1, $longitude1, $latitude2, $longitude2)
+{
+    $earth_radius = 6371; //km
+
+    $dLat = deg2rad($latitude2 - $latitude1);
+    $dLon = deg2rad($longitude2 - $longitude1);
+
+    $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * sin($dLon/2) * sin($dLon/2);
+    $c = 2 * asin(sqrt($a));
+    $d = $earth_radius * $c;
+
+    return $d;
+}
+
 
 ?>
