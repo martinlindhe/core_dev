@@ -7,7 +7,9 @@
  * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
-//TODO: port code from input_coordinate.php to static methods
+//TODO: port code from input_coordinates.php to static methods
+
+require_once('input_coordinates.php'); // for getDistanceWGS84()
 
 define('COORD_EXACT',      1);
 
@@ -24,9 +26,6 @@ define('COORD_COUNTRY',    12);
 
 // define('COORD_SUN',        200);
 // define('COORD_PLANET',     201);
-
-
-
 
 class Coordinate
 {
