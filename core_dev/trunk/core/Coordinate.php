@@ -69,6 +69,21 @@ class Coordinate
         return SqlObject::loadObject($row, __CLASS__);
     }
 
+    /**
+     * @return all most recent coordinates for objects not owned by $exclude_owner
+     */
+    public static function getOtherThan($type, $exclude_owner)
+    {
+        $q =
+        'SELECT MAX(time_saved) AS time_saved,id,owner,type,country,name,latitude,longitude,accuracy'.
+        ' FROM '.self::$tbl_name.
+        ' WHERE type = ? AND owner != ?'.
+        ' GROUP BY owner';
+        $list = Sql::pSelect($q, 'ii', COORD_EXACT, $exclude_owner);
+
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
     public static function store($obj)
     {
         return SqlObject::store($obj, self::$tbl_name, 'id');
