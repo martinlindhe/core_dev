@@ -2,9 +2,9 @@
 /**
  * $Id$
  *
- * Renders a set of views into a XML document (XML, XHTML, VoiceXML)
+ * Renders a set of views into a XML document (XHTML, HTML5)
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -18,6 +18,8 @@ require_once('Url.php');
 class XmlDocumentHandler extends CoreBase
 {
     static $_instance;                       ///< singleton
+
+    protected $html_mode     = 'xhtml';      ///< Defaults to XHTML 1.0 Transitional
 
     private $design_head;
     private $design_foot;
@@ -72,6 +74,11 @@ class XmlDocumentHandler extends CoreBase
 
         if (!$this->coredev_root)
             $this->setRelativeCoreDevUrl('core_dev/');
+    }
+
+    public function setHtmlMode($s)
+    {
+        $this->html_mode = $s;
     }
 
     /** @return relative URL for current website */
@@ -337,15 +344,25 @@ class XmlDocumentHandler extends CoreBase
 
         if ($this->enable_design)
         {
-            echo
-//            '<!DOCTYPE html>'."\n";  //HTML 5
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
+            switch ($this->html_mode) {
+            case 'xhtml': // XHTML 1.0 Transitional
+                echo
+                '<!DOCTYPE html'.
+                ' PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'.
+                ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n".
+                '<html'.
+                ' xmlns="http://www.w3.org/1999/xhtml"';
+                break;
 
-            echo
-            '<html'.
-//            ' manifest="cache.manifest"'.   // The "HTML5" manifest="cache.manifest" property on the <html> tag is how the browser knows that we want to cache this web page offline.
-            ' xml:lang="'.$this->language_code.'" lang="'.$this->language_code.'"'.
-            ' xmlns="http://www.w3.org/1999/xhtml"';
+            case 'html5': // HTML 5
+                echo
+                '<!DOCTYPE html>'."\n".
+                '<html';
+    //            ' manifest="cache.manifest"'.   // The "HTML5" manifest="cache.manifest" property on the <html> tag is how the browser knows that we want to cache this web page offline.
+                break;
+            }
+
+//            ' xml:lang="'.$this->language_code.'" lang="'.$this->language_code.'"'
 
             foreach ($this->xmlns as $name => $uri)
                 echo ' xmlns:'.$name.'="'.$uri.'"';
