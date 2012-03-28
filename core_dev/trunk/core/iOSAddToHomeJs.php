@@ -6,6 +6,8 @@
  *
  * https://github.com/cubiq/add-to-homescreen
  * http://cubiq.org/add-to-home-screen
+ *
+ * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
 class iOSAddToHomeJs
@@ -18,10 +20,11 @@ class iOSAddToHomeJs
         $header = XhtmlHeader::getInstance();
 
         $header->embedJs(
-        'var addToHomeConfig = {'.
+        'var addToHomeConfig='.
+        '{'.
             'touchIcon:true,'. // show <link rel="apple-touch-icon"> image in popup?
             'lifespan:10000,'. // = 10s
-            'message:"Lägg till denna app på din %device: tryck på %icon och därefter <strong>Lägg till på hemskärmen</strong>."'.
+            'message:"Lägg till denna app på din %device: tryck på %icon och sedan <strong>Lägg till på hemskärmen</strong>."'.
             // 'returningVisitor:true,'.
             // 'expire:2,'.
             // 'animationIn:"bubble",'.

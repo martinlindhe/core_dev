@@ -212,12 +212,14 @@ class SqlObject
     }
 
     /**
-     * If object exists with the same name as field in $field_name, update that item
+     * @param $field_name if object exists with this name, then update that item
      */
     static function store($obj, $tblname, $field_name = 'id')
     {
-        if (SqlObject::idExists($obj->$field_name, $tblname, $field_name))
+        if ($obj->$field_name && SqlObject::idExists($obj->$field_name, $tblname, $field_name))
         {
+//            throw new exception ('obj fieldname: '.$obj->$field_name.' tbl '.$tblname);
+
             sqlObject::updateId($obj, $tblname, $field_name);
             return $obj->id;
         }
