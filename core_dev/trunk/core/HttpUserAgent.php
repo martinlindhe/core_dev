@@ -64,7 +64,7 @@ class HttpUserAgent
     /**
      * @return true if UA is a iOS device
      */
-    public static function isIOS($s)
+    public static function isIOS($s = '')
     {
         $b = self::getBrowser($s);
         if ($b->os == 'iPhone' || $b->os == 'iPod' || $b->os == 'iPad')
