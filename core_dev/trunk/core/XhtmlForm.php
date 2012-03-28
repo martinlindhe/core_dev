@@ -238,6 +238,9 @@ class XhtmlForm
     /** Adds a input field to the form */
     function addInput($name, $text, $val = '', $width = 0, $maxlen = 0)
     {
+        if (!is_numeric($width) || !is_numeric($maxlen))
+            throw new Exception ('bad input');
+
         $o = new XhtmlComponentInput();
         $o->name   = $name;
         $o->value  = $val;
@@ -249,6 +252,9 @@ class XhtmlForm
     /** Adds a password field to the form */
     function addPassword($name, $text, $width = 0, $maxlen = 0)
     {
+        if (!is_numeric($width) || !is_numeric($maxlen))
+            throw new Exception ('bad input');
+
         $o = new XhtmlComponentPassword();
         $o->name   = $name;
         $o->width  = $width;
@@ -259,6 +265,9 @@ class XhtmlForm
     /** Adds a textarea to the form */
     function addTextarea($name, $text = '', $val = '', $width = 300, $height = 70)
     {
+        if (!is_numeric($width) || !is_numeric($height))
+            throw new Exception ('bad input');
+
         $o = new XhtmlComponentTextarea();
         $o->name   = $name;
         $o->value  = $val;

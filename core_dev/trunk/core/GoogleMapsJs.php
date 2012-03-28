@@ -30,6 +30,8 @@ class GoogleMapMarker
     var $longitude;
     var $tooltip;
     var $icon;
+    var $zIndex;
+    var $flat = false;
 
     function __construct($lat = 0, $lng = 0)
     {
@@ -110,6 +112,8 @@ class GoogleMapsJs
                     'position:new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
                     ($m->icon ? 'icon:"'.$m->icon.'",' : '').
                     ($m->tooltip ? 'title:"'.$m->tooltip.'",' : '').
+                    ($m->zIndex ? 'zIndex:'.$m->zIndex.',' : '').
+                    ($m->flat ? 'flat:true,' : '').
                     'map:myMap'.
                 '});';
 
