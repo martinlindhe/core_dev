@@ -30,6 +30,7 @@ class XhtmlForm
     protected $elems          = array();
     protected $url_handler;              ///< sends form to a different url
     protected $autocomplete   = true;    ///< tell browser to suggest autocomplete data of this form?
+    protected $title;                    ///< optional form title
 
     protected $file_upload    = false;
     protected $handled        = false;   ///< true when form data has been processed by callback function
@@ -99,6 +100,8 @@ class XhtmlForm
 
         throw new Exception ('element '.$s.' not defined');
     }
+
+    function setTitle($s) { $this->title = $s; }
 
     /**
      * Processes the form submit. Is called automatically from render() if not called before
@@ -445,6 +448,7 @@ class XhtmlForm
         ' name="'.$this->name.'"'.
         (!$this->autocomplete ? ' autocomplete="off"' : '').
         ($this->id          ? ' id="'.$this->id.'"' : '').
+        ($this->title       ? ' title="'.$this->title.'"' : '').
         ($this->file_upload ? ' enctype="multipart/form-data"' : '').
         ($this->js_onsubmit ? ' onsubmit="'.$this->js_onsubmit.'"' : '').
         '>';
