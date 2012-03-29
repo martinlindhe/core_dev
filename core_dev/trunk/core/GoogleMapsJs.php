@@ -90,9 +90,9 @@ class GoogleMapsJs
         $header->includeJs(
             'http://maps.google.com/maps/api/js'.
             '?key='.$this->api_key.
-            ($this->lang   ? '&language='.$this->lang : '').
-            ($this->region ? '&region='.$this->region : '').
-            '&sensor='.sbool($this->detect_location)
+            ($this->lang   ? '&amp;language='.$this->lang : '').
+            ($this->region ? '&amp;region='.$this->region : '').
+            '&amp;sensor='.sbool($this->detect_location)
         );
 
         $div_id = 'gmap_'.mt_rand();

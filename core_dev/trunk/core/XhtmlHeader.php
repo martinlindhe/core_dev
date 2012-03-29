@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Generates a XHTML 1.x compilant header
+ * Generates a HTML header
  *
  * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
@@ -162,7 +162,9 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if ($this->title)
             $res .= '<title>'.$this->title.'</title>';
 
-        $res .= '<meta http-equiv="content-type" content="text/html;charset=utf-8"/>';
+        // according to http://code.google.com/p/doctype-mirror/wiki/MetaCharsetAttribute, all major browsers support the short-form <meta charset>
+        $res .= '<meta charset="utf-8"/>';
+//        $res .= '<meta http-equiv="content-type" content="text/html;charset=utf-8"/>';   // XHTML 1.0, "long form"
 
         foreach ($this->meta_tags as $o)
             $res .= '<meta name="'.$o->name.'" content="'.$o->val.'"/>';

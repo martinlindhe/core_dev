@@ -310,7 +310,7 @@ class Playlist extends CoreList
             $res .=
             '<tr><td>'.
             '<h2>'.$title.'</h2>'.
-            $item->Timestamp->getRelative().'<br/>'.
+            ($item->Timestamp ? $item->Timestamp->getRelative().'<br/>' : '').
             ($item->thumbnail ? '<img src="'.$item->thumbnail.'" width="320" style="float: left; padding: 10px;"/>' : '').
             ($item->desc ? '<p>'.$item->desc.'</p>' : '').
             ($item->Duration ? t('Duration').': '.$item->Duration->render().'<br/>' : '').

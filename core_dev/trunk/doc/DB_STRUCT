@@ -168,3 +168,13 @@ tblHttpCache
     time_saved
     raw
 
+
+tblCoordinate        XXXX-later! does mysql (5.5+) have some better datatype to store coords?
+    id
+    owner
+    type           COORD_*
+    country        2-letter country code  XXXXX this is google response, whats the ISO naming standard called again...
+    name           localized name of the place (according to Google/other result)
+    latitude       double (WGS84)
+    longitude      double
+    time_saved
