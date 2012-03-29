@@ -86,6 +86,15 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
+    public static function getName($id)
+    {
+        $q =
+        'SELECT name FROM '.self::$tbl_name.
+        ' WHERE id = ?'.
+        ' AND time_deleted IS NULL';
+        return Sql::pSelectItem($q, 'i', $id);
+    }
+
     public static function getByName($name)
     {
         $q =
