@@ -39,13 +39,14 @@ class XhtmlForm
     protected $css_table      = 'border:1px solid;';
     protected $js_onsubmit;              ///< js to execute on form submit
 
-    function __construct($name = '', $url_handler = '')
+    function __construct($name = '', $id = '', $url_handler = '')
     {
         if ($name)
             $this->name = $name;
         else
             $this->name = 'frm'.mt_rand();
 
+        $this->id = $id;
         $this->url_handler = $url_handler;
     }
 
