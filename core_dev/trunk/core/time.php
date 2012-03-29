@@ -19,18 +19,18 @@ require_once('sql_misc.php');
  * @param $sql_time SQL timestamp
  * @return text string representing how long ago this timestamp occured
  */
-function ago($sql_time)
+function ago($sql_time, $past = 'ago', $future = 'in', $just_now = 'just now')
 {
     $old_time  = ts( sql_datetime($sql_time) );
     $curr_time = time();
 
     if ($curr_time == $old_time)
-        return 'just now';
+        return $just_now;
 
     if ($curr_time >= $old_time)
-        return elapsed_seconds($curr_time - $old_time, 0).' ago';
+        return elapsed_seconds($curr_time - $old_time, 0).' '.$past;
 
-    return 'in '.elapsed_seconds($old_time - $curr_time, 0);
+    return $future.' '.elapsed_seconds($old_time - $curr_time, 0);
 }
 
 /**

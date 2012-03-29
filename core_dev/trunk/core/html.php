@@ -9,6 +9,8 @@
 
 require_once('XmlDocumentHandler.php');
 
+require_once('XhtmlComponentA.php');
+
 //STATUS: wip
 
 //TODO in js_reload() & js_redirect(): throw exception if server outputted errors during this page load. how to check that?

@@ -180,19 +180,8 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
                 ($o->title ? ' title="'.$o->title.'"' : '').
                 '/>';
 
-        // margin and padding on body element can introduce errors in determining element position and are not recommended
-        // height:100% is needed for google maps js widget
-        $res .= css_embed(
-        'html{'.
-            'height:100%'.
-        '}'.
-        'body{'.
-            'height:100%;'.
-            'margin:0;'.
-            'padding:0'.
-        '}'.
-        $this->embed_css
-        );
+        if ($this->embed_css)
+            $res .= css_embed($this->embed_css);
 
         $js = '';
 
@@ -216,7 +205,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         foreach ($this->include_js_last as $uri)
             $res .= '<script type="text/javascript" src="'.$uri.'"></script>';
 
-        $res .= '</head>';
+        $res .= '</head>'."\n";
 
         $res .= '<body class="yui-skin-sam">'."\n"; // required for YUI
 
