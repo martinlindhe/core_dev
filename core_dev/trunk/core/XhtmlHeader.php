@@ -88,6 +88,11 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         if (substr($uri, 0, 1) != '/')
             $uri = relurl($uri);
 
+        // dont include the same js multiple times
+        foreach ($this->include_js as $chk_uri)
+            if ($chk_uri == $uri)
+                return false;
+
         $this->include_js[] = $uri;
     }
 
