@@ -316,7 +316,7 @@ function randstr($len)
  */
 function numbers_only($s) //XXXX FIXME use a regexp   FIXME rename to is_digits()
 {
-    if (!trim($s))
+    if (strlen($s) == 0)
         return false;
 
     $ok = array('0','1','2','3','4','5','6','7','8','9');
