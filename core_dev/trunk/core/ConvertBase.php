@@ -57,6 +57,9 @@ abstract class ConvertBase
      */
     function getShortcode($s, $lcase = true)
     {
+        if (!empty($this->lookup[$s]))
+            return $this->lookup[$s];
+
         if ($lcase)
             $s = strtolower(trim($s));
         else
