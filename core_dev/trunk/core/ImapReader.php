@@ -12,7 +12,6 @@
 
 //STATUS: wip - expose in GetMail interface. move getMail() logic from here to GetMail class
 
-//TODO: ability to use SSL to connect to server, see imap_open()
 //FIXME: cant find a way to specify connection timeout
 
 require_once('MimeReader.php');
