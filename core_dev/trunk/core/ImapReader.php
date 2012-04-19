@@ -7,7 +7,7 @@
  * References:
  * http://tools.ietf.org/html/rfc3501
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
  */
 
 //STATUS: wip - expose in GetMail interface. move getMail() logic from here to GetMail class
@@ -27,6 +27,7 @@ class ImapReader extends CoreBase
     private $password;
     private $emails    = array(); ///< array of EMail objects
     private $tot_mails = 0;
+    private $use_ssl   = false;
 
     function __construct()
     {
@@ -39,6 +40,8 @@ class ImapReader extends CoreBase
     function setPassword($s) { $this->password = $s; }
     function setPort($n) { $this->port = $n; }
 
+    function useSsl($b) { $this->use_ssl = $b; }
+
     function __destruct()
     {
         $this->disconnect();
@@ -46,8 +49,11 @@ class ImapReader extends CoreBase
 
     private function connect()
     {
-        $this->handle = imap_open('{'.$this->server.':'.$this->port.'/imap/novalidate-cert}INBOX', $this->username, $this->password);
-        if (!$this->handle) return false;
+        $inbox = '{'.$this->server.':'.$this->port.'/imap/'.($this->use_ssl ? 'ssl': 'novalidate-cert').'}INBOX';
+
+        $this->handle = imap_open($inbox, $this->username, $this->password);
+        if (!$this->handle)
+            return false;
 
         return true;
     }
