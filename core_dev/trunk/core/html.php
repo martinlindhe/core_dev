@@ -100,7 +100,7 @@ function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
     $a = new XhtmlComponentA();
     $a->href = relurl($url);
-    $a->content = htmlspecialchars($text);
+    $a->content = $text;
     $a->target = $target;
     $a->onClick($onclick);
     $a->class = $class;
