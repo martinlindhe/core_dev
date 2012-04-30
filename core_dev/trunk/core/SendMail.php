@@ -10,7 +10,7 @@
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
  * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -18,7 +18,6 @@
 //TODO: untangle smtp class, create a new connect() method
 //XXXX: why are stuff static arrays?
 
-require_once('CoreBase.php');
 require_once('SmtpClient.php');
 require_once('network.php'); //for is_email()
 require_once('files.php'); //for file_get_mime_by_suffix()
@@ -31,7 +30,7 @@ class MailAttachment
     var $mimetype;
 }
 
-class SendMail extends CoreBase
+class SendMail
 {
     protected static $_instance; ///< singleton
 
@@ -51,12 +50,17 @@ class SendMail extends CoreBase
     protected static $html        = false;
     protected static $attachments = array();  ///< MailAttachment objects
 
+    protected $debug = false;
+
     private function __construct()
     {
         set_time_limit(0);
+        mb_internal_encoding('UTF-8');    //XXX: required for utf8-encoded text (php 5.2)
     }
 
     private function __clone() {}      //singleton: prevent cloning of class
+
+    public function setDebug($b) { $this->debug = $b; }
 
     public static function getInstance()
     {
@@ -85,28 +89,28 @@ class SendMail extends CoreBase
         self::$attachments = array();
     }
 
-    function setServer($server = '', $username = '', $password = '', $port = 25)
+    function setServer($server = '') { $this->server_host = $server; }
+
+    function setPort($port = 25) { $this->server_port = $port; }
+
+    function setUsername($s)
     {
-        mb_internal_encoding('UTF-8');    //XXX: required for utf8-encoded text (php 5.2)
-
-        $this->server_host = $server;
-        $this->server_port = $port;
-        $this->username    = $username;
-        $this->password    = $password;
-
-        self::$from_adr = $username;
-
-        $this->smtp = new SmtpClient($server, $username, $password, $port);
+        $this->username = $s;
+        self::$from_adr = $s;
     }
+
+    function setPassword($s) { $this->password = $s; }
 
     private function connect()
     {
-        if ($this->getDebug())
-            $this->smtp->debug = true;
-
         if (!$this->server_host)
             // throw new Exception ('No email server configured');
             return false;
+
+        $this->smtp = new SmtpClient($this->server_host, $this->username, $this->password, $this->server_port);
+
+        if ($this->debug)
+            $this->smtp->debug = true;
 
         if (!$this->smtp->login())
             throw new Exception ('Cant connect to smtp server '.$this->server_host.':'.$this->server_port);

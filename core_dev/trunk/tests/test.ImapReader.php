@@ -6,12 +6,13 @@ require_once('core.php');
 require_once('CoreBase.php');
 require_once('ImapReader.php');
 
+
+// Google IMAP example
 $mail = new ImapReader();
 $mail->setServer('imap.gmail.com');
 $mail->setPort(993); // SSL port
 $mail->setUsername('xxx@gmail.com');
 $mail->setPassword('pwd');
-
 $mail->useSsl(true);
 
 

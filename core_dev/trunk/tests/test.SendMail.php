@@ -6,43 +6,29 @@ require('core.php');
 require('SendMail.php');
 
 
-
-
+// Gmail example
 $mail = SendMail::getInstance();
-$mail->setServer('mail.unicorn.se');
-$mail->setFrom('test@unicorn.se', 'TEST');
+//$mail->setDebug(true);
+$mail->setServer('smtp.gmail.com');
+$mail->setUsername('gmail-username');
+$mail->setPassword('password');
+$mail->setPort(587); // TLS/STARTTLS
+
+$mail->setFrom('martin@unicorn.se', 'martin testar');
 $mail->setReplyTo('noreply@unicorn.se');
 
 
-
-
-$msg ='abc åäö 123';
-
-
-//$arr = array('martin@unicorn.se', 'ml@unicorn.se');
-$arr = "eva-lena@unicorn.se\r\n
-goran.utbult@gmail.com\r\n
-";
+$arr = array('martin@unicorn.se','martin@startwars.org');
 $mail->addRecipients($arr);
 
-if (count($mail->getRecipients()) != 3) echo "FAIL 1\n";
+if (count($mail->getRecipients()) != 2) echo "FAIL 1\n";
 
 
 
 $mail->setSubject('message åäö subject');
-$mail->attachFile('/home/ml/Desktop/bilder/167968_193900863954437_140855739258950_730662_4411055_n.jpg');
-$mail->send($msg);
+//$mail->attachFile('/home/ml/Desktop/bilder/167968_193900863954437_140855739258950_730662_4411055_n.jpg');
 
-
-
-//---
-
-
-$mail = SendMail::getInstance();
-$mail->addRecipients('ml@unicorn.se');
-
-
-$mail->attachFile('/home/ml/Desktop/Screenshot.png');
+$msg ='abc åäö 123';
 $mail->send($msg);
 
 
