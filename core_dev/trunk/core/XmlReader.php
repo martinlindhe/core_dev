@@ -42,7 +42,7 @@ class CoreXmlReader extends XMLReader
                 echo 'http status: '.$h->getStatus()."\n";
                 echo 'data len: '.strlen($raw).' bytes'."\n";
                 echo dh( substr($raw, 0, 100) );
-                throw new Exception ('RssReader->parse FAIL: cant parse feed from '.$url);
+                throw new Exception ('cant parse feed from '.$url);
                 return false;
             }
         }

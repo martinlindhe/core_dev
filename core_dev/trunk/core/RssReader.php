@@ -46,7 +46,12 @@ class RssReader extends CoreBase
 
     function parse($data)
     {
+        $data = trim($data);
+        if (!$data)
+            return false;
+
         $this->reader = new CoreXmlReader();
+
         $this->reader->parse($data);
 
         while ($this->reader->read())
@@ -159,7 +164,7 @@ class RssReader extends CoreBase
                 $url = str_replace("\xC3\xBC", '%C3%BC', $url); // ü
                 $item->setUrl( $url );
                 break;
-  
+
             case 'pubdate':
             case 'dc:date': // XXX non standard tag, <dc:date>2012-02-01 05:50:00</dc:date>
                 $item->setTimestamp( $this->reader->readValue() );
