@@ -94,12 +94,7 @@ class SendMail
 
     function setPort($port) { $this->port = $port; }
 
-    function setUsername($s)
-    {
-        $this->username = $s;
-        self::$from_adr = $s;
-    }
-
+    function setUsername($s) { $this->username = $s; }
     function setPassword($s) { $this->password = $s; }
 
     private function connect()
