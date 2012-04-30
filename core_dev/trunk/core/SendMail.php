@@ -15,7 +15,6 @@
 
 //STATUS: wip
 
-//TODO: untangle smtp class, create a new connect() method
 //XXXX: why are stuff static arrays?
 
 require_once('SmtpClient.php');
@@ -35,11 +34,13 @@ class SendMail
     protected static $_instance; ///< singleton
 
     protected $smtp;                         ///< SmtpClient object
-    protected $version            = 'core_dev Sendmail 0.9';
-    protected $connected          = false;
+    protected $version          = 'core_dev Sendmail 0.9';
+    protected $connected        = false;
 
-    protected $server_host, $server_port;
-    protected $username, $password;
+    protected $host;
+    protected $port             = 25;
+    protected $username;
+    protected $password;
 
     protected static $from_adr, $from_name;
     protected static $rply_adr, $rply_name;
@@ -72,7 +73,7 @@ class SendMail
         return self::$_instance;
     }
 
-    function getServer() { return $this->server_host; }
+    function getServer() { return $this->host; }
 
     function getRecipients() { return self::$to_adr; }
 
@@ -89,9 +90,9 @@ class SendMail
         self::$attachments = array();
     }
 
-    function setServer($server = '') { $this->server_host = $server; }
+    function setServer($server = '') { $this->host = $server; }
 
-    function setPort($port = 25) { $this->server_port = $port; }
+    function setPort($port) { $this->port = $port; }
 
     function setUsername($s)
     {
@@ -103,17 +104,16 @@ class SendMail
 
     private function connect()
     {
-        if (!$this->server_host)
-            // throw new Exception ('No email server configured');
-            return false;
+        if (!$this->host)
+            throw new Exception ('No email server configured');
 
-        $this->smtp = new SmtpClient($this->server_host, $this->username, $this->password, $this->server_port);
+        $this->smtp = new SmtpClient($this->host, $this->username, $this->password, $this->port);
 
         if ($this->debug)
             $this->smtp->debug = true;
 
         if (!$this->smtp->login())
-            throw new Exception ('Cant connect to smtp server '.$this->server_host.':'.$this->server_port);
+            throw new Exception ('Cant connect to smtp server '.$this->host.':'.$this->port);
 
         $this->connected = true;
         return true;
