@@ -269,28 +269,39 @@ class Playlist extends CoreList
         foreach ($this->getItems() as $item)
         {
             $res .=
-            "# ".($item->getTitle() ? $item->getTitle() : 'Untitled track')."\n";
+            "# ".($item->getTitle() ? $item->getTitle() : 'Untitled track')." (".sql_datetime($item->getTimestamp()).")\n";
+
+            $outfile = basename($item->Url);
+            $res .= "if [ ! -e ".$outfile." ]; then\n";
 
             switch (get_protocol($item->Url)) {
             case 'http':
-                $c = 'curl "'.$item->Url.'" --user-agent "'.$user_agent.'" -o '.basename($item->Url);
+                $c =
+                'curl'.
+                ' "'.$item->Url.'"'.
+                ' --user-agent "'.$user_agent.'"'.
+                ' --output '.$outfile;
                 break;
 
             case 'rtmp':
             case 'rtmpe':
-                $c = 'rtmpdump -r '.$item->Url.' -o '.basename($item->Url);
+                $c =
+                'rtmpdump'.
+                ' --verbose'.
+                ' --rtmp '.$item->Url.
+                ' --flv '.$outfile;
                 break;
 
             case 'rtsp':
                 /*
                 $c = 'mplayer'.
                 ' -dumpstream "'.$item->Url.'"'.
-                ' -dumpfile '.basename($item->Url);
+                ' -dumpfile '.$outfile;
                 */
 
                 $c = 'cvlc'.
                 ' --rtsp-tcp '.$item->Url.
-                ' --sout=file/mp4:'.basename($item->Url);
+                ' --sout=file/mp4:'.$outfile;
                 break;
 
             case 'mms':
@@ -298,13 +309,15 @@ class Playlist extends CoreList
                 ' --verbose'.
                 // ' --bandwidth='.(1024*1024*10). // 10 MiB/sec
                 ' "'.$item->Url.'"'.
-                ' '.basename($item->Url);
+                ' '.$outfile;
                 break;
 
             default:
                 throw new Exception ('unhandled protocol: '.get_protocol($item->Url) );
             }
-            $res .= $c."\n\n";
+            $res .=
+            "\t".$c."\n".
+            "fi\n\n";
         }
 
         return $res;
