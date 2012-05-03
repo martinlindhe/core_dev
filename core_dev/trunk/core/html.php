@@ -290,4 +290,29 @@ function countryFlag($s)
     return '<img src="'.relurl('core_dev/gfx/flags/'.$s.'.png').'" alt="'.$title.'" title="'.$title.'"/>';
 }
 
+/**
+ * Uses FLV Player Maxi from http://code.google.com/p/flvplayer/ to play requested video clip
+ */
+function embed_flv($vid_id)
+{
+    $pres_div = 'pres_div'.mt_rand();
+
+    $file = File::get($vid_id);
+
+    $flashvars  = array(
+    'flv' => '/coredev/file/'.$vid_id,
+    'autoload' => 0, 'showstop' => 1, 'showvolume' => 1, 'shortcut' => 0,
+    'buffermessage' => '',
+    'margin' => 2,
+    'bgcolor1' => '454545', 'bgcolor2' => '454545', 'playercolor' => '454545');
+
+    $thumbs = File::getByCategory(THUMB, $vid_id, $file->uploader);
+    if (count($thumbs) == 1)
+        $flashvars['startimage'] = '/coredev/file/'.$thumbs[0]->id;
+
+    return
+    '<div id="'.$pres_div.'"></div>'.
+    js_swfobject('/swf/player_flv_maxi.swf', $pres_div, 240, 182, $flashvars);
+}
+
 ?>

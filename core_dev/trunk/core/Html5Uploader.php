@@ -29,14 +29,14 @@ class Html5Uploader
 
         $header->embedCss(
         '#box{'.
-            'width:208px;'.
+            'width:300px;'.
             'background-color:#f60;'.
-            'border:1px solid #f60;'.
+            'border:2px solid #f60;'.
             '-webkit-border-radius:6px;'.
             '-moz-border-radius:6px;'.
             'border-radius:6px;'.
             'padding-bottom:10px;'.
-            'float:left;'.
+            //'float:left;'.
         '}'.
         '#box p{'.
             'font-size:10px;'.
@@ -44,19 +44,19 @@ class Html5Uploader
             'margin:0px;'.
         '}'.
         '#drop{'.
-            'width:208px;'.
+            'width:100%;'.
             'height:200px;'.
             'background-color:#f90;'.
         '}'.
         '#status{'.
-            'width:200px;'.
+            'width:100%-10px;'.
             'height:25px;'.
             'font-size:10px;'.
             'color:#fff;'.
             'padding:5px;'.
         '}'.
         '#list{'.
-            'width:210px;'.
+            'width:100%;'.
             'font-size:10px;'.
             'float:left;'.
             'margin-left:10px;'.

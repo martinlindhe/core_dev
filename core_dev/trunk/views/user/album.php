@@ -55,7 +55,7 @@ case 'show':
     if ($album->owner != 0 && $album->owner != $this->child)
         throw new Exception ('epic HACK attempt');
 
-    echo '<h1>Photo album '.$album->name.' by user #'.$this->child.'</h1>';
+    echo '<h1>Photo album '.$album->name.' by '.UserLink::render($this->child).'</h1>';
     echo 'Created '.ago($album->time_created).'<br/>';
 
     // shows album content
@@ -113,7 +113,7 @@ case 'upload':
     }
 
     if (!$this->child)
-        die('XXX no album specified');
+        die('nonoAAA');
 
     $album = PhotoAlbum::get($this->child);
     if ($album->owner != 0 && $album->owner != $session->id)
@@ -131,12 +131,17 @@ case 'upload':
     // only enable Html5Uploader for supported browsers
     $b = HttpUserAgent::getBrowser();
     if ($b->name == 'Firefox' || $b->name == 'Chrome')
-        echo '<h1>'.ahref('u/album/uploadmulti', $b->name.' detected, try the new drag & drop multi image uploader').'</h1>';
+        echo '<h1>'.ahref('u/album/uploadmulti/'.$this->child, $b->name.' detected, try the new drag & drop multi image uploader').'</h1>';
 
     break;
 
 case 'uploadmulti':
+    if (!$this->child)
+        die('nonow2');
+
     echo Html5Uploader::albumUploader($this->child);
+
+    echo ahref('u/album/show/'.$session->id.'/'.$this->child, 'Return to album');
     break;
 
 case 'new':
