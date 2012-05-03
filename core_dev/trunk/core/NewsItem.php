@@ -71,6 +71,7 @@ class NewsItem extends CoreBase
     function getHiQualityVideo()
     {
         $best_w = 0;
+        $best_bitrate = 0;
         $best_id = false;
 
         $best_type = '';
@@ -80,15 +81,20 @@ class NewsItem extends CoreBase
             {
                 $cur_type = get_protocol($m->Url);
 
-                if ($m->video_width > $best_w) {
+                if ($m->bitrate > $best_bitrate) {
+                    $best_bitrate = $m->bitrate;
+                    $best_id = $m;
+                    $best_type = get_protocol($m->Url);
+                    echo 'setting to bitrate '.$best_bitrate.', type '.$best_type."\n";
+                } else if ($m->video_width > $best_w) {
                     $best_w = $m->video_width;
                     $best_id = $m;
                     $best_type = get_protocol($m->Url);
-                    // echo 'setting to width '.$best_w.', type '.$best_type."\n";
+                    echo 'setting to width '.$best_w.', type '.$best_type."\n";
                 } else if ($cur_type != $best_type && !in_array( $cur_type, array('http', 'mms', 'rtsp'))) {
                     $best_type = get_protocol($m->Url);
                     $best_id = $m;
-                    // echo 'setting to type '.$best_type."\n";
+                    echo 'setting to type '.$best_type."\n";
                 }
             }
 
