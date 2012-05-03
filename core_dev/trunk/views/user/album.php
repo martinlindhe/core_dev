@@ -139,6 +139,8 @@ case 'uploadmulti':
     if (!$this->child)
         die('nonow2');
 
+    echo '<h2>Multi image uploader</h2>';
+
     echo Html5Uploader::albumUploader($this->child);
 
     echo ahref('u/album/show/'.$session->id.'/'.$this->child, 'Return to album');

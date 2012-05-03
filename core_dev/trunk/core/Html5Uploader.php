@@ -6,7 +6,7 @@
  * Verified to work with Firefox 8, Chrome 15
  */
 
-//XXXX test with Safari (should work)
+//TODO: test with Safari (should work)
 
 //STATUS: wip, dont work with IE (may work with IE10 when it is released)
 
@@ -30,28 +30,19 @@ class Html5Uploader
         $header->embedCss(
         '#box{'.
             'width:300px;'.
-            'background-color:#f60;'.
-            'border:2px solid #f60;'.
+            'border:2px solid #454545;'.
+            'border-radius:6px;'.
             '-webkit-border-radius:6px;'.
             '-moz-border-radius:6px;'.
-            'border-radius:6px;'.
-            'padding-bottom:10px;'.
-            //'float:left;'.
-        '}'.
-        '#box p{'.
-            'font-size:10px;'.
-            'padding:5px;'.
-            'margin:0px;'.
         '}'.
         '#drop{'.
             'width:100%;'.
             'height:200px;'.
-            'background-color:#f90;'.
+            'background-color:#E5E5E5;'.
         '}'.
         '#status{'.
-            'width:100%-10px;'.
-            'height:25px;'.
             'font-size:10px;'.
+            'background-color:#2B2B2B;'.
             'color:#fff;'.
             'padding:5px;'.
         '}'.
@@ -62,14 +53,15 @@ class Html5Uploader
             'margin-left:10px;'.
         '}'.
         '.addedIMG{'.
-            'width:100px;'.
             'height:100px;'.
         '}'
         );
 
+        $txt = 'Drag the images from a folder to the area below ...';
+
         $res =
         '<div id="box">'.
-                '<div id="status">Drag the images from a folder to the area below ...</div>'.
+                '<div id="status">'.$txt.'</div>'.
                 '<div id="drop"></div>'.
         '</div>'.
         '<div id="list"></div>';
