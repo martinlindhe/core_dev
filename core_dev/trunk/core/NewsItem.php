@@ -71,16 +71,28 @@ class NewsItem extends CoreBase
     function getHiQualityVideo()
     {
         $best_w = 0;
-        $best = false;
+        $best_id = false;
+
+        $best_type = '';
 
         foreach ($this->media as $m)
             if ($m instanceof VideoResource)
-                if ($m->video_width >= $best_w) {
-                    $best_w = $m->video_width;
-                    $best = $m;
-                }
+            {
+                $cur_type = get_protocol($m->Url);
 
-        return $best;
+                if ($m->video_width > $best_w) {
+                    $best_w = $m->video_width;
+                    $best_id = $m;
+                    $best_type = get_protocol($m->Url);
+                    // echo 'setting to width '.$best_w.', type '.$best_type."\n";
+                } else if ($cur_type != $best_type && !in_array( $cur_type, array('http', 'mms', 'rtsp'))) {
+                    $best_type = get_protocol($m->Url);
+                    $best_id = $m;
+                    // echo 'setting to type '.$best_type."\n";
+                }
+            }
+
+        return $best_id;
     }
 
     /**

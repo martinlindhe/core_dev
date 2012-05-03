@@ -263,6 +263,8 @@ class Playlist extends CoreList
      */
     private function renderSh()
     {
+        $user_agent = 'QuickTime/7.6.2';
+
         $res = "# shell script downloader\n\n";
         foreach ($this->getItems() as $item)
         {
@@ -271,7 +273,7 @@ class Playlist extends CoreList
 
             switch (get_protocol($item->Url)) {
             case 'http':
-                $c = 'wget '.$item->Url;
+                $c = 'curl "'.$item->Url.'" --user-agent "'.$user_agent.'" -o '.basename($item->Url);
                 break;
 
             case 'rtmp':
@@ -279,8 +281,24 @@ class Playlist extends CoreList
                 $c = 'rtmpdump -r '.$item->Url.' -o '.basename($item->Url);
                 break;
 
+            case 'rtsp':
+                /*
+                $c = 'mplayer'.
+                ' -dumpstream "'.$item->Url.'"'.
+                ' -dumpfile '.basename($item->Url);
+                */
+
+                $c = 'cvlc'.
+                ' --rtsp-tcp '.$item->Url.
+                ' --sout=file/mp4:'.basename($item->Url);
+                break;
+
             case 'mms':
-                $c = 'mplayer -dumpstream '.$item->Url.' -dumpfile '.basename($item->Url);
+                $c = 'mimms'.
+                ' --verbose'.
+                // ' --bandwidth='.(1024*1024*10). // 10 MiB/sec
+                ' "'.$item->Url.'"'.
+                ' '.basename($item->Url);
                 break;
 
             default:
