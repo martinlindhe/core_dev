@@ -2,6 +2,8 @@
 /**
  * $Id$
  *
+ * For keeping vistor track of user profiles, photos etc
+ *
  * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
@@ -17,7 +19,7 @@ class Visit
 
     protected static $tbl_name = 'tblVisits';
 
-    static function store($obj)
+    public static function store($obj)
     {
         return SqlObject::storeUnique($obj, self::$tbl_name);
     }
@@ -28,7 +30,7 @@ class Visit
      * @param $owner_id
      * @param $ref_id
      */
-    static function create($type, $owner_id, $ref_id)
+    public static function create($type, $owner_id, $ref_id)
     {
         $o = new Visit();
         $o->type  = $type;
@@ -36,6 +38,16 @@ class Visit
         $o->ref   = $ref_id;
         $o->time  = sql_datetime( time() );
         self::store($o);
+    }
+
+    public static function getAll($type, $owner)
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE type = ? AND owner = ?';
+
+        $list = Sql::pSelect($q, 'ii', $type, $owner);
+        return $list;
     }
 
 }
