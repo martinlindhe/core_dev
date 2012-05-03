@@ -6,6 +6,7 @@
 require_once('Image.php'); // for showThumb()
 require_once('Bookmark.php');
 require_once('YuiLightbox.php');
+require_once('Visit.php');
 
 $session->requireLoggedIn();
 
@@ -22,6 +23,10 @@ if (!$user)
 if (Bookmark::exists(BOOKMARK_USERBLOCK, $session->id, $user_id)) {
     echo 'User has blocked you from access';
     return;
+}
+
+if ($user_id != $session->id) {
+    Visit::create(PROFILE, $user_id, $session->id);
 }
 
 echo '<h1>Profile for '.$user->name.'</h1>';
