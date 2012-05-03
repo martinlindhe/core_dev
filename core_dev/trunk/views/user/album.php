@@ -131,8 +131,12 @@ case 'upload':
     // only enable Html5Uploader for supported browsers
     $b = HttpUserAgent::getBrowser();
     if ($b->name == 'Firefox' || $b->name == 'Chrome')
-        echo Html5Uploader::albumUploader($this->child);
+        echo '<h1>'.ahref('u/album/uploadmulti', $b->name.' detected, try the new drag & drop multi image uploader').'</h1>';
 
+    break;
+
+case 'uploadmulti':
+    echo Html5Uploader::albumUploader($this->child);
     break;
 
 case 'new':
