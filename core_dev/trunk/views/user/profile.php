@@ -88,6 +88,8 @@ echo '<br/>';
 if ($session->id && $user_id != $session->id) {
     echo '&raquo; '.ahref('u/messages/send/'.$user_id, 'Send message').'<br/>';
 
+    echo '&raquo; '.ahref('u/poke/send/'.$user_id, 'Poke user').'<br/>';
+
     //XXX: FIXME move to rr-project view
     echo '&raquo; '.ahref('videomsg/send/'.$user_id, 'Send video message').'<br/>';
 

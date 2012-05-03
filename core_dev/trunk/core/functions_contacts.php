@@ -7,7 +7,9 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-//STATUS: working, but oo-rewrite using "tblShortcuts" is planned; 2011-08-24
+//STATUS: working, but deprecated. "bookmark to favorite user" exists in Bookmark.php
+
+//TODO: a OO version of full functionality with sending friend request
 
 throw new Exception ('functions_contacts is deprecated!!!');
 

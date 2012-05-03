@@ -103,7 +103,7 @@ case 'vote':
     break;
 
 default:
-    echo 'no such view: '.$this->owner;
+    echo 'no such view: '.$this->view;
 }
 
 
