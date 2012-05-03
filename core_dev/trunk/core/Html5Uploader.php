@@ -32,8 +32,6 @@ class Html5Uploader
             'width:300px;'.
             'border:2px solid #454545;'.
             'border-radius:6px;'.
-            '-webkit-border-radius:6px;'.
-            '-moz-border-radius:6px;'.
         '}'.
         '#drop{'.
             'width:100%;'.
@@ -42,9 +40,13 @@ class Html5Uploader
         '}'.
         '#status{'.
             'font-size:10px;'.
-            'background-color:#2B2B2B;'.
             'color:#fff;'.
             'padding:5px;'.
+            'background:#7F7F7F;'. // for non-css3 browsers
+            'filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#7F7F7F", endColorstr="#242424");'. // IE
+            'background: -webkit-gradient(linear, left top, left bottom, from(#7F7F7F), to(#242424));'. // webkit browsers
+            'background: -moz-linear-gradient(top, #7F7F7F, #242424);'. /* firefox 3.6+ */
+            'background: -o-linear-gradient(top, #7F7F7F, #242424);'. /* opera */
         '}'.
         '#list{'.
             'width:100%;'.
