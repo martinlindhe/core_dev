@@ -93,6 +93,17 @@ class UserList
         return $db->getMappedArray($q);
     }
 
+    static function getNewUsers($limit = 10)
+    {
+        $q =
+        'SELECT * FROM tblUsers'.
+        ' ORDER BY time_created DESC LIMIT '.intval($limit);
+
+        $list = Sql::pSelect($q);
+
+        return SqlObject::loadObjects($list, 'User');
+    }
+
 }
 
 ?>

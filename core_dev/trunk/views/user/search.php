@@ -29,8 +29,10 @@ case 'user':
     $form->setHandler('handleSearch');
 
     echo $form->render();
+    echo '<br/>';
 
-    echo ahref('u/users/online', 'Show users online');
+    echo '&raquo; '.ahref('u/users/online', 'Show users online').'<br/>';
+    echo '&raquo; '.ahref('u/users/newest', 'Show new members').'<br/>';
     break;
 
 default:
