@@ -295,7 +295,7 @@ function countryFlag($s)
  */
 function embed_flv($vid_id)
 {
-    $pres_div = 'pres_div'.mt_rand();
+    $div_id = 'cdflv'.mt_rand();
 
     $file = File::get($vid_id);
 
@@ -311,8 +311,8 @@ function embed_flv($vid_id)
         $flashvars['startimage'] = '/coredev/file/'.$thumbs[0]->id;
 
     return
-    '<div id="'.$pres_div.'"></div>'.
-    js_swfobject('/swf/player_flv_maxi.swf', $pres_div, 240, 182, $flashvars);
+    '<div id="'.$div_id.'"></div>'.
+    js_swfobject('/core_dev/swf/player_flv_maxi.swf', $div_id, 240, 182, $flashvars);
 }
 
 ?>

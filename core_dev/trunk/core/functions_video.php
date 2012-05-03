@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
+//STATUS: deprecated... use embed_flv() in html.php to embed a flash video/audio player instead
+
 /**
  * Embeds a video in a html page using Windows Media Player
  *
