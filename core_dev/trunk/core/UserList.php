@@ -2,12 +2,10 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
-
-//TODO: factor our sql from here
 
 require_once('User.php');
 
@@ -18,10 +16,8 @@ class UserList
      */
     static function getCount()
     {
-        $db = SqlHandler::getInstance();
-
         $q = 'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL';
-        return $db->pSelectItem($q);
+        return Sql::pSelectItem($q);
     }
 
     /**
@@ -30,11 +26,11 @@ class UserList
     static function onlineCount()
     {
         $session = SessionHandler::getInstance();
-        $db = SqlHandler::getInstance();
 
-        $q  = 'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL';
-        $q .= ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
-        return $db->getOneItem($q);
+        $q =
+        'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL'.
+        ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
+        return Sql::pSelectItem($q);
     }
 
     /**
@@ -45,13 +41,14 @@ class UserList
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
 
-        $q  = 'SELECT * FROM tblUsers WHERE time_deleted IS NULL';
+        $q = 'SELECT * FROM tblUsers WHERE time_deleted IS NULL';
 
         if ($filter)
             $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
 
-        $q .= ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
-        $q .= ' ORDER BY time_last_active DESC';
+        $q .=
+        ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)'.
+        ' ORDER BY time_last_active DESC';
 
         $list = $db->getArray($q);
         return SqlObject::loadObjects($list, 'User');
@@ -61,17 +58,21 @@ class UserList
      * @param $filter partial username matching
      * @return array of User objects
      */
-    static function getUsers($filter = '')  //XXXX use SqlObject
+    static function getUsers($filter = '')
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT * FROM tblUsers';
-        $q .= ' WHERE time_deleted IS NULL';
+        $q =
+        'SELECT * FROM tblUsers'.
+        ' WHERE time_deleted IS NULL';
 
-        if ($filter)
-            $q .= ' AND name LIKE "%'.$db->escape($filter).'%"';
+        if ($filter) {
+            $q .= ' AND name LIKE ?';
+            $list = Sql::pSelect($q, 's', '%'.$filter.'%');
+        } else {
+            $list = Sql::pSelect($q);
+        }
 
-        $list = $db->getArray($q);
         return SqlObject::loadObjects($list, 'User');
     }
 
@@ -82,8 +83,9 @@ class UserList
     {
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT id, name FROM tblUsers';
-        $q .= ' WHERE time_deleted IS NULL';
+        $q =
+        'SELECT id, name FROM tblUsers'.
+        ' WHERE time_deleted IS NULL';
 
         if ($filter)
             $q .= ' AND name LIKE "%'.$db->escape($filter).'%"';
