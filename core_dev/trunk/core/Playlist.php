@@ -273,10 +273,16 @@ class Playlist extends CoreList
             case 'http':
                 $c = 'wget '.$item->Url;
                 break;
+
             case 'rtmp':
             case 'rtmpe':
                 $c = 'rtmpdump -r '.$item->Url.' -o '.basename($item->Url);
                 break;
+
+            case 'mms':
+                $c = 'mplayer -dumpstream '.$item->Url.' -dumpfile '.basename($item->Url);
+                break;
+
             default:
                 throw new Exception ('unhandled protocol: '.get_protocol($item->Url) );
             }
