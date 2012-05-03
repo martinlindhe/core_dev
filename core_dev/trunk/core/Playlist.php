@@ -269,7 +269,7 @@ class Playlist extends CoreList
         foreach ($this->getItems() as $item)
         {
             $res .=
-            "# ".($item->getTitle() ? $item->getTitle() : 'Untitled track')." (".sql_datetime($item->getTimestamp()).")\n";
+            "# ".($item->title ? $item->title : 'Untitled track')." (".sql_datetime($item->getTimestamp()).")\n";
 
             $outfile = basename($item->Url);
             $res .= "if [ ! -e ".$outfile." ]; then\n";
@@ -287,7 +287,7 @@ class Playlist extends CoreList
             case 'rtmpe':
                 $c =
                 'rtmpdump'.
-                ' --verbose'.
+                // ' --verbose'.
                 ' --rtmp '.$item->Url.
                 ' --flv '.$outfile;
                 break;
@@ -341,7 +341,7 @@ class Playlist extends CoreList
 
             $title .=
                 ($item->Url ? '<a href="'.htmlentities($item->Url).'">' : '').
-                ($item->getTitle() ? $item->getTitle() : 'Untitled entry').
+                ($item->title ? $item->title : 'Untitled entry').
                 ($item->Url ? '</a>' : '');
 
             $res .=
