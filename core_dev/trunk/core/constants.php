@@ -29,6 +29,7 @@ define('POLL',            11);  ///< category is owned by a poll
 define('THUMB',           12);  ///< image is a thumbnail for a video clip (tblFiles.category = owner video)
 define('USERDATA_OPTION', 20);  ///< used to hold options in tblSettings for UserDataFieldOptions
 define('PRIV_MSG',        21);  ///< a private text message
+define('PROFILE',         22);  ///< a user profile (used by Visit.php)
 
 define('RECORDING_PRES',  30);  ///< stream recording of a user presentation
 define('RECORDING_MSG',   31);  ///< stream recording of a private message
