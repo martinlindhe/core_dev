@@ -21,6 +21,18 @@ case 'send':
     echo ahref('u/profile/'.$this->child, 'Continue');
     break;
 
+case 'show':
+    // shows my recieved pokes
+    echo '<h1>My recieved pokes</h1>';
+
+    $list = Poke::getPokes($session->id);
+
+    foreach ($list as $poke) {
+        echo 'Poke from '.UserLink::render($poke->from).' sent at '.$poke->time.'<br/>';
+    }
+
+    break;
+
 default:
     echo 'no such view: '.$this->owner;
 }

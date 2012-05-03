@@ -38,16 +38,23 @@ class Poke
         self::store($o);
     }
 
-    public static function getMyPokes()
+    public static function getPokes($to)
     {
-        $session = SessionHandler::getInstance();
-
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE to = ?';
+        ' WHERE `to` = ?';
 
-        $list = Sql::pSelect($q, 'i', $session->id);
-        return $list;
+        $list = Sql::pSelect($q, 'i', $to);
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    public static function getUnseenCount($to)
+    {
+        $q =
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE `to` = ?';
+
+        return Sql::pSelectItem($q, 'i', $to);
     }
 
 }
