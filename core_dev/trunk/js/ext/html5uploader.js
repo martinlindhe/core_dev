@@ -1,5 +1,6 @@
 // from http://code.google.com/p/html5uploader/ at 2011-11-25, see core/Html5Uploader.php
 // 2011-11-25: added fix from http://code.google.com/p/html5uploader/issues/detail?id=10#c2
+// 2012-05-03: added fix from http://code.google.com/p/html5uploader/issues/detail?id=21
 
 /*
 *   Upload files to the server using HTML 5 Drag and drop the folders on your local computer
@@ -20,7 +21,7 @@
 function uploader(place, status, targetPHP, show) {
 
     // Upload image files
-    upload = function(file) {
+    var upload = function(file) {
 
         // Firefox 3.6, Chrome 6, WebKit
         if(window.FileReader) {
