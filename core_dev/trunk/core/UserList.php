@@ -11,24 +11,29 @@ require_once('User.php');
 
 class UserList
 {
+    protected static $tbl_name = 'tblUsers';
+
     /**
      * @return total number of users (excluding deleted ones)
      */
-    static function getCount()
+    public static function getCount()
     {
-        $q = 'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL';
+        $q =
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE time_deleted IS NULL';
         return Sql::pSelectItem($q);
     }
 
     /**
      * @return number of users online
      */
-    static function onlineCount()
+    public static function onlineCount()
     {
         $session = SessionHandler::getInstance();
 
         $q =
-        'SELECT COUNT(*) FROM tblUsers WHERE time_deleted IS NULL'.
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE time_deleted IS NULL'.
         ' AND time_last_active >= DATE_SUB(NOW(),INTERVAL '.$session->online_timeout.' SECOND)';
         return Sql::pSelectItem($q);
     }
@@ -36,12 +41,14 @@ class UserList
     /**
      * @return array of User objects for all users online
      */
-    static function getUsersOnline($filter = '')
+    public static function getUsersOnline($filter = '')
     {
         $session = SessionHandler::getInstance();
         $db = SqlHandler::getInstance();
 
-        $q = 'SELECT * FROM tblUsers WHERE time_deleted IS NULL';
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE time_deleted IS NULL';
 
         if ($filter)
             $q .= ' AND userName LIKE "%'.$db->escape($filter).'%"';
@@ -58,12 +65,12 @@ class UserList
      * @param $filter partial username matching
      * @return array of User objects
      */
-    static function getUsers($filter = '')
+    public static function getUsers($filter = '')
     {
         $db = SqlHandler::getInstance();
 
         $q =
-        'SELECT * FROM tblUsers'.
+        'SELECT * FROM '.self::$tbl_name.
         ' WHERE time_deleted IS NULL';
 
         if ($filter) {
@@ -79,12 +86,12 @@ class UserList
     /**
      * Returns a id->name array
      */
-    static function getFlat($filter = '')
+    public static function getFlat($filter = '')
     {
         $db = SqlHandler::getInstance();
 
         $q =
-        'SELECT id, name FROM tblUsers'.
+        'SELECT id, name FROM '.self::$tbl_name.
         ' WHERE time_deleted IS NULL';
 
         if ($filter)
@@ -93,10 +100,10 @@ class UserList
         return $db->getMappedArray($q);
     }
 
-    static function getNewUsers($limit = 10)
+    public static function getNewUsers($limit = 10)
     {
         $q =
-        'SELECT * FROM tblUsers'.
+        'SELECT * FROM '.self::$tbl_name.
         ' ORDER BY time_created DESC LIMIT '.intval($limit);
 
         $list = Sql::pSelect($q);
