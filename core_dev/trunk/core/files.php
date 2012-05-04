@@ -160,6 +160,34 @@ function dir_get_tree($outerDir)
 }
 
 /**
+ * @return string filename of one randomly select file, or false if no match
+ */
+function file_get_random($dir)
+{
+    $dir = realpath($dir);
+
+    $dirs = array_diff( scandir($dir), array('.', '..') );
+    $res = array();
+
+    foreach ($dirs as $d)
+    {
+        $p = $dir.'/'.$d;
+        if (is_dir($p) )
+            continue;
+
+        $res[] = $p;
+    }
+
+    if (!$res)
+        return false;
+
+    // get an random index:
+    $rand = mt_rand(0, count($res)-1);
+
+    return $res[$rand];
+}
+
+/**
  * Returns array with files filtered on extension
  *
  * @param $path path to directory to look in

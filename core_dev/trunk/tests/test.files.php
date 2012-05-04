@@ -43,4 +43,10 @@ $x = expand_arg_files('/var/log', array('*.log', '*.err') );
 d( $x );
 */
 
+
+/*
+$x = file_get_random('/home/ml/dev/martin/asterisk/recordings/mojo/');
+d($x);
+*/
+
 ?>
