@@ -8,7 +8,7 @@
 class CalendarEvent
 {
     protected $date;
-    protected $title;
+    var $title;
     var $timezone;
 
     function setDate($s) { $this->date = ts($s); }
