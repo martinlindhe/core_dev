@@ -17,7 +17,14 @@ $css =
 
 echo '<div id="'.$tempstore_div.'" style="'.$css.'">';
 
-foreach ($temp->getServerStats() as $host => $stat)
+$pool = $temp->getServerStats();
+if (!$pool) {
+    echo 'No server configured';
+    echo '</div>';
+    return;
+}
+
+foreach ($pool as $host => $stat)
 {
     echo 'Read: <b>'.byte_count($stat['bytes_read']).'</b><br/>';
     echo 'Written: <b>'.byte_count($stat['bytes_written']).'</b><br/>';
