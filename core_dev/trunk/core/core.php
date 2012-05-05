@@ -125,15 +125,12 @@ function ln()
  */
 function dp($str)
 {
-    global $config;
-
     if (is_array($str) || is_object($str))
         $str = serialize($str);
 
     error_log($str);
 
-    if (!empty($config['debug']))
-        error_log(date('[r] ').$str.PHP_EOL, 3, '/tmp/core_dev.log');
+    error_log(date('[r] ').$str.PHP_EOL, 3, '/tmp/core_dev.log');
 }
 
 /**
