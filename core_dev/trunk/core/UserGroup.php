@@ -132,8 +132,10 @@ class UserGroup
     {
         $session = SessionHandler::getInstance();
 
+        $creator_id = $session->id ? $session->id : 0;
+
         $q = 'INSERT INTO tblUserGroups SET createdBy = ?, timeCreated = NOW(), name = ?, level = ?';
-        return Sql::pInsert($q, 'isi', $session->id, $name, $level);
+        return Sql::pInsert($q, 'isi', $creator_id, $name, $level);
     }
 
     /**
