@@ -234,6 +234,36 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
 
         if ($this->type == SESSION_FACEBOOK)
             $this->facebook_id = $this->username;
+
+        if ($this->id && $this->ip && ($this->ip != client_ip()) )
+        {
+            // Logged in: Check if client ip has changed since last request, if so - log user out to avoid session hijacking
+            $msg = 'ERROR: Client IP changed for '.$this->username.', Old: '.$this->ip.', current: '.client_ip();
+            $error->add($msg);
+            dp($msg);
+            $this->end();
+
+        //    $session->errorPage();
+        }
+        else if ($this->id && $this->getLastActive() < (time() - $this->timeout))
+        {
+            // Check user activity - log out inactive user
+            $msg = 'Session timed out for '.$this->username.' after '.(time() - $this->getLastActive()).'s (timeout is '.($this->timeout).'s)';
+            $error->add($msg);
+            dp($msg);
+            $this->end();
+
+            //$session->showErrorPage();
+        }
+        else if ($this->id)
+        {
+            $this->setLastActive();
+        }
+        else if (!$this->id && $this->facebook_app_id)
+        {
+            // Handle facebook login
+            $this->handleFacebookLogin();
+        }
     }
 
     /** Logs out the user */

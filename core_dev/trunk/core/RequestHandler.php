@@ -110,12 +110,9 @@ class RequestHandler
         $error = ErrorHandler::getInstance();
 
         // automatically resumes session unless it is blacklisted
-        if (class_exists('SessionHandler') && !in_array($this->_controller, $this->exclude_session))
-        {
-            // resume session & handle login/logout/register requests to any page
-            //XXXX CLEANUP: move these to built in views
-            $view = new ViewModel( $page->getCoreDevPath().'views/core/handle_request.php', $this);
-            $page->attach( $view->render() ); // needs to be evaluated here in order to process requests properly
+        if (class_exists('SessionHandler') && !in_array($this->_controller, $this->exclude_session)) {
+            $session = SessionHandler::getInstance();
+            $session->start();
         }
 
         switch ($this->_controller) {
