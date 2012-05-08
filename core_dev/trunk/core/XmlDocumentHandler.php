@@ -249,19 +249,33 @@ class XmlDocumentHandler extends CoreBase
         $this->objs[] = $obj;
     }
 
+    /**
+     * Attaches a controller object to the beginning of the main body
+     */
+    function prepend($obj)
+    {
+        array_unshift($this->objs, $obj);
+    }
+
     function render()
     {
         ob_start();   //XXXX debug haxx, should be removed at some point
 
-        $out = '';
+        if ($this->enable_design)
+        {
+            if ($this->design_head)
+                $this->prepend(new ViewModel($this->design_head));
 
-        if ($this->enable_design && $this->design_head) {
-            $view = new ViewModel($this->design_head);
-            $out .= $view->render();
+            $this->prepend(new ViewModel('views/core/required_js.php'));
+
+            if ($this->design_foot)
+                $this->attach(new ViewModel($this->design_foot));
+
+            if ($this->enable_profiler)
+                $this->attach(new ViewModel('views/profiler/page.php'));
         }
 
-        $view = new ViewModel('views/core/required_js.php');
-        $out .= $view->render();
+        $out = '';
 
         foreach ($this->objs as $obj)
         {
@@ -269,7 +283,7 @@ class XmlDocumentHandler extends CoreBase
                 continue;
 
             if (is_string($obj)) {
-                //XXX hack to allow any text to be attached
+                //XXX hack to allow any text to be attached, should no longer be needed, 2012-05-08
 //                throw new Exception ('obj is string: '.$obj);
                 $out .= $obj;
                 continue;
@@ -278,27 +292,10 @@ class XmlDocumentHandler extends CoreBase
             if (!is_object($obj))
                 throw new Exception ('not an object: '.$obj);
 
-            $rc = new ReflectionClass($obj);
-
-            if (!$rc->implementsInterface('IXmlComponent'))
+            if ($obj instanceof IXmlComponent)
+                $out .= $obj->render();
+            else
                 throw new exception('Attached '.get_class($obj).' dont implement IXmlComponent');
-
-            if (!$rc->hasMethod('render'))
-                throw new Exception('Attached '.get_class($obj).' dont implement render()');
-
-            $out .= $obj->render();
-        }
-
-        if ($this->enable_design) {
-            if ($this->design_foot) {
-                $view = new ViewModel($this->design_foot);
-                $out .= $view->render();
-            }
-
-            if ($this->enable_profiler) {
-                $view = new ViewModel('views/profiler/page.php');
-                $out .= $view->render();
-            }
         }
 
         $this->sendHeaders();
@@ -335,7 +332,6 @@ class XmlDocumentHandler extends CoreBase
                 'document.getElementById("fb-root").appendChild(e);'.
             '}());'
             );
-
         }
 
         $x = ob_get_contents();
