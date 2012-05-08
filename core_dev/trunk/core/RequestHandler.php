@@ -115,7 +115,7 @@ class RequestHandler
             // resume session & handle login/logout/register requests to any page
             //XXXX CLEANUP: move these to built in views
             $view = new ViewModel( $page->getCoreDevPath().'views/core/handle_request.php', $this);
-            $page->attach( $view->render() ); // XXX needs to be evaluated here
+            $page->attach( $view->render() ); // needs to be evaluated here in order to process requests properly
         }
 
         switch ($this->_controller) {

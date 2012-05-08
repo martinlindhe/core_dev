@@ -1,7 +1,5 @@
 <?php
 
-require_once('UserHandler.php');
-
 $session->start();
 
 if ($session->id && $session->ip && ($session->ip != client_ip()) )
@@ -26,20 +24,14 @@ else if ($session->id && $session->getLastActive() < (time() - $session->timeout
 
     //$session->showErrorPage();
 }
-/*
-else if (!$session->id && !empty($_POST['login_usr']) && isset($_POST['login_pwd']))
+else if ($session->id)
 {
-    // Check for login request, POST to any page with 'login_usr' & 'login_pwd' variables set to log in
-    $session->login($_POST['login_usr'], $_POST['login_pwd']);
-}*/
+    $session->setLastActive();
+}
 else if (!$session->id && $session->facebook_app_id)
 {
     // Handle facebook login
     $session->handleFacebookLogin();
-}
-else if ($session->id)
-{
-    $session->setLastActive();
 }
 
 ?>
