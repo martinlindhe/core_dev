@@ -4,10 +4,12 @@
  *
  * The view model creates a scope for variables and include the file returning the parsed output
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
-class ViewModel extends ArrayObject
+require_once('IXmlComponent.php');
+
+class ViewModel extends ArrayObject implements IXmlComponent
 {
     private $template;
 
@@ -29,6 +31,8 @@ class ViewModel extends ArrayObject
     {
         $this->$name = $val;
     }
+
+    public function handlePost($p) {}
 
     public function render()
     {
