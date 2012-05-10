@@ -259,42 +259,38 @@ class XmlDocumentHandler extends CoreBase
 
     function render()
     {
+        $head = '';
+        $foot = '';
+
         if ($this->enable_design)
         {
-            if ($this->design_head)
-                $this->prepend(new ViewModel($this->design_head));
+            if ($this->design_head) {
+                $view = new ViewModel($this->design_head);
+                $head .= $view->render();
+            }
 
-            $this->prepend(new ViewModel('views/core/required_js.php'));
+            $view = new ViewModel('views/core/required_js.php');
+            $head .= $view->render();
 
-            if ($this->design_foot)
-                $this->attach(new ViewModel($this->design_foot));
-
-            if ($this->enable_profiler)
-                $this->attach(new ViewModel('views/profiler/page.php'));
+            if ($this->design_foot) {
+                $view = new ViewModel($this->design_foot);
+                $foot .= $view->render();
+            }
         }
 
-        $out = '';
+        $main = '';
 
         foreach ($this->objs as $obj)
         {
-/*
-            if (!$obj)
-                continue;
-
-            if (is_string($obj)) {
-                //XXX hack to allow any text to be attached, should no longer be needed, 2012-05-08
-//                throw new Exception ('obj is string: '.$obj);
-                $out .= $obj;
-                continue;
-            }
-
-            if (!is_object($obj))
-                throw new Exception ('not an object: '.$obj);
-*/
             if ($obj instanceof IXmlComponent)
-                $out .= $obj->render();
+                $main .= $obj->render();
             else
                 throw new exception('Attached '.get_class($obj).' dont implement IXmlComponent');
+        }
+
+        if ($this->enable_design && $this->enable_profiler) {
+            $view = new ViewModel('views/profiler/page.php');
+            $main .= $view->render();
         }
 
         $this->sendHeaders();
@@ -304,10 +300,9 @@ class XmlDocumentHandler extends CoreBase
         $enable_fb = false;
 
         if ($this->enable_design && class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
+        {
             $enable_fb = true;
 
-        if ($enable_fb)
-        {
             $header->includeJs( $this->getScheme().'://connect.facebook.net/en_US/all.js');
 
             $this->registerXmlNs('fb', 'http://www.facebook.com/2008/fbml');
@@ -366,11 +361,16 @@ class XmlDocumentHandler extends CoreBase
                 echo '<div id="fb-root"></div>'; // required for Facebook API
         }
 
-        echo $out;
+        if ($this->enable_design)
+            echo $head;
 
-        //XXX <body> tag is opened in XhtmlHeader->render()
+        echo $main;
+
+        if ($this->enable_design)
+            echo $foot;
+
         if ($this->enable_design) {
-            echo '</body>';
+            echo '</body>';        // <body> tag is opened in XhtmlHeader->render()
             echo '</html>';
         }
     }
