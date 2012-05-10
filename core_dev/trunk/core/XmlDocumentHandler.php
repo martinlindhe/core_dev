@@ -259,8 +259,6 @@ class XmlDocumentHandler extends CoreBase
 
     function render()
     {
-        ob_start();   //XXXX debug haxx, should be removed at some point
-
         if ($this->enable_design)
         {
             if ($this->design_head)
@@ -333,10 +331,6 @@ class XmlDocumentHandler extends CoreBase
             '}());'
             );
         }
-
-        $x = ob_get_contents();
-        if ($x)
-            throw new Exception ('XXX should not happen '.$x);
 
         if ($this->enable_design)
         {
