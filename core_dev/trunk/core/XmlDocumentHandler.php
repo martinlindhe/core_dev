@@ -277,6 +277,7 @@ class XmlDocumentHandler extends CoreBase
 
         foreach ($this->objs as $obj)
         {
+/*
             if (!$obj)
                 continue;
 
@@ -289,7 +290,7 @@ class XmlDocumentHandler extends CoreBase
 
             if (!is_object($obj))
                 throw new Exception ('not an object: '.$obj);
-
+*/
             if ($obj instanceof IXmlComponent)
                 $out .= $obj->render();
             else
