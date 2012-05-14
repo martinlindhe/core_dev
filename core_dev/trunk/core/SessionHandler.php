@@ -2,21 +2,12 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
 
-//TODO: remember client ip between requests in order to mitigate session hijacking
-//FIXME: session timeout verkar inte funka rätt?!?!? vill kunna ha session i 7 dygn den dör efter nån timme iaf
-
 //TODO: reimplement user-block & ip-block
-
-//TODO: rework tblUsers.userPass to store value as "sha1:xxxxx", "sha512:xxx" in order to simplify future hash change
-//      XXX also increase tblUsers.userPass size to 64(512 bits) + 10 (algorithm name) characters
-
-//TODO: calculate password hash by feeding first generated hash to hash algorithm for a number of times (10?)
-//      XXX will break all currently used passwords
 
 
 require_once('CoreBase.php');
