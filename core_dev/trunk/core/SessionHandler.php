@@ -122,7 +122,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
      */
     function login($username, $pwd, $type = SESSION_REGULAR)
     {
-        $error   = ErrorHandler::getInstance();
+        $error = ErrorHandler::getInstance();
 
         if (!$this->allow_logins) {
             $error->add('Logins currently not allowed.');
@@ -204,6 +204,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
             throw new Exception ('session name not set');
 
         $sess_storage = new SessionStorageHandler();
+        $error = ErrorHandler::getInstance();
 
         session_name($this->name);
 
