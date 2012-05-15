@@ -31,6 +31,7 @@ class File
     protected static $tbl_name = 'tblFiles';
 
     /**
+     * Calculates the upload directory for the specified file id
      * @return full local path to uploaded file
      */
     public static function getUploadPath($id)
@@ -42,9 +43,9 @@ class File
 
         $dir_limit = 2000; // number of files per subdirectory
 
-        $subdir = floor($id / $dir_limit) * $dir_limit;
+        $low_range = floor($id / $dir_limit) * $dir_limit;
 
-        $dir = $page->getUploadPath().'/'.$subdir.'to'.($subdir+$dir_limit);
+        $dir = $page->getUploadPath().'/'.$low_range.'to'.($low_range+$dir_limit);
 
         if (!is_dir($dir)) {
             mkdir($dir);
