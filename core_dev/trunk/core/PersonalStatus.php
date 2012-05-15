@@ -28,7 +28,9 @@ class PersonalStatus
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE owner = ?';
+        ' WHERE owner = ?'.
+        ' ORDER BY time_saved DESC'.
+        ' LIMIT 1';
 
         $res = Sql::pSelectRow($q, 'i', $id);
 
@@ -37,11 +39,6 @@ class PersonalStatus
 
     public static function setStatus($user_id, $text)
     {
-        $prev = self::getByOwner($user_id);
-
-        if ($prev)
-            self::delete($prev->id);
-
         $status = new PersonalStatus();
         $status->owner = $user_id;
         $status->text = $text;
