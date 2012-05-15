@@ -2,6 +2,8 @@
 
 // Needed due to changes in File.php r6641, 2012-05-15
 
+die; // mission complete, 2012-05-15
+
 require_once('../core/core.php');
 require_once('../core/files.php');
 require_once('../core/File.php');
