@@ -9,6 +9,7 @@ require_once('ModerationObject.php');
 
 require_once('Image.php'); // for getThumbUrl()
 require_once('PhotoAlbum.php');
+require_once('PersonalStatus.php');
 
 $session->requireLoggedIn();
 
@@ -206,6 +207,30 @@ case 'password':
     echo $form->render();
     break;
 
+case 'status':
+
+    function handleEditStatus($p)
+    {
+        $session = SessionHandler::getInstance();
+        if (!$session->id)
+            return;
+
+        PersonalStatus::setStatus($session->id, $p['status']);
+
+        js_redirect('u/profile');
+    }
+
+    echo '<h1>Change status</h1>';
+
+    $form = new XhtmlForm();
+    $form->addInput('status', '');
+    $form->addSubmit('Set');
+    $form->setHandler('handleEditStatus');
+    $form->setFocus('status');
+    echo $form->render();
+    break;
+
+    break;
 
 default:
     echo 'no such view: '.$view;

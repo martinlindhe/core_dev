@@ -19,6 +19,36 @@ class PersonalStatus
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
+    public static function delete($id)
+    {
+        SqlObject::deleteById($id, self::$tbl_name, 'id');
+    }
+
+    public static function getByOwner($id)
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE owner = ?';
+
+        $res = Sql::pSelectRow($q, 'i', $id);
+
+        return SqlObject::loadObject($res, __CLASS__);
+    }
+
+    public static function setStatus($user_id, $text)
+    {
+        $prev = self::getByOwner($user_id);
+
+        if ($prev)
+            self::delete($prev->id);
+
+        $status = new PersonalStatus();
+        $status->owner = $user_id;
+        $status->text = $text;
+        $status->time_saved = sql_datetime( time() );
+        self::store($status);
+    }
+
 }
 
 ?>

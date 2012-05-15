@@ -7,6 +7,7 @@ require_once('Image.php'); // for showThumb()
 require_once('Bookmark.php');
 require_once('YuiLightbox.php');
 require_once('Visit.php');
+require_once('PersonalStatus.php');
 
 $session->requireLoggedIn();
 
@@ -33,10 +34,18 @@ echo '<h1>Profile for '.$user->name.'</h1>';
 
 if (UserHandler::isOnline($user_id)) {
     echo 'Last active '.ago($user->time_last_active).'<br/>';
-    echo 'Otillgänglig för chat?: '.UserSetting::get($user_id, 'chat_off').'<br/>';
 } else {
     echo 'Offline<br/>';
 }
+
+$status = PersonalStatus::getByOwner($user_id);
+if ($status && $status->text)
+    echo '<b>STATUS: '.$status->text.'</b><br/>';
+
+if ($user_id == $session->id)
+    echo ahref('u/edit/status', 'Change your status message').'<br/><br/>';
+
+
 
 echo 'User level: '.UserGroupHandler::getUserLevel($user_id).'<br/>';
 
