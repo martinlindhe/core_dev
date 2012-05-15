@@ -38,9 +38,20 @@ class File
         $page = XmlDocumentHandler::getInstance();
 
         if (!$page->getUploadPath())
-            throw new Exception ('No upload path configured!');
+            throw new Exception ('No XmlDocumentHandler upload path configured!');
 
-        return $page->getUploadPath().'/'.$id;
+        $dir_limit = 2000; // number of files per subdirectory
+
+        $subdir = floor($id / $dir_limit) * $dir_limit;
+
+        $dir = $page->getUploadPath().'/'.$subdir.'to'.($subdir+$dir_limit);
+
+        if (!is_dir($dir)) {
+            mkdir($dir);
+            chmod($dir, 0777);
+        }
+
+        return $dir.'/'.$id;
     }
 
     public static function get($id)
