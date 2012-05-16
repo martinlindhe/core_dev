@@ -4,49 +4,13 @@
  *
  * Image handling helper functions
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
 //STATUS: reworking snippets into classes, see ImageResizer
 
 $predef_color['white'] = array(255,255,255);
 $predef_color['black'] = array(0,0,0);
-
-/**
- * Converts a image to specified file type. Currently supports conversions to jpeg, png or gif
- * Requires ImageMagick commandline image converter "convert" installed
- *
- * @param $in_file input filename
- * @param $out_file output filename
- * @param $to_mime wanted output format
- * @return true on success
- */
-function convertImage($in_file, $out_file, $to_mime)
-{
-    global $config;
-
-    switch ($to_mime) {
-        case 'image/jpeg':
-            $c = 'convert -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/png':
-            $c = 'convert '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
-            break;
-
-        case 'image/gif':
-            $c = 'convert '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
-            break;
-
-        default:
-            echo 'convertImage(): Unhandled mimetype "'.$to_mime.'"<br/>';
-            return false;
-    }
-    //echo 'Executing: '.$c.'<br/>';
-    exec($c);
-    if (!file_exists($out_file)) return false;
-    return true;
-}
 
 /**
  * Loads a font & sets font type & font height variables
