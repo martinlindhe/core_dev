@@ -6,8 +6,6 @@ require_once('db_mssql.php');
 
 //die('XXX: need better db testing code');
 
-$config['debug'] = true;
-
 $mssql_db['username']   = 'user';
 $mssql_db['password']   = 'password';
 $mssql_db['database']   = 'database';

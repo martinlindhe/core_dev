@@ -7,7 +7,7 @@
 
 //STATUS: wip
 
-//TODO: reimplement user-block & ip-block
+//TODO: reimplement ip-block
 
 
 require_once('CoreBase.php');
@@ -34,7 +34,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     var $online_timeout = 1800;    ///< 30m - max idle time before the user is counted as "logged out" in "users online"-lists etc
 
     var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
-    var $start_page;               ///< redirects user to this page (in $config['app']['web_root'] directory) after successful login
+    var $start_page;               ///< redirects user to this page after successful login
     var $logged_out_start_page;    ///< go to specific page? else root page url will be used
     var $error_page = 'coredev/error';  ///< redirects the user to this page to show errors
 
