@@ -4,7 +4,7 @@
  *
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
- 
+
 //STATUS: wip
 
 require_once('Image.php');
@@ -17,11 +17,11 @@ class ImageRotator extends Image
      */
     function rotate($angle)
     {
-        if (!function_exists('imagerotate'))
-            throw new Exception ('php-gd2 missing');
+        if (!extension_loaded('gd'))
+            throw new Exception ('php5-gd missing');
 
         if (!$this->resource)
-            throw new Exception ('no image resource loaded');                
+            throw new Exception ('no image resource loaded');
 
         if (!is_numeric($angle))
             return false;

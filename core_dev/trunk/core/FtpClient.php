@@ -35,7 +35,7 @@ class FtpClient extends CoreBase
 
     function __construct($url = '')
     {
-        if (!function_exists('curl_init'))
+        if (!extension_loaded('curl'))
             throw new exception ('php5-curl missing');
 
         if ($url)

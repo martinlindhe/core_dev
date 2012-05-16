@@ -132,7 +132,7 @@ if (ini_get('memory_limit') != '-1') {
 }
 echo '<br/>';
 
-if (function_exists('apc_cache_info')) {
+if (extension_loaded('apc')) {
     $conv = new ConvertDatasize();
 
     $info = apc_cache_info('', true);

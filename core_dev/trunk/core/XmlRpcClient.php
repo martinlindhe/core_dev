@@ -17,8 +17,8 @@ class XmlRpcClient extends HttpClient
 
     function __construct($s = '')
     {
-        if (!function_exists('xmlrpc_server_create'))
-            throw new Exception ('XmlRpcClient FAIL: php5-xmlrpc not found');
+        if (!extension_loaded('xmlrpc'))
+            throw new Exception ('php5-xmlrpc not found');
 
         parent::__construct($s);
     }

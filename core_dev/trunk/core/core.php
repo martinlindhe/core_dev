@@ -151,7 +151,7 @@ function dm()
         $res .= ' (no limit)'.ln();
     }
 
-    if (function_exists('apc_cache_info')) {
+    if (extension_loaded('apc')) {
         $conv = new ConvertDatasize();
 
         $info = apc_cache_info('', true);
