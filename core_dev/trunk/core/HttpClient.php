@@ -30,7 +30,7 @@ require_once('network.php');
 require_once('Url.php');
 require_once('TempStore.php');
 
-class HttpClient extends CoreBase
+class HttpClient
 {
     public  $Url;                          ///< Url property
     private $ch;                           ///< curl handle
@@ -50,6 +50,8 @@ class HttpClient extends CoreBase
 
     private $auth_method        = '';
 
+    protected $debug            = false;
+
     function __construct($url = '')
     {
         if (!extension_loaded('curl'))
@@ -67,6 +69,8 @@ class HttpClient extends CoreBase
     {
         curl_close($this->ch);
     }
+
+    function setDebug($b = true) { $this->debug = $b; }
 
     /**
      * Performs a HTTP HEAD request
@@ -114,7 +118,11 @@ class HttpClient extends CoreBase
         return false;
     }
 
-    function setConnectionTimeout($n) { if (is_numeric($n)) $this->connection_timeout = $n; }
+    /**
+     * @param $n duration in seconds, or represented as "30s", "2m"
+     */
+    function setConnectionTimeout($n) { $this->connection_timeout = parse_duration($n); }
+
     function setContentType($s) { $this->content_type = $s; }
     function setReferer($s) { $this->referer = $s; }
 
@@ -156,10 +164,7 @@ class HttpClient extends CoreBase
     /**
      * Returns HTTP status code for the last request
      */
-    function getStatus()
-    {
-        return $this->status_code;
-    }
+    function getStatus() { return $this->status_code; }
 
     function getUrl() { return $this->Url->get(); }
 
@@ -267,7 +272,7 @@ class HttpClient extends CoreBase
             }
         }
 
-        if ($this->getDebug())
+        if ($this->debug)
             curl_setopt($this->ch, CURLOPT_VERBOSE, true);
 
         curl_setopt($this->ch, CURLOPT_URL, $this->Url->get() );
@@ -277,8 +282,6 @@ class HttpClient extends CoreBase
 
         $this->addRequestHeader('Accept-Encoding: gzip,deflate');
         $this->addRequestHeader('Expect:');  // HACK to disable cURL default to send "100-continue"
-
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->request_headers);
 
         if ($this->Url->getScheme() == 'https') {
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -307,7 +310,7 @@ class HttpClient extends CoreBase
             switch ($this->auth_method) {
             case 'basic':
                 $key = base64_encode($this->username.':'.$this->password);
-                curl_setopt($this->ch, CURLOPT_HTTPHEADER, array('Authorization: basic '.$key) );
+                $this->addRequestHeader('Authorization: basic '.$key);
                 break;
 /*
             case 'NTLM':  //DONT WORK PROPERLY, 2010-10-20
@@ -321,31 +324,37 @@ class HttpClient extends CoreBase
             }
         }
 
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->request_headers);
+
         if ($this->cookies) {
-            if ($this->getDebug()) echo "http->get() sending cookies: ".$this->encodeCookies().ln();
+            if ($this->debug)
+                echo 'http->get() sending cookies: '.$this->encodeCookies().ln();
             curl_setopt($this->ch, CURLOPT_COOKIE, $this->encodeCookies());
         }
 
         if (!empty($post_params)) {
-            if ($this->getDebug()) echo "http->post() ".$this->Url->get()." ... ";
+            if ($this->debug)
+                echo 'http->post() '.$this->Url->get().' ... ';
 
             if (is_array($post_params)) {
                 $var = http_build_query($post_params);
             } else {
                 $var = $post_params;
             }
-            if ($this->getDebug()) echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
+            if ($this->debug)
+                echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
 
             curl_setopt($this->ch, CURLOPT_POST, 1);
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $var);
         } else {
-            if ($this->getDebug()) echo "http->get() ".$this->Url->get()." ... ".ln();
+            if ($this->debug)
+                echo 'http->get() '.$this->Url->get().' ... '.ln();
         }
 
         $res = curl_exec($this->ch);
 
-        if ($this->getDebug())
-            echo "Got ".strlen($res)." bytes".ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
+        if ($this->debug)
+            echo 'Got '.strlen($res).' bytes'.ln(); //, showing first 2000:".ln(); d( substr($res,0,2000) );
 
         $this->parseResponse($res);
 
@@ -378,8 +387,8 @@ class HttpClient extends CoreBase
         }
 
         $status = array_shift($headers);
-        if ($this->getDebug())
-            echo "http->get() returned HTTP status ".$status.ln();
+        if ($this->debug)
+            echo 'http->get() returned HTTP status '.$status.ln();
 
         switch (substr($status, 0, 9)) {
         case 'HTTP/1.0 ':
@@ -413,7 +422,7 @@ class HttpClient extends CoreBase
 */
             case 'set-cookie':
                 // store cookies sent from the server in our cookie pool for possible manipulation
-                echo "SETTING COOKIE: ".$col[1]."\n";
+d('SETTING COOKIE: '.$col[1]);
                 $this->setCookie( $col[1] );
                 break;
             }

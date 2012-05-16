@@ -224,7 +224,7 @@ case 'status':
 
     $form = new XhtmlForm();
     $form->addInput('status', '');
-    $form->addSubmit('Set');
+    $form->addSubmit('Save');
     $form->setHandler('handleEditStatus');
     $form->setFocus('status');
     echo $form->render();
