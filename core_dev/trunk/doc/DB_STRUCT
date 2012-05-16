@@ -192,3 +192,19 @@ tblPokes        for sending pokes, or "flirts" to other users
     from
     to
     time
+
+
+tblPersonalStatus
+    id
+    owner
+    text
+    time_saved
+
+
+tblLike
+    id
+    owner   reference to the object being liked
+    type    type of object
+    user    who likes the object?
+    time
+
