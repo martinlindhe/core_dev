@@ -44,6 +44,7 @@ class HttpClient extends CoreBase
 {
     public  $Url;                          ///< Url property
     private $ch;                           ///< curl handle
+    private $request_headers    = array();
     private $headers;
     private $body;
     private $status_code;                  ///< return code from http request, such as 404
@@ -61,10 +62,8 @@ class HttpClient extends CoreBase
 
     function __construct($url = '')
     {
-        if (!function_exists('curl_init')) {
-            echo "HttpClient->ERROR: php5-curl missing".ln();
-            return false;
-        }
+        if (!extension_loaded('curl'))
+            throw new Exception ('php5-curl missing');
 
         $this->ch = curl_init();
 
@@ -115,6 +114,8 @@ class HttpClient extends CoreBase
     function setConnectionTimeout($n) { if (is_numeric($n)) $this->connection_timeout = $n; }
     function setContentType($s) { $this->content_type = $s; }
     function setReferer($s) { $this->referer = $s; }
+
+    function addRequestHeader($s) { $this->request_headers[] = $s; }
 
     /**
      * Sets a cookie to send with the next HTTP request
@@ -265,13 +266,13 @@ class HttpClient extends CoreBase
 
         curl_setopt($this->ch, CURLOPT_URL, $this->Url->get() );
 
-        $headers = array(
-        ($this->content_type ? 'Content-Type: '.$this->content_type : ''),
-        'Accept-Encoding: gzip,deflate',
-        'Expect:',  // HACK to disable cURL default to send "100-continue"
-        );
+        if ($this->content_type)
+            $this->addRequestHeader('Content-Type: '.$this->content_type);
 
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
+        $this->addRequestHeader('Accept-Encoding: gzip,deflate');
+        $this->addRequestHeader('Expect:');  // HACK to disable cURL default to send "100-continue"
+
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->request_headers);
 
         if ($this->Url->getScheme() == 'https') {
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
@@ -394,7 +395,7 @@ class HttpClient extends CoreBase
             $body = gzinflate($body);
             break;
 
-	    case 'identity':
+        case 'identity':
         case '':
             break;
 
