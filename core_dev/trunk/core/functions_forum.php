@@ -1246,4 +1246,196 @@ function shareForumItem($itemId)
     echo xhtmlFormClose();
 }
 
+function formatUserInputText($text, $convert_html = true)   //XXXX DEPRECATE, use YuiRichedit instead
+{
+    $text = trim($text);
+
+    //convert html tags to &lt; and &gt; etc:
+    if ($convert_html) $text = htmlspecialchars($text);
+
+    //convert dos line-endings to Unix format for easy handling
+    $text = str_replace("\r\n", "\n", $text);
+
+    /* [b]bold text[/b] */
+    $text = str_ireplace('[b]', '<b>', $text);
+    $text = str_ireplace('[/b]', '</b>', $text);
+
+    /* [i]italic text[/i] */
+    $text = str_ireplace('[i]', '<i>', $text);
+    $text = str_ireplace('[/i]', '</i>', $text);
+
+    /* [u]underlined text[/u] */
+    $text = str_ireplace('[u]', '<u>', $text);
+    $text = str_ireplace('[/u]', '</u>', $text);
+
+    /* [s]strikethru text[/u] */
+    $text = str_ireplace('[s]', '<del>', $text);
+    $text = str_ireplace('[/s]', '</del>', $text);
+
+    /* [h1]headline level 1[/h1] */
+    $text = str_ireplace('[h1]', '<h1 class="bb_h1">', $text);
+    $text = str_ireplace('[/h1]', '</h1>', $text);
+
+    /* [h2]headline level 2[/h2] */
+    $text = str_ireplace('[h2]', '<h2 class="bb_h2">', $text);
+    $text = str_ireplace('[/h2]', '</h2>', $text);
+
+    /* [h3]headline level 3[/h3] */
+    $text = str_ireplace('[h3]', '<h3 class="bb_h3">', $text);
+    $text = str_ireplace('[/h3]', '</h3>', $text);
+
+    $text = str_ireplace("[hr]\n", '<hr/>', $text); //fixme: this is a hack. a better solution would be to trim all whitespace directly following a [hr] tag
+    $text = str_ireplace('[hr]', '<hr/>', $text);
+
+    //raw block, example: [raw]text text[/raw], interpret as written. FIXME: make possible to disable in config
+    $text = str_ireplace("[/raw]\n", "[/raw]", $text);
+    do {
+        $pos1 = stripos($text, '[raw]');
+        if ($pos1 === false) break;
+
+        $pos2 = stripos($text, '[/raw]');
+        if ($pos2 === false) break;
+        $codeblock = trim(substr($text, $pos1+strlen('[raw]'), $pos2-$pos1-strlen('[raw]')));
+        $codeblock = str_replace("\n", '(_br_)', $codeblock);
+
+        $text = substr($text, 0, $pos1).$codeblock.substr($text, $pos2+strlen('[/raw]'));
+    } while (1);
+
+    //code block, example: [code]text text[/code]
+    $text = str_ireplace("[/code]\n", "[/code]", $text);
+    do {
+        $pos1 = stripos($text, '[code]');
+        if ($pos1 === false) break;
+
+        $pos2 = stripos($text, '[/code]');
+        if ($pos2 === false) break;
+        $codeblock = trim(substr($text, $pos1+strlen('[code]'), $pos2-$pos1-strlen('[code]')));
+        $codeblock = str_replace("\n", '(_br_)', $codeblock);
+
+        $codeblock =
+            '<div class="bb_code">'.
+            '<div class="bb_code_head">code</div>'.
+            '<div class="bb_code_body">'.$codeblock.'</div>'.
+            '</div>';
+
+        $text = substr($text, 0, $pos1) . $codeblock . substr($text, $pos2+strlen('[/code]'));
+    } while (1);
+
+    //quote block, example: [quote name=elvis]text text text[/quote]
+    //or: [quote]text text text[/quote]
+    do {
+        $pos1 = stripos($text, '[quote');
+        if ($pos1 === false) break;
+
+        $pos2 = stripos($text, '[/quote]');
+        if ($pos2 === false) break;
+
+        $quoteblock = substr($text, $pos1+strlen('[quote'), $pos2-$pos1-strlen('[quote'));
+
+        $qpos1 = stripos($quoteblock, 'name=');
+        $qpos2 = strpos($quoteblock, ']');
+        if ($qpos1 !== false) {
+            $nameblock = substr($quoteblock, $qpos1+strlen('name='), $qpos2-$qpos1-strlen('name='));
+            $quoteblock = substr($quoteblock, $qpos1+strlen('name=')+strlen($nameblock)+strlen(']'));
+            if ($nameblock) $nameblock .= ' '.t('wrote');
+            else $nameblock = t('Quote');
+        } else {
+            $nameblock = t('Quote');
+            $quoteblock = substr($quoteblock, $qpos2+strlen(']'));
+        }
+
+        $quoteblock =
+            '<div class="bb_quote">'.
+            '<div class="bb_quote_head">'.$nameblock.':</div>'.
+            '<div class="bb_quote_body">'.trim($quoteblock).'</div>'.
+            '</div>';
+
+        $text = substr($text, 0, $pos1) .$quoteblock. substr($text, $pos2+strlen('[/quote]'));
+    } while (1);
+
+    //wiki links, example [[wiki:About]] links to wiki.php?Wiki:About
+    //example 2: [[wiki:About|read about us]] links to wiki.php?Wiki:About but "read about us" is link text
+    //example 3: [[link:page.php|click here]] makes a clickable link
+    do {
+        $pos1 = strpos($text, '[[');
+        if ($pos1 === false) break;
+
+        $pos2 = strpos($text, ']]');
+        if ($pos2 === false) break;
+
+        $wiki_command = substr($text, $pos1+strlen('[['), $pos2-$pos1-strlen(']]'));
+
+        $link = array();
+        if (strpos($wiki_command, '|') !== false) {
+            list($link['coded'], $link['title']) = explode('|', $wiki_command);
+        } else {
+            $link['coded'] = $wiki_command;
+        }
+
+        $arr = explode(':', $link['coded']);
+        $link['cmd'] = $arr[0];
+        $link['param'] = '';
+        for ($i=1; $i<count($arr); $i++) {
+            $link['param'] .= ($i>1?':':'').$arr[$i];
+        }
+
+        if (empty($link['cmd'])) continue;
+
+        $result = '';
+
+        switch ($link['cmd']) {
+            case 'wiki':
+                if (!empty($link['title'])) {
+                    //[[wiki:About|read about us]] format
+                    $result = '<a href="wiki.php?Wiki:'.$link['param'].'">'.$link['title'].'</a>';
+                } else {
+                    //[[wiki:About]] format
+                    $result = '<a href="wiki.php?Wiki:'.$link['param'].'">'.$link['param'].'</a>';
+                }
+                break;
+
+            case 'link':
+                $result = '<a href="'.$link['param'].'">'.$link['title'].'</a>';
+                break;
+
+            case 'file':
+                $result = makeImageLink($link['param']);
+                break;
+
+            case 'video':
+                $url = '/video/'.$link['param'].'.flv';
+                $result = embedFlashVideo($url, 176, 144, '', false);
+                break;
+
+            case 'audio':
+                $url = '/audio/'.$link['param'].'.mp3';
+                $result = embedFlashAudio($url, 176, 60, '', '/core_dev/gfx/voice_play.png', false);
+                break;
+
+            default:
+                if (!empty($link['title'])) {
+                    //[[About|read about us]] format
+                    $result = '<a href="wiki.php?Wiki:'.$link['cmd'].'">'.$link['title'].'</a>';
+                } else {
+                    //[[About]] format
+                    $result = '<a href="wiki.php?Wiki:'.$link['cmd'].'">'.$link['cmd'].'</a>';
+                }
+                break;
+        }
+
+        if (!$result) $result = '['.$wiki_command.']';
+
+        $text = substr($text, 0, $pos1) .$result. substr($text, $pos2+strlen(']]'));
+    } while (1);
+
+    //TODO: add [img]url[/img] tagg för bildlänkning! och checka för intern länkning
+
+    $text = replaceEMails($text);
+
+    $text = nl2br($text);
+    $text = str_replace('(_br_)', "\n", $text);
+
+    return $text;
+}
+
 ?>
