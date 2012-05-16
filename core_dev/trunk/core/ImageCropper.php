@@ -5,53 +5,53 @@
  * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
-//STATUS: rewrite this to a class extending from Image, like ImageResizer works
+//STATUS: wip
 
-die('XXX NEED REWRITE');
+require_once('Image.php');
 
-/**
- * Crops selected image to the requested dimensions
- *
- * @param $in_file filename of input image
- * @param $in_file filename of output image
- * @param $x1 coordinate x1
- * @param $y1 coordinate y1
- * @param $x2 coordinate x2
- * @param $y2 coordinate y2
- * @return true on success
- */
-function cropImage($in_file, $out_file, $x1, $y1, $x2, $y2)
+class ImageCropper extends Image
 {
-    global $h, $config;
-    if (!is_numeric($x1) || !is_numeric($y1) || !is_numeric($x2) || !is_numeric($y2)) return false;
+    protected $tmp_dir  = '/tmp/core_dev-images';
 
-    $mime = $h->files->lookupMimeType($in_file);
+    /**
+     * Crops selected image to the requested dimensions
+     * @param $x coordinate x
+     * @param $y coordinate y
+     * @param $w width
+     * @param $h height
+     */
+    function crop($x, $y, $w, $h)
+    {
+        if (!is_numeric($x) || !is_numeric($y) || !is_numeric($x) || !is_numeric($y))
+            throw new Exception ('bad input');
 
-    if (!$h->files->image_convert) return false;
+        echo 'Cropping '.$this->width.'x'.$this->height.' to '.$x.','.$y.' '.$w.'x'.$h."\n";
 
-    $crop = ($x2-$x1).'x'.($y2-$y1).'+'.$x1.'+'.$y1;
+        $key = 'cropped-'.$this->sha1.'-'.$x.'-'.$y.'-'.$w.'-'.$h;
+        $tmp_file = $this->tmp_dir.'/'.$key;
+        if (file_exists($tmp_file)) {
+            $this->load($tmp_file);
+            return;
+        }
 
-    //Crop with imagemagick
-    switch ($mime) {
-    case 'image/jpeg':
-        $c = 'convert -crop '.$crop. ' -quality '.$config['image']['jpeg_quality'].' '.escapeshellarg($in_file).' JPG:'.escapeshellarg($out_file);
-        break;
+        $org = $this->resource;
+        $this->resource = imagecreatetruecolor($w, $h);
 
-    case 'image/png':
-        $c = 'convert -crop '.$crop. ' '.escapeshellarg($in_file).' PNG:'.escapeshellarg($out_file);
-        break;
+        imagecopy($this->resource, $org, 0, 0, $x, $y, $w, $h);
 
-    case 'image/gif':
-        $c = 'convert -crop '.$crop. ' '.escapeshellarg($in_file).' GIF:'.escapeshellarg($out_file);
-        break;
+        $this->width  = $w;
+        $this->height = $h;
 
-    default:
-        throw new Exception ('unhandled mimetype "'.$mime.'"');
+        if (!file_exists($this->tmp_dir)) {
+            mkdir($this->tmp_dir);
+            chmod($this->tmp_dir, 0777);
+        }
+
+        // cache a copy
+        imagepng($this->resource, $tmp_file);
     }
-    //echo 'Executing: '.$c.'<br/>';
-    exec($c);
-    if (!file_exists($out_file)) return false;
-    return true;
+
 }
+
 
 ?>

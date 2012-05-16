@@ -35,7 +35,7 @@ class ImageResizer extends Image
         $tmp_file = $this->tmp_dir.'/'.$key;
         if (file_exists($tmp_file)) {
             $this->load($tmp_file);
-            return true;
+            return;
         }
 
         $org = $this->resource;
@@ -54,6 +54,7 @@ class ImageResizer extends Image
             chmod($this->tmp_dir, 0777);
         }
 
+        // cache a copy
         imagejpeg($this->resource, $tmp_file, $this->jpeg_quality);
     }
 
