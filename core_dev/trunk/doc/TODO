@@ -132,9 +132,8 @@ BEFORE 1.0 (201?):
     * all non-prepared sql should be removed & non-prepared DatabaseMysql methods removed
     * some infrastructure to handle scheduling of jobs?
 
-
-rewrite/cleanup following modules:
-    * function_forum.php      use same table to store messages?
+    * rewrite/cleanup following modules:
+        function_forum.php
 
 
 replace icons with this icon set:
