@@ -12,7 +12,7 @@ require_once('Image.php');
 class ImageResizer extends Image
 {
     protected $resample = true;
-    protected $tmp_dir  = '/tmp/core_dev-images/';
+    protected $tmp_dir  = '/tmp/core_dev-images';
 
     /**
      * Resizes image to specified dimensions
@@ -32,7 +32,7 @@ class ImageResizer extends Image
 //        echo 'Resizing from '.$this->width.'x'.$this->height.' to '.$tn_width.'x'.$tn_height.'<br/>';
 
         $key = 'resized-'.$this->sha1.'-'.$tn_width.'x'.$tn_height;
-        $tmp_file = $this->tmp_dir.$key;
+        $tmp_file = $this->tmp_dir.'/'.$key;
         if (file_exists($tmp_file)) {
             $this->load($tmp_file);
             return true;
@@ -49,8 +49,10 @@ class ImageResizer extends Image
         $this->width  = $tn_width;
         $this->height = $tn_height;
 
-        if (!file_exists($this->tmp_dir))
+        if (!file_exists($this->tmp_dir)) {
             mkdir($this->tmp_dir);
+            chmod($this->tmp_dir, 0777);
+        }
 
         imagejpeg($this->resource, $tmp_file, $this->jpeg_quality);
     }

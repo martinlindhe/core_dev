@@ -13,7 +13,8 @@ $x->render('gif', 'xxx.gif');
 */
 
 
-$x = new ImageResizer('/home/ml/Desktop/YJZLx.jpg'); // 1280x800
+$file = '/mnt/media.x/nydisk/bilder/lol/ec9e4aafad8730955d2f303f2edf31329db09a10_m.gif';
+$x = new ImageResizer($file);
 
 $x->resizeAspect(800, 800);
 $x->render('gif', 'x50.gif');

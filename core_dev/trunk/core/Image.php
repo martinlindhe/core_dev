@@ -45,7 +45,7 @@ class Image
     /**
      * Initializes object from an resource
      *
-     * @param $r can be a full filename, a GD resource or a File object
+     * @param $r can be a path to a image file, a GD resource or a File object
      */
     function load($r)
     {
@@ -61,7 +61,7 @@ class Image
             return;
         }
 
-        if (!file_exists($r))
+        if (!is_readable($r))
             throw new Exception ('image resource not found: '.$r);
 
         $info = getimagesize($r);
@@ -74,7 +74,6 @@ class Image
         }
 
         $this->resource = $im;
-
         $this->width    = $info[0];
         $this->height   = $info[1];
         $this->mimetype = $info['mime'];
