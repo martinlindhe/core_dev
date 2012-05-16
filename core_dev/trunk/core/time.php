@@ -399,9 +399,6 @@ function formatTime($ts = 0, $relative = false)
 {
     if (!$ts) $ts = time();
 
-    if (function_exists('formatTimeOverride'))
-        return formatTimeOverride($ts);
-
     if (!is_numeric($ts)) $ts = strtotime($ts);
 
     $datestamp = mktime (0,0,0,date('m',$ts), date('d',$ts), date('Y',$ts));
