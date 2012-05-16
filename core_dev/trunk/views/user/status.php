@@ -13,7 +13,10 @@ case 'like':
     $status = PersonalStatus::get($this->child);
     if (!$status)
         die('WEEH');
-//XXX: disallow multiple likes on same status
+
+    if (Like::isLiked($status->id, STATUS, $session->id))
+        die('LIKED');
+
     Like::set($status->id, STATUS, $session->id);
 
     redir('u/profile/'.$status->owner);

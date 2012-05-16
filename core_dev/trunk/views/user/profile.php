@@ -49,7 +49,12 @@ if ($status && $status->text) {
         else
             echo 'You like this<br/>';
     }
-    //XXX show all others who like this
+
+    $other_likes = Like::getAllExcept($status->id, STATUS, $session->id);
+    if ($other_likes) {
+        echo '<h2>FIXME: properly display other likes</h2>';
+        d($other_likes);
+    }
 }
 
 if ($user_id == $session->id)

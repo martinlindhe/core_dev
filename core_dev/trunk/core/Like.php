@@ -42,6 +42,19 @@ class Like
         self::store($l);
     }
 
+    /**
+     * @return all likes of object, except by user_id
+     */
+    public static function getAllExcept($owner, $type, $user_id)
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE owner = ? AND type = ? AND user != ?';
+        $list = Sql::pSelect($q, 'iii', $owner, $type, $user_id);
+
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
 }
 
 ?>
