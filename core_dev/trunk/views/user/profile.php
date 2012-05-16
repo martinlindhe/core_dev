@@ -8,6 +8,7 @@ require_once('Bookmark.php');
 require_once('YuiLightbox.php');
 require_once('Visit.php');
 require_once('PersonalStatus.php');
+require_once('Like.php');
 
 $session->requireLoggedIn();
 
@@ -39,8 +40,17 @@ if (UserHandler::isOnline($user_id)) {
 }
 
 $status = PersonalStatus::getByOwner($user_id);
-if ($status && $status->text)
+if ($status && $status->text) {
     echo '<b>STATUS: '.$status->text.'</b><br/>';
+
+    if ($session->id != $user_id) {
+        if (!Like::isLiked($status->id, STATUS, $session->id))
+            echo ahref('u/status/like/'.$status->id, 'Like').'<br/>';
+        else
+            echo 'You like this<br/>';
+    }
+    //XXX show all others who like this
+}
 
 if ($user_id == $session->id)
     echo ahref('u/edit/status', 'Change your status message').'<br/><br/>';

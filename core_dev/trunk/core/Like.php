@@ -22,7 +22,17 @@ class Like
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
-    public static function like($owner, $type, $user_id)
+    public static function isLiked($owner, $type, $user_id)
+    {
+        $q =
+        'SELECT id FROM '.self::$tbl_name.
+        ' WHERE owner = ? AND type = ? AND user = ?';
+        $id = Sql::pSelectItem($q, 'iii', $owner, $type, $user_id);
+
+        return $id ? true : false;
+    }
+
+    public static function set($owner, $type, $user_id)
     {
         $l = new Like();
         $l->owner = $owner;

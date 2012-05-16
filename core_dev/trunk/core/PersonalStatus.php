@@ -24,6 +24,11 @@ class PersonalStatus
         SqlObject::deleteById($id, self::$tbl_name, 'id');
     }
 
+    public static function get($id)
+    {
+        return SqlObject::getById($id, self::$tbl_name, __CLASS__);
+    }
+
     public static function getByOwner($id)
     {
         $q =
