@@ -2,9 +2,9 @@
 /**
  * $Id$
  *
- * Renders a GD image resource to PNG/GIF/JPEG
+ * Utility class for images, supporting PNG/GIF/JPEG images and GD resources
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -25,7 +25,7 @@ class Image
      */
     function __construct($r = false)
     {
-        if (!function_exists('gd_info'))
+        if (!extension_loaded('gd'))
             throw new Exception ('sudo apt-get install php5-gd');
 
         if ($r)

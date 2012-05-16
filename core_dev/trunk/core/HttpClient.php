@@ -45,7 +45,7 @@ class HttpClient extends CoreBase
     public  $Url;                          ///< Url property
     private $ch;                           ///< curl handle
     private $request_headers    = array();
-    private $headers;
+    private $response_headers   = array();
     private $body;
     private $status_code;                  ///< return code from http request, such as 404
     private $cache_time         = 0;       ///< in seconds
@@ -98,15 +98,15 @@ class HttpClient extends CoreBase
 
     function getResponseHeaders()
     {
-        return $this->headers;
+        return $this->response_headers;
     }
 
     function getResponseHeader($name)
     {
         $name = strtolower($name);
 
-        if (isset($this->headers[ $name ]))
-            return $this->headers[$name];
+        if (isset($this->response_headers[ $name ]))
+            return $this->response_headers[$name];
 
         return false;
     }
@@ -187,7 +187,7 @@ class HttpClient extends CoreBase
             break;
 
         default:
-            d($this->headers);
+            d($this->response_headers);
             throw new Exception ('unhandled auth method: '.$x[0]);
         }
 
@@ -342,7 +342,7 @@ class HttpClient extends CoreBase
         $this->parseResponse($res);
 
         if (!$this->username && empty($post_params) && $this->cache_time && !$head_only) {
-            $temp->set($key_head, serialize($this->headers), $this->cache_time);
+            $temp->set($key_head, serialize($this->response_headers), $this->cache_time);
             $temp->set($key_full, $res, $this->cache_time);
         }
 
@@ -354,7 +354,7 @@ class HttpClient extends CoreBase
      */
     private function parseResponse($res)
     {
-        $this->headers = array();
+        $this->response_headers = array();
 
         if (!$res)
             return;
@@ -370,7 +370,8 @@ class HttpClient extends CoreBase
         }
 
         $status = array_shift($headers);
-        if ($this->getDebug()) echo "http->get() returned HTTP status ".$status.ln();
+        if ($this->getDebug())
+            echo "http->get() returned HTTP status ".$status.ln();
 
         switch (substr($status, 0, 9)) {
         case 'HTTP/1.0 ':
@@ -383,7 +384,7 @@ class HttpClient extends CoreBase
 
         foreach ($headers as $h) {
             $col = explode(': ', $h, 2);
-            $this->headers[ strtolower($col[0]) ] = $col[1];
+            $this->response_headers[ strtolower($col[0]) ] = $col[1];
         }
 
         $encoding = $this->getResponseHeader('content-encoding');
@@ -400,7 +401,7 @@ class HttpClient extends CoreBase
             break;
 
         default:
-            d( $this->headers);
+            d( $this->response_headers);
             throw new Exception ('unhandled content-encoding: '.$encoding);
         }
 

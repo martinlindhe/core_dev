@@ -6,15 +6,17 @@ require_once('core.php');
 require_once('HttpClient.php');
 
 
-$http = new HttpClient('http://martin-rr.unicorn.se/'); // this domain returns "gzip" compressed documents
+$http = new HttpClient('http://martin-rr.unicorn.se/');
 $http->setDebug();
+$http->addRequestHeader('Accept-Language: sv');
 $body = $http->getBody();
 
 d($http->getCookies() );
 die;
 
 
-$http = new HttpClient('http://www.if-not-true-then-false.com/'); // this domain returns "gzip" compressed documents
+
+$http = new HttpClient('http://www.if-not-true-then-false.com/');
 $http->setDebug();
 $body = $http->getBody();
 d($http->getAllResponseHeaders() );
