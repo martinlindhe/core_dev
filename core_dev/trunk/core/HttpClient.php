@@ -82,6 +82,8 @@ class HttpClient
         return $this->get($params);
     }
 
+//    function getAllResponseHeaders() { return $this->response_headers);
+
     /**
      * @return value of specified response header name. if more than one value is set, the first is returned
      */
@@ -89,8 +91,8 @@ class HttpClient
     {
         $name = strtolower($name);
 
-        if (isset($this->headers[ $name ]))
-            return $this->headers[$name][0];
+        if (isset($this->response_headers[ $name ]))
+            return $this->response_headers[$name][0];
 
         return false;
     }
@@ -102,8 +104,8 @@ class HttpClient
     {
         $name = strtolower($name);
 
-        if (isset($this->headers[ $name ]))
-            return $this->headers[$name];
+        if (isset($this->response_headers[ $name ]))
+            return $this->response_headers[$name];
         if (isset($this->response_headers[ $name ]))
             return $this->response_headers[$name];
 
@@ -414,7 +416,7 @@ class HttpClient
 */
             case 'set-cookie':
                 // store cookies sent from the server in our cookie pool for possible manipulation
-d('SETTING COOKIE: '.$col[1]);
+//d('SETTING COOKIE: '.$col[1]);
                 $this->setCookie( $col[1] );
                 break;
             }

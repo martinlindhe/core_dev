@@ -11,7 +11,7 @@
  * Prepared statement format:
  *  (isdb), integer, string, double/float, binary
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -42,26 +42,22 @@ class Sql
         if (! ($stmt = $db->db_handle->prepare($args[0])) )
             throw new Exception ('FAIL prepare: '.$args[0]);
 
-        $params = array();
         if (isset($args[2]) && is_array($args[2]))
         {
-            $x = array();
-            for ($i = 0; $i < count($args[2]); $i++)
-                $x[] = $args[2][$i];
-
-            for ($i = 0; $i < count($x); $i++)
-                $args[2+$i] = $x[$i];
+            $params = $args[2];
+            array_unshift($params, $args[1]);
+        } else {
+            $params = array();
+            for ($i = 1; $i < count($args); $i++)
+                $params[] = $args[$i];
         }
-
-        for ($i = 1; $i < count($args); $i++)
-            $params[] = $args[$i];
 
         if ($params)
             $res = call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));
 
         if (!$stmt->execute()) {
-            d($args);
-            throw new Exception ('query failed: '.$args[0]);
+            d($params);
+            throw new Exception ('query failed: '.$args[0].' ('.$args[1].')');
         }
 
         if ($db instanceof DatabaseMysqlProfiler)
@@ -100,12 +96,7 @@ class Sql
             $s = substr($s, $p+1);
 
             if (is_numeric($x2) || $x2 == '"')
-            {
-                throw new Exception ('XXX: query is not prepared: (val is '.$x2.') ... '.$old_s);
-
-                echo 'XXX: query is not prepared: (val is '.$x2.') ... '.$old_s.ln();
-                return false;
-            }
+                throw new Exception ('query is not prepared: (val is '.$x2.') ... '.$old_s);
 
         } while ($s);
 
@@ -173,7 +164,6 @@ class Sql
         }
 
         $meta->close();
-
         $stmt->close();
 
         return $data;
