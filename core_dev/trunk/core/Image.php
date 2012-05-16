@@ -61,27 +61,25 @@ class Image
             return;
         }
 
-        if (file_exists($r))
-        {
-            $info = getimagesize($r);
+        if (!file_exists($r))
+            throw new Exception ('image resource not found: '.$r);
 
-            switch ($info['mime']) {
-            case 'image/jpeg': $im = imagecreatefromjpeg($r); break;
-            case 'image/png':  $im = imagecreatefrompng($r); break;
-            case 'image/gif':  $im = imagecreatefromgif($r); break;
-            default: throw new Exception ('Unsupported image type '.$info['mime'].' for '.$r);
-            }
+        $info = getimagesize($r);
 
-            $this->resource = $im;
-
-            $this->width    = $info[0];
-            $this->height   = $info[1];
-            $this->mimetype = $info['mime'];
-            $this->sha1     = sha1_file($r);
-            return;
+        switch ($info['mime']) {
+        case 'image/jpeg': $im = imagecreatefromjpeg($r); break;
+        case 'image/png':  $im = imagecreatefrompng($r); break;
+        case 'image/gif':  $im = imagecreatefromgif($r); break;
+        default: throw new Exception ('Unsupported image type '.$info['mime'].' for '.$r);
         }
 
-        throw new Exception ('image resource not found: '.$r);
+        $this->resource = $im;
+
+        $this->width    = $info[0];
+        $this->height   = $info[1];
+        $this->mimetype = $info['mime'];
+        $this->sha1     = sha1_file($r);
+        return;
     }
 
     function render($type = 'png', $dst_file = '')
