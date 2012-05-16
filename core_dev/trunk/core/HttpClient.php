@@ -16,14 +16,6 @@
 
 //STATUS: wip
 
-
-/**
- * TODO make NTLM work......... curl
- *
- * auth med user "sweweb":    Authorization: NTLM TlRMTVNTUAABAAAABoIIAAAAAAAAAAAAAAAAAAAAAAA=
- * server response:           WWW-Authenticate: NTLM TlRMTVNTUAACAAAADwAPADgAAAAGgooCD0s3WhzSkKMAAAAAAAAAAIwAjABHAAAABQCTCAAAAA9VTkktWEsxUTNZNkdCRTUCAB4AVQBOAEkALQBYAEsAMQBRADMAWQA2AEcAQgBFADUAAQAeAFUATgBJAC0AWABLADEAUQAzAFkANgBHAEIARQA1AAQAHgB1AG4AaQAtAHgAawAxAHEAMwB5ADYAZwBiAGUANQADAB4AdQBuAGkALQB4AGsAMQBxADMAeQA2AGcAYgBlADUAAAAAAA==
- */
-
 require_once('core.php');
 require_once('network.php');
 
@@ -32,25 +24,25 @@ require_once('TempStore.php');
 
 class HttpClient
 {
-    public  $Url;                          ///< Url property
-    private $ch;                           ///< curl handle
-    private $request_headers    = array();
-    private $response_headers   = array();
-    private $body;
-    private $status_code;                  ///< return code from http request, such as 404
-    private $cache_time         = 0;       ///< in seconds
-    private $user_agent         = 'core_dev HttpClient 1.0';
-    private $referer            = '';      ///< if set, send Referer header
-    private $cookies            = array(); ///< holds cookies to be sent to the server in the following request
-    private $connection_timeout = 120;     ///< 2 minutes
-    private $content_type       = '';      ///< request content by mime type
+    public    $Url;                          ///< Url property
+    protected $ch;                           ///< curl handle
+    protected $request_headers    = array();
+    protected $response_headers   = array();
+    protected $body;
+    protected $status_code;                  ///< return code from http request, such as 404
+    protected $cache_time         = 0;       ///< in seconds
+    protected $user_agent         = 'core_dev HttpClient 1.0';
+    protected $referer            = '';      ///< if set, send Referer header
+    protected $cookies            = array(); ///< holds cookies to be sent to the server in the following request
+    protected $connection_timeout = 120;     ///< 2 minutes
+    protected $content_type       = '';      ///< request content by mime type
 
-    private $username;
-    private $password;
+    protected $username;
+    protected $password;
 
-    private $auth_method        = '';
+    protected $auth_method        = '';
 
-    protected $debug            = false;
+    protected $debug              = false;
 
     function __construct($url = '')
     {
