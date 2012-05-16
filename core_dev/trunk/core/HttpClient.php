@@ -16,16 +16,6 @@
 
 //STATUS: wip
 
-//TODO: parse expire time from expiring cookies:   Set-Cookie: Vizzit=/rp3KjkkMk+37+ynumEJxA==:1328174026; expires=Sat, 02-Feb-2013 08:13:45 GMT; path=/
-
-
-
-
-//FIXME header parsing should preserve all fields, ex:
-/*
-WWW-Authenticate: Negotiate
-WWW-Authenticate: NTLM
-*/
 
 /**
  * TODO make NTLM work......... curl
@@ -96,15 +86,28 @@ class HttpClient extends CoreBase
         return $this->get($params);
     }
 
-    function getResponseHeaders()
-    {
-        return $this->response_headers;
-    }
-
+    /**
+     * @return value of specified response header name. if more than one value is set, the first is returned
+     */
     function getResponseHeader($name)
     {
         $name = strtolower($name);
 
+        if (isset($this->headers[ $name ]))
+            return $this->headers[$name][0];
+
+        return false;
+    }
+
+    /**
+     * @return all values of specified response header name
+     */
+    function getResponseHeaders($name)
+    {
+        $name = strtolower($name);
+
+        if (isset($this->headers[ $name ]))
+            return $this->headers[$name];
         if (isset($this->response_headers[ $name ]))
             return $this->response_headers[$name];
 
@@ -120,30 +123,30 @@ class HttpClient extends CoreBase
     /**
      * Sets a cookie to send with the next HTTP request
      */
-    function setCookie($name, $val)
+    function setCookie($raw)
     {
-        $this->cookies[ $name ] = $val;
+        $this->cookies[] = $raw;
     }
 
     /**
      * Sets/updates an array (name->val) of cookies
      */
-    function setCookies($arr)
+    /* function setCookies($arr)
     {
         foreach ($arr as $name => $val)
             $this->setCookie($name, $val);
-    }
+    } */
 
     /**
      * Returns the value of a cookie from last server response
      */
-    function getCookie($name)
+    /* function getCookie($name)
     {
         if (!isset($this->cookies[ $name ]))
             return false;
 
         return $this->cookies[ $name ];
-    }
+    } */
 
     /**
      * Returns all cookies from last server response
@@ -203,6 +206,8 @@ class HttpClient extends CoreBase
 
     function encodeCookies()
     {
+        return implode('; ', $this->cookies);
+/*
         $res = '';
         foreach ($this->cookies as $key => $val) {
             $res .= $key.'='.$val.'; ';
@@ -214,12 +219,13 @@ class HttpClient extends CoreBase
             $res = substr($res, 0, -1);
 
         return $res;
+*/
     }
 
     /**
-     * Parses a HTTP header "set-cookie" string into array
+     * Parses a HTTP header "Set-cookie" string into array
      */
-    static function decodeCookies($raw)
+    static function decodeCookie($raw)
     {
         $out = array();
 
@@ -278,6 +284,8 @@ class HttpClient extends CoreBase
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, 0);
         }
+
+        curl_setopt($this->ch, CURLOPT_COOKIESESSION, 1); /// to disable curl:s internal cookie handling
 
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->connection_timeout);
         curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->connection_timeout);
@@ -384,10 +392,34 @@ class HttpClient extends CoreBase
 
         foreach ($headers as $h) {
             $col = explode(': ', $h, 2);
-            $this->response_headers[ strtolower($col[0]) ] = $col[1];
+
+            $name = strtolower($col[0]);
+            if (!isset( $this->response_headers[ $name ]))
+                $this->response_headers[ $name ] = array();
+            $this->response_headers[ $name ][] = $col[1];
+            switch ($name) {
+/*
+            case 'cache-control':
+                switch (strtolower($col[1])) {
+                case 'no-cache="set-cookie, set-cookie2"':
+                    echo "CLEARING COOKIES!!!!\n";
+                    $this->cookies = array();
+                    break;
+                default:
+                    echo "XXX UNKNOWN CACHE CONTROL: ".$col[1]."\n";
+                    break;
+                }
+                break;
+*/
+            case 'set-cookie':
+                // store cookies sent from the server in our cookie pool for possible manipulation
+                echo "SETTING COOKIE: ".$col[1]."\n";
+                $this->setCookie( $col[1] );
+                break;
+            }
         }
 
-        $encoding = $this->getResponseHeader('content-encoding');
+        $encoding = $this->getResponseHeader('Content-Encoding');
         switch ($encoding) {
         case 'gzip':
             // strip 10-byte gzip header  XXXX always 10 byte headers???
@@ -406,11 +438,6 @@ class HttpClient extends CoreBase
         }
 
         $this->body = $body;
-
-        // store cookies sent from the server in our cookie pool for possible manipulation
-        $raw_cookies = $this->getResponseHeader('set-cookie');
-        if ($raw_cookies)
-            $this->setCookies( self::decodeCookies($raw_cookies) );
 
         $auth = $this->getResponseHeader('www-authenticate');
         if ($auth)
