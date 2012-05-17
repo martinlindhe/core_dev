@@ -315,4 +315,30 @@ function embed_flv($vid_id)
     js_swfobject('/core_dev/swf/player_flv_maxi.swf', $div_id, 240, 182, $flashvars);
 }
 
+/**
+ * Decorates input string with smiley images
+ */
+function str_add_smileys($s)
+{
+    // http://en.wikipedia.org/wiki/List_of_emoticons
+
+    $root = relurl('core_dev/gfx/smileys/');
+    $s = str_replace( array(':-)', ':)'), '<img align="absmiddle" src="'.$root.'smile.png"/>', $s);
+    $s = str_replace( array(';-)', ';)'), '<img align="absmiddle" src="'.$root.'wink.png"/>', $s);
+    $s = str_replace( array(':-(', ':('), '<img align="absmiddle" src="'.$root.'sad.png"/>', $s);
+    $s = str_replace( array(':-D', ':D'), '<img align="absmiddle" src="'.$root.'smile_big.png"/>', $s);
+    $s = str_replace( array(':-~', ':~'), '<img align="absmiddle" src="'.$root.'crying.png"/>', $s);
+    $s = str_replace( array('}:-)', '}:)'), '<img align="absmiddle" src="'.$root.'devil.png"/>', $s);
+    $s = str_replace( array('O:-)'), '<img align="absmiddle" src="'.$root.'angel.png"/>', $s);
+    $s = str_replace( array('8-)'), '<img align="absmiddle" src="'.$root.'glasses.png"/>', $s);
+    $s = str_replace( array(':-*'), '<img align="absmiddle" src="'.$root.'kiss.png"/>', $s);
+    $s = str_replace( array(':-O'), '<img align="absmiddle" src="'.$root.'surprised.png"/>', $s);
+    $s = str_replace( array(':-P'), '<img align="absmiddle" src="'.$root.'grin.png"/>', $s);
+    $s = str_replace( array(':-|'), '<img align="absmiddle" src="'.$root.'indifferent.png"/>', $s);
+
+    $s = str_replace( array('<3'), '<img align="absmiddle" src="'.$root.'heart.png"/>', $s);
+
+    return $s;
+}
+
 ?>
