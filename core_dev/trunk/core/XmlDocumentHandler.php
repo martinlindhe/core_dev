@@ -246,6 +246,9 @@ class XmlDocumentHandler extends CoreBase
      */
     function attach($obj)
     {
+        if ( !($obj instanceof IXmlComponent))
+            throw new exception( get_class($obj).' dont implement IXmlComponent');
+
         $this->objs[] = $obj;
     }
 
@@ -254,6 +257,9 @@ class XmlDocumentHandler extends CoreBase
      */
     function prepend($obj)
     {
+        if ( !($obj instanceof IXmlComponent))
+            throw new exception( get_class($obj).' dont implement IXmlComponent');
+
         array_unshift($this->objs, $obj);
     }
 
@@ -282,10 +288,7 @@ class XmlDocumentHandler extends CoreBase
 
         foreach ($this->objs as $obj)
         {
-            if ($obj instanceof IXmlComponent)
-                $main .= $obj->render();
-            else
-                throw new exception('Attached '.get_class($obj).' dont implement IXmlComponent');
+            $main .= $obj->render();
         }
 
         if ($this->enable_design && $this->enable_profiler) {

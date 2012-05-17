@@ -1,7 +1,7 @@
 <?php
 /**
  * Intended to be run from a cron-job, in order to check a coredev website health
- * by looking at the http://coredevapp/coredev/selftest page
+ * by looking at the http://coredevapp/c/selftest page
  */
 
 if ($argc != 2)

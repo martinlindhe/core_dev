@@ -11,7 +11,9 @@
 
 //TODO: use anonymous function for set_error_handler(), requires PHP 5.3
 
-class ErrorHandler
+require_once('IXmlComponent.php');
+
+class ErrorHandler implements IXmlComponent
 {
     static $_instance; ///< singleton
 
@@ -110,7 +112,7 @@ class ErrorHandler
         return true;
     }
 
-    function render($clear_errors = false)
+    function render()
     {
         if (empty($_SESSION['cd_errors']))
             return '';
@@ -133,8 +135,8 @@ class ErrorHandler
         foreach ($_SESSION['cd_errors'] as $e)
             $res .= '<div class="'.$div_class.'">'.$e.'</div><br/>';
 
-        if ($clear_errors)
-            $this->reset();
+        // clear errors
+        $this->reset();
 
         return $res;
     }

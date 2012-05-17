@@ -116,13 +116,11 @@ class RequestHandler
         }
 
         switch ($this->_controller) {
-        case 'coredev': $file = $page->getCoreDevPath().'views/core/coredev.php'; break;
-
-        case 'a':       $file = $page->getCoreDevPath().'views/admin/'.$this->_view.'.php'; break;
-        case 'u':       $file = $page->getCoreDevPath().'views/user/'.$this->_view.'.php'; break;
-        case 'c':       $file = $page->getCoreDevPath().'views/core/'.$this->_view.'.php'; break;
-        case 't':       $file = $page->getCoreDevPath().'views/tools/'.$this->_view.'.php'; break;
-        default:        $file = 'views/'.$this->_controller.'.php';
+        case 'a': $file = $page->getCoreDevPath().'views/admin/'.$this->_view.'.php'; break;
+        case 'u': $file = $page->getCoreDevPath().'views/user/'.$this->_view.'.php'; break;
+        case 'c': $file = $page->getCoreDevPath().'views/core/'.$this->_view.'.php'; break;
+        case 't': $file = $page->getCoreDevPath().'views/tools/'.$this->_view.'.php'; break;
+        default:  $file = 'views/'.$this->_controller.'.php';
         }
 
         if (!file_exists($file))
@@ -143,7 +141,7 @@ class RequestHandler
 
         // this must be done last, so that errors that was created during the view render can be displayed
         if ($error->getErrorCount())
-            $page->attach( $error->render(true) );
+            $page->attach( $error );
     }
 
 }

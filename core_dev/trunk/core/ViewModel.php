@@ -32,8 +32,6 @@ class ViewModel extends ArrayObject implements IXmlComponent
         $this->$name = $val;
     }
 
-    public function handlePost($p) {}
-
     public function render()
     {
         //available variables in the scope of the view

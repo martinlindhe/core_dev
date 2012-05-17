@@ -56,8 +56,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         return self::$_instance;
     }
 
-    public function handlePost($p) {}
-
     /** Add a <meta name="" content=""> tag */
     function setMeta($name, $val)
     {

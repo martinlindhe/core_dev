@@ -28,7 +28,8 @@ class XhtmlComponentCheckbox extends XhtmlComponent
 
         if (!$this->js_onclick)
         {
-            $o = new XhtmlComponentHidden($this->name);
+            $o = new XhtmlComponentHidden();
+            $o->name = $this->name;
             $o->value = 0;
             $res .= $o->render();
         }
@@ -41,7 +42,6 @@ class XhtmlComponentCheckbox extends XhtmlComponent
         ($this->checked ? ' checked="checked"':'').
         ($this->js_onclick ? ' onclick="'.$this->js_onclick.'"' : '').
         '/>';
-
 
         if ($this->title)
             $res .= '<label for="lab_'.$this->name.'"> '.$this->title.'</label>';

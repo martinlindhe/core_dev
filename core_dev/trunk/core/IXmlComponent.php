@@ -12,10 +12,6 @@ interface IXmlComponent
      */
     public function render();
 
-    /**
-     * Handles POST data for the object
-     */
-    public function handlePost($p);
 }
 
 ?>
