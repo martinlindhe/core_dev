@@ -1,5 +1,5 @@
 Views:
-    views/core     = iview.php, coredev.php
+    views/core     = error.php, coredev.php
     views/tools    = portcheck.php, ipcheck.php
 
     views/admin    = phpinfo.php, userdata.php

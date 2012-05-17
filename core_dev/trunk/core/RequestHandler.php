@@ -117,7 +117,6 @@ class RequestHandler
 
         switch ($this->_controller) {
         case 'coredev': $file = $page->getCoreDevPath().'views/core/coredev.php'; break;
-        case 'iview':   $file = $page->getCoreDevPath().'views/core/iview.php'; break;
 
         case 'a':       $file = $page->getCoreDevPath().'views/admin/'.$this->_view.'.php'; break;
         case 'u':       $file = $page->getCoreDevPath().'views/user/'.$this->_view.'.php'; break;
