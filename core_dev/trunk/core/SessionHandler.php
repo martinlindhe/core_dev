@@ -36,7 +36,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
     var $name;                     ///< session cookie name, needs to be unique for multiple projects on same webhost
     var $start_page;               ///< redirects user to this page after successful login
     var $logged_out_start_page;    ///< go to specific page? else root page url will be used
-    var $error_page = 'coredev/error';  ///< redirects the user to this page to show errors
+    var $error_page = 'c/error';   ///< redirects the user to this page to show errors
 
     var $isWebmaster;              ///< is user webmaster?
     var $isAdmin;                  ///< is user admin?

@@ -121,6 +121,7 @@ class RequestHandler
 
         case 'a':       $file = $page->getCoreDevPath().'views/admin/'.$this->_view.'.php'; break;
         case 'u':       $file = $page->getCoreDevPath().'views/user/'.$this->_view.'.php'; break;
+        case 'c':       $file = $page->getCoreDevPath().'views/core/'.$this->_view.'.php'; break;
         case 't':       $file = $page->getCoreDevPath().'views/tools/'.$this->_view.'.php'; break;
         default:        $file = 'views/'.$this->_controller.'.php';
         }

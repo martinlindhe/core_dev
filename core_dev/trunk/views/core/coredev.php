@@ -10,13 +10,6 @@ require_once('File.php');
 require_once('ImageResizer.php');
 
 switch ($this->view) {
-case 'error':
-    $header->setTitle( t('Error message') );
-    echo $error->render(true);
-    echo ahref('u/login', 'Log in').'<br/>';
-    echo ahref('./', 'Go to start page').'<br/>';
-    break;
-
 case 'selftest':
     // returns a error code if anything is wrong
     // the idea is to have a external script fetch http://server/coredev/selftest
