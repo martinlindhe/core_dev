@@ -60,7 +60,6 @@ echo '<br/>';
 echo '<h2>Character sets</h2>';
 
 $charsets = Sql::pSelectMapped('SHOW VARIABLES LIKE "%character_set%"');
-
 foreach ($charsets as $ch_name => $val) {
     echo $ch_name.' = ';
     if (!in_array($val, array('utf8')))
@@ -70,6 +69,11 @@ foreach ($charsets as $ch_name => $val) {
     echo '<br/>';
 }
 
+$collations = Sql::pSelectMapped('SHOW VARIABLES LIKE "%collation%"');
+foreach ($collations as $ch_name => $val) {
+    echo $ch_name.' = '.$val.'<br/>';
+}
+echo '<br/>';
 
 // show MySQL query cache settings
 

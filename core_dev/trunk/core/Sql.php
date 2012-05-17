@@ -270,6 +270,13 @@ class Sql
         return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
     }
 
+    /** like pDelete */
+    public static function pSet()
+    {
+        $args = func_get_args();
+        return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+    }
+
     /** like pDelete, but returns insert id */
     public static function pInsert()
     {
