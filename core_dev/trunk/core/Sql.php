@@ -42,15 +42,19 @@ class Sql
         if (! ($stmt = $db->db_handle->prepare($args[0])) )
             throw new Exception ('FAIL prepare: '.$args[0]);
 
+        $params = array();
         if (isset($args[2]) && is_array($args[2]))
         {
-            $params = $args[2];
-            array_unshift($params, $args[1]);
-        } else {
-            $params = array();
-            for ($i = 1; $i < count($args); $i++)
-                $params[] = $args[$i];
-        }
+            $x = array();
+            for ($i = 0; $i < count($args[2]); $i++)
+                $x[] = $args[2][$i];
+
+            for ($i = 0; $i < count($x); $i++)
+                $args[2+$i] = $x[$i];
+         }
+
+        for ($i = 1; $i < count($args); $i++)
+            $params[] = $args[$i];
 
         if ($params)
             $res = call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));

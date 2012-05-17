@@ -57,6 +57,20 @@ echo 'Database uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
 echo '<br/>';
 
 
+echo '<h2>Character sets</h2>';
+
+$charsets = Sql::pSelectMapped('SHOW VARIABLES LIKE "%character_set%"');
+
+foreach ($charsets as $ch_name => $val) {
+    echo $ch_name.' = ';
+    if (!in_array($val, array('utf8')))
+        echo '<font color="red">'.$val.'</font>';
+    else
+        echo $val;
+    echo '<br/>';
+}
+
+
 // show MySQL query cache settings
 
 $data = Sql::pSelectMapped('SHOW VARIABLES LIKE "%query_cache%"');
