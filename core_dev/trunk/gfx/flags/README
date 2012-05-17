@@ -1,11 +1,9 @@
-TODO MISSING: AP = "Asia/Pacific Region" has no flag... ??
-
 TODO UPDATE FLAGS:
-    TKL = Tokelau   OLD FLAG, current: http://en.wikipedia.org/wiki/Flag_of_Tokelau
+    TKL = Tokelau   old flag, current is http://en.wikipedia.org/wiki/Flag_of_Tokelau
     MWI = Malawi    old flag from "1964–2010", current is http://en.wikipedia.org/wiki/File:Flag_of_Malawi.svg
     LSO = Lesotho   old flag from "1987–2006", current is http://en.wikipedia.org/wiki/Flag_of_Lesotho
     TUV = Tuvalu    old flag from 1997, current is http://en.wikipedia.org/wiki/Flag_of_Tuvalu)
-    MMR = Myanmar   old flag 1974-2010, current:  http://en.wikipedia.org/wiki/Flag_of_Burma
+    MMR = Myanmar   old flag 1974-2010, current is http://en.wikipedia.org/wiki/Flag_of_Burma
 
 
 ---
@@ -26,6 +24,8 @@ AQ, ATA   Antartica      has no official flag, see http://en.wikipedia.org/wiki/
                          instead we use a unofficial symbol, created from
                          http://en.wikipedia.org/wiki/File:Flag_of_Antarctica.svg
 
+AP        Asia/Pacific Region has no flag, see http://en.wikipedia.org/wiki/Asia/Pacific_Region
+
 IM, IMN   Isle of Man    self-governing British Crown Dependency, see http://en.wikipedia.org/wiki/Isle_of_man
                          created icon from http://en.wikipedia.org/wiki/File:Flag_of_the_Isle_of_Man.svg
 
@@ -39,6 +39,14 @@ CW, CUW   Curaçao        a constituent country of the Kingdom of the Netherland
                          created icon from http://en.wikipedia.org/wiki/File:Flag_of_Cura%C3%A7ao.svg
 
 ---
+HAS FLAGS BUT UNUSED:
+
+UM, UMI   "United States Minor Outlying Islands"    Changed to unassigned by ICANN action in 2007, deleted from root zone as of April 20, 2008
+            - 2012-05-17: geoip says ip 226.139.217.181 belongs to this
+
+BV, BVT   Bouvet Island        Owned by Norway, Not in use; authorities decided that use of the .no domain is sufficient
+            - 2012-05-17: geoip says ip 206.99.153.57 belongs to this
+
 
 
 
