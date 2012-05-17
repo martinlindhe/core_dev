@@ -4,6 +4,8 @@
 // and warn if result != "STATUS:OK"
 
 $page->disableDesign();
+$page->setMimeType('text/plain');
+
 $status = 'OK';
 
 $dir = $page->getUploadPath();
