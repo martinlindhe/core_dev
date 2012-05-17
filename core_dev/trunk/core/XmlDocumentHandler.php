@@ -314,7 +314,7 @@ class XmlDocumentHandler extends CoreBase
                     'status:true,'. // fetch fresh status
                     'cookie:true,'. // enable cookie support
                     'xfbml:true,'.  // parse XFBML tags
-                    'channelUrl:"'.$this->getUrl().'coredev/fbchannel",'. // channel.html file
+                    'channelUrl:"'.$this->getUrl().'c/fbchannel",'. // channel.html file
             //        'oauth:true'.   // enable OAuth 2.0   XXX dont work with stable Chrome at 2011.08.08
                 '});'.
             '};'.

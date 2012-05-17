@@ -1,13 +1,6 @@
 <?php
 
-//STATUS: wip
-
-//TODO: separate these to their own files
-
-require_once('UserList.php');
-require_once('IconWriter.php');
-require_once('File.php');
-require_once('ImageResizer.php');
+//TODO: drop this file, separate each view to their own file
 
 switch ($this->view) {
 case 'selftest':
@@ -31,42 +24,6 @@ case 'selftest':
 
     die('STATUS:'.$status);
 
-case 'file':
-    // passes thru a file
-    echo File::passthru($this->owner);
-    return;
-
-case 'image':
-    // passes thru a image (with optional width & height specified)
-
-    $name = File::getUploadPath($this->owner);
-
-    if (!empty($_GET['w']) && !empty($_GET['h'])) {
-        $im = new ImageResizer($name);
-
-        if ($_GET['w'] <= $im->getWidth() && $_GET['h'] <= $im->getHeight())
-            $im->resizeAspect($_GET['w'], $_GET['h']);
-    } else {
-        $im = new Image($name);
-    }
-    $im->render();
-
-    return;
-
-case 'robots':
-    $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
-    $page->setMimeType('text/plain');
-    echo "User-agent: *\n";
-    echo "Disallow: /\n";
-    break;
-
-case 'fbchannel':
-    // required for facebook login, see http://developers.facebook.com/docs/reference/javascript/FB.init/ as to why
-    $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request
-    $page->setMimeType('text/html');
-    // If your application is https, your channelUrl must also be https
-    echo '<script src="'.$page->getScheme().'://connect.facebook.net/en_US/all.js"></script>';
-    return;
 
 default:
     throw new Exception ('no such view: '.$this->view);

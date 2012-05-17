@@ -300,7 +300,7 @@ function embed_flv($vid_id)
     $file = File::get($vid_id);
 
     $flashvars  = array(
-    'flv' => '/coredev/file/'.$vid_id,
+    'flv' => 'c/file/'.$vid_id,
     'autoload' => 0, 'showstop' => 1, 'showvolume' => 1, 'shortcut' => 0,
     'buffermessage' => '',
     'margin' => 2,
@@ -308,7 +308,7 @@ function embed_flv($vid_id)
 
     $thumbs = File::getByCategory(THUMB, $vid_id, $file->uploader);
     if (count($thumbs) == 1)
-        $flashvars['startimage'] = '/coredev/file/'.$thumbs[0]->id;
+        $flashvars['startimage'] = 'c/file/'.$thumbs[0]->id;
 
     return
     '<div id="'.$div_id.'"></div>'.

@@ -7,7 +7,7 @@
  *
  * The theory of operation is that URLs follow the format /controller/action/key1/value1/
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip

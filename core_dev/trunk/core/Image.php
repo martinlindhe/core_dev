@@ -140,7 +140,7 @@ function getThumbUrl($id, $width = 50, $height = 50)
     $page = XmlDocumentHandler::getInstance();
 
     return
-        $page->getRelativeUrl().'coredev/image/'.$id.
+        $page->getRelativeUrl().'c/image/'.$id.
         ($width ? '?w='.$width : '').
         ($height ? '&h='.$height : '');
 }
