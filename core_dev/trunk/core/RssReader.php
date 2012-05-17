@@ -51,7 +51,6 @@ class RssReader extends CoreBase
             return false;
 
         $this->reader = new CoreXmlReader();
-
         $this->reader->parse($data);
 
         while ($this->reader->read())

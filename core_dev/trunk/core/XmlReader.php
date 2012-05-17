@@ -38,13 +38,9 @@ class CoreXmlReader extends XMLReader
                 $raw = $h->getBody();
             }
 
-            if (strpos($raw, '<?xml ') === false) {
-                echo 'http status: '.$h->getStatus()."\n";
-                echo 'data len: '.strlen($raw).' bytes'."\n";
-                echo dh( substr($raw, 0, 100) );
-                throw new Exception ('cant parse feed from '.$url);
-                return false;
-            }
+            // prepend XML header if nonexistent
+            if (strpos($raw, '<?xml ') === false)
+                $raw = '<?xml version="1.0"?>'.$raw;
         }
 
         $this->xml($raw);
