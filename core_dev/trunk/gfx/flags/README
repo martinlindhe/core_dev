@@ -16,7 +16,8 @@ and optimized using pngcrush & optipng
 http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3
 ---
 
-
+I (Martin) have created additional 16x11 flag tiles for the following areas,
+missing from the orginal "famfamfam" flag set:
 
 The set is missing (probably among with more) flags for the following countries / regions:
 
@@ -39,7 +40,7 @@ CW, CUW   Curaçao        a constituent country of the Kingdom of the Netherland
                          created icon from http://en.wikipedia.org/wiki/File:Flag_of_Cura%C3%A7ao.svg
 
 ---
-HAS FLAGS BUT UNUSED:
+HAS FLAGS BUT UNUSED TLD:s:
 
 UM, UMI   "United States Minor Outlying Islands"    Changed to unassigned by ICANN action in 2007, deleted from root zone as of April 20, 2008
             - 2012-05-17: geoip says ip 226.139.217.181 belongs to this
@@ -47,7 +48,9 @@ UM, UMI   "United States Minor Outlying Islands"    Changed to unassigned by ICA
 BV, BVT   Bouvet Island        Owned by Norway, Not in use; authorities decided that use of the .no domain is sufficient
             - 2012-05-17: geoip says ip 206.99.153.57 belongs to this
 
-
+EH, ESH   Western Sahara   Unassigned tld, see http://en.wikipedia.org/wiki/.eh
+                http://en.wikipedia.org/wiki/Western_Sahara
+            - 2012-05-17: geoip says ip 46.136.207.67 belongs to this
 
 
 make_sprites.php
