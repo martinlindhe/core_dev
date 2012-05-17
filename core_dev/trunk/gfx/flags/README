@@ -45,12 +45,19 @@ HAS FLAGS BUT UNUSED TLD:s:
 UM, UMI   "United States Minor Outlying Islands"    Changed to unassigned by ICANN action in 2007, deleted from root zone as of April 20, 2008
             - 2012-05-17: geoip says ip 226.139.217.181 belongs to this
 
-BV, BVT   Bouvet Island        Owned by Norway, Not in use; authorities decided that use of the .no domain is sufficient
-            - 2012-05-17: geoip says ip 206.99.153.57 belongs to this
-
 EH, ESH   Western Sahara   Unassigned tld, see http://en.wikipedia.org/wiki/.eh
                 http://en.wikipedia.org/wiki/Western_Sahara
             - 2012-05-17: geoip says ip 46.136.207.67 belongs to this
+
+BV, BVT   Bouvet Island        Owned by Norway, Not in use; authorities decided that use of the .no domain is sufficient
+            - 2012-05-17: geoip says ip 206.99.153.57 belongs to this
+
+SJ, SJM  Svalbard and Jan Mayen   Owned by Norway, not in use
+
+AN, ANT       Netherlands Antilles   Transitional reservations from 2010-12
+
+CS, CSK       Czechoslovakia      Transitional reservations From 1993-06, see http://en.wikipedia.org/wiki/.cs
+
 
 
 make_sprites.php
