@@ -38,4 +38,5 @@ if (is_html_color(''))         echo "FAIL 16\n";
 
 if (htmlchars_decode('&#039;') != "'") echo "FAIL 17\n";
 
+if (relurl('abp://subscribe') != 'abp://subscribe') echo "FAIL 20\n";
 ?>

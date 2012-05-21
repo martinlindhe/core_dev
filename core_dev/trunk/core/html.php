@@ -68,7 +68,7 @@ function redir($dst)
 /** @param $url partial url to generate a url relative website base */
 function relurl($url)
 {
-    if (substr($url, 0, 4) == 'http' || substr($url, 0, 1) == '/' || substr($url, 0, 1) == '?')
+    if (strpos($url, '://') !== false || substr($url, 0, 1) == '/' || substr($url, 0, 1) == '?')
         return $url;
 
     $page = XmlDocumentHandler::getInstance();

@@ -47,6 +47,7 @@ class XmlDocumentHandler extends CoreBase
 
     private function __construct()
     {
+        $this->Url = new Url('http://XmlDocumentHandler.url.default');
         $this->ts_initial = microtime(true);
     }
 
