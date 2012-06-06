@@ -199,6 +199,10 @@ class iCalendarWriter
 
         $easter_ofs = easter_days($year, CAL_GREGORIAN);    //number of days after March 21 on which Easter falls
 
+        //Skärtorsdagen (rörlig): torsdagen närmast före påskdagen
+        $ts = mktime(0, 0, 0, 3, 21 + $easter_ofs - 3, $year);
+        $res[] = array($ts, 'Skärtorsdagen');
+
         //Långfredagen (rörlig): fredagen närmast före påskdagen
         $ts = mktime(0, 0, 0, 3, 21 + $easter_ofs - 2, $year);
         $res[] = array($ts, 'Långfredagen');
@@ -215,9 +219,9 @@ class iCalendarWriter
         $ts = mktime(0, 0, 0, 3, 21 + $easter_ofs + 1, $year);
         $res[] = array($ts, 'Annandag påsk');
 
-        //Kristi himmelfärdsdagen (rörlig): sjätte torsdagen efter påskdagen (39 dagar efter)
+        //Kristi himmelfärdsdag (rörlig): sjätte torsdagen efter påskdagen (39 dagar efter)
         $ts = mktime(0, 0, 0, 3, 21 + $easter_ofs + 39, $year);
-        $res[] = array($ts, 'Kristi himmelfärdsdagen');
+        $res[] = array($ts, 'Kristi himmelfärdsdag');
 
         //Pingsdagen (rörlig): sjunde söndagen efter påskdagen (49 dagar efter)
         $ts = mktime(0, 0, 0, 3, 21 + $easter_ofs + 49, $year);
