@@ -153,7 +153,7 @@ class iCalendarWriter
     /**
      * Generates swedish days off (workfree days)
      *
-     * Calculations verified 2008.05.13
+     * Calculations verified 2012.06.06
      *
      * Details (in swedish) here:
      * http://sv.wikipedia.org/wiki/Helgdag#Allm.C3.A4nna_helgdagar_i_Sverige

@@ -4,7 +4,7 @@
  *
  * Temporary all-in-one storage singleton that utilises memcached extension
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -25,12 +25,13 @@ class TempStore
 {
     static    $_instance;            ///< singleton
 
-    protected $handle;
+    protected $handle;               ///< Memcached object
     protected $persistent  = true;   ///< use persistent connections?
     protected $server_pool = array();
     protected $enabled     = true;
     protected $debug       = false;
     protected $connected   = false;
+    private   $maxlen      = 300;
 
     private function __construct()
     {
@@ -43,7 +44,7 @@ class TempStore
         if (!(self::$_instance instanceof self))
             self::$_instance = new self();
 
-        if (!extension_loaded('memcached') && !extension_loaded('memcache'))
+        if (!extension_loaded('memcached'))
             throw new Exception ('sudo apt-get install php5-memcached');
 
         return self::$_instance;
@@ -118,8 +119,8 @@ class TempStore
         if (!$this->enabled)
             return false;
 
-        if (strlen($key) > 250)
-            throw new Exception ('Key length too long '.$key);
+        if (strlen($key) > $this->maxlen)
+            throw new Exception ('Key length too long (len '.strlen($key).', max '.$this->maxlen.'): '.$key);
 
         $this->connect();
 
@@ -138,8 +139,8 @@ class TempStore
      */
     function set($key, $val = '', $expire_time = '1h')
     {
-        if (strlen($key) > 250)
-            throw new Exception ('Key length too long');
+        if (strlen($key) > $this->maxlen)
+            throw new Exception ('Key length too long (len '.strlen($key).', max '.$this->maxlen.'): '.$key);
 
         if (!is_duration($expire_time))
             throw new Exception ('bad expire time');

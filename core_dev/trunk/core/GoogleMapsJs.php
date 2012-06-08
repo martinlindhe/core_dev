@@ -24,6 +24,8 @@
 
 require_once('html.php');
 
+require_once('MapWidget.php');
+
 class GoogleMapMarker
 {
     var $latitude;
@@ -41,31 +43,18 @@ class GoogleMapMarker
 
 }
 
-class GoogleMapsJs
+class GoogleMapsJs extends MapWidget
 {
-    protected $latitude;                ///< OR use detect_location
-    protected $longitude;
     protected $lang;                    ///< 2-letter language code, eg "en". if unset, it will autodetect
     protected $region;                  ///< ("US", or "SE") in order to force maps to assume it is viewed from this region, rather than detected region
 
-    protected $detect_location = false; ///< shall google maps try to detect location of the user? instead of specifying coordinates
-    protected $zoom = 3;                ///< 1 (whole world) to 20 (max zoom)
+    protected $sensor = false;          ///< shall google maps try to detect location of the user? instead of specifying coordinates
 
     protected $width  = 500;
     protected $height = 300;
     protected $markers = array();
 
     protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';
-
-    function __construct($lat = false, $lng = false)
-    {
-        $this->latitude  = $lat;
-        $this->longitude = $lng;
-    }
-
-    function setZoomLevel($n) { $this->zoom = $n; }
-    function setWidth($n) { $this->width = $n; }
-    function setHeight($n) { $this->height = $n; }
 
     function addMarkers($arr)
     {
@@ -92,7 +81,7 @@ class GoogleMapsJs
             '?key='.$this->api_key.
             ($this->lang   ? '&amp;language='.$this->lang : '').
             ($this->region ? '&amp;region='.$this->region : '').
-            '&amp;sensor='.sbool($this->detect_location)
+            '&amp;sensor='.sbool($this->sensor)
         );
 
         $div_id = 'gmap_'.mt_rand();
@@ -121,7 +110,6 @@ class GoogleMapsJs
 
         return
         '<div id="'.$div_id.'" style="width:'.$this->width.'px;height:'.$this->height.'px;"></div>';
-//        '<br style="clear:both"/>';
     }
 
 }

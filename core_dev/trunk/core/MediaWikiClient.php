@@ -73,7 +73,8 @@ class MediaWikiClient
         $url = new Url($full_url);
 
         $x = explode('/', $url->getPath() );
-        return urldecode( array_pop($x) );
+        $t = urldecode( array_pop($x) );
+        return $t;
     }
 
     /** @return 2-letter language code from MediaWiki url */
@@ -180,7 +181,8 @@ class MediaWikiClient
                 throw new Exception ('failed to fetch article '.$full_url);
         }
         else
-            throw new Exception ('wierd input: '.$full_url);
+            return false;
+            //throw new Exception ('wierd input: '.$full_url);
 
         $article = MediaWikiParser::parseArticle($article->content);
         return $article->summary;
@@ -188,7 +190,12 @@ class MediaWikiClient
 
     public static function showArticle($full_url)  /// XXXX MAKE THIS INTO A VIEW, WHICH CAN HANDLE "FETCH NEW VERSION OF ARTICLE" CAPSLOCKFTW
     {
+//d($full_url);die;
         $o = self::getArticle( $full_url );
+        if (!$o) {
+            echo "WARNING: no such article in cache: ".$full_url."<br/>";
+            return false;
+        }
 
         $res =
         '<div class="okay">'.    // XXX have some better css
