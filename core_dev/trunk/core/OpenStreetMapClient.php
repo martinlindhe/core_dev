@@ -39,13 +39,27 @@ class OpenStreetMapClient extends MapWidget
         'map.addLayer(markers);';
 
         foreach ($this->markers as $idx => $m)
+        {
             $js .=
             'mll=new OpenLayers.LonLat('.$m->longitude.','.$m->latitude.')'.
                 '.transform('.
                 'new OpenLayers.Projection("EPSG:4326"),'. // transform from WGS 1984
                 'map.getProjectionObject()'.               // to Spherical Mercator Projection
-                ');'.
-            'markers.addMarker(new OpenLayers.Marker(mll));';
+                ');';
+
+            if ($m->icon) {
+                $js .=
+                'var size = new OpenLayers.Size(16,11);'.  // XXXX stupid api requires me to specify icon dimensions
+                'var offset = new OpenLayers.Pixel(-(size.w/2), -size.h);'.
+
+                'icon=new OpenLayers.Icon("'.$m->icon.'",size,offset);'.
+                'markers.addMarker(new OpenLayers.Marker(mll,icon));';
+
+            } else {
+                $js .=
+                'markers.addMarker(new OpenLayers.Marker(mll));';
+            }
+        }
 
         $js .=
         'map.setCenter(ll,'.$this->zoom.');';

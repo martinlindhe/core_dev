@@ -18,10 +18,6 @@
 
 //STATUS: wip
 
-//FIXME: add title text to map markers
-//TODO: make default mapTypeId configurable: ROADMAP, SATELLITE, HYBRID, TERRAIN
-//TODO: ability to use "css sprite" images somehow
-
 require_once('html.php');
 
 require_once('MapWidget.php');
@@ -38,8 +34,6 @@ class GoogleMapsJs extends MapWidget
     protected $width  = 500;
     protected $height = 300;
 
-//    protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';    // XXX remove, dont seem to be needed anymore? 2012-06-08
-
     function render()
     {
         if ($this->latitude === false || $this->longitude === false)
@@ -49,7 +43,6 @@ class GoogleMapsJs extends MapWidget
         $header->includeJs(
             'http://maps.google.com/maps/api/js'.
             '?sensor='.sbool($this->sensor).
-//            '&amp;key='.$this->api_key.
             ($this->lang   ? '&amp;language='.$this->lang : '').
             ($this->region ? '&amp;region='.$this->region : '')
         );
