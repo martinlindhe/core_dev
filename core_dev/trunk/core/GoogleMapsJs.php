@@ -26,22 +26,7 @@ require_once('html.php');
 
 require_once('MapWidget.php');
 
-class GoogleMapMarker
-{
-    var $latitude;
-    var $longitude;
-    var $tooltip;
-    var $icon;
-    var $zIndex;
-    var $flat = false;
 
-    function __construct($lat = 0, $lng = 0)
-    {
-        $this->latitude  = $lat;
-        $this->longitude = $lng;
-    }
-
-}
 
 class GoogleMapsJs extends MapWidget
 {
@@ -52,23 +37,8 @@ class GoogleMapsJs extends MapWidget
 
     protected $width  = 500;
     protected $height = 300;
-    protected $markers = array();
 
-    protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';
-
-    function addMarkers($arr)
-    {
-        if (!is_array($arr))
-            throw new Exception ('not array');
-
-        foreach ($arr as $o)
-        {
-            if (!($o instanceof GoogleMapMarker))
-                throw new Exception ('need GoogleMapMarker');
-
-            $this->markers[] = $o;
-        }
-    }
+//    protected $api_key = 'AIzaSyC262ttP813tKVbb79fRHjv6oP-542KeEM';    // XXX remove, dont seem to be needed anymore? 2012-06-08
 
     function render()
     {
@@ -78,10 +48,10 @@ class GoogleMapsJs extends MapWidget
         $header = XhtmlHeader::getInstance();
         $header->includeJs(
             'http://maps.google.com/maps/api/js'.
-            '?key='.$this->api_key.
+            '?sensor='.sbool($this->sensor).
+//            '&amp;key='.$this->api_key.
             ($this->lang   ? '&amp;language='.$this->lang : '').
-            ($this->region ? '&amp;region='.$this->region : '').
-            '&amp;sensor='.sbool($this->sensor)
+            ($this->region ? '&amp;region='.$this->region : '')
         );
 
         $div_id = 'gmap_'.mt_rand();
@@ -94,17 +64,16 @@ class GoogleMapsJs extends MapWidget
         '};'.
         'var myMap=new google.maps.Map(document.getElementById("'.$div_id.'"),myOptions);';
 
-        if ($this->markers)
-            foreach ($this->markers as $idx => $m)
-                $res .=
-                'var mk'.$idx.'=new google.maps.Marker({'.
-                    'position:new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
-                    ($m->icon ? 'icon:"'.$m->icon.'",' : '').
-                    ($m->tooltip ? 'title:"'.$m->tooltip.'",' : '').
-                    ($m->zIndex ? 'zIndex:'.$m->zIndex.',' : '').
-                    ($m->flat ? 'flat:true,' : '').
-                    'map:myMap'.
-                '});';
+        foreach ($this->markers as $idx => $m)
+            $res .=
+            'var mk'.$idx.'=new google.maps.Marker({'.
+                'position:new google.maps.LatLng('.$m->latitude.','.$m->longitude.'),'.
+                ($m->icon ? 'icon:"'.$m->icon.'",' : '').
+                ($m->tooltip ? 'title:"'.$m->tooltip.'",' : '').
+                ($m->zIndex ? 'zIndex:'.$m->zIndex.',' : '').
+                ($m->flat ? 'flat:true,' : '').
+                'map:myMap'.
+            '});';
 
         $header->embedJsOnload($res);
 

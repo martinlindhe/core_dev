@@ -12,6 +12,8 @@
 
 //STATUS: works
 
+//TODO: map markers dont support text label: http://dev.openlayers.org/docs/files/OpenLayers/Marker-js.html
+
 require_once('MapWidget.php');
 
 class OpenStreetMapClient extends MapWidget
@@ -33,6 +35,19 @@ class OpenStreetMapClient extends MapWidget
             'map.getProjectionObject()'.               // to Spherical Mercator Projection
             ');'.
 
+        'var markers = new OpenLayers.Layer.Markers( "Markers" );'.
+        'map.addLayer(markers);';
+
+        foreach ($this->markers as $idx => $m)
+            $js .=
+            'mll=new OpenLayers.LonLat('.$m->longitude.','.$m->latitude.')'.
+                '.transform('.
+                'new OpenLayers.Projection("EPSG:4326"),'. // transform from WGS 1984
+                'map.getProjectionObject()'.               // to Spherical Mercator Projection
+                ');'.
+            'markers.addMarker(new OpenLayers.Marker(mll));';
+
+        $js .=
         'map.setCenter(ll,'.$this->zoom.');';
 
         $header->embedJsOnload($js);
