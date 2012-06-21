@@ -60,8 +60,14 @@ function xmlentities($s)
 /** @param $dst redirects user to destination url relative to website base url */
 function redir($dst)
 {
-    $page = XmlDocumentHandler::getInstance();
-    header('Location: '.$page->getRelativeUrl().$dst);
+    if (strpos($dst, '://') !== false || substr($dst, 0, 1) == '/' || substr($dst, 0, 1) == '?') {
+        $loc = $dst;
+    } else {
+        $page = XmlDocumentHandler::getInstance();
+        $loc = $page->getRelativeUrl().$dst;
+    }
+
+    header('Location: '.$loc);
     die;
 }
 
