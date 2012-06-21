@@ -49,6 +49,22 @@ class Comment
         ' ORDER BY time_created DESC';
 
         $list = Sql::pSelect($q, 'ii', $type, $owner);
+
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    public static function getByType($type)
+    {
+        if (!is_numeric($type))
+            throw new Exception ('hmmm');
+
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE type = ?'.
+        ' ORDER BY time_created DESC';
+
+        $list = Sql::pSelect($q, 'i', $type);
+
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
