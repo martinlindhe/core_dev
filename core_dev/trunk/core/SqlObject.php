@@ -221,7 +221,7 @@ class SqlObject
 //            throw new exception ('obj fieldname: '.$obj->$field_name.' tbl '.$tblname);
 
             sqlObject::updateId($obj, $tblname, $field_name);
-            return $obj->id;
+            return $obj->$field_name;
         }
 
         return SqlObject::create($obj, $tblname);
@@ -295,14 +295,14 @@ class SqlObject
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new Exception ('very bad');
 
-        if (!$obj->id)
+        if (!$obj->$field_name)
         {
             d($obj);
             throw new Exception ('eehh');
         }
 
-        if (!is_numeric($obj->id))
-            throw new Exception ('bad data'. $obj->id);
+        if (!is_numeric($obj->$field_name))
+            throw new Exception ('bad data'. $obj->$field_name);
 
         $reflect = self::reflectQuery($obj, $field_name);
 
@@ -312,7 +312,7 @@ class SqlObject
         ' WHERE '.$field_name.' = ?';
 
         $reflect->str .= 'i';
-        $reflect->vals[] = $obj->id;
+        $reflect->vals[] = $obj->$field_name;
 
         return Sql::pUpdate($q, $reflect->str, $reflect->vals);
     }
