@@ -19,10 +19,7 @@
 //STATUS: wip
 
 require_once('html.php');
-
 require_once('MapWidget.php');
-
-
 
 class GoogleMapsJs extends MapWidget
 {

@@ -39,9 +39,6 @@ class GeoCodeResult  //XXXX MERGE WITH GeoLookupResult into GeoResult !
 
 class GoogleMapsClient
 {
-//    static $api_key = 'ABQIAAAAZb_xLTALhJppDDNbAvv61RTTk3jw-XtFtPS4v2-kipB51_4ySRQsE9iSridKaiJXVTQ5msdyWyuhRw'; //XXXXX
-//    static $api_key = 'AIzaSyBvieGWbFsNYanbECPYyQEtxRYY9ofuYug';
-
     static function reverse($latitude, $longitude)
     {
         $temp = TempStore::getInstance();
@@ -52,8 +49,8 @@ class GoogleMapsClient
             return unserialize($data);
 
         $url =
-        'http://maps.google.com/maps/geo?ll='.$latitude.','.$longitude.
-//        '&key='.self::$api_key.
+        'http://maps.google.com/maps/geo'.
+        '?ll='.$latitude.','.$longitude.
         '&output=json'; //XXX "output=xml" returns prettified street address & more info if needed
 
         $json = JSON::decode($url);
@@ -94,8 +91,8 @@ class GoogleMapsClient
             return unserialize($data);
 
         $url =
-        'http://maps.google.com/maps/geo?q='.urlencode(trim($address)).
-//        '&key='.self::$api_key.
+        'http://maps.google.com/maps/geo'.
+        '?q='.urlencode(trim($address)).
         '&output=json';    //XXX "output=xml" returns prettified street address & more info if needed
 
         $json = JSON::decode($url);
