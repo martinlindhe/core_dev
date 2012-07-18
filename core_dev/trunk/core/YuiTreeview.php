@@ -43,9 +43,6 @@ class YuiTreeview
 
     function render()
     {
-        if (!$this->xhr_url)
-            throw new Exception ('xhr url must be set');
-
         $header = XhtmlHeader::getInstance();
 
         $header->includeCss('http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css');
@@ -72,8 +69,8 @@ class YuiTreeview
             $node_type = 'MenuNode';
 
         $res =
-        'function loadNodeData(node, fnLoadComplete) {'.
-
+        'function loadNodeData(node, fnLoadComplete)'.
+        '{'.
             //We'll load node data based on what we get back when we
             //use Connection Manager topass the text label of the
             //expanding node to the Yahoo!
@@ -90,7 +87,7 @@ class YuiTreeview
                 //if our XHR call is successful, we want to make use
                 //of the returned data and create child nodes.
                     'success: function(oResponse) {'.
-//                  'YAHOO.log("XHR transaction was successful.", "info", "example");'.
+                    //'YAHOO.log("XHR transaction was successful.", "info", "example");'.
                     //YAHOO.log(oResponse.responseText);
                     'var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);'.
                     'if (oResults.records && oResults.records.length) {'.
@@ -128,10 +125,11 @@ class YuiTreeview
             'YAHOO.util.Connect.asyncRequest("GET", sUrl, callback);'.
         '}'.
 
-        'tree = new YAHOO.widget.TreeView("'.$div_holder.'");'.
+        'var tree = new YAHOO.widget.TreeView("'.$div_holder.'");'.
 
         //turn dynamic loading on for entire tree:
-        'tree.setDynamicLoad(loadNodeData, '.($this->leaf_mode ? '1' : '0').');'.
+        ($this->xhr_url ?
+            'tree.setDynamicLoad(loadNodeData,'.($this->leaf_mode ? '1' : '0').');' : '').
 
         //get root node for tree:
         'var root = tree.getRoot();'.
