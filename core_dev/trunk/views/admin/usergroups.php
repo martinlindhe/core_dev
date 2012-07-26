@@ -13,7 +13,7 @@ function addUserGroupSubmit($p)
     $grp->setLevel($p['level']);
     $grp->save();
 
-    redir('admin/core/usergroup');
+    redir('a/usergroups');
 }
 
 $header->setTitle('Admin: Manage user groups');

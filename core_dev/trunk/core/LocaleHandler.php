@@ -93,6 +93,9 @@ class LocaleHandler
  */
 function t($s)
 {
+    if (!$s)
+        throw new Exception ('huh');
+
     $locale = LocaleHandler::getInstance();
 
     switch ($locale->get()) {
