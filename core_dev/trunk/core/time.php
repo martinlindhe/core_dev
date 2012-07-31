@@ -202,6 +202,24 @@ function in_seconds($s)
 }
 
 /**
+ * @param $d duration in seconds
+ * @return duration in days
+ */
+function in_days($d, $precision = 0)
+{
+    return round($d / 86400, $precision);
+}
+
+/**
+ * @param $d duration in seconds
+ * * @return duration in months (30 day average)
+ */
+function in_months($d, $precision = 0)
+{
+    return round($d / (86400*30), $precision);
+}
+
+/**
  * Renders a second representation as "18:40:22"
  * @param $milli force millisecond rendering?
  * @param $precision decimal precision of milliseconds
