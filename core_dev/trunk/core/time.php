@@ -205,6 +205,15 @@ function in_seconds($s)
 
 /**
  * @param $d duration in seconds
+ * @return duration in hours
+ */
+function in_hours($d, $precision = 0)
+{
+    return round($d / 3600, $precision);
+}
+
+/**
+ * @param $d duration in seconds
  * @return duration in days
  */
 function in_days($d, $precision = 0)
@@ -214,7 +223,7 @@ function in_days($d, $precision = 0)
 
 /**
  * @param $d duration in seconds
- * * @return duration in months (30 day average)
+ * @return duration in months (30 day average)
  */
 function in_months($d, $precision = 0)
 {
@@ -223,7 +232,7 @@ function in_months($d, $precision = 0)
 
 /**
  * @param $d duration in seconds
- * * @return duration in years (365 day average)
+ * @return duration in years (365.25 day average)
  */
 function in_years($d, $precision = 0)
 {
