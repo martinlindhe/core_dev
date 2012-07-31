@@ -180,12 +180,14 @@ function elapsed_seconds($s, $precision = 1)
         return $r.($r > 1 ? ' months' : ' month');
     }
 
-    $r = round($s / 60 / 60 / 24 / 365, $precision);
+    $r = round($s / 60 / 60 / 24 / 365.25, $precision);
     return $r.($r > 1 ? ' years' : ' year');
 }
 
 /**
- * Translates a time string such as "18:40:22", "18:40:22.11" or "18:44:22,09" into number of seconds
+ * Translates a time string to seconds
+ * @param $s text such as "18:40:22", "18:40:22.11" or "18:40:22,11"
+ * @return seconds
  */
 function in_seconds($s)
 {
@@ -217,6 +219,15 @@ function in_days($d, $precision = 0)
 function in_months($d, $precision = 0)
 {
     return round($d / (86400*30), $precision);
+}
+
+/**
+ * @param $d duration in seconds
+ * * @return duration in years (365 day average)
+ */
+function in_years($d, $precision = 0)
+{
+    return round($d / (86400*365.25), $precision);
 }
 
 /**

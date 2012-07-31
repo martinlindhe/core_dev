@@ -20,6 +20,10 @@ if (in_seconds('23:59:59') != 86399)                      echo "FAIL 12\n";
 if (in_seconds('0:49:47.53') != 2987.53)                  echo "FAIL 13\n";
 if (in_seconds('00:26:36,595') != 1596.595)               echo "FAIL 14\n";
 
+if (in_seconds('18:40:22')    != 67222)                   echo "FAIL 15\n";
+if (in_seconds('18:40:22.11') != 67222.11)                echo "FAIL 16\n";
+if (in_seconds('18:40:22,11') != 67222.11)                echo "FAIL 17\n";
+
 if (seconds_to_hms(65625)   != '18:13:45')                          echo "FAIL 20\n";
 if (seconds_to_hms(0)       != '00:00:00')                          echo "FAIL 21\n";
 if (seconds_to_hms(86399)   != '23:59:59')                          echo "FAIL 22\n";
