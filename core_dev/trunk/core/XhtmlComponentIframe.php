@@ -21,6 +21,7 @@ class XhtmlComponentIframe extends XhtmlComponent
         return
         '<iframe'.
         ($this->name   ? ' name="'.$this->name.'"' : '').
+        ($this->name   ? ' id="'.$this->name.'"' : '').
         ($this->width  ? ' width="'.$this->width.'"' : '').
         ($this->height ? ' height="'.$this->height.'"' : '').
         ($this->scrolling ? ' scrolling="'.$this->scrolling.'"' : '').
