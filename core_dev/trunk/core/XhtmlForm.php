@@ -323,6 +323,7 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
+    /** Adds radio buttons */
     function addRadio($name, $text, $arr, $default = '')
     {
         $o = new XhtmlComponentRadio();
@@ -368,9 +369,7 @@ class XhtmlForm
         $this->add($o, $text);
     }
 
-    /**
-     * Adds a YuiAutocomplete powered input field
-     */
+    /** Adds a YuiAutocomplete powered input field */
     function addAutocomplete($name, $text, $url, $rf, $js = '')
     {
         $o = new YuiAutocomplete();
@@ -451,9 +450,7 @@ class XhtmlForm
         ($this->title       ? ' title="'.$this->title.'"' : '').
         ($this->file_upload ? ' enctype="multipart/form-data"' : '').
         ($this->js_onsubmit ? ' onsubmit="'.$this->js_onsubmit.'"' : '').
-        '>';
-
-        $res .=
+        '>'.
         '<table'.
         ' style="padding: 6px;'.$this->css_table.'"'.
         '>';
@@ -490,12 +487,9 @@ class XhtmlForm
             $res .=
             '<tr>'.
             ($e['str'] ? '<td>'.$e['str'].'</td><td>' : '<td colspan="2">').
-            $e['obj']->render();
-
-            if ($e['obj2'] instanceof XhtmlComponent)
-                $res .= $e['obj2']->render();
-
-            $res .= '</td>'.
+            $e['obj']->render().
+            ($e['obj2'] instanceof XhtmlComponent ? $e['obj2']->render() : '').
+            '</td>'.
             '</tr>';
         }
 

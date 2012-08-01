@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
  */
 
 ///XXXX: make interface IXhtmlComponent instead?
@@ -17,6 +17,7 @@ require_once('XhtmlComponentCheckbox.php');
 require_once('XhtmlComponentDropdown.php');
 require_once('XhtmlComponentFile.php');
 require_once('XhtmlComponentHidden.php');
+require_once('XhtmlComponentIframe.php');
 require_once('XhtmlComponentImage.php');
 require_once('XhtmlComponentInput.php');
 require_once('XhtmlComponentListbox.php');
