@@ -31,8 +31,9 @@ class XhtmlComponentDropdown extends XhtmlComponent
             throw new Exception ('options not an array: '.$this->options);
 
         $out =
-        '<select '.
-            'name="'.strip_tags($this->name).'"'.
+        '<select'.
+            ' name="'.strip_tags($this->name).'"'.
+            ' id="'.strip_tags($this->name).'"'.
             ($this->js_onchange ? ' onchange="'.$this->js_onchange.'"' : '').
         '>'.
         '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
