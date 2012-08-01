@@ -23,7 +23,8 @@ class RequestHandler
     protected $_view = 'default';     ///< /controller/VIEW/owner/        XXX view parameter for the "controller", or later will be the method to run on the controller
     protected $_owner = '';           ///< /controller/view/OWNER/        alphanumeric id
     protected $_child = '';           ///< /controller/view/owner/CHILD/  alphanumeric id
-    protected $_child2 = '';          ///< /controller/view/owner/child/CHILD2/  alphanumeric id
+    protected $_child2 = '';          ///< /controller/view/owner/child/CHILD2/         alphanumeric id
+    protected $_child3 = '';          ///< /controller/view/owner/child/child2/CHILD3/  alphanumeric id
     protected $exclude_session = array();
 
     private function __clone() {}      //singleton: prevent cloning of class
@@ -95,8 +96,14 @@ class RequestHandler
 
             if (!empty($arr[4])) {
                 if (!is_alphanumeric($arr[4]))
-                    die('XXX child4');
+                    die('XXX child2');
                 $this->_child2 = $arr[4];
+            }
+
+            if (!empty($arr[5])) {
+                if (!is_alphanumeric($arr[5]))
+                    die('XXX child3');
+                $this->_child3 = $arr[5];
             }
         }
     }
@@ -136,6 +143,7 @@ class RequestHandler
         $view->owner  = $this->_owner;
         $view->child  = $this->_child;
         $view->child2 = $this->_child2;
+        $view->child3 = $this->_child3;
 
         $page->attach( $view );
 
