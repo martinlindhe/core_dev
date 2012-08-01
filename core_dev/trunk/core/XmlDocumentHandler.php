@@ -183,6 +183,8 @@ class XmlDocumentHandler extends CoreBase
     function designHead($n) { $this->design_head = $n; }
     function designFoot($n) { $this->design_foot = $n; }
 
+    function allowFrames($b) { $this->allow_frames = $b; }
+
     /** Disables automatic render of XhtmlHeader, designHead & designFoot */
     function disableDesign() { $this->enable_design = false; }
 
