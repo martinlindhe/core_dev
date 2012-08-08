@@ -130,7 +130,14 @@ function dp($str)
 
     error_log($str);
 
-    error_log(date('[r] ').$str.PHP_EOL, 3, '/tmp/core_dev.log');
+    $f = '/tmp/core_dev.log';
+
+    if (!file_exists($f)) {
+        touch($f);
+        chmod($f, 0666); // writable by all
+    }
+
+    error_log(date('[r] ').$str.PHP_EOL, 3, $f);
 }
 
 /**
