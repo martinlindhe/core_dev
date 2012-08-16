@@ -21,12 +21,15 @@ require_once('XhtmlComponent.php');
 class XhtmlComponentAudio extends XhtmlComponent
 {
     var $src;
+    var $mimetype = '';
+    var $preload = 'auto'; ///< "auto", "metadata" or "none"
 
     function render()
     {
         return
-            '<audio src="'.$this->src.'" controls="controls">'.
-            'Your browser does not support the audio element.'.
+            '<audio controls="controls" preload="'.$this->preload.'">'.
+                '<source src="'.$this->src.'"'.($this->mimetype ? ' type="'.$this->mimetype.'"' : '').'/>'.
+                'Your browser does not support the audio element.'.
             '</audio>';
     }
 
