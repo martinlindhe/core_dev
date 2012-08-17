@@ -19,6 +19,7 @@ $wrapper_id   = 'cdw_'.mt_rand();
 $header->embedCss(
 '#'.$wrapper_id.
 '{'.
+    'z-index:999;'.     // to put on top of other elements
     'position:fixed;'.
     'right:0;'.
     'bottom:0;'.
@@ -30,6 +31,7 @@ $header->embedCss(
     'background-color:#fafafa;'.
     'font:9px verdana;'.
 '}'.
+
 'a.closebtn'.
 '{'.
     'display:block;'.
@@ -40,6 +42,7 @@ $header->embedCss(
     'margin-top:4px;'.
     'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
 '}'.
+
 'a.closebtn:hover'.
 '{'.
     'background-position:0px -7px;'.
@@ -56,13 +59,12 @@ $header->embedCss(
     'background:url("'.relurl('core_dev/gfx/close.gif').'");'.
     'background-position:0px -28px;'.
 '}'.
+
 'a.expandbtn:hover'.
 '{'.
-//    'background-position:0px -21px;'.  //TOODO: add lighter version of expander icon tile for hover
+//    'background-position:0px -21px;'.  //TODO: add lighter version of expander icon tile for hover
 '}'
-
 );
-
 
 
 echo '<div id="'.$wrapper_id.'">'; // outer wrapper
