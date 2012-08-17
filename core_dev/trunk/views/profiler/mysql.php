@@ -22,7 +22,7 @@ function print_query($q)
     ' IS NULL', ' IS NOT NULL', ' DESC', ' ASC',
     ' != ',
     'NOW()', ' DATE(',
-    ' COUNT(', ' SUM(', ' LENGTH(', ' CHAR_LENGTH(',
+    ' COUNT(', ' DISTINCT(', ' SUM(', ' LENGTH(', ' CHAR_LENGTH(',
     ' MIN(', ' MAX(',
     );
 
@@ -36,33 +36,61 @@ function print_query($q)
     ' <b>IS NULL</b>', ' <b>IS NOT NULL</b>', ' <b>DESC</b>', ' <b>ASC</b>',
     ' <b>!=</b> ',
     '<b>NOW()</b>', ' <b>DATE</b>(',
-    ' <b>COUNT</b>(', ' <b>SUM</b>(', ' <b>LENGTH</b>(', ' <b>CHAR_LENGTH</b>(',
-    ' <b>MIN</b>(',' <b>MAX</b>(',
+    ' <b>COUNT</b>( ', ' <b>DISTINCT</b>( ',' <b>SUM</b>( ', ' <b>LENGTH</b>( ', ' <b>CHAR_LENGTH</b>( ',
+    ' <b>MIN</b>( ',' <b>MAX</b>( ',
     );
 
     $query = str_replace($keywords, $decorated, $query);
 
     $header = XhtmlHeader::getInstance();
     $header->registerCss(
-    '.cd_mysql_pager'.
+    '.cd_sql_row'.
     '{'.
         'overflow:auto;'.
         'max-width:400px;'.
-        'max-height:100px;'.
+    '}'
+    );
+
+    $header->registerCss(
+    '.cd_sql_row:hover'.
+    '{'.
+        'background-color:#ccc;'.
+    '}'
+    );
+
+    $header->registerCss(
+    '.cd_sql_box,.cd_sql_box_p'.
+    '{'.
+        'width:30px;'.
+        'float:left;'.
+    '}'
+    );
+
+    $header->registerCss(
+    '.cd_sql_box_p'.
+    '{'.
+        'background-color:#B1F9AA;'.
+    '}'
+    );
+
+    $header->registerCss(
+    '.cd_sql_text'.
+    '{'.
+        'width:300px;'.
+        'float:left;'.
     '}'
     );
 
     echo
-    '<div class="cd_mysql_pager">'.
-    '<table summary="" class="hover" width="100%">'.
-    '<tr><td width="30"'.($q->prepared ? ' style="background-color:#B1F9AA"': '').'>';
+    '<div class="cd_sql_row">'.
+    '<div class="'.($q->prepared ? 'cd_sql_box_p' : 'cd_sql_box').'">';
 
     if ($q->error)
         echo coreButton('Error', '', 'SQL Error');
     else
         echo round($q->time, 2).'s';
 
-    echo '</td><td>';
+    echo '</div><div class="cd_sql_text">';
 
     if ($q->error)
         echo 'Error: <b>'.$q->error.'</b><br/><br/>';
@@ -75,17 +103,12 @@ function print_query($q)
         echo ': '.implode(', ', $q->params);
 
     echo
-    '</td></tr></table>'.
+    '</div>'.
+
     '</div>';
 }
 
-$sql_div = 'sql_'.mt_rand();
-
-$header->embedCss(
-'.hover:hover{'.
-    'background-color:#ccc;'.
-'}'
-);
+$sql_div = 'cd_sql'.mt_rand();
 
 $db_time = $db->pSelectItem('SELECT NOW()');
 $uptime  = $db->pSelectRow('SHOW STATUS WHERE Variable_name = ?', 's', 'Uptime');
