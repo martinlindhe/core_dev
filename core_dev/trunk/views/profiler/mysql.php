@@ -5,6 +5,44 @@
 
 //STATUS: wip
 
+$header->registerCss(
+'.cd_sql_row'.
+'{'.
+    'overflow:auto;'.
+    'max-width:400px;'.
+'}'
+);
+
+$header->registerCss(
+'.cd_sql_row:hover'.
+'{'.
+    'background-color:#ccc;'.
+'}'
+);
+
+$header->registerCss(
+'.cd_sql_box,.cd_sql_box_p'.
+'{'.
+    'width:30px;'.
+    'float:left;'.
+'}'
+);
+
+$header->registerCss(
+'.cd_sql_box_p'.
+'{'.
+    'background-color:#B1F9AA;'.
+'}'
+);
+
+$header->registerCss(
+'.cd_sql_text'.
+'{'.
+    'width:300px;'.
+    'float:left;'.
+'}'
+);
+
 function print_query($q)
 {
     if (! ($q instanceof SqlQuery))
@@ -41,45 +79,6 @@ function print_query($q)
     );
 
     $query = str_replace($keywords, $decorated, $query);
-
-    $header = XhtmlHeader::getInstance();
-    $header->registerCss(
-    '.cd_sql_row'.
-    '{'.
-        'overflow:auto;'.
-        'max-width:400px;'.
-    '}'
-    );
-
-    $header->registerCss(
-    '.cd_sql_row:hover'.
-    '{'.
-        'background-color:#ccc;'.
-    '}'
-    );
-
-    $header->registerCss(
-    '.cd_sql_box,.cd_sql_box_p'.
-    '{'.
-        'width:30px;'.
-        'float:left;'.
-    '}'
-    );
-
-    $header->registerCss(
-    '.cd_sql_box_p'.
-    '{'.
-        'background-color:#B1F9AA;'.
-    '}'
-    );
-
-    $header->registerCss(
-    '.cd_sql_text'.
-    '{'.
-        'width:300px;'.
-        'float:left;'.
-    '}'
-    );
 
     echo
     '<div class="cd_sql_row">'.
