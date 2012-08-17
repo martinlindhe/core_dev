@@ -31,20 +31,21 @@ class LinkRel
 
 class XhtmlHeader extends CoreBase implements IXmlComponent
 {
-    static $_instance;                     ///< singleton class
+    static $_instance;                      ///< singleton class
 
     protected $title;
 
     protected $embed_js        = array();
     protected $embed_js_onload = array();
     protected $embed_css       = '';
+    protected $css_define      = array();   ///< defines css rules
     protected $include_js      = array();
-    protected $include_js_last = array();  /// HACK to enable to include js after some js snippet has been embedded
+    protected $include_js_last = array();   ///< HACK to enable to include js after some js snippet has been embedded
     protected $js_functions    = array();
     protected $meta_tags       = array();
-    protected $rel             = array(); ///< <link rel=""> tags for external resources: css, icon, rss, opensearch
+    protected $rel             = array();   ///< <link rel=""> tags for external resources: css, icon, rss, opensearch
 
-    protected $reload_time     = 0;        ///< time after page load to reload the page, in seconds
+    protected $reload_time     = 0;         ///< time after page load to reload the page, in seconds
 
     private function __construct() { }
 
@@ -56,7 +57,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         return self::$_instance;
     }
 
-    /** Add a <meta name="" content=""> tag */
+    /** Adds a <meta name="" content=""> tag */
     function setMeta($name, $val)
     {
         $o = new MetaDescription();
@@ -65,7 +66,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->meta_tags[] = $o;
     }
 
-    /** Add a <link rel="" href=""> tag */
+    /** Adds a <link rel="" href=""> tag */
     function addRel($rel_type, $href, $mime_type = '', $title = '')
     {
         $o = new LinkRel();
@@ -131,7 +132,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->addRel('icon', $uri, file_get_mime_by_suffix($uri));
     }
 
-    /** Registers a javascript function */
+    /** Registers a javascript function (avoids double definitions)  */
     function registerJsFunction($code)
     {
         $code = trim($code);
@@ -142,14 +143,39 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $fn = explode('(', $tmp);
 
         // detect duplicate function names
-        if (isset($this->js_functions[$fn[0]]) && $this->js_functions[$fn[0]] != $code)
-            throw new Exception ('XXX js function with different code already defined: '.$fn[0]);
+        if (isset($this->js_functions[$fn[0]]))
+            if ($this->js_functions[$fn[0]] != $code)
+                throw new Exception ('js function with different code already defined: '.$fn[0]);
+            else
+                // dont double-embed identical functions
+                return false;
 
         $this->js_functions[$fn[0]] = $code;
+        return true;
     }
 
     /** CSS to be added inside <head> */
-    function embedCss($s = '') { $this->embed_css .= $s; }
+    function embedCss($s) { $this->embed_css .= $s; }
+
+    /** Registers a css block (avoids double definitions) */
+    function registerCss($code)
+    {
+        $code = trim($code);
+
+        $tmp = substr($code, 9);
+        $fn = explode('{', $tmp);
+
+        // detect duplicate function names
+        if (isset($this->css_define[$fn[0]]))
+            if ($this->css_define[$fn[0]] != $code)
+                throw new Exception ('css define with different code already defined: '.$fn[0]);
+            else
+                // dont double-embed identical functions
+                return false;
+
+        $this->css_define[$fn[0]] = $code;
+        return true;
+    }
 
     /** JavaScript to be added inside <head> (js functions is available before page load event is completed) */
     function embedJs($s) { $this->embed_js[] = $s; }
@@ -182,8 +208,16 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
                 ($o->title ? ' title="'.$o->title.'"' : '').
                 '/>';
 
+        $css = '';
         if ($this->embed_css)
-            $res .= css_embed($this->embed_css);
+            $css .= $this->embed_css;
+
+        if ($this->css_define)
+            foreach ($this->css_define as $key => $val)
+                $css .= $val;
+
+        if ($css)
+            $res .= css_embed($css);
 
         $js = '';
 

@@ -42,13 +42,18 @@ function print_query($q)
 
     $query = str_replace($keywords, $decorated, $query);
 
-    $css =
-    'overflow:auto;'.
-    'max-width:400px;'.
-    'max-height:100px;';
+    $header = XhtmlHeader::getInstance();
+    $header->registerCss(
+    '.cd_mysql_pager'.
+    '{'.
+        'overflow:auto;'.
+        'max-width:400px;'.
+        'max-height:100px;'.
+    '}'
+    );
 
     echo
-    '<div style="'.$css.'">'.
+    '<div class="cd_mysql_pager">'.
     '<table summary="" class="hover" width="100%">'.
     '<tr><td width="30"'.($q->prepared ? ' style="background-color:#B1F9AA"': '').'>';
 
