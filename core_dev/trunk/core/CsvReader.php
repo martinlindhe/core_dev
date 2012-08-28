@@ -63,6 +63,7 @@ class CsvReader
 
                 if ($cols != count($row)) {
                     echo "FATAL: CSV format error in $filename at line ".($line+1).": ".count($row)." columns found, $cols expected\n";
+                    d($row);
                     return false;
                 }
                 if ($row)
