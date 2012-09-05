@@ -551,6 +551,9 @@ function formatMSID($anr, $cc = '46')
 {
     $anr = str_replace(array("\t", ' ', '-', '+'), '', $anr);
 
+    if (substr($anr, 0, 2) == '00')
+        $anr = substr($anr, 2);
+
     // numer without country code
     if (substr($anr, 0, 1) == '0' && strlen($anr) >= 6 )
         $anr = $cc.substr($anr, 1);
