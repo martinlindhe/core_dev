@@ -152,6 +152,10 @@ class User
      */
     function remove()
     {
+        // also removes user from all user groups
+        foreach (UserGroupHandler::getGroups($this->id) as $grp)
+            UserGroupHandler::removeFromGroup($this->id, $grp->id);
+
         $q = 'UPDATE tblUsers SET time_deleted = NOW() WHERE id = ?';
         Sql::pUpdate($q, 'i', $this->id);
     }

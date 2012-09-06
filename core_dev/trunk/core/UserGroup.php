@@ -13,13 +13,13 @@ require_once('User.php');
 
 class UserGroup
 {
-    private $name;
-    private $id;
-    private $level = 0; ///< user level
-    private $info;
+    var $name;
+    var $id;
+    var $level = 0; ///< user level
+    var $info;
 
-    private $time_created;
-    private $creator_id;
+    var $time_created;
+    var $creator_id;
 
     function __construct($id = 0)
     {
