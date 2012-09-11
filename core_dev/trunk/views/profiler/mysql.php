@@ -62,6 +62,7 @@ function print_query($q)
     'NOW()', ' DATE(',
     ' COUNT(', ' DISTINCT(', ' SUM(', ' LENGTH(', ' CHAR_LENGTH(',
     ' MIN(', ' MAX(',
+    ' SHA1(',',SHA1(', // FIXME can this be described in one rule?
     );
 
     $decorated = array(
@@ -76,6 +77,7 @@ function print_query($q)
     '<b>NOW()</b>', ' <b>DATE</b>(',
     ' <b>COUNT</b>( ', ' <b>DISTINCT</b>( ',' <b>SUM</b>( ', ' <b>LENGTH</b>( ', ' <b>CHAR_LENGTH</b>( ',
     ' <b>MIN</b>( ',' <b>MAX</b>( ',
+    ' <b>SHA1</b>( ',', <b>SHA1</b>( ',
     );
 
     $query = str_replace($keywords, $decorated, $query);
