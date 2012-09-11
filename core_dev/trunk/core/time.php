@@ -53,14 +53,10 @@ function num_years($d1, $d2)
     $d1 = ts($d1);
     $d2 = ts($d2);
 
-    if (php_min_ver('5.3')) {
-        $dt1 = new DateTime(sql_date($d1));
-        $dt2 = new DateTime(sql_date($d2));
-        $interval = $dt1->diff($dt2);
-        return $interval->y;
-    }
-
-    return floor(($d2 - $d1) / 60 / 60 / 24 / 365.25);
+    $dt1 = new DateTime(sql_date($d1));
+    $dt2 = new DateTime(sql_date($d2));
+    $interval = $dt1->diff($dt2);
+    return $interval->y;
 }
 
 /**
