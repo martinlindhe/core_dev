@@ -79,10 +79,7 @@ class RequestHandler
                 $this->_view = $arr[1];
             }
 
-            if (count($arr) <= 2)
-                return;
-
-            if ($arr[2]) {
+            if (!empty($arr[2])) {
                 if (!is_alphanumeric($arr[2]))
                     die('XXX owner');
                 $this->_owner = $arr[2];
