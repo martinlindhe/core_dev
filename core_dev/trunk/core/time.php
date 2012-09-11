@@ -71,23 +71,20 @@ function num_days($d1, $d2)
     $d1 = ts($d1);
     $d2 = ts($d2);
 
-    if (php_min_ver('5.3')) {
-        $dt1 = new DateTime(sql_date($d1));
-        $dt2 = new DateTime(sql_date($d2));
-        $interval = $dt1->diff($dt2);
+    $dt1 = new DateTime(sql_date($d1));
+    $dt2 = new DateTime(sql_date($d2));
+    $interval = $dt1->diff($dt2);
 
-        $days = $interval->format('%a'); //Total amount of days
-        return $days + 1;
-    }
+    $days = $interval->format('%a'); //Total amount of days
+    return $days + 1;
+}
 
-    if ($d1 > $d2)
-        $date_diff = $d1 - $d2;
-    else
-        $date_diff = $d2 - $d1;
-
-    $days = ceil($date_diff / (3600*24)) + 1;
-
-    return $days;
+/**
+ * @return number of days since $ts
+ */
+function days_ago($ts)
+{
+    return num_days(time(), $ts) - 1;
 }
 
 /**
