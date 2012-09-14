@@ -8,7 +8,7 @@ $l = new ConvertLength();
 $l->setPrecision(2);
 
 if ($l->conv('m', 'au', 100000000000) != 0.67) echo "FAIL 1\n";
-if ($l->conv('au', 'm', 2) != 299195742928)    echo "FAIL 2\n";
+if ($l->conv('au', 'm', 2) != 299195741400)    echo "FAIL 2\n";
 
 if ($l->conv('m', 'ft', 100) != 328.08)        echo "FAIL 3\n";
 if ($l->conv('ft', 'm', 100) != 30.48)         echo "FAIL 4\n";

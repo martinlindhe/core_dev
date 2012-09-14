@@ -302,7 +302,7 @@ class XhtmlForm
     }
 
     /** Adds a submit button to the form */
-    function addSubmit($title, $css = '')
+    function addSubmit($title = 'Submit', $css = '')
     {
         $o = new XhtmlComponentSubmit();
         $o->title = $title;

@@ -30,7 +30,7 @@ class ConvertLength extends ConvertBase
     'yd'        => 0.9144,         //xx: Yard
     'ukmile'    => 1852,           //UK: Mile (nautical)
     'usmile'    => 1609.344,       //US: Mile (statute)
-    'au'        => 149597871464,   //xx: Astronomical Unit
+    'au'        => 149597870700,   // Astronomical Unit
     );
 
     protected $lookup = array(
