@@ -34,8 +34,13 @@ if ($l->conv('nm', 'mm', 500000) != 0.5)       echo "FAIL 16\n";
 if ($l->conv('pm', 'nm', 500000) != 500)       echo "FAIL 17\n";
 if ($l->conv('nm', 'pm', 0.04) != 40)          echo "FAIL 18\n";
 
-if ($l->convLiteral('1 meter', 'cm') != 100)       echo "FAIL 19\n";
-if ($l->convLiteral('10 mil', 'kilometer') != 100) echo "FAIL 20\n";
-if ($l->convLiteral('1 micrometer', 'nanometer') != 1000) echo "FAIL 21\n";
+if ($l->conv('fm', 'pm', 50000000) != 50000)   echo "FAIL 19\n";
+if ($l->conv('am', 'fm', 50000000) != 50000)   echo "FAIL 20\n";
+if ($l->conv('zm', 'am', 50000000) != 50000)   echo "FAIL 21\n";
+if ($l->conv('ym', 'zm', 50000000) != 50000)   echo "FAIL 22\n";
+
+if ($l->convLiteral('1 meter', 'cm') != 100)              echo "FAIL 30\n";
+if ($l->convLiteral('10 mil', 'kilometer') != 100)        echo "FAIL 31\n";
+if ($l->convLiteral('1 micrometer', 'nanometer') != 1000) echo "FAIL 32\n";
 
 ?>

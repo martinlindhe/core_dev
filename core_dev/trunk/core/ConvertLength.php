@@ -8,7 +8,7 @@
  * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Length
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 require_once('ConvertBase.php');
@@ -16,26 +16,34 @@ require_once('ConvertBase.php');
 class ConvertLength extends ConvertBase
 {
     protected $scale = array( ///< unit scale to Meter
-    'pm'        => 0.000000000001, //Metric: Picometer
-    'nm'        => 0.000000001,    //Metric: Nanometer
-    'microm'    => 0.000001,       //Metric: Micrometer (μm)
-    'mm'        => 0.001,          //Metric: Millimeter
-    'cm'        => 0.01,           //Metric: Centimeter
-    'dm'        => 0.1,            //Metric: Decimeter
-    'm'         => 1,              //Metric: Meter
-    'km'        => 1000,           //Metric: Kilometer
-    'scandmile' => 10000,          //Metric: Scandinavian mile, http://en.wikipedia.org/wiki/Scandinavian_mile
-    'in'        => 0.0254,         //xx: Inch
-    'ft'        => 0.304800610,    //xx: Feet
-    'yd'        => 0.9144,         //xx: Yard
-    'ukmile'    => 1852,           //UK: Mile (nautical)
-    'usmile'    => 1609.344,       //US: Mile (statute)
-    'au'        => 149597870700,   // Astronomical Unit
+    'ym'        => 0.000000000000000000000001, // SI: Yoctometre     10^−24m
+    'zm'        => 0.000000000000000000001,    // SI: Zeptometre     10^−21m
+    'am'        => 0.000000000000000001,       // SI: Attometre      10^−18m
+    'fm'        => 0.000000000000001,          // SI: Femtometre     10^−15m
+    'pm'        => 0.000000000001,             // SI: Picometre      10^−12m
+    'nm'        => 0.000000001,                // SI: Nanometre      10^-9m
+    'microm'    => 0.000001,                   // SI: Micrometre, μm 10^-6m
+    'mm'        => 0.001,                      // SI: Millimetre     10^-3m
+    'cm'        => 0.01,                       // SI: Centimetre     10^-2m
+    'dm'        => 0.1,                        // SI: Decimetre      10^-1m
+    'm'         => 1,                          // SI: Meter
+    'km'        => 1000,                       // SI: Kilometer      10^3m
+    'scandmile' => 10000,                      // Scandinavian mile, http://en.wikipedia.org/wiki/Scandinavian_mile
+    'in'        => 0.0254,                     // XXX: Inch
+    'ft'        => 0.304800610,                // XXX: Feet
+    'yd'        => 0.9144,                     // XXX: Yard
+    'ukmile'    => 1852,                       // UK: Mile (nautical)
+    'usmile'    => 1609.344,                   // US: Mile (statute)
+    'au'        => 149597870700,               // Astronomical Unit
     );
 
     protected $lookup = array(
-    'picometer'    => 'pm',
-    'nanometer'    => 'nm',
+    'yoctometer'   => 'ym',     'yoctometre'   => 'ym',
+    'zeptometer'   => 'zm',     'zeptometre'   => 'zm',
+    'attometer'    => 'am',     'attometre'    => 'am',
+    'femtometer'   => 'fm',     'femtometre'   => 'fm',
+    'picometer'    => 'pm',     'picometre'  => 'pm',
+    'nanometer'    => 'nm',     'nanometre'  => 'nm',
     'micrometer'   => 'microm', 'micrometre' => 'microm', 'µm' => 'microm', 'micron' => 'microm', 'microns' => 'microm',
     'millimeter'   => 'mm',
     'centimeter'   => 'cm',
