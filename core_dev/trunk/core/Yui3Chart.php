@@ -118,10 +118,10 @@ class Yui3Chart
                     '"<span style=\"text-decoration:underline\">" + valueItem.displayName + " for " + categoryItem.value + "</span><br/>'.
                     '<div style=\"margin-top:5px;font-weight:bold\">" + (valueItem.value ? valueItem.value : "0") + "</div>";'.
                 '},'.
-				'setTextFunction: function(textField, val)'.
-				'{'.
-					'textField.setHTML(val);'.
-				'}'.
+                'setTextFunction: function(textField, val)'.
+                '{'.
+                    'textField.setHTML(val);'.
+                '}'.
             '};'.
 
             'var styleDef = {'.
