@@ -85,7 +85,7 @@ class Yui3Chart
 */
         $header = XhtmlHeader::getInstance();
 
-        $header->includeJs('http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js');
+        $header->includeJs('http://yui.yahooapis.com/3.7.1/build/yui/yui-min.js');
 
 
         $div_holder = 'yui_chart'.mt_rand();
@@ -117,7 +117,11 @@ class Yui3Chart
                     'return '.
                     '"<span style=\"text-decoration:underline\">" + valueItem.displayName + " for " + categoryItem.value + "</span><br/>'.
                     '<div style=\"margin-top:5px;font-weight:bold\">" + (valueItem.value ? valueItem.value : "0") + "</div>";'.
-                '}'.
+                '},'.
+				'setTextFunction: function(textField, val)'.
+				'{'.
+					'textField.setHTML(val);'.
+				'}'.
             '};'.
 
             'var styleDef = {'.
