@@ -94,7 +94,7 @@ class FtpClient extends CoreBase
     /**
      * Translates curl errors to readable strings
      */
-    private function getFtpError()
+    function getFtpError()
     {
         // error codes: http://curl.haxx.se/libcurl/c/libcurl-errors.html
         switch (curl_errno($this->curl)) {
