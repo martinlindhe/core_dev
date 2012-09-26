@@ -11,6 +11,8 @@
 
 //XXX: rename to EpisodeNumber
 
+namespace cd;
+
 require_once('CoreProperty.php');
 
 class Episode extends CoreProperty

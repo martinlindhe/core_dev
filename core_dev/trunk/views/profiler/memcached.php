@@ -3,6 +3,8 @@
  * Shows detailed information of all connected memcached servers, which is used by the TempStore class
  */
 
+namespace cd;
+
 $tempstore_div = 'tss_'.mt_rand();
 
 echo ' | '.ahref_js('cache', "return toggle_el('".$tempstore_div."')").' ';

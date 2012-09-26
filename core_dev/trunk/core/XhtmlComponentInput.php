@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 
 class XhtmlComponentInput extends XhtmlComponent
@@ -34,7 +36,7 @@ class XhtmlComponentInput extends XhtmlComponent
             throw new Exception ('no: '.$id );
 
         $style = $this->style . ($this->width ? 'width:'.$this->width.'px;': '');
-            
+
         $res =
         '<input type="text"'.
         ' name="'.$this->name.'"'.

@@ -15,9 +15,10 @@
 
 //WIP: handle <rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('NewsItem.php');
-
 require_once('XmlReader.php');
 
 class RssReader extends CoreBase

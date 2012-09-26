@@ -7,8 +7,9 @@
 
 //STATUS: wip
 
-require_once('XmlRpcClient.php');
+namespace cd;
 
+require_once('XmlRpcClient.php');
 require_once('ICurrencyFetcher.php');
 
 class CurrencyFetcherFoxRate extends XmlRpcClient implements ICurrencyFetcher

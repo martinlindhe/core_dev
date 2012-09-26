@@ -7,6 +7,8 @@
 
 ///XXXX: make interface IXhtmlComponent instead?
 
+namespace cd;
+
 require_once('CoreBase.php');
 
 // standard html components:

@@ -8,12 +8,14 @@
  * Grouping: You just need to add a grouping to the rel attribute with the grouping in brackets.
  *           So rel="lightbox" becomes rel="lightbox[grouping]"
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
  */
 
 //STATUS: works
 
 //TODO: expand popup view with links to image
+
+namespace cd;
 
 class YuiLightbox
 {

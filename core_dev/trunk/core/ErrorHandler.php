@@ -11,6 +11,8 @@
 
 //TODO: use anonymous function for set_error_handler(), requires PHP 5.3
 
+namespace cd;
+
 require_once('IXmlComponent.php');
 
 class ErrorHandler implements IXmlComponent

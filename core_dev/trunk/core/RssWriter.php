@@ -19,6 +19,8 @@
 //TODO: extend this class for specific video feeds
 //TODO: verify $item is of right class (NewsItem)
 
+namespace cd;
+
 require_once('FeedWriter.php');
 
 class RssWriter extends FeedWriter

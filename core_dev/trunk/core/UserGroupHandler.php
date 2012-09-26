@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 class UserGroupHandler
 {
     protected static $tbl_name = 'tblGroupMembers';

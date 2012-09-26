@@ -7,6 +7,8 @@
 
 //XXX use XhtmlForm?
 
+namespace cd;
+
 require_once('ForgotPasswordHandler.php');
 
 if ($session->id)

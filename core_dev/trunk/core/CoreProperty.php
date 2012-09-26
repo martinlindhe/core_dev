@@ -2,10 +2,12 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
+
+namespace cd;
 
 require_once('CoreBase.php');
 

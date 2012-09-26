@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class LocaleInSwe
 {
     var $month_long = array(

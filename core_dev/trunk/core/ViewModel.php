@@ -7,9 +7,11 @@
  * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('IXmlComponent.php');
 
-class ViewModel extends ArrayObject implements IXmlComponent
+class ViewModel extends \ArrayObject implements IXmlComponent
 {
     private $template;
 
@@ -18,7 +20,7 @@ class ViewModel extends ArrayObject implements IXmlComponent
     public function __construct($template, $caller = false)
     {
         //makes this a property overloaded object
-        parent::__construct(array(), ArrayObject::ARRAY_AS_PROPS);
+        parent::__construct(array(), \ArrayObject::ARRAY_AS_PROPS);
         $this->template = $template;
 
         $this->caller = $caller;
@@ -35,13 +37,13 @@ class ViewModel extends ArrayObject implements IXmlComponent
     public function render()
     {
         //available variables in the scope of the view
-        if (class_exists('ErrorHandler'))       $error   = ErrorHandler::getInstance();
-        if (class_exists('SessionHandler'))     $session = SessionHandler::getInstance();
-        if (class_exists('SqlHandler'))         $db      = SqlHandler::getInstance();
-        if (class_exists('XhtmlHeader'))        $header  = XhtmlHeader::getInstance();
-        if (class_exists('XmlDocumentHandler')) $page    = XmlDocumentHandler::getInstance();
-        if (class_exists('LocaleHandler'))      $locale  = LocaleHandler::getInstance();
-        if (class_exists('TempStore'))          $temp    = TempStore::getInstance();
+        if (class_exists('\cd\ErrorHandler'))       $error   = ErrorHandler::getInstance();
+        if (class_exists('\cd\SessionHandler'))     $session = SessionHandler::getInstance();
+        if (class_exists('\cd\SqlHandler'))         $db      = SqlHandler::getInstance();
+        if (class_exists('\cd\XhtmlHeader'))        $header  = XhtmlHeader::getInstance();
+        if (class_exists('\cd\XmlDocumentHandler')) $page    = XmlDocumentHandler::getInstance();
+        if (class_exists('\cd\LocaleHandler'))      $locale  = LocaleHandler::getInstance();
+        if (class_exists('\cd\TempStore'))          $temp    = TempStore::getInstance();
 
         // make reference to calling object available in the namespace of the view
         $caller = $this->caller;

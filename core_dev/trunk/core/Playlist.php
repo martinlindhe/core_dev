@@ -31,17 +31,15 @@
 //XXX TODO ability to load playlist from PLS files
 //XXX TODO add input_xspf.php support, ability to fetch xspf from web
 
+namespace cd;
+
 require_once('CoreList.php');
 require_once('Duration.php');
 require_once('Url.php');
 require_once('Timestamp.php');
-
 require_once('AsxReader.php');
 require_once('M3uReader.php'); //XXX: TODO support m3u playlists
-//require_once('io_newsfeed.php');
-
 require_once('XhtmlHeader.php');
-
 require_once('MediaResource.php');
 
 class Playlist extends CoreList

@@ -13,6 +13,8 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('ConvertBase.php');
 
 class ConvertDuration extends ConvertBase

@@ -1,9 +1,13 @@
 <?php
 /**
  * $Id$
+ *
+ * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
 //STATUS: wip
+
+namespace cd;
 
 class LoginEntry
 {

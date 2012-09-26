@@ -14,6 +14,8 @@
 
 //TODO: extend from HttpClient
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('HttpClient.php');
 require_once('NewsItem.php');

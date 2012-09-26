@@ -16,6 +16,8 @@
 
 //TODO: fix class nesting crap, LocaleHandler should just be the current locale, no $this->handle crap
 
+namespace cd;
+
 require_once('LocaleInSwe.php');
 require_once('LocaleInEng.php');
 require_once('LocaleInGer.php');
@@ -85,32 +87,6 @@ class LocaleHandler
 
         return 'XXX-FAILTRANS-'.$s.'XXX';
     }
-
-}
-
-/**
- * Translates strings into other languages
- */
-function t($s)
-{
-    if (!$s)
-        throw new Exception ('huh');
-
-    $locale = LocaleHandler::getInstance();
-
-    switch ($locale->get()) {
-    case 'ger': return $s;             // German (Deutsch)   - XXX not translated
-    case 'eng': return $s;             // English (System default)
-    case 'swe': $t = t_swe($s); break; // Swedish (Svenska)
-    default: die('Unhandled language: '.$locale->get());
-    }
-
-    if (!$t) {
-        dp('Untranslated string: '.$s);
-        return '__('.$s.')__';
-    }
-
-    return $t;
 
 }
 

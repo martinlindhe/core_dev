@@ -14,6 +14,8 @@
 
 //STATUS: the code is close to useless... write a clean parser from draft
 
+namespace cd;
+
 class MediaWikiFormatter
 {
     public function format($html, $title)

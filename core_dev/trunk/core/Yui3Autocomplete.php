@@ -11,6 +11,8 @@
 
 //TODO: ability to load list with id=>label pairs of data. show label but submit id
 
+namespace cd;
+
 require_once('JSON.php');
 
 class Yui3Autocomplete

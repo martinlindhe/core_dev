@@ -18,6 +18,8 @@
 
 //REQUIRES PHP 5.3+
 
+namespace cd;
+
 class Sql
 {
     /** Executes a prepared statement and binds parameters
@@ -175,11 +177,11 @@ class Sql
 
     public static function pSelectRow()
     {
-        $res = call_user_func_array('Sql::pSelect', func_get_args() );  // HACK to pass dynamic variables to parent method
+        $res = call_user_func_array(array('self', 'pSelect'), func_get_args() );  // HACK to pass dynamic variables to parent method
 
         if (count($res) > 1) {
 //            d( func_get_args() );
-            throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
+            throw new Exception ('returned '.count($res).' rows');
         }
 
         if (!$res)
@@ -204,7 +206,7 @@ class Sql
         $stmt->close();
 
         if (count($data) > 1)
-            throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($data).' rows');
+            throw new Exception ('returned '.count($data).' rows');
 
         if (!$data)
             return false;
@@ -239,7 +241,7 @@ class Sql
         $data = array();
 
         if ($stmt->field_count != 2)
-            throw new Exception ('pSelectMapped requires a key->val result set');
+            throw new Exception ('result is not 2 fields wide, requires a key->val result set');
 
         // 2d array
         $stmt->bind_result($col1, $col2);

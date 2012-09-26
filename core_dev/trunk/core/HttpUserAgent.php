@@ -39,6 +39,8 @@ Opera/9.80 (Android 2.2; Linux; Opera Mobi/ADR-2093533312; U; pl) Presto/2.7.60 
 Opera/9.80 (S60; SymbOS; Opera Mobi/447; U; en) Presto/2.4.18 Version/10.00
 */
 
+namespace cd;
+
 require_once('core.php');
 
 class WebBrowser

@@ -2,15 +2,17 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
-
-require_once('atom_revisions.php');
 
 //STATUS: wip - mostly working
 
 //TODO: reimplement locking
 //TODO: reimplement file attachments
+
+namespace cd;
+
+require_once('atom_revisions.php');
 
 class Wiki
 {

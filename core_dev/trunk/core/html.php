@@ -8,7 +8,6 @@
  */
 
 require_once('XmlDocumentHandler.php');
-
 require_once('XhtmlComponentA.php');
 
 //STATUS: wip
@@ -63,7 +62,7 @@ function redir($dst)
     if (strpos($dst, '://') !== false || substr($dst, 0, 1) == '/' || substr($dst, 0, 1) == '?') {
         $loc = $dst;
     } else {
-        $page = XmlDocumentHandler::getInstance();
+        $page = \cd\XmlDocumentHandler::getInstance();
         $loc = $page->getRelativeUrl().$dst;
     }
 
@@ -77,7 +76,7 @@ function relurl($url)
     if (strpos($url, '://') !== false || substr($url, 0, 1) == '/' || substr($url, 0, 1) == '?')
         return $url;
 
-    $page = XmlDocumentHandler::getInstance();
+    $page = \cd\XmlDocumentHandler::getInstance();
     return $page->getRelativeUrl().$url;
 }
 
@@ -87,9 +86,9 @@ function relurl($url)
  */
 function relurl_add($p)
 {
-    $page = XmlDocumentHandler::getInstance();
+    $page = \cd\XmlDocumentHandler::getInstance();
 
-    $u = new Url( $page->getUrl() );
+    $u = new \cd\Url( $page->getUrl() );
     $u->setPath($_SERVER['REQUEST_URI']);
 
     foreach ($p as $key => $val)
@@ -104,7 +103,7 @@ function relurl_add($p)
  */
 function ahref($url, $text, $target = '', $onclick = '', $class = '')
 {
-    $a = new XhtmlComponentA();
+    $a = new \cd\XhtmlComponentA();
     $a->href = relurl($url);
     $a->content = $text;
     $a->target = $target;
@@ -168,7 +167,7 @@ function js_redirect($url)
         $url = relurl($url);
 
     if (!$url) {
-        $page = XmlDocumentHandler::getInstance();
+        $page = \cd\XmlDocumentHandler::getInstance();
         $url = $page->getRelativeUrl();
     }
 
@@ -228,9 +227,9 @@ function css_size($s)
  */
 function js_swfobject($swf, $render_div, $width = 300, $height = 120, $flashvars = '', $params = '', $attributes = '')
 {
-    $page = XmlDocumentHandler::getInstance();
+    $page = \cd\XmlDocumentHandler::getInstance();
 
-    $header = XhtmlHeader::getInstance();
+    $header = \cd\XhtmlHeader::getInstance();
     $header->includeJs( $page->getRelativeCoreDevUrl().'js/swfobject.js');
 
     $min_version = '9.0.115'; // first version to support MP4
@@ -286,7 +285,7 @@ function countryFlag($s)
         $s = strtoupper($s);
     }
 
-    $locale = LocaleHandler::getInstance();
+    $locale = \cd\LocaleHandler::getInstance();
 
     $title = getCountryName($s);
 
@@ -312,7 +311,7 @@ function embed_flv($vid_id)
     'margin' => 2,
     'bgcolor1' => '454545', 'bgcolor2' => '454545', 'playercolor' => '454545');
 
-    $thumbs = File::getByCategory(THUMB, $vid_id, $file->uploader);
+    $thumbs = \cd\File::getByCategory(THUMB, $vid_id, $file->uploader);
     if (count($thumbs) == 1)
         $flashvars['startimage'] = 'c/file/'.$thumbs[0]->id;
 

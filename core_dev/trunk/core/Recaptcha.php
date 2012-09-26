@@ -15,6 +15,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 require_once('ErrorHandler.php');
 require_once('HttpClient.php');

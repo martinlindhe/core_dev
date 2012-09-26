@@ -14,6 +14,8 @@
 
 //XXX export categories, no longer in the xml?
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('HttpClient.php');
 require_once('Imdb.php');

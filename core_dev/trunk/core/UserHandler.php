@@ -12,6 +12,8 @@
 
 //TODO: should contain "register user" view with ability to extend registration to contain extra fields (like userdata)
 
+namespace cd;
+
 require_once('User.php');
 require_once('UserGroup.php');
 require_once('ReservedWord.php');

@@ -11,6 +11,8 @@
 
 //XXX: move facebook stuff out of here?
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('LocaleHandler.php');
 require_once('Url.php');
@@ -305,7 +307,7 @@ class XmlDocumentHandler extends CoreBase
 
         $enable_fb = false;
 
-        if ($this->enable_design && class_exists('SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
+        if ($this->enable_design && class_exists('\cd\SessionHandler') && SessionHandler::getInstance()->facebook_app_id)
         {
             $enable_fb = true;
 

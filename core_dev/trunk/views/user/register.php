@@ -12,8 +12,9 @@
 //TODO: send account activation mail
 //XXX use XhtmlForm class, it needs a way to show the images first. also needs a way to show multiple buttons
 
-require_once('UserList.php');
+namespace cd;
 
+require_once('UserList.php');
 require_once('XhtmlComponentButton.php');
 
 $superadmin_reg = !UserList::getCount();

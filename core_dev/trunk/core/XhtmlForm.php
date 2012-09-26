@@ -14,9 +14,10 @@
 
 //TODO low prio: remove need of "using_captcha" variable, it can be figured out by checking object types
 
+namespace cd;
+
 require_once('ErrorHandler.php');
 require_once('output_xhtml.php');
-
 require_once('constants.php');
 require_once('File.php');
 require_once('XhtmlComponent.php');
@@ -70,15 +71,17 @@ class XhtmlForm
     function setHandler($f, $o = false)
     {
         if ($this->url_handler)
-            throw new Exception ('Cant use setHandler together with a separate url_handler');
+            throw new \Exception ('Cant use setHandler together with a separate url_handler');
 
         if (is_object($o))
             $this->post_handler = array($o, $f);
         else {
-            if ($f && !function_exists($f))
-                throw new Exception ('function '.$f.' is not defined');
-
-            $this->post_handler = $f;
+            if ($f && function_exists($f))
+                $this->post_handler = $f;
+            else if ($f && function_exists(__NAMESPACE__.'\\'.$f))
+                $this->post_handler = __NAMESPACE__.'\\'.$f;
+            else
+                throw new \Exception ('function '.$f.' is not defined');
         }
     }
 
@@ -98,7 +101,7 @@ class XhtmlForm
             }
         }
 
-        throw new Exception ('element '.$s.' not defined');
+        throw new \Exception ('element '.$s.' not defined');
     }
 
     function setTitle($s) { $this->title = $s; }
@@ -116,7 +119,7 @@ class XhtmlForm
             foreach ($this->elems as $e)
             {
                 if (!is_object($e['obj']))
-                    throw new Exception ('XXX not an obj!');
+                    throw new \Exception ('XXX not an obj!');
 
                 if (!isset($e['obj']->name))
                     continue;
@@ -129,7 +132,7 @@ class XhtmlForm
             foreach ($this->elems as $e)
             {
                 if (!is_object($e['obj']))
-                    throw new Exception ('XXX not an obj!');
+                    throw new \Exception ('XXX not an obj!');
 
                 if (!isset($e['obj']->name))
                     continue;
@@ -216,13 +219,13 @@ class XhtmlForm
     function add($o, $text = '', $second_obj = '')
     {
         if (!is_object($o))
-            throw new Exception ('not an object');
+            throw new \Exception ('not an object');
 
         if (!$o instanceof XhtmlComponent)
-            throw new exception ('obj must extend from XhtmlComponent');
+            throw new \Exception ('obj must extend from XhtmlComponent');
 
         if ($second_obj && !($second_obj instanceof XhtmlComponent))
-            throw new exception ('second_obj must extend from XhtmlComponent');
+            throw new \Exception ('second_obj must extend from XhtmlComponent');
 
         if ($o instanceof XhtmlComponentFile)
             $this->file_upload = true;
@@ -243,7 +246,7 @@ class XhtmlForm
     function addInput($name, $text, $val = '', $width = 0, $maxlen = 0)
     {
         if (!is_numeric($width) || !is_numeric($maxlen))
-            throw new Exception ('bad input');
+            throw new \Exception ('bad input');
 
         $o = new XhtmlComponentInput();
         $o->name   = $name;
@@ -257,7 +260,7 @@ class XhtmlForm
     function addPassword($name, $text, $width = 0, $maxlen = 0)
     {
         if (!is_numeric($width) || !is_numeric($maxlen))
-            throw new Exception ('bad input');
+            throw new \Exception ('bad input');
 
         $o = new XhtmlComponentPassword();
         $o->name   = $name;
@@ -270,7 +273,7 @@ class XhtmlForm
     function addTextarea($name, $text = '', $val = '', $width = 300, $height = 70)
     {
         if (!is_numeric($width) || !is_numeric($height))
-            throw new Exception ('bad input');
+            throw new \Exception ('bad input');
 
         $o = new XhtmlComponentTextarea();
         $o->name   = $name;
@@ -423,7 +426,7 @@ class XhtmlForm
   //          throw new Exception ('FATAL: XhtmlForm no post handler or js handler set');
 
         if (!$this->name)
-            throw new Exception ('need a form name');
+            throw new \Exception ('need a form name');
 
         if (!$this->handled)
             $this->handle();
@@ -461,13 +464,13 @@ class XhtmlForm
         foreach ($this->elems as $e)
         {
             if (!isset($e['obj']))
-                throw new Exception ('ehjohohohoh: '.$e['obj']);
+                throw new \Exception ('ehjohohohoh: '.$e['obj']);
 
             if ( !($e['obj'] instanceof XhtmlComponent) )
-                throw new Exeption ('obj not a XhtmlComponent');
+                throw new \Exception ('obj not a XhtmlComponent');
 
             if ( $e['obj2'] && !($e['obj2'] instanceof XhtmlComponent) )
-                throw new Exeption ('obj2 not a XhtmlComponent');
+                throw new \Exception ('obj2 not a XhtmlComponent');
 
             if (isset($e['obj']->value))
                 $e['obj']->value = htmlspecialchars($e['obj']->value);

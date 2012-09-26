@@ -13,6 +13,8 @@
 
 //TODO: add more units
 
+namespace cd;
+
 require_once('ConvertBase.php');
 
 class ConvertVolume extends ConvertBase

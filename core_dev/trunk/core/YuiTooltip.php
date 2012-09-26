@@ -10,11 +10,9 @@
 
 //TODO: rename class...
 
-/**
- *
- * Name tooltip id="tt_usr_123" where 123 is user id to make a "user" infobox appear
- *
- */
+// Name tooltip id="tt_usr_123" where 123 is user id to make a "user" infobox appear
+
+namespace cd;
 
 class YuiTooltip
 {

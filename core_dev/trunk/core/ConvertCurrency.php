@@ -14,6 +14,8 @@
 
 //STATUS: ok
 
+namespace cd;
+
 require_once('ConvertBase.php');
 require_once('TempStore.php');
 

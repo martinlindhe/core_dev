@@ -9,6 +9,8 @@
 
 //TODO: use list sort code from newsfeed & playlist
 
+namespace cd;
+
 require_once('CoreBase.php');
 
 class CoreList extends CoreBase

@@ -10,6 +10,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 define('BOOKMARK_USERBLOCK',    1);  ///< blocked user
 define('BOOKMARK_FAVORITEUSER', 2);  ///< "favorite user" (like friends but no friend-request)
 

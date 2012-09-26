@@ -14,6 +14,8 @@
 //TODO: ability to embed icon in the xml
 //TODO: ask browser to cache content
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 
 class XhtmlComponentOpenSearch extends XhtmlComponent

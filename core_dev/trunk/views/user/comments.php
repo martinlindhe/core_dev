@@ -13,7 +13,7 @@
 //TODO: ability to create private comments (tbl flag is there)
 //TODO: allow anon comments with Captcha (?)
 
-
+namespace cd;
 
 require_once('User.php');
 

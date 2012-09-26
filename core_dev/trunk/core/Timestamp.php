@@ -9,6 +9,8 @@
 
 //STATUS: good
 
+namespace cd;
+
 require_once('CoreProperty.php');
 require_once('Duration.php');
 

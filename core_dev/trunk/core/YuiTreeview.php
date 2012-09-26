@@ -12,6 +12,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('JSON.php');
 
 class YuiTreeview

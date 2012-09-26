@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class SqlQuery
 {
     var $query;

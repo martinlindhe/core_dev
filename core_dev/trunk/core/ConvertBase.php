@@ -7,6 +7,8 @@
 
 //STATUS: ok
 
+namespace cd;
+
 abstract class ConvertBase
 {
     protected $precision = 0;   ///< if set, specifies rounding precision. if unset, return exact result

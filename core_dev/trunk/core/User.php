@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('constants.php');
 require_once('SqlObject.php');
 require_once('UserHandler.php');

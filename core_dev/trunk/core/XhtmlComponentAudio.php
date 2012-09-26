@@ -16,6 +16,8 @@
   "webm audio" - XXXX test
 */
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 
 class AudioComponent

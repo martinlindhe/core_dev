@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class LocaleInEng
 {
     var $month_long = array(

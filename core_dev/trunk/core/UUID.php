@@ -15,6 +15,8 @@
 
 //FIXME: replace strrev2 with some built-in PHP function
 
+namespace cd;
+
 class UUID
 {
     public static function isValid($uuid)

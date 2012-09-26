@@ -10,6 +10,8 @@
 
 //STATUS: wip, the web service is very slow! 2010-10-03
 
+namespace cd;
+
 require_once('ICurrencyFetcher.php');
 
 class CurrencyFetcherWebservicex implements ICurrencyFetcher

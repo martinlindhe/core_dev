@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('FaqItem.php');
 require_once('YuiDatatable.php');
 
@@ -45,7 +47,7 @@ case 'add':
     $x->addInput('q', 'Question');
     $x->addTextarea('a', 'Answer');
     $x->addSubmit('Create');
-    $x->setHandler('createHandler');
+    $x->setHandler(__NAMESPACE__.'\createHandler');
     echo $x->render();
     break;
 
@@ -75,7 +77,7 @@ case 'edit':
     $x->addInput('q', 'Question', $faq->question);
     $x->addTextarea('a', 'Answer', $faq->answer);
     $x->addSubmit('Save');
-    $x->setHandler('editHandler');
+    $x->setHandler(__NAMESPACE__.'\editHandler');
     echo $x->render();
     echo '<br/>';
     echo '&raquo; '.ahref('a/faq/delete/'.$this->child, 'Delete FAQ entry');

@@ -13,6 +13,8 @@
 
 //TODO: getArtistInfo() parse "similar" artists tag
 
+namespace cd;
+
 require_once('HttpClient.php');
 require_once('MediaResource.php');
 require_once('TempStore.php');

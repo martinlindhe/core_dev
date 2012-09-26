@@ -8,6 +8,8 @@
 //TODO: make facebook javascript login code work
 //TODO cosmetic: mark input field for username or password with a color if empty in validate_login_form()
 
+namespace cd;
+
 require_once('UserList.php');
 require_once('SendMail.php');
 
@@ -123,7 +125,7 @@ $form->add($i, t('Password'), $p_img);
 $form->addSubmit('Log in', 'font-weight:bold');
 $form->setFocus('usr');
 $form->onSubmit('return check_login(this);');
-$form->setHandler('loginHandler');
+$form->setHandler(__NAMESPACE__.'\loginHandler');
 echo $form->render();
 
 $header->registerJsFunction(

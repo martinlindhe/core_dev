@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 
 class XhtmlComponentListbox extends XhtmlComponent

@@ -106,7 +106,7 @@ function dts($s = '')
 
 function is_cli()
 {
-    $page = XmlDocumentHandler::getInstance();
+    $page = \cd\XmlDocumentHandler::getInstance();
 
     return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain');
 //    return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
@@ -559,6 +559,31 @@ function formatMSID($anr, $cc = '46')
         $anr = $cc.substr($anr, 1);
 
     return $anr;
+}
+
+/**
+ * Translates strings into other languages
+ */
+function t($s)
+{
+    if (!$s)
+        throw new Exception ('huh');
+
+    $locale = \cd\LocaleHandler::getInstance();
+
+    switch ($locale->get()) {
+    case 'ger': return $s;             // German (Deutsch)   - XXX not translated
+    case 'eng': return $s;             // English (System default)
+    case 'swe': $t = \cd\t_swe($s); break; // Swedish (Svenska)
+    default: die('Unhandled language: '.$locale->get());
+    }
+
+    if (!$t) {
+        dp('Untranslated string: '.$s);
+        return '__('.$s.')__';
+    }
+
+    return $t;
 }
 
 ?>

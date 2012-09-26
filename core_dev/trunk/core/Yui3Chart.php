@@ -16,6 +16,8 @@
 //TODO (MISSING FROM YUI2-chart): visa label för x & y led: setYTitle(), setXTitle()
 //   - ticket open due to missing functionality: http://yuilibrary.com/projects/yui3/ticket/2529841
 
+namespace cd;
+
 require_once('JSON.php');
 
 class Yui3Chart

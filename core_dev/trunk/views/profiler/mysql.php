@@ -5,6 +5,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 $header->registerCss(
 '.cd_sql_row'.
 '{'.

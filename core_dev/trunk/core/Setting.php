@@ -9,6 +9,8 @@
 
 //TODO: use SqlObject stuff
 
+namespace cd;
+
 require_once('constants.php');
 
 class Setting

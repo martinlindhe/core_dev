@@ -11,6 +11,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 abstract class XhrBackend
 {
     protected $sort_column;

@@ -24,6 +24,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('sql_misc.php');
 
 class SqlHandler

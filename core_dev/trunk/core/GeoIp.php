@@ -11,7 +11,9 @@
 
 //STATUS: wip
 
-//XXX several commercial databases also available, "ISP", "region", "organization", etc
+// several commercial databases also available, "ISP", "region", "organization", etc from maxmind.com
+
+namespace cd;
 
 require_once('sql_misc.php');
 require_once('time.php');

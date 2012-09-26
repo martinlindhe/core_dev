@@ -13,6 +13,8 @@
  * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('ConvertBase.php');
 
 class ConvertEnergy extends ConvertBase

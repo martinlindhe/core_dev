@@ -14,6 +14,8 @@
 
 //TODO: map markers dont support text label: http://dev.openlayers.org/docs/files/OpenLayers/Marker-js.html
 
+namespace cd;
+
 require_once('MapWidget.php');
 
 class OpenStreetMapClient extends MapWidget

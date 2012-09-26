@@ -9,6 +9,8 @@
 
 //STATUS: ok
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 
 class XhtmlComponentDropdown extends XhtmlComponent

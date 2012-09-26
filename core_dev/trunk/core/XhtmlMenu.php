@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('network.php');   // for get_protocol()
 

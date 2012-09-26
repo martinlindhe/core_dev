@@ -62,7 +62,7 @@ function sql_time($ts)
  */
 function sql_or_array($key, $vals, $pad = '', $numeric = true)
 {
-    $db = SqlHandler::getInstance();
+    $db = \cd\SqlHandler::getInstance();
 
     $tmp = array();
     foreach ($vals as $val) {

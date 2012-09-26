@@ -12,6 +12,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('core.php'); //for is_alphanumeric()
 require_once('ViewModel.php');
 
@@ -114,7 +116,7 @@ class RequestHandler
         $error = ErrorHandler::getInstance();
 
         // automatically resumes session unless it is blacklisted
-        if (class_exists('SessionHandler') && !in_array($this->_controller, $this->exclude_session)) {
+        if (class_exists('\cd\SessionHandler') && !in_array($this->_controller, $this->exclude_session)) {
             $session = SessionHandler::getInstance();
             $session->start();
         }

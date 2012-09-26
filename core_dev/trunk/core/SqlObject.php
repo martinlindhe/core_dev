@@ -11,6 +11,8 @@
 
 //XXX move some of the methods to Sql.php
 
+namespace cd;
+
 require_once('Sql.php');
 
 class ReflectedObject
@@ -48,8 +50,8 @@ class SqlObject
         if (!is_array($row))
             throw new Exception ('loadObject fail, need array of rows, got: '.$row);
 
-        $reflect = new ReflectionClass($classname);
-        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+        $reflect = new \ReflectionClass($classname);
+        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         $obj = new $classname();
         foreach ($props as $prop)
@@ -119,8 +121,8 @@ class SqlObject
      */
     protected static function reflectQuery($obj, $exclude_col = '', $include_unset = true)
     {
-        $reflect = new ReflectionClass($obj);
-        $props   = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+        $reflect = new \ReflectionClass($obj);
+        $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
 
         // we escape column names for reserved SQL words
         // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html

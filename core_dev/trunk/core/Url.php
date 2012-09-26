@@ -4,10 +4,12 @@
  *
  * Location object, contains a URI resource
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
 //STATUS: good
+
+namespace cd;
 
 require_once('core.php');
 require_once('CoreProperty.php');

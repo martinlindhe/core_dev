@@ -11,6 +11,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('CsvWriter.php');
 require_once('XlsWriter.php');
 

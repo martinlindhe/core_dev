@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 abstract class MediaResource extends CoreBase  //XXXX delete this class
 {
     var $track_id;

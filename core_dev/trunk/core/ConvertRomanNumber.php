@@ -8,6 +8,8 @@
 //STATUS: ok
 //TODO: reuse lookup array in getAsRoman() for decoding numbers, drop expand()
 
+namespace cd;
+
 class ConvertRomanNumber
 {
     private $value; ///< holds "arabic" (integer) representation of roman number

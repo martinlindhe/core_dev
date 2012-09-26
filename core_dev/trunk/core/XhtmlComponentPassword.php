@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('XhtmlComponent.php');
 
 class XhtmlComponentPassword extends XhtmlComponent

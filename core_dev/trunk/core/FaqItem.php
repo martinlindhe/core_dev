@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class FaqItem
 {
     var $id;
@@ -14,7 +16,7 @@ class FaqItem
     var $answer;
     var $creator;
     var $time_created;
-    
+
     protected static $tbl_name = 'tblFAQ';
 
     public static function get($id)

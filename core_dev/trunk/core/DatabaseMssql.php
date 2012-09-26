@@ -12,6 +12,8 @@
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
 
+namespace cd;
+
 require_once('ISql.php');
 
 class DatabaseMssql implements IDB_SQL

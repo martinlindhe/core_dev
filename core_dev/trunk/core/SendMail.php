@@ -17,6 +17,8 @@
 
 //XXXX: why are stuff static arrays?
 
+namespace cd;
+
 require_once('SmtpClient.php');
 require_once('network.php'); //for is_email()
 require_once('files.php'); //for file_get_mime_by_suffix()

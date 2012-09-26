@@ -14,8 +14,9 @@
 //XXX simplify by using simplexml instead of extending RssReader ?
 //CANTFIX: would have been awesome if results could be localized on server-side, but its not :( 2011-02-11
 
-require_once('RssReader.php');
+namespace cd;
 
+require_once('RssReader.php');
 require_once('YahooQueryClient.php');
 
 class WeatherResult

@@ -19,6 +19,8 @@
 //TODO: extend this class for specific video feeds
 //XXX atom output: no way to embed video duration, <link length="x"> is size of the resource, in bytes.
 
+namespace cd;
+
 require_once('FeedWriter.php');
 
 class AtomWriter extends FeedWriter

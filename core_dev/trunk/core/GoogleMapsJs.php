@@ -18,6 +18,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('html.php');
 require_once('MapWidget.php');
 

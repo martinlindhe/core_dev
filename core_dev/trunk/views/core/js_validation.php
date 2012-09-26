@@ -5,6 +5,8 @@
  * javascript based on http://www.webcheatsheet.com/javascript/form_validation.php
  */
 
+namespace cd;
+
 $h = UserHandler::getInstance();
 
 $header->registerJsFunction(

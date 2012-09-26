@@ -11,6 +11,8 @@
  * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('ConvertBase.php');
 
 class ConvertLength extends ConvertBase

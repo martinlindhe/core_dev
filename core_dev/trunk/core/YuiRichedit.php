@@ -14,8 +14,9 @@
 
 //TODO: integrate image upload
 
-require_once('XhtmlComponent.php');
+namespace cd;
 
+require_once('XhtmlComponent.php');
 require_once('JSON.php');
 
 class YuiRichedit extends XhtmlComponent

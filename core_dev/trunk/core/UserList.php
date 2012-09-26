@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('User.php');
 
 class UserList

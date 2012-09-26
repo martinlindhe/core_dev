@@ -12,6 +12,8 @@
 //TODO: make it a general sql profiler (reuse for ms-sql)
 //XXX: somehow show return values if debug is enabled
 
+namespace cd;
+
 require_once('DatabaseMysql.php');
 require_once('SqlQuery.php');
 

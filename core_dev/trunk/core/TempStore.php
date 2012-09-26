@@ -10,6 +10,8 @@
 //STATUS: wip
 //PLAN: stabilise impl, move current Cache users to here, eventually deprecate Cache class
 
+namespace cd;
+
 class MemcacheServer
 {
     var $host;
@@ -89,7 +91,7 @@ class TempStore
         if (!extension_loaded('memcached'))
             throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
 
-        $this->handle = new Memcached;
+        $this->handle = new \Memcached;
 
         if (!$this->server_pool)
             $this->addServer('127.0.0.1', 11211);

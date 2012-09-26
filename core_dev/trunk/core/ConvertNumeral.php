@@ -12,6 +12,8 @@
 
 //STATUS: ok
 
+namespace cd;
+
 require_once('core.php'); // for is_alphanumeric()
 require_once('ConvertBase.php');
 require_once('ConvertRomanNumber.php');

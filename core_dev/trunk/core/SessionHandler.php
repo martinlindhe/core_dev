@@ -9,6 +9,7 @@
 
 //TODO: reimplement ip-block
 
+namespace cd;
 
 require_once('CoreBase.php');
 require_once('User.php');
@@ -20,7 +21,7 @@ require_once('LoginEntry.php');
 
 require_once(dirname(__FILE__) . '/../facebook-php-sdk/facebook.php');
 
-class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
+class SessionHandler extends CoreBase ///XXXX should extend from User class ?
 {
     static $_instance;             ///< singleton
 
@@ -98,7 +99,7 @@ class SessionHandler extends CoreBase  ///XXXX should extend from User class ?
         $this->facebook_app_id = $app_id;
         $this->facebook_secret = $secret;
 
-        $this->fb_handle = new Facebook(array(
+        $this->fb_handle = new \Facebook(array(
             'appId'  => $this->facebook_app_id,
             'secret' => $this->facebook_secret
         ));

@@ -9,6 +9,8 @@
 
 // see views/user/comments.php for a default comment list view
 
+namespace cd;
+
 require_once('SqlObject.php');
 require_once('constants.php');
 

@@ -10,6 +10,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class SessionStorageHandler
 {
     private $expire_time;

@@ -31,6 +31,7 @@ mariadb:
         http://www.utf8-chartable.de/
 */
 
+namespace cd;
 
 require_once('HttpClient.php');
 require_once('JSON.php');

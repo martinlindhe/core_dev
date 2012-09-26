@@ -14,11 +14,11 @@
 //STATUS: wip
 
 //XXXX: upgrade yo yui 3.4.0 calendar when its released
-
 //FIXME: selection of a new time is buggy if the calendar was rendered with a selection
 
-require_once('XhtmlComponent.php');
+namespace cd;
 
+require_once('XhtmlComponent.php');
 require_once('JSON.php');
 
 class YuiDateInterval extends XhtmlComponent

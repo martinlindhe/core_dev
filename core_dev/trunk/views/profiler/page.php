@@ -3,6 +3,8 @@
  * Shows page load time & other information
  */
 
+namespace cd;
+
 require_once('HttpUserAgent.php');
 
 // measure time at page "start execute" event

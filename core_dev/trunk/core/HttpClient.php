@@ -16,9 +16,10 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('core.php');
 require_once('network.php');
-
 require_once('Url.php');
 require_once('TempStore.php');
 

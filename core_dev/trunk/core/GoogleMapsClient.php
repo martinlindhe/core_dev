@@ -25,6 +25,8 @@
 
 //XXX: google dont return timezone of geolocation queries
 
+namespace cd;
+
 require_once('JSON.php');
 require_once('TempStore.php');
 

@@ -16,6 +16,8 @@
 //TODO: enable inline cell editing: http://developer.yahoo.com/yui/examples/datatable/dt_cellediting.html
 //TODO: right-align money column types
 
+namespace cd;
+
 require_once('JSON.php');
 
 class YuiColumnDef

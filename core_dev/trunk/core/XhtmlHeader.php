@@ -9,6 +9,8 @@
 
 //STATUS: ok
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('XmlDocumentHandler.php');  // for relurl()

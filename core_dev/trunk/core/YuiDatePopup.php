@@ -13,11 +13,11 @@
 //STATUS: wip
 
 //XXXX: upgrade yo yui 3.4.0 calendar when its released
-
 //TODO: hide useless "Reset" and "close" buttons in the bottom
 
-require_once('XhtmlComponent.php');
+namespace cd;
 
+require_once('XhtmlComponent.php');
 require_once('JSON.php');
 
 class YuiDatePopup extends XhtmlComponent

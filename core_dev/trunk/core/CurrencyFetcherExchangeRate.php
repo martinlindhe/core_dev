@@ -9,6 +9,8 @@
 
 //TODO: set a default api key for a project email
 
+namespace cd;
+
 require_once('ICurrencyFetcher.php');
 
 class CurrencyFetcherExchangeRate extends HttpClient implements ICurrencyFetcher

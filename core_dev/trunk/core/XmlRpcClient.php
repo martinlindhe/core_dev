@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('HttpClient.php');
 
 class XmlRpcClient extends HttpClient

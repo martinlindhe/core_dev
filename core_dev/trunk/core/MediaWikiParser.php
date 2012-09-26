@@ -7,6 +7,8 @@
 
 //STATUS: early alpha, my own take at a mediawiki parser
 
+namespace cd;
+
 class MediaWikiArticle
 {
     var $summary;

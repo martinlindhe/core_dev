@@ -23,6 +23,8 @@
 
 //TODO: verify that the calendar output works with Apple Calendar
 
+namespace cd;
+
 require_once('UUID.php');
 
 require_once('CalendarEvent.php');

@@ -4,20 +4,18 @@
  *
  * Simple newsfeed (RSS, Atom) reader/writer with support for RSS 2.0 and Atom 1.0
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
  */
 
-require_once('CoreList.php');
+namespace cd;
 
+require_once('CoreList.php');
 require_once('Duration.php');
 require_once('Url.php');
 require_once('Timestamp.php');
-
 require_once('NewsItem.php');
-
 require_once('RssReader.php');
 require_once('AtomReader.php');
-
 require_once('HttpClient.php');
 
 abstract class FeedWriter extends CoreList
@@ -44,11 +42,11 @@ abstract class FeedWriter extends CoreList
     function addItem($i)
     {
         switch (get_class($i)) {
-        case 'NewsItem':
+        case 'cd\NewsItem':
             $item = $i;
             break;
 
-        case 'VideoResource':
+        case 'cd\VideoResource':
 d($i);die;
     //    d($i);
             //convert into a NewsItem
@@ -65,8 +63,7 @@ d($i);die;
             break;
 
         default:
-            d('NewsFeed->addItem cant handle '.get_class($i) );
-            return false;
+            throw new \Exception ('cant handle '.get_class($i) );
         }
         parent::addItem($item);
     }

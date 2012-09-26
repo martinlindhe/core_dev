@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('SqlHandler.php');
 
 class SqlFactory
@@ -23,20 +25,22 @@ class SqlFactory
         switch ($driver) {
         case 'mysql': $class = 'DatabaseMysql'; break;
         case 'mssql': $class = 'DatabaseMssql'; break;
-        default: throw new Exception ('Unknown driver '.$driver);
+        default: throw new \Exception ('Unknown driver '.$driver);
         }
 
         $class = $class.($profiler ? 'Profiler': '');
 
         require_once($class.'.php');
 
+        $class = '\\cd\\'.$class;
+
         if (!class_exists($class))
-            throw new Exception ('Database driver not found '.$class);
+            throw new \Exception ('Database driver not found '.$class);
 
         $db = new $class();
 
         if (!($db instanceof IDB_SQL))
-            throw new Exception('Database driver must implement IDB_SQL');
+            throw new \Exception('Database driver must implement IDB_SQL');
 
         return $db;
     }

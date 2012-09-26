@@ -7,12 +7,14 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-require_once('ISql.php');
-require_once('Sql.php');
-
 //STATUS: wip
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
+
+namespace cd;
+
+require_once('ISql.php');
+require_once('Sql.php');
 
 class DatabaseMysql implements IDB_SQL
 {
@@ -86,7 +88,7 @@ class DatabaseMysql implements IDB_SQL
             return true;
 
         //silence warning from failed connection and display our error instead
-        $this->db_handle = new mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
+        $this->db_handle = new \mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
             throw new Exception ('db_mysqli->connect: '.$this->db_handle->connect_error);
