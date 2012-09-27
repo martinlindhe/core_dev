@@ -18,7 +18,7 @@ class CurrencyFetcherWebservicex implements ICurrencyFetcher
 {
     function getRate($from, $to)
     {
-        $client = new SoapClient('http://www.webservicex.net/CurrencyConvertor.asmx?WSDL');
+        $client = new \SoapClient('http://www.webservicex.net/CurrencyConvertor.asmx?WSDL');
 
         try {
             $params['FromCurrency'] = strtoupper($from);
