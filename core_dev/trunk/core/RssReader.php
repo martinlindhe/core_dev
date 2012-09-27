@@ -24,7 +24,7 @@ require_once('XmlReader.php');
 class RssReader extends CoreBase
 {
     protected $items = array();    ///< list of NewsItem objects
-    protected $reader;             ///< CoreXmlReader object
+    protected $reader;             ///< \cd\XmlReader object
     protected $title;              ///< title of the feed
 
     protected $ext_tags = array(); ///< to be filled with custom tags to parse, set by extending class
@@ -51,7 +51,7 @@ class RssReader extends CoreBase
         if (!$data)
             return false;
 
-        $this->reader = new CoreXmlReader();
+        $this->reader = new XmlReader();
         $this->reader->parse($data);
 
         while ($this->reader->read())

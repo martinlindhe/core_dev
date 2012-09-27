@@ -9,13 +9,11 @@
 
 //STATUS: wip
 
-//XXX TODO: rename to XmlReader when we use namespaces
-
 namespace cd;
 
 require_once('HttpClient.php');
 
-class CoreXmlReader extends XMLReader
+class XmlReader extends \XMLReader
 {
     function parse($raw)
     {
