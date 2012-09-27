@@ -26,7 +26,7 @@ class CategoryList
     function __construct($type = 0)
     {
         if (!is_numeric($type))
-            throw new Exception ('non-numeric type');
+            throw new \Exception ('non-numeric type');
 
         $this->type = $type;
     }
@@ -40,7 +40,7 @@ class CategoryList
             if ($item instanceof CategoryItem)
                 $res[ $item->getId() ] = $item->getTitle();
             else
-                throw new Exception ('CoreList->getKeyVals: cant handle object type '.get_class($item) );
+                throw new \Exception ('CoreList->getKeyVals: cant handle object type '.get_class($item) );
         }
         return $res;
     }

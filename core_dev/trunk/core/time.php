@@ -143,7 +143,7 @@ function shortTimePeriod($secs) //XXX rename to something with duration. also se
 function elapsed_seconds($s, $precision = 1)
 {
     if (!is_numeric($s))
-        throw new Exception ('not a number '.$s);
+        throw new \Exception ('not a number '.$s);
 
     if ($s < 60)
         return $s.' seconds';
@@ -185,11 +185,11 @@ function elapsed_seconds($s, $precision = 1)
 function in_seconds($s)
 {
     if (!is_hms($s))
-        throw new Exception ('not a time string: '.$s);
+        throw new \Exception ('not a time string: '.$s);
 
     $x = explode(':', $s);
     if (count($x) != 3)
-        throw new Exception ('bad format: '.$s);
+        throw new \Exception ('bad format: '.$s);
 
     $x[2] = str_replace(',', '.', $x[2]);
 
@@ -242,7 +242,7 @@ function in_years($d, $precision = 0)
 function seconds_to_hms($secs, $show_milli = false, $precision = 2, $separator = '.', $pad_hours = false)
 {
     if (!is_numeric($secs))
-        throw new Exception ('bad input');
+        throw new \Exception ('bad input');
 
     if (!$secs)
         return '00:00:00';
@@ -338,11 +338,11 @@ function is_year_period($s)
 //    echo 'year1: '.$year1.', year2: '.$year2."\n";
 
     if (!intval($year1) || !intval($year2))
-        throw new Exception ('years not numbers, hmm?!?'); // should not be possible with above regexp
+        throw new \Exception ('years not numbers, hmm?!?'); // should not be possible with above regexp
 
     if ($year2 <= $year1)
         return false;
-        // throw new Exception ('period end is less than start: '.$s.', y1: '.$year1.', y2: '.$year2);
+        // throw new \Exception ('period end is less than start: '.$s.', y1: '.$year1.', y2: '.$year2);
 
     return true;
 }
@@ -396,7 +396,7 @@ function ts($d)
         $dd = substr($d, 6, 2);
 
         if (!checkdate($mm, $dd, $yy))
-            throw new Exception ('invalid ts form: '.$d);
+            throw new \Exception ('invalid ts form: '.$d);
 
         return mktime(0, 0, 0, $mm, $dd, $yy);
     }
@@ -486,7 +486,7 @@ function parse_duration($s)
     $val   = substr($s, 0, -1);
 
     if (!is_numeric($val))
-        throw new Exception ('bad val: '.$val);
+        throw new \Exception ('bad val: '.$val);
 
     switch ($delim) {
     case 'w': return $val * 604800;
@@ -494,7 +494,7 @@ function parse_duration($s)
     case 'h': return $val * 3600;
     case 'm': return $val * 60;
     case 's': return $val;
-    default: throw new Exception ('unknown delim:'.$delim);
+    default: throw new \Exception ('unknown delim:'.$delim);
     }
 }
 

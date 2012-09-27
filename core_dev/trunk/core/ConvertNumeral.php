@@ -65,7 +65,7 @@ class ConvertNumeral extends ConvertBase
             $from = 'dec';
 
         if ($from == 'auto' && !is_numeric($val))
-            throw new Exception ('unhandled number conversion of '.$val.' to '.$to);
+            throw new \Exception ('unhandled number conversion of '.$val.' to '.$to);
 
         $from = $this->getShortcode($from);
         $to   = $this->getShortcode($to);

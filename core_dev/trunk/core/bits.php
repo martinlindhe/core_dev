@@ -12,7 +12,7 @@ function byte_split($b)
         $b = ord($b);
 
     if (!is_numeric($b) || $b > 255 || $b < 0)
-        throw new Exception ('bad input: '.$b);
+        throw new \Exception ('bad input: '.$b);
 
     return
         array(
@@ -28,7 +28,7 @@ function byte_to_bits($b)
         $b = ord($b);
 
     if (!is_numeric($b) || $b > 255 || $b < 0)
-        throw new Exception ('bad input: '.$b);
+        throw new \Exception ('bad input: '.$b);
 
     $res = array();
 

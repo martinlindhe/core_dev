@@ -41,7 +41,7 @@ class PsPdfReader
     function loadFromFile($filename)
     {
         if (!is_file($filename))
-            throw new Exception ('file not found');
+            throw new \Exception ('file not found');
 
         $data = file_get_contents($filename);
 
@@ -59,7 +59,7 @@ class PsPdfReader
     function parse()
     {
         if (!$this->data)
-            throw new Exception ('no ps data loaded');
+            throw new \Exception ('no ps data loaded');
 
         $rows = explode("\n", $this->data);
 

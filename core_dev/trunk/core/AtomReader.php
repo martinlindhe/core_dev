@@ -46,7 +46,7 @@ class AtomReader extends CoreBase
             //FIXME check http client return code for 404
             if (strpos($data, '<feed ') === false) {
                 //dp('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
-                throw new Exception ('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
+                throw new \Exception ('AtomReader->parse FAIL: cant parse feed from '.$u->getUrl() );
                 return false;
             }
         }
@@ -62,7 +62,7 @@ class AtomReader extends CoreBase
             switch ($this->reader->name) {
             case 'feed':
                 if ($this->reader->getAttribute('xmlns') != 'http://www.w3.org/2005/Atom')
-                    throw new Exception ('Unknown atom xmlns: '.$this->reader->getAttribute('xmlns') );
+                    throw new \Exception ('Unknown atom xmlns: '.$this->reader->getAttribute('xmlns') );
                 break;
 
             case 'entry':
@@ -159,7 +159,7 @@ class AtomReader extends CoreBase
                         break;
 
                     default:
-                        throw new Exception ('unknown enclosure mime: '.$this->reader->getAttribute('type') );
+                        throw new \Exception ('unknown enclosure mime: '.$this->reader->getAttribute('type') );
                     }
                     break;
 
@@ -173,7 +173,7 @@ class AtomReader extends CoreBase
                         break;
 
                     default:
-                        throw new Exception ('unknown image mime: '.$this->reader->getAttribute('type') );
+                        throw new \Exception ('unknown image mime: '.$this->reader->getAttribute('type') );
                     }
                     break;
 
@@ -186,7 +186,7 @@ class AtomReader extends CoreBase
                     break;
                 default:
                     d($item);
-                    throw new Exception ('unknown link type: '.$this->reader->getAttribute('rel') );
+                    throw new \Exception ('unknown link type: '.$this->reader->getAttribute('rel') );
                 }
                 break;
 

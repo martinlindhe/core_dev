@@ -24,7 +24,7 @@ class XhtmlComponentCheckbox extends XhtmlComponent
     function render()
     {
         if (is_array($this->value))
-            throw new exception ('dont use arrays');
+            throw new \Exception ('dont use arrays');
 
         $res = '';
 

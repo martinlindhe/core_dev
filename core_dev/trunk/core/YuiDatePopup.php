@@ -35,7 +35,7 @@ class YuiDatePopup extends XhtmlComponent
     function render()
     {
         if (!$this->name)
-            throw new Exception ('must set a name');
+            throw new \Exception ('must set a name');
 
         $header = XhtmlHeader::getInstance();
 

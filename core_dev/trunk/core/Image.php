@@ -28,7 +28,7 @@ class Image
     function __construct($r = false)
     {
         if (!extension_loaded('gd'))
-            throw new Exception ('sudo apt-get install php5-gd');
+            throw new \Exception ('sudo apt-get install php5-gd');
 
         if ($r)
             $this->load($r);
@@ -64,7 +64,7 @@ class Image
         }
 
         if (!is_readable($r))
-            throw new Exception ('image resource not found: '.$r);
+            throw new \Exception ('image resource not found: '.$r);
 
         $info = getimagesize($r);
 
@@ -72,7 +72,7 @@ class Image
         case 'image/jpeg': $im = imagecreatefromjpeg($r); break;
         case 'image/png':  $im = imagecreatefrompng($r); break;
         case 'image/gif':  $im = imagecreatefromgif($r); break;
-        default: throw new Exception ('Unsupported image type '.$info['mime'].' for '.$r);
+        default: throw new \Exception ('Unsupported image type '.$info['mime'].' for '.$r);
         }
 
         $this->resource = $im;
@@ -86,7 +86,7 @@ class Image
     function render($type = 'png', $dst_file = '')
     {
         if (!$this->resource)
-            throw new Exception ('no image resource loaded');
+            throw new \Exception ('no image resource loaded');
 
         $page = XmlDocumentHandler::getInstance();
         $page->disableDesign();
@@ -115,7 +115,7 @@ class Image
             break;
 
         default:
-            throw new Exception ('odd render type '.$type);
+            throw new \Exception ('odd render type '.$type);
         }
     }
 

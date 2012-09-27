@@ -65,7 +65,7 @@ class YuiDatatable
     function setRowsPerPage($n)
     {
         if (!is_numeric($n))
-            throw new Execption ('not numeric: '.$n);
+            throw new \Exception ('not numeric: '.$n);
 
         $this->rows_per_page = $n;
     }
@@ -73,7 +73,7 @@ class YuiDatatable
     function setRowsPerPageOptions($a)
     {
         if (!is_array($a))
-            throw new Exception ('not array: '.$a);
+            throw new \Exception ('not array: '.$a);
 
         $this->rpp_opts = array_unique($n);
         sort($this->rpp_opts);
@@ -106,7 +106,7 @@ class YuiDatatable
     function setSortOrder($col, $order = 'asc')
     {
         if (!in_array($order, array('asc', 'desc')))
-            throw new Exception ('bad sort order: '.$order);
+            throw new \Exception ('bad sort order: '.$order);
 
         $this->sort_column = false;
 
@@ -118,14 +118,14 @@ class YuiDatatable
 
         if ($this->sort_column === false) {
 //            d( $this->columns );
-            throw new Exception ('column '.$col.' not found');
+            throw new \Exception ('column '.$col.' not found');
         }
     }
 
     function colorRow( $c1, $comp, $c2, $css)
     {
         if (!in_array($comp, array('==', '!=', '>=', '<=', '>', '<')))
-            throw new Exception ('unhandled comparison method: '.$comp);
+            throw new \Exception ('unhandled comparison method: '.$comp);
 
         $col = new YuiColorRow();
         $col->c1 = $c1;
@@ -198,7 +198,7 @@ class YuiDatatable
             $this->embed_arrays[] = $extra;
             break;
 
-        default: throw new Exception('Unknown column type '.$type);
+        default: throw new \Exception('Unknown column type '.$type);
         }
 
         if ($max_width)
@@ -235,10 +235,10 @@ class YuiDatatable
         }
 /*
         if (!is_url($url))
-            throw new Exception ('not an url: '.$url);
+            throw new \Exception ('not an url: '.$url);
 */
         if (!is_string($url))
-            throw new Exception ('really bad input: '.$url);
+            throw new \Exception ('really bad input: '.$url);
 
         $this->data_source = $url;
     }
@@ -246,7 +246,7 @@ class YuiDatatable
     function render()
     {
         if (!$this->columns)
-            throw new Exception ('no columns');
+            throw new \Exception ('no columns');
 
         $header = XhtmlHeader::getInstance();
 

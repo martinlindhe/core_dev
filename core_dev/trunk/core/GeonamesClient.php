@@ -27,7 +27,7 @@ class GeonamesClient
     static function reverse($latitude, $longitude)
     {
         if (!$latitude || !$longitude)
-            throw new Exception ('no coords set');
+            throw new \Exception ('no coords set');
 
         $temp = TempStore::getInstance();
 

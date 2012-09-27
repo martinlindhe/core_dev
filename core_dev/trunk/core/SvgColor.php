@@ -57,7 +57,7 @@ class SvgColor
             $g = $g.$g;
             $b = $b.$b;
         } else
-            throw new Exception ('wierd length of color '.strlen($s));
+            throw new \Exception ('wierd length of color '.strlen($s));
 
         $this->r = hexdec($r);
         $this->g = hexdec($g);

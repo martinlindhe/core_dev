@@ -30,7 +30,7 @@ class XhtmlComponentDropdown extends XhtmlComponent
     function render()
     {
         if (!is_array($this->options))
-            throw new Exception ('options not an array: '.$this->options);
+            throw new \Exception ('options not an array: '.$this->options);
 
         $out =
         '<select'.

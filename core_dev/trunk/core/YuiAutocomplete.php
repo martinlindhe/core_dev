@@ -47,13 +47,13 @@ class YuiAutocomplete extends XhtmlComponent
     function render()
     {
         if (!$this->name)
-            throw new Exception ('must set a name');
+            throw new \Exception ('must set a name');
 
         if (!$this->xhr_url)
-            throw new Exception ('must set xhr url');
+            throw new \Exception ('must set xhr url');
 
         if (!$this->js_format_result || !$this->result_fields)
-            throw new Exception ('need js code');
+            throw new \Exception ('need js code');
 
         $header = XhtmlHeader::getInstance();
 

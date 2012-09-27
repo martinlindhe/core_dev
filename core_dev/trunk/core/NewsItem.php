@@ -55,7 +55,7 @@ class NewsItem extends CoreBase
             $this->media[] = $o;
         else {
             d($o);
-            throw new Exception ('unhandled class '.get_class($o) );
+            throw new \Exception ('unhandled class '.get_class($o) );
         }
     }
 
@@ -107,7 +107,7 @@ class NewsItem extends CoreBase
      */
     function getThumbnailLink()
     {
-        throw new Exception ('implement me!');
+        throw new \Exception ('implement me!');
     }
 
 }

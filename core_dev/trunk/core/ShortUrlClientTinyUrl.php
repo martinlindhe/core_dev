@@ -32,7 +32,7 @@ class ShortUrlClientTinyUrl implements IShortUrlClient
 
         list($error_code, $error_message) = explode('|', $res);
 
-        throw new Exception ('Error: '.$error_message.' ('.$error_code.')');
+        throw new \Exception ('Error: '.$error_message.' ('.$error_code.')');
     }
 
 }

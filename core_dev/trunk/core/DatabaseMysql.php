@@ -60,7 +60,7 @@ class DatabaseMysql implements IDB_SQL
     public function setPort($n)
     {
         if (!is_numeric($n))
-            throw new Exception ('non-numeric port: '.$n);
+            throw new \Exception ('non-numeric port: '.$n);
 
         $this->port = $n;
     }
@@ -91,10 +91,10 @@ class DatabaseMysql implements IDB_SQL
         $this->db_handle = new \mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
-            throw new Exception ('db_mysqli->connect: '.$this->db_handle->connect_error);
+            throw new \Exception ('db_mysqli->connect: '.$this->db_handle->connect_error);
 
         if (!$this->db_handle->set_charset($this->charset))
-            throw new Exception ('Error loading character set '.$this->charset.': '.$this->db_handle->error);
+            throw new \Exception ('Error loading character set '.$this->charset.': '.$this->db_handle->error);
 
         $this->connected = true;
 
@@ -202,7 +202,7 @@ class DatabaseMysql implements IDB_SQL
             return false;
 
         if ($result->num_rows > 1)
-            throw new Exception ('DatabaseMysql::getOneItem() returned '.$result->num_rows.' rows');
+            throw new \Exception ('getOneItem() returned '.$result->num_rows.' rows');
 
         $data = $result->fetch_row();
         $result->free();
@@ -223,7 +223,7 @@ class DatabaseMysql implements IDB_SQL
             return false;
 
         if ($result->num_rows > 1)
-            throw new Exception ('DatabaseMysql::getOneRow() returned '.$result->num_rows.' rows');
+            throw new \Exception ('getOneRow() returned '.$result->num_rows.' rows');
 
         $data = $result->fetch_array(MYSQLI_ASSOC);
         $result->free();
@@ -299,17 +299,17 @@ class DatabaseMysql implements IDB_SQL
     protected function pExecStmt($args)
     {
         if (!$args[0])
-            throw new Exception ('no query');
+            throw new \Exception ('no query');
 
         if (!$this->connected)
             $this->connect();
 
         if (!Sql::isQueryPrepared($args[0]))
-            throw new Exception ('query is not prepared: ... '.$args[0]);
+            throw new \Exception ('query is not prepared: ... '.$args[0]);
 
         if (! ($stmt = $this->db_handle->prepare($args[0])) ) {
             bt();
-            throw new Exception ('FAIL prepare: '.$args[0]);
+            throw new \Exception ('FAIL prepare: '.$args[0]);
         }
 
         $params = array();
@@ -368,7 +368,7 @@ class DatabaseMysql implements IDB_SQL
 
         if (count($res) > 1) {
 //            d( func_get_args() );
-            throw new Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
+            throw new \Exception ('DatabaseMysql::pSelectRow() returned '.count($res).' rows');
         }
 
         if (!$res)
@@ -382,7 +382,7 @@ class DatabaseMysql implements IDB_SQL
         $stmt = $this->pExecStmt( func_get_args() );
 
         if ($stmt->field_count != 1)
-            throw new Exception ('not 1 column result');
+            throw new \Exception ('not 1 column result');
 
         $stmt->bind_result($col1);
 
@@ -393,7 +393,7 @@ class DatabaseMysql implements IDB_SQL
         $stmt->close();
 
         if (count($data) > 1)
-            throw new Exception ('DatabaseMysql::pSelectItem() returned '.count($data).' rows');
+            throw new \Exception ('DatabaseMysql::pSelectItem() returned '.count($data).' rows');
 
         if (!$data)
             return false;
@@ -409,7 +409,7 @@ class DatabaseMysql implements IDB_SQL
         $data = array();
 
         if ($stmt->field_count != 1)
-            throw new Exception ('not 1d result');
+            throw new \Exception ('not 1d result');
 
         $stmt->bind_result($col1);
 
@@ -428,7 +428,7 @@ class DatabaseMysql implements IDB_SQL
         $data = array();
 
         if ($stmt->field_count != 2)
-            throw new Exception ('pSelectMapped requires a key->val result set');
+            throw new \Exception ('pSelectMapped requires a key->val result set');
 
         //2d array
         $stmt->bind_result($col1, $col2);
@@ -466,7 +466,7 @@ class DatabaseMysql implements IDB_SQL
         if ($res == 1)
             return $this->db_handle->insert_id;
         else
-            throw new Exception ('insert fail: '.$args[0]);
+            throw new \Exception ('insert fail: '.$args[0]);
     }
 
     /** HACK needed for some reason */

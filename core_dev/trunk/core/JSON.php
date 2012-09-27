@@ -30,7 +30,7 @@ class JSON
         if (is_object($obj))
             return self::encodeObject($obj, $with_keys);
 
-        throw new Exception ('ewwp');
+        throw new \Exception ('ewwp');
 //        return json_encode($obj);
     }
 
@@ -54,7 +54,8 @@ class JSON
                 $all[] = json_encode($val);
                 continue;
             }
-//throw new Exception ('eh '.$key.' = '.$val);
+            //throw new \Exception ('eh '.$key.' = '.$val);
+
             $res = '';
             if ($with_keys)
                 if (is_numeric($key) && (strlen($key) == 1 || substr($key, 0, 1) != '0'))
@@ -112,7 +113,7 @@ class JSON
         }
 
         if ($e && !$res)
-            throw new Exception('JSON::decode: '.$e);
+            throw new \Exception('JSON::decode: '.$e);
 
         return $res;
     }

@@ -165,7 +165,7 @@ function getCountryName($s)
     );
 
     if (!isset($c3[$s]))
-        throw new Exception ('Unknown country name '.$s);
+        throw new \Exception ('Unknown country name '.$s);
 
     return $c3[$s];
 }

@@ -33,7 +33,7 @@ class ImapReader extends CoreBase
     function __construct()
     {
         if (!extension_loaded('imap'))
-            throw new Exception ('php5-imap extension is required');
+            throw new \Exception ('php5-imap extension is required');
     }
 
     function setServer($s) { $this->server = $s; }
@@ -80,7 +80,8 @@ class ImapReader extends CoreBase
      */
     function getMail($callback = '', $timeout = 30)
     {
-        if (!$this->connect()) return false;
+        if (!$this->connect())
+            return false;
 
         $folders = imap_listmailbox($this->handle, "{".$this->server.":".$this->port."}", "*");
 

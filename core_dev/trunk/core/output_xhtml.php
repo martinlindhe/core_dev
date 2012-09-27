@@ -143,7 +143,7 @@ function xhtmlForm($name = '', $action = '', $method = '', $enctype = '', $onsub
         $method = 'post';
 
     if (!in_array($method, array('get', 'post')))
-        throw new Exception ('wierd method '.$method);
+        throw new \Exception ('wierd method '.$method);
 
     return
     '<form action="'.$action.'" method="'.$method.'"'.
@@ -283,7 +283,7 @@ function xhtmlSelectCategory__XXX_DEPRECATED($_type, $_owner = 0, $selectName = 
 function toXmlTags($tagname, $params, $pad_before = '', $pad_after = "\n")
 {
     if (!is_array($params))
-        throw new Exception ('toXmlTags need array with params!');
+        throw new \Exception ('toXmlTags need array with params!');
 
     $res = '';
     foreach ($params as $p)

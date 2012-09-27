@@ -40,7 +40,7 @@ class ShortUrlClientBitLy implements IShortUrlClient
         $res = JSON::decode( $http->getBody() );
 
         if ($res->status_code != 200)
-            throw new Exception ('Error code '.$res->status_code.': '.$res->status_txt);
+            throw new \Exception ('Error code '.$res->status_code.': '.$res->status_txt);
 
         return $res->data->url;
     }

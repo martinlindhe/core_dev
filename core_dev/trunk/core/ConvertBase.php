@@ -79,7 +79,7 @@ abstract class ConvertBase
         if (!empty($this->scale[$s]))
             return $s;
 
-        throw new Exception (get_class($this).': unhandled unit: '.$s);
+        throw new \Exception (get_class($this).': unhandled unit: '.$s);
     }
 
     /**

@@ -41,7 +41,7 @@ class YuiDateInterval extends XhtmlComponent
     function render()
     {
         if (!$this->name)
-            throw new Exception ('name must be configured');
+            throw new \Exception ('name must be configured');
 
         $header = XhtmlHeader::getInstance();
 

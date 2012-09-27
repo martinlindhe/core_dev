@@ -16,7 +16,7 @@
 //TODO: rename setCacheTime -> setTimeout
 //TODO later: drop 'memcache' extension support
 
-throw new Exception ('who uses me!');
+throw new \Exception ('who uses me!');
 
 require_once('core.php');
 require_once('CoreBase.php');
@@ -46,7 +46,7 @@ class Cache extends CoreBase
             $this->driver_name = 'memcache';
             $this->handle = new Memcache;
         } else
-            throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
+            throw new \Exception ("php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
 
         $this->handle->addServer('127.0.0.1', 11211);
 
@@ -69,7 +69,7 @@ class Cache extends CoreBase
     function get($key)
     {
         if (strlen($key) > 250)
-            throw new Exception ('Key length too long '.$key);
+            throw new \Exception ('Key length too long '.$key);
 
         if (!$this->connect())
             return false;
@@ -88,7 +88,7 @@ class Cache extends CoreBase
     function set($key, $val = '')
     {
         if (strlen($key) > 250)
-            throw new Exception ('Key length too long');
+            throw new \Exception ('Key length too long');
 
         if (!$this->connect())
             return false;
@@ -112,7 +112,7 @@ class Cache extends CoreBase
     function delete($key)
     {
         if (strlen($key) > 250)
-            throw new Exception ('Key length too long');
+            throw new \Exception ('Key length too long');
 
         if (!$this->connect())
             return false;

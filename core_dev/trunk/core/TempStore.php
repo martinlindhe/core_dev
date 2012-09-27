@@ -47,7 +47,7 @@ class TempStore
             self::$_instance = new self();
 
         if (!extension_loaded('memcached'))
-            throw new Exception ('sudo apt-get install php5-memcached');
+            throw new \Exception ('sudo apt-get install php5-memcached');
 
         return self::$_instance;
     }
@@ -89,7 +89,7 @@ class TempStore
             return;
 
         if (!extension_loaded('memcached'))
-            throw new Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
+            throw new \Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
 
         $this->handle = new \Memcached;
 
@@ -122,7 +122,7 @@ class TempStore
             return false;
 
         if (strlen($key) > $this->maxlen)
-            throw new Exception ('Key length too long (len '.strlen($key).', max '.$this->maxlen.'): '.$key);
+            throw new \Exception ('Key length too long (len '.strlen($key).', max '.$this->maxlen.'): '.$key);
 
         $this->connect();
 
@@ -142,10 +142,10 @@ class TempStore
     function set($key, $val = '', $expire_time = '1h')
     {
         if (strlen($key) > $this->maxlen)
-            throw new Exception ('Key length too long (len '.strlen($key).', max '.$this->maxlen.'): '.$key);
+            throw new \Exception ('Key length too long (len '.strlen($key).', max '.$this->maxlen.'): '.$key);
 
         if (!is_duration($expire_time))
-            throw new Exception ('bad expire time');
+            throw new \Exception ('bad expire time');
 
         $expire_time = parse_duration($expire_time);
 

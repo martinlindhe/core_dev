@@ -177,17 +177,17 @@ class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
     protected function pExecStmt($args)
     {
         if (!$args[0])
-            throw new Exception ('no query');
+            throw new \Exception ('no query');
 
         if (strpos($args[0], '=') !== false && strpos($args[0], '?') === false)
             if (stripos($args[0], 'SELECT') === false)
-                throw new Exception ('query is not prepared: '.$args[0]);
+                throw new \Exception ('query is not prepared: '.$args[0]);
 
         if (!$this->connected)
             $this->connect();
 
         if (! ($stmt = $this->db_handle->prepare($args[0])) )
-            throw new Exception ('FAIL prepare: '.$args[0]);
+            throw new \Exception ('FAIL prepare: '.$args[0]);
 
         $params = array();
         for ($i = 1; $i < count($args); $i++)

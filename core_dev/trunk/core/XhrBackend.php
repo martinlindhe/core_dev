@@ -55,7 +55,7 @@ abstract class XhrBackend
 
         $order = strtolower($order);
         if (!in_array($order, array('desc', 'asc')))
-            throw new Exception ('Bad sortOrder');
+            throw new \Exception ('Bad sortOrder');
 
         $this->sort_column = $s;
         $this->sort_order  = $order;

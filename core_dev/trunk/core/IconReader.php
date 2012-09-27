@@ -33,7 +33,7 @@ class IconReader
     static function listLmages($in)
     {
         if (!file_exists($in))
-            throw new Exception ('file not found: '.$in);
+            throw new \Exception ('file not found: '.$in);
 
         $fp = fopen($in, 'rb');
 
@@ -74,7 +74,7 @@ class IconReader
     static function getImages($in)
     {
         if (!file_exists($in))
-            throw new Exception ('file not found');
+            throw new \Exception ('file not found');
 
         $images = array();
 
@@ -84,10 +84,10 @@ class IconReader
         $header = unpack('vReserved/vType/vCount', fread($fp, 6));
 
         if ($header['Reserved'] != 0)
-            throw new Exception ('Reserved is not 0');
+            throw new \Exception ('Reserved is not 0');
 
         if ($header['Type'] != 1)
-            throw new Exception ('Type is not 1');
+            throw new \Exception ('Type is not 1');
 
         for ($i = 0; $i < $header['Count']; $i++)
             $images[] = self::_readIconResource($fp, $i);
@@ -107,10 +107,10 @@ class IconReader
         fseek($fp, $entry['ImageOffset']);
 
         if ($entry['Reserved'] != 0)
-            throw new Exception ('Reserved (0) is '. $entry['Reserved']);
+            throw new \Exception ('Reserved (0) is '. $entry['Reserved']);
 
         if ($entry['Planes'] > 1)
-            throw new Exception ('odd planes: '.$entry['Planes']);
+            throw new \Exception ('odd planes: '.$entry['Planes']);
 
         // read icon data
         $data = fread($fp, $entry['BytesInRes']);
@@ -129,17 +129,17 @@ class IconReader
 
         if ($header['Size'] != 40) {
             print_r($header);
-            throw new Exception ('odd header size: '.$header['Size']);
+            throw new \Exception ('odd header size: '.$header['Size']);
         }
 
         if ($header['Planes'] > 1)
-            throw new Exception ('odd planes: '.$header['Planes']);
+            throw new \Exception ('odd planes: '.$header['Planes']);
 
         if ($header['Compression'])
-            throw new Exception ('compression not supported');
+            throw new \Exception ('compression not supported');
 
         if ($entry['Height'] > 1024 || $entry['Width'] > 1024)
-            throw new Exception ('xxx too big');
+            throw new \Exception ('xxx too big');
 
         $im = imagecreatetruecolor($entry['Width'], $entry['Height']);
         imagesavealpha($im, true);
@@ -184,7 +184,7 @@ class IconReader
 
                     case 8:
                         if ($entry['ColorCount'])
-                            throw new Exception ('xxx use available palette for 8bit??');
+                            throw new \Exception ('xxx use available palette for 8bit??');
 
                         $byte = ord($data[$pos++]);
                         imagesetpixel($im, $x, $entry['Height'] - $y - 1, $palette[ $byte ]);
@@ -192,7 +192,7 @@ class IconReader
                         break;
 
                     default:
-                        throw new Exception ('unhandled bitcount '.$header['BitCount']);
+                        throw new \Exception ('unhandled bitcount '.$header['BitCount']);
                     }
                 }
                 // All rows end on the 32 bit
@@ -232,7 +232,7 @@ class IconReader
 
                 if ($pos % 4)
                     //$pos += 4 - ($pos % 4);
-                    throw new Exception ('eh2: '.dechex($pos) );
+                    throw new \Exception ('eh2: '.dechex($pos) );
             }
             if ($header['BitCount'] == 32 && !empty($alphas) && count($alphas) == 1) {
                 echo "USE ALPHA\n";

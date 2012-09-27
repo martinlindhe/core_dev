@@ -25,7 +25,7 @@ class ImageCropper extends Image
     function crop($x, $y, $w, $h)
     {
         if (!is_numeric($x) || !is_numeric($y) || !is_numeric($x) || !is_numeric($y))
-            throw new Exception ('bad input');
+            throw new \Exception ('bad input');
 
         echo 'Cropping '.$this->width.'x'.$this->height.' to '.$x.','.$y.' '.$w.'x'.$h."\n";
 

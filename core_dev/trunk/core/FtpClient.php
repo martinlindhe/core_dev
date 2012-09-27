@@ -38,7 +38,7 @@ class FtpClient extends CoreBase
     function __construct($url = '')
     {
         if (!extension_loaded('curl'))
-            throw new exception ('php5-curl missing');
+            throw new \Exception ('php5-curl missing');
 
         if ($url)
             $this->setAddress($url);
@@ -67,7 +67,7 @@ class FtpClient extends CoreBase
     function setAddress($url) //XXX rename method
     {
         if (!$url)
-            throw new Exception ('setAddress called with empty parameter');
+            throw new \Exception ('setAddress called with empty parameter');
 
         $p = parse_url($url);
         if (!$p)
@@ -182,7 +182,7 @@ class FtpClient extends CoreBase
 
         if (curl_errno($this->curl))
         {
-            throw new Exception ('curl error "'.$this->getFtpError($this->curl).'" while reading '.$remote_file);
+            throw new \Exception ('curl error "'.$this->getFtpError($this->curl).'" while reading '.$remote_file);
 
             if (!filesize($local_file))
                 unlink($local_file);
@@ -212,7 +212,7 @@ class FtpClient extends CoreBase
         $res = curl_exec($this->curl);
 
         if (curl_errno($this->curl))
-            throw new Exception ('ftp download error: '.curl_error($this->curl));
+            throw new \Exception ('ftp download error: '.curl_error($this->curl));
 
         if ($this->getDebug())
             echo 'getData md5: '.md5($res).ln();
@@ -287,7 +287,7 @@ class FtpClient extends CoreBase
         fclose($fp);
 
         if (curl_errno($this->curl))
-            throw new Exception ('ftp exec error: '.curl_error($this->curl) );
+            throw new \Exception ('ftp exec error: '.curl_error($this->curl) );
 
         return true;
     }
@@ -309,7 +309,7 @@ class FtpClient extends CoreBase
         $raw = curl_exec($this->curl);
 
         if (curl_errno($this->curl))
-            throw new Exception ('ftp download error: '.curl_error($this->curl));
+            throw new \Exception ('ftp download error: '.curl_error($this->curl));
 
         //  mode        ?   ?        ?          size    mtime      filename
         //drwxrwxr-x    2 1137     1100         2048 Apr  4  2009 slackware

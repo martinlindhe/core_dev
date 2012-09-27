@@ -20,7 +20,7 @@ class XhtmlComponentHidden extends XhtmlComponent
     function render()
     {
         if (is_array($this->value))
-            throw new exception ('dont use arrays'); //XXX do any code exploit this "feature"?
+            throw new \Exception ('dont use arrays'); //XXX do any code exploit this "feature"?
 
 /*
         if (is_array($this->value))

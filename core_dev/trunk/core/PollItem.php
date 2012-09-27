@@ -65,7 +65,7 @@ class PollItem
     {
         $length = parse_duration($duration_mode);
         if (!$length)
-            throw new Exception ('odd duration '.$duration_mode);
+            throw new \Exception ('odd duration '.$duration_mode);
 
         switch ($start_mode) {
         case 'thismonday':
@@ -94,7 +94,7 @@ class PollItem
             break;
 
         default:
-            throw new Exception ('eexp');
+            throw new \Exception ('eexp');
         }
 
         $timeEnd = $timeStart + $length;

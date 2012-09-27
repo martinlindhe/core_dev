@@ -22,7 +22,7 @@ class Guestbook
     public static function getEntries($user_id)
     {
         if (!is_numeric($user_id))
-            throw new Exception ('ehm');
+            throw new \Exception ('ehm');
 
         $q =
         'SELECT * FROM '.self::$tbl_name.

@@ -115,7 +115,7 @@ function get_mimetype_of_file($filename)
     }
 */
     if (!$res)
-        throw new Exception ('file_get_mime FAIL on '.$filename);
+        throw new \Exception ('file_get_mime FAIL on '.$filename);
 
     return $res;
 }
@@ -231,14 +231,14 @@ function dir_get_matches($path, $haystack = array(), $prefix = '', $full_path = 
 function arg_match($needle, $haystack)
 {
     if (!is_array($haystack))
-        throw new Exception ('haystack must be array: '.$haystack);
+        throw new \Exception ('haystack must be array: '.$haystack);
 
     foreach ($haystack as $h)
     {
         $p1 = strpos($h, '*');
 
         if ($p1 === false)
-            throw new Exception ('arg_match() haystack filters require wildcards, change ".avi" TO "*.avi"');
+            throw new \Exception ('arg_match() haystack filters require wildcards, change ".avi" TO "*.avi"');
 
         $i1 = substr($h, 0, $p1);
         $i2 = substr($h, $p1 +  1);
@@ -265,7 +265,7 @@ function arg_match($needle, $haystack)
 function expand_arg_files($in, $haystack = array() )
 {
     if (is_array($in)) {
-        throw new Exception ('FIXME be recursive');
+        throw new \Exception ('FIXME be recursive');
 /*        $res = array();
         foreach ($in as $f)
             if (in_array( file_suffix($f), $haystack))
@@ -286,7 +286,7 @@ function expand_arg_files($in, $haystack = array() )
 
     /* if (strpos($in, "\n") !== false) {
         if ($haystack)
-            throw new Exception ('XXX respect $haystack');
+            throw new \Exception ('XXX respect $haystack');
 
         return explode("\n", trim($in)); // newline-separated list of filenames with full path
     }*/
@@ -295,7 +295,7 @@ function expand_arg_files($in, $haystack = array() )
     if (is_string($in) && !$haystack)
         return dir_get_matches( dirname($in), array(basename($in)) );
 
-    throw new Exception ('Unknown input: '.$in);
+    throw new \Exception ('Unknown input: '.$in);
 }
 
 /**
@@ -307,7 +307,7 @@ function generate_video_thumb($fileId, $where = '10%')
         return false;
 
     if (!file_exists(File::getUploadPath($fileId)))
-        throw new Exception ('file '.File::getUploadPath($fileId).' dont exist!');
+        throw new \Exception ('file '.File::getUploadPath($fileId).' dont exist!');
 
     $c = 'avprobe '.File::getUploadPath($fileId).' 2>&1 | /bin/grep Duration | cut -d, -f1'; // returns: "Duration: 00:00:08.50"
     //echo "Executing: ".$c."\n";

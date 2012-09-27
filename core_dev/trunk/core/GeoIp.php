@@ -23,7 +23,7 @@ class GeoIp
     private static function compat_check()
     {
         if (!extension_loaded('geoip'))
-            throw new Exception ('sudo apt-get install php5-geoip');
+            throw new \Exception ('sudo apt-get install php5-geoip');
     }
 
     static function getRecord($s)

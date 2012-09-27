@@ -102,7 +102,7 @@ class SendMail
     private function connect()
     {
         if (!$this->host)
-            throw new Exception ('No email server configured');
+            throw new \Exception ('No email server configured');
 
         $this->smtp = new SmtpClient($this->host, $this->username, $this->password, $this->port);
 
@@ -110,7 +110,7 @@ class SendMail
             $this->smtp->debug = true;
 
         if (!$this->smtp->login())
-            throw new Exception ('Cant connect to smtp server '.$this->host.':'.$this->port);
+            throw new \Exception ('Cant connect to smtp server '.$this->host.':'.$this->port);
 
         $this->connected = true;
         return true;
@@ -132,7 +132,7 @@ class SendMail
     {
         $adr = trim($adr);
         if (!is_email($adr))
-            throw new Exception ('Cant set invalid from address '.$adr);
+            throw new \Exception ('Cant set invalid from address '.$adr);
 
         self::$from_adr  = $adr;
         self::$from_name = $n;
@@ -142,7 +142,7 @@ class SendMail
     {
         $adr = trim($adr);
         if (!is_email($adr))
-            throw new Exception ('Cant set reply-to to invalid address '.$adr);
+            throw new \Exception ('Cant set reply-to to invalid address '.$adr);
 
         self::$rply_adr  = $adr;
         self::$rply_name = $n;
@@ -152,7 +152,7 @@ class SendMail
     {
         $s = trim($s);
         if (!is_email($s))
-            throw new Exception ('Cant add invalid cc '.$s);
+            throw new \Exception ('Cant add invalid cc '.$s);
 
         self::$cc_adr[] = $s;
     }
@@ -161,7 +161,7 @@ class SendMail
     {
         $s = trim($s);
         if (!is_email($s))
-            throw new Exception ('Cant add invalid bcc '.$s);
+            throw new \Exception ('Cant add invalid bcc '.$s);
 
         self::$bcc_adr[] = $s;
     }
@@ -173,7 +173,7 @@ class SendMail
             return;
 
         if (!is_email($s))
-            throw new Exception ('Cant add invalid recipient '.$s);
+            throw new \Exception ('Cant add invalid recipient '.$s);
 
         self::$to_adr[] = $s;
     }
@@ -215,7 +215,7 @@ class SendMail
     function embedFile($filename, $cid = '')
     {
         if (!file_exists($filename))
-            throw new Exception ('File '.$filename.' not found');
+            throw new \Exception ('File '.$filename.' not found');
 
         $a = new MailAttachment();
         $a->data       = file_get_contents($filename);
@@ -237,7 +237,7 @@ class SendMail
         }
 
         if (!$this->smtp->_MAIL_FROM(self::$from_adr))
-            throw new Exception ('Failed to set from address');
+            throw new \Exception ('Failed to set from address');
 
         $header =
         "Date: ".date('r')."\r\n".

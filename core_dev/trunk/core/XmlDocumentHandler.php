@@ -121,7 +121,7 @@ class XmlDocumentHandler extends CoreBase
     function setUploadPath($s)
     {
         if (!is_dir($s))
-            throw new Exception ('setUploadPath: directory dont exist: '.$s);
+            throw new \Exception ('setUploadPath: directory dont exist: '.$s);
 
         $this->upload_root = realpath($s);
     }
@@ -132,7 +132,7 @@ class XmlDocumentHandler extends CoreBase
     function setApplicationPath($s = './')
     {
         if (!is_dir($s))
-            throw new Exception ('setApplicationPath: directory dont exist: '.$s);
+            throw new \Exception ('setApplicationPath: directory dont exist: '.$s);
 
         $this->app_root = realpath($s);
     }
@@ -141,7 +141,7 @@ class XmlDocumentHandler extends CoreBase
     function getCoreDevPath()
     {
         if (!$this->coredev_inc)
-            throw new Exception('setCoreDevPath not configured');
+            throw new \Exception('setCoreDevPath not configured');
 
         return $this->coredev_inc;
     }
@@ -151,7 +151,7 @@ class XmlDocumentHandler extends CoreBase
         $real = realpath($path);
 
         if (!is_dir($real))
-            throw new Exception ('path not found '.$path.' (expanded to '.$real.')');
+            throw new \Exception ('path not found '.$path.' (expanded to '.$real.')');
 
         // make sure this function returns path name with ending /
         $this->coredev_inc = $real.'/';
@@ -252,7 +252,7 @@ class XmlDocumentHandler extends CoreBase
     function attach($obj)
     {
         if ( !($obj instanceof IXmlComponent))
-            throw new exception( get_class($obj).' dont implement IXmlComponent');
+            throw new \Exception( get_class($obj).' dont implement IXmlComponent');
 
         $this->objs[] = $obj;
     }
@@ -263,7 +263,7 @@ class XmlDocumentHandler extends CoreBase
     function prepend($obj)
     {
         if ( !($obj instanceof IXmlComponent))
-            throw new exception( get_class($obj).' dont implement IXmlComponent');
+            throw new \Exception( get_class($obj).' dont implement IXmlComponent');
 
         array_unshift($this->objs, $obj);
     }

@@ -32,10 +32,10 @@ class IsbnDbClient
     function getByISBN($isbn)
     {
         if (!ISBN::isValid($isbn))
-            throw new Exception ('invalid isbn');
+            throw new \Exception ('invalid isbn');
 
         if (!$this->api_key)
-            throw new Exception ('api key required');
+            throw new \Exception ('api key required');
 
         $temp = TempStore::getInstance();
 
@@ -59,7 +59,7 @@ class IsbnDbClient
         $d = $xml->BookList->BookData;
         $attrs = $d->attributes();
         if (!$attrs)
-            throw new Exception ('no attrs');
+            throw new \Exception ('no attrs');
 
         $book = new BookResource();
         $book->title     = strval($d->Title);

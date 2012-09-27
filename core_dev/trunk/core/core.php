@@ -425,7 +425,7 @@ function array_first_entry($arr)
 function byte_count($s)
 {
     if (!is_numeric($s))
-        throw new Exception ('not a number '.$s);
+        throw new \Exception ('not a number '.$s);
 
     if ($s < 1024)
         return $s.' bytes';
@@ -479,7 +479,7 @@ function sbool($b)
 function instr($haystack, $needle)
 {
     if (!is_string($haystack) || !is_string($needle))
-        throw new Exception ('strings only');
+        throw new \Exception ('strings only');
 
     if (strpos($haystack, $needle) === false)
         return false;
@@ -567,7 +567,7 @@ function formatMSID($anr, $cc = '46')
 function t($s)
 {
     if (!$s)
-        throw new Exception ('huh');
+        throw new \Exception ('huh');
 
     $locale = \cd\LocaleHandler::getInstance();
 

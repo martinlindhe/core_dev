@@ -20,7 +20,7 @@ class XmlRpcClient extends HttpClient
     function __construct($s = '')
     {
         if (!extension_loaded('xmlrpc'))
-            throw new Exception ('php5-xmlrpc not found');
+            throw new \Exception ('php5-xmlrpc not found');
 
         parent::__construct($s);
     }
@@ -28,7 +28,7 @@ class XmlRpcClient extends HttpClient
     function call($method, $params, $debug = false)
     {
         if (!$this->Url->get() )
-            throw new Exception ('No XML-RPC server URL set');
+            throw new \Exception ('No XML-RPC server URL set');
 
         $this->setContentType('text/xml');
 

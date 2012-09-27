@@ -37,7 +37,7 @@ class Bookmark
     static function getList($type, $owner)
     {
         if (!is_numeric($owner) || !is_numeric($type))
-            throw new Exception ('noo');
+            throw new \Exception ('noo');
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -91,7 +91,7 @@ class Bookmark
     static function remove($type, $object_id, $owner = 0)
     {
         if (!is_numeric($type) || !is_numeric($object_id) || !is_numeric($owner))
-            throw new Exception ('noo');
+            throw new \Exception ('noo');
 
         $session = SessionHandler::getInstance();
 

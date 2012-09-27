@@ -120,7 +120,7 @@ class GoogleMapsClient
             $res->name = $item->address;
         else {
             d($json);
-            throw new exception ('ERRORZZZ');
+            throw new \Exception ('ERRORZZZ');
         }
 
         if (isset($item->AddressDetails->Country->CountryNameCode))
@@ -148,16 +148,16 @@ class GoogleMapsClient
     static function staticMap($lat, $long, $markers = array(), $path = array(), $width = 512, $height = 512, $zoom = 14, $maptype = 'mobile', $format = 'png8')
     {
         if (!is_numeric($lat) || !is_numeric($long) || !is_numeric($width) || !is_numeric($height))
-            throw new Exception ('bad input');
+            throw new \Exception ('bad input');
 
         if ($lat < -90.0 || $lat > 90.0 || $long < -180.0 || $long > 180.0)
-            throw new Exception ('odd coords');
+            throw new \Exception ('odd coords');
 
         if ($width < 0 || $width > 640 || $height < 0 || $height > 640)
-            throw new Exception ('odd sizes');
+            throw new \Exception ('odd sizes');
 
         if ($zoom < 0 || $zoom > 21)
-            throw new Exception ('odd zoom');
+            throw new \Exception ('odd zoom');
 
         $url =
         'http://maps.googleapis.com/maps/api/staticmap'.

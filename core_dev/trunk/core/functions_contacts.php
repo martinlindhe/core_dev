@@ -11,7 +11,7 @@
 
 //TODO: a OO version of full functionality with sending friend request
 
-throw new Exception ('functions_contacts is deprecated!!!');
+throw new \Exception ('functions_contacts is deprecated!!!');
 
 //TODO: greater flexiblity, ability to create "favorites" lists
 

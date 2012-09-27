@@ -30,7 +30,7 @@ class ShortUrlClientIsGd implements IShortUrlClient
         if (substr($res, 0, 4) == 'http')
             return trim($res);
 
-        throw new Exception ('Error: '.$res);
+        throw new \Exception ('Error: '.$res);
     }
 
 }

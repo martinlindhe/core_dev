@@ -22,7 +22,7 @@ class XhtmlComponentListbox extends XhtmlComponent
     function render()
     {
         if (!is_array($this->options))
-            throw new Exception ('options not an array: '.$this->options);
+            throw new \Exception ('options not an array: '.$this->options);
 
         $page = XmlDocumentHandler::getInstance();
         $header = XhtmlHeader::getInstance();

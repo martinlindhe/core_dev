@@ -88,7 +88,7 @@ class MimeReader
                 $this->from_adr = strtolower($s);
             else
                 // XXX should not be possilbe
-                throw new Exception ('FAILED TO extract adr from '.$from);
+                throw new \Exception ('FAILED TO extract adr from '.$from);
         }
 
         return true;
@@ -136,7 +136,7 @@ class MimeReader
             $pos = strpos($part, '=');
 
             if ($pos === false)
-                throw new Exception ("multipart header error, Content-Type: ".$this->getHeader('content-type'));
+                throw new \Exception ("multipart header error, Content-Type: ".$this->getHeader('content-type'));
 
             $key = substr($part, 0, $pos);
             $val = substr($part, $pos+1);
@@ -152,7 +152,7 @@ class MimeReader
             }
         }
         if (!$multipart_id)
-            throw new Exception ('didnt find multipart id');
+            throw new \Exception ('didnt find multipart id');
 
         //echo "Splitting msg using id '".$multipart_id."'\n";
 
@@ -215,7 +215,7 @@ class MimeReader
                 break;
 
             default:
-                throw new Exception ("Unknown transfer encoding: ".$enc );
+                throw new \Exception ("Unknown transfer encoding: ".$enc );
             }
 
             $part_cnt++;

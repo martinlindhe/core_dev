@@ -57,10 +57,10 @@ class BarcodeEan13 extends Image
         $n = str_replace(' ', '', $n);
 
         if (!$n || !is_numeric($n))
-            throw new Exception ('invalid format');
+            throw new \Exception ('invalid format');
 
         if (strlen($n) != 13)
-            throw new Exception ('wrong length: '.strlen($n));
+            throw new \Exception ('wrong length: '.strlen($n));
 
         $this->code = $n;
 
@@ -104,7 +104,7 @@ class BarcodeEan13 extends Image
     private function calcCheck()
     {
         if (!is_numeric($this->code))
-            throw new Exception ('invalid barcode');
+            throw new \Exception ('invalid barcode');
 
         $sum = 0;
 
@@ -168,7 +168,7 @@ class BarcodeEan13 extends Image
     function renderDetails()
     {
         if (!$this->code)
-            throw new Exception ('no code loaded');
+            throw new \Exception ('no code loaded');
 
         $res  = 'Barcode : '.$this->code.ln();
         $res .= 'GS1     : '.$this->getGs1Name().' ('.$this->gs1.')'.ln();
@@ -226,10 +226,10 @@ class BarcodeEan13 extends Image
     function render($type = 'png', $dst_file = '')
     {
         if (strlen($this->code) != 13 || !is_numeric($this->code))
-            throw new Exception ('invalid input: '.$this->code);
+            throw new \Exception ('invalid input: '.$this->code);
 
         if (!$this->isValid())
-            throw new Exception ('invalid code');
+            throw new \Exception ('invalid code');
 
         // Calculate the barcode width
         $barcodewidth = (strlen($this->code)) * (7 * $this->_barwidth)

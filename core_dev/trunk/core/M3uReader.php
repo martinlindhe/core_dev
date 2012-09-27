@@ -34,7 +34,7 @@ class M3uReader
             $data = $http->getBody();
 
             if (strpos($data, '#EXTM3U') === false) {
-                throw new Exception ('M3uReader->parse FAIL: cant parse feed from '.$http->getUrl() );
+                throw new \Exception ('M3uReader->parse FAIL: cant parse feed from '.$http->getUrl() );
                 return false;
             }
             $base_url = dirname( $http->getUrl() );

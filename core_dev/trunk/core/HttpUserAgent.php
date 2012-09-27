@@ -60,7 +60,7 @@ class HttpUserAgent
      */
     public static function isSmartphone($s)
     {
-        throw new Exception ('FIXME implement');
+        throw new \Exception ('FIXME implement');
     }
 
     /**

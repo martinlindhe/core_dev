@@ -121,7 +121,7 @@ class MediaWikiFormatter
         $url = new Url($this->url);
 
         if (substr($url->getPath(), 0, 6) != '/wiki/')
-            throw new Exception ('not a mediawiki url: '.$this->url);
+            throw new \Exception ('not a mediawiki url: '.$this->url);
 */
         $target = $match[1];
         $text = empty($match[2]) ? $match[1] : $match[2];

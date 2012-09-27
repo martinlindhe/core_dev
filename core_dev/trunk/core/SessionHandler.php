@@ -68,7 +68,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
     function setTimeout($n)
     {
         if (!is_duration($n))
-            throw new Exception ('bad timeout: '.$n);
+            throw new \Exception ('bad timeout: '.$n);
 
         $this->timeout = parse_duration($n);
     }
@@ -132,7 +132,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
         case SESSION_FACEBOOK:
             $user = new FacebookUser($username);
             break;
-        default: throw new Exception ('hmm '.$type);
+        default: throw new \Exception ('hmm '.$type);
         }
 
         if (!$user || !$user->id) {
@@ -193,7 +193,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
     function start()
     {
         if (!$this->name)
-            throw new Exception ('session name not set');
+            throw new \Exception ('session name not set');
 
         $sess_storage = new SessionStorageHandler();
         $error = ErrorHandler::getInstance();
@@ -205,7 +205,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
 
         if (!session_id())
             if (!session_start())
-                throw new Exception ('failed to start session');
+                throw new \Exception ('failed to start session');
 
         if (empty($_SESSION['id']))
             return;
@@ -265,7 +265,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
         dp($this->username.' logged out');
 
         if (!$this->id)
-            throw new Exception ('already logged out');
+            throw new \Exception ('already logged out');
 
         Sql::pUpdate('UPDATE tblUsers SET time_last_logout = NOW() WHERE id = ?', 'i', $this->id);
 
@@ -404,7 +404,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
     function handleFacebookLogin() /// XXXX move to own class?
     {
         if ($this->facebook_id)
-            throw new Exception ('wiee! already handled');
+            throw new \Exception ('wiee! already handled');
 
         // Get User ID
         $fbuser = $this->fb_handle->getUser();

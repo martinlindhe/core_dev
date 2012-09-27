@@ -93,7 +93,7 @@ class TheMovieDbClient extends CoreBase
     static function getInfo($movie_id)
     {
         if (!Imdb::isValidId($movie_id) && !self::probeId($movie_id))
-            throw new Exception ('not a tmdb / imdb id');
+            throw new \Exception ('not a tmdb / imdb id');
 
         $temp = TempStore::getInstance();
         $key = 'TheMovieDbClient/info//'.$movie_id;
@@ -145,7 +145,7 @@ class TheMovieDbClient extends CoreBase
             $movie->last_modified = strval($m->last_modified_at);
 
             if ($movie->imdb_id && !Imdb::isValidId($movie->imdb_id))
-                throw new Exception ('invalid imdb id: '.$movie->imdb_id);
+                throw new \Exception ('invalid imdb id: '.$movie->imdb_id);
 
             foreach ($m->images->image as $i) {
                 $image = new ImageResource();

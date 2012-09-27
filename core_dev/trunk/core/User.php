@@ -38,7 +38,7 @@ class UserLink
             $name = UserSetting::get($u->id, 'fb_name');
             $res .= $name.' (facebook)';
             break;
-        default: throw new Exception ('hm');
+        default: throw new \Exception ('hm');
         }
 
         // $res .= '<span class="yui3-hastooltip" id="tt_usr_'.$u->id.'">'.$u->name.'</span>';

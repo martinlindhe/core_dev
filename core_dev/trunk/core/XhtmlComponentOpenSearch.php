@@ -26,7 +26,7 @@ class XhtmlComponentOpenSearch extends XhtmlComponent
     function render()
     {
         if (!$this->url)
-            throw new Exception ('no url set');
+            throw new \Exception ('no url set');
 
         $page = XmlDocumentHandler::getInstance();
         $page->disableDesign(); //remove XhtmlHeader, designHead & designFoot for this request

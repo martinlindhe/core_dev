@@ -25,7 +25,7 @@ class CategoryItem
     function __construct($type = 0)
     {
         if (!is_numeric($type))
-            throw new Exception ('non-numeric type');
+            throw new \Exception ('non-numeric type');
 
         $this->type = $type;
     }

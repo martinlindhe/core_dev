@@ -68,7 +68,7 @@ The link will expire in @EXPIRETIME@';
 
         $email = UserSetting::getEmail($user_id);
         if (!$email)
-            throw new Exception ('entered email not found');
+            throw new \Exception ('entered email not found');
 
         $code = Token::generate($user_id, 'activation_code');
 

@@ -68,7 +68,7 @@ class HashVideo implements IHash
     public static function CalcString($s)
     {
         // XXX need reworking the code to implement, and not very useful
-        throw new Exception ('VideoHash::CalcString not supported');
+        throw new \Exception ('VideoHash::CalcString not supported');
     }
 
     private static function AddUINT64($a, $handle)

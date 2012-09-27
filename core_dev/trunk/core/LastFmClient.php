@@ -40,7 +40,7 @@ class LastFmClient
     function setLanguage($s)
     {
         if (!in_array($s, array('en', 'sv')))
-            throw new Exception ('unknown lang: '.$s);
+            throw new \Exception ('unknown lang: '.$s);
 
         $this->language = $s;
     }
@@ -64,7 +64,7 @@ class LastFmClient
 /*
         $attrs = $x->attributes();
         if ($attrs['status'] == 'failed')
-            throw new Exception ('last.fm api error: '.$x->error);
+            throw new \Exception ('last.fm api error: '.$x->error);
 */
         return $x;
     }
@@ -159,7 +159,7 @@ class LastFmClient
     static function getBestImage($images, $quality = 'mega')
     {
         if (!is_array($images))
-            throw new Exception ('no array given');
+            throw new \Exception ('no array given');
 
         $scoring = array(
         'small'      => 1,
@@ -170,7 +170,7 @@ class LastFmClient
         );
 
         if (!array_key_exists($quality, $scoring))
-            throw new Exception ('unrecognized quality: '.$quality);
+            throw new \Exception ('unrecognized quality: '.$quality);
 
         $score = 0;
         $best_url = '';
@@ -186,7 +186,7 @@ class LastFmClient
                     $best_url = $i->getUrl();
                 }
             } else
-                throw new Exception ('unknown image quality '.$i->type );
+                throw new \Exception ('unknown image quality '.$i->type );
         }
 
         return $best_url;

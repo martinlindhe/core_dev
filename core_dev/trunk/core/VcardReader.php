@@ -27,7 +27,7 @@ class VcardReader
 
             //FIXME check http client return code for 404
             if (strpos($data, 'BEGIN:VCARD') === false) {
-                throw new Exception ('VcardReader->parse FAIL: cant parse vcard from '.$http->getUrl() );
+                throw new \Exception ('VcardReader->parse FAIL: cant parse vcard from '.$http->getUrl() );
                 return false;
             }
         }
@@ -66,7 +66,7 @@ class VcardReader
         foreach ($rows as $row) {
             $p1 = strpos($row, ':');
             if ($p1 === false)
-                throw new Exception ('invalid vcard format: '.$row);
+                throw new \Exception ('invalid vcard format: '.$row);
 
             $key = substr($row, 0, $p1);
             $val = explode(';', substr($row, $p1 + 1) );
@@ -83,7 +83,7 @@ class VcardReader
             case 'END': break;
             case 'VERSION':
                 if ($val[0] != '2.1')
-                    throw new Exception ('unsupported vcard version '.$val[0]);
+                    throw new \Exception ('unsupported vcard version '.$val[0]);
                 break;
 
             case 'BDAY':

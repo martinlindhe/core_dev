@@ -55,7 +55,7 @@ class LocaleHandler
         case 'eng': $this->handle = new LocaleInEng(); break;
         case 'swe': $this->handle = new LocaleInSwe(); break;
         case 'ger': $this->handle = new LocaleInGer(); break;
-        default: throw new Exception('Unknown locale '.$s);
+        default: throw new \Exception('Unknown locale '.$s);
         }
     }
 

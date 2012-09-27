@@ -33,7 +33,7 @@ class XhtmlComponentInput extends XhtmlComponent
             $id = '';
 
         if (!is_alphanumeric($id))
-            throw new Exception ('no: '.$id );
+            throw new \Exception ('no: '.$id );
 
         $style = $this->style . ($this->width ? 'width:'.$this->width.'px;': '');
 

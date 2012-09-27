@@ -22,7 +22,7 @@ class Password
         case 'sha512':
             return $algo.':'.hash($algo, $salt1 . hash($algo, $salt2) . hash($algo, $pwd));
         default:
-            throw new Exception ('unknown method: '.$method);
+            throw new \Exception ('unknown method: '.$method);
         }
     }
 

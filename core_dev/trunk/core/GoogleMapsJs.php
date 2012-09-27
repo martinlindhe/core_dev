@@ -36,7 +36,7 @@ class GoogleMapsJs extends MapWidget
     function render()
     {
         if ($this->latitude === false || $this->longitude === false)
-            throw new Exception ('initial center coords required but not set!');
+            throw new \Exception ('initial center coords required but not set!');
 
         $header = XhtmlHeader::getInstance();
         $header->includeJs(

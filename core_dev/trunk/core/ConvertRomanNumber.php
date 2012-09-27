@@ -38,7 +38,7 @@ class ConvertRomanNumber
         $s = strtoupper($s);
 
         if (!self::isValid($s))
-            throw new Exception ('invalid roman number: '.$s);
+            throw new \Exception ('invalid roman number: '.$s);
 
         // Expand subtractive notation in Roman numerals
         $s = str_replace('CM', 'DCCCC', $s);
@@ -66,12 +66,12 @@ class ConvertRomanNumber
     function getAsRoman()
     {
         if (intval($this->value) != $this->value)
-            throw new Exception ('only handes integer values');
+            throw new \Exception ('only handes integer values');
 
         $n = $this->value;
 
         if ($n > 4999)
-            throw new Exception ('Cannot represent numbers larger than 4999 in plain ASCII');
+            throw new \Exception ('Cannot represent numbers larger than 4999 in plain ASCII');
 
         $lookup = array(
         'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,

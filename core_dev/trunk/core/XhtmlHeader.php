@@ -139,7 +139,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     {
         $code = trim($code);
         if (substr($code, 0, 9) != 'function ')
-            throw new Exception ('wierd code: '.$code);
+            throw new \Exception ('wierd code: '.$code);
 
         $tmp = substr($code, 9);
         $fn = explode('(', $tmp);
@@ -147,7 +147,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         // detect duplicate function names
         if (isset($this->js_functions[$fn[0]]))
             if ($this->js_functions[$fn[0]] != $code)
-                throw new Exception ('js function with different code already defined: '.$fn[0]);
+                throw new \Exception ('js function with different code already defined: '.$fn[0]);
             else
                 // dont double-embed identical functions
                 return false;
@@ -170,7 +170,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         // detect duplicate function names
         if (isset($this->css_define[$fn[0]]))
             if ($this->css_define[$fn[0]] != $code)
-                throw new Exception ('css define with different code already defined: '.$fn[0]);
+                throw new \Exception ('css define with different code already defined: '.$fn[0]);
             else
                 // dont double-embed identical functions
                 return false;

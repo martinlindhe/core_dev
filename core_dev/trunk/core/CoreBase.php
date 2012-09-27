@@ -20,7 +20,7 @@ class CoreBase
     public function __set($name, $value)
     {
         if (!isset($this->$name))
-            throw new Exception ('property "'.$name.'" does not exist');
+            throw new \Exception ('property "'.$name.'" does not exist');
     }
 
 }

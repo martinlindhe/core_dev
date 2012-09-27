@@ -55,7 +55,7 @@ class iCalendarWriter
     function addEvent($e)
     {
         if (!($e instanceof CalendarEvent))
-            throw new Exception ('cant handle object type '.get_class($e));
+            throw new \Exception ('cant handle object type '.get_class($e));
 
         $this->events[] = $e;
     }

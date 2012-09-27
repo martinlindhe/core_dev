@@ -108,11 +108,11 @@ class SsnSwedish
 
         // Error: odd (male) ssn found but user thinks its a female ssn
         if ($gender && ($ssn_gender % 2) && $gender == SsnSwedish::FEMALE)
-            throw new Exception ('Wrong gender specified, this ssn belongs to a male');
+            throw new \Exception ('Wrong gender specified, this ssn belongs to a male');
 
         // Error: even (female) ssn found but user thinks its a male ssn
         if ($gender && !($ssn_gender % 2) && $gender == SsnSwedish::MALE)
-            throw new Exception ('Wrong gender specified, this ssn belongs to a female');
+            throw new \Exception ('Wrong gender specified, this ssn belongs to a female');
 
         if (self::calcLunh($ssn))
             return true;
@@ -128,7 +128,7 @@ class SsnSwedish
     private static function calcLunh($ssn, $gender = 0)
     {
         if (strlen($ssn) != 12)
-            throw new Exception ('XXX should not happen');
+            throw new \Exception ('XXX should not happen');
 
         $ssn = substr($ssn, 2); // remove first 2 digits of YEAR
 
@@ -152,7 +152,7 @@ class SsnSwedish
         $ssn = self::cleanSsn($ssn);
 
         if (strlen($ssn) != 12 || !is_numeric($ssn))
-            throw new Exception ('isValid invalid ssn: '.$ssn);
+            throw new \Exception ('isValid invalid ssn: '.$ssn);
 
         $yr = substr($ssn, 0, 4);
         $mn = substr($ssn, 4, 2);

@@ -38,7 +38,7 @@ class SvgImage
     function add($o)
     {
         if (!($o instanceof ISvgComponent))
-            throw new Exception ('only want SvgLine');
+            throw new \Exception ('only want SvgLine');
 
         $this->objs[] = $o;
     }

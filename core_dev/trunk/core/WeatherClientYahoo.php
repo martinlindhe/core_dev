@@ -138,7 +138,7 @@ class WeatherClientYahoo extends RssReader
             $x = YahooQueryClient::geocode($place, $country);
 
             if (!$x->woeid)
-                throw new Exception ('location not found');
+                throw new \Exception ('location not found');
 
             $woeid = $x->woeid;
         }
@@ -158,7 +158,7 @@ class WeatherClientYahoo extends RssReader
         $items = $this->getItems();
 
         if (count($items) != 1)
-            throw new Exception ('unexpected number of results');
+            throw new \Exception ('unexpected number of results');
 
         if (!$this->city)
             return false;

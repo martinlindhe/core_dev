@@ -282,7 +282,7 @@ class SmtpClient
         $this->write('AUTH PLAIN');
         if ($this->status == 503) return true; //authentication not enabled
         if ($this->status != 334)
-            throw new Exception ("smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply);
+            throw new \Exception ("smtp->_AUTH() PLAIN [".$this->status."]: ".$this->lastreply);
 
         $cmd = base64_encode(chr(0).$this->username.chr(0).$this->password);
         $this->write($cmd);

@@ -25,10 +25,10 @@ class ImageResizer extends Image
     function resizeAspect($to_width = 0, $to_height = 0)
     {
         if (!$this->width || !$this->height)
-            throw new Exception ('can happen?');
+            throw new \Exception ('can happen?');
 
         if (!$to_width && !$to_height)
-            throw new Exception ('need dst size');
+            throw new \Exception ('need dst size');
 
         list($tn_width, $tn_height) = $this->calcAspect($to_width, $to_height);
 //        echo 'Resizing from '.$this->width.'x'.$this->height.' to '.$tn_width.'x'.$tn_height.'<br/>';

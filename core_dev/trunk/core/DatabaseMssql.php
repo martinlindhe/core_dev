@@ -30,7 +30,7 @@ class DatabaseMssql implements IDB_SQL
     public function __construct()
     {
         if (!extension_loaded('mssql'))
-            throw new Exception ('MsSql FAIL: php5-sybase not found');
+            throw new \Exception ('php5-sybase (for ms-sql support) not found');
     }
 
     function setConfig($conf)

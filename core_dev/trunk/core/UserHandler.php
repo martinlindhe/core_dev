@@ -147,7 +147,7 @@ class UserHandler
     {
         $u = User::get($id);
         if (!$u)
-            throw new Exception ('wat');
+            throw new \Exception ('wat');
 
         $u->name = $username;
         User::store($u);
@@ -165,7 +165,7 @@ class UserHandler
     {
         $u = User::get($id);
         if (!$u)
-            throw new Exception ('wat');
+            throw new \Exception ('wat');
 
         $u->password = Password::encrypt($id, $pwd, $algo);
         User::store($u);

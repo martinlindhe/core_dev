@@ -39,12 +39,12 @@ class Yui3Chart
     function setDataSource($arr, $include_keys = false)
     {
         if (!$this->category_key)
-            throw new Exception ('category_key must be set before data source');
+            throw new \Exception ('category_key must be set before data source');
 
         $this->data_source = array();
 
         if (!is_array($arr))
-            throw new Exception ('data source is not a array: '.$arr);
+            throw new \Exception ('data source is not a array: '.$arr);
 
         foreach ($arr as $idx => $vals)
         {
@@ -64,7 +64,7 @@ class Yui3Chart
     function setXType($t)
     {
         if ($t != 'time')
-            throw new Exception ('unknown x type');
+            throw new \Exception ('unknown x type');
 
         $this->x_type = $t;
     }
@@ -83,7 +83,7 @@ class Yui3Chart
     function render()
     {
         /*if (!$this->data_source)
-            throw new Exception ('no data source set');
+            throw new \Exception ('no data source set');
 */
         $header = XhtmlHeader::getInstance();
 

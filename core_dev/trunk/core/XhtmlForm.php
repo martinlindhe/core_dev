@@ -423,7 +423,7 @@ class XhtmlForm
     function render()
     {
 //        if (!function_exists($this->post_handler) && !$this->js_onsubmit)
-  //          throw new Exception ('FATAL: XhtmlForm no post handler or js handler set');
+  //          throw new \Exception ('FATAL: XhtmlForm no post handler or js handler set');
 
         if (!$this->name)
             throw new \Exception ('need a form name');

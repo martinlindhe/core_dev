@@ -84,7 +84,7 @@ class UserGroup
     function getMembers()
     {
         if (!$this->id)
-            throw new Exception ('no group id set');
+            throw new \Exception ('no group id set');
 
         $res = array();
 

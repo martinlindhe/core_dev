@@ -20,10 +20,10 @@ class ImageRotator extends Image
     function rotate($angle)
     {
         if (!extension_loaded('gd'))
-            throw new Exception ('php5-gd missing');
+            throw new \Exception ('php5-gd missing');
 
         if (!$this->resource)
-            throw new Exception ('no image resource loaded');
+            throw new \Exception ('no image resource loaded');
 
         if (!is_numeric($angle))
             return false;

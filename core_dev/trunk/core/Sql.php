@@ -30,10 +30,10 @@ class Sql
     protected static function pExecStmt($args)
     {
         if (!$args[0])
-            throw new Exception ('no query');
+            throw new \Exception ('no query');
 
         if (!self::isQueryPrepared($args[0]))
-            throw new Exception ('query is not prepared: ... '.$args[0]);
+            throw new \Exception ('query is not prepared: ... '.$args[0]);
 
         $db = SqlHandler::getInstance();
         $db->connect();
@@ -42,7 +42,7 @@ class Sql
             $db->startMeasure();
 
         if (! ($stmt = $db->db_handle->prepare($args[0])) )
-            throw new Exception ('FAIL prepare: '.$args[0]);
+            throw new \Exception ('FAIL prepare: '.$args[0]);
 
         $params = array();
         if (isset($args[2]) && is_array($args[2]))
@@ -63,7 +63,7 @@ class Sql
 
         if (!$stmt->execute()) {
             d($params);
-            throw new Exception ('query failed: '.$args[0].' ('.$args[1].')');
+            throw new \Exception ('query failed: '.$args[0].' ('.$args[1].')');
         }
 
         if ($db instanceof DatabaseMysqlProfiler)
@@ -102,7 +102,7 @@ class Sql
             $s = substr($s, $p+1);
 
             if (is_numeric($x2) || $x2 == '"')
-                throw new Exception ('query is not prepared: (val is '.$x2.') ... '.$old_s);
+                throw new \Exception ('query is not prepared: (val is '.$x2.') ... '.$old_s);
 
         } while ($s);
 
@@ -181,7 +181,7 @@ class Sql
 
         if (count($res) > 1) {
 //            d( func_get_args() );
-            throw new Exception ('returned '.count($res).' rows');
+            throw new \Exception ('returned '.count($res).' rows');
         }
 
         if (!$res)
@@ -195,7 +195,7 @@ class Sql
         $stmt = self::pExecStmt( func_get_args() );
 
         if ($stmt->field_count != 1)
-            throw new Exception ('expected 1 column result, got '.$stmt->field_count.' columns');
+            throw new \Exception ('expected 1 column result, got '.$stmt->field_count.' columns');
 
         $stmt->bind_result($col1);
 
@@ -206,7 +206,7 @@ class Sql
         $stmt->close();
 
         if (count($data) > 1)
-            throw new Exception ('returned '.count($data).' rows');
+            throw new \Exception ('returned '.count($data).' rows');
 
         if (!$data)
             return false;
@@ -222,7 +222,7 @@ class Sql
         $data = array();
 
         if ($stmt->field_count != 1)
-            throw new Exception ('not 1d result');
+            throw new \Exception ('not 1d result');
 
         $stmt->bind_result($col1);
 
@@ -241,7 +241,7 @@ class Sql
         $data = array();
 
         if ($stmt->field_count != 2)
-            throw new Exception ('result is not 2 fields wide, requires a key->val result set');
+            throw new \Exception ('result is not 2 fields wide, requires a key->val result set');
 
         // 2d array
         $stmt->bind_result($col1, $col2);
@@ -286,7 +286,7 @@ class Sql
         $res = call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
 
         if ($res != 1)
-            throw new Exception ('insert fail: '.$args[0]);
+            throw new \Exception ('insert fail: '.$args[0]);
 
         $db = SqlHandler::getInstance();
         return $db->db_handle->insert_id;

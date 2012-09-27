@@ -89,7 +89,7 @@ function showRevisions($articleType, $articleId, $articleName)
             break;
 
         default:
-            throw new Exception ('unknown revision type '.$row['categoryId']);
+            throw new \Exception ('unknown revision type '.$row['categoryId']);
         }
     }
 }

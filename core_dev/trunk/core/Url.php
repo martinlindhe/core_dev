@@ -107,7 +107,7 @@ class Url extends CoreProperty
             return false;
 
         if (!is_url($url))
-            throw new Exception ('not a url: '.$url);
+            throw new \Exception ('not a url: '.$url);
 
         $this->reset();
 

@@ -41,7 +41,7 @@ class LocaleInGer
 
     function getSkycondition($s)
     {
-        throw new Exception ('FIXME translate skyconditon to german');
+        throw new \Exception ('FIXME translate skyconditon to german');
     }
 
 }

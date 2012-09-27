@@ -87,7 +87,7 @@ class MediaWikiClient
         $host = $url->getHost();
         $x = explode('.', $host);
         if (count($x) != 3)
-            throw new Exception ('something wrong with the url '.$full_url);
+            throw new \Exception ('something wrong with the url '.$full_url);
 
         return $x[0];
     }
@@ -99,7 +99,7 @@ class MediaWikiClient
     public static function getArticle($full_url, $use_db_cache = '30 days')
     {
         if (!is_url($full_url) || !is_mediawiki_url($full_url))
-            throw new Exception ('need a mediawiki url... '.$full_url);
+            throw new \Exception ('need a mediawiki url... '.$full_url);
 
         $article_name = self::getArticleTitle($full_url);
 
@@ -179,11 +179,11 @@ class MediaWikiClient
         {
             $article = self::getArticle($full_url);
             if (!$article)
-                throw new Exception ('failed to fetch article '.$full_url);
+                throw new \Exception ('failed to fetch article '.$full_url);
         }
         else
             return false;
-            //throw new Exception ('wierd input: '.$full_url);
+            //throw new \Exception ('wierd input: '.$full_url);
 
         $article = MediaWikiParser::parseArticle($article->content);
         return $article->summary;

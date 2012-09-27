@@ -15,14 +15,14 @@ class UserFinder
         $email = trim($email);
 
         if (!is_email($email))
-            throw new Exception ('XXX not an email address: '.$email);
+            throw new \Exception ('XXX not an email address: '.$email);
 
         $res = UserSetting::getList('email', $email);
         if (count($res) == 1)
             return $res[0];
 
         if (count($res) > 1)
-            throw new Exception ('XXX multiple users with same email address');
+            throw new \Exception ('XXX multiple users with same email address');
 
         return false;
     }

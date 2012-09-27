@@ -62,7 +62,7 @@ class RssReader extends CoreBase
             switch ($this->reader->name) {
             case 'rss':
                 if ($this->reader->getAttribute('version') != '2.0')
-                    throw new Exception ('unsupported RSS version '.$this->reader->getAttribute('version') );
+                    throw new \Exception ('unsupported RSS version '.$this->reader->getAttribute('version') );
                 break;
 
             case 'channel':
@@ -70,7 +70,7 @@ class RssReader extends CoreBase
                 break;
 
             default:
-                throw new Exception ('bad top entry: '.$this->reader->name);
+                throw new \Exception ('bad top entry: '.$this->reader->name);
             }
         }
 

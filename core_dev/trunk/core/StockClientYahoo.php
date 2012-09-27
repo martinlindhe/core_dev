@@ -43,7 +43,7 @@ class StockClientYahoo
         $csv = CsvReader::parse($data);
 
         if (count($csv) != 1)
-            throw new Exception ('unhandled number of stock results: '.count($csv) );
+            throw new \Exception ('unhandled number of stock results: '.count($csv) );
 
         $stock = new StockQuoteResult();
         $stock->name           = $csv[0][0];

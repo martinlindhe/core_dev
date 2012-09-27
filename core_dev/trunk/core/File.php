@@ -41,7 +41,7 @@ class File
         $page = XmlDocumentHandler::getInstance();
 
         if (!$page->getUploadPath())
-            throw new Exception ('No XmlDocumentHandler upload path configured!');
+            throw new \Exception ('No XmlDocumentHandler upload path configured!');
 
         $dir_limit = 2000; // number of files per subdirectory
 
@@ -122,7 +122,7 @@ class File
     {
         $name = self::getUploadPath($id);
         if (!file_exists($name))
-            throw new Exception ('cant sync nonexisting file, what do???');
+            throw new \Exception ('cant sync nonexisting file, what do???');
 
         $size = filesize($name);
         $mime = get_mimetype_of_file($name);
@@ -180,7 +180,7 @@ class File
             return false;
 
         if (!$blind && !is_uploaded_file($key['tmp_name'])) {
-            throw new Exception ('Upload failed for file '.$key['name'] );
+            throw new \Exception ('Upload failed for file '.$key['name'] );
             //$error->add('Upload failed for file '.$key['name'] );
             //return;
         }
@@ -205,10 +205,10 @@ class File
         if ($blind) {
             // UGLY HACK using "@": currently gives a E_WARNING: "Operation not permitted" error even though the rename suceeds!?!?!?
             if (! (@rename($key['tmp_name'], $dst_file)) )
-                throw new Exception ('rename failed');
+                throw new \Exception ('rename failed');
 
         } else if (!move_uploaded_file($key['tmp_name'], $dst_file))
-            throw new Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
+            throw new \Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
 
         chmod($dst_file, 0777);
 
@@ -226,7 +226,7 @@ class File
         $error = ErrorHandler::getInstance();
 
         if (!file_exists($key['tmp_name']))
-            throw new Exception ('file '.$key['tmp_name'].' dont exist!');
+            throw new \Exception ('file '.$key['tmp_name'].' dont exist!');
 
         $info = getimagesize($key['tmp_name']);
         switch ($info['mime']) {

@@ -45,7 +45,7 @@ class DatabaseDescribeMysql
         foreach ($this->getTableDetails($tbl) as $l) {
 
             if ($l['Extra'] && $l['Extra'] != 'auto_increment')
-                throw new Exception ('TODO handle extra data: '.$l['Extra']);
+                throw new \Exception ('TODO handle extra data: '.$l['Extra']);
             $res .= '  `'.$l['Field'].'` '.$l['Type'];
             $res .= ($l['Null'] == 'NO' ? ' NOT NULL' : '');
             if ($l['Extra'] && $l['Extra'] == 'auto_increment')

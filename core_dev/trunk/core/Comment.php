@@ -43,7 +43,7 @@ class Comment
     public static function get($type, $owner)
     {
         if (!is_numeric($type) || !is_numeric($owner))
-            throw new Exception ('hmmm');
+            throw new \Exception ('hmmm');
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -58,7 +58,7 @@ class Comment
     public static function getByType($type)
     {
         if (!is_numeric($type))
-            throw new Exception ('hmmm');
+            throw new \Exception ('hmmm');
 
         $q =
         'SELECT * FROM '.self::$tbl_name.

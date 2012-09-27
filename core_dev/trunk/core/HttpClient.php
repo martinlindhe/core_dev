@@ -48,12 +48,12 @@ class HttpClient
     function __construct($url = '')
     {
         if (!extension_loaded('curl'))
-            throw new Exception ('php5-curl missing');
+            throw new \Exception ('php5-curl missing');
 
         $this->ch = curl_init();
 
         if (!$this->ch)
-            throw new Exception ('curl error: '.curl_errstr($this->ch).' ('.curl_errno($this->ch) );
+            throw new \Exception ('curl error: '.curl_errstr($this->ch).' ('.curl_errno($this->ch) );
 
         $this->Url = new Url($url);
     }
@@ -191,7 +191,7 @@ class HttpClient
 
         default:
             d($this->response_headers);
-            throw new Exception ('unhandled auth method: '.$x[0]);
+            throw new \Exception ('unhandled auth method: '.$x[0]);
         }
 
         // force a second request to complete the authentication procedure
@@ -251,7 +251,7 @@ class HttpClient
     private function get($post_params = array(), $head_only = false)
     {
         if (!$this->Url->get())
-            throw new Exception ('Must set url');
+            throw new \Exception ('Must set url');
 
         $temp = TempStore::getInstance();
 
@@ -315,7 +315,7 @@ class HttpClient
                 break;
 */
             default:
-                throw new Exception ('unhandled auth method '.$this->auth_method);
+                throw new \Exception ('unhandled auth method '.$this->auth_method);
             }
         }
 
@@ -391,7 +391,7 @@ class HttpClient
             $this->status_code = intval(substr($status, 9));
             break;
         default:
-            throw new Exception ('unhandled HTTP response '.$status);
+            throw new \Exception ('unhandled HTTP response '.$status);
         }
 
         foreach ($headers as $h) {
@@ -438,7 +438,7 @@ class HttpClient
 
         default:
             d( $this->response_headers);
-            throw new Exception ('unhandled content-encoding: '.$encoding);
+            throw new \Exception ('unhandled content-encoding: '.$encoding);
         }
 
         $this->body = $body;

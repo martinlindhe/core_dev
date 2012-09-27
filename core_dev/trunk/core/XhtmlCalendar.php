@@ -46,7 +46,7 @@ class XhtmlCalendar
     function addEvent($e)
     {
         if (!($e instanceof CalendarEvent))
-            throw new Exception ('cant handle type');
+            throw new \Exception ('cant handle type');
 
         $this->events[] = $e;
     }

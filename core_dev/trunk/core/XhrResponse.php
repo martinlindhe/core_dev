@@ -25,7 +25,7 @@ class XhrResponse
     function __construct($format = 'json')
     {
         if (!in_array($format, array('json', 'csv', 'xls')))
-            throw new Exception('Unsupported XhrResponse format '.$format);
+            throw new \Exception('Unsupported XhrResponse format '.$format);
 
         $this->format = $format;
     }

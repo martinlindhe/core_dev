@@ -49,7 +49,7 @@ class SqlHandler
     public static function getInstance($num = 0)
     {
         if (empty(self::$_instances[ $num ]))
-            throw new Exception ('No sql instance registered');
+            throw new \Exception ('No sql instance registered');
 //            return false;
 
         return self::$_instances[ $num ];

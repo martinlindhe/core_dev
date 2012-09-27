@@ -32,7 +32,7 @@ class XhtmlComponentPassword extends XhtmlComponent
             $id = '';
 
         if (!is_alphanumeric($id))
-            throw new Exception ('no: '.$id );
+            throw new \Exception ('no: '.$id );
 
         $res =
         '<input type="password"'.

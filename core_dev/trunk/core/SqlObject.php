@@ -42,13 +42,13 @@ class SqlObject
         if (!$q) {
             return false;
 //            return new $classname();
-//            throw new Exception ('no query');
+//            throw new \Exception ('no query');
         }
 
         $row = is_array($q) ? $q : Sql::pSelect($q);
 
         if (!is_array($row))
-            throw new Exception ('loadObject fail, need array of rows, got: '.$row);
+            throw new \Exception ('loadObject fail, need array of rows, got: '.$row);
 
         $reflect = new \ReflectionClass($classname);
         $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -62,7 +62,7 @@ class SqlObject
                 echo 'ERROR: array key dont exist:<br/>';
                 d($n);
                 d( $row);
-                throw new Exception ('loadObject fail, class '.$classname.', db column named "'.$n.'" dont exist');
+                throw new \Exception ('loadObject fail, class '.$classname.', db column named "'.$n.'" dont exist');
             }
             $obj->$n = $row[ $n ];
         }
@@ -76,7 +76,7 @@ class SqlObject
             d($props);
             d( count($props ) );
 */
-            throw new Exception ('loadObject fail, class '.$classname.' misses defined variables, or something!');
+            throw new \Exception ('loadObject fail, class '.$classname.' misses defined variables, or something!');
         }
 
         return $obj;
@@ -156,7 +156,7 @@ class SqlObject
     static function idExists($id, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         $q =
         'SELECT COUNT(*) FROM '.$tblname.
@@ -174,7 +174,7 @@ class SqlObject
     static function exists($obj, $tblname)
     {
         if (!is_alphanumeric($tblname))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         $reflect = self::reflectQuery($obj, '', false);
 
@@ -192,7 +192,7 @@ class SqlObject
     static function create($obj, $tblname)
     {
         if (!is_alphanumeric($tblname))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         $reflect = self::reflectQuery($obj, '', false);
 
@@ -220,7 +220,7 @@ class SqlObject
     {
         if ($obj->$field_name && SqlObject::idExists($obj->$field_name, $tblname, $field_name))
         {
-//            throw new exception ('obj fieldname: '.$obj->$field_name.' tbl '.$tblname);
+//            throw new \Exception ('obj fieldname: '.$obj->$field_name.' tbl '.$tblname);
 
             sqlObject::updateId($obj, $tblname, $field_name);
             return $obj->$field_name;
@@ -237,7 +237,7 @@ class SqlObject
     static function getByField($val, $tblname, $classname, $field_name)
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         $form = self::stringForm($val);
 
@@ -255,10 +255,10 @@ class SqlObject
     static function deleteById($id, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         if (!is_numeric($id))
-            throw new Exception ('bad data'. $id);
+            throw new \Exception ('bad data'. $id);
 
         $q =
          'DELETE FROM '.$tblname.
@@ -273,10 +273,10 @@ class SqlObject
     static function getAllByField($field_name, $value, $tblname, $classname, $order_field = '', $order = 'asc')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name) || !is_alphanumeric($order_field))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         if (!Sql::isValidOrder($order))
-            throw new Exception ('odd order '.$order);
+            throw new \Exception ('odd order '.$order);
 
         if (is_numeric($value))
             $form = 'i';
@@ -295,16 +295,16 @@ class SqlObject
     static function updateId($obj, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
-            throw new Exception ('very bad');
+            throw new \Exception ('very bad');
 
         if (!$obj->$field_name)
         {
             d($obj);
-            throw new Exception ('eehh');
+            throw new \Exception ('eehh');
         }
 
         if (!is_numeric($obj->$field_name))
-            throw new Exception ('bad data'. $obj->$field_name);
+            throw new \Exception ('bad data'. $obj->$field_name);
 
         $reflect = self::reflectQuery($obj, $field_name);
 

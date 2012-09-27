@@ -138,7 +138,7 @@ class Recaptcha extends XhtmlComponent
         // http://code.google.com/intl/sv-SE/apis/recaptcha/docs/customization.html    some languages is supported already
         case 'eng': $opts = 'lang : "en", '; break;
         default:
-            throw new Exception ('recaptcha translation missing');
+            throw new \Exception ('recaptcha translation missing');
         }
 
         return

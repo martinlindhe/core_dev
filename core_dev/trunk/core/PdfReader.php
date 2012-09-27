@@ -68,7 +68,7 @@ class PdfReader
     private function parseHeader($s)
     {
         if (substr($s, 0, 5) != '%PDF-')
-            throw new Exception ('Not a pdf');
+            throw new \Exception ('Not a pdf');
 
         $this->major = intval( substr($s, 5, 1) );
         $this->minor = intval( substr($s, 7, 1) );
@@ -76,7 +76,7 @@ class PdfReader
         $this->version = $this->major.'.'.$this->minor;
 
         if (!in_array($this->version ,$this->supported_versions))
-            throw new Exception ('Unsupported PDF version '.$this->version);
+            throw new \Exception ('Unsupported PDF version '.$this->version);
 
         // echo "DBG: PDF v".$this->major.".".$this->minor."\n";
     }
@@ -84,7 +84,7 @@ class PdfReader
     function read()
     {
         if (!file_exists($this->filename))
-            throw new Exception ('file not found: '.$this->filename);
+            throw new \Exception ('file not found: '.$this->filename);
 
         $this->fp = fopen($this->filename, "rb");
 
@@ -190,7 +190,7 @@ class PdfReader
 
             $data = fgets($this->fp, 7);
             if ($data != "endobj")
-                throw new Exception ('unexpected end obj: '.$data);
+                throw new \Exception ('unexpected end obj: '.$data);
 
             return;
 
@@ -227,13 +227,13 @@ class PdfReader
             break;
 
         default:
-            throw new Exception ('unhandled stream type: '.$dict['Filter']);
+            throw new \Exception ('unhandled stream type: '.$dict['Filter']);
         }
 
         //XXXX more friendly line reader????
         $data = $this->readRow();
         if ($data != "endstream")
-            throw new Exception ('unexpected end stream: '.$data);
+            throw new \Exception ('unexpected end stream: '.$data);
 
         /*
         if (isset($dict['Type']) && $dict['Type'] == 'XObject' && $dict['Subtype'] == 'Image')
@@ -251,7 +251,7 @@ function pdf_parse_dict($s)
     if (substr($s, 0, 2) == '<<' && substr($s, -2) == '>>')
         $s = substr($s, 2, strlen($s) - 4);
     else {
-        //throw new Exception ('Unexpected dict format: '.$s);
+        //throw new \Exception ('Unexpected dict format: '.$s);
         echo "Unexpected dict format: ".$s."\n";
         return false;
     }

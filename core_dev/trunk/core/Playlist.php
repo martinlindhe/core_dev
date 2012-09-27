@@ -61,7 +61,7 @@ class Playlist extends CoreList
     function addItem($i)
     {
         if (!is_object($i))
-            throw new Exception ('not an object '.$i);
+            throw new \Exception ('not an object '.$i);
 
         /**
          * HACK: Needed to work around a limitation in xbmc, which needs rss
@@ -311,7 +311,7 @@ class Playlist extends CoreList
                 break;
 
             default:
-                throw new Exception ('unhandled protocol: '.get_protocol($item->Url) );
+                throw new \Exception ('unhandled protocol: '.get_protocol($item->Url) );
             }
             $res .=
             "\t".$c."\n".

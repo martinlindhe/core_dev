@@ -155,7 +155,7 @@ function confirmed($text)
 function js_reload($ms)
 {
     if (!is_numeric($ms))
-        throw new Exception ('not a numeric: '.$ms);
+        throw new \Exception ('not a numeric: '.$ms);
 
     return js_embed('setTimeout("location.reload();",'.$ms.');');
 }
@@ -216,7 +216,7 @@ function css_size($s)
     if (substr($s, -1) == '%')
         return $s;
 
-    throw new Exception ('fixme '.$s);
+    throw new \Exception ('fixme '.$s);
 
     //TODO: handle "40.5em"
 }
@@ -277,7 +277,7 @@ function countryFlag($s)
     else
     {
         if (!is_alphanumeric($s))
-            throw new Exception ('hey');
+            throw new \Exception ('hey');
 
         if (strlen($s) == 2)
             $s = country_2_to_3_letters($s);
@@ -290,7 +290,7 @@ function countryFlag($s)
     $title = getCountryName($s);
 
     if (!$title)
-        throw new Exception ('unhandled country flag code '.$s);
+        throw new \Exception ('unhandled country flag code '.$s);
 
     return '<img src="'.relurl('core_dev/gfx/flags/'.$s.'.png').'" alt="'.$title.'" title="'.$title.'"/>';
 }

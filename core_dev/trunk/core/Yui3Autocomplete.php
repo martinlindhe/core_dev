@@ -24,7 +24,7 @@ class Yui3Autocomplete
     function render()
     {
         if (!$this->data_source)
-            throw new Exception ('need data source');
+            throw new \Exception ('need data source');
 
         $header = XhtmlHeader::getInstance();
 

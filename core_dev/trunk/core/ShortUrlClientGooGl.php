@@ -38,7 +38,7 @@ class ShortUrlClientGooGl implements IShortUrlClient
         $res = JSON::decode($res);
 
         if (isset($res->error))
-            throw new Exception ('Error code '.$res->error->code.': '.$res->error->message);
+            throw new \Exception ('Error code '.$res->error->code.': '.$res->error->message);
 
         $temp->set('goo.gl/'.$input_url, $res->id);
 

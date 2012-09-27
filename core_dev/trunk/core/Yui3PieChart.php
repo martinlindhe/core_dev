@@ -36,12 +36,12 @@ class Yui3PieChart
     function setDataSource($arr)
     {
         if (!$this->category_key)
-            throw new Exception ('category_key must be set before data source');
+            throw new \Exception ('category_key must be set before data source');
 
         $this->data_source = array();
 
         if (!is_array($arr))
-            throw new Exception ('data source is not a array: '.$arr);
+            throw new \Exception ('data source is not a array: '.$arr);
 
         foreach ($arr as $idx => $vals)
         {

@@ -58,7 +58,7 @@ class MediaRssReader extends RssReader
                 // http url with a m3u playlist, possibly containing more m3u playlists
                 $m3u = new M3uReader( $this->reader->getAttribute('url') );
 
-//throw new Exception ('xxxxxxx apple stuff');
+                //throw new \Exception ('xxxxxxx apple stuff');
                 foreach ( $m3u->getItems() as $m) {
                     if (file_suffix($m->getUrl()) == '.m3u8') {
                         // pl points to another playlist
@@ -89,7 +89,7 @@ class MediaRssReader extends RssReader
             break;
 
         default:
-            throw new Exception ('unhandled medium type '.$this->reader->getAttribute('medium') );
+            throw new \Exception ('unhandled medium type '.$this->reader->getAttribute('medium') );
         }
 
         while ($this->reader->read()) {
