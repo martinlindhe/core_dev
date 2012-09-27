@@ -12,6 +12,8 @@
 ///XXX: firefox 4 still dont implement various text transformations 2010-12-20, see https://developer.mozilla.org/En/SVG_in_Firefox
 //    - for example vertical text orientation is not supported (supported by Google Chrome)
 
+namespace cd;
+
 class SvgText implements ISvgComponent
 {
     var $x = 0, $y = 0;

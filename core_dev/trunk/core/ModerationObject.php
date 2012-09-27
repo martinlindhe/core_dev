@@ -7,6 +7,8 @@
 
 //STATUS: wip, will replace atom_moderation.php
 
+namespace cd;
+
 // ModerationObject types:
 define('MODERATE_CHANGE_USERNAME', 1);   // data holds new username
 define('MODERATE_UPLOAD',          2);   // reference is a tblFiles.id

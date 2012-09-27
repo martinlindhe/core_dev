@@ -17,6 +17,8 @@
 
 //STATUS: good
 
+namespace cd;
+
 class CsvWriter
 {
     private $data         = array();

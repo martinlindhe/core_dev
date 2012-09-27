@@ -16,8 +16,9 @@
 
 //TODO: how to "configure" this static function while avoiding globals?
 
-require_once('IShortUrlClient.php');
+namespace cd;
 
+require_once('IShortUrlClient.php');
 require_once('HttpClient.php');
 require_once('JSON.php');
 

@@ -11,6 +11,8 @@
  * @license  You may copy this code freely under the conditions of the GPL.
  */
 
+namespace cd;
+
 define('USE_ASSERTS', function_exists('assert'));
 
 class _DiffOp

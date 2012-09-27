@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('SqlObject.php');
 require_once('ImageResizer.php');
 

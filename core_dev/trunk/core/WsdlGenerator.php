@@ -12,6 +12,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class WsdlGenerator
 {
     public $interface_name = '';

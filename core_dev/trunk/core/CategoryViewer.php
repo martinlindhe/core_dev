@@ -9,6 +9,8 @@
 
 //TODO: add some ui category management (edit, remove)
 
+namespace cd;
+
 class CategoryViewer extends CoreBase
 {
     var $Cat; //CategoryList object

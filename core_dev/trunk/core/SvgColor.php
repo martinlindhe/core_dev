@@ -11,6 +11,8 @@
 
 //FIXME: opacity is not quite correct ????
 
+namespace cd;
+
 class SvgColor
 {
     var $r, $g, $b;

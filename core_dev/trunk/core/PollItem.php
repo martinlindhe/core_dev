@@ -9,8 +9,9 @@
 
 //STATUS: wip
 
-require_once('constants.php');
+namespace cd;
 
+require_once('constants.php');
 require_once('CategoryList.php');
 require_once('Yui3PieChart.php');
 require_once('Rating.php');

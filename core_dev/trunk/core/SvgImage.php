@@ -18,6 +18,8 @@
 
 //TODO: fix SvgColor to support alpha-channel
 
+namespace cd;
+
 require_once('ISvgComponent.php');
 require_once('SvgCircle.php');
 require_once('SvgColor.php');

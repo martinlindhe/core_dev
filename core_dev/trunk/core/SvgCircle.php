@@ -9,6 +9,8 @@
 
 //XXX TODO: handle alpha channel in colors
 
+namespace cd;
+
 class SvgCircle implements ISvgComponent
 {
     var $color;             ///< XXX fill color RGBA

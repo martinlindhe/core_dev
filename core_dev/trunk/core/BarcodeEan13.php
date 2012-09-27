@@ -34,6 +34,8 @@
 //TODO: isolerad sqlite databas som innehåller GS1-country codes
  //XXX: calcCheck() also works with EAN-8 numbers.. fix by extending EAN-8 class when it is written
 
+namespace cd;
+
 require_once('Image.php');
 
 class BarcodeEan13 extends Image

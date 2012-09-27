@@ -16,6 +16,8 @@
 //TODO: debug output: show sip messages
 //TODO: return correct error codes on failures
 
+namespace cd;
+
 require_once('MimeReader.php');
 require_once('input_sdp.php');
 require_once('output_sdp.php');

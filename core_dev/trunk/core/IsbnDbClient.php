@@ -16,6 +16,8 @@
 
 //TODO: add api usage "keystats" method, see https://isbndb.com/docs/api/40-common.html for example
 
+namespace cd;
+
 require_once('HttpClient.php');
 require_once('ISBN.php');
 require_once('MediaResource.php'); // for BookResource

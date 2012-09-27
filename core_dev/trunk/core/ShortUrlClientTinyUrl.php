@@ -12,8 +12,9 @@
 
 //STATUS: works 2011-01-13
 
-require_once('IShortUrlClient.php');
+namespace cd;
 
+require_once('IShortUrlClient.php');
 require_once('HttpClient.php');
 
 class ShortUrlClientTinyUrl implements IShortUrlClient

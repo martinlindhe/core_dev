@@ -18,6 +18,8 @@
 
 //TODO optimize disk r/w, currently the whole file is parsed on every get() / set()
 
+namespace cd;
+
 class ini
 {
     private $filename;

@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class SvgLine implements ISvgComponent
 {
     var $x1, $x2, $y1, $y2;

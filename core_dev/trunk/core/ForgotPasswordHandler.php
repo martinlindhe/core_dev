@@ -10,6 +10,8 @@
 //TODO: dont create a new token if one exists and is still valid
 //TODO: dont send out new email if token already exists and was saved less than 30 minutes ago
 
+namespace cd;
+
 require_once('UserFinder.php');
 require_once('SendMail.php');
 require_once('Token.php');

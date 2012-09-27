@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
+namespace cd;
+
 class Imdb
 {
     /**

@@ -7,6 +7,8 @@
 
 //STATUS: nonworking. code cleanup / rewrite + accompanying view is needed
 
+namespace cd;
+
 class UserActivationHandler
 {
     protected $activate_msg =

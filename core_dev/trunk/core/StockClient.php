@@ -11,6 +11,8 @@
 
 //TODO later: also make a google finance api client: http://code.google.com/apis/finance/
 
+namespace cd;
+
 require_once('StockClientYahoo.php'); //NASDAQ only (?)
 require_once('TempStore.php');
 

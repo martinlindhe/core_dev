@@ -11,6 +11,8 @@
 
 //TODO: api can be extended to lookup multiple stock qoutes in one call
 
+namespace cd;
+
 require_once('HttpClient.php');
 require_once('CsvReader.php');
 

@@ -9,6 +9,8 @@
 
 //XXXX TODO rework this as a static class & map to tblUserGroups
 
+namespace cd;
+
 require_once('User.php');
 
 class UserGroup

@@ -3,6 +3,8 @@
  * $Id$
  */
 
+namespace cd;
+
 class Rating
 {
     /** Count current average of the rating */

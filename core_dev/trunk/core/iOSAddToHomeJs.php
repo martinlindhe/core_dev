@@ -10,6 +10,8 @@
  * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 class iOSAddToHomeJs
 {
     public static function render()

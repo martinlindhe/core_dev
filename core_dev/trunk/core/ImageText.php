@@ -15,8 +15,9 @@
 
 //STATUS: wip
 
-
 //WISHLIST: WOFF support in freetype? should already be there... ? http://www.google.com/webfonts
+
+namespace cd;
 
 require_once('Image.php');
 

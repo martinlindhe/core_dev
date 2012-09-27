@@ -7,6 +7,8 @@
 
 //STATUS: early wip
 
+namespace cd;
+
 // types:
 define('RESERVED_USERNAME', 1);
 
@@ -15,7 +17,7 @@ class ReservedWord
     var $id;
     var $type;
     var $value;
-    
+
     protected static $tbl_name = 'tblReservedWords';
 
     public static function getAll($type)
@@ -24,7 +26,7 @@ class ReservedWord
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE type = ?'.
         ' ORDER BY value ASC';
-        
+
         $res = Sql::pSelect($q, 'i', $type);
 
         return SqlObject::loadObjects($res, __CLASS__);
@@ -48,8 +50,8 @@ class ReservedWord
             return true;
 
         return false;
-    }    
-    
+    }
+
 }
- 
+
 ?>

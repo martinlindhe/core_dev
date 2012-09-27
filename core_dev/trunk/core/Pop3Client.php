@@ -21,6 +21,8 @@
 
 //$mail = new pop3('mail.startwars.org', 'martintest@startwars.org', 'test111'); //pop3 test
 
+namespace cd;
+
 require_once('MimeReader.php');
 
 class Pop3Client extends CoreBase

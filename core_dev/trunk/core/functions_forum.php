@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
  */
 
-die('NON WORKING NEED FULL REWRITE');
+throw new Exception ('NON WORKING NEED FULL REWRITE');
 
 require_once('atom_subscriptions.php');    //for subscription functionality
 require_once('functions_email.php');    //for email sharing of forum links

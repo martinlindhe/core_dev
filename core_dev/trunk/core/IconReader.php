@@ -15,6 +15,8 @@
 
 //XXX: how to handle AndMap for 24 & 32-bpp ?
 
+namespace cd;
+
 require_once('core.php');
 require_once('bits.php');
 

@@ -11,6 +11,8 @@
 
 //TODO: add rounded corners support
 
+namespace cd;
+
 class SvgRectangle implements ISvgComponent
 {
     var $x = 0, $y = 0;

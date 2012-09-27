@@ -16,6 +16,7 @@
 
 //TODO: support multiple input & output formats for contact information
 
+namespace cd;
 
 class VcardWriter
 {

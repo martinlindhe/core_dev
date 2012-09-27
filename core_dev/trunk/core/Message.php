@@ -11,6 +11,8 @@
 
 //TODO: mark message as read
 
+namespace cd;
+
 require_once('SqlObject.php');
 
 class Message

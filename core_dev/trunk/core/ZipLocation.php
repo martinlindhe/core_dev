@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
  */
 
+namespace cd;
+
 class ZipLocation
 {
     /**

@@ -23,6 +23,8 @@
    such as m for moveto and l for lineto.
 */
 
+namespace cd;
+
 class PsPdfReader
 {
     private $data;

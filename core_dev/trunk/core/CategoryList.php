@@ -11,6 +11,8 @@
 
 //XXXX2: why do a list have a type? each item have types.. maybe useful to be able to mix types in a list?
 
+namespace cd;
+
 require_once('CategoryItem.php');
 
 class CategoryList

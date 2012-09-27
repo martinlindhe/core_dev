@@ -9,6 +9,8 @@
 
 //TODO: port code from input_coordinates.php to static methods
 
+namespace cd;
+
 require_once('input_coordinates.php'); // for getDistanceWGS84()
 
 define('COORD_EXACT',      1);

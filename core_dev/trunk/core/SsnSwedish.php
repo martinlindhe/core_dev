@@ -22,6 +22,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class OrgNoSwedish extends SsnSwedish
 {
     static function isValid($ssn, $gender = 0)

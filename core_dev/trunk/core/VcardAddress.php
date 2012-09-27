@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2011
  */
 
+namespace cd;
+
 class VcardAddress
 {
     var $first_name;

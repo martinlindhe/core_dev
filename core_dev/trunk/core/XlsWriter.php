@@ -22,6 +22,8 @@
 //STATUS: wip
 //FIXME write header rows in bold text
 
+namespace cd;
+
 class XlsWriter
 {
     private $data = array();

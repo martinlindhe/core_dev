@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2011 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('constants.php');
 require_once('Setting.php');
 require_once('UserDataField.php');

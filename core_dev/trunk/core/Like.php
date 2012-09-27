@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 class Like
 {
     var $id;

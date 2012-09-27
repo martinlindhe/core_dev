@@ -7,6 +7,8 @@
 
 //STATUS: wip, unused
 
+namespace cd;
+
 require_once('core.php');
 require_once('CoreProperty.php');
 

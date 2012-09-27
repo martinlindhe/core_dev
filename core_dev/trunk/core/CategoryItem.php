@@ -7,6 +7,8 @@
 
 //STATUS: wip, used by polls
 
+namespace cd;
+
 require_once('constants.php');
 
 class CategoryItem

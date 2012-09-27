@@ -16,6 +16,8 @@
 
 //STATUS: ok
 
+namespace cd;
+
 require_once('IHash.php');
 require_once('TempStore.php');
 

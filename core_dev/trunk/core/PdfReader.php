@@ -24,6 +24,8 @@
  * v1.4: works with all samples
  */
 
+namespace cd;
+
 require_once('PsPdfReader.php');
 
 class PdfStream

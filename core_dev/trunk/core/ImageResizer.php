@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('Image.php');
 
 class ImageResizer extends Image

@@ -14,6 +14,8 @@
 //TODO hmm: make a base mime reader class and extend a EMailReader class from it??
 //FIXME: parseHeader() limitation - multiple keys with same name will just be glued together (Received are one such common header key)
 
+namespace cd;
+
 class EMail
 {
     var $id;

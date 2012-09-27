@@ -10,6 +10,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('GeonamesClient.php');
 require_once('GoogleMapsClient.php');
 require_once('TempStore.php');

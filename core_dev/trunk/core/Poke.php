@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class Poke
 {
     var $id;

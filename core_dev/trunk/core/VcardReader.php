@@ -11,6 +11,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('HttpClient.php');
 require_once('VcardAddress.php');
 

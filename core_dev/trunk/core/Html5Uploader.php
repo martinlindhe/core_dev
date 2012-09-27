@@ -10,6 +10,8 @@
 
 //STATUS: wip, dont work with IE (may work with IE10 when it is released)
 
+namespace cd;
+
 class Html5Uploader
 {
     /**

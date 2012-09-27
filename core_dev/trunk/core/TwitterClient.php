@@ -15,6 +15,8 @@
 //TODO: implement Twitter OAuth authentication so TwitterClient can create new tweets and also so core_dev apps can allow Twitter users to login to the site,
 //      see http://apiwiki.twitter.com/OAuth-Examples
 
+namespace cd;
+
 require_once('AtomReader.php');
 require_once('HttpClient.php');
 

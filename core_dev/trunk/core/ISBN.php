@@ -19,6 +19,8 @@
 
 //TODO: recognize & validate ISBN-10: "91-501-0143-9"  (10-digit ISBN was in use until 2007), algo here: https://secure.wikimedia.org/wikipedia/en/wiki/ISBN#ISBN-10
 
+namespace cd;
+
 require_once('BarcodeEan13.php');
 
 class ISBN

@@ -9,6 +9,8 @@
 
 // STATUS: wip
 
+namespace cd;
+
 require_once('Setting.php');
 
 class UserDataFieldOption

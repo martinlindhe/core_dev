@@ -15,6 +15,8 @@
 //STATUS: wip
 //XXX: merge with GeoLoopupClient ???
 
+namespace cd;
+
 require_once('HttpClient.php');
 require_once('TempStore.php');
 

@@ -27,6 +27,8 @@
 //FIXME: figure out why "AUTH DIGEST-MD5" needs an extra NOOP at the end
 //TODO: move out AUTH implementations to separate file (can be reused by IMAP etc)
 
+namespace cd;
+
 require_once('MimeReader.php');
 
 class SmtpClient

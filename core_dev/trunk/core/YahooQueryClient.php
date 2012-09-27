@@ -9,9 +9,10 @@
 
 //STATUS: wip
 
+namespace cd;
+
 require_once('JSON.php');
 require_once('TempStore.php');
-
 require_once('GeonamesClient.php'); // to lookup timezone for location
 
 class YahooGeocodeResult

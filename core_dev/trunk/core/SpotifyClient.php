@@ -8,15 +8,17 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-require_once('CoreBase.php');
-require_once('HttpClient.php');
-
 //STATUS: wip
 
 //TODO: objektklasser för "artist", "record", "track"
 
 //XXX: memcache the parsed results too, for quicker artist id lookup at least
 //XXX: The rate limit is currently 10 request per second per ip. This may change.
+
+namespace cd;
+
+require_once('CoreBase.php');
+require_once('HttpClient.php');
 
 class SpotifyClient extends CoreBase
 {

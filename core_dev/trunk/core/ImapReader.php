@@ -14,6 +14,8 @@
 
 //FIXME: cant find a way to specify connection timeout
 
+namespace cd;
+
 require_once('MimeReader.php');
 
 class ImapReader extends CoreBase

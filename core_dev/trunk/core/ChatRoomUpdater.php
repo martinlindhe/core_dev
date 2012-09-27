@@ -18,6 +18,8 @@
 //TODO: dont hardcode locale to sv-SE
 //XXX: can YUI scroll focus to bottom? use that & drop scroll_to_bottom() in that case
 
+namespace cd;
+
 require_once('YuiTooltip.php');
 
 class ChatRoomUpdater

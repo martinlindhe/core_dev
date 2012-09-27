@@ -7,6 +7,8 @@
 
 //STATUS: early wip
 
+namespace cd;
+
 class PhotoAlbum
 {
     var $id;

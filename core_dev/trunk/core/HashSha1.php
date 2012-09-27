@@ -5,6 +5,8 @@
  * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('IHash.php');
 
 class HashSha1 implements IHash

@@ -11,6 +11,8 @@
 
 //TODO: simplify & speed up by using php's str_getcsv(), fgetcsv()
 
+namespace cd;
+
 class CsvReader
 {
     /**

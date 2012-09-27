@@ -5,6 +5,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class UserFinder
 {
     /** @return user id */

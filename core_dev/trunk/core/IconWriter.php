@@ -19,8 +19,9 @@
 
 //TODO later: support Vista icon format (png:s inside .ico container)
 
-require_once('core.php');
+namespace cd;
 
+require_once('core.php');
 require_once('Image.php');
 
 class IconWriter

@@ -7,6 +7,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class SvgPolygon implements ISvgComponent
 {
     var $color;                   ///< XXXX fill color RGBA
