@@ -42,7 +42,7 @@ if (isset($_POST['register_usr']) && isset($_POST['register_pwd']) && isset($_PO
                 $sadmin_id = $grp['groupId'];
             }
             if (!$sadmin_id)
-                throw new Exception ('super admin group not found');
+                throw new \Exception ('super admin group not found');
 
             // Add this user to Super Admin group
             UserGroupHandler::addToGroup($user_id, $sadmin_id);

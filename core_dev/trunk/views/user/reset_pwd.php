@@ -8,6 +8,8 @@
 //TODO: use js from views/core/js_validation.php to check password
 //XXX use XhtmlForm?
 
+namespace cd;
+
 require_once('ForgotPasswordHandler.php');
 
 if (!$this->token)
@@ -23,10 +25,10 @@ if (Token::isExpired('activation_code', $this->token, $duration))
 $user_id = Token::getOwner('activation_code', $this->token);
 
 if (!$user_id)
-    throw new Exception ('token dont exist');
+    throw new \Exception ('token dont exist');
 
 if ($session->id && $user_id != $session->id)
-    throw new Exception ('HACKER stop doing that!');
+    throw new \Exception ('HACKER stop doing that!');
 
 if ($session->id)
     echo '<div class="critical">You are already logged in! Are you sure you want to reset your password?</div>';

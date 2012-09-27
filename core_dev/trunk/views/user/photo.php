@@ -6,6 +6,8 @@
 //TODO: ability to edit description of photo
 //TODO: add comments to photo
 
+namespace cd;
+
 require_once('Image.php'); // for getThumbUrl()
 require_once('ImageRotator.php');
 require_once('YuiLightbox.php');

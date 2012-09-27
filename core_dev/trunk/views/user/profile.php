@@ -3,6 +3,8 @@
  * Default view for a user profile
  */
 
+namespace cd;
+
 require_once('Image.php'); // for showThumb()
 require_once('Bookmark.php');
 require_once('YuiLightbox.php');

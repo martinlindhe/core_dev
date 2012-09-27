@@ -302,7 +302,7 @@ function embed_flv($vid_id)
 {
     $div_id = 'cdflv'.mt_rand();
 
-    $file = File::get($vid_id);
+    $file = \cd\File::get($vid_id);
 
     $flashvars  = array(
     'flv' => 'c/file/'.$vid_id,

@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('FeedbackItem.php');
 
 function fbHandler($p)

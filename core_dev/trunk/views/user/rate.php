@@ -7,12 +7,13 @@
  * http://www.yuiblog.com/blog/2010/04/28/gallery-ratings/
  */
 
-require_once('Rating.php');
-
 //FIXME: ratings:ratingChange js event  never triggers!
 
 //XXX: make it read-only after you clicked it once
 
+namespace cd;
+
+require_once('Rating.php');
 
 switch ($this->view) {
 case 'handle':

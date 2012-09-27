@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 switch ($this->owner) {
 case 'user';
     // returns little box of html to show in tooltip userinfo, fetched as a XHR

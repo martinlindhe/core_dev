@@ -2,6 +2,8 @@
 
 //TODO: mark entries as read, see number of unread entries
 
+namespace cd;
+
 require_once('Guestbook.php');
 require_once('Bookmark.php');
 require_once('YuiDatatable.php');

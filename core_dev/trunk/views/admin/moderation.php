@@ -106,7 +106,7 @@ case 'handle':
             break;
 
         default:
-            throw new Exception ('Unhandled ModerationObject type '.$o->type);
+            throw new \Exception ('Unhandled ModerationObject type '.$o->type);
         }
 
         redir('a/moderation');
@@ -171,7 +171,7 @@ case 'handle':
         break;
 
     default:
-        throw new Exception ('Unhandled ModerationObject type '.$o->type);
+        throw new \Exception ('Unhandled ModerationObject type '.$o->type);
     }
 
     break;

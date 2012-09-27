@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('UserList.php');
 require_once('YuiDatatable.php');
 require_once('Visit.php');
@@ -21,7 +23,7 @@ case 'profile':
     break;
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    throw new \Exception ('no such view: '.$this->owner);
 }
 
 ?>

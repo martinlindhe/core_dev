@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('UserList.php');
 require_once('YuiDatatable.php');
 
@@ -38,7 +40,7 @@ case 'newest':
 
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    throw new \Exception ('no such view: '.$this->owner);
 }
 
 ?>

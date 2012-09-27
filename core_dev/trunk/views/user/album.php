@@ -2,8 +2,9 @@
 
 //TODO later: move "create system wide albums" to admin panel
 
-require_once('PhotoAlbum.php');
+namespace cd;
 
+require_once('PhotoAlbum.php');
 require_once('Image.php'); // for showThumb()
 require_once('ImageResizer.php');
 require_once('YuiLightbox.php');
@@ -53,7 +54,7 @@ case 'show':
 
     $album = PhotoAlbum::get($this->child2);
     if ($album->owner != 0 && $album->owner != $this->child)
-        throw new Exception ('epic HACK attempt');
+        throw new \Exception ('epic HACK attempt');
 
     echo '<h1>Photo album '.$album->name.' by '.UserLink::render($this->child).'</h1>';
     echo 'Created '.ago($album->time_created).'<br/>';
@@ -117,7 +118,7 @@ case 'upload':
 
     $album = PhotoAlbum::get($this->child);
     if ($album->owner != 0 && $album->owner != $session->id)
-        throw new Exception ('epic HACK attempt');
+        throw new \Exception ('epic HACK attempt');
 
     echo '<h1>Upload photo to album '.$album->name.'</h1>';
 
@@ -181,7 +182,7 @@ case 'new':
     break;
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    throw new \Exception ('no such view: '.$this->owner);
 }
 
 ?>

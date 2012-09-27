@@ -36,7 +36,7 @@ case 'default':
 
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    throw new \Exception ('no such view: '.$this->owner);
 }
 
 ?>

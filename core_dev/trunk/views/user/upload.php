@@ -3,6 +3,7 @@
  * File upload view, used by Html5Uploader
  */
 
+namespace cd;
 
 $page->disableDesign();
 
@@ -47,7 +48,7 @@ case 'album':
     break;
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    throw new \Exception ('no such view: '.$this->owner);
 }
 
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('Bookmark.php');
 require_once('Poke.php');
 

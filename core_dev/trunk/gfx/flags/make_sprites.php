@@ -22,10 +22,10 @@ foreach ($sprites as $f) {
     list($width, $height) = getimagesize($f);
 
     if ($use_width && $width > $use_width)
-        throw new Exception ('wrong width: '.$width.' in '.$f);
+        throw new \Exception ('wrong width: '.$width.' in '.$f);
 
     if ($height != $use_height)
-        throw new Exception ('wrong height: '.$height.' in '.$f);
+        throw new \Exception ('wrong height: '.$height.' in '.$f);
 }
 
 $im = imagecreatetruecolor($use_width, $use_height * count($sprites) );

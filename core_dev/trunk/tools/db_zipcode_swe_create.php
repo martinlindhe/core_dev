@@ -13,7 +13,7 @@ $db_file = 'zipcodes_swe.db';
 require_once('/devel/core_dev/trunk/core/core.php');
 
 if (!class_exists('SQLite3'))
-    throw new Exception ('sudo apt-get install php5-sqlite');
+    throw new \Exception ('sudo apt-get install php5-sqlite');
 
 if (file_exists($db_file))
     unlink($db_file);

@@ -48,7 +48,7 @@ $header->registerCss(
 function print_query($q)
 {
     if (! ($q instanceof SqlQuery))
-        throw new Exception ('odd input: '.$q);
+        throw new \Exception ('odd input: '.$q);
 
     $query = htmlentities(nl2br($q->query), ENT_COMPAT, 'UTF-8');
 

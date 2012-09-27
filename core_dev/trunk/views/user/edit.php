@@ -5,8 +5,9 @@
 // TODO: ability to change email (+ require verification of new email)
 // TODO: check minimum allowed password lenght etc when user changes password
 
-require_once('ModerationObject.php');
+namespace cd;
 
+require_once('ModerationObject.php');
 require_once('Image.php'); // for getThumbUrl()
 require_once('PhotoAlbum.php');
 require_once('PersonalStatus.php');

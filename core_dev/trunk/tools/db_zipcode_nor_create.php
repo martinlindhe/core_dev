@@ -14,7 +14,7 @@ require_once('/devel/core_dev/trunk/core/core.php');
 require_once('/devel/core_dev/trunk/core/CsvReader.php');
 
 if (!class_exists('SQLite3'))
-    throw new Exception ('sudo apt-get install php5-sqlite');
+    throw new \Exception ('sudo apt-get install php5-sqlite');
 
 if (file_exists($db_file))
     unlink($db_file);
@@ -50,7 +50,7 @@ while (($buf = fgets($handle, 4096)) !== false)
     $postort = substr($r[0], 5);
 
     if (!is_numeric($postnr) || strlen($postnr) != 4)
-        throw new Exception ('bad data');
+        throw new \Exception ('bad data');
 
     if (!in_array($postort, $cities))
         $cities[] = $postort;

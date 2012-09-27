@@ -3,6 +3,8 @@
  * For normal users usage of chatrooms
  */
 
+namespace cd;
+
 require_once('ChatRoomUpdater.php');
 
 $session->requireLoggedIn();

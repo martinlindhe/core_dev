@@ -3,11 +3,11 @@
  * Self-moderation features, such as "report user", or "report photo"
  */
 
-
 //TODO: ability to report photos
 
-$session->requireLoggedIn();
+namespace cd;
 
+$session->requireLoggedIn();
 
 switch ($this->owner) {
 case 'user':

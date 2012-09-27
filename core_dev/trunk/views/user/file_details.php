@@ -3,11 +3,13 @@
  * Shows detailed info of one file
  */
 
+namespace cd;
+
 $fileId = $this->owner;
 
 $f = File::get($fileId);
 if (!$f)
-    throw new Exception ('file not found: '.$fileId);
+    throw new \Exception ('file not found: '.$fileId);
 
 echo '<h2>File details</h2>';
 echo 'Name: '.$f->name.'<br/>';

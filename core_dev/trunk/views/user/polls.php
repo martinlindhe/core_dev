@@ -2,6 +2,8 @@
 
 //TODO later: allow anonymous polls? then allow 1 vote from each IP
 
+namespace cd;
+
 require_once('PollItem.php');
 
 switch ($this->owner) {
@@ -19,7 +21,7 @@ case 'vote':
     // child2 = option id
 
     if (!$session->id || !is_numeric($this->child) || !is_numeric($this->child2))
-        throw new Exception ('XXX');
+        throw new \Exception ('XXX');
 
     Rating::addVote(POLL, $this->child, $this->child2);
 
@@ -31,7 +33,7 @@ case 'show':
     //child = poll id
 
     if (!$this->child)
-        throw new Exception ('no id set');
+        throw new \Exception ('no id set');
 
     $poll = PollItem::get($this->child);
     if (!$poll)
@@ -154,7 +156,7 @@ case 'show':
     break;
 
 default:
-    throw new Exception ('no such view: '.$this->owner);
+    throw new \Exception ('no such view: '.$this->owner);
 }
 
 ?>

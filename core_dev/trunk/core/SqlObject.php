@@ -50,6 +50,9 @@ class SqlObject
         if (!is_array($row))
             throw new \Exception ('loadObject fail, need array of rows, got: '.$row);
 
+        if (class_exists(__NAMESPACE__.'\\'.$classname))
+            $classname = __NAMESPACE__.'\\'.$classname;
+
         $reflect = new \ReflectionClass($classname);
         $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
 

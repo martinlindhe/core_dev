@@ -8,6 +8,8 @@
 //TODO: ability to mark seen msg as "UNREAD" again
 //TODO: ability to mark a message as "DELETED". really useful? will require 2 copies of each msg, or else if user 1 deletes the msg, user2 also wont see it
 
+namespace cd;
+
 require_once('Message.php');
 require_once('Bookmark.php');
 require_once('YuiDatatable.php');
@@ -40,7 +42,7 @@ case 'inbox':
             echo embed_flv($msg->body).'<br/>';
             break;
         default:
-            throw new Exception ('eh');
+            throw new \Exception ('eh');
         }
         echo ahref('videomsg/send/'.$msg->from, 'Reply with video').'<br/>';
         echo ahref('u/messages/send/'.$msg->from, 'Reply with text').'<br/>';
@@ -68,7 +70,7 @@ case 'outbox':
             echo embed_flv($msg->body).'<br/>';
             break;
         default:
-            throw new Exception ('eh');
+            throw new \Exception ('eh');
         }
         echo '<hr/>';
     }
