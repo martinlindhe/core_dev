@@ -16,7 +16,7 @@
 //TODO: rename setCacheTime -> setTimeout
 //TODO later: drop 'memcache' extension support
 
-throw new \Exception ('who uses me!');
+//throw new \Exception ('who uses me!');
 
 require_once('core.php');
 require_once('CoreBase.php');
