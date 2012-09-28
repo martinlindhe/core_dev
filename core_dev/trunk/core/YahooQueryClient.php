@@ -79,7 +79,7 @@ admin2: {
 }
 */
         $res->woeid = $item->woeid;
-        $res->area = new StdClass();
+        $res->area = new \StdClass();
         $res->area->center = new YahooQueryCoordinate($item->centroid->latitude, $item->centroid->longitude);
         $res->area->sw = new YahooQueryCoordinate($item->boundingBox->southWest->latitude, $item->boundingBox->southWest->longitude);
         $res->area->ne = new YahooQueryCoordinate($item->boundingBox->northEast->latitude, $item->boundingBox->northEast->longitude);

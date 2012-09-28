@@ -4,7 +4,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('JSON.php');
 
-$o = new stdClass();
+$o = new \StdClass();
 $o->x = 1;
 $o->y = 2;
 $o->z = 3;
