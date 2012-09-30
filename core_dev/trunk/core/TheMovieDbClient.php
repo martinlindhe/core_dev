@@ -10,6 +10,7 @@
 
 //STATUS: wip
 
+//TODO: cache results in local table
 //TODO: search by opensubtitles hash
 
 //XXX export categories, no longer in the xml?
@@ -88,7 +89,7 @@ class TheMovieDbClient extends CoreBase
     /**
      * Returns details on a movie
      *
-     * @param $movie_id TMDB id
+     * @param $movie_id TMDB id or IMDB id
      */
     static function getInfo($movie_id)
     {

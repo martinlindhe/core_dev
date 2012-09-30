@@ -16,7 +16,13 @@ class Imdb
         $pattern = "((http://www.imdb.com/title/)((tt|ch|nm|co)([0-9]){7}))";
 
         preg_match($pattern, $url, $res);
-        return !empty($res[2]) ? $res[2] : false;
+        if (!empty($res[2]))
+            return $res[2];
+
+        if (self::isValidId($url))
+            return $url;
+
+        return false;
     }
 
     /**
