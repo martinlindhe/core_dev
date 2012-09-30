@@ -113,6 +113,17 @@ function ahref($url, $text, $target = '', $onclick = '', $class = '')
     return $a->render();
 }
 
+function html_img($url, $text = '', $style = '', $class = '')
+{
+    $a = new \cd\XhtmlComponentImage();
+    $a->src = relurl($url);
+    $a->title = $text;
+    $a->style = $style;
+    $a->class = $class;
+
+    return $a->render();
+}
+
 /** Creates a clickable link that opens in a new window */
 function ahref_blank($url, $text)
 {

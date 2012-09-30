@@ -9,6 +9,8 @@
 
 //STATUS: wip
 
+//TODO: see ImageResource class in MediaResource.php
+
 //XXX: drop automatic sha1 generation, add a calcSha1() method
 
 namespace cd;

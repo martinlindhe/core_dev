@@ -75,6 +75,23 @@ class ImageResource
     function setUrl($n) { $this->Url = new Url($n); }
     function getUrl() { return $this->Url->get(); }
     function setMimetype($s) { $this->mimetype = $s; }
+/*
+    static function getBestImage($objs, $type = 'poster')
+    {
+        foreach ($objs as $o)
+        {
+            if (!($o instanceof ImageResource))
+                throw new \Exception ('unhandled object type');
+
+            if ($o->type != $type)
+                continue;
+
+            echo html_img($o->Url->get())."<br/>\n";
+//            d($o);
+        }
+    }
+*/
+
 }
 
 class ArtistResource
