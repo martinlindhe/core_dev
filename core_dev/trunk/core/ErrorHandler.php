@@ -106,9 +106,10 @@ class ErrorHandler implements IXmlComponent
             return;
 
         echo '</div>'; // HACK to not end up inside a <div style="display:none">
+        echo "\n";
         echo '<pre>';
         echo '<b>'.$type.':</b> '.$s.' on '.$errfile.':'.$errline;
-        echo '</pre>';
+        echo '</pre>'."\n";
 
         // Don't execute PHP internal error handler
         return true;
