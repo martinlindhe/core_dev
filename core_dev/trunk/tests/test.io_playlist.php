@@ -5,6 +5,8 @@
  * XSPF playlists are known to be compatible with: VLC, Totem
  */
 
+namespace cd;
+
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
 require_once('io_newsfeed.php');

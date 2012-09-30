@@ -48,5 +48,4 @@ function is_imdb_url($url)
     return false;
 }
 
-
 ?>

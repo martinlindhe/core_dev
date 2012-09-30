@@ -2,6 +2,7 @@
 
 //XXX FIXME this is not really a test :P
 
+namespace cd;
 
 /*  How to set extra headers for special browsers:
 

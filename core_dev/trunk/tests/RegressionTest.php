@@ -5,6 +5,8 @@
 
 //STATUS: wip
 
+namespace cd;
+
 class RegressionTest
 {
     static function check($filename, $arr)
