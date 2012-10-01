@@ -70,9 +70,9 @@ class XlsWriter
         foreach ($this->data as $row) {
             $this->col = 0;
             foreach ($row as $val) {
-                /*if (is_numeric($val))
+                if (is_numeric($val))
                     $res .= $this->writeDouble($val);
-                else*/
+                else
                     $res .= $this->writeText($val);
                 $this->col++;
             }
