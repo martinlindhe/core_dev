@@ -45,10 +45,16 @@ class CsvReader
     static function parseFile($filename, $callback, $start_line = 0, $delimiter = ',')
     {
         $fp = fopen($filename, 'r');
-        if (!$fp || !function_exists($callback)) {
-            echo "FATAL: csvParse() callback not defined\n";
+        if (!$fp) {
+            echo "FATAL: failed to open csv file\n";
             return false;
         }
+
+        if (function_exists(__NAMESPACE__.'\\'.$callback))
+            $callback = __NAMESPACE__.'\\'.$callback;
+
+        if (!function_exists($callback))
+            throw new Exception ('no such callback: '.$callback);
 
         $cols = 0;
         $line = 0;
@@ -68,6 +74,7 @@ class CsvReader
                     d($row);
                     return false;
                 }
+
                 if ($row)
                     call_user_func($callback, $row);
             }
