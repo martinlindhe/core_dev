@@ -13,6 +13,7 @@
 
 namespace cd;
 
+require_once('core.php');
 require_once('Sql.php');
 
 class ReflectedObject
@@ -27,6 +28,9 @@ class SqlObject
 {
     public static function stringForm($s)
     {
+        if (substr($s, 0, 1) == '0')
+            return 's';
+
         if (numbers_only($s))
             return 'i';
         return 's';
