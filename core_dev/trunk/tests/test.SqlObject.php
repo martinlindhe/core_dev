@@ -9,5 +9,6 @@ require_once('SqlObject.php');
 if (SqlObject::stringForm(123) != 'i')     echo "FAIL 1\n";
 if (SqlObject::stringForm("abc") != 's')   echo "FAIL 2\n";
 if (SqlObject::stringForm("0123") != 's')  echo "FAIL 3\n";
+if (SqlObject::stringForm(12.34) !='d')    echo "FAIL 4\n";
 
 ?>

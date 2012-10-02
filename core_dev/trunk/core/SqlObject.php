@@ -31,6 +31,9 @@ class SqlObject
         if (substr($s, 0, 1) == '0')
             return 's';
 
+        if (is_numeric($s) && strpos($s, '.') !== false)
+            return 'd';
+
         if (numbers_only($s))
             return 'i';
         return 's';
@@ -285,10 +288,7 @@ class SqlObject
         if (!Sql::isValidOrder($order))
             throw new \Exception ('odd order '.$order);
 
-        if (is_numeric($value))
-            $form = 'i';
-        else
-            $form = 's';
+        $form = self::stringForm($value);
 
         $q =
         'SELECT * FROM '.$tblname.' WHERE '.$field_name.' = ?'.
