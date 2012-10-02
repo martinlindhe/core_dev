@@ -188,6 +188,8 @@ class SendMail
             $a = reduce_whitespace($a);
             $a = str_replace(';', ',', $a);
             $a = str_replace(' ', ',', $a);
+            $a = str_replace("\n", ',', $a);
+            $a = str_replace("\r", ',', $a);
 
             // translate comma-separated string to array
             $a = explode(',', $a);
