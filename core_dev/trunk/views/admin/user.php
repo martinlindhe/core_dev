@@ -13,6 +13,8 @@
 
 */
 
+namespace cd;
+
 $session->requireSuperAdmin();
 
 require_once('YuiDatatable.php');

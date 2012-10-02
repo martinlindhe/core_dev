@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 $session->requireSuperAdmin();
 
 echo '<h1>core_dev admin</h1>';

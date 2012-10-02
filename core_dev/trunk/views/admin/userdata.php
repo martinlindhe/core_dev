@@ -4,6 +4,8 @@
 
 //TODO: abiltiy to mark a userdata field as required at registration (such as email)
 
+namespace cd;
+
 require_once('UserDataField.php');
 require_once('YuiDatatable.php');
 

@@ -2,6 +2,8 @@
 
 //TODO later: ability to export results (csv, xls, ...?)
 
+namespace cd;
+
 require_once('PollItem.php');
 require_once('YuiDatatable.php');
 

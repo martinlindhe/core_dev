@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 $header->setTitle( t('Error message') );
 echo $error->render(true);
 echo ahref('u/login', 'Log in').'<br/>';

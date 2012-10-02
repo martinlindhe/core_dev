@@ -5,6 +5,8 @@
 
 //TODO: ability to add IP ban from here
 
+namespace cd;
+
 $session->requireSuperAdmin();
 
 if (!$this->owner)

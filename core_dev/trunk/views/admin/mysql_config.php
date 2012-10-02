@@ -7,6 +7,8 @@
 //TODO: present data in pretty tables
 //TODO: use pie charts to show percentage of used memory etc
 
+namespace cd;
+
 $session->requireSuperAdmin();
 
 echo '<h1>MySQL information</h1>';

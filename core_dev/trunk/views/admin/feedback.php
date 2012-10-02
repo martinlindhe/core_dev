@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('FeedbackItem.php');
 require_once('Message.php');
 require_once('YuiDatatable.php');

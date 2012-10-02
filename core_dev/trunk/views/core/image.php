@@ -2,8 +2,9 @@
 
 // passes thru a image (with optional width & height specified)
 
-require_once('Image.php');
+namespace cd;
 
+require_once('Image.php');
 
 $name = File::getUploadPath($this->owner);
 

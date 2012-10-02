@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 header('HTTP/1.1 404 Not Found');
 
 $header->setTitle( $_SERVER['REDIRECT_URL'].' not found' );

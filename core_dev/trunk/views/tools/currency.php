@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 require_once('ConvertCurrency.php');
 
 echo '<h1>Currencies</h1>';

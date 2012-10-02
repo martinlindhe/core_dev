@@ -3,6 +3,7 @@
  * Utility to decode base64 strings
  */
 
+namespace cd;
 
 $session->requireSuperAdmin();
 

@@ -5,6 +5,8 @@
 //TODO: ability to add new word
 //TODO: ability to remove a word
 
+namespace cd;
+
 $session->requireSuperAdmin();
 
 require_once('ReservedWord.php');

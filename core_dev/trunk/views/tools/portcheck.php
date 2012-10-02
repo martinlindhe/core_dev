@@ -3,6 +3,8 @@
  * port checker
  */
 
+namespace cd;
+
 $session->requireSuperAdmin();
 
 $error = '';

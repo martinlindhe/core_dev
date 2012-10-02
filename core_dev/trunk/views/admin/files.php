@@ -8,6 +8,8 @@
 //TODO: limit selection by selecting image type, dates, etc
 //TODO: pagination
 
+namespace cd;
+
 require_once('YuiDatatable.php');
 
 $session->requireAdmin();

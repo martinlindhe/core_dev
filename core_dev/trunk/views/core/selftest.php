@@ -3,6 +3,8 @@
 // the idea is to have a external script fetch http://server/coredev/selftest
 // and warn if result != "STATUS:OK"
 
+namespace cd;
+
 $page->disableDesign();
 $page->setMimeType('text/plain');
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace cd;
+
 if (!$session->isAdmin)
     return;
 

@@ -7,6 +7,8 @@
 
 //HINT: use console.log() to log text in Webkit browsers (or Firebug)
 
+namespace cd;
+
 $header->registerJsFunction(
 // @return true if input is numeric
 'function isNumber(n)'.

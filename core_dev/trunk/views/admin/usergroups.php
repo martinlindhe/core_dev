@@ -3,6 +3,8 @@
  * This is the user group manager
  */
 
+namespace cd;
+
 $session->requireAdmin();
 
 function addUserGroupSubmit($p)

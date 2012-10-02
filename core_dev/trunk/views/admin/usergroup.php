@@ -5,6 +5,8 @@
 
 //TODO: ability to remove a empty usergroup
 
+namespace cd;
+
 $session->requireAdmin();
 
 $grp = new UserGroup($this->owner);

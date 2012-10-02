@@ -5,6 +5,8 @@
 
 //TODO: fix up row coloring with YuiDatatable
 
+namespace cd;
+
 $session->requireAdmin();
 
 require_once('UserList.php');
