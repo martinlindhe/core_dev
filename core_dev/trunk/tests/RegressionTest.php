@@ -23,8 +23,8 @@ class RegressionTest
 
             $err = eval($code);
 
-            if ($err != $a[1]) {
-                echo basename($filename).' FAIL '.$cnt.': '.$a[0].'. expected "'.$a[1].'" but got "'.$err.'"'."\n";
+            if ($err !== $a[1]) {
+                echo basename($filename).' FAIL '.$cnt.': '.$a[0].'. expected "'.$a[1].'" ('.gettype($a[0]).') but got "'.$err.'" ('.gettype($a[1]).")\n";
                 $fail++;
             }
 
