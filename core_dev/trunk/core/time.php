@@ -198,6 +198,15 @@ function in_seconds($s)
 
 /**
  * @param $d duration in seconds
+ * @return duration in minutes
+ */
+function in_minutes($d, $precision = 0)
+{
+    return round($d / 60, $precision);
+}
+
+/**
+ * @param $d duration in seconds
  * @return duration in hours
  */
 function in_hours($d, $precision = 0)
