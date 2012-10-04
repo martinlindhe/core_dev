@@ -180,7 +180,7 @@ function elapsed_seconds($s, $precision = 1)
 /**
  * Translates a time string to seconds
  * @param $s text such as "18:40:22", "18:40:22.11" or "18:40:22,11"
- * @return seconds
+ * @return duration in seconds
  */
 function in_seconds($s)
 {

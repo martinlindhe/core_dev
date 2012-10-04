@@ -475,6 +475,17 @@ function sbool($b)
      return $b ? 'true' : 'false';
 }
 
+/** returns a boolean value of input string */
+function string_to_bool($s)
+{
+    switch (strtolower($s)) {
+    case 'true': return true;
+    case 'false': return false;
+    }
+
+    return -1;
+}
+
 /** If string $needle is inside $haystack, then return true */
 function instr($haystack, $needle)
 {
