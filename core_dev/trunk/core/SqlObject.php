@@ -137,7 +137,7 @@ class SqlObject
         // we escape column names for reserved SQL words
         // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
         // the list is huge, so we only cover common use cases
-        $reserved_words = array('desc', 'default', 'from', 'to');
+        $reserved_words = array('desc', 'default', 'group', 'from', 'to');
 
         $res = new ReflectedObject();
 

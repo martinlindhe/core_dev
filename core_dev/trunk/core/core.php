@@ -469,13 +469,13 @@ function uptime()
     return $raw[0];
 }
 
-/** returns a boolean representation of input value as a string */
+/** @return a boolean representation of input value as a string */
 function sbool($b)
 {
      return $b ? 'true' : 'false';
 }
 
-/** returns a boolean value of input string */
+/** @return a boolean value of input string */
 function string_to_bool($s)
 {
     switch (strtolower($s)) {
@@ -484,6 +484,15 @@ function string_to_bool($s)
     }
 
     return -1;
+}
+
+/** @return a integer representation of the bool value */
+function bool_to_int($b)
+{
+    if (is_bool($b) === false)
+        throw new \Exception ('not a bool: '.$b);
+
+    return $b ? 1 : 0;
 }
 
 /** If string $needle is inside $haystack, then return true */

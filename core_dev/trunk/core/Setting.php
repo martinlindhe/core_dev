@@ -8,6 +8,7 @@
 //STATUS: wip
 
 //TODO: use SqlObject stuff
+//TODO: add data type (string(binary), int, bool, double) in order to improve automatic handling
 
 namespace cd;
 
