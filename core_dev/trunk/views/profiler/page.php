@@ -3,6 +3,8 @@
  * Shows page load time & other information
  */
 
+//TODO: $_SERVER['REQUEST_TIME'] är ett bättre "page start" värde (???)
+
 namespace cd;
 
 require_once('HttpUserAgent.php');
