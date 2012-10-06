@@ -43,7 +43,7 @@ function handleSubmit($p)
     redir($_SERVER['REQUEST_URI']);
 }
 
-$list = Comment::getAll($this->type, $this->owner);
+$list = Comment::getByTypeAndOwner($this->type, $this->owner);
 
 foreach ($list as $c)
 {

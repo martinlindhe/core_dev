@@ -40,7 +40,18 @@ class Comment
 
     protected static $tbl_name = 'tblComments';
 
-    public static function getAll($type, $owner)
+    public static function getAll()
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' ORDER BY time_created DESC';
+
+        $list = Sql::pSelect($q);
+
+        return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    public static function getByTypeAndOwner($type, $owner)
     {
         if (!is_numeric($type) || !is_numeric($owner))
             throw new \Exception ('hmmm');
