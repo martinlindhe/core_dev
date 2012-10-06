@@ -78,12 +78,12 @@ echo 'core_dev';
 
 echo '<div id="'.$container_id.'" style="display:none;">';  // inner container
 
-if (class_exists('SqlHandler')) {
+if (class_exists('cd\SqlHandler')) {
     $view = new ViewModel('views/profiler/mysql.php');
     echo $view->render();
 }
 
-if (class_exists('TempStore')) {
+if (class_exists('cd\TempStore')) {
     $view = new ViewModel('views/profiler/memcached.php');
     echo $view->render();
 }
