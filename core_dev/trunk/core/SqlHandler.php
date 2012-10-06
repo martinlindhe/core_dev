@@ -48,8 +48,11 @@ class SqlHandler
      * Registers a database object to the instance pool
      * @return instance index
      */
-    public static function addInstance($obj, $name = 'default')
+    public static function addInstance($obj, $name = '')
     {
+        if (!$name)
+            $name = 'default'.count(self::$_instances);
+
         foreach (self::$_instances as $i)
             if ($i->name == $name)
                 throw new \Exception ('duplicate db instance name '.$name);
