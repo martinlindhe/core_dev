@@ -40,22 +40,10 @@ function handleSubmit($p)
     $c->creator_ip   = client_ip();
 
     Comment::store($c);
+    redir($_SERVER['REQUEST_URI']);
 }
 
-if ($session->id)
-{
-    $form = new XhtmlForm('addcomment');
-    $form->addHidden('type', $this->type);
-    $form->addHidden('owner', $this->owner);
-    $form->addRichedit('comment', t('Write a comment'), '', 300, 80 );
-
-    $form->addSubmit('Save');
-    $form->setHandler('handleSubmit');
-
-    $form->handle();  // force form processing so following Comment::get() is current
-}
-
-$list = Comment::get($this->type, $this->owner);
+$list = Comment::getAll($this->type, $this->owner);
 
 foreach ($list as $c)
 {
@@ -67,11 +55,21 @@ foreach ($list as $c)
 
     echo nl2br($c->msg).'<br/>';
 
-    echo ago($c->time_created); //XXX snygga till
+    echo '<span title="'.ago($c->time_created).'">';
+    echo sql_datetime($c->time_created);
+    echo '</span>';
     echo '<hr/>';
 }
 
 if ($session->id)
+{
+    $form = new XhtmlForm('addcomment');
+    $form->addHidden('type', $this->type);
+    $form->addHidden('owner', $this->owner);
+    $form->addRichedit('comment', t('Write a comment'), '', 300, 80 );
+    $form->addSubmit('Save');
+    $form->setHandler('handleSubmit');
     echo $form->render();
+}
 
 ?>

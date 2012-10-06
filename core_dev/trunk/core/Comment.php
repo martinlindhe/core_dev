@@ -40,7 +40,7 @@ class Comment
 
     protected static $tbl_name = 'tblComments';
 
-    public static function get($type, $owner)
+    public static function getAll($type, $owner)
     {
         if (!is_numeric($type) || !is_numeric($owner))
             throw new \Exception ('hmmm');
