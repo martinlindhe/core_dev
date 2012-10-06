@@ -7,12 +7,20 @@
 
 //STATUS: wip
 
+//TODO-later: rename table columns
+
 namespace cd;
 
 define('LOGIN_INTERNAL', 1);
 
 class LoginEntry
 {
+    var $entryId;
+    var $userId;
+    var $timeCreated;
+    var $IP;
+    var $userAgent;
+    var $type;
 
     protected static $tbl_name = 'tblLogins';
 
@@ -28,8 +36,28 @@ class LoginEntry
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
-        ' WHERE userId = ? AND type = ? ORDER BY timeCreated DESC';
+        ' WHERE userId = ? AND type = ?'.
+        ' ORDER BY timeCreated DESC';
         return Sql::pSelect($q, 'ii', $user_id, $type);
+    }
+
+    /** @return login entries of all types for this user */
+    public static function getAllHistory($user_id)
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE userId = ?'.
+        ' ORDER BY timeCreated DESC';
+        return Sql::pSelect($q, 'i', $user_id);
+    }
+
+    public static function getAllBetween($time_start, $time_end)
+    {
+        $q =
+        'SELECT * FROM '.self::$tbl_name.
+        ' WHERE timeCreated BETWEEN "'.sql_datetime($time_start).'" AND "'.sql_datetime($time_end).'"'.
+        ' ORDER BY timeCreated DESC';
+        return Sql::pSelect($q);
     }
 
     /** @return array of user id's associated with $ip */

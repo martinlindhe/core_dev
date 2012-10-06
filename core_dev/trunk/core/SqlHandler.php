@@ -38,9 +38,9 @@ class SqlInstance
 
 class SqlHandler
 {
-    static $_instances = array();      ///< array of SqlInstance objects
+    private static $_instances = array(); ///< array of SqlInstance objects
 
-    private function __construct() { } //singleton
+    private function __construct() {}  //singleton
 
     private function __clone() {}      //singleton: prevent cloning of class
 
@@ -58,6 +58,7 @@ class SqlHandler
         $i->obj = $obj;
         $i->name = $name;
         self::$_instances[] = $i;
+
         return count(self::$_instances) - 1;
     }
 
@@ -69,10 +70,9 @@ class SqlHandler
         if (is_numeric($s) && !empty(self::$_instances[ $s ]))
             return self::$_instances[ $s ]->obj;
 
-        foreach (self::$_instances as $i) {
+        foreach (self::$_instances as $i)
             if ($i->name == $s)
                 return $i->obj;
-        }
 
         throw new \Exception ('No sql instance registered');
     }
