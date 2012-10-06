@@ -12,14 +12,16 @@
  *
  * # Using multiple databases
  * $db  = SqlFactory::factory('mysql');
- * SqlHandler::addInstance($db);      //always add the main db instance first
+ * SqlHandler::addInstance($db, 'mysql-db');      //always add the main db instance first
  * $db2 = SqlFactory::factory('mssql');
- * SqlHandler::addInstance($db2);
+ * SqlHandler::addInstance($db2, 'microsoft-db');
  * # ...
  * $db  = SqlHandler::getInstance();  //will always return the first registered instance
  * $db2 = SqlHandler::getInstance(1); //will always return the 2:nd registered instance
+ * ...
+ * $db  =  SqlHandler::getInstance('microsoft-db');  // will always return the instance named "microsoft-db"
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -28,9 +30,15 @@ namespace cd;
 
 require_once('sql_misc.php');
 
+class SqlInstance
+{
+    var $obj;
+    var $name;
+}
+
 class SqlHandler
 {
-    static $_instances = array();
+    static $_instances = array();      ///< array of SqlInstance objects
 
     private function __construct() { } //singleton
 
@@ -40,19 +48,33 @@ class SqlHandler
      * Registers a database object to the instance pool
      * @return instance index
      */
-    public static function addInstance($obj)
+    public static function addInstance($obj, $name = 'default')
     {
-        self::$_instances[] = $obj;
+        foreach (self::$_instances as $i)
+            if ($i->name == $name)
+                throw new \Exception ('duplicate db instance name '.$name);
+
+        $i = new SqlInstance();
+        $i->obj = $obj;
+        $i->name = $name;
+        self::$_instances[] = $i;
         return count(self::$_instances) - 1;
     }
 
-    public static function getInstance($num = 0)
+    /**
+     * @param $s instance id or name
+     */
+    public static function getInstance($s = 0)
     {
-        if (empty(self::$_instances[ $num ]))
-            throw new \Exception ('No sql instance registered');
-//            return false;
+        if (is_numeric($s) && !empty(self::$_instances[ $s ]))
+            return self::$_instances[ $s ]->obj;
 
-        return self::$_instances[ $num ];
+        foreach (self::$_instances as $i) {
+            if ($i->name == $s)
+                return $i->obj;
+        }
+
+        throw new \Exception ('No sql instance registered');
     }
 
 }
