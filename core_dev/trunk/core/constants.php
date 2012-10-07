@@ -160,6 +160,7 @@ function getCountryName($s)
     'USA' => 'United States of America',
     'GBR' => 'United Kingdom',
     'DEU' => 'Germany',
+    'JPN' => 'Japan',
 
     'EUR' => 'European Union',
     );

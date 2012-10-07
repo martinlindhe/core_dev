@@ -223,7 +223,7 @@ class ConvertCurrency extends ConvertBase
      * @param $to currency code to convert to
      * @return converted currency
      */
-    function conv($from, $to, $val)
+    function conv($from, $to, $val, $precision = 0)
     {
         $rate = $this->getRate($from, $to);
 
@@ -232,8 +232,9 @@ class ConvertCurrency extends ConvertBase
 
         $res = $val * $rate;
 
-        if ($this->precision)
-            return round_decimals($res, $this->precision);
+        $p = $precision ? $precision : $this->precision;
+        if ($p)
+            return round_decimals($res, $p);
 
         return $res;
     }
