@@ -40,9 +40,11 @@ if ($l->conv('fm', 'pm', 50000000) != 50000)   echo "FAIL 19\n";
 if ($l->conv('am', 'fm', 50000000) != 50000)   echo "FAIL 20\n";
 if ($l->conv('zm', 'am', 50000000) != 50000)   echo "FAIL 21\n";
 if ($l->conv('ym', 'zm', 50000000) != 50000)   echo "FAIL 22\n";
+if ($l->conv('km', 'ld', 500000) != 1.3)       echo "FAIL 23\n";
 
 if ($l->convLiteral('1 meter', 'cm') != 100)              echo "FAIL 30\n";
 if ($l->convLiteral('10 mil', 'kilometer') != 100)        echo "FAIL 31\n";
 if ($l->convLiteral('1 micrometer', 'nanometer') != 1000) echo "FAIL 32\n";
+
 
 ?>

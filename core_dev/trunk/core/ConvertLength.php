@@ -36,6 +36,7 @@ class ConvertLength extends ConvertBase
     'yd'        => 0.9144,                     // XXX: Yard
     'ukmile'    => 1852,                       // UK: Mile (nautical)
     'usmile'    => 1609.344,                   // US: Mile (statute)
+    'ld'        => 384400000,                  // Lunar distance, http://en.wikipedia.org/wiki/Lunar_distance_%28astronomy%29
     'au'        => 149597870700,               // Astronomical Unit
     );
 
@@ -59,6 +60,7 @@ class ConvertLength extends ConvertBase
     'usmile'       => 'usmile',
     'mile'         => 'usmile', 'miles'     => 'usmile',
     'mil'          => 'scandmile',
+    'lunar'        => 'ld',
     'astronomical' => 'au',
     );
 
