@@ -15,6 +15,8 @@ array("strpad_exact('1234', 8, ' ')",       '1234    '),
 array("strpad_exact('1234', 3, ' ')",       '123'),
 array("is_alphanumeric('2')",               true),
 array("is_alphanumeric('2.0')",             true),
+array("is_alphanumeric('%')",               false),  // important not to allow control characters
+array("is_alphanumeric('/')",               false),  // important not to allow control characters
 array("is_alphanumeric('x\"x')",            false),  //  " is NOT ok
 array("is_alphanumeric(\"x'x\")",           false),  //  ' is NOT ok
 array("is_alphanumeric('abc 123')",         false),  // space is NOT ok
