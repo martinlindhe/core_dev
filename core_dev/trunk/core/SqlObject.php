@@ -69,7 +69,7 @@ class SqlObject
             $n = $prop->getName();
 
             if (!array_key_exists($n, $row)) {
-                echo 'ERROR: array key dont exist:<br/>';
+                echo "ERROR: array key dont exist:<br/>\n";
                 d($n);
                 d( $row);
                 throw new \Exception ('loadObject fail, class '.$classname.', db column named "'.$n.'" dont exist');

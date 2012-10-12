@@ -67,7 +67,7 @@ function sql_or_array($key, $vals, $pad = '', $numeric = true)
     $tmp = array();
     foreach ($vals as $val) {
         if ($numeric && !is_numeric($val))
-            throw new \Exception ('sql_or_array INVALID value');
+            throw new \Exception ('sql_or_array INVALID value "'.$val.'"');
 
         $val .= $pad;
         $tmp[] = $key.($numeric ? $val : '"'.$db->escape($val).'"');
