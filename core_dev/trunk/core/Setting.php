@@ -55,6 +55,14 @@ class Setting
         return true;
     }
 
+    /** Toggle value between 0 and 1 */
+    public static function toggle($type, $owner, $name)
+    {
+        $val = self::get($type, $owner, $name, 0);
+
+        self::set($type, $owner, $name, $val ? 0 : 1);
+    }
+
     public static function delete($type, $owner, $name)
     {
         $q =
