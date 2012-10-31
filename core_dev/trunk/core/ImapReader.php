@@ -80,21 +80,25 @@ class ImapReader extends CoreBase
      */
     function getMail($callback = '', $timeout = 30)
     {
-        if (!$this->connect())
+        if (!$this->connect()) {
+            echo "ERROR: IMAP connection to ".$this->server.":".$this->port." failed\n";
             return false;
+        }
 
-        $folders = imap_listmailbox($this->handle, "{".$this->server.":".$this->port."}", "*");
+        $folders = imap_listmailbox($this->handle, '{'.$this->server.':'.$this->port.'}', '*');
 
         $msginfo = imap_mailboxmsginfo($this->handle);
+
+        dp('found '.$msginfo->Nmsgs.' messages in mailbox');
+
         $this->tot_mails = $msginfo->Nmsgs;
 
         for ($i=1; $i<= $this->tot_mails; $i++)
         {
-            if ($this->getDebug())
-                echo "Downloading ".$i." of ".$this->tot_mails." ...\n";
+            dp("Downloading ".$i." of ".$this->tot_mails." ...");
 
             //XXX hack because retarded imap_fetchbody() dont allow to fetch the whole message
-            $fp = fopen("php://temp", 'w');
+            $fp = fopen('php://temp', 'w');
             imap_savebody($this->handle, $fp, $i);
             rewind($fp);
             $msg = stream_get_contents($fp);
@@ -106,8 +110,10 @@ class ImapReader extends CoreBase
             $this->emails[] = $mime->getAsEMail($i);
         }
 
-        if (function_exists($callback))
-            call_user_func($callback, $this->emails, $this);
+        if (!function_exists($callback))
+            throw new \Exception ('ERROR callback function '.$callback.' not found');
+
+        call_user_func($callback, $this->emails, $this);
     }
 
 }
