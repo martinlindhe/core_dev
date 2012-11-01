@@ -89,13 +89,13 @@ class ImapReader extends CoreBase
 
         $msginfo = imap_mailboxmsginfo($this->handle);
 
-        dp('found '.$msginfo->Nmsgs.' messages in mailbox');
+        //dp('found '.$msginfo->Nmsgs.' messages in mailbox');
 
         $this->tot_mails = $msginfo->Nmsgs;
 
         for ($i=1; $i<= $this->tot_mails; $i++)
         {
-            dp("Downloading ".$i." of ".$this->tot_mails." ...");
+            //dp("Downloading ".$i." of ".$this->tot_mails." ...");
 
             //XXX hack because retarded imap_fetchbody() dont allow to fetch the whole message
             $fp = fopen('php://temp', 'w');
