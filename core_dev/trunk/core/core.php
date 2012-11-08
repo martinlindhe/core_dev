@@ -206,19 +206,19 @@ function bt()
  * Debug function
  * @return string of hex + ascii values
  */
-function dh($m, $row_len = 16, $fill_char = ' ')
+function dh($m, $row_len = 16, $fill_char = ' ', $html_encode = true)
 {
     $j = 0;
     $bytes = '';
     $hex = '';
     $res = '';
 
-    for ($i=0; $i < strlen($m); $i++)
+    for ($i = 0; $i < strlen($m); $i++)
     {
         $x = substr($m, $i, 1);
 
         if (ord($x) > 30 && ord($x) < 0x80)
-            $bytes .= $x;
+            $bytes .= $html_encode ? htmlspecialchars($x) : $x;
         else
             $bytes .= '.';
 
