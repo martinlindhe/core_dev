@@ -10,17 +10,22 @@ $allowed = array(
     '192.168.0.1',
     '80.0.0.0/8',
     '240.0.0.0/8',
-    '123.123.123.123/16',
-    '123.123.123.123/24',
+    '230.230.0.0/16',
+    '220.220.220.0/24',
 );
 
 if (IPv4_to_GeoIP('192.168.0.1') != 3232235521)                      echo "FAIL 1\n";
 if (GeoIP_to_IPv4(IPv4_to_GeoIP('192.168.0.1')) != '192.168.0.1')    echo "FAIL 2\n";
-if (!match_ip('240.212.11.42', $allowed))                            echo "FAIL 3\n";
-if (match_ip('241.212.11.42', $allowed))                             echo "FAIL 4\n";
-if (match_ip('240.212.11.42.1', $allowed))                           echo "FAIL 5\n";
-if (match_ip('111.111.111.111/8', $allowed))                         echo "FAIL 6\n";
-if (match_ip('300.111.111.111', $allowed))                           echo "FAIL 7\n";
+
+if (!match_ip('240.212.11.42', $allowed))                            echo "FAIL 10\n";
+if ( match_ip('230.212.11.42', $allowed))                            echo "FAIL 11\n";
+if (!match_ip('230.230.11.42', $allowed))                            echo "FAIL 12\n";
+if ( match_ip('220.220.11.42', $allowed))                            echo "FAIL 13\n";
+if (!match_ip('220.220.220.42', $allowed))                           echo "FAIL 14\n";
+if ( match_ip('241.212.11.42', $allowed))                            echo "FAIL 15\n";
+if ( match_ip('240.212.11.42.1', $allowed))                          echo "FAIL 16\n";
+if ( match_ip('111.111.111.111/8', $allowed))                        echo "FAIL 17\n";
+if ( match_ip('300.111.111.111', $allowed))                          echo "FAIL 18\n";
 
 
 $valid_urls = array(
