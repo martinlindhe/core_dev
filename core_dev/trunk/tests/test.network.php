@@ -57,6 +57,7 @@ $invalid_urls = array(
 'x',
 'x.com',
 'x.x',
+'http:/invalid.com/test',
 'http://-invalid.leading-char.com',
 'http:// invalid with spaces.com',
 'http://invalid.url-with a.space.com',

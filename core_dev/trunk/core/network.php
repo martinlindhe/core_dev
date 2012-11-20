@@ -103,8 +103,7 @@ function client_ip()
 // http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
 define('URL_REGEXP',
 '('.
-    '(https?|ftps?|rtmpe?|mms|rtsp){1}'. // protocol
-    '(://){1}'.
+    '(https?|ftps?|rtmpe?|mms|rtsp){1}://'. // protocol
     '(?:\w+'.        // optional username
         '(:\w+)?'.   // optional password
         '@'.         // required separator
