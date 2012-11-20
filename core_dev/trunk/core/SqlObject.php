@@ -52,10 +52,10 @@ class SqlObject
 //            throw new \Exception ('no query');
         }
 
-        $row = is_array($q) ? $q : Sql::pSelect($q);
+        $list = is_array($q) ? $q : Sql::pSelect($q);
 
-        if (!is_array($row))
-            throw new \Exception ('loadObject fail, need array of rows, got: '.$row);
+        if (!is_array($list))
+            throw new \Exception ('loadObject fail, need array of rows, got: '.$list);
 
         if (class_exists(__NAMESPACE__.'\\'.$classname))
             $classname = __NAMESPACE__.'\\'.$classname;
@@ -63,30 +63,29 @@ class SqlObject
         $reflect = new \ReflectionClass($classname);
         $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
 
+        $found = array();
         $obj = new $classname();
         foreach ($props as $prop)
         {
             $n = $prop->getName();
 
-            if (!array_key_exists($n, $row)) {
-                echo "ERROR: array key dont exist:<br/>\n";
-                d($n);
-                d( $row);
-                throw new \Exception ('loadObject fail, class '.$classname.', db column named "'.$n.'" dont exist');
+            if (array_key_exists($n, $list)) {
+                $obj->$n = $list[ $n ];
+                $found[$n] = true;
+                continue;
             }
-            $obj->$n = $row[ $n ];
+
+            throw new \Exception ('class '.$classname.' expects database column named "'.$n.'" which dont exist');
         }
 
-        if ( count($props) != count($row))
+        if ( count($props) != count($list))
         {
-/*
-            d($row);
-            d( count($row ) );
+            foreach ($list as $idx => $row) {
+                if (!array_key_exists($idx, $found))
+                    throw new \Exception ('class '.$classname.' misses define of variable '.$idx);
+            }
 
-            d($props);
-            d( count($props ) );
-*/
-            throw new \Exception ('loadObject fail, class '.$classname.' misses defined variables, or something!');
+            throw new \Exception ('class '.$classname.' ERROR - SHOULD NOT HAPPEN!');
         }
 
         return $obj;
