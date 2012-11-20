@@ -6,17 +6,21 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('network.php');
 
-$x = IPv4_to_GeoIP('192.168.0.1');
-$valid = array(
+$allowed = array(
     '192.168.0.1',
     '80.0.0.0/8',
     '240.0.0.0/8',
+    '123.123.123.123/16',
+    '123.123.123.123/24',
 );
 
-if ($x != 3232235521) echo "FAIL 1\n";
-if (GeoIP_to_IPv4($x) != '192.168.0.1') echo "FAIL 2\n";
-if (!match_ip('240.212.11.42', $valid)) echo "FAIL 3\n";
-if (match_ip('241.212.11.42', $valid)) echo "FAIL 4\n";
+if (IPv4_to_GeoIP('192.168.0.1') != 3232235521)                      echo "FAIL 1\n";
+if (GeoIP_to_IPv4(IPv4_to_GeoIP('192.168.0.1')) != '192.168.0.1')    echo "FAIL 2\n";
+if (!match_ip('240.212.11.42', $allowed))                            echo "FAIL 3\n";
+if (match_ip('241.212.11.42', $allowed))                             echo "FAIL 4\n";
+if (match_ip('240.212.11.42.1', $allowed))                           echo "FAIL 5\n";
+if (match_ip('111.111.111.111/8', $allowed))                         echo "FAIL 6\n";
+if (match_ip('300.111.111.111', $allowed))                           echo "FAIL 7\n";
 
 
 $valid_urls = array(

@@ -83,9 +83,11 @@ function match_ip($ip, $matches)
                 $hi = $lo+bindec('1'.str_repeat('0', 32-$a[1])) - 1;
                 //echo "lo: ".GeoIP_to_IPv4($lo)."   (".$lo.")\n";
                 //echo "hi: ".GeoIP_to_IPv4($hi)."   (".$hi.")\n";
-                if ($ip <= $hi) return true;
+                if ($ip <= $hi)
+                    return true;
             }
-        } else if ($ip == IPv4_to_GeoIP($chk)) return true;
+        } else if ($ip == IPv4_to_GeoIP($chk))
+            return true;
     }
 
     return false;
