@@ -27,8 +27,9 @@ class XmlDocumentHandler extends CoreBase
     private $design_foot;
     private $enable_design   = true;
     private $enable_headers  = true;         ///< send http headers?
-    private $enable_profiler = false;        ///< embed page profiler?
-    private $allow_frames    = false;        ///< allow this document to be framed using <frame> or <iframe> ?
+    private $enable_profiler        = false; ///< embed page profiler?
+    private $allow_internal_framing = false; ///< allow this document to be framed using <frame> or <iframe> from same origin
+    private $allow_external_framing = false; ///< allow this document to be framed by any origin
     private $cache_duration  = 0;            ///< seconds to allow browser client to cache this result
     private $mimetype;
     private $Url;                            ///< Url object
@@ -185,7 +186,8 @@ class XmlDocumentHandler extends CoreBase
     function designHead($n) { $this->design_head = $n; }
     function designFoot($n) { $this->design_foot = $n; }
 
-    function allowFrames($b) { $this->allow_frames = $b; }
+    function internalFraming($b) { $this->allow_internal_framing = $b; }
+    function externalFraming($b) { $this->allow_external_framing = $b; }
 
     /** Disables automatic render of XhtmlHeader, designHead & designFoot */
     function disableDesign() { $this->enable_design = false; }
@@ -231,7 +233,8 @@ class XmlDocumentHandler extends CoreBase
         // IE8, Fiefox 3.6: "Clickjacking Defense" (XSS prevention), Forbids this document to be embedded in a frame from
         // an external source, see https://developer.mozilla.org/en/the_x-frame-options_response_header
         // and http://blogs.msdn.com/b/ie/archive/2009/01/27/ie8-security-part-vii-clickjacking-defenses.aspx
-        header('X-Frame-Options: '.($this->allow_frames ? 'SAMEORIGIN' : 'DENY') );
+        if (!$this->allow_external_framing)
+            header('X-Frame-Options: '.($this->allow_internal_framing ? 'SAMEORIGIN' : 'DENY') );
 
         // IE8: "XSS Filter"
         // see http://blogs.msdn.com/b/ie/archive/2008/07/01/ie8-security-part-iv-the-xss-filter.aspx
