@@ -13,7 +13,8 @@ namespace cd;
 
 require_once('input_coordinates.php'); // for getDistanceWGS84()
 
-define('COORD_EXACT',      1);
+define('COORD_EXACT',      1);  // TODO: deprecate this name for COORD_COORDINATE
+define('COORD_COORDINATE', 1);  ///< an exact coordinate on Earth
 
 define('COORD_CONTINENT',  10);
 define('COORD_REGION',     11);
@@ -96,6 +97,7 @@ class Coordinate
 
     public static function store($obj)
     {
+        $obj->time_saved = sql_datetime( time() );
         return SqlObject::store($obj, self::$tbl_name, 'id');
     }
 
