@@ -12,20 +12,32 @@ namespace cd;
 require_once('CoreBase.php');
 require_once('network.php');   // for get_protocol()
 
+class XhtmlMenuItem
+{
+    var $title;
+    var $link;
+    var $style;
+}
+
 class XhtmlMenu extends CoreBase
 {
     private $items       = array();
-    private $css_all     = '';
-    private $css_current = '';
+    private $css_all     = '';   ///< css for whole menu
+    private $css_current = '';   ///< css for current item (hover)
 
     public function add($title, $link, $style = '')
     {
-        $this->items[] = array('title'=>$title, 'link'=>relurl($link), 'style'=>$style);
+        $i = new XhtmlMenuItem();
+        $i->title = $title;
+        $i->link = $link;
+        $i->style = $style;
+        $this->items[] = $i;
     }
 
     public function spacer()
     {
-        $this->items[] = array();
+        $i = new XhtmlMenuItem();
+        $this->items[] = $i;
     }
 
     function setCss($class, $current = '')
@@ -42,22 +54,23 @@ class XhtmlMenu extends CoreBase
 
         foreach ($this->items as $item)
         {
-            if (!$item) {
+            if (!$item->title) {
+                // spacer
                 $res .= '<li>&nbsp;</li>';
                 continue;
             }
 
-            if ($this->css_current && $item['link'] == $cur)
+            if ($this->css_current && $item->link == $cur)
                 $res .= '<li class="'.$this->css_current.'"';
             else
                 $res .= '<li';
 
-            $res .= ($item['style'] ? ' style="'.$item['style'].'"' : '').'>';
+            $res .= ($item->style ? ' style="'.$item->style.'"' : '').'>';
 
-            if ($item['link'])
-                $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title'], ENT_QUOTES, 'UTF-8').'</a>';
+            if ($item->link)
+                $res .= '<a href="'.$item->link.'">'.htmlentities($item->title, ENT_QUOTES, 'UTF-8').'</a>';
             else
-                $res .= $item['title'];
+                $res .= $item->title;
 
             $res .= '</li>';
         }
