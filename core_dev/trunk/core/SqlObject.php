@@ -310,7 +310,7 @@ class SqlObject
         }
 
         if (!is_numeric($obj->$field_name))
-            throw new \Exception ('bad data'. $obj->$field_name);
+            throw new \Exception ('bad data: '. $obj->$field_name);
 
         $reflect = self::reflectQuery($obj, $field_name);
 

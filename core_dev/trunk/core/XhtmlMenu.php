@@ -29,7 +29,7 @@ class XhtmlMenu extends CoreBase
     {
         $i = new XhtmlMenuItem();
         $i->title = $title;
-        $i->link = $link;
+        $i->link = relurl($link);
         $i->style = $style;
         $this->items[] = $i;
     }
