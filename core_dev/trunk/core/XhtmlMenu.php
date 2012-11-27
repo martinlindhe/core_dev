@@ -18,9 +18,9 @@ class XhtmlMenu extends CoreBase
     private $css_all     = '';
     private $css_current = '';
 
-    public function add($title, $link)
+    public function add($title, $link, $style = '')
     {
-        $this->items[] = array('title'=>$title, 'link'=>relurl($link));
+        $this->items[] = array('title'=>$title, 'link'=>relurl($link), 'style'=>$style);
     }
 
     public function spacer()
@@ -48,9 +48,11 @@ class XhtmlMenu extends CoreBase
             }
 
             if ($this->css_current && $item['link'] == $cur)
-                $res .= '<li class="'.$this->css_current.'">';
+                $res .= '<li class="'.$this->css_current.'"';
             else
-                $res .= '<li>';
+                $res .= '<li';
+
+            $res .= ($item['style'] ? ' style="'.$item['style'].'"' : '').'>';
 
             if ($item['link'])
                 $res .= '<a href="'.$item['link'].'">'.htmlentities($item['title'], ENT_QUOTES, 'UTF-8').'</a>';
