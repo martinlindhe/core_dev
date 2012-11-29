@@ -25,8 +25,9 @@ class XmlDocumentHandler extends CoreBase
 
     private $design_head;
     private $design_foot;
-    private $enable_design   = true;
-    private $enable_headers  = true;         ///< send http headers?
+    private $enable_design        = true;
+    private $enable_html_headers  = true; ///< send HTML headers?
+    private $enable_http_headers  = true;         ///< send http headers?
     private $enable_profiler        = false; ///< embed page profiler?
     private $allow_internal_framing = false; ///< allow this document to be framed using <frame> or <iframe> from same origin
     private $allow_external_framing = false; ///< allow this document to be framed by any origin
@@ -183,8 +184,8 @@ class XmlDocumentHandler extends CoreBase
     /**
      * Specifies php scripts to include for additional design
      */
-    function designHead($n) { $this->design_head = $n; }
-    function designFoot($n) { $this->design_foot = $n; }
+    function designHead($s) { $this->design_head = $s; }
+    function designFoot($s) { $this->design_foot = $s; }
 
     function internalFraming($b) { $this->allow_internal_framing = $b; }
     function externalFraming($b) { $this->allow_external_framing = $b; }
@@ -192,8 +193,12 @@ class XmlDocumentHandler extends CoreBase
     /** Disables automatic render of XhtmlHeader, designHead & designFoot */
     function disableDesign() { $this->enable_design = false; }
 
-    /** Disables headers being set automatically */
-    function disableHeaders() { $this->enable_headers = false; }
+    /** Disables HTTP headers being set automatically */
+    function disableHeaders() { $this->enable_http_headers = false; }    /// TODO: deprecate, use disableHttpHeaders()
+    function disableHttpHeaders() { $this->enable_http_headers = false; }
+
+    /** Disables HTML headers being set automatically */
+    function disableHtmlHeaders() { $this->enable_html_headers = false; }
 
     function enableProfiler($b = true) { $this->enable_profiler = $b; }
 
@@ -208,7 +213,7 @@ class XmlDocumentHandler extends CoreBase
         if (!$this->mimetype)
             $this->mimetype = 'text/html; charset=utf-8';
 
-        if (!$this->enable_headers)
+        if (!$this->enable_http_headers)
             return;
 
         header('Content-Type: '.$this->mimetype);
@@ -338,7 +343,7 @@ class XmlDocumentHandler extends CoreBase
             );
         }
 
-        if ($this->enable_design)
+        if ($this->enable_html_headers)
         {
             switch ($this->html_mode) {
             case 'xhtml': // XHTML 1.0 Transitional
