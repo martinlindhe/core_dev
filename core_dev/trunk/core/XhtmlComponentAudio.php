@@ -45,7 +45,7 @@ class XhtmlComponentAudio extends XhtmlComponent
     {
         //IE9 fix: without the css snippet, it will not display the embedded player
         $res =
-        '<audio controls="controls" preload="'.$this->preload.' style="height:32px;width:100%;">';
+        '<audio controls="controls" preload="'.$this->preload.'" style="height:32px;width:100%;">';
 
         foreach ($this->components as $c)
             $res .= '<source src="'.$c->src.'"'.($c->mimetype ? ' type="'.$c->mimetype.'"' : '').'/>';
