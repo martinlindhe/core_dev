@@ -40,4 +40,7 @@ if (strip_html($s) != 'hello world')                  echo "FAIL 40\n";
 
 if (strip_html('hi<!--comment--> bye') != 'hi bye')   echo "FAIL 41\n";
 
+$s = '<!--[if gte mso 9]><x>val</x><![endif]--> res <br/>';
+if (strip_html($s) != ' res ')                        echo "FAIL 42\n";
+
 ?>

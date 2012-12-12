@@ -36,9 +36,9 @@ function htmlchars_decode($s)
 function strip_html($s)
 {
     $search = array(
+    '<!--(.*?)-->', // strip multi-line comments including CDATA
     '@<(script|style)[^>]*?>.*?</(script|style)>@si', // javascript, css
     '@<[\/\!]*?[^<>]*?>@si',                          // HTML tags
-    '@<![\s\S]*?--[ \t\n\r]*>@',    // strip multi-line comments including CDATA
     );
 
     $s = preg_replace($search, '', $s);
