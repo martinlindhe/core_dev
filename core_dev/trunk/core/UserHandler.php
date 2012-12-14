@@ -95,6 +95,11 @@ class UserHandler
             return false;
         }
 
+        if (Password::isForbidden($pwd1)) {
+            $error->add('Your password is a very weak one and is forbidden to use');
+            return false;
+        }
+
         $user_id = self::create($username, $pwd1);
 
         if (!$user_id) {
@@ -123,10 +128,10 @@ class UserHandler
         if (!$o->id)
             return false;
 
-        $o->password = Password::encrypt($o->id, $password, $algo);
-        User::store($o);
-
         $session = SessionHandler::getInstance();
+
+        $o->password = Password::encrypt($o->id, $session->getEncryptKey(), $password, $algo);
+        User::store($o);
 
         dp($session->getUsername().' created user '.$username.' ('.$o->id.') of type '.$type);
         return $o->id;
@@ -134,8 +139,11 @@ class UserHandler
 
     public static function isOnline($id)
     {
-        $session = SessionHandler::getInstance();
         $u = User::get($id);
+        if (!$u)
+            throw new \Exception ('wat');
+
+        $session = SessionHandler::getInstance();
 
         if (ts($u->time_last_active) > time() - $session->online_timeout)
             return true;
@@ -167,7 +175,9 @@ class UserHandler
         if (!$u)
             throw new \Exception ('wat');
 
-        $u->password = Password::encrypt($id, $pwd, $algo);
+        $session = SessionHandler::getInstance();
+
+        $u->password = Password::encrypt($id, $session->getEncryptKey(), $pwd, $algo);
         User::store($u);
         return true;
     }

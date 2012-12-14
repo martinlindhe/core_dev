@@ -143,7 +143,9 @@ class User
             $pwd2 = $row['password'];
         }
 
-        if (!Password::encrypt($id, $pwd, $algo) == $pwd2)
+        $session = SessionHandler::getInstance();
+
+        if (!Password::encrypt($id, $session->getEncryptKey(), $pwd, $algo) == $pwd2)
             return false;
 
         return SqlObject::loadObject($row, __CLASS__);
