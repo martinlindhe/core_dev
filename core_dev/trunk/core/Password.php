@@ -2,18 +2,17 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
  */
+
+// STATUS: ok
 
 namespace cd;
 
 class Password
 {
-    public static function encrypt($salt1, $pwd, $algo)
+    public static function encrypt($salt1, $salt2, $pwd, $algo)
     {
-        $session = SessionHandler::getInstance();
-        $salt2 = $session->getEncryptKey();
-
         switch ($algo) {
         case 'sha1':
         case 'sha224':
@@ -24,6 +23,21 @@ class Password
         default:
             throw new \Exception ('unknown method: '.$method);
         }
+    }
+
+    /** @return bool */
+    public static function isForbidden($s)
+    {
+        $chk_file = dirname(__FILE__).'/Password.forbidden.txt';
+        if (!file_exists($chk_file))
+            throw new \Exception ('file not found '.$chk_file);
+
+        $data = file_get_contents($chk_file);
+        $data = trim($data);
+
+        $arr = explode("\n", $data);
+
+        return in_array(strtolower($s), $arr);
     }
 
 }
