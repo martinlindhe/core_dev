@@ -47,4 +47,7 @@ $s = '<!--[if gte mso 9]><w>0</w><![endif]
 -->';
 if (strip_html($s) != '')                             echo "FAIL 43\n";
 
+$s = '<!-- c1 -->SHOULD_SHOW<!-- c2 -->ALWAYS_SHOWS';
+if (strip_html($s) != 'SHOULD_SHOWALWAYS_SHOWS')      echo "FAIL 44\n";
+
 ?>

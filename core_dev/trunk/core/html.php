@@ -36,7 +36,14 @@ function htmlchars_decode($s)
 function strip_html($s)
 {
     $search = array(
-    '@<!--(.*)-->@si', // strip multi-line comments including CDATA
+    // strip multi-line comments including CDATA
+    '@<!--'.               // "<!--"
+    '(?:'.                 // non-capturing group:
+      '(?!-->)'.           // a position not followed by "-->"
+      '.'.                 // eat the following char, it's part of the comment
+    ')*'.                  // end non-capturing group, repeat
+    '-->@si',              // "-->"
+
     '@<(script|style)[^>]*?>.*?</(script|style)>@si', // javascript, css
     '@<[\/\!]*?[^<>]*?>@si',                          // HTML tags
     );
