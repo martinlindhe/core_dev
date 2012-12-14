@@ -447,7 +447,9 @@ class HttpClient
         if (!$charset)
             $charset = 'Windows-1252'; // assume undefined content type is windows stuff
 
-        if (strtoupper($charset) != 'UTF-8')
+        if (strtoupper($charset) == 'UTF-8')
+            $this->body = $body;
+        else
             $this->body = mb_convert_encoding($body, 'UTF-8', $charset);
 
         $auth = $this->getResponseHeader('WWW-Authenticate');
