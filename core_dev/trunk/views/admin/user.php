@@ -51,6 +51,11 @@ if ($session->id != $this->owner && isset($_GET['remove'])) {
 }
 
 if (!empty($_POST['change_pwd'])) {
+    if (Password::isForbidden($_POST['change_pwd'])) {
+        echo '<div class="item">Weak password was chosen, password has not been changed!</div>';
+        return;
+    }
+
     UserHandler::setPassword($user->id, $_POST['change_pwd']);
     echo '<div class="item">Password changed!</div>';
     return;

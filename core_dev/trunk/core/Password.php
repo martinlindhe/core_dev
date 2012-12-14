@@ -37,7 +37,9 @@ class Password
 
         $arr = explode("\n", $data);
 
-        return in_array(strtolower($s), $arr);
+        $s = trim(strtolower($s));
+
+        return in_array($s, $arr);
     }
 
 }
