@@ -83,7 +83,7 @@ class HttpClient
         return $this->get($params);
     }
 
-//    function getAllResponseHeaders() { return $this->response_headers);
+    function getAllResponseHeaders() { return $this->response_headers; }
 
     /**
      * @return value of specified response header name. if more than one value is set, the first is returned
@@ -441,11 +441,36 @@ class HttpClient
             throw new \Exception ('unhandled content-encoding: '.$encoding);
         }
 
-        $this->body = $body;
+        $content_type =  $this->getResponseHeader('Content-Type');
+        $charset = self::parseResponseHeader('charset', $content_type);
 
-        $auth = $this->getResponseHeader('www-authenticate');
+        if (!$charset)
+            $charset = 'Windows-1252'; // assume undefined content type is windows stuff
+
+        if (strtoupper($charset) != 'UTF-8')
+            $this->body = mb_convert_encoding($body, 'UTF-8', $charset);
+
+        $auth = $this->getResponseHeader('WWW-Authenticate');
         if ($auth)
             $this->setAuthMethod($auth);
+    }
+
+    /**
+     * Parses and returns a section's given value of a HTTP response header
+     */
+    public static function parseResponseHeader($section, $s)
+    {
+        $x = explode(';', $s);
+
+        foreach ($x as $part) {
+            $y = explode('=', $part);
+            if (count($y) == 2) {
+                if (strtolower(trim($y[0])) == strtolower($section))
+                    return $y[1];
+            }
+        }
+
+        return false;
     }
 
 }

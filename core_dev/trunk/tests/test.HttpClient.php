@@ -8,6 +8,15 @@ require_once('core.php');
 require_once('HttpClient.php');
 
 
+$content_type = 'text/html; charset=utf-8';
+$charset = HttpClient::parseResponseHeader('charset', $content_type);
+if ($charset != 'utf-8')      echo "FAIL 1\n";
+
+
+
+
+
+
 $http = new HttpClient('http://martin-rr.unicorn.se/');
 $http->setDebug();
 $http->addRequestHeader('Accept-Language: sv');
@@ -28,9 +37,17 @@ die;
 
 $http = new HttpClient('http://www.google.com/');
 $body = $http->getBody();
-if ($http->getResponseHeader('content-type') != 'text/html; charset=UTF-8') echo "FAIL 1\n";
-if ($http->getStatus() != 302)                                      echo "FAIL 2: ".$http->getStatus()."\n";
+if ($http->getResponseHeader('content-type') != 'text/html; charset=UTF-8') echo "FAIL 50\n";
+if ($http->getStatus() != 302)                                              echo "FAIL 51: ".$http->getStatus()."\n";
 
 // see url validation tests in test.network.php
+
+
+
+
+
+
+
+
 
 ?>
