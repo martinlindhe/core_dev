@@ -1,0 +1,5 @@
+# extracted from http://www.scb.se/Pages/ProductTables____13001.aspx
+# "Befolkning i tätorter 1960-2010"
+# http://www.scb.se/Statistik/MI/MI0810/2010A01Z/05_Tatorter2010_befolkning_1960_2010.xls
+#
+# at 2012.12.23
