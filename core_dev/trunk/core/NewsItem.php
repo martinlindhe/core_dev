@@ -38,6 +38,7 @@ class NewsItem extends CoreBase
     function getTimestamp() { return $this->Timestamp; }
 
     function getMedia() { return $this->media; }
+    function getGuid() { return $this->guid; }
 
     function getUrl() { return $this->Url->get(); }
     function getDuration() { return $this->Duration->get(); }
