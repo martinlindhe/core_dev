@@ -73,6 +73,11 @@ d($i);die;
      */
     function load($data)
     {
+        if (is_array($data)) {
+            $this->addItems( $data);
+            return;
+        }
+
         if (is_url($data)) {
             $http = new HttpClient($data);
             if ($this->getDebug()) $http->setDebug();
