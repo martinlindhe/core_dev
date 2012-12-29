@@ -48,7 +48,7 @@ class RssWriter extends FeedWriter
             $res .=
             '<item>'.
                 '<title><![CDATA['.$item->getTitle().']]></title>'.
-                '<link>'.$item->getUrl().'</link>'.
+                '<link>'.htmlspecialchars( $item->getUrl() ).'</link>'.
                 '<description><![CDATA['.$item->desc.']]></description>'.
                 '<pubDate>'.$item->getTimestamp()->getRFC822().'</pubDate>'.
                 ($item->guid ? '<guid>'.$item->guid.'</guid>' : '').
