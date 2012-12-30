@@ -33,9 +33,9 @@ class RssWriter extends FeedWriter
             '<channel>'.
                 '<title><![CDATA['.$this->title.']]></title>'.
                 '<link>'.htmlspecialchars($this->url).'</link>'.
+                '<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($this->url).'"/>'.
                 '<description><![CDATA['.$this->desc.']]></description>'.
                 ($this->ttl ? '<ttl>'.$this->ttl.'</ttl>' : '').
-                '<atom:link rel="self" type="application/rss+xml" href="'.htmlspecialchars($this->url).'"/>'.
                 ($this->TimeUpdated ? '<lastBuildDate>'.$this->TimeUpdated->getRFC822().'</lastBuildDate>' : '').
                 '<generator>'.$this->version.'</generator>'."\n";
 

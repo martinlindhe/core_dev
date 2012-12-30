@@ -383,7 +383,7 @@ class HttpClient
 
         $status = array_shift($headers);
         if ($this->debug)
-            echo 'http->get() returned HTTP status '.$status.ln();
+            echo 'http->get( '.$this->Url->get().' ) returned HTTP status '.$status.ln();
 
         switch (substr($status, 0, 9)) {
         case 'HTTP/1.0 ':
