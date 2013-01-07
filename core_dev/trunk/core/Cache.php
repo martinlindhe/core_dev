@@ -9,12 +9,9 @@
  * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
  */
 
-//STATUS: wip
-//PLAN. migrate users over to TempStore, eventually drop Cache class
+//STATUS: FINISH MIGRATION OF ALL USERS TO TempStore. THEN NUKE THIS CLASS!
 
-//TODO: remove isActive(), add isConnected() ??
-//TODO: rename setCacheTime -> setTimeout
-//TODO later: drop 'memcache' extension support
+namespace cd;
 
 //throw new \Exception ('who uses me!');
 
