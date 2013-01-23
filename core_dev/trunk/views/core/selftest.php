@@ -6,6 +6,7 @@
 namespace cd;
 
 $page->disableDesign();
+$page->disableHtmlHeaders();
 $page->setMimeType('text/plain');
 
 $status = 'OK';
