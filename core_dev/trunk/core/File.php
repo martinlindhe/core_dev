@@ -76,7 +76,7 @@ class File
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE type = ?'.
         ' AND time_deleted IS NULL';
-        $list = SqlHandler::getInstance()->pSelect($q, 'i', $type);
+        $list = Sql::pSelect($q, 'i', $type);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
@@ -89,7 +89,7 @@ class File
         ' AND category = ?'.
         ' AND uploader = ?'.
         ' AND time_deleted IS NULL';
-        $list = SqlHandler::getInstance()->pSelect($q, 'iii', $type, $cat, $uploader);
+        $list = Sql::pSelect($q, 'iii', $type, $cat, $uploader);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }

@@ -63,7 +63,17 @@ class HttpClient
         curl_close($this->ch);
     }
 
-    function setDebug($b = true) { $this->debug = $b; }
+    /**
+     * Returns all cookies from last server response
+     */
+    function getCookies() { return $this->cookies; }
+
+    /**
+     * Returns HTTP status code for the last request
+     */
+    function getStatus() { return $this->status_code; }
+
+    function getUrl() { return $this->Url->get(); }
 
     /**
      * Performs a HTTP HEAD request
@@ -113,6 +123,8 @@ class HttpClient
         return false;
     }
 
+    function setDebug($b = true) { $this->debug = $b; }
+
     /**
      * @param $n duration in seconds, or represented as "30s", "2m"
      */
@@ -150,18 +162,6 @@ class HttpClient
 
         return $this->cookies[ $name ];
     } */
-
-    /**
-     * Returns all cookies from last server response
-     */
-    function getCookies() { return $this->cookies; }
-
-    /**
-     * Returns HTTP status code for the last request
-     */
-    function getStatus() { return $this->status_code; }
-
-    function getUrl() { return $this->Url->get(); }
 
     /**
      * @param $s cache time in seconds or as string "4h", max 2592000 (30 days)

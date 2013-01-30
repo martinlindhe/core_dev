@@ -7,11 +7,15 @@ namespace cd;
 
 class Rating
 {
+     protected static $tbl_name = 'tblRatings';
+
     /** Count current average of the rating */
     public static function getAverage($type, $id)
     {
-        $q = 'SELECT AVG(value) FROM tblRatings WHERE type = ? AND owner = ?';
-        return SqlHandler::getInstance()->pSelectItem($q, 'ii', $type, $id);
+        $q =
+        'SELECT AVG(value) FROM '.self::$tbl_name.
+        ' WHERE type = ? AND owner = ?';
+        return Sql::pSelectItem($q, 'ii', $type, $id);
     }
 
     /** Get statistics for specified poll */
@@ -19,7 +23,8 @@ class Rating
     {
         $q  =
         'SELECT t1.categoryName, '.
-            '(SELECT COUNT(*) FROM tblRatings WHERE type = ? AND value = t1.categoryId) AS cnt'.
+            '(SELECT COUNT(*) FROM '.self::$tbl_name.
+            ' WHERE type = ? AND value = t1.categoryId) AS cnt'.
         ' FROM tblCategories AS t1'.
         ' WHERE t1.ownerId = ?';
         return Sql::pSelectMapped($q, 'ii', $type, $id);
@@ -32,7 +37,9 @@ class Rating
         if (!$session->id)
             return true;
 
-        $q = 'SELECT owner FROM tblRatings WHERE type = ? AND userId = ? AND owner = ?';
+        $q =
+        'SELECT owner FROM '.self::$tbl_name.
+        ' WHERE type = ? AND userId = ? AND owner = ?';
         if (Sql::pSelectItem($q, 'iii', $type, $session->id, $id))
             return true;
 
@@ -49,7 +56,9 @@ class Rating
         if (self::hasAnswered($type, $id))
             return false;
 
-        $q = 'INSERT INTO tblRatings SET type = ?, owner = ?, userId = ?, value = ?, timestamp = NOW()';
+        $q =
+        'INSERT INTO '.self::$tbl_name.
+        ' SET type = ?, owner = ?, userId = ?, value = ?, timestamp = NOW()';
         Sql::pInsert($q, 'iiii', $type, $id, $session->id, $value);
         return true;
     }
