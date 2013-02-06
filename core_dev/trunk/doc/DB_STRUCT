@@ -208,3 +208,13 @@ tblLike
     user    who likes the object?
     time
 
+
+tblWiki
+    id
+    name
+    text
+    time_created
+    time_edited
+    edited_by       tblUsers.id
+    locked_by
+    time_locked
