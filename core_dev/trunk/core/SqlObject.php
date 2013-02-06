@@ -28,6 +28,9 @@ class SqlObject
 {
     public static function stringForm($s)
     {
+        if ($s && !is_string($s) && !is_numeric($s))
+            throw new \Exception ('not a string: '.$s);
+
         if (substr($s, 0, 1) == '0')
             return 's';
 
@@ -40,16 +43,15 @@ class SqlObject
     }
 
     /**
-     * Creates one object $objname
+     * Creates one object $classname
      * @param $q a sql select query resulting in one row, or a indexed array
      * @param $classname name of class object to load rows into
      */
     static function loadObject($q, $classname)
     {
         if (!$q) {
+            // return new $classname();   // TODO-LATER default to always return a object of type $classname
             return false;
-//            return new $classname();
-//            throw new \Exception ('no query');
         }
 
         $list = is_array($q) ? $q : Sql::pSelect($q);
@@ -231,7 +233,7 @@ class SqlObject
         {
 //            throw new \Exception ('obj fieldname: '.$obj->$field_name.' tbl '.$tblname);
 
-            sqlObject::updateId($obj, $tblname, $field_name);
+            SqlObject::updateId($obj, $tblname, $field_name);
             return $obj->$field_name;
         }
 
@@ -253,10 +255,7 @@ class SqlObject
         $q =
          'SELECT * FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
-
         $row = Sql::pSelectRow($q, $form, $val);
-        if (!$row)
-            return false;
 
         return SqlObject::loadObject($row, $classname);
     }
@@ -309,9 +308,6 @@ class SqlObject
             throw new \Exception ('eehh');
         }
 
-        if (!is_numeric($obj->$field_name))
-            throw new \Exception ('bad data: '. $obj->$field_name);
-
         $reflect = self::reflectQuery($obj, $field_name);
 
         $q =
@@ -319,7 +315,7 @@ class SqlObject
         ' SET '.implode(', ', $reflect->cols).
         ' WHERE '.$field_name.' = ?';
 
-        $reflect->str .= 'i';
+        $reflect->str .= (is_numeric($obj->$field_name) ? 'i' : 's');
         $reflect->vals[] = $obj->$field_name;
 
         return Sql::pUpdate($q, $reflect->str, $reflect->vals);
