@@ -3,7 +3,7 @@
 namespace cd;
 
 require_once('Wiki.php');
-require_once('atom_revisions.php');  // TODO: rewrite into class, wiki is only user (???)
+require_once('Revision.php');
 
 $header->embedCss(
 '.wiki {'.
@@ -96,14 +96,22 @@ case 'edit':
             return false;
 
         if ($wiki->id) {
-            addRevision(REVISIONS_WIKI, $wiki->id, $wiki->text, $wiki->time_edited, $wiki->edited_by, REV_CAT_TEXT_CHANGED);
+
+            $rev = new Revision();
+            $rev->type         = WIKI;
+            $rev->owner        = $wiki->id;
+            $rev->value        = $wiki->text;
+            $rev->time_created = $wiki->time_edited;
+            $rev->created_by   = $wiki->edited_by;
+            $rev->event        = EVENT_TEXT_CHANGED;
+            Revision::store($rev);
 
             $wiki->text = $p['text'];
             $wiki->edited_by = $session->id;
             $wiki->time_edited = sql_datetime( time() );
             $wiki->revision++;
             Wiki::store($wiki);
-            return true;
+            redir('u/wiki/show/'.$wiki->name);
         }
 
         $wiki->name = $name;
@@ -111,7 +119,7 @@ case 'edit':
         $wiki->edited_by = $session->id;
         $wiki->time_edited = sql_datetime( time() );
         Wiki::store($wiki);
-        return true;
+        redir('u/wiki/show/'.$wiki->name);
     }
 
     $wiki = Wiki::getByName($this->child);
@@ -213,7 +221,54 @@ case 'history':
         echo nl2br(htmlentities($wiki->text, ENT_COMPAT, 'UTF-8'));
         echo '</div>';
 
-        showRevisions(REVISIONS_WIKI, $wiki->id, $wiki->name);
+
+        echo 'History of article '.$wiki->name.'<br/><br/>';
+
+        $tot_cnt = Revision::getCount(WIKI, $wiki->id);
+
+        $list = Revision::getAll(WIKI, $wiki->id);
+
+        if (!$list) {
+            echo '<b>There is no edit history of this wiki in the database.</b><br/>';
+            return;
+        }
+
+        foreach ($list as $row) {
+            echo formatTime($row->time_created).': ';
+
+            $creator = User::get($row->created_by);
+            switch ($row->event) {
+            case EVENT_TEXT_CHANGED:
+                echo '<a href="#" onclick="return toggle_el(\'layer_history'.$row->id.'\')">';
+                echo t('Edited by').' '.$creator->name. ' ('.strlen($row->value).' '.t('characters').')</a><br/>';
+                echo '<div id="layer_history'.$row->id.'" class="revision_entry" style="display: none;">';
+                echo nl2br(htmlentities($row->value, ENT_COMPAT, 'UTF-8'));
+                echo '</div>';
+                break;
+
+            case EVENT_LOCKED:
+                echo '<img src="'.coredev_webroot().'gfx/icon_locked.png" width="16" height="16" alt="Locked"/>';
+                echo ' Locked by '.$creator->name.'<br/>';
+                break;
+
+            case EVENT_UNLOCKED:
+                echo '<img src="'.coredev_webroot().'gfx/icon_unlocked.png" width="16" height="16" alt="Unlocked"/>';
+                echo ' Unlocked by '.$creator->name.'<br/>';
+                break;
+
+            case EVENT_FILE_UPLOADED:
+                echo ' File uploaded by '.$creator->name.'<br/>';
+                break;
+
+            case EVENT_FILE_DELETED:
+                echo ' File deleted by '.$creator->name.'<br/>';
+                break;
+
+            default:
+                throw new \Exception ('unknown revision event '.$row->event);
+            }
+        }
+
     } else {
         echo 'There is no history for this wiki.';
     }

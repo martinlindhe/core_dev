@@ -219,3 +219,13 @@ tblWiki
     locked_by
     time_locked
     revision        counter
+
+
+tblRevision
+    id
+    type            eg. WIKI
+    owner           depending on type, eg tblWiki.id
+    value           depending on type
+    created_by
+    time_created
+    event           kind of event that occured
