@@ -218,3 +218,4 @@ tblWiki
     edited_by       tblUsers.id
     locked_by
     time_locked
+    revision        counter

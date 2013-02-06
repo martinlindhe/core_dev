@@ -9,7 +9,6 @@
 
 namespace cd;
 
-require_once('atom_revisions.php');
 require_once('WikiViewer.php');
 
 class Wiki
@@ -22,6 +21,7 @@ class Wiki
     var $edited_by;         ///< tblUsers.id
     var $locked_by;
     var $time_locked;
+    var $revision;          ///< counter
 
     protected static $tbl_name = 'tblWiki';
 

@@ -4,7 +4,7 @@
  *
  * Reads database columns into properties of objects
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2013 <martin@startwars.org>
  */
 
 //STATUS: wip

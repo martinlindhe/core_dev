@@ -3,15 +3,73 @@
 namespace cd;
 
 require_once('Wiki.php');
+require_once('atom_revisions.php');  // TODO: rewrite into class, wiki is only user (???)
+
+$header->embedCss(
+'.wiki {'.
+    'font-size: 14px;'.
+'}'.
+'.wiki_body {'.
+    'padding: 10px;'.
+    'background-color: #F0F0F0;'.
+    'color: #000;'.
+    'border-width: 1px;'.
+    'border-left-style: solid;'.
+    'border-right-style: solid;'.
+    'border-bottom-style: solid;'.
+    'border-top-style: solid;'.
+'}'.
+'.wiki_locked {'.
+    'padding: 5px;'.
+    'padding-left: 25px;'.
+    'font-size: 20px;'.
+    'background: #ee99aa url("../../gfx/icon_locked.png") no-repeat;'.
+    'background-position: 5px 50%;'.
+'}'.
+'.wiki_menu {'.
+    'font-size: 12px;'.
+    'margin-top: 0;'.
+    'padding-left: 0;'.
+'}'.
+'.wiki_menu li {'.
+    'margin-left: 2px;'.
+    'margin-right: 2px;'.
+    'display: inline;'.
+    'border: 1px #000 solid;'.
+    'background-color: #ddd;'.
+    'padding: 4px;'.
+'}'.
+'.wiki_menu li a {'.
+    'color: #000;'.
+    'text-decoration: none;'.
+'}'.
+'.wiki_menu li:hover {'.
+    'background-color: #fff;'.
+'}');
+
 
 switch ($this->owner) {
 case 'show':
     // child = article name
     echo '<h2>Showing wiki article '.$this->child.'</h2>';
-    echo WikiViewer::render($this->child);
+
+    $menu = new XhtmlMenu();
+    $menu->setCss('wiki_menu');
+    $menu->add(t('Article'), 'u/wiki/show/'.$this->child);
 
     if ($session->id)
-        echo ahref('u/wiki/edit/'.$this->child, 'Edit article');
+        $menu->add(t('Edit'),    'u/wiki/edit/'.$this->child);
+
+    $menu->add(t('History'), 'u/wiki/history/'.$this->child);
+
+    echo $menu->render();
+
+    echo
+    '<div class="wiki">'.
+    '<div class="wiki_body">'.
+    WikiViewer::render($this->child).
+    '</div>'.
+    '</div>';
     break;
 
 case 'edit':
@@ -43,13 +101,7 @@ case 'edit':
             $wiki->text = $p['text'];
             $wiki->edited_by = $session->id;
             $wiki->time_edited = sql_datetime( time() );
-/*
-            $q =
-            'UPDATE '.self::$tbl_name.
-            ' SET msg="'.$db->escape($p['text']).'",editorId='.$session->id.',revision=revision+1,timeSaved=NOW()'.
-            ' WHERE wikiName="'.$db->escape($name).'"';
-*/
-//            $db->update($q);
+            $wiki->revision++;
             Wiki::store($wiki);
             return true;
         }
@@ -59,12 +111,6 @@ case 'edit':
         $wiki->edited_by = $session->id;
         $wiki->time_edited = sql_datetime( time() );
         Wiki::store($wiki);
-/*
-        $q =
-        'INSERT INTO '.self::$tbl_name.
-        ' SET wikiName="'.$db->escape($name).'",msg="'.$db->escape($p['text']).'",editorId='.$session->id.',revision=1,timeSaved=NOW()';
-        $db->insert($q);
-*/
         return true;
     }
 
@@ -112,6 +158,20 @@ case 'edit':
     }
 */
 
+/*
+        if ($session->isAdmin && !empty($_GET['wikilock'])) {
+            $q = 'UPDATE tblWiki SET lockerId='.$session->id.',timeLocked=NOW() WHERE wikiId='.$this->id;
+            $db->update($q);
+            $this->lockerId = $session->id;
+            addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been locked', now(), $session->id, REV_CAT_LOCKED);
+        } else if ($session->isAdmin && isset($_GET['wikilock'])) {
+            $q = 'UPDATE tblWiki SET lockerId=0 WHERE wikiId='.$this->id;
+            $db->update($q);
+            $this->lockerId = 0;
+            addRevision(REVISIONS_WIKI, $this->id, 'The wiki has been unlocked', now(), $session->id, REV_CAT_UNLOCKED);
+        }
+*/
+
     $form->addSubmit('Save');
     $form->setHandler('editWikiSubmit');
     echo $form->render();
@@ -123,9 +183,42 @@ case 'edit':
         echo t('never');
 
     echo '</div>';
+    break;
 
+case 'history':
+    // child = article name
+    echo '<h2>History for wiki '.$this->child.'</h2>';
 
+    $wiki = Wiki::getByName($this->child);
 
+    $menu = new XhtmlMenu();
+    $menu->setCss('wiki_menu');
+    $menu->add(t('Article'), 'u/wiki/show/'.$this->child);
+    $menu->add(t('Edit'),    'u/wiki/edit/'.$this->child);
+    $menu->add(t('History'), 'u/wiki/history/'.$this->child);
+
+    echo '<div class="wiki">';
+    echo $menu->render();
+
+    if ($wiki->id) {
+        echo t('Current version').':<br/>';
+
+        echo
+        '<b><a href="#" onclick="return toggle_el(\'layer_history_current\')">'.
+        t('Edited').' '.formatTime($wiki->time_edited).' '.
+        t('by').' '.User::get($wiki->edited_by)->name.' ('.strlen($wiki->text).' '.
+        t('characters').')</a></b><br/>';
+
+        echo '<div id="layer_history_current" class="revision_entry">';
+        echo nl2br(htmlentities($wiki->text, ENT_COMPAT, 'UTF-8'));
+        echo '</div>';
+
+        showRevisions(REVISIONS_WIKI, $wiki->id, $wiki->name);
+    } else {
+        echo 'There is no history for this wiki.';
+    }
+
+    echo '</div>';
     break;
 
 default:
