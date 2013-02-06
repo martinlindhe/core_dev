@@ -11,26 +11,6 @@
 //      finish $use_db_cache by respecting max-age parameter (currently ignored,
 //      only first version of page is ever fetched)
 
-//TODO: implement is_mediawiki_url()
-//     examples: http://sv.wiktionary.org/wiki/bestick
-//               http://en.wikipedia.org/wiki/Cutlery
-//       regexp: http(s)://lang.host.tld/wiki/utf8
-
-/**
-TODO: utf8 5.0 support
-    - currently only "utf8 3.0" strings are handled (due to db backend)
-
-mariadb:
-    * handle 4-byte utf8. mariadb/mysql 5.5 will support this with data type "utf8mb4":
-        http://dev.mysql.com/doc/refman/5.5/en/charset-unicode-utf8mb4.html
-    * some utf8 5.0 (4-byte) sequences i found at got.wikipedia.org (ancient gothic)
-        \xF0\x90\x8C\xB7
-        \xF0\x90\x8C\xBC
-        \xF0\x90\x8D\x86
-
-        http://www.utf8-chartable.de/
-*/
-
 namespace cd;
 
 require_once('HttpClient.php');
@@ -64,7 +44,37 @@ class MediaWikiPage
 
 function is_mediawiki_url($url)
 {
-    return is_url($url);
+    $pattern =
+    '('.
+        '(https?){1}://'.
+//        '([\w+]).'.   // XXX improve check to require 2-3 ASCII letters language code
+        '([en|sv].wikipedia.org/wiki/){1}'.
+        '('.
+            // XXX improve match???
+            '[\w+]'.
+        ')?'.
+    ')i';
+/*
+    $pattern =
+    '('.
+        'https?://'.
+        '([-\w\.]+)+'.
+        '(wikipedia.org/wiki/){1}'.
+        '(/([\w/_\.]*(\?\S+)?)?)+'.
+    ')';
+*/
+
+    if (is_url($url))
+        return true;
+
+// XXX FINISH THE REGEXP!!!
+
+    preg_match($pattern, $url, $matches);
+d($matches);
+    if ($matches && $matches[0] == $url)
+        return true;
+
+    return false;
 }
 
 class MediaWikiClient
