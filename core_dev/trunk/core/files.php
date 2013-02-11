@@ -59,6 +59,7 @@ function file_get_mime_by_suffix($name)
 
     // documents
     case '.txt': return 'text/plain';
+    case '.pdf': return 'application/pdf';
 
     // video
     case '.mov': return 'video/quicktime';
