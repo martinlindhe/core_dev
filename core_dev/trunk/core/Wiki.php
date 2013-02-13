@@ -27,7 +27,10 @@ class Wiki
 
     public static function getByName($name)
     {
-        return SqlObject::getByField($name, self::$tbl_name, __CLASS__, 'name');
+        $o = SqlObject::getByField($name, self::$tbl_name, __CLASS__, 'name');
+        if (!$o)
+            return new Wiki();   // XXX TODO: this is a workaround because becase SqlObjecT::loadObject dont always return a object!!!!
+        return $o;
     }
 
     public static function store($o)

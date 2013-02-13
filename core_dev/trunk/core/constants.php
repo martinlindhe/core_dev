@@ -97,20 +97,50 @@ define('LANG_GER', 9);
 define('LANG_ITA', 10);
 define('LANG_POL', 11);
 define('LANG_SPA', 12);
+define('LANG_JPN', 13);
+define('LANG_CHI', 14);
+define('LANG_KOR', 15);
+define('LANG_HEB', 16);
+define('LANG_YID', 17);
+define('LANG_GRE', 18); // Modern Greek
+define('LANG_HRV', 19);
+define('LANG_CZE', 20);
+define('LANG_LAT', 21);
+define('LANG_RUS', 22);
+define('LANG_PER', 23);
+define('LANG_ARA', 24);
+define('LANG_AFR', 25);
+define('LANG_ICE', 26);
+define('LANG_FAO', 27);
 
 function getLanguages()
 {
     return array(
+    LANG_AFR => 'Afrikaans',
+    LANG_ARA => 'Arabic',
+    LANG_CHI => 'Chinese',
+    LANG_HRV => 'Croatian',
+    LANG_CZE => 'Czech',
     LANG_DAN => 'Danish',
     LANG_DUT => 'Dutch',
     LANG_ENG => 'English',
+    LANG_FAO => 'Faroese',
     LANG_FIN => 'Finnish',
     LANG_FRE => 'Frensh',
     LANG_GER => 'German',
+    LANG_GRE => 'Greek',
+    LANG_HEB => 'Hebrew',
     LANG_HUN => 'Hungarian',
+    LANG_ICE => 'Icelandic',
     LANG_ITA => 'Italian',
+    LANG_HEB => 'Yiddish',
+    LANG_JPN => 'Japanese',
+    LANG_KOR => 'Korean',
+    LANG_LAT => 'Latin',
     LANG_NOR => 'Norwegian',
+    LANG_PER => 'Persian',
     LANG_POL => 'Polish',
+    LANG_RUS => 'Russian',
     LANG_SPA => 'Spanish',
     LANG_SWE => 'Swedish',
     );
