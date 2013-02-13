@@ -84,15 +84,35 @@ function getUserLevelName($n)
     return $x[ $n ];
 }
 
-// ISO 639-2 naming (language names): http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+// ISO 639-2 naming (3-letter language codes): http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
 define('LANG_SWE', 1);
 define('LANG_ENG', 2);
+define('LANG_NOR', 3);
+define('LANG_FIN', 4);
+define('LANG_DAN', 5);
+define('LANG_HUN', 6);
+define('LANG_DUT', 7);
+define('LANG_FRE', 8);
+define('LANG_GER', 9);
+define('LANG_ITA', 10);
+define('LANG_POL', 11);
+define('LANG_SPA', 12);
 
 function getLanguages()
 {
     return array(
-    LANG_SWE => 'Swedish',
+    LANG_DAN => 'Danish',
+    LANG_DUT => 'Dutch',
     LANG_ENG => 'English',
+    LANG_FIN => 'Finnish',
+    LANG_FRE => 'Frensh',
+    LANG_GER => 'German',
+    LANG_HUN => 'Hungarian',
+    LANG_ITA => 'Italian',
+    LANG_NOR => 'Norwegian',
+    LANG_POL => 'Polish',
+    LANG_SPA => 'Spanish',
+    LANG_SWE => 'Swedish',
     );
 }
 

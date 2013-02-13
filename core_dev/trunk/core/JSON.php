@@ -113,7 +113,7 @@ class JSON
         }
 
         if ($e && !$res)
-            throw new \Exception('JSON::decode: '.$e);
+            throw new \Exception('JSON::decode: '.$e.' on input data: '.$data);
 
         return $res;
     }

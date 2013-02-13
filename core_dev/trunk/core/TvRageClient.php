@@ -25,7 +25,7 @@ require_once('TempStore.php');
 require_once('TvShow.php');
 require_once('TvEpisode.php');
 
-class TvRageClient extends \cd\HttpClient
+class TvRageClient extends HttpClient
 {
     private $period_from, $period_to;
 
@@ -153,6 +153,7 @@ class TvRageClient extends \cd\HttpClient
     static function parseStatus($s, $started, $ended)
     {
         switch (strval($s)) {
+        case 'Ended':
         case 'Canceled/Ended':
             return $started.' - '.$ended.' (ended)';
             break;
@@ -175,7 +176,7 @@ class TvRageClient extends \cd\HttpClient
             break;
 
         default:
-            dp('FIXME: unhandled status: '.strval($s) );
+            dp('FIXME TvRageClient: unhandled status: '.strval($s) );
             return 'XXX-ODDSTATUS '.strval($s);
         }
     }
