@@ -36,8 +36,6 @@ class Wiki
 
     public static function store($o)
     {
-        // XXX: WikiConfig object to get destination path
-
         $page_name = $o->name;
 
         // cleanups to make directory transversal impossible
