@@ -21,7 +21,7 @@
  * ...
  * $db  =  SqlHandler::getInstance('microsoft-db');  // will always return the instance named "microsoft-db"
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -40,9 +40,9 @@ class SqlHandler
 {
     private static $_instances = array(); ///< array of SqlInstance objects
 
-    private function __construct() {}  //singleton
+    private function __construct() {}     ///< singleton
 
-    private function __clone() {}      //singleton: prevent cloning of class
+    private function __clone() {}         ///< singleton: prevent cloning of class
 
     /**
      * Registers a database object to the instance pool

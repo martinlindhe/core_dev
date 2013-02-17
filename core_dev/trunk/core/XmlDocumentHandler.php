@@ -4,7 +4,7 @@
  *
  * Renders a set of views into a XML document (XHTML, HTML5)
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -25,9 +25,9 @@ class XmlDocumentHandler extends CoreBase
 
     private $design_head;
     private $design_foot;
-    private $enable_design        = true;
-    private $enable_html_headers  = true; ///< send HTML headers?
-    private $enable_http_headers  = true;         ///< send http headers?
+    private $enable_design          = true;
+    private $enable_html_headers    = true;  ///< send HTML headers?
+    private $enable_http_headers    = true;  ///< send http headers?
     private $enable_profiler        = false; ///< embed page profiler?
     private $allow_internal_framing = false; ///< allow this document to be framed using <frame> or <iframe> from same origin
     private $allow_external_framing = false; ///< allow this document to be framed by any origin
@@ -47,9 +47,9 @@ class XmlDocumentHandler extends CoreBase
 
     private $objs = array();                 ///< IXmlComponent objects
 
-    private function __clone() {}      //singleton: prevent cloning of class
+    private function __clone() {}            ///< singleton: prevent cloning of class
 
-    private function __construct()
+    private function __construct()           ///< singleton
     {
         $this->Url = new Url('http://XmlDocumentHandler.url.default');
         $this->ts_initial = microtime(true);
