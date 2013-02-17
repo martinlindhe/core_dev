@@ -9,6 +9,7 @@
 
 namespace cd;
 
+require_once('WikiConfig.php');
 require_once('WikiViewer.php');
 
 class Wiki
@@ -35,6 +36,20 @@ class Wiki
 
     public static function store($o)
     {
+        // XXX: WikiConfig object to get destination path
+
+        $page_name = $o->name;
+
+        // cleanups to make directory transversal impossible
+        // TODO proper cleanup of name!
+        $page_name = str_replace('.', '_', $page_name);
+        $page_name = str_replace('/', '_', $page_name);
+        $page_name = str_replace('\\', '_', $page_name);
+        $page_name = str_replace(' ', '_', $page_name);
+
+        $dst_file = WikiConfig::getDiskPath().'/'.$page_name;
+        file_put_contents($dst_file, $o->text);
+
         return SqlObject::store($o, self::$tbl_name, 'name');
     }
 
