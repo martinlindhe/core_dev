@@ -11,7 +11,7 @@
  * Prepared statement format:
  *  (isdb), integer, string, double/float, binary
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -63,7 +63,10 @@ class Sql
 
         if (!$stmt->execute()) {
             d($params);
-            throw new \Exception ('query failed: '.$args[0].' ('.$args[1].')');
+            $s = 'query failed: '.$args[0];
+            if (!empty($args[1]))
+                $s .= ' ('.$args[1].')';
+            throw new \Exception ($s);
         }
 
         if ($db instanceof DatabaseMysqlProfiler)
@@ -263,6 +266,13 @@ class Sql
 
         $stmt->close();
         return $data;
+    }
+
+    /** like pDelete */
+    public static function pTruncate()
+    {
+        $args = func_get_args();
+        return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
     }
 
     /** like pDelete */
