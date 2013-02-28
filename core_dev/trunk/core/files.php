@@ -339,4 +339,15 @@ function generate_video_thumb($fileId, $where = '10%')
 }
 
 
+function store_uploaded_file($key, $dst_file)
+{
+    if (!is_uploaded_file($key['tmp_name']))
+        throw new \Exception ('Upload failed for file '.$key['name'] );
+
+    if (!move_uploaded_file($key['tmp_name'], $dst_file))
+        throw new \Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
+
+}
+
+
 ?>
