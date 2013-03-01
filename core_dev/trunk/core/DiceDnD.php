@@ -18,6 +18,8 @@ namespace cd;
 
 require_once('RandomNumber.php');
 
+class WrongFormatException extends \Exception { }
+
 class DiceDnD
 {
     var $numberOfDices = 0;
@@ -28,22 +30,20 @@ class DiceDnD
     {
         $pos = stripos($cmd, 'D');
         if ($pos === false)
-            throw new \Exception ('wrong format: '.$cmd);
+            throw new WrongFormatException();
 
         $this->numberOfDices = intval(substr($cmd, 0, $pos));
 
-        $s1 = substr($cmd, $pos+1);
-        $this->numberOfDots = $s1;
+        $s = substr($cmd, $pos+1);
 
-        $this->parseRemainder($s1, '+');
-        $this->parseRemainder($s1, '-');
-    }
-
-    function parseRemainder($s, $char)
-    {
-        $pos = strpos($s, $char);
+        $pos = strpos($s, '+');
         if ($pos === false)
+            $pos = strpos($s, '-');
+
+        if ($pos === false) {
+            $this->numberOfDots = $s;
             return;
+        }
 
         $this->numberOfDots = intval(substr($s, 0, $pos));
         $this->adjustment   = intval(substr($s, $pos));
