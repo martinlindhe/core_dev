@@ -41,12 +41,11 @@ class DiceDnD
             $pos = strpos($s, '-');
 
         if ($pos === false) {
-            $this->numberOfDots = $s;
-            return;
+            $this->numberOfDots = intval($s);
+        } else {
+            $this->numberOfDots = intval(substr($s, 0, $pos));
+            $this->adjustment   = intval(substr($s, $pos));
         }
-
-        $this->numberOfDots = intval(substr($s, 0, $pos));
-        $this->adjustment   = intval(substr($s, $pos));
     }
 
     function roll()
