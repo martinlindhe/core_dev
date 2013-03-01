@@ -15,9 +15,7 @@ class Password
     {
         switch ($algo) {
         case 'sha1':
-        case 'sha224':
         case 'sha256':
-        case 'sha384':
         case 'sha512':
             return $algo.':'.hash($algo, $salt1 . hash($algo, $salt2) . hash($algo, $pwd));
         default:
