@@ -16,11 +16,13 @@
 
 namespace cd;
 
+require_once('RandomNumber.php');
+
 class DiceDnD
 {
     var $numberOfDices = 0;
     var $numberOfDots  = 0;
-    var $adjust        = 0;
+    var $adjustment    = 0;
 
     function __construct($cmd)
     {
@@ -29,20 +31,22 @@ class DiceDnD
             throw new \Exception ('wrong format: '.$cmd);
 
         $this->numberOfDices = intval(substr($cmd, 0, $pos));
+
         $s1 = substr($cmd, $pos+1);
-        $this->numberOfDots  = $s1;
+        $this->numberOfDots = $s1;
 
-        $pos = strpos($s1, '+');
-        if ($pos !== false) {
-            $this->numberOfDots = intval(substr($s1, 0, $pos));
-            $this->adjust       = intval(substr($s1, $pos+1));
-        }
+        $this->parseRemainder($s1, '+');
+        $this->parseRemainder($s1, '-');
+    }
 
-        $pos = strpos($s1, '-');
-        if ($pos !== false) {
-            $this->numberOfDots = intval(substr($s1, 0, $pos));
-            $this->adjust       = -(intval( substr($s1, $pos+1) ));
-        }
+    function parseRemainder($s, $char)
+    {
+        $pos = strpos($s, $char);
+        if ($pos === false)
+            return;
+
+        $this->numberOfDots = intval(substr($s, 0, $pos));
+        $this->adjustment   = intval(substr($s, $pos));
     }
 
     function roll()
@@ -50,28 +54,19 @@ class DiceDnD
         $result = 0;
 
         for ($i = 0; $i < $this->numberOfDices; $i++)
-            $result += (rand() % $this->numberOfDots) + 1;
+            $result += (RandomNumber::get() % $this->numberOfDots) + 1;
 
-        return $result + $this->adjust;
+        return $result + $this->adjustment;
     }
 
-    /** Calculates the best possible outcome of a dice roll */
-    function max()
-    {
-        return ($this->numberOfDices * $this->numberOfDots) + $this->adjust;
-    }
-
-    /** Calculates the worst possible outcome of a dice roll */
     function min()
     {
-        return $this->numberOfDices + $this->adjust;
+        return $this->numberOfDices + $this->adjustment;
     }
 
-    function about()
+    function max()
     {
-        return
-            $this->numberOfDices.' dices with  '.$this->numberOfDots.' dots and '.
-            $this->adjust.' adjustment, min '.$this->min().', max '.$this->max();
+        return ($this->numberOfDices * $this->numberOfDots) + $this->adjustment;
     }
 
 }
