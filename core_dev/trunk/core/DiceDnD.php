@@ -24,7 +24,7 @@ class DiceDnD
 {
     var $numberOfDices = 0;
     var $numberOfDots  = 0;
-    var $adjustment    = 0;
+    var $adjustment;
 
     function __construct($cmd)
     {
@@ -42,6 +42,7 @@ class DiceDnD
 
         if ($pos === false) {
             $this->numberOfDots = intval($s);
+            $this->adjustment   = 0;
         } else {
             $this->numberOfDots = intval(substr($s, 0, $pos));
             $this->adjustment   = intval(substr($s, $pos));

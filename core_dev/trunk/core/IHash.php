@@ -4,16 +4,14 @@
  *
  * Hash algorithm interface
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 namespace cd;
 
 interface IHash
 {
-    public static function CalcFile($file);
+    public static function fromFile($file);
 
-    public static function CalcString($s);
+    public static function fromString($s);
 }
-
-?>

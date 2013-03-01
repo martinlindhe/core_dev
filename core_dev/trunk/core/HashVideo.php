@@ -11,22 +11,26 @@
  * The algorithm is based on video hash algoritm from Media Player Classic
  * (Licenced under GPL)
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 //STATUS: ok
 
 namespace cd;
 
-require_once('IHash.php');
 require_once('TempStore.php');
 
 class HashVideo implements IHash
 {
-    /** @return 16-character string */
-    public static function CalcFile($file)
+    var $characters = 16; ///< number of hex character needed to represent the value
+
+    public static function fromFile($file)
     {
         if (!file_exists($file))
+            return false;
+
+        $fsize = filesize($file);
+        if ($fsize < 65536)
             return false;
 
         $temp = TempStore::getInstance();
@@ -37,9 +41,6 @@ class HashVideo implements IHash
             return $hash;
 
         $handle = fopen($file, 'rb');
-        $fsize = filesize($file);
-        if ($fsize < 65536) //XXXX what is minimum possible size?
-            return false;
 
         $hash = array(
         3 => 0,
@@ -65,10 +66,10 @@ class HashVideo implements IHash
         return $res;
     }
 
-    public static function CalcString($s)
+    public static function fromString($s)
     {
         // XXX need reworking the code to implement, and not very useful
-        throw new \Exception ('VideoHash::CalcString not supported');
+        throw new \Exception ('not implemented');
     }
 
     private static function AddUINT64($a, $handle)
@@ -97,5 +98,3 @@ class HashVideo implements IHash
     }
 
 }
-
-?>

@@ -2,7 +2,9 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * https://en.wikipedia.org/wiki/SHA-1
+ *
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -11,8 +13,7 @@ require_once('IHash.php');
 
 class HashSha1 implements IHash
 {
-    /** @return 40-character string */
-    public static function CalcFile($file)
+    public static function fromFile($file)
     {
         if (!file_exists($file))
             return false;
@@ -20,15 +21,12 @@ class HashSha1 implements IHash
         if (is_dir($file))
             return false;
 
-        return sha1_file($file);
+        return hash_file('sha1', $file);
     }
 
-    /** @return 40-character string */
-    public static function CalcString($s)
+    public static function fromString($s)
     {
-        return sha1($s);
+        return hash('sha1', $s);
     }
 
 }
-
-?>
