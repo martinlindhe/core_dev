@@ -11,34 +11,34 @@
 
 namespace cd;
 
-require_once('ConvertBase.php');
+require_once('IConvert.php');
 
-class ConvertLength extends ConvertBase
+class ConvertLength implements IConvert
 {
-    protected $scale = array( ///< unit scale to Meter
-    'ym'        => 0.000000000000000000000001, // SI: Yoctometre     10^−24m
-    'zm'        => 0.000000000000000000001,    // SI: Zeptometre     10^−21m
-    'am'        => 0.000000000000000001,       // SI: Attometre      10^−18m
-    'fm'        => 0.000000000000001,          // SI: Femtometre     10^−15m
-    'pm'        => 0.000000000001,             // SI: Picometre      10^−12m
-    'nm'        => 0.000000001,                // SI: Nanometre      10^-9m
-    'microm'    => 0.000001,                   // SI: Micrometre, μm 10^-6m
-    'mm'        => 0.001,                      // SI: Millimetre     10^-3m
-    'cm'        => 0.01,                       // SI: Centimetre     10^-2m
-    'dm'        => 0.1,                        // SI: Decimetre      10^-1m
-    'm'         => 1,                          // SI: Meter
-    'km'        => 1000,                       // SI: Kilometer      10^3m
-    'scandmile' => 10000,                      // Scandinavian mile, http://en.wikipedia.org/wiki/Scandinavian_mile
-    'in'        => 0.0254,                     // XXX: Inch
-    'ft'        => 0.304800610,                // XXX: Feet
-    'yd'        => 0.9144,                     // XXX: Yard
-    'ukmile'    => 1852,                       // UK: Mile (nautical)
-    'usmile'    => 1609.344,                   // US: Mile (statute)
-    'ld'        => 384400000,                  // Lunar distance, http://en.wikipedia.org/wiki/Lunar_distance_%28astronomy%29
-    'au'        => 149597870700,               // Astronomical Unit
+    protected static $scale = array( ///< unit scale to Meter
+    'ym'        => '0.000000000000000000000001', // SI: Yoctometre     10^−24m
+    'zm'        => '0.000000000000000000001',    // SI: Zeptometre     10^−21m
+    'am'        => '0.000000000000000001',       // SI: Attometre      10^−18m
+    'fm'        => '0.000000000000001',          // SI: Femtometre     10^−15m
+    'pm'        => '0.000000000001',             // SI: Picometre      10^−12m
+    'nm'        => '0.000000001',                // SI: Nanometre      10^-9m
+    'microm'    => '0.000001',                   // SI: Micrometre, μm 10^-6m
+    'mm'        => '0.001',                      // SI: Millimetre     10^-3m
+    'cm'        => '0.01',                       // SI: Centimetre     10^-2m
+    'dm'        => '0.1',                        // SI: Decimetre      10^-1m
+    'm'         => '1',                          // SI: Meter
+    'km'        => '1000',                       // SI: Kilometer      10^3m
+    'scandmile' => '10000',                      // Scandinavian mile, http://en.wikipedia.org/wiki/Scandinavian_mile
+    'in'        => '0.0254',                     // XXX: Inch
+    'ft'        => '0.304800610',                // XXX: Feet
+    'yd'        => '0.9144',                     // XXX: Yard
+    'ukmile'    => '1852',                       // UK: Mile (nautical)
+    'usmile'    => '1609.344',                   // US: Mile (statute)
+    'ld'        => '384400000',                  // Lunar distance, http://en.wikipedia.org/wiki/Lunar_distance_%28astronomy%29
+    'au'        => '149597870700',               // Astronomical Unit
     );
 
-    protected $lookup = array(
+    protected static $lookup = array(
     'yoctometer'   => 'ym',     'yoctometre'   => 'ym',
     'zeptometer'   => 'zm',     'zeptometre'   => 'zm',
     'attometer'    => 'am',     'attometre'    => 'am',
@@ -62,25 +62,37 @@ class ConvertLength extends ConvertBase
     'astronomical' => 'au',
     );
 
-    function conv($from, $to, $val)
+    protected static function getScale($s)
     {
-        $from = $this->getShortcode($from);
-        $to   = $this->getShortcode($to);
+        $s = trim($s);
+        if (!$s)
+            throw new \Exception ('no input data');
 
-        if (!$from || !$to)
-            return false;
+        $s = strtolower($s);
+        if (!empty(self::$lookup[$s]))
+            return self::$scale[ self::$lookup[$s] ];
 
-        $res = ($val * $this->scale[$from]) / $this->scale[$to];
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
 
-        if ($this->precision)
-            return round($res, $this->precision);
+        $s = strtoupper($s);
+        if (!empty(self::$lookup[$s]))
+            return self::$scale[ self::$lookup[$s] ];
 
-        return $res;
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
+
+        throw new \Exception ('unhandled unit: '.$s);
     }
 
-    function convLiteral($s, $to, $from = 'meter')
+    public static function convert($from, $to, $val)
     {
-        return parent::convLiteral($s, $to, $from);
+        $from = self::getScale($from);
+        $to   = self::getScale($to);
+
+        $scale = 20;
+        $mul = bcmul($val, $from, $scale);
+        return bcdiv($mul, $to, $scale);
     }
 
 }
