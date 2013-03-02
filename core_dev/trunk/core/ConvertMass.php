@@ -4,11 +4,9 @@
  *
  * Conversion functions between different units of mass
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Mass
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -64,5 +62,3 @@ class ConvertMass extends ConvertBase
     }
 
 }
-
-?>

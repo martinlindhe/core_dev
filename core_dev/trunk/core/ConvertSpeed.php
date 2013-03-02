@@ -4,15 +4,13 @@
  *
  * Conversion functions between different speed units
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Speed
  * http://en.wikipedia.org/wiki/Miles_per_hour        = mph
  * http://en.wikipedia.org/wiki/Metre_per_second      = m/s
  * http://en.wikipedia.org/wiki/Kilometres_per_hour   = km/h
  * http://en.wikipedia.org/wiki/Knot_(unit)  = knot
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -49,5 +47,3 @@ class ConvertSpeed extends ConvertBase
     }
 
 }
-
-?>

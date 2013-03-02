@@ -4,13 +4,11 @@
  *
  * Conversion functions between different units of energy
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Energy
  * http://en.wikipedia.org/wiki/Unit_of_energy
  * http://en.wikipedia.org/wiki/Kilowatt_hour
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -62,5 +60,3 @@ class ConvertEnergy extends ConvertBase
     }
 
 }
-
-?>

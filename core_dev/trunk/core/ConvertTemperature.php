@@ -4,12 +4,10 @@
  *
  * Conversion functions for different units of temperature
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Temperature_conversion_formulas
  * http://en.wikipedia.org/wiki/Conversion_of_units#Temperature
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -62,5 +60,3 @@ class ConvertTemperature extends ConvertBase
     }
 
 }
-
-?>

@@ -4,11 +4,9 @@
  *
  * Conversion functions between different units of volume
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Volume
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //TODO: add more units
@@ -23,8 +21,8 @@ class ConvertVolume extends ConvertBase
     'ml'        => 0.001,       // milliliter
     'cl'        => 0.01,        // centiliter
     'dl'        => 0.1,         // deciliter
-    'l'         => 1,           // liter / litre
-    'm³'        => 1000,        // cubic metre = 1000 litres
+    'l'         => 1,           // liter
+    'm³'        => 1000,        // cubic meter = 1000 liters
     'us_gallon' => 3.785411784, // us liquid gallon
     'uk_gallon' => 4.54609,     // imperial (uk) gallon
     );
@@ -62,5 +60,3 @@ class ConvertVolume extends ConvertBase
     }
 
 }
-
-?>

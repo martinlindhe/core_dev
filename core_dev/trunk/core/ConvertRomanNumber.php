@@ -2,10 +2,11 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: ok
+
 //TODO: reuse lookup array in getAsRoman() for decoding numbers, drop expand()
 
 namespace cd;
@@ -97,5 +98,3 @@ class ConvertRomanNumber
     }
 
 }
-
-?>

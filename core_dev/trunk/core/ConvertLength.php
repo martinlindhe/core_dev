@@ -4,11 +4,9 @@
  *
  * Conversion functions for different units of length
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Conversion_of_units#Length
  *
- * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -86,5 +84,3 @@ class ConvertLength extends ConvertBase
     }
 
 }
-
-?>
