@@ -4,11 +4,9 @@
  *
  * Conversion functions between different units of area
  *
- * References
- * ----------
  * http://en.wikipedia.org/wiki/Area
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 namespace cd;
@@ -17,29 +15,33 @@ require_once('ConvertBase.php');
 
 class ConvertArea extends ConvertBase
 {
-    protected $scale = array( ///< unit scale to square metre (m²)
-//TODO: square millimetre
-//TODO: square centimetre
+    var $scale = array( ///< unit scale to square metre (m²)
+    'mm²'   => 0.000001,       // square millimetre (1.0 × 10^-6 m²)
+    'cm²'   => 0.0001,         // square centimetre
+    'dm²'   => 0.01,           // square decimetre
     'm²'    => 1,              // square metre
     'a'     => 100,            // are (100 m²)
     'ha'    => 10000,          // hectare (10 000 m²)
     'km²'   => 1000000,        // square kilometre (100 hectares)
-
-//TODO: square inch
-    'sq ft' => 0.09290304,     // square foot
-    'sq yd' => 0.83612736,     // square yard = 9 square feet
-    'acre'  => 4046.8564224,   // = 4840 square yards = 43560 square feet
-//TODO: square mile (U.S. mile)
+    'in²'   => 0.00064516,     // square inch
+    'ft²'   => 0.09290304,     // square foot
+    'yd²'   => 0.83612736,     // square yard = 9 square feet
+    'acre'  => 4046.8564224,   // 1 acre = 4840 square yards = 43560 square feet
+    'mile²' => 2589988.11,     // square mile (U.S. mile) = 640 acres
     );
 
-    protected $lookup = array(
-    'square meter'     => 'm²',   'square meters'      => 'm²',    'square metre'     => 'm²',  'square metres'     => 'm²',
-    'are'              => 'a',    'ares'               => 'a',
-    'hectare'          => 'ha',   'hectares'           => 'ha',
-    'square kilometer' => 'km²',  'square kilometers'  => 'km²',   'square kilometre' => 'km²', 'square kilometres' => 'km²',
+    var $lookup = array(
+    'square meter'     => 'm²',    'square meters'     => 'm²',
+    'square metre'     => 'm²',    'square metres'     => 'm²',
+    'are'              => 'a',     'ares'              => 'a',
+    'hectare'          => 'ha',    'hectares'          => 'ha',
+    'square kilometer' => 'km²',   'square kilometers' => 'km²',
+    'square kilometre' => 'km²',   'square kilometres' => 'km²',
+    'square inch'      => 'in²',   'square inches'     => 'in²',
+    'square foot'      => 'ft²',   'square feet'       => 'ft²',
+    'square yard'      => 'yd²',   'square yards'      => 'yd²',
+    'square mile'      => 'mile²', 'square miles'      => 'mile²',
     'acres'            => 'acre',
-    'square foot'      => 'sq ft', 'square feet'       => 'sq ft',
-    'square yard'      => 'sq yd', 'square yards'      => 'sq yd',
     );
 
     function conv($from, $to, $val)
@@ -58,11 +60,4 @@ class ConvertArea extends ConvertBase
         return $res;
     }
 
-    function convLiteral($s, $to, $from = 'm²')
-    {
-        return parent::convLiteral($s, $to, $from);
-    }
-
 }
-
-?>

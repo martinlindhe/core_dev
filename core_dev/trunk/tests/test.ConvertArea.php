@@ -18,4 +18,15 @@ if ($m->convLiteral('4 square yard', 'square meter') != 3.34)         echo "FAIL
 
 if ($m->convLiteral('140 acre', 'hectare') != 56.66)                  echo "FAIL 7\n";
 
+if ($m->conv('acre', 'hectare', 1) != 0.4)                            echo "FAIL 8\n";
+if ($m->conv('cm²', 'm²', 100000) != 10)                              echo "FAIL 9\n";
+if ($m->conv('mm²', 'cm²', 100000) != 1000)                           echo "FAIL 10\n";
+if ($m->conv('dm²', 'cm²', 100) != 10000)                             echo "FAIL 10\n";
+
+if ($m->conv('square inches', 'cm²', 100) != 645.16)                  echo "FAIL 11\n";
+
+
+//echo ConvertArea::conv('acre', 'hectare', 1);
+
+
 ?>
