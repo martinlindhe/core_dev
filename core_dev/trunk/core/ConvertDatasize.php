@@ -59,10 +59,6 @@ class ConvertDatasize implements IConvert
     'yottabyte' => 'yb',
     );
 
-    /**
-     * @param $name unit name or shortcode
-     * @return shortcode for the unit name
-     */
     protected static function getScale($s)
     {
         $s = trim($s);
@@ -90,7 +86,6 @@ class ConvertDatasize implements IConvert
     {
         $from = self::getScale($from);
         $to   = self::getScale($to);
-        echo 'from '.$from.', to '.$to."\n";
 
         $scale = 20;
         $mul = bcmul($val, $from, $scale);

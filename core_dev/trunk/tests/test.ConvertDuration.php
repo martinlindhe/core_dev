@@ -6,31 +6,30 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require('ConvertDuration.php');
 
-$d = new ConvertDuration();
+$arr = array(
+array('hour', 'second', 1, 3600),
+array('day',  'minute', 4, 5760),
+array('hour', 'minutes', 1, 60),
+array('hour', 'days', 4320, 180),
+array('week', 'days', 2, 14),
+array('gregorian year', 'second', 1, 31556952),
+array('julian year', 'second', 1, 31557600),
+array('millisecond', 'second', 1, 0.001),
+array('centisecond', 'second', 2, 0.02),
+array('decisecond',  'second', 4, 0.4),
+array('microsecond',  'millisecond', 2, 0.002),
+array('nanosecond',   'microsecond', 2, 0.002),
+array('picosecond',   'nanosecond', 2, 0.002),
+array('ky', 'year', 2, 2000),
+array('femtosecond', 'attosecond', 1, 1000),
+array('attosecond', 'second', 100000000000000000, 0.1),
+array('zeptosecond', 'attosecond', 100, 0.1),
+);
 
-if ($d->conv('hour', 'second', 1) != 3600)                     echo "FAIL 1\n";
-if ($d->conv('day',  'minute', 4) != 5760)                     echo "FAIL 2\n";
-if ($d->convLiteral('1 hour', 'minutes') != 60)                echo "FAIL 3\n";
-if ($d->convLiteral('4320 hour', 'days') != 180)               echo "FAIL 4\n";
-if ($d->convLiteral('2 week', 'days')    != 14)                echo "FAIL 5\n";
-
-if ($d->convLiteral('1 gregorian year', 'second') != 31556952) echo "FAIL 6\n";
-if ($d->convLiteral('1 julian year', 'second')    != 31557600) echo "FAIL 7\n";
-
-if ($d->convLiteral('1 millisecond', 'second') != 0.001)       echo "FAIL 8\n";
-if ($d->convLiteral('2 centisecond', 'second') != 0.02)        echo "FAIL 9\n";
-if ($d->convLiteral('4 decisecond',  'second') != 0.4)         echo "FAIL 10\n";
-
-if ($d->convLiteral('2 microsecond',  'millisecond') != 0.002) echo "FAIL 11\n";
-if ($d->convLiteral('2 nanosecond',   'microsecond') != 0.002) echo "FAIL 12\n";
-if ($d->convLiteral('2 picosecond',   'nanosecond')  != 0.002) echo "FAIL 13\n";
-
-if ($d->convLiteral('2 ky', 'year') != 2000)                   echo "FAIL 14\n";
-
-if ($d->conv('femtosecond', 'attosecond', 1) != 1000)          echo "FAIL 15\n";
-
-if ($d->conv('attosecond', 'second', 100000000000000000) != 0.1)          echo "FAIL 16\n";
-if ($d->conv('zeptosecond', 'attosecond', 100) != 0.1)         echo "FAIL 17\n";           // XXX fails but should pass
-
-
+foreach ($arr as $test)
+{
+    $res = ConvertDuration::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3])
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
+}
 
