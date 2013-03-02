@@ -23,26 +23,26 @@ class ConvertVolume implements IConvert
 //    'fl'         => 0,            // femtolitre 10 ^−15 L
 //    'pl'         => 0,            // picolitre 10 ^−12 L
 //    'nl'         => 0,            // nanolitre 10 ^−9 L
-    'ml'         => 0.001,        // milliliter  10 ^−3 L
-    'cl'         => 0.01,         // centiliter  10 ^−2 L
-    'dl'         => 0.1,          // deciliter   10 ^−1 L
-    'l'          => 1,            // liter       10 ^0 L
-    'dal'        => 10,           // decalitre 10 ^1 L
-    'hl'         => 100,          // hectolitre 10 ^2 L
-    'kl'         => 1000,         // kilolitre  10 ^3 L
-    'ML'         => 1000000,      // megalitre 10 ^6 L
+    'ml'         => '0.001',        // milliliter  10 ^−3 L
+    'cl'         => '0.01',         // centiliter  10 ^−2 L
+    'dl'         => '0.1',          // deciliter   10 ^−1 L
+    'l'          => '1',            // liter       10 ^0 L
+    'dal'        => '10',           // decalitre 10 ^1 L
+    'hl'         => '100',          // hectolitre 10 ^2 L
+    'kl'         => '1000',         // kilolitre  10 ^3 L
+    'ML'         => '1000000',      // megalitre 10 ^6 L
 //    'GL'         => 0,            // gigalitre 10 ^9 L
 //    'TL'         => 0,            // teralitre 10 ^12 L
 //    'PL'         => 0,            // petalitre 10 ^15 L
 //    'EL'         => 0,            // exalitre 10 ^18 L
 //    'ZL'         => 0,            // zettalitre 10 ^21 L
 //    'YL'         => 0,            // yottalitre 10 ^24 L
-    'cubic_inch' => 0.016387064,  //
-    'cubic_foot' => 28.316846592, // = XXX cubic inches?
-    'us_gallon'  => 3.785411784,  // U.S liquid gallon
-    'uk_gallon'  => 4.54609,      // imperial (uk) gallon
-    'pint'       => 0.56826125,   // imperial pint
-    'us_pint'    => 0.473176473,  // U.S. fluid pint
+    'cubic_inch' => '0.016387064',  //
+    'cubic_foot' => '28.316846592', // = XXX cubic inches?
+    'us_gallon'  => '3.785411784',  // U.S liquid gallon
+    'uk_gallon'  => '4.54609',      // imperial (uk) gallon
+    'pint'       => '0.56826125',   // imperial pint
+    'us_pint'    => '0.473176473',  // U.S. fluid pint
     );
 
     protected static $lookup = array(

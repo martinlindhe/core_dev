@@ -6,12 +6,19 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require('ConvertDatasize.php');
 
-$d = new ConvertDatasize();
-if ($d->conv('megabyte', 'byte', 0.5) != 524288)  echo "FAIL 1\n";
-if ($d->conv('megabit', 'megabyte', 100) != 12.5) echo "FAIL 2\n";
-if ($d->convLiteral('1GB', 'MiB') != 1024)        echo "FAIL 3\n";
-if ($d->conv('zb', 'tb', 1) != 1073741824)        echo "FAIL 4\n";
-if ($d->conv('zettabyte', 'exabyte', 1) != 1024)  echo "FAIL 5\n";
-if ($d->conv('zettabit', 'exabit', 1) != 1024)    echo "FAIL 6\n";
+$arr = array(
+array('megabyte',  'byte',     0.5,  524288),
+array('megabit',   'megabyte', 100,  12.5),
+array('GB',        'MiB',      1,    1024),
+array('zb',        'tb',       1,    1073741824),
+array('zettabyte', 'exabyte',  1,    1024),
+array('zettabit',  'exabit',   1,    1024),
+);
 
-?>
+foreach ($arr as $test)
+{
+    $res = ConvertDatasize::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3])
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
+}
+

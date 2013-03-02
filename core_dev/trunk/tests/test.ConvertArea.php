@@ -16,7 +16,7 @@ array('square yard', 'square meter',      4,      3.34450944),
 array('acre', 'hectare',                  140,    56.6559899136),
 array('acre', 'hectare',                  1,      0.40468564224),
 array('cm²', 'm²',                        100000, 10),
-array('mm²', 'cm²',                       100000, 1000),  // FAILS, why?
+array('mm²', 'cm²',                       100000, 1000),
 array('dm²', 'cm²',                       100,    10000),
 array('square inches', 'cm²',             100,    645.16),
 array('square foot', 'square inch',       1,      144),

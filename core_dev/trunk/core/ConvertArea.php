@@ -16,18 +16,18 @@ require_once('IConvert.php');
 class ConvertArea implements IConvert
 {
     protected static $scale = array( ///< unit scale to square metre (m²)
-    'mm²'   => 0.000001,       // square millimetre (1.0 × 10^-6 m²)
-    'cm²'   => 0.0001,         // square centimetre
-    'dm²'   => 0.01,           // square decimetre
-    'm²'    => 1,              // square metre
-    'a'     => 100,            // are (100 m²)
-    'ha'    => 10000,          // hectare (10 000 m²)
-    'km²'   => 1000000,        // square kilometre (100 hectares)
-    'in²'   => 0.00064516,     // square inch
-    'ft²'   => 0.09290304,     // square foot = 144 square inches
-    'yd²'   => 0.83612736,     // square yard = 9 square feet
-    'acre'  => 4046.8564224,   // 1 acre = 4840 square yards = 43560 square feet
-    'mile²' => 2589988.11,     // square mile (U.S. mile) = 640 acres
+    'mm²'   => '0.000001',       // square millimetre (1.0 × 10^-6 m²)
+    'cm²'   => '0.0001',         // square centimetre
+    'dm²'   => '0.01',           // square decimetre
+    'm²'    => '1',              // square metre
+    'a'     => '100',            // are (100 m²)
+    'ha'    => '10000',          // hectare (10 000 m²)
+    'km²'   => '1000000',        // square kilometre (100 hectares)
+    'in²'   => '0.00064516',     // square inch
+    'ft²'   => '0.09290304',     // square foot = 144 square inches
+    'yd²'   => '0.83612736',     // square yard = 9 square feet
+    'acre'  => '4046.8564224',   // 1 acre = 4840 square yards = 43560 square feet
+    'mile²' => '2589988.11',     // square mile (U.S. mile) = 640 acres
     );
 
     protected static $lookup = array(
