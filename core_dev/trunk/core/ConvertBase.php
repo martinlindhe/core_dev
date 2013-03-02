@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 //STATUS: ok
@@ -57,18 +57,14 @@ abstract class ConvertBase
      * @param $name unit name or shortcode
      * @return shortcode for the unit name
      */
-    function getShortcode($s, $lcase = true)
+    function getShortcode($s)
     {
+        $s = strtolower(trim($s));
+        if (!$s)
+            throw new \Exception ('no input data');
+
         if (!empty($this->lookup[$s]))
             return $this->lookup[$s];
-
-        if ($lcase)
-            $s = strtolower(trim($s));
-        else
-            $s = strtoupper(trim($s));
-
-        if (!$s)
-            return false;
 
         if (!empty($this->lookup[$s]))
             return $this->lookup[$s];

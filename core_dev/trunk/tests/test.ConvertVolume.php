@@ -6,15 +6,19 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('ConvertVolume.php');
 
-$m = new ConvertVolume();
-$m->setPrecision(2);
+$arr = array(
+array('kl',          'litres',    1,               1000),
+array('us gallon',   'liter',     2,               7.570823568),
+array('uk gallon',   'liter',     2,               9.09218),
+array('cubic meter', 'us gallon', 528,             139482.84364510236332058715 ),
+array('cubic meter', 'deciliter', 0.5,             5000),
+array('deciliter',   'liter',     5,               0.5),
+array('milliliter',  'us gallon', 3.785411784 * 2, 0.002),
+);
 
-if ($m->convLiteral('1 m³', 'litres') != 1000)               echo "FAIL 1\n";
-if ($m->convLiteral('2 us gallon', 'liter') != 7.57)         echo "FAIL 2\n";
-if ($m->convLiteral('2 uk gallon', 'liter') != 9.09)         echo "FAIL 3\n";
-if ($m->convLiteral('3 cubic meter', 'gallon') != 792.52)    echo "FAIL 4\n";
-if ($m->convLiteral('0.5 cubic meter', 'deciliter') != 5000) echo "FAIL 5\n";
-if ($m->convLiteral('5 deciliter', 'liter') != 0.5)          echo "FAIL 6\n";
-if ($m->convLiteral('400 milliliter', 'gallon') != 0.11)     echo "FAIL 7\n";
-
-?>
+foreach ($arr as $test)
+{
+    $res = ConvertVolume::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3])
+        echo 'FAIL for '.$test[0].' => '.$test[1].', cnt '.$test[2].': got '.$res.', expected '.$test[3]."\n";
+}
