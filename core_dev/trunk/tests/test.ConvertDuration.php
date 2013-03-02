@@ -27,4 +27,10 @@ if ($d->convLiteral('2 picosecond',   'nanosecond')  != 0.002) echo "FAIL 13\n";
 
 if ($d->convLiteral('2 ky', 'year') != 2000)                   echo "FAIL 14\n";
 
-?>
+if ($d->conv('femtosecond', 'attosecond', 1) != 1000)          echo "FAIL 15\n";
+
+if ($d->conv('attosecond', 'second', 100000000000000000) != 0.1)          echo "FAIL 16\n";
+if ($d->conv('zeptosecond', 'attosecond', 100) != 0.1)         echo "FAIL 17\n";           // XXX fails but should pass
+
+
+
