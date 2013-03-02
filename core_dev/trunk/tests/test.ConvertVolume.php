@@ -20,5 +20,5 @@ foreach ($arr as $test)
 {
     $res = ConvertVolume::convert($test[0], $test[1], $test[2]);
     if ($res != $test[3])
-        echo 'FAIL for '.$test[0].' => '.$test[1].', cnt '.$test[2].': got '.$res.', expected '.$test[3]."\n";
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
 }

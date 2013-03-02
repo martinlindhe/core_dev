@@ -6,8 +6,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require('ConvertCurrency.php');
 
-$currency = new ConvertCurrency();
 $val = 100;
-echo $val." USD is currently worth ".$currency->conv('USD', 'SEK', $val)." SEK\n";
+echo $val." USD is currently worth ".ConvertCurrency::convert('USD', 'SEK', $val)." SEK\n";
 
 ?>

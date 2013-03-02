@@ -2,14 +2,13 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 namespace cd;
 
 interface ICurrencyFetcher
 {
-    public function getRate($from, $to);
-}
+    public static function getRate($from, $to);
 
-?>
+}

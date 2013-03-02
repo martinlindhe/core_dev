@@ -10,13 +10,11 @@
  * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
-//STATUS: ok
-
 namespace cd;
 
 require_once('IConvert.php');
 
-class ConvertVolume implements IConvert //extends ConvertBase
+class ConvertVolume implements IConvert
 {
     protected static $scale = array( ///< unit scale to 1 liter
 //    'yl'         => 0,            // yoctolitre 10 ^−24 L
@@ -69,7 +67,7 @@ class ConvertVolume implements IConvert //extends ConvertBase
      * @param $name unit name or shortcode
      * @return shortcode for the unit name
      */
-    public static function getScale($s)
+    protected static function getScale($s)
     {
         $s = trim($s);
         if (!$s)
