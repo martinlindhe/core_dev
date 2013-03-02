@@ -13,50 +13,62 @@
 
 namespace cd;
 
-require_once('ConvertBase.php');
+require_once('IConvert.php');
 
-class ConvertEnergy extends ConvertBase
+class ConvertEnergy implements IConvert
 {
-    protected $scale = array( ///< unit scale to watt hour
-    'microwatt_h' => 0,000001,         // microwatt hour 10^-6
-    'milliwatt_h' => 0,001,            // milliwatt hour 10^-3
-    'Wh'          => 1,                // watt hour
-    'kilowatt_h'  => 1000,             // kilowatt hour, 10^3
-    'megawatt_h'  => 1000000,          // megawatt hour  10^6
-    'gigawatt_h'  => 1000000000,       // gigawatt hour  10^9
-    'terawatt_h'  => 1000000000000,    // terawatt hour  10^12
-    'petawatt_h'  => 1000000000000000, // petawatt hour  10^15
+    protected static $scale = array( ///< unit scale to watt hour
+    'microwatt_h' => '0,000001',         // microwatt hour 10^-6
+    'milliwatt_h' => '0,001',            // milliwatt hour 10^-3
+    'wh'          => '1',                // watt hour
+    'kilowatt_h'  => '1000',             // kilowatt hour, 10^3
+    'megawatt_h'  => '1000000',          // megawatt hour  10^6
+    'gigawatt_h'  => '1000000000',       // gigawatt hour  10^9
+    'terawatt_h'  => '1000000000000',    // terawatt hour  10^12
+    'petawatt_h'  => '1000000000000000', // petawatt hour  10^15
     );
 
-    protected $lookup = array(
-    'µWh'   => 'microwatt_h',
-    'mWh'   => 'milliwatt_h',
-    'kWh'   => 'kilowatt_h',
-    'MWh'   => 'megawatt_h',
-    'GWh'   => 'gigawatt_h',
-    'TWh'   => 'terawatt_h',
-    'PWh'   => 'petawatt_h',
+    protected static $lookup = array(
+    'µwh'   => 'microwatt_h',
+    'mwh'   => 'milliwatt_h',
+    'kwh'   => 'kilowatt_h',
+    'mwh'   => 'megawatt_h',
+    'gwh'   => 'gigawatt_h',
+    'twh'   => 'terawatt_h',
+    'pwh'   => 'petawatt_h',
     );
 
-    function conv($from, $to, $val)
+    protected static function getScale($s)
     {
-        $from = $this->getShortcode($from);
-        $to   = $this->getShortcode($to);
+        $s = trim($s);
+        if (!$s)
+            throw new \Exception ('no input data');
 
-        if (!$from || !$to)
-            return false;
+        $s = strtolower($s);
+        if (!empty(self::$lookup[$s]))
+            return self::$scale[ self::$lookup[$s] ];
 
-        $res = ($val * $this->scale[$from]) / $this->scale[$to];
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
 
-        if ($this->precision)
-            return round($res, $this->precision);
+        $s = strtoupper($s);
+        if (!empty(self::$lookup[$s]))
+            return self::$scale[ self::$lookup[$s] ];
 
-        return $res;
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
+
+        throw new \Exception ('unhandled unit: '.$s);
     }
 
-    function convLiteral($s, $to, $from = 'gram')
+    public static function convert($from, $to, $val)
     {
-        return parent::convLiteral($s, $to, $from);
+        $from = self::getScale($from);
+        $to   = self::getScale($to);
+
+        $scale = 20;
+        $mul = bcmul($val, $from, $scale);
+        return bcdiv($mul, $to, $scale);
     }
 
 }

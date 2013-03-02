@@ -21,6 +21,7 @@ class ConvertTemperature extends ConvertBase
     'fahrenheit' => 'f',
     'rakine'     => 'r',
     'kelvin'     => 'k',
+    // TODO: milliKelvin
     );
 
     function conv($from, $to, $val)
