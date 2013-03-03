@@ -12,52 +12,65 @@
 
 namespace cd;
 
-require_once('ConvertBase.php');
+require_once('IConvert.php');
 
-class ConvertTemperature extends ConvertBase
+class ConvertTemperature implements IConvert
 {
-    protected $lookup = array(
-    'celcius'    => 'c',
-    'fahrenheit' => 'f',
-    'rakine'     => 'r',
-    'kelvin'     => 'k',
+    protected static $units = array(
+    'celcius'    => 0,
+    'fahrenheit' => 0,
+    'rakine'     => 0,
+    'kelvin'     => 0,
     // TODO: milliKelvin
     );
 
-    function conv($from, $to, $val)
-    {
-        $from = $this->getShortcode($from);
-        $to   = $this->getShortcode($to);
+    protected static $lookup = array(
+    'c'        => 'celcius',
+    'f'        => 'fahrenheit',
+    'r'        => 'rakine',
+    'k'        => 'kelvin',
+    );
 
-        if (!$from || !$to)
-            return false;
+    protected static function getShortcode($s)
+    {
+        $s = trim($s);
+        if (!$s)
+            throw new \Exception ('no input data');
+
+        $s = strtolower($s);
+
+        if (isset(self::$units[$s]))
+            return $s;
+
+        if (isset(self::$lookup[$s]))
+            return self::$lookup[$s];
+
+        throw new \Exception ('unhandled unit: '.$s);
+    }
+
+    public static function convert($from, $to, $val)
+    {
+        $from = self::getShortcode($from);
+        $to   = self::getShortcode($to);
 
         //convert to celcius for internal representation
         switch (strtolower($from)) {
-        case 'c': $cel =  $val; break;
-        case 'f': $cel = ($val - 32) * (5/9); break;
-        case 'r': $cel = ($val - 491.67) * (5/9); break;
-        case 'k': $cel =  $val - 273.15; break;
-        default: return false;
+        case 'celcius': $cel =  $val; break;
+        case 'fahrenheit': $cel = ($val - 32) * (5/9); break;
+        case 'rakine': $cel = ($val - 491.67) * (5/9); break;
+        case 'kelvin': $cel =  $val - 273.15; break;
+        default: throw new \Exception ('from val: '.$from);
         }
 
         switch (strtolower($to)) {
-        case 'c': $res =  $cel; break;
-        case 'f': $res = ($cel * (9/5)) + 32; break;
-        case 'r': $res = ($cel + 273.15) * (9/5); break;
-        case 'k': $res =  $cel + 273.15; break;
-        default: return false;
+        case 'celcius': $res =  $cel; break;
+        case 'fahrenheit': $res = ($cel * (9/5)) + 32; break;
+        case 'rakine': $res = ($cel + 273.15) * (9/5); break;
+        case 'kelvin': $res =  $cel + 273.15; break;
+        default: throw new \Exception ('to val: '.$to);
         }
 
-        if ($this->precision)
-            return round($res, $this->precision);
-
         return $res;
-    }
-
-    function convLiteral($s, $to, $from = 'celcius')
-    {
-        return parent::convLiteral($s, $to, $from);
     }
 
 }

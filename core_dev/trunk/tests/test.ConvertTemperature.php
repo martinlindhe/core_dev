@@ -6,25 +6,28 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('ConvertTemperature.php');
 
-$t = new ConvertTemperature();
-$t->setPrecision(2);
+$arr = array(
+array('C', 'F',      300,     572),
+array('C', 'K',      300,     573.15),
+array('C', 'R',      300,     1031.67),
+array('F', 'C',      500,     260),
+array('F', 'K',      500,     533.15),
+array('F', 'R',      500,     959.67),
+array('K', 'C',      0,      -273.15),
+array('K', 'F',      0,      -459.67),           // XXX fails, why?
+array('K', 'R',      0,       0),
+array('R', 'C',      509.67,  10),
+array('R', 'F',      509.67,  50),
+array('R', 'K',      509.67,  283.15),
+array('C', 'kelvin', 100,     373.15),
+);
 
-if ($t->conv('C', 'F', 300) != 572)       echo "FAIL 1\n";
-if ($t->conv('C', 'K', 300) != 573.15)    echo "FAIL 2\n";
-if ($t->conv('C', 'R', 300) != 1031.67)   echo "FAIL 3\n";
+foreach ($arr as $test)
+{
+    $res = ConvertTemperature::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3]) {
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
+    }
+}
 
-if ($t->conv('F', 'C', 500) != 260)       echo "FAIL 4\n";
-if ($t->conv('F', 'K', 500) != 533.15)    echo "FAIL 5\n";
-if ($t->conv('F', 'R', 500) != 959.67)    echo "FAIL 6\n";
 
-if ($t->conv('K', 'C', 0) != -273.15)     echo "FAIL 7\n";
-if ($t->conv('K', 'F', 0) != -459.67)     echo "FAIL 8\n";
-if ($t->conv('K', 'R', 0) != 0)           echo "FAIL 9\n";
-
-if ($t->conv('R', 'C', 509.67) != 10)     echo "FAIL 10\n";
-if ($t->conv('R', 'F', 509.67) != 50)     echo "FAIL 11\n";
-if ($t->conv('R', 'K', 509.67) != 283.15) echo "FAIL 12\n";
-
-if ($t->convLiteral('100C', 'kelvin') != 373.15) echo "FAIL 13\n";
-
-?>
