@@ -6,12 +6,18 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('ConvertSpeed.php');
 
-$m = new ConvertSpeed();
-$m->setPrecision(2);
+$arr = array(
+array('mph',  'km/h', 18,  28.96816882546493962804),
+array('km/h', 'm/s',  18,  5.000004),
+array('ft/s', 'mph',  12,  8.18181818181818181818),
+array('knot', 'm/s',  20,  10.28888),
+);
 
-if ( $m->conv('mph', 'km/h', 18) != 28.97) echo "FAIL 1\n";
-if ( $m->conv('km/h', 'm/s', 18) != 5)     echo "FAIL 2\n";
-if ( $m->conv('ft/s', 'mph', 12) != 8.18)  echo "FAIL 3\n";
-if ( $m->conv('knot', 'm/s', 20) != 10.29) echo "FAIL 4\n";
+foreach ($arr as $test)
+{
+    $res = ConvertSpeed::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3])
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
+}
 
-?>
+
