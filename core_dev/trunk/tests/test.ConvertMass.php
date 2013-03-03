@@ -6,14 +6,20 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('ConvertMass.php');
 
-$m = new ConvertMass();
-$m->setPrecision(2);
+$arr = array(
+array('kg', 'lb',   500,  1102.31131092438790361486),
+array('lb', 'kg',   500,  226.796185),
+array('t',  'kg',   1,    1000),
+array('kg', 't',    2000, 2),
+array('oz', 'g',    1,    28.349523125),
+array('kg', 'gram', 1,    1000),
+);
 
-if ($m->conv('kg', 'lb', 500) != 1102.31)    echo "FAIL 1\n";
-if ($m->conv('lb', 'kg', 500) != 226.8)      echo "FAIL 2\n";
-if ($m->conv('t', 'kg', 1) != 1000)          echo "FAIL 3\n";
-if ($m->conv('kg', 't', 2000) != 2)          echo "FAIL 4\n";
-if ($m->conv('oz', 'g', 1) != 28.35)         echo "FAIL 5\n";
-if ($m->convLiteral('1 kg', 'gram') != 1000) echo "FAIL 6\n";
+foreach ($arr as $test)
+{
+    $res = ConvertMass::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3])
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
+}
 
-?>
+

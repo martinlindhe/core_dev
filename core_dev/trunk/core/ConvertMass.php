@@ -11,54 +11,65 @@
 
 namespace cd;
 
-require_once('ConvertBase.php');
+require_once('IConvert.php');
 
-class ConvertMass extends ConvertBase
+class ConvertMass implements IConvert
 {
-    protected $scale = array( ///< unit scale to Gram
-    'g'  => 1,             //Gram
-    'hg' => 100,           //Hectogram
-    'kg' => 1000,          //Kilogram
-    't'  => 1000000,       //Tonne
-    'kt' => 1000000000,    //Kilotonne
-    'mt' => 1000000000000, //Megatonne
-    'oz' => 28.349523125,  //Ounce (1/16 lb)
-    'lb' => 453.59237,     //Pound
-    'st' => 6350.29318,    //Stone (14 lb)
+    protected static $scale = array( ///< unit scale to Gram
+    'g'  => '1',              // Gram
+    'hg' => '100',            // Hectogram
+    'kg' => '1000',           // Kilogram
+    't'  => '1000000',        // Metric tonne
+    'kt' => '1000000000',     // Kilotonne
+    'mt' => '1000000000000',  // Megatonne
+    'oz' => '28.349523125',   // Ounce
+    'lb' => '453.59237',      // Pound = 16 ounces
+    'st' => '6350.29318',     // Stone = 14 pounds
     );
 
-    protected $lookup = array(
+    protected static $lookup = array(
     'gram'      => 'g',
     'hecto'     => 'hg', 'hectogram' => 'hg',
     'kilo'      => 'kg', 'kilogram'  => 'kg',
-    'ton'       => 't',  'tonne'     => 't',  //"metric tonne"
+    'ton'       => 't',  'tonne'     => 't',
     'kiloton'   => 'kt', 'kilotonne' => 'kt',
     'megaton'   => 'mt', 'megatonne' => 'mt',
-
     'ounce'     => 'oz',    'ounces' => 'oz',
     'pound'     => 'lb',    'pounds' => 'lb', 'lbs'  => 'lb',
     'stone'     => 'st',    'stones' => 'st',
     );
 
-    function conv($from, $to, $val)
+    protected static function getScale($s)
     {
-        $from = $this->getShortcode($from);
-        $to   = $this->getShortcode($to);
+        $s = trim($s);
+        if (!$s)
+            throw new \Exception ('no input data');
 
-        if (!$from || !$to)
-            return false;
+        $s = strtolower($s);
+        if (!empty(self::$lookup[$s]))
+            return self::$scale[ self::$lookup[$s] ];
 
-        $res = ($val * $this->scale[$from]) / $this->scale[$to];
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
 
-        if ($this->precision)
-            return round($res, $this->precision);
+        $s = strtoupper($s);
+        if (!empty(self::$lookup[$s]))
+            return self::$scale[ self::$lookup[$s] ];
 
-        return $res;
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
+
+        throw new \Exception ('unhandled unit: '.$s);
     }
 
-    function convLiteral($s, $to, $from = 'gram')
+    public static function convert($from, $to, $val)
     {
-        return parent::convLiteral($s, $to, $from);
+        $from = self::getScale($from);
+        $to   = self::getScale($to);
+
+        $scale = 20;
+        $mul = bcmul($val, $from, $scale);
+        return bcdiv($mul, $to, $scale);
     }
 
 }
