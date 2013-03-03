@@ -6,14 +6,20 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require('ConvertNumeral.php');
 
-$d = new ConvertNumeral();
+$arr = array(
+array('decimal', 'binary',  '11',   1011),
+array('decimal', 'octal',   '44',   54),
+array('octal',   'decimal', '33',   27),
+array('octal',   'decimal', '1234', 668),
+array('binary',  'decimal', '1110', 14),
+array('binary',  'decimal', '1011', 11),
+);
 
-if ($d->conv('decimal', 'binary', '11') != '1011')   echo "FAIL 1\n";
-if ($d->conv('decimal', 'octal', '44')  != '54')     echo "FAIL 2\n";
-if ($d->conv('octal', 'decimal', '33')  != '27')     echo "FAIL 3\n";
-if ($d->conv('octal', 'decimal', '1234') != '668')   echo "FAIL 4\n";
-if ($d->conv('binary', 'decimal', '1110') != '14')   echo "FAIL 5\n";
-if ($d->convLiteral('1011 binary', 'decimal') != 11) echo "FAIL 6\n";
-if ($d->conv('auto', 'decimal', 'MCMLXXXVIII') != 1988)   echo "FAIL 7\n";
+foreach ($arr as $test)
+{
+    $res = ConvertNumeral::convert($test[0], $test[1], $test[2]);
+    if ($res != $test[3])
+        echo 'FAIL for '.$test[2].' '.$test[0].' => '.$test[1].', got '.$res.', expected '.$test[3]."\n";
+}
 
-?>
+

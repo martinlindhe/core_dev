@@ -4,8 +4,7 @@
  *
  * Converter between different numeral systems
  *
- * http://en.wikipedia.org/wiki/Radix
- * http://en.wikipedia.org/wiki/Numeral_system
+ * https://en.wikipedia.org/wiki/List_of_numeral_systems
  *
  * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
@@ -14,77 +13,51 @@
 
 namespace cd;
 
-require_once('core.php'); // for is_alphanumeric()
-require_once('ConvertBase.php');
-require_once('ConvertRomanNumber.php');
+require_once('IConvert.php');
 
-class ConvertNumeral extends ConvertBase
+class ConvertNumeral implements IConvert
 {
-    protected $scale = array( ///< digits in the numeral system
-    'bin' => 2,
-    'oct' => 8,
-    'dec' => 10,
-    'hex' => 16,
+    protected static $scale = array( ///< digits in the numeral system
+    'binary'      => 2,
+    'octal'       => 8,
+    'decimal'     => 10,
+    'hexadecimal' => 16,
+    'vigesimal'   => 20,
     );
 
-    protected $lookup = array(
-    'binary'      => 'bin',
-    'octal'       => 'oct',
-    'decimal'     => 'dec',
-    'hexadecimal' => 'hex',
+    protected static $lookup = array(
+    'bin'  => 'binary',
+    'oct'  => 'octal',
+    'dec'  => 'decimal',
+    'hex'  => 'hexadecimal',
     );
 
-    function conv($from, $to, $val)
+    protected static function getScale($s)
     {
-        if ($from == 'auto' && ConvertRomanNumber::isValid($val)) {
-            $roman = new ConvertRomanNumber($val);
-            return $roman->getAsInteger();
-        }
+        if (!empty(self::$scale[$s]))
+            return self::$scale[$s];
 
-        if (substr($val, 0, 1) == 'b') {
-            $val = substr($val, 1);
-            $from = 'bin';
-        }
-
-        if (substr($val, 0, 1) == 'o') {
-            $val = substr($val, 1);
-            $from = 'oct';
-        }
-
-        if (substr($val, 0, 1) == 'x') {
-            $val = substr($val, 1);
-            $from = 'hex';
-        }
-
-        if (substr($val, 0, 2) == '0x') {
-            $val = substr($val, 2);
-            $from = 'hex';
-        }
-
-        if ($from == 'auto' && is_numeric($val))
-            $from = 'dec';
-
-        if ($from == 'auto' && !is_numeric($val))
-            throw new \Exception ('unhandled number conversion of '.$val.' to '.$to);
-
-        $from = $this->getShortcode($from);
-        $to   = $this->getShortcode($to);
-
-        if (!$from || !$to)
-            return false;
-
-        if (!is_alphanumeric($val))
-            return false;
-
-        $base_from = $this->scale[$from];
-        $base_to   = $this->scale[$to];
-
-        return base_convert($val, $base_from, $base_to);
+        throw new \Exception ('xx');
     }
 
-    function convLiteral($s, $to, $from = 'decimal')
+    public static function convert($from, $to, $val)
     {
-        return parent::convLiteral($s, $to, $from);
+        if ($from == 'binary' && substr($val, 0, 1) == 'b')
+            $val = substr($val, 1);
+
+        if ($from == 'octal' && substr($val, 0, 1) == 'o')
+            $val = substr($val, 1);
+
+        if ($from == 'hexadecimal' && substr($val, 0, 1) == 'x')
+            $val = hexadecimal($val, 1);
+
+        if ($from == 'hexadecimal' && substr($val, 0, 2) == '0x')
+            $val = substr($val, 2);
+
+        $from_base = self::getScale($from);
+        $to_base = self::getScale($to);
+
+        return base_convert($val, $from_base, $to_base);
     }
 
 }
