@@ -4,7 +4,7 @@
  *
  * Helper functions for XHTML generation
  *
-  * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+  * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
 
 //WIP - deprecate all functions, see html.php
@@ -15,57 +15,6 @@ require_once('LocaleHandler.php');
 require_once('XhtmlHeader.php');
 require_once('html.php');
 
-/**
- * Creates a select-dropdown with numbers
- */
-function xhtmlSelectNumeric($_name, $_min = 1, $_max = 10, $_skip = 1)
-{
-    if (!is_numeric($_min) || !is_numeric($_max) || !is_numeric($_skip)) return;
-
-    $out = '<select name="'.strip_tags($_name).'">';
-
-    for ($i = $_min; $i <= $_max; $i += $_skip)
-        $out .= '<option value="'.$i.'">'.$i.'</option>';
-
-    $out .= '</select>';
-
-    return $out;
-}
-
-/**
- * @param $_size number of fields shown
- */
-function xhtmlSelectMultiple($_name, $_arr, $_default = '', $_onchange = '')   /// XXXXXX DEPRECATE this! use XhtmlComponentListbox instead
-{
-    //TODO not ignore the default param
-
-    $rnd = mt_rand();
-
-    $out = js_embed(
-    'function toggle_multi_'.$rnd.'() {'.
-        'var e = document.getElementById("multi_'.$rnd.'");'.
-        'if (e.multiple == true) {'.
-            'e.multiple = false;'.
-        '} else {'.
-            'e.multiple = true;'.
-        '}'.
-    '}'
-    );
-
-    $out .= '<select id="multi_'.$rnd.'" name="'.strip_tags($_name).'[]"'.($_onchange ? ' onchange="'.$_onchange.'"' : '').'>';
-
-    $out .= '<option value="0">---</option>';    //default to "0" instead of an empty string for "no option selected"
-    foreach ($_arr as $id => $title)
-        $out .= '<option value="'.$id.'">'.$title.'</option>';
-
-    $out .= '</select>';
-
-    $page = XmlDocumentHandler::getInstance();
-
-    $out .= '<a href="#" onclick="toggle_multi_'.$rnd.'(); return false;" style="vertical-align: bottom;"><img src="'.$page->getRelativeCoreDevUrl().'gfx/bullet_toggle_plus.png"/></a>';
-
-    return $out;
-}
 
 /**
  * Creates a hidden input field
@@ -213,71 +162,6 @@ function xhtmlMap($shapes, $name, $id = '')
 }
 
 /**
- * Creates select-dropdown menus out of specified category
- */
-function xhtmlSelectCategory__XXX_DEPRECATED($_type, $_owner = 0, $selectName = 'default', $selectedId = 0, $url = '', $varName = '', $extra = '')
-{
-    if (!is_numeric($_type) || !is_numeric($_owner)) return false;
-
-    $out = '<select name="'.strip_tags($selectName).'">';
-
-    if ($_type == CATEGORY_USERFILE) {
-        if ($h->files->allow_root_level) {
-            $out .= '<option value="0" onclick="location.href=\'?file_category_id=0\'">&nbsp;</option>';
-        }
-    } else {
-        $out .= '<option value="0">&nbsp;</option>';
-    }
-
-    $shown_global_cats = false;
-    $shown_my_cats = false;
-
-    $list = getGlobalAndUserCategories($_type, $_owner);
-
-    foreach ($list as $row) {
-        if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_global_cats && ($row['permissions']&CAT_PERM_GLOBAL) ) {
-            $out .= '<optgroup label="'.t('Global categories').'">';
-            $shown_global_cats = true;
-        }
-        if ($_type != CATEGORY_CONTACT && $_type != CATEGORY_USERDATA && $_type != CATEGORY_NEWS && $_type != CATEGORY_LANGUAGE && !$shown_my_cats && ($row['permissions']&CAT_PERM_USER)) {
-            $out .= '</optgroup>';
-            $out .= '<optgroup label="'.t('Your categories').'">';
-            $shown_my_cats = true;
-        }
-
-        //If text is formatted like "123|Text" then 123 will be used as value for this option.
-        //This is used by USERDATA_TYPE_THEME
-        $data = explode('|', $row['categoryName']);
-        if (!empty($data[1])) {
-            $val = trim($data[0]);
-            $text = trim($data[1]);
-        } else {
-            $val = $row['categoryId'];
-            $text = $data[0];
-        }
-
-        $out .= '<option value="'.$val.'"';
-        if ($selectedId == $val) $out .= ' selected="selected"';
-        else if ($url) {
-            if ($varName) {
-                $out .= ' onclick="location.href=\''.$url.'?'.$varName.'='.$row['categoryId'].$extra.'\'"';
-            } else {
-                $out .= ' onclick="location.href=\''.$url.'='.$row['categoryId'].$extra.'\'"';
-            }
-        }
-        $out .= '>'.$text;
-        if ($row['permissions'] & CAT_PERM_PRIVATE) $out .= ' ('.t('Private').')';
-        if ($row['permissions'] & CAT_PERM_HIDDEN) $out .= ' ('.t('Hidden').')';
-        $out .= '</option>';
-    }
-    if ($shown_global_cats || $shown_my_cats) $out .= '</optgroup>';
-
-    $out .= '</select>';
-
-    return $out;
-}
-
-/**
  * Generates XML tags from an array of values
  *
  * @param $params array with params (Name=>Value) for each tag
@@ -300,5 +184,3 @@ function toXmlTags($tagname, $params, $pad_before = '', $pad_after = "\n")
 
     return $res;
 }
-
-?>
