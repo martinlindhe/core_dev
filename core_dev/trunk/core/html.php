@@ -4,8 +4,10 @@
  *
  * Various HTML, Javascript and CSS utility functions
  *
- * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
+
+namespace cd;
 
 require_once('XmlDocumentHandler.php');
 require_once('XhtmlComponentA.php');

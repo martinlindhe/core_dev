@@ -9,6 +9,8 @@
 
 //WIP - deprecate all functions, see html.php
 
+namespace cd;
+
 require_once('LocaleHandler.php');
 require_once('XhtmlHeader.php');
 require_once('html.php');

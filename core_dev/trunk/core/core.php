@@ -7,6 +7,8 @@
  * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
  */
 
+namespace cd;
+
 require_once('CoreBase.php');
 require_once('LocaleHandler.php');        //for translations
 require_once('output_xhtml.php');         //for XHTML output helper functions
@@ -145,26 +147,28 @@ function dp($str)
  */
 function dm()
 {
-    $conv = new ConvertDatasize();
+    $used_mem = memory_get_peak_usage(false);
 
-    $res = 'Memory: using '.round($conv->convLiteral(memory_get_peak_usage(false), 'MiB', 'byte'), 1).' MiB';
+    $res = 'Memory: using '.round(ConvertDatasize::convert('byte', 'MiB', $used_mem), 1).' MiB';
 
-    // "-1" means "no memory limit"
-    if (ini_get('memory_limit') != '-1') {
-        //XXX simplify datasize conversion
-        $limit = $conv->convLiteral(ini_get('memory_limit'), 'byte'); //convert from "128M", or "4G" to bytes
-        $res .= ' ('.round(memory_get_peak_usage(false) / $limit * 100, 1).'% of '.$conv->convLiteral($limit, 'MiB').' MiB)'.ln();
+    $memory_limit = ini_get('memory_limit');
+
+    if ($memory_limit != '-1') { // "-1" means "no memory limit"
+
+        $limit = datasize_to_bytes($memory_limit);
+        $pct = round($used_mem / $limit * 100, 1);
+        $limit_s = round(ConvertDatasize::convert('byte', 'MiB', $limit), 1);
+        $res .=
+        ' ('.$pct.'% of '.$limit_s.' MiB)'.ln();
     } else {
         $res .= ' (no limit)'.ln();
     }
 
     if (extension_loaded('apc')) {
-        $conv = new ConvertDatasize();
-
         $info = apc_cache_info('', true);
-//d($info);
+
         $res .=
-        'APC: using '.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB'.
+        'APC: using '.round(ConvertDatasize::convert('byte', 'MiB', $info['mem_size']), 2).' MiB'.
         ', '.$info['num_hits'].' hits, '.$info['num_misses'].' misses, '.$info['num_entries'].' entries (max '.$info['num_slots'].')'.ln();
     }
 
