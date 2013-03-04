@@ -24,4 +24,16 @@ if ($x->getAsRoman() != 'MCMLXXXVIII') echo "FAIL 6\n";
 $x = new ConvertRomanNumber('MMMMCMXCIX');
 if ($x->getAsInteger() != 4999) echo "FAIL 7\n";
 
-?>
+
+
+
+
+/*
+        if (ConvertRomanNumber::isValid($val)) {
+            $roman = new ConvertRomanNumber($val);
+            return $roman->getAsInteger();
+        }
+*/
+
+
+// array('roman', 'decimal', 'MCMLXXXVIII') != 1988)   echo "FAIL 7\n";

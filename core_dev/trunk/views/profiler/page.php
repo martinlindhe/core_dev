@@ -118,32 +118,33 @@ if (isset($db) && $db instanceof DatabaseMySQLProfiler) {
 echo '<br/>';
 
 
-$conv = new ConvertDatasize(); // XXXX this should be static class
 $used_mem = memory_get_peak_usage(false);
 
 echo
 'Used memory: <b>'.
-round($conv->convLiteral($used_mem, 'MiB', 'byte'), 1).
+round(ConvertDatasize::convert('byte', 'MiB', $used_mem), 1).
 ' MiB</b>';
 
-// "-1" means "no memory limit"
-if (ini_get('memory_limit') != '-1') {
-    //XXX simplify datasize conversion
-    $limit = $conv->convLiteral(ini_get('memory_limit'), 'byte'); //convert from "128M", or "4G" to bytes
+
+$memory_limit = ini_get('memory_limit');
+if ($memory_limit != '-1') { // "-1" means "no memory limit"
+
+    $limit = datasize_to_bytes($memory_limit);
+    $pct = round($used_mem / $limit * 100, 1);
+    $limit_s = round(ConvertDatasize::convert('byte', 'MiB', $limit), 1);
     echo
-    ' (<b>'.round($used_mem / $limit * 100, 1).'%</b>'.
-    ' of <b>'.$conv->convLiteral($limit, 'MiB').' MiB</b>)<br/>';
+    ' (<b>'.$pct.'%</b>'.
+    ' of <b>'.$limit_s.' MiB</b>)<br/>';
 } else {
     echo ' (no limit)<br/>';
 }
 echo '<br/>';
 
 if (extension_loaded('apc')) {
-    $conv = new ConvertDatasize();
 
     $info = apc_cache_info('', true);
 //d($info);
-    echo 'APC: using <b>'.round($conv->convLiteral($info['mem_size'], 'MiB'), 2).' MiB</b><br/>';
+    echo 'APC: using <b>'.round(ConvertDatasize::convert('byte', 'MiB', $info['mem_size']), 2).' MiB</b><br/>';
     echo 'APC: <b>'.$info['num_hits'].'</b> hits, <b>'.$info['num_misses'].'</b> misses<br/>';
     echo 'APC: <b>'.$info['num_entries'].'</b> entries (max <b>'.$info['num_slots'].'</b>)<br/>';
     echo '<br/>';

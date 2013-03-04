@@ -93,3 +93,24 @@ class ConvertDatasize implements IConvert
     }
 
 }
+
+/**
+ * 1024M, 4G, 256K etc into bytes
+ */
+function datasize_to_bytes($s)
+{
+    if (is_numeric($s))
+        throw new \Exception ('unexpected value: '.$s);
+
+    //HACK: find first non-digit/non-separator. replace with a regexp
+    for ($i=0; $i<strlen($s); $i++) {
+        $c = substr($s, $i, 1);
+        if (!is_numeric($c) && $c != '.' && $c != ',')
+            break;
+    }
+
+    $suff = substr($s, $i);
+    $val  = substr($s, 0, $i);
+
+    return ConvertDatasize::convert($suff, 'byte', $val);
+}

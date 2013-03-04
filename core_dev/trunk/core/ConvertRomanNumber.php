@@ -11,7 +11,9 @@
 
 namespace cd;
 
-class ConvertRomanNumber
+require_once('IConvert.php');
+
+class ConvertRomanNumber implements IConvert
 {
     private $value; ///< holds "arabic" (integer) representation of roman number
 
@@ -20,9 +22,9 @@ class ConvertRomanNumber
         $this->set($s);
     }
 
-    static function isValid($s)
+    public static function isValid($s)
     {
-        preg_match('/(?<roman>[MDCLXVI]+)/i', $s, $x);  //XXX use ^ match from beginning and $ = match to end to simplify check
+        preg_match('/(?<roman>[MDCLXVI]+)/i', $s, $x);
         if (isset($x['roman']) && $x['roman'] == $s)
             return true;
 
