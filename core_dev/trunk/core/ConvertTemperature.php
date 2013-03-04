@@ -19,7 +19,7 @@ class ConvertTemperature implements IConvert
     protected static $units = array(
     'celcius'    => 0,
     'fahrenheit' => 0,
-    'rakine'     => 0,
+    'rankine'     => 0,
     'kelvin'     => 0,
     // TODO: milliKelvin
     );
@@ -27,7 +27,7 @@ class ConvertTemperature implements IConvert
     protected static $lookup = array(
     'c'        => 'celcius',
     'f'        => 'fahrenheit',
-    'r'        => 'rakine',
+    'r'        => 'rankine',
     'k'        => 'kelvin',
     );
 
@@ -53,20 +53,20 @@ class ConvertTemperature implements IConvert
         $from = self::getShortcode($from);
         $to   = self::getShortcode($to);
 
-        //convert to celcius for internal representation
+        // convert to celcius for internal representation
         switch (strtolower($from)) {
         case 'celcius': $cel =  $val; break;
         case 'fahrenheit': $cel = ($val - 32) * (5/9); break;
-        case 'rakine': $cel = ($val - 491.67) * (5/9); break;
-        case 'kelvin': $cel =  $val - 273.15; break;
+        case 'rankine': $cel = ($val - 491.67) * (5/9); break;
+        case 'kelvin': $cel = $val - 273.15; break;
         default: throw new \Exception ('from val: '.$from);
         }
 
         switch (strtolower($to)) {
         case 'celcius': $res =  $cel; break;
         case 'fahrenheit': $res = ($cel * (9/5)) + 32; break;
-        case 'rakine': $res = ($cel + 273.15) * (9/5); break;
-        case 'kelvin': $res =  $cel + 273.15; break;
+        case 'rankine': $res = ($cel + 273.15) * (9/5); break;
+        case 'kelvin': $res = $cel + 273.15; break;
         default: throw new \Exception ('to val: '.$to);
         }
 
