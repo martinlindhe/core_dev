@@ -253,6 +253,7 @@ class XhtmlForm
         $o->value  = $val;
         $o->width  = $width;
         $o->maxlen = $maxlen;
+        $o->autocomplete = $this->autocomplete;
         $this->add($o, $text);
    }
 

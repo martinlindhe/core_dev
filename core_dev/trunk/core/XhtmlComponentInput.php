@@ -4,10 +4,10 @@
  *
  * XHTML text input field
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
 
-//STATUS: wip
+//STATUS: ok
 
 namespace cd;
 
@@ -23,6 +23,7 @@ class XhtmlComponentInput extends XhtmlComponent
     var $maxlen;
     var $disabled = false;  ///< disable field (make it read only)
     var $onchange;          ///< js to execute on change event (when input field lost focus after user input)
+    var $autocomplete = true; ///< HTML5: allow browser autocomplete of this input field?
 
     function onChange($s) { $this->onchange = $s; }
 
@@ -47,11 +48,10 @@ class XhtmlComponentInput extends XhtmlComponent
         ($this->maxlen ? ' maxlength="'.$this->maxlen.'"': '').
         ($this->disabled ? ' disabled': '').
         ($this->onchange ? ' onchange="'.$this->onchange.'"': '').
+        (!$this->autocomplete ? ' autocomplete="off"': '').
         '/>';
 
         return $res;
     }
 
 }
-
-?>
