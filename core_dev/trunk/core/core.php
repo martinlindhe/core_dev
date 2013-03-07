@@ -91,10 +91,7 @@ function dt($s)
 {
     echo "[".sql_datetime( time() )."] ";
 
-    if (is_string($s))
-        echo $s;
-    else
-        d($s);
+    echo is_string($s) ? $s.ln() : d($s);
 }
 
 /**
