@@ -39,25 +39,22 @@ function php_min_ver($ver)
 }
 
 /**
- * Debug function. Prints out variable $v
- *
- * @param $v variable of any type to display
- * @return nothing
+ * Debug function. Prints out $s
  */
-function d($v)
+function d($s)
 {
     $cli = is_cli();
 
-    if (is_string($v)) {
+    if (is_string($s)) {
         //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
 
         if (is_cli()) {
-            var_dump($v);
+            var_dump($s);
         } else {
-            $out = htmlentities($v, ENT_QUOTES, 'UTF-8');
+            $out = htmlentities($s, ENT_QUOTES, 'UTF-8');
             $out = str_replace("\n", "<br/>", $out);
 
-            if ($out != htmlentities($v, ENT_QUOTES, 'UTF-8'))
+            if ($out != htmlentities($s, ENT_QUOTES, 'UTF-8'))
                 echo '<pre>'."\n".$out.'</pre>';
             else
                 var_dump($out);
@@ -66,21 +63,38 @@ function d($v)
         return;
     }
 
-    if (!$v) {
+    if (!$s) {
         echo "NULL".ln();
         return;
     }
 
     //xdebug's var_dump is awesome
     if (extension_loaded('xdebug')) {
-        var_dump($v);
+        var_dump($s);
         return;
     }
 
-    if (!$cli) echo '<pre>'."\n";
-    print_r($v);
+    if (!$cli)
+        echo '<pre>'."\n";
+
+    print_r($s);
     echo ln();
-    if (!$cli) echo '</pre>';
+
+    if (!$cli)
+        echo '</pre>';
+}
+
+/**
+ * Debug function. Prints out $s, with timestamp
+ */
+function dt($s)
+{
+    echo "[".sql_datetime( time() )."] ";
+
+    if (is_string($s))
+        echo $s;
+    else
+        d($s);
 }
 
 /**
@@ -609,5 +623,3 @@ function t($s)
 
     return $t;
 }
-
-?>

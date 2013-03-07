@@ -229,3 +229,12 @@ tblRevision
     created_by
     time_created
     event           kind of event that occured
+
+tblMediaWikiPages
+    id
+    url     text        !! utf8_bin collation for exact url match
+    title
+    pageid
+    content
+    time_saved
+    lang
