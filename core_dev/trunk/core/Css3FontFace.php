@@ -23,7 +23,7 @@ class Css3FontFace
 
     public function addSource($format, $url)
     {
-        if (!in_array($format, array('woff', 'truetype')))
+        if (!in_array($format, array('truetype', 'opentype', 'woff', 'eot')))
             throw new \Exception ('unknown format: '.$format);
 
         $src = new Css3FontFaceSrc();
