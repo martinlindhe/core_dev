@@ -101,7 +101,7 @@ class XhtmlForm
             }
         }
 
-        throw new \Exception ('element '.$s.' not defined');
+        throw new \Exception ('element "'.$s.'" not found');
     }
 
     function setTitle($s) { $this->title = $s; }
