@@ -159,7 +159,7 @@ echo
 echo '<br/>';
 
 echo 'Webserver: <b>'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'</b><br/>';
-echo 'Software: <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <span title="PHP_VERSION_ID = '.PHP_VERSION_ID.'">PHP '.phpversion().'</b><br/>';
+echo 'Software: <b>'.$_SERVER['SERVER_SOFTWARE'].'</b> with <b><span title="PHP_VERSION_ID = '.PHP_VERSION_ID.'">PHP '.phpversion().'</span></b><br/>';
 
 echo 'Webserver time: <b>'.date('Y-m-d H:i:s T').'</b><br/>';
 echo 'System uptime: <b>'.elapsed_seconds( uptime() ).'</b><br/>';
