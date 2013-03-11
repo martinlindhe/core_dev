@@ -17,9 +17,9 @@ class Css3FontFace
 {
     var $font_family;
     var $font_stretch = 'normal';
-    var $font_style = 'normal';
-    var $font_weight = 'normal';
-    var $sources = array();
+    var $font_style   = 'normal';
+    var $font_weight  = 'normal';
+    var $sources      = array();
 
     public function addSource($format, $url)
     {
@@ -39,7 +39,7 @@ class Css3FontFace
         foreach ($this->sources as $src)
             $sources[] = 'url('.$src->url.') format("'.$src->format.'")';
 
-        $css =
+        return
         '@font-face'.
         '{'.
             'font-family:"'.$this->font_family.'";'.
@@ -48,7 +48,6 @@ class Css3FontFace
             ($this->font_weight != 'normal' ? 'font-weight:'.$this->font_weight.';' : '').
             'src:'.implode(',', $sources).';'.
         '}';
-
-        return $css;
     }
+
 }
