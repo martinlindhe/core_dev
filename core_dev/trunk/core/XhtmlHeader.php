@@ -4,7 +4,7 @@
  *
  * Generates a HTML header
  *
- * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 //STATUS: ok
@@ -14,6 +14,7 @@ namespace cd;
 require_once('CoreBase.php');
 require_once('IXmlComponent.php');
 require_once('XmlDocumentHandler.php');  // for relurl()
+require_once('Css3FontFace.php');
 require_once('html.php');
 require_once('HttpUserAgent.php');
 
@@ -79,9 +80,15 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->rel[] = $o;
     }
 
-    function setTitle($t) { $this->title = $t; }
+    function setTitle($t)
+    {
+        $this->title = $t;
+    }
 
-    function setReloadTime($secs) { $this->reload_time = $secs; }
+    function setReloadTime($secs)
+    {
+        $this->reload_time = $secs;
+    }
 
     /** Adds a js file include to the header */
     function includeJs($uri)
@@ -126,6 +133,18 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->addRel('search', $url, 'application/opensearchdescription+xml', $title);
     }
 
+    function includeFont($name, $url, $format)
+    {
+        $ff = new Css3FontFace();
+        $ff->font_family = $name;
+        $ff->font_stretch = 'normal';
+        $ff->font_style = 'normal';
+        $ff->font_weight = 'normal';
+        $ff->addSource($format, $url);
+
+        $this->embedCss( $ff->render() );
+    }
+
     function setFavicon($uri)
     {
         if (substr($uri, 0, 1) != '/')
@@ -157,7 +176,10 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** CSS to be added inside <head> */
-    function embedCss($s) { $this->embed_css .= $s; }
+    function embedCss($s)
+    {
+        $this->embed_css .= $s;
+    }
 
     /** Registers a css block (avoids double definitions) */
     function registerCss($code)
@@ -167,12 +189,12 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $tmp = substr($code, 9);
         $fn = explode('{', $tmp);
 
-        // detect duplicate function names
+        // detect duplicate rule names
         if (isset($this->css_define[$fn[0]]))
             if ($this->css_define[$fn[0]] != $code)
                 throw new \Exception ('css define with different code already defined: '.$fn[0]);
             else
-                // dont double-embed identical functions
+                // dont double-embed identical rules
                 return false;
 
         $this->css_define[$fn[0]] = $code;
@@ -180,10 +202,16 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** JavaScript to be added inside <head> (js functions is available before page load event is completed) */
-    function embedJs($s) { $this->embed_js[] = $s; }
+    function embedJs($s)
+    {
+        $this->embed_js[] = $s;
+    }
 
     /** JavaScript to run when page loaded DOM event fires */
-    function embedJsOnload($s) { $this->embed_js_onload[] = $s; }
+    function embedJsOnload($s)
+    {
+        $this->embed_js_onload[] = $s;
+    }
 
     public function render()
     {
@@ -254,5 +282,3 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
 }
-
-?>
