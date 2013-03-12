@@ -61,7 +61,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** Adds a <meta name="" content=""> tag */
-    function setMeta($name, $val)
+    public function setMeta($name, $val)
     {
         $o = new MetaDescription();
         $o->name = $name;
@@ -70,7 +70,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** Adds a <link rel="" href=""> tag */
-    function addRel($rel_type, $href, $mime_type = '', $title = '')
+    public function addRel($rel_type, $href, $mime_type = '', $title = '')
     {
         $o = new LinkRel();
         $o->rel_type  = $rel_type;
@@ -80,18 +80,18 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->rel[] = $o;
     }
 
-    function setTitle($t)
+    public function setTitle($t)
     {
         $this->title = $t;
     }
 
-    function setReloadTime($secs)
+    public function setReloadTime($secs)
     {
         $this->reload_time = $secs;
     }
 
     /** Adds a js file include to the header */
-    function includeJs($uri)
+    public function includeJs($uri)
     {
         if (substr($uri, 0, 1) != '/')
             $uri = relurl($uri);
@@ -104,7 +104,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** Adds a js file include to the end of the header */
-    function includeJsLast($uri)
+    public function includeJsLast($uri)
     {
         if (substr($uri, 0, 1) != '/')
             $uri = relurl($uri);
@@ -112,7 +112,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->include_js_last[] = $uri;
     }
 
-    function includeCss($uri)
+    public function includeCss($uri)
     {
         if (substr($uri, 0, 1) != '/')
             $uri = relurl($uri);
@@ -120,12 +120,12 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->addRel('stylesheet', $uri, 'text/css');
     }
 
-    function includeFeed($url, $title = '')
+    public function includeFeed($url, $title = '')
     {
         $this->addRel('alternate', $url, 'application/rss+xml', $title);
     }
 
-    function includeOpenSearch($url, $title)
+    public function includeOpenSearch($url, $title)
     {
         if (substr($url, 0, 1) != '/')
             $uri = relurl($url);
@@ -133,19 +133,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
         $this->addRel('search', $url, 'application/opensearchdescription+xml', $title);
     }
 
-    function includeFont($name, $url, $format)
-    {
-        $ff = new Css3FontFace();
-        $ff->font_family = $name;
-        $ff->font_stretch = 'normal';
-        $ff->font_style = 'normal';
-        $ff->font_weight = 'normal';
-        $ff->addSource($format, $url);
-
-        $this->embedCss( $ff->render() );
-    }
-
-    function setFavicon($uri)
+    public function setFavicon($uri)
     {
         if (substr($uri, 0, 1) != '/')
             $uri = relurl($uri);
@@ -154,7 +142,7 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** Registers a javascript function (avoids double definitions)  */
-    function registerJsFunction($code)
+    public function registerJsFunction($code)
     {
         $code = trim($code);
         if (substr($code, 0, 9) != 'function ')
@@ -176,13 +164,13 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** CSS to be added inside <head> */
-    function embedCss($s)
+    public function embedCss($s)
     {
         $this->embed_css .= $s;
     }
 
     /** Registers a css block (avoids double definitions) */
-    function registerCss($code)
+    public function registerCss($code)
     {
         $code = trim($code);
 
@@ -202,13 +190,13 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     }
 
     /** JavaScript to be added inside <head> (js functions is available before page load event is completed) */
-    function embedJs($s)
+    public function embedJs($s)
     {
         $this->embed_js[] = $s;
     }
 
     /** JavaScript to run when page loaded DOM event fires */
-    function embedJsOnload($s)
+    public function embedJsOnload($s)
     {
         $this->embed_js_onload[] = $s;
     }
