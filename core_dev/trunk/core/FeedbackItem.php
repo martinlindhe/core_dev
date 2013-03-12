@@ -35,9 +35,9 @@ class FeedbackItem
         return SqlObject::loadObjects($q, __CLASS__);
     }
 
-    public static function store($obj)
+    public function store()
     {
-        return SqlObject::store($obj, self::$tbl_name);
+        return SqlObject::store($this, self::$tbl_name);
     }
 
     public static function remove($id)
@@ -57,9 +57,7 @@ class FeedbackItem
         $i->time_answered = sql_datetime( time() );
         $i->answered_by = $session->id;
         $i->message = $message_id;
-        FeedbackItem::store($i);
+        $i->store();
     }
 
 }
-
-?>

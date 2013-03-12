@@ -20,11 +20,6 @@ class Poke
 
     protected static $tbl_name = 'tblPokes';
 
-    public static function store($obj)
-    {
-        return SqlObject::storeUnique($obj, self::$tbl_name);
-    }
-
     /**
      * Creates a new poke
      * @param $to
@@ -37,7 +32,7 @@ class Poke
         $o->from = $session->id;
         $o->to   = $to;
         $o->time = sql_datetime( time() );
-        self::store($o);
+        $o->store();
     }
 
     public static function getPokes($to)
@@ -59,6 +54,10 @@ class Poke
         return Sql::pSelectItem($q, 'i', $to);
     }
 
-}
+    public function store()
+    {
+        return SqlObject::storeUnique($this, self::$tbl_name);
+    }
 
-?>
+
+}

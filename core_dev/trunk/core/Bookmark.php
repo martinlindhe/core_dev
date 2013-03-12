@@ -29,12 +29,12 @@ class Bookmark
 
     protected static $tbl_name = 'tblBookmarks';
 
-    static function get($id)
+    public static function get($id)
     {
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    static function getList($type, $owner)
+    public static function getList($type, $owner)
     {
         if (!is_numeric($owner) || !is_numeric($type))
             throw new \Exception ('noo');
@@ -51,7 +51,7 @@ class Bookmark
     /**
      * Check if an object (owner id & type) is already bookmarked
      */
-    static function exists($type, $value, $owner = 0)
+    public static function exists($type, $value, $owner = 0)
     {
         $o = new Bookmark();
         $o->type  = $type;
@@ -61,9 +61,9 @@ class Bookmark
         return SqlObject::exists($o, self::$tbl_name);
     }
 
-    static function store($obj)
+    public function store()
     {
-        return SqlObject::storeUnique($obj, self::$tbl_name);
+        return SqlObject::storeUnique($this, self::$tbl_name);
     }
 
     /**
@@ -71,8 +71,9 @@ class Bookmark
      * @param $type
      * @param $object_id   the object who owns the bookmark
      * @param $owner       if not set, owner will be current user
+     * @return bookmark id
      */
-    static function create($type, $object_id, $owner = 0)
+    public static function create($type, $object_id, $owner = 0)
     {
         $session = SessionHandler::getInstance();
 
@@ -80,7 +81,7 @@ class Bookmark
         $o->type  = $type;
         $o->value = $object_id;
         $o->owner = $owner ? $owner : $session->id;
-        self::store($o);
+        return $o->store();
     }
 
     /**
@@ -88,7 +89,7 @@ class Bookmark
      * @param $type
      * @param $object_id   the object who owns the bookmark
      */
-    static function remove($type, $object_id, $owner = 0)
+    public static function remove($type, $object_id, $owner = 0)
     {
         if (!is_numeric($type) || !is_numeric($object_id) || !is_numeric($owner))
             throw new \Exception ('noo');
@@ -105,5 +106,3 @@ class Bookmark
     }
 
 }
-
-?>

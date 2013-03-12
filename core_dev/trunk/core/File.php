@@ -196,11 +196,11 @@ class File
         $file->mimetype = $key['type'];
         $file->category = $category;
         $file->time_uploaded = sql_datetime( time() );
-        $fileId = self::store($file);
-        if (!$fileId)
+        $file->id = $file->store();
+        if (!$file->id)
             return false;
 
-        $dst_file = self::getUploadPath($fileId);
+        $dst_file = self::getUploadPath($file->id);
 
         if ($blind) {
             // UGLY HACK using "@": currently gives a E_WARNING: "Operation not permitted" error even though the rename suceeds!?!?!?
@@ -213,7 +213,7 @@ class File
         chmod($dst_file, 0777);
 
         $key['name'] = $dst_file;
-        $key['file_id'] = $fileId;
+        $key['file_id'] = $file->id;
 
         return $fileId;
     }

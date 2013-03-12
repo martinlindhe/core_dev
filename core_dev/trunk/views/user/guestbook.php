@@ -71,12 +71,12 @@ function gbHandler($p)
     if ($session->id == $p['to'])
         return false;
 
-    $x = new Guestbook();
-    $x->owner = $p['to'];
-    $x->creator = $session->id;
-    $x->time_created = sql_datetime( time() );
-    $x->body = $p['body'];
-    Guestbook::store($x);
+    $gb = new Guestbook();
+    $gb->owner = $p['to'];
+    $gb->creator = $session->id;
+    $gb->time_created = sql_datetime( time() );
+    $gb->body = $p['body'];
+    $gb->store();
 
     return true;
 }

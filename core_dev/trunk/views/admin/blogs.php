@@ -24,8 +24,7 @@ case 'new':
         $o->body           = trim($p['body']);
         $o->time_created   = sql_datetime( time() );
         $o->time_published = sql_datetime( time() );
-
-        BlogEntry::store($o);
+        $o->id             = $o->store();
 
         js_redirect('a/blogs/overview');
     }

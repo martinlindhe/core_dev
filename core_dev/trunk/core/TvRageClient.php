@@ -74,7 +74,7 @@ class TvRageClient extends HttpClient
         $show->ended        = sql_date( self::parseDate( strval($xml->ended) ) );
         $show->status       = self::parseStatus($xml->status, $show->started, $show->ended);
         $show->time_updated = sql_datetime( time() );
-        TvShow::store($show);
+        $show->store();
 
         if (!$xml->Episodelist)
             return $show;
@@ -91,7 +91,7 @@ class TvRageClient extends HttpClient
                 $ep->link   = strval($e->link);
                 $ep->setDate( strval($e->airdate) );
                 $ep->setEpisode( $attrs['no'].'x'.$e->seasonnum );
-                TvEpisode::store($ep);
+                $ep->store();
 
                 //only include episodes in period if it is set
                 if (!$this->period_from && !$this->period_to || ($ep->getDate() >= $this->period_from && $ep->getDate() <= $this->period_to))
@@ -140,7 +140,7 @@ class TvRageClient extends HttpClient
             $show->started = sql_date( self::parseDate(strval($s->started)) );
             $show->ended   = sql_date( self::parseDate(strval($s->ended)) );
             $show->status  = self::parseStatus($s->status, $show->started, $show->ended);
-            TvShow::store($show);
+            $show->store();
 
             $res[] = $show;
         }

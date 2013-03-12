@@ -13,7 +13,7 @@ function fbHandler($p)
     $o->body   = $p['body'];
     $o->from = $session->id;
     $o->time_created = sql_datetime( time() );
-    FeedbackItem::store($o);
+    $o->store();
 
     js_redirect(''); // jump to start page
 }

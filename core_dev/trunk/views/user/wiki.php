@@ -104,13 +104,13 @@ case 'edit':
             $rev->time_created = $wiki->time_edited;
             $rev->created_by   = $wiki->edited_by;
             $rev->event        = EVENT_TEXT_CHANGED;
-            Revision::store($rev);
+            $rev->id           = $rev->store();
 
             $wiki->text = $p['text'];
             $wiki->edited_by = $session->id;
             $wiki->time_edited = sql_datetime( time() );
             $wiki->revision++;
-            Wiki::store($wiki);
+            $wiki->store();
             redir('u/wiki/show/'.$wiki->name);
         }
 
@@ -118,7 +118,7 @@ case 'edit':
         $wiki->text = $p['text'];
         $wiki->edited_by = $session->id;
         $wiki->time_edited = sql_datetime( time() );
-        Wiki::store($wiki);
+        $wiki->store();
         redir('u/wiki/show/'.$wiki->name);
     }
 

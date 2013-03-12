@@ -25,9 +25,9 @@ class TvShow
 
     protected $episodes = array(); ///< array of TvEpisode objects
 
-    function getEpisodes() { return $this->episodes; }
+    public function getEpisodes() { return $this->episodes; }
 
-    function addEpisode($o)
+    public function addEpisode($o)
     {
         if (!($o instanceof TvEpisode))
             throw new \Exception ('not TvEpisode');
@@ -35,7 +35,7 @@ class TvShow
         $this->episodes[] = $o;
     }
 
-    function getPastEpisodes()
+    public function getPastEpisodes()
     {
         $res = array();
         foreach ($this->episodes as $ep)
@@ -45,7 +45,7 @@ class TvShow
         return $res;
     }
 
-    function getFutureEpisodes()
+    public function getFutureEpisodes()
     {
         $res = array();
         foreach ($this->episodes as $ep)
@@ -72,11 +72,9 @@ class TvShow
         return $obj;
     }
 
-    public static function store($obj)
+    public function store()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
 }
-
-?>

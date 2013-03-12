@@ -124,14 +124,14 @@ class UserHandler
         $o->name = $username;
         $o->type = $type;
         $o->time_created = sql_datetime( now() );
-        $o->id = User::store($o);
+        $o->id = $o->store();
         if (!$o->id)
             return false;
 
         $session = SessionHandler::getInstance();
 
         $o->password = Password::encrypt($o->id, $session->getEncryptKey(), $password, $algo);
-        User::store($o);
+        $o->store(); // write again with password encoded using the user id
 
         dp($session->getUsername().' created user '.$username.' ('.$o->id.') of type '.$type);
         return $o->id;
@@ -158,8 +158,7 @@ class UserHandler
             throw new \Exception ('wat');
 
         $u->name = $username;
-        User::store($u);
-        return true;
+        $u->store();
     }
 
     /**
@@ -178,8 +177,7 @@ class UserHandler
         $session = SessionHandler::getInstance();
 
         $u->password = Password::encrypt($id, $session->getEncryptKey(), $pwd, $algo);
-        User::store($u);
-        return true;
+        $u->store();
     }
 
 }

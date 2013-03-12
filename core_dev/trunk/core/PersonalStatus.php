@@ -16,16 +16,6 @@ class PersonalStatus
 
     protected static $tbl_name = 'tblPersonalStatus';
 
-    public static function store($obj)
-    {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
-    }
-
-    public static function delete($id)
-    {
-        SqlObject::deleteById($id, self::$tbl_name, 'id');
-    }
-
     public static function get($id)
     {
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
@@ -50,9 +40,17 @@ class PersonalStatus
         $status->owner = $user_id;
         $status->text = $text;
         $status->time_saved = sql_datetime( time() );
-        self::store($status);
+        return $status->store();
+    }
+
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name, 'id');
+    }
+
+    public static function delete($id)
+    {
+        SqlObject::deleteById($id, self::$tbl_name, 'id');
     }
 
 }
-
-?>

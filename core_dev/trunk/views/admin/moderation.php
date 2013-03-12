@@ -87,7 +87,7 @@ case 'handle':
         $o->handled_by = $session->id;
         $o->time_handled = sql_datetime( time() );
         $o->approved = isset($_GET['approve']) ? 1 : 0;
-        ModerationObject::store($o);
+        $o->store();
 
         if (!isset($_GET['approve']))
             redir('a/moderation');

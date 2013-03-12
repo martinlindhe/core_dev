@@ -96,12 +96,12 @@ class Comment
         $c->creator = $session->id;
         $c->creator_ip = client_ip();
         $c->time_created = sql_datetime( time() );
-        self::store($c);
+        return $c->store();
     }
 
-    public static function store($obj)
+    public function store()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
     public static function deleteByOwner($type, $owner)
@@ -116,5 +116,3 @@ class Comment
     }
 
 }
-
-?>

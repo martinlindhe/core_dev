@@ -66,7 +66,7 @@ case 'send':
     $m->from = $session->id;
     $m->msg  = $_GET['m'];
     $m->microtime = microtime(true);
-    ChatMessage::store($m);
+    $m->store();
 
     $page->setMimeType('text/plain');
     echo 'OK';

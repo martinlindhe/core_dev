@@ -32,11 +32,11 @@ case 'add':
         $session = SessionHandler::getInstance();
 
         $o = new FaqItem();
-        $o->question = $p['q'];
-        $o->answer   = $p['a'];
-        $o->creator = $session->id;
+        $o->question     = $p['q'];
+        $o->answer       = $p['a'];
+        $o->creator      = $session->id;
         $o->time_created = sql_datetime( time() );
-        FaqItem::store($o);
+        $o->id           = $o->store();
 
         js_redirect('a/faq');
     }
@@ -57,13 +57,12 @@ case 'edit':
     {
         $session = SessionHandler::getInstance();
 
-        $o = new FaqItem();
-        $o->id       = $p['id'];
-        $o->question = $p['q'];
-        $o->answer   = $p['a'];
-        $o->creator = $session->id;
+        $o = FaqItem::get($p['id']);
+        $o->question     = $p['q'];
+        $o->answer       = $p['a'];
+        $o->creator      = $session->id;
         $o->time_created = sql_datetime( time() );
-        FaqItem::store($o);
+        $o->store();
 
         js_redirect('a/faq');
     }

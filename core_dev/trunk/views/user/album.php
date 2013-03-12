@@ -164,9 +164,9 @@ case 'new':
         if ($session->isSuperAdmin && $p['system'])
             $o->owner = 0; // create a system wide album
 
-        $album_id = PhotoAlbum::store($o);
+        $o->id = $o->store();
 
-        js_redirect('u/album/show/'.$session->id.'/'.$album_id);
+        js_redirect('u/album/show/'.$session->id.'/'.$o->id);
     }
 
     $form = new XhtmlForm();

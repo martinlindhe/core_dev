@@ -19,11 +19,6 @@ class Like
 
     protected static $tbl_name = 'tblLikes';
 
-    public static function store($obj)
-    {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
-    }
-
     public static function isLiked($owner, $type, $user_id)
     {
         $q =
@@ -41,7 +36,7 @@ class Like
         $l->type = $type;
         $l->user = $user_id;
         $l->time = sql_datetime( time() );
-        self::store($l);
+        $l->store();
     }
 
     /**
@@ -57,6 +52,9 @@ class Like
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-}
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name, 'id');
+    }
 
-?>
+}

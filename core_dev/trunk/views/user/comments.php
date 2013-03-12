@@ -39,7 +39,7 @@ function handleSubmit($p)
     $c->creator      = $session->id;
     $c->creator_ip   = client_ip();
 
-    Comment::store($c);
+    $c->store();
     redir($_SERVER['REQUEST_URI']);
 }
 

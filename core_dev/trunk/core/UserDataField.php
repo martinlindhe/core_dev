@@ -41,11 +41,6 @@ class UserDataField
         return SqlObject::loadObjects($q, __CLASS__);
     }
 
-    public static function store($obj)
-    {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
-    }
-
     public static function getTypes()
     {
         return array(
@@ -59,6 +54,9 @@ class UserDataField
         );
     }
 
-}
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name, 'id');
+    }
 
-?>
+}

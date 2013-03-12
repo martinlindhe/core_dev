@@ -37,10 +37,10 @@ case 'new':
         $f->name = $p['name'];
         $f->type = $p['type'];
         $f->label = $p['label'];
-        $id = UserDataField::store($f);
+        $f->id = $f->store();
 
         if ($f->type == UserDataField::RADIO)
-            js_redirect('a/userdata/edit/'.$id);
+            js_redirect('a/userdata/edit/'.$f->id);
         else
             js_redirect('a/userdata/list');
     }
@@ -66,13 +66,13 @@ case 'edit':
         $f->name  = $p['name'];
         $f->label = $p['label'];
         $f->type  = $p['type'];
-        $id = UserDataField::store($f);
+        $f->id = $f->store();
 
         switch ($f->type) {
         case UserDataField::RADIO:
             for ($i=1; $i<6; $i++)
                 if (!empty($p['opt_'.$i]))
-                    UserDataFieldOption::set($id, 'opt_'.$i, $p['opt_'.$i]);
+                    UserDataFieldOption::set($f->id, 'opt_'.$i, $p['opt_'.$i]);
             break;
 
         case UserDataField::AVATAR:
@@ -83,7 +83,7 @@ case 'edit':
                         continue;
 
                     $fileId = File::importImage(SITE, $p['avatar_'.$i]);
-                    UserDataFieldOption::set($id, 'avatar_'.$i, $fileId);
+                    UserDataFieldOption::set($f->id, 'avatar_'.$i, $fileId);
                 }
             break;
 

@@ -21,11 +21,6 @@ class Visit
 
     protected static $tbl_name = 'tblVisits';
 
-    public static function store($obj)
-    {
-        return SqlObject::storeUnique($obj, self::$tbl_name);
-    }
-
     /**
      * Creates a new visit entry
      * @param $type
@@ -39,7 +34,7 @@ class Visit
         $o->owner = $owner_id;
         $o->ref   = $ref_id;
         $o->time  = sql_datetime( time() );
-        self::store($o);
+        $o->store();
     }
 
     public static function getAll($type, $owner)
@@ -52,6 +47,9 @@ class Visit
         return $list;
     }
 
-}
+    public function store()
+    {
+        return SqlObject::storeUnique($this, self::$tbl_name);
+    }
 
-?>
+}

@@ -42,7 +42,7 @@ case 'edit':
             $o->locked_by = $session->id;
             $o->time_locked = sql_datetime( time() );
         }
-        ChatRoom::store($o);
+        $o->store();
 
         js_redirect('a/chatroom/list');
     }
@@ -84,7 +84,7 @@ case 'new':
     {
         $o = new ChatRoom();
         $o->name = trim($p['name']);
-        ChatRoom::store($o);
+        $o->id   = $o->store();
 
         js_redirect('a/chatroom/list');
     }

@@ -27,11 +27,6 @@ class Message
 
     protected static $tbl_name = 'tblMessages';
 
-    public static function store($obj)
-    {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
-    }
-
     /** @return number of unread messages in the Inbox */
     public static function getUnreadCount($user_id)
     {
@@ -69,6 +64,11 @@ class Message
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name, 'id');
+    }
+
     /**
      * @return message id
      */
@@ -82,9 +82,7 @@ class Message
         $m->body = $msg;
         $m->type = $type;
         $m->time_sent = sql_datetime( time() );
-        return self::store($m);
+        return $m->store();
     }
 
 }
-
-?>

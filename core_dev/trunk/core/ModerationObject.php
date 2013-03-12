@@ -40,17 +40,12 @@ class ModerationObject
 
     protected static $tbl_name = 'tblModerationObjects';
 
-    static function get($id)
+    public static function get($id)
     {
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    static function store($obj)
-    {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
-    }
-
-    static function getUnhandled()
+    public static function getUnhandled()
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -60,7 +55,7 @@ class ModerationObject
         return SqlObject::loadObjects($q, __CLASS__);
     }
 
-    static function getApproved()
+    public static function getApproved()
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -71,7 +66,7 @@ class ModerationObject
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    static function getDenied()
+    public static function getDenied()
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -82,7 +77,7 @@ class ModerationObject
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    static function getStatusByReference($type, $reference)
+    public static function getStatusByReference($type, $reference)
     {
         $q =
         'SELECT approved FROM '.self::$tbl_name.
@@ -91,7 +86,7 @@ class ModerationObject
         return Sql::pSelectItem($q, 'ii', $type, $reference);
     }
 
-    static function getByReference($type, $reference)
+    public static function getByReference($type, $reference)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -102,7 +97,7 @@ class ModerationObject
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-    static function deleteByReference($type, $reference)
+    public static function deleteByReference($type, $reference)
     {
         $q =
         'DELETE FROM '.self::$tbl_name.
@@ -111,7 +106,13 @@ class ModerationObject
         return Sql::pDelete($q, 'ii', $type, $reference);
     }
 
-    static function add($type, $reference = 0, $data = '')
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name, 'id');
+    }
+
+
+    public static function add($type, $reference = 0, $data = '')
     {
         $session = SessionHandler::getInstance();
 
@@ -121,10 +122,8 @@ class ModerationObject
         $c->time_created = sql_datetime( time() );
         $c->data         = $data;
         $c->reference    = $reference;
-
-        self::store($c);
+        $c->id           = $c->store();
+        return $c->id;
     }
 
 }
-
-?>
