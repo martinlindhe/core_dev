@@ -5,6 +5,10 @@
  * @author Martin Lindhe, 2013 <martin@startwars.org>
  */
 
+// eot: IE 6-8 supports this
+// woff: Firefox, Chrome, IE9+
+// truetype: Firefox, Chrome, IE9+
+
 namespace cd;
 
 class Css3FontFaceSrc

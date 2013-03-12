@@ -37,7 +37,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     static $_instance;                      ///< singleton class
 
     protected $title;
-
     protected $embed_js        = array();
     protected $embed_js_onload = array();
     protected $embed_css       = '';
@@ -47,7 +46,6 @@ class XhtmlHeader extends CoreBase implements IXmlComponent
     protected $js_functions    = array();
     protected $meta_tags       = array();
     protected $rel             = array();   ///< <link rel=""> tags for external resources: css, icon, rss, opensearch
-
     protected $reload_time     = 0;         ///< time after page load to reload the page, in seconds
 
     private function __construct() { }
