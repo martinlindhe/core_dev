@@ -34,27 +34,27 @@ class TvEpisode extends Episode
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    public static function store($obj)
+    public function store()
     {
         $q =
         'SELECT id FROM '.self::$tbl_name.
         ' WHERE owner = ? AND season = ? AND episode = ?';
-        $id = Sql::pSelectItem($q, 'iii', $obj->owner, $obj->season, $obj->episode);
-        if ($id) {
+        $this->id = Sql::pSelectItem($q, 'iii', $this->owner, $this->season, $this->episode);
+        if ($this->id) {
             $q =
             'UPDATE '.self::$tbl_name.
             ' SET owner = ?, title = ?, date = ?, info = ?, season = ?, episode = ?, link = ? WHERE id = ?';
-            Sql::pUpdate($q, 'isssiisi', $obj->owner, $obj->title, $obj->date, $obj->info, $obj->season, $obj->episode, $obj->link, $id);
-            return $id;
+            Sql::pUpdate($q, 'isssiisi', $this->owner, $this->title, $this->date, $this->info, $this->season, $this->episode, $this->link, $this->id);
+            return $this->id;
         }
 
         $q =
         'INSERT INTO '.self::$tbl_name.
         ' SET owner = ?, title = ?, date = ?, info = ?, season = ?, episode = ?, link = ?';
-        return Sql::pInsert($q, 'isssiis', $obj->owner, $obj->title, $obj->date, $obj->info, $obj->season, $obj->episode, $obj->link);
+        return Sql::pInsert($q, 'isssiis', $this->owner, $this->title, $this->date, $this->info, $this->season, $this->episode, $this->link);
     }
 
-    function render()
+    public function render()
     {
         $res = sql_date($this->date).': '. $this->get().' - '.$this->title;
 

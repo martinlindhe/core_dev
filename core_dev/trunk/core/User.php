@@ -4,7 +4,7 @@
  *
  * Class to deal with creating and modifying a user
  *
- * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -109,15 +109,15 @@ class User
         return SqlObject::loadObject($row, __CLASS__);
     }
 
-    static function store($obj)
+    public function store()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
     /**
      * Used by SessionHandler::login() and others
      */
-    static function getExact($type, $id, $name, $pwd)
+    public static function getExact($type, $id, $name, $pwd)
     {
         $q =
         'SELECT * FROM tblUsers'.
@@ -154,7 +154,7 @@ class User
     /**
      * Marks specified user as "deleted"
      */
-    function remove()
+    public function remove()
     {
         // also removes user from all user groups
         foreach (UserGroupHandler::getGroups($this->id) as $grp)
@@ -165,5 +165,3 @@ class User
     }
 
 }
-
-?>

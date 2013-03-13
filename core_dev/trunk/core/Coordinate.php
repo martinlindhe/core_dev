@@ -95,12 +95,10 @@ class Coordinate
         return getDistanceWGS84($c1->latitude, $c1->longitude, $c2->latitude, $c2->longitude);
     }
 
-    public static function store($obj)
+    public function store()
     {
         $obj->time_saved = sql_datetime( time() );
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
 }
-
-?>

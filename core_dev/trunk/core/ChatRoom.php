@@ -20,12 +20,12 @@ class ChatRoom
 
     protected static $tbl_name = 'tblChatRooms';
 
-    static function get($id)
+    public static function get($id)
     {
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    static function getByName($s)
+    public static function getByName($s)
     {
         if (!$s)
             return false;
@@ -33,7 +33,7 @@ class ChatRoom
         return SqlObject::getAllByField('name', $s, self::$tbl_name, __CLASS__);
     }
 
-    static function getList()
+    public static function getList()
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -41,9 +41,9 @@ class ChatRoom
         return SqlObject::loadObjects($q, __CLASS__);
     }
 
-    static function store($o)
+    public function store()
     {
-        return SqlObject::store($o, self::$tbl_name);
+        return SqlObject::store($this, self::$tbl_name);
     }
 
     public static function remove($id)
@@ -52,5 +52,3 @@ class ChatRoom
     }
 
 }
-
-?>

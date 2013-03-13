@@ -32,9 +32,9 @@ class ChatMessage
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    public static function store($obj)
+    public function store()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
     /**
@@ -49,5 +49,3 @@ class ChatMessage
     }
 
 }
-
-?>

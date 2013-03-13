@@ -21,11 +21,9 @@ class HttpCache
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    public static function store($obj)
+    public function store()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
 }
-
-?>

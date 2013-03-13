@@ -35,9 +35,14 @@ class PhotoAlbum
         return SqlObject::getById($id, self::$tbl_name, __CLASS__);
     }
 
-    public static function store($obj)
+    public static function getProfileAlbumId()
     {
-        return SqlObject::store($obj, self::$tbl_name, 'id');
+        return 1; /// XXXX global "Profile pictures" album
+    }
+
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name, 'id');
     }
 
     public static function delete($id)
@@ -45,11 +50,4 @@ class PhotoAlbum
         return SqlObject::deleteById($id, self::$tbl_name, 'id');
     }
 
-    public static function getProfileAlbumId()
-    {
-        return 1; /// XXXX global "Profile pictures" album
-    }
-
 }
-
-?>

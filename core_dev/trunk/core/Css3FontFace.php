@@ -2,11 +2,13 @@
 /**
  * $Id$
  *
+ * http://www.w3schools.com/cssref/css3_pr_font-face_rule.asp
+ *
  * @author Martin Lindhe, 2013 <martin@startwars.org>
  */
 
 // eot: IE 6-8 supports this
-// woff: Firefox, Chrome, IE9+
+// woff: Firefox, Chrome, Safari, Opera, IE9+
 // truetype: Firefox, Chrome, IE9+
 
 namespace cd;

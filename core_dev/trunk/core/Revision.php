@@ -30,11 +30,6 @@ class Revision
 
     protected static $tbl_name = 'tblRevision';
 
-    public static function store($obj)
-    {
-        return SqlObject::store($obj, self::$tbl_name);
-    }
-
     public static function getCount($type, $owner)
     {
         $q =
@@ -52,6 +47,11 @@ class Revision
         $list = Sql::pSelect($q, 'ii', $type, $owner);
 
         return SqlObject::loadObjects($list, __CLASS__);
+    }
+
+    public function store()
+    {
+        return SqlObject::store($this, self::$tbl_name);
     }
 
 }

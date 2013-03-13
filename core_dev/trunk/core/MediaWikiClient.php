@@ -35,10 +35,9 @@ class MediaWikiPage
         return SqlObject::getByField($url, self::$tbl_name, __CLASS__, 'url');
     }
 
-    public static function store($o)
+    public function store()
     {
-// XXXX: delete all articles with same $url before storing (?)
-        return SqlObject::store($o, self::$tbl_name, 'url');
+        return SqlObject::store($this, self::$tbl_name, 'url');
     }
 }
 

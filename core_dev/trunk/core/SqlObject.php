@@ -47,7 +47,7 @@ class SqlObject
      * @param $q a sql select query resulting in one row, or a indexed array
      * @param $classname name of class object to load rows into
      */
-    static function loadObject($q, $classname)
+    public static function loadObject($q, $classname)
     {
         if (!$q) {
             // return new $classname();   // TODO-LATER default to always return a object of type $classname
@@ -98,7 +98,7 @@ class SqlObject
      * @param $q       a sql select query resulting in multiple rows, or a array of rows
      * @param $classname name of class object to load rows into
      */
-    static function loadObjects($q, $classname)
+    public static function loadObjects($q, $classname)
     {
         $list = is_array($q) ? $q : Sql::pSelect($q);
 
@@ -113,7 +113,7 @@ class SqlObject
      * Helper function, useful for parsing an object for a XhtmlForm dropdown etc
      * @return id->name paired array
      */
-    static function getListAsIdNameArray($arr, $id_name = 'id', $name_name = 'name')   // XXXX rename?
+    public static function getListAsIdNameArray($arr, $id_name = 'id', $name_name = 'name')   // XXXX rename?
     {
         $res = array();
         foreach ($arr as $o)
@@ -164,7 +164,7 @@ class SqlObject
         return $res;
     }
 
-    static function idExists($id, $tblname, $field_name = 'id')
+    public static function idExists($id, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new \Exception ('very bad');
@@ -182,7 +182,7 @@ class SqlObject
      * Compares the object:s set properties to table columns
      * @return true if object exists
      **/
-    static function exists($obj, $tblname)
+    public static function exists($obj, $tblname)
     {
         if (!is_alphanumeric($tblname))
             throw new \Exception ('very bad');
@@ -200,7 +200,7 @@ class SqlObject
      * Creates a object in a database table
      * @return insert id
      */
-    static function create($obj, $tblname)
+    public static function create($obj, $tblname)
     {
         if (!is_alphanumeric($tblname))
             throw new \Exception ('very bad');
@@ -216,7 +216,7 @@ class SqlObject
     /**
      * If object exists with same name as field in $field_name, already in db, return false
      */
-    static function storeUnique($obj, $tblname)
+    public static function storeUnique($obj, $tblname)
     {
         if (self::exists($obj, $tblname))
             return false;
@@ -227,7 +227,7 @@ class SqlObject
     /**
      * @param $field_name if object exists with this name, then update that item
      */
-    static function store($obj, $tblname, $field_name = 'id')
+    public static function store($obj, $tblname, $field_name = 'id')
     {
         if ($obj->$field_name && SqlObject::idExists($obj->$field_name, $tblname, $field_name))
         {
@@ -240,12 +240,12 @@ class SqlObject
         return SqlObject::create($obj, $tblname);
     }
 
-    static function getById($id, $tblname, $classname, $field_name = 'id')
+    public static function getById($id, $tblname, $classname, $field_name = 'id')
     {
         return self::getByField($id, $tblname, $classname, $field_name);
     }
 
-    static function getByField($val, $tblname, $classname, $field_name)
+    public static function getByField($val, $tblname, $classname, $field_name)
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new \Exception ('very bad');
@@ -260,7 +260,7 @@ class SqlObject
         return SqlObject::loadObject($row, $classname);
     }
 
-    static function deleteById($id, $tblname, $field_name = 'id')
+    public static function deleteById($id, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new \Exception ('very bad');
@@ -278,7 +278,7 @@ class SqlObject
      * Fetches all items where $field_name = $value
      * @param $order 'desc', 'asc' or empty
      */
-    static function getAllByField($field_name, $value, $tblname, $classname, $order_field = '', $order = 'asc')
+    public static function getAllByField($field_name, $value, $tblname, $classname, $order_field = '', $order = 'asc')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name) || !is_alphanumeric($order_field))
             throw new \Exception ('very bad');
@@ -297,7 +297,7 @@ class SqlObject
         return SqlObject::loadObjects($list, $classname);
     }
 
-    static function updateId($obj, $tblname, $field_name = 'id')
+    public static function updateId($obj, $tblname, $field_name = 'id')
     {
         if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
             throw new \Exception ('very bad');
@@ -322,5 +322,3 @@ class SqlObject
     }
 
 }
-
-?>

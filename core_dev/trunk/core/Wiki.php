@@ -30,13 +30,13 @@ class Wiki
     {
         $o = SqlObject::getByField($name, self::$tbl_name, __CLASS__, 'name');
         if (!$o)
-            return new Wiki();   // XXX TODO: this is a workaround because becase SqlObjecT::loadObject dont always return a object!!!!
+            return new Wiki();   // XXX TODO: this is a workaround because becase SqlObject::loadObject dont always return a object!!!!
         return $o;
     }
 
-    public static function store($o)
+    public function store()
     {
-        $page_name = $o->name;
+        $page_name = $this->name;
 
         // cleanups to make directory transversal impossible
         // TODO proper cleanup of name!
@@ -46,9 +46,9 @@ class Wiki
         $page_name = str_replace(' ', '_', $page_name);
 
         $dst_file = WikiConfig::getDiskPath().'/'.$page_name;
-        file_put_contents($dst_file, $o->text);
+        file_put_contents($dst_file, $this->text);
 
-        return SqlObject::store($o, self::$tbl_name, 'name');
+        return SqlObject::store($this, self::$tbl_name, 'name');
     }
 
 }
