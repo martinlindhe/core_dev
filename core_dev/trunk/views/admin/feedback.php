@@ -39,22 +39,27 @@ case 'handle':
     if (!$fb)
         die('Eppp');
 
-    $from = User::get($fb->from);
+    if ($fb->type == USER) {
+        $from = User::get($fb->from);
+        echo '<h2>User feedback from '.$fb->name.'</h2>';
+    }
 
-    echo '<h2>Feedback from '.$from->name.'</h2>';
     echo 'Subject: '.$fb->subject.'<br/>';
-    echo 'Message: '.nl2br($fb->body);
+    if ($fb->body)
+        echo 'Message: '.nl2br($fb->body);
     echo '<br/>';
 
-    $msg = "In response to your feedback:\n\n".$fb->body;
+    if ($fb->type == USER) {
+        $msg = "In response to your feedback:\n\n".$fb->body;
 
-    $frm = new XhtmlForm();
-    $frm->addHidden('owner', $this->child);
-    $frm->addHidden('to', $fb->from);
-    $frm->addTextarea('msg', 'Reply', $msg);
-    $frm->addSubmit('Send');
-    $frm->setHandler('fbHandle');
-    echo $frm->render();
+        $frm = new XhtmlForm();
+        $frm->addHidden('owner', $this->child);
+        $frm->addHidden('to', $fb->from);
+        $frm->addTextarea('msg', 'Reply', $msg);
+        $frm->addSubmit('Send');
+        $frm->setHandler('fbHandle');
+        echo $frm->render();
+    }
 
 
     echo '<br/>';
