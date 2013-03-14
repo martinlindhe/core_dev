@@ -31,6 +31,7 @@ define('USERDATA_OPTION', 20);  ///< used to hold options in tblSettings for Use
 define('PRIV_MSG',        21);  ///< a private text message
 define('PROFILE',         22);  ///< a user profile (used by Visit.php)
 define('STATUS',          23);  ///< a user personal status
+define('SYSTEM',          24);  ///< something from the system
 
 define('RECORDING_PRES',  30);  ///< stream recording of a user presentation
 define('RECORDING_MSG',   31);  ///< stream recording of a private message
