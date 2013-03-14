@@ -2,13 +2,14 @@
 
 namespace cd;
 
-require_once('FeedbackItem.php');
+require_once('Feedback.php');
 
 function fbHandler($p)
 {
     $session = SessionHandler::getInstance();
 
-    $o = new FeedbackItem();
+    $o = new Feedback();
+    $o->type = USER;
     $o->subject = $p['subj'];
     $o->body   = $p['body'];
     $o->from = $session->id;

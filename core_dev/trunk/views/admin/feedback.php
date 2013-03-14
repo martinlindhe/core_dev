@@ -2,7 +2,7 @@
 
 namespace cd;
 
-require_once('FeedbackItem.php');
+require_once('Feedback.php');
 require_once('Message.php');
 require_once('YuiDatatable.php');
 
@@ -14,7 +14,7 @@ if (!$this->owner)
 switch ($this->owner) {
 case 'default':
     echo '<h1>User feedback</h1>';
-    $list = FeedbackItem::getUnanswered();
+    $list = Feedback::getUnanswered();
 //    d($list);
 
     $dt = new YuiDatatable();
@@ -31,11 +31,11 @@ case 'handle':
     function fbHandle($p)
     {
         $msg_id = Message::send($p['to'], $p['msg']);
-        FeedbackItem::markHandled($p['owner'], $msg_id);
+        Feedback::markHandled($p['owner'], $msg_id);
         js_redirect('a/feedback/default');
     }
 
-    $fb = FeedbackItem::get($this->child);
+    $fb = Feedback::get($this->child);
     if (!$fb)
         die('Eppp');
 
@@ -63,7 +63,7 @@ case 'handle':
 
 case 'markhandled':
     // child = tblFeedback.id
-    FeedbackItem::markHandled($this->child);
+    Feedback::markHandled($this->child);
     js_redirect('a/feedback/default');
     break;
 

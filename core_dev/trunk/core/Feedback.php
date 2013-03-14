@@ -2,16 +2,19 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
 
 namespace cd;
 
-class FeedbackItem
+require_once('constants.php');
+
+class Feedback
 {
     var $id;
+    var $type;
     var $subject;
     var $body;
     var $from;          ///< user id
@@ -53,7 +56,7 @@ class FeedbackItem
     {
         $session = SessionHandler::getInstance();
 
-        $i = FeedbackItem::get($id);
+        $i = self::get($id);
         $i->time_answered = sql_datetime( time() );
         $i->answered_by = $session->id;
         $i->message = $message_id;
