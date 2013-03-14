@@ -303,10 +303,10 @@ tblFeedback
     id
     type            USER, SYSTEM
     subject
-    body
-    from            user id
+    body            (for USER)
+    from            user id (for USER)
     time_created
     time_answered
     answered_by     user id
-    $message        message id of response from admin
+    reference       message id of response from admin (for USER)
 

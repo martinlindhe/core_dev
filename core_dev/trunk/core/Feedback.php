@@ -21,7 +21,7 @@ class Feedback
     var $time_created;
     var $time_answered;
     var $answered_by;   ///< user id
-    var $message;       ///< message id of response from admin
+    var $reference;     ///< message id of response from admin (USER)
 
     protected static $tbl_name = 'tblFeedback';
 
@@ -36,6 +36,14 @@ class Feedback
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE time_answered IS NULL';
         return SqlObject::loadObjects($q, __CLASS__);
+    }
+
+    public static function getUnansweredCount()
+    {
+        $q =
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE time_answered IS NULL';
+        return Sql::pSelectItem($q);
     }
 
     public function store()
