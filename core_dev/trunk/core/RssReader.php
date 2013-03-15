@@ -162,7 +162,7 @@ class RssReader extends CoreBase
                 $url = str_replace("\xC3\xA9", '%C3%A9', $url); // é
                 $url = str_replace("\xC3\xB6", '%C3%B6', $url); // ö
                 $url = str_replace("\xC3\xBC", '%C3%BC', $url); // ü
-                $item->setUrl( $url );
+                $item->setUrl( trim($url) );
                 break;
 
             case 'pubdate':

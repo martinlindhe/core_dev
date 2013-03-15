@@ -46,6 +46,24 @@ class Feedback
         return Sql::pSelectItem($q);
     }
 
+    public static function ReferenceExists($type, $ref)
+    {
+        $q =
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE type = ? AND reference = ?';
+        $cnt = Sql::pSelectItem($q, 'ii', $type, $ref);
+        return $cnt ? true : false;
+    }
+
+    public static function SubjectExists($type, $subject)
+    {
+        $q =
+        'SELECT COUNT(*) FROM '.self::$tbl_name.
+        ' WHERE type = ? AND subject = ?';
+        $cnt = Sql::pSelectItem($q, 'is', $type, $subject);
+        return $cnt ? true : false;
+    }
+
     public function store()
     {
         return SqlObject::store($this, self::$tbl_name);
