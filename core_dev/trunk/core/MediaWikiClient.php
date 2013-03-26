@@ -107,7 +107,10 @@ class MediaWikiClient
      */
     public static function getArticle($full_url, $use_db_cache = '30 days')
     {
-        if (!is_url($full_url) || !is_mediawiki_url($full_url))
+        if (!is_url($full_url))
+            throw new \Exception ('need a url... '.$full_url);
+
+        if (!is_mediawiki_url($full_url))
             throw new \Exception ('need a mediawiki url... '.$full_url);
 
         $article_name = self::getArticleTitle($full_url);
@@ -143,14 +146,12 @@ class MediaWikiClient
 
         $raw = $http->getBody();
         $json = JSON::decode($raw);
+
         $pages = array();
         foreach ( $json->query->pages as $id => $p)
         {
             if ($id == '-1')
-            {
-                echo 'MEDIAWIKI FAIL: no page result for "'.$article_name.'"<br/>';
-                return false;
-            }
+                throw new \Exception ('no page result for "'.$article_name.'"');
 
             $o = new MediaWikiPage();
 
@@ -200,10 +201,12 @@ class MediaWikiClient
 
     public static function showArticle($full_url)  /// XXXX MAKE THIS INTO A VIEW, WHICH CAN HANDLE "FETCH NEW VERSION OF ARTICLE" CAPSLOCKFTW
     {
-//d($full_url);die;
-        $o = self::getArticle( $full_url );
-        if (!$o) {
-            echo "WARNING: no such article in cache: ".$full_url."<br/>";
+        try {
+            $o = self::getArticle( $full_url );
+        } catch (\Exception $e) {
+            echo "WARN: exception ".$e->getMessage()."<br/>";
+//            d($e);
+  //          echo "WARNING: no such article in cache: ".$full_url."<br/>";
             return false;
         }
 
