@@ -91,7 +91,7 @@ class DatabaseMysql implements IDB_SQL
         $this->db_handle = new \mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
-            throw new \Exception ('db_mysqli->connect: '.$this->db_handle->connect_error);
+            throw new \Exception ($this->db_handle->connect_error);
 
         if (!$this->db_handle->set_charset($this->charset))
             throw new \Exception ('Error loading character set '.$this->charset.': '.$this->db_handle->error);
