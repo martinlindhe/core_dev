@@ -17,6 +17,8 @@ class XmlReader extends \XMLReader
 {
     function parse($raw)
     {
+        // TODO XmlReader should not handle HTTP protocol details
+
         if (is_url($raw)) {
             $url = $raw;
             $h = new HttpClient($url);
@@ -43,7 +45,12 @@ class XmlReader extends \XMLReader
                 $raw = '<?xml version="1.0"?>'.$raw;
         }
 
-        $this->xml($raw);
+        if (!$this->xml($raw)) {
+            if (isset($url))
+                throw new \Exception ("Failed to parse XML from ".$url);
+
+            throw new \Exception ("Failed to parse XML");
+        }
     }
 
     function readValue()

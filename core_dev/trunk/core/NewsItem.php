@@ -18,7 +18,7 @@ class NewsItem extends CoreBase
 
     protected $Duration;  ///< video duration
     protected $Timestamp;
-    protected $Url;       ///< location of news article
+    var $Url;       ///< location of news article
 
     protected $media = array();
 
