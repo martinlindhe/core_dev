@@ -125,6 +125,16 @@ function is_cli()
 //    return (php_sapi_name() == 'cli' || $page->getMimeType() == 'text/plain' || $page->getMimeType() == '');
 }
 
+function debug_sleep($min_time, $max_time = 0)
+{
+    if (!$max_time)
+        $max_time = $min_time;
+
+    $val = mt_rand($min_time*1000000, $min_time*1000000);
+    dt('sleeping for '.$min_time.' to '.$max_time.' = '.$val.' ...');
+    usleep( $val );
+}
+
 /**
  * Returns appropriate line feed character
  */
