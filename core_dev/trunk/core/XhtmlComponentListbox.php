@@ -15,6 +15,8 @@ class XhtmlComponentListbox extends XhtmlComponent
 {
     var $value;                   ///< default value
     var $options;                 ///<  array of available options
+    var $collapsed_size = 1;
+    var $expanded_size  = 4;
     protected $js_onchange = '';
 
     function setJsOnChange($s) { $this->js_onchange = $s; }
@@ -34,8 +36,10 @@ class XhtmlComponentListbox extends XhtmlComponent
             'var e = document.getElementById(n);'.
             'if (e.multiple == true) {'.
                 'e.multiple = false;'.
+                'e.size = '.$this->collapsed_size.';'.
             '} else {'.
                 'e.multiple = true;'.
+                'e.size = '.$this->expanded_size.';'.
             '}'.
         '}'
         );

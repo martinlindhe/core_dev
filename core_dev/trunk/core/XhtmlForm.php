@@ -344,6 +344,7 @@ class XhtmlForm
         $o->name    = $name;
         $o->value   = $default;
         $o->options = $arr;
+        $o->expanded_size = 10;
         $this->add($o, $text);
     }
 
