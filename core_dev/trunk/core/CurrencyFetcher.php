@@ -58,7 +58,7 @@ class CurrencyFetcher
 
         $rate = CurrencyFetcherGoogle::getRate($from, $to);
 
-        $temp->set($key, $rate);
+        $temp->set($key, $rate, '1h');
         return $rate;
     }
 

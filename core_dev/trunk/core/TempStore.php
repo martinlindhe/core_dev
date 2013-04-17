@@ -4,10 +4,13 @@
  *
  * Temporary all-in-one storage singleton that utilises memcached extension
  *
- * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
+
+//TODO: detect when no memcache server actually exist. currently it will just act as no cache result was found
+
 //PLAN: stabilise impl, move current Cache users to here, eventually deprecate Cache class
 
 namespace cd;
@@ -65,7 +68,8 @@ class TempStore
         $serv->port = intval($port);
         $this->server_pool[] = $serv;
 
-        $this->handle->addServer($host, $port, $this->persistent);
+        if (!$this->handle->addServer($host, $port, $this->persistent))
+            throw new \Exception ('failed to add server');
     }
 
     /**
@@ -89,7 +93,7 @@ class TempStore
             return;
 
         if (!extension_loaded('memcached'))
-            throw new \Exception ("Cache FAIL: php5-memcache (php 5.2 or older), or php5-memcached (php 5.3+) not found");
+            throw new \Exception ('apt-get install php5-memcached');
 
         $this->handle = new \Memcached;
 
