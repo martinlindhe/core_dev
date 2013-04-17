@@ -19,6 +19,8 @@ require_once('CurrencyFetcherWebservicex.php');  // very slow, 2010-10-27
 
 class CurrencyFetcher
 {
+    var $cache_time = '1h';
+
     // currency list was last updated 2009.07.23
     protected static $lookup = array(
     'AFA','ALL','AED','ARS','AWG','AUD','ANG','BSD','BHD','BDT','BBD','BZD',
@@ -58,7 +60,7 @@ class CurrencyFetcher
 
         $rate = CurrencyFetcherGoogle::getRate($from, $to);
 
-        $temp->set($key, $rate, '1h');
+        $temp->set($key, $rate, $this->cache_time);
         return $rate;
     }
 
