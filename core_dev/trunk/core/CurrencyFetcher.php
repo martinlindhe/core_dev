@@ -19,8 +19,6 @@ require_once('CurrencyFetcherWebservicex.php');  // very slow, 2010-10-27
 
 class CurrencyFetcher
 {
-    var $cache_time = '1h';
-
     // currency list was last updated 2009.07.23
     protected static $lookup = array(
     'AFA','ALL','AED','ARS','AWG','AUD','ANG','BSD','BHD','BDT','BBD','BZD',
@@ -43,7 +41,7 @@ class CurrencyFetcher
         return in_array($s, self::$lookup) ? true : false;
     }
 
-    public static function getRate($from, $to)
+    public static function getRate($from, $to, $cache_time = '')
     {
         $from = strtoupper($from);
         $to   = strtoupper($to);
@@ -51,16 +49,20 @@ class CurrencyFetcher
         if (!self::isKnownCurrency($from) || !self::isKnownCurrency($to))
             throw new \Exception ('unknown currency');
 
-        $key = 'currency/'.$from.'/'.$to;
-        $temp = TempStore::getInstance();
+        if ($cache_time) {
+            $key = 'currency/'.$from.'/'.$to;
+            $temp = TempStore::getInstance();
 
-        $rate = $temp->get($key);
-        if ($rate)
-            return $rate;
+            $rate = $temp->get($key);
+            if ($rate)
+                return $rate;
+        }
 
         $rate = CurrencyFetcherGoogle::getRate($from, $to);
 
-        $temp->set($key, $rate, $this->cache_time);
+        if ($cache_time)
+            $temp->set($key, $rate, $cache_time);
+
         return $rate;
     }
 

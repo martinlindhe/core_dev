@@ -18,7 +18,7 @@ class ConvertCurrency implements IConvert
 {
     public static function convert($from, $to, $val)
     {
-        $rate = CurrencyFetcher::getRate($from, $to);
+        $rate = CurrencyFetcher::getRate($from, $to, '1h');
 
         $scale = 20;
         return bcmul($val, $rate, $scale);
