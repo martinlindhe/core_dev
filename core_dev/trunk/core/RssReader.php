@@ -118,6 +118,22 @@ class RssReader extends CoreBase
         }
     }
 
+    public static function FixUrl($url)
+    {
+        // HACKS - FIX invalid URLs
+        // no need to do this if value was not parsed directly to a Url object
+        $url = str_replace("\xC2\xA0", '%C2%A0', $url); // non-breaking space
+
+        $url = str_replace("\xC3\xA4", '%C3%A4', $url); // ä
+        $url = str_replace("\xC3\xA5", '%C3%A5', $url); // å
+        $url = str_replace("\xC3\xA9", '%C3%A9', $url); // é
+        $url = str_replace("\xC3\xB6", '%C3%B6', $url); // ö
+        $url = str_replace("\xC3\xBC", '%C3%BC', $url); // ü
+
+        $url = str_replace("\xE2\x80\x93", '%E2%80%93', $url);
+        return $url;
+    }
+
     private function parseItem()
     {
         $item = new NewsItem();
@@ -153,16 +169,7 @@ class RssReader extends CoreBase
 
             case 'link':
                 $url = $this->reader->readValue();
-                // UGLY HACKS - FIX invalid URLs
-                // no need to do this if value was not parsed to a Url object
-                $url = str_replace("\xC2\xA0", '%C2%A0', $url); // non-breaking space
-
-                $url = str_replace("\xC3\xA4", '%C3%A4', $url); // ä
-                $url = str_replace("\xC3\xA5", '%C3%A5', $url); // å
-                $url = str_replace("\xC3\xA9", '%C3%A9', $url); // é
-                $url = str_replace("\xC3\xB6", '%C3%B6', $url); // ö
-                $url = str_replace("\xC3\xBC", '%C3%BC', $url); // ü
-                $item->setUrl( trim($url) );
+                $item->setUrl( trim(self::FixUrl($url)) );
                 break;
 
             case 'pubdate':
