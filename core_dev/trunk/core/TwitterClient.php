@@ -52,7 +52,7 @@ class TwitterClient
 
     function getTimeline($user = '')
     {
-        $c = 'http://twitter.com/statuses/user_timeline.atom?screen_name='.urlencode($user);
+        $c = 'https://api.twitter.com/1/statuses/user_timeline.rss?screen_name='.urlencode($user);
 
         $data = $this->exec($c);
 

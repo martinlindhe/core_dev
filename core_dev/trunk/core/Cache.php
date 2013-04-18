@@ -37,7 +37,7 @@ class Cache extends CoreBase
         if (extension_loaded('memcached')) {
             //php5-memcached for php 5.3 or newer
             $this->driver_name = 'memcached';
-            $this->handle = new Memcached;
+            $this->handle = new \Memcached;
         } else if (extension_loaded('memcache')) {
             //php5-memcache for php 5.2 or older
             $this->driver_name = 'memcache';

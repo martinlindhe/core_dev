@@ -51,12 +51,12 @@ class AtomReader extends CoreBase
             }
         }
 
-        $this->reader = new XMLReader();
+        $this->reader = new \XMLReader();
         $this->reader->xml($data);
 
         while ($this->reader->read())
         {
-            if ($this->reader->nodeType != XMLReader::ELEMENT)
+            if ($this->reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch ($this->reader->name) {
@@ -99,13 +99,13 @@ class AtomReader extends CoreBase
         $item = new NewsItem();
 
         while ($this->reader->read()) {
-            if ($this->reader->nodeType == XMLReader::END_ELEMENT && $this->reader->name == 'entry') {
+            if ($this->reader->nodeType == \XMLReader::END_ELEMENT && $this->reader->name == 'entry') {
                 if ($item->title == $item->desc) $item->desc = '';
                 $this->items[] = $item;
                 return;
             }
 
-            if ($this->reader->nodeType != XMLReader::ELEMENT)
+            if ($this->reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch (strtolower($this->reader->name)) {
