@@ -73,6 +73,11 @@ class DatabaseMssql implements IDB_SQL
         $this->connected = true;
     }
 
+    public function ping()
+    {
+        // TODO: implement
+    }
+
     function selectDatabase($dbname)
     {
         $this->database = $dbname;

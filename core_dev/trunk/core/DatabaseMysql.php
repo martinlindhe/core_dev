@@ -4,12 +4,14 @@
  *
  * MySQL db driver using the php_mysqli extension
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
 
 //TODO: rewrite using PHP Data Objects: http://se.php.net/pdo
+
+//TODO: check php.ini for reconnect, needed by ping!   mysqli.reconnect = On
 
 namespace cd;
 
@@ -99,6 +101,15 @@ class DatabaseMysql implements IDB_SQL
         $this->connected = true;
 
         return true;
+    }
+
+    public function ping()
+    {
+        if (!$this->connected)
+            $this->connect();
+
+        if (!$this->db_handle->ping())
+            throw new \Exception ("Error: ".$this->db_handle->error);
     }
 
     /**

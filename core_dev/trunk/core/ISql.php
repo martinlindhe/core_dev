@@ -16,6 +16,8 @@ interface IDB_SQL
     public function connect();
     public function disconnect();
 
+    public function ping();
+
     public function escape($q);
 
     public function insert($q);
