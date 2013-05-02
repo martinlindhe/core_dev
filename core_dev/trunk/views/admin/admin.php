@@ -2,6 +2,8 @@
 
 namespace cd;
 
+require_once('Feedback.php');
+
 $session->requireSuperAdmin();
 
 echo '<h1>core_dev admin</h1>';
