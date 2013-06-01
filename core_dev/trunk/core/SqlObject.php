@@ -207,6 +207,9 @@ class SqlObject
 
         $reflect = self::reflectQuery($obj, '', false);
 
+        if (!$reflect->cols)
+            throw new \Exception ('no columns defined for '.$tblname);
+
         $q = 'INSERT INTO '.$tblname.
         ' SET '.implode(', ', $reflect->cols);
 
