@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * Util class to send email messages
+ * Util class to send email messages using SmtpClient class or external MTA
  *
  * MIME attachments:                 http://tools.ietf.org/html/rfc2231
  * MIME message bodies:              http://tools.ietf.org/html/rfc2045
@@ -10,11 +10,12 @@
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
  * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
- * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
 
+// TODO: use MTA switch
 //XXXX: why are stuff static arrays?
 
 namespace cd;
@@ -38,6 +39,7 @@ class SendMail
     protected $smtp;                         ///< SmtpClient object
     protected $version          = 'core_dev Sendmail 0.9';
     protected $connected        = false;
+    protected $use_mta          = false; ///< if true, let external MTA handle mail delivery
 
     protected $host;
     protected $port             = 25;
@@ -233,14 +235,6 @@ class SendMail
      */
     function send($msg = '')
     {
-        if (!$this->connect()) {
-            dp('SendMail failed to send mail because no mail server configured: '.substr($msg, 0, 200) );
-            return false;
-        }
-
-        if (!$this->smtp->_MAIL_FROM(self::$from_adr))
-            throw new \Exception ('Failed to set from address');
-
         $header =
         "Date: ".date('r')."\r\n".
         "From: ".(mb_encode_mimeheader(self::$from_name, 'UTF-8') ? mb_encode_mimeheader(self::$from_name, 'UTF-8')." <".self::$from_adr.">" : self::$from_adr)."\r\n".
@@ -251,18 +245,14 @@ class SendMail
         if (self::$rply_adr)
             $header .= "Reply-To: ".(mb_encode_mimeheader(self::$rply_name, 'UTF-8') ? mb_encode_mimeheader(self::$rply_name, 'UTF-8')." <".self::$rply_adr.">" : self::$rply_adr)."\r\n";
 
-        foreach (self::$to_adr as $to) {
-            if (!$this->smtp->_RCPT_TO($to)) continue;
+        foreach (self::$to_adr as $to)
             $header .= "To: ".$to."\r\n";
-        }
-        foreach (self::$cc_adr as $cc) {
-            if (!$this->smtp->_RCPT_TO($cc)) continue;
+
+        foreach (self::$cc_adr as $cc)
             $header .= "Cc: ".$cc."\r\n";
-        }
-        foreach (self::$bcc_adr as $bcc) {
-            if (!$this->smtp->_RCPT_TO($bcc)) continue;
+
+        foreach (self::$bcc_adr as $bcc)
             $header .= "Bcc: ".$bcc."\r\n";
-        }
 
         if (count(self::$attachments)) {
             $rnd = md5( mt_rand().'))<>(('.microtime() );
@@ -279,8 +269,7 @@ class SendMail
         $header .=
         "Content-Type: ".(self::$html ? "text/html" : "text/plain")."; charset=utf-8\r\n".
         "Content-Transfer-Encoding: 7bit\r\n".
-        "\r\n".
-        $msg."\r\n";
+        "\r\n";
 
         $attachment_data = '';
         foreach (self::$attachments as $a)
@@ -301,9 +290,27 @@ class SendMail
         if (count(self::$attachments))
             $attachment_data .= "--".$boundary."--";
 
-        return $this->smtp->_DATA($header.$attachment_data);
+        if ($this->use_mta)
+            return mail( implode(', ', self::$to_adr), self::$subject, $msg, $header);
+
+        if (!$this->connect()) {
+            dp('SendMail failed to send mail because no mail server configured: '.substr($msg, 0, 200) );
+            return false;
+        }
+
+        if (!$this->smtp->_MAIL_FROM(self::$from_adr))
+            throw new \Exception ('Failed to set from address');
+
+        foreach (self::$to_adr as $to)
+            $this->smtp->_RCPT_TO($to);
+
+        foreach (self::$cc_adr as $cc)
+            $this->smtp->_RCPT_TO($cc);
+
+        foreach (self::$bcc_adr as $bcc)
+            $this->smtp->_RCPT_TO($bcc);
+
+        return $this->smtp->_DATA($header.$msg."\r\n".$attachment_data);
     }
 
 }
-
-?>
