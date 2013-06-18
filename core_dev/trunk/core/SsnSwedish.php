@@ -16,8 +16,11 @@
  *
  * Documentation:
  * http://sv.wikipedia.org/wiki/Personnummer_i_Sverige
+ * http://sv.wikipedia.org/wiki/Organisationsnummer
+ * Organisationsnummer, broschyr SKV 709 från Skatteverket:
+ * http://www.skatteverket.se/download/18.70ac421612e2a997f85800040284/70909.pdf
  *
- * @author Martin Lindhe, 2007-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -26,10 +29,25 @@ namespace cd;
 
 class OrgNoSwedish extends SsnSwedish
 {
+    protected static function cleanSsn($ssn)
+    {
+        $ssn = str_replace('-', '', $ssn);
+        $ssn = str_replace(' ', '', $ssn);
+        $ssn = trim($ssn);
+        return $ssn;
+    }
+
     static function isValid($ssn, $gender = 0)
     {
-        // XXX validate how?
-        return true;
+        $ssn = self::cleanSsn($ssn);
+
+        if (strlen($ssn) != 10)
+            throw new \Exception ('odd length');
+
+        if (parent::calcLunh($ssn))
+            return true;
+
+        return false;
     }
 }
 
@@ -41,7 +59,7 @@ class SsnSwedish
     protected $valid = false;
 
     /* @return 12-digit ssn YYYYMMDDXXXX */
-    private static function cleanSsn($ssn)
+    protected static function cleanSsn($ssn)
     {
         $ssn = str_replace('-', '', $ssn);
         $ssn = str_replace(' ', '', $ssn);
@@ -53,9 +71,6 @@ class SsnSwedish
         case 8:
             // YYYYMMDD
             $yr = substr($ssn, 0, 4);
-            // years in the future cant be valid ssn
-            if ($yr > date('Y'))
-                return false;
             $mn = substr($ssn, 4, 2);
             $dy = substr($ssn, 6, 2);
             $last4 = '0000';
@@ -65,30 +80,24 @@ class SsnSwedish
             // "YY" is converted to "YYYY"
             // years below current year is considered to be 2000-20xx, otherwise its 1900-19xx
             $yr = substr($ssn, 0, 2);
-            $yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;
-
             $mn = substr($ssn, 2, 2);
             $dy = substr($ssn, 4, 2);
+
+            $yr = ($yr > date('y')) ? '19'.$yr : '20'.$yr;
+
             $last4 = substr($ssn, 6, 4);
             break;
 
         case 12:
             $yr = substr($ssn, 0, 4);
-            // years in the future cant be valid ssn
-            if ($yr > date('Y'))
-                return false;
             $mn = substr($ssn, 4, 2);
             $dy = substr($ssn, 6, 2);
             $last4 = substr($ssn, 8, 4);
             break;
 
         default:
-            return false;
+            throw new \Exception ('uhw odd length of '.$ssn);
         }
-
-        // validate if the date existed, for example 19810230 is invalid
-        if (!checkdate($mn, $dy, $yr))
-            return false;
 
         return $yr.$mn.$dy.$last4;
     }
@@ -101,18 +110,28 @@ class SsnSwedish
     {
         $ssn = self::cleanSsn($ssn);
 
-        if (!$ssn)
+        $yr = substr($ssn, 0, 4);
+        $mn = substr($ssn, 4, 2);
+        $dy = substr($ssn, 6, 2);
+
+        if ($yr > date('Y'))
             return false;
 
-        $ssn_gender = substr($ssn, 10, 1);
+        // validate if the date existed, for example 19810230 is invalid
+        if (!checkdate($mn, $dy, $yr))
+            return false;
 
-        // Error: odd (male) ssn found but user thinks its a female ssn
-        if ($gender && ($ssn_gender % 2) && $gender == SsnSwedish::FEMALE)
-            throw new \Exception ('Wrong gender specified, this ssn belongs to a male');
+        if ($gender) {
+            $ssn_gender = substr($ssn, 10, 1);
 
-        // Error: even (female) ssn found but user thinks its a male ssn
-        if ($gender && !($ssn_gender % 2) && $gender == SsnSwedish::MALE)
-            throw new \Exception ('Wrong gender specified, this ssn belongs to a female');
+            // Error: odd (male) ssn found but user thinks its a female ssn
+            if (($ssn_gender % 2) && $gender == SsnSwedish::FEMALE)
+                throw new \Exception ('Wrong gender specified, this ssn belongs to a male');
+
+            // Error: even (female) ssn found but user thinks its a male ssn
+            if (!($ssn_gender % 2) && $gender == SsnSwedish::MALE)
+                throw new \Exception ('Wrong gender specified, this ssn belongs to a female');
+        }
 
         if (self::calcLunh($ssn))
             return true;
@@ -125,19 +144,25 @@ class SsnSwedish
      *
      * Using the Luhn algorithm
      */
-    private static function calcLunh($ssn, $gender = 0)
+    protected static function calcLunh($ssn, $gender = 0)
     {
-        if (strlen($ssn) != 12)
-            throw new \Exception ('XXX should not happen');
+        // remove first 2 digits of YYYY
+        if (strlen($ssn) == 12)
+            $ssn = substr($ssn, 2);
 
-        $ssn = substr($ssn, 2); // remove first 2 digits of YEAR
+        if (strlen($ssn) != 10)
+            throw new \Exception ('XXX should not happen');
 
         $sum = 0;
 
         for ($i = 0; $i < strlen($ssn)-1; $i++)
         {
-            $tmp = substr($ssn, $i, 1) * (2 - ($i & 1)); // Switch between 212121212
-            if ($tmp > 9) $tmp -= 9;
+            // Switch between 212121212
+            $tmp = substr($ssn, $i, 1) * (2 - ($i & 1));
+
+            if ($tmp > 9)
+                $tmp -= 9;
+
             $sum += $tmp;
         }
 
