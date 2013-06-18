@@ -15,7 +15,6 @@
 
 //STATUS: wip
 
-// TODO: use MTA switch
 //XXXX: why are stuff static arrays?
 
 namespace cd;
@@ -66,6 +65,8 @@ class SendMail
     private function __clone() {}      //singleton: prevent cloning of class
 
     public function setDebug($b) { $this->debug = $b; }
+
+    public function useMta($b) { $this->use_mta = $b; }
 
     public static function getInstance()
     {
