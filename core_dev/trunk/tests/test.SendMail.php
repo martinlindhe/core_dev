@@ -8,6 +8,19 @@ require('core.php');
 require('SendMail.php');
 
 
+// external MTA example
+
+/*
+$sendmail = SendMail::getInstance();
+$sendmail->useMta(true);
+
+$sendmail->addRecipient('martin@ubique.se');
+$sendmail->setSubject('subj åöl');
+$sendmail->send('helo world');
+*/
+
+
+
 // Gmail example
 $mail = SendMail::getInstance();
 //$mail->setDebug(true);
@@ -19,9 +32,7 @@ $mail->setPort(587); // TLS/STARTTLS
 $mail->setFrom('martin@unicorn.se', 'martin testar');
 $mail->setReplyTo('noreply@unicorn.se');
 
-
-$arr = array('martin@unicorn.se','martin@startwars.org');
-$mail->addRecipients($arr);
+$mail->addRecipients(array('martin@unicorn.se','martin@startwars.org'));
 
 if (count($mail->getRecipients()) != 2) echo "FAIL 1\n";
 
@@ -32,6 +43,3 @@ $mail->setSubject('message åäö subject');
 
 $msg ='abc åäö 123';
 $mail->send($msg);
-
-
-?>
