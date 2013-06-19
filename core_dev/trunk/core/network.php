@@ -293,4 +293,18 @@ function coredev_urlencode($s)
     return $res;
 }
 
-?>
+/**
+ * Determines if we have a reliable connection to
+ * the specified host, by attempting to successfully open
+ * a tcp connection to the host within specified timeout.
+ * @param float $timeout in seconds
+ */
+function can_connect($host, $port = 80, $timeout = 30)
+{
+    $sock = @fsockopen($host, $port, $errno, $errstr, $timeout);
+    if (!$sock)
+        return false;
+
+    fclose($sock);
+    return true;
+}
