@@ -278,7 +278,34 @@ class SqlObject
     }
 
     /**
+     * Fetches all items
+     * @param $tblname
+     * @param $classname
+     */
+    public static function getAll($tblname, $classname, $order_field = '', $order = 'asc')
+    {
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($order_field))
+            throw new \Exception ('very bad');
+
+        if (!Sql::isValidOrder($order))
+            throw new \Exception ('odd order '.$order);
+
+        $q =
+        'SELECT * FROM '.$tblname.
+        ($order_field ? ' ORDER BY '.$order_field.' '.strtoupper($order) : '');
+
+        $list = Sql::pSelect($q);
+
+        return SqlObject::loadObjects($list, $classname);
+    }
+
+    /**
      * Fetches all items where $field_name = $value
+     * @param $field_name
+     * @param $value
+     * @param $tblname
+     * @param $classname
+     * @param $order_field
      * @param $order 'desc', 'asc' or empty
      */
     public static function getAllByField($field_name, $value, $tblname, $classname, $order_field = '', $order = 'asc')
