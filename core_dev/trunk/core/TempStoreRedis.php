@@ -42,12 +42,19 @@ class TempStoreRedis implements ITempStore
     }
 
 
-    /** @return array of server statistics, one entry per server */
-    public function getServerStats()
+    /** @return array of server info */
+    public function getServerInfo()
     {
         $this->connect();
 
         return $this->redis->info();
+    }
+
+    public function getServerConfig()
+    {
+        $this->connect();
+
+        return $this->redis->config("GET", "*");
     }
 
     public function get($key)

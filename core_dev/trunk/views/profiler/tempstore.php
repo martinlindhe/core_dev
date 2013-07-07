@@ -19,7 +19,28 @@ $css =
 
 echo '<div id="'.$tempstore_div.'" style="'.$css.'">';
 
+// TODO one view for memcached, one for Redis
+
+// memcached stats:
+if ($temp instanceof TempStoreRedis) {
+
+    $config = $temp->getServerConfig();
+//d($config);
+
+    $info = $temp->getServerInfo();
+//d($info);
+    echo 'Redis '.$info['redis_version'].', '.$info['redis_mode'].' mode<br/>';
+    echo 'at <b>'.$config['bind'].':'.$config['port'].'</b><br/>';
+    echo 'Uptime <b>'.elapsed_seconds($info['uptime_in_seconds']).'</b><br/>';
+    echo 'Connected clients: <b>'.$info['connected_clients'].'</b><br/>';
+    echo 'Used memory: <b>'.byte_count($info['used_memory']).'</b><br/>';
+
+    echo '</div>';
+    return;
+}
+
 $pool = $temp->getServerStats();
+
 if (!$pool) {
     echo 'No server configured';
     echo '</div>';

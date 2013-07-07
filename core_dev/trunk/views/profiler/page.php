@@ -84,7 +84,7 @@ if (class_exists('cd\SqlHandler')) {
 }
 
 if (class_exists('cd\TempStore')) {
-    $view = new ViewModel('views/profiler/memcached.php');
+    $view = new ViewModel('views/profiler/tempstore.php');
     echo $view->render();
 }
 

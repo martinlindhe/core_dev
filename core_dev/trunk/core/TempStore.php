@@ -26,8 +26,8 @@ class TempStore
             self::$_instance = new self();
         }
 
-        //self::$_backend = new TempStoreRedis();
-        self::$_backend = new TempStoreMemcached();
+        self::$_backend = new TempStoreRedis();
+        //self::$_backend = new TempStoreMemcached();
 
         return self::$_backend;
     }

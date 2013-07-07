@@ -11,5 +11,3 @@ interface ISvgComponent
 {
     public function render();
 }
-
-?>
