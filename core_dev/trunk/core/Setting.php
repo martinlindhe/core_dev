@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -24,10 +24,12 @@ class Setting
     var $type;    ///< use numbers from 50 and up for application specific types
     var $time_saved;
 
+    protected static $tbl_name = 'tblSettings';
+
     public static function get($type, $owner, $name, $default = '')
     {
         $q =
-        'SELECT value FROM tblSettings'.
+        'SELECT value FROM '.self::$tbl_name.
         ' WHERE owner = ? AND type = ? AND name = ?';
         $res = Sql::pSelectRow($q, 'iis', $owner, $type, $name);
 
@@ -38,17 +40,19 @@ class Setting
     public static function set($type, $owner, $name, $val)
     {
         $q =
-        'SELECT id FROM tblSettings'.
+        'SELECT id FROM '.self::$tbl_name.
         ' WHERE owner = ? AND type = ? AND name = ?';
 
         if (Sql::pSelectItem($q, 'iis', $owner, $type, $name)) {
             $q =
-            'UPDATE tblSettings SET time_saved = NOW(), value = ?'.
+            'UPDATE '.self::$tbl_name.
+            ' SET time_saved = NOW(), value = ?'.
             ' WHERE owner = ? AND type = ? AND name = ?';
             Sql::pUpdate($q, 'siis', $val, $owner, $type, $name);
         } else {
             $q =
-            'INSERT INTO tblSettings SET time_saved = NOW(),'.
+            'INSERT INTO '.self::$tbl_name.
+            ' SET time_saved = NOW(),'.
             'owner = ?, type = ?, name = ?, value = ?';
             Sql::pInsert($q, 'iiss', $owner, $type, $name, $val);
         }
@@ -66,7 +70,7 @@ class Setting
     public static function delete($type, $owner, $name)
     {
         $q =
-        'DELETE FROM tblSettings'.
+        'DELETE FROM '.self::$tbl_name.
         ' WHERE owner = ? AND type = ? AND name = ?';
         Sql::pDelete($q, 'iis', $owner, $type, $name);
         return true;
@@ -75,7 +79,7 @@ class Setting
     public static function getById($type, $id)
     {
         $q =
-        'SELECT value FROM tblSettings'.
+        'SELECT value FROM '.self::$tbl_name.
         ' WHERE type = ? AND id = ?';
         return Sql::pSelectItem($q, 'ii', $type, $id);
     }
@@ -87,7 +91,8 @@ class Setting
     {
         $q =
         'SELECT id, name, value, category'.
-        ' FROM tblSettings WHERE type = ? AND owner = ?';
+        ' FROM '.self::$tbl_name.
+        ' WHERE type = ? AND owner = ?';
         return Sql::pSelect($q, 'ii', $type, $owner);
     }
 
@@ -98,7 +103,7 @@ class Setting
     public static function getOwner($type, $name, $val)
     {
         $q =
-        'SELECT owner FROM tblSettings'.
+        'SELECT owner FROM '.self::$tbl_name.
         ' WHERE type = ? AND name = ? AND value = ?';
         return Sql::pSelectItem($q, 'iss', $type, $name, $val);
     }
@@ -109,11 +114,9 @@ class Setting
     public static function getTimeSaved($type, $name, $val)
     {
         $q =
-        'SELECT time_saved FROM tblSettings'.
+        'SELECT time_saved FROM '.self::$tbl_name.
         ' WHERE type = ? AND name = ? AND value = ?';
         return Sql::pSelectItem($q, 'iss', $type, $name, $val);
     }
 
 }
-
-?>
