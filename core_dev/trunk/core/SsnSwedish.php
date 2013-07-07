@@ -10,10 +10,6 @@
  * An odd number is assigned to men, an even number to women.
  * The tenth digit is a checksum which was introduced in 1967 when the system was computerized.
  *
- * To calculate the checksum, multiply the individual digits in the identity number with 212121-212.
- * The resulting products (a two digit product, such as 16, would be converted to 1 + 6) are
- * added together. The checksum is 10 minus the ones place digit in this sum.
- *
  * Documentation:
  * http://sv.wikipedia.org/wiki/Personnummer_i_Sverige
  * http://sv.wikipedia.org/wiki/Organisationsnummer
@@ -26,6 +22,8 @@
 //STATUS: wip
 
 namespace cd;
+
+require_once('Luhn.php');
 
 class OrgNoSwedish extends SsnSwedish
 {
@@ -114,6 +112,7 @@ class SsnSwedish
         $mn = substr($ssn, 4, 2);
         $dy = substr($ssn, 6, 2);
 
+        // years in the future cant be valid ssn
         if ($yr > date('Y'))
             return false;
 
@@ -144,7 +143,7 @@ class SsnSwedish
      *
      * Using the Luhn algorithm
      */
-    protected static function calcLunh($ssn, $gender = 0)
+    public static function calcLunh($ssn)
     {
         // remove first 2 digits of YYYY
         if (strlen($ssn) == 12)
@@ -153,21 +152,7 @@ class SsnSwedish
         if (strlen($ssn) != 10)
             throw new \Exception ('XXX should not happen');
 
-        $sum = 0;
-
-        for ($i = 0; $i < strlen($ssn)-1; $i++)
-        {
-            // Switch between 212121212
-            $tmp = substr($ssn, $i, 1) * (2 - ($i & 1));
-
-            if ($tmp > 9)
-                $tmp -= 9;
-
-            $sum += $tmp;
-        }
-
-        // Substract the ones place digit from 10
-        $sum = (10 - ($sum % 10)) % 10;
+        $sum = Luhn::Calculate(substr($ssn, 0, -1) );
 
         return substr($ssn, -1, 1) == $sum;
     }
