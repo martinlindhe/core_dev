@@ -7,7 +7,7 @@
  * Custom toolbar example:
  * http://developer.yahoo.com/yui/examples/editor/toolbar_editor.html
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -35,19 +35,19 @@ class YuiRichedit extends XhtmlComponent
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/assets/skins/sam/skin.css');
 
         // utility Dependencies
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/element/element-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/element/element-min.js');
 
         // needed for Menus, Buttons and Overlays used in the Toolbar
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/button/button-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/container/container_core-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/menu/menu-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/button/button-min.js');
 
         // source file for Rich Text Editor
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/editor/editor-min.js');
 
         $div_id = $this->name ? $this->name : 're_'.mt_rand();
 
@@ -107,5 +107,3 @@ class YuiRichedit extends XhtmlComponent
         return $hold->render().js_embed($res);
     }
 }
-
-?>

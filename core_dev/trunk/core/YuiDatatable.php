@@ -4,10 +4,11 @@
  *
  * http://developer.yahoo.com/yui/datatable/
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
+//TODO hi prio; write a yui3 class and drop this
 
 //TODO WIP: finish conditional row coloring: http://developer.yahoo.com/yui/examples/datatable/dt_row_coloring.html
 //          current code is half-working... multiple rules dont work well together, only integer comparisions???
@@ -251,20 +252,20 @@ class YuiDatatable
         $header = XhtmlHeader::getInstance();
 
         if ($this->show_paginator)
-            $header->includeCss('http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css');
+            $header->includeCss('core_dev/js/ext/yui/2.9.0/build/paginator/assets/skins/sam/paginator.css');
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/datatable/assets/skins/sam/datatable.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/element/element-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/connection/connection-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/datasource/datasource-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/element/element-min.js');
 
         if ($this->show_paginator)
-            $header->includeJs('http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js');
+            $header->includeJs('core_dev/js/ext/yui/2.9.0/build/paginator/paginator-min.js');
 
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/json/json-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/datatable/datatable-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/json/json-min.js');
 
         $div_holder = 'yui_dt'.mt_rand();
         $data_var   = 'yui_dt_data'.mt_rand();
@@ -438,5 +439,3 @@ class YuiDatatable
     }
 
 }
-
-?>

@@ -8,7 +8,7 @@
  * http://developer.yahoo.com/yui/calendar/
  * http://developer.yahoo.com/yui/docs/YAHOO.widget.CalendarGroup.html
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -45,10 +45,10 @@ class YuiDateInterval extends XhtmlComponent
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/calendar/assets/skins/sam/calendar.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/calendar/calendar-min.js');
 
         $res =
         '(function()'.
@@ -235,5 +235,3 @@ class YuiDateInterval extends XhtmlComponent
     }
 
 }
-
-?>

@@ -6,7 +6,7 @@
  *
  * http://developer.yahoo.com/yui/autocomplete/
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
  */
 
 //STATUS: wip, currently only used in savak/bnr
@@ -57,17 +57,17 @@ class YuiAutocomplete extends XhtmlComponent
 
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css');
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css');
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/fonts/fonts-min.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/button/assets/skins/sam/button.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/get/get-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/element/element-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/button/button-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/get/get-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/animation/animation-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/datasource/datasource-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/autocomplete/autocomplete-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/element/element-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/button/button-min.js');
 
         $div_holder = 'yui_ac'.mt_rand();
 
@@ -189,5 +189,3 @@ class YuiAutocomplete extends XhtmlComponent
     }
 
 }
-
-?>

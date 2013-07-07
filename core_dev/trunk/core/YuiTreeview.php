@@ -7,7 +7,7 @@
  * Documentation:
  * http://developer.yahoo.com/yui/treeview/
  *
- * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2013 <martin@startwars.org>
  */
 
 //STATUS: wip
@@ -47,19 +47,19 @@ class YuiTreeview
     {
         $header = XhtmlHeader::getInstance();
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/treeview/assets/skins/sam/treeview.css');
 
         // XXX disable this css to get windows-style treeview object
         $header->includeCss('http://developer.yahoo.com/yui/build/treeview/assets/treeview-menu.css');
 
-        $header->includeCss('http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css');
+        $header->includeCss('core_dev/js/ext/yui/2.9.0/build/calendar/assets/skins/sam/calendar.css');
 
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/json/json-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js');
-        $header->includeJs('http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/animation/animation-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/calendar/calendar-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/json/json-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/connection/connection-min.js');
+        $header->includeJs('core_dev/js/ext/yui/2.9.0/build/treeview/treeview-min.js');
 
         $locale = LocaleHandler::getInstance();
 
@@ -159,5 +159,3 @@ class YuiTreeview
     }
 
 }
-
-?>
