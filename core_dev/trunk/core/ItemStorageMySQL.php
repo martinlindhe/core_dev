@@ -36,4 +36,9 @@ abstract class ItemStorageMySQL
     {
         return SqlObject::getAllByField('owner', $id, static::$tbl_name, get_called_class() );
     }
+
+    public static function getAllByField($field_name, $value)
+    {
+        return SqlObject::getAllByField($field_name, $value, static::$tbl_name, get_called_class() );
+    }
 }

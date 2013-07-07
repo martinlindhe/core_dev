@@ -4,7 +4,7 @@
  *
  * Creates a select-dropdown list from a indexed array
  *
- * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
  */
 
 //STATUS: ok
@@ -15,12 +15,15 @@ require_once('XhtmlComponent.php');
 
 class XhtmlComponentDropdown extends XhtmlComponent
 {
-    var        $value;               ///< default value
-    private   $options = array();  ///<  array of available options
+    var       $value;               ///< default value
+    private   $options = array();   ///<  array of available options
     protected $js_onchange = '';
 
     function setOptions($a)
     {
+        if (!is_array($a))
+            throw new \Exception ('not an array: '.$a);
+
         foreach ($a as $idx => $o)
             $this->options[$idx] = htmlentities($o, ENT_QUOTES, 'UTF-8');
     }
@@ -49,5 +52,3 @@ class XhtmlComponentDropdown extends XhtmlComponent
     }
 
 }
-
-?>
