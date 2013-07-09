@@ -13,7 +13,7 @@ class TempStoreRedis implements ITempStore
     protected $connected = false;
     protected $enabled = true;
     protected $maxlen = 300; ///< do redis have a limit?
-    var       $debug = true;
+    var       $debug = false;
 
     var       $host = '127.0.0.1';
     var       $port = 6379;

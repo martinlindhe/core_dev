@@ -23,7 +23,7 @@ class TempStoreMemcached implements ITempStore
 {
     protected $memcached;
     protected $enabled     = true;
-    protected $debug       = true;
+    protected $debug       = false;
     protected $connected   = false;
     private   $maxlen      = 300;
     var       $host        = '127.0.0.1';
