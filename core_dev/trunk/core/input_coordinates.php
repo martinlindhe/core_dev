@@ -5,17 +5,25 @@
  * Helper functions to convert different coordinate systems
  * and syntaxes to the internal format: WGS84 in degrees
  *
- * World Geodetic System (WGS84):
  * http://en.wikipedia.org/wiki/WGS84
+ * http://sv.wikipedia.org/wiki/SWEREF_99
+ * http://sv.wikipedia.org/wiki/SWEREF_99_TM
+ * http://sv.wikipedia.org/wiki/RT_90
+ *
+ * SWEREF 99 is used in Sweden and is the current standard,
+ * differs by a few decimeters from WGS84, while "SWEREF 99 TM" only
+ * covers Sweden and is used by Lantmäteriet
  *
  * Converters:
  * http://latlong.mellifica.se/ (SWEREF 99, RT 90 to WGS84)
  * http://franson.com/coordtrans/ (commerical product)
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * Based on http://latlong.mellifica.se/latlong.js (creative commons licence)
+ *
+ * @author Martin Lindhe, 2008-2013 <martin@startwars.org>
  */
 
-//STATUS: ???
+//STATUS: ??? CLENAUP!
 
 /**
  * Converts WGS84 degrees, minutes and seconds (D'M'S)
@@ -64,7 +72,6 @@ function gpsToWGS84($coord)    //XXX rename function
 
 /**
  * Converts RT 90 coordinates to WGS84
- * http://sv.wikipedia.org/wiki/RT_90
  *
  * @note RT 90 is used in Sweden, but is superseded by SWEREF 99
  */
@@ -86,12 +93,9 @@ function RT90toWGS84($x, $y)
 }
 
 /**
- * Converts SWEREF 99 coordinates to WGS84
- * http://sv.wikipedia.org/wiki/Sweref
- *
- * @note SWEREF 99 is used in Sweden and is the current standard
+ * Converts "SWEREF 99 TM" coordinates to WGS84 / SWEREF99
  */
-function SWEREF99toWGS84($n, $e)
+function SWEREF99_TM_toWGS84($n, $e)
 {
     global $coords;
 
@@ -183,6 +187,3 @@ function getDistanceWGS84($latitude1, $longitude1, $latitude2, $longitude2)
 
     return $d;
 }
-
-
-?>
