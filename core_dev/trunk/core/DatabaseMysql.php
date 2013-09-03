@@ -90,7 +90,9 @@ class DatabaseMysql implements IDB_SQL
             return true;
 
         //silence warning from failed connection and display our error instead
-        $this->db_handle = new \mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
+        // NOTE: silence "Headers and client library minor version mismatch. Headers:50531 Library:100004" warning when using mariadb server
+
+        $this->db_handle = @new \Mysqli($this->host, $this->username, $this->password, $this->database, $this->port);
 
         if ($this->db_handle->connect_error)
             throw new \Exception ($this->db_handle->connect_error);
