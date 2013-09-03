@@ -1,7 +1,7 @@
-facebook-php-sdk from: https://github.com/facebook/php-sdk/
+facebook-php-sdk from: https://github.com/facebook/facebook-php-sdk
 
-  git clone https://github.com/facebook/php-sdk facebook-php-sdk
+  git clone https://github.com/facebook/facebook-php-sdk.git
 
-  + only kept "src" dir files facebook.php and fb_ca_chain_bundle.crt
+  + only kept "src" dir files
 
-last synced at 2011.11.30
+last synced at 2013.09.03
