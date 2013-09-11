@@ -1,3 +1,0 @@
-php code for adblockrules.org
-
-tightly tied to the dbAdblock db structure (based on dbSample tables)

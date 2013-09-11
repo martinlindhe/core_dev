@@ -1,8 +1,0 @@
-$config['core']['fs_root']  = fs path to core_dev			previously called $config['core_root']
-$config['core']['web_root'] = web path to core_dev			previously called $config['core_web_root']
-$config['core']['full_url'] = full web path to core_dev		previously called $config['full_core_web_root']
-
-$config['app']['fs_root'] = fs path to app					previously called $config['app_root']
-$config['app']['web_root'] = web path to app				previously called $config['web_root']
-$config['app']['web_server'] = http://servername.com
-$config['app']['full_url'] = full web path to app			previously called $config['full_url'] or $config['full_web_root']
