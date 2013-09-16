@@ -7,6 +7,7 @@ require_once('Feedback.php');
 $session->requireSuperAdmin();
 
 echo '<h1>core_dev admin</h1>';
+
 echo ahref('a/moderation', 'Moderation queue').'<br/>';
 
 echo ahref('a/feedback',   'Feedback ('.Feedback::getUnansweredCount().')').'<br/>';
@@ -32,5 +33,8 @@ echo ahref('a/mysql_config',   'MySQL information').'<br/>';
 echo ahref('a/geoip/version',  'GeoIP information').'<br/>';
 echo ahref('a/hashes',         'Available hash functions').'<br/>';
 echo '<br/>';
+
+
+echo ahref('a/webshop/category/0',  'Webshop admin').'<br/>';
 
 ?>

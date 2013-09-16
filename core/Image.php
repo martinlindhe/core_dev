@@ -91,6 +91,7 @@ class Image
             throw new \Exception ('no image resource loaded');
 
         $page = XmlDocumentHandler::getInstance();
+        $page->disableHtmlHeaders();
         $page->disableDesign();
 
         switch ($type) {

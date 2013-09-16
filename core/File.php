@@ -81,15 +81,19 @@ class File
         return SqlObject::loadObjects($list, __CLASS__);
     }
 
-    public static function getByCategory($type, $cat, $uploader)
+    public static function getByCategory($type, $cat, $uploader = 0)
     {
         $q =
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE type = ?'.
         ' AND category = ?'.
-        ' AND uploader = ?'.
+        ($uploader ? ' AND uploader = ?' : '').
         ' AND time_deleted IS NULL';
-        $list = Sql::pSelect($q, 'iii', $type, $cat, $uploader);
+
+        if ($uploader)
+            $list = Sql::pSelect($q, 'iii', $type, $cat, $uploader);
+        else
+            $list = Sql::pSelect($q, 'ii', $type, $cat);
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
@@ -215,7 +219,7 @@ class File
         $key['name'] = $dst_file;
         $key['file_id'] = $file->id;
 
-        return $fileId;
+        return $file->id;
     }
 
     /**

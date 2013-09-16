@@ -17,5 +17,3 @@ if (!empty($_GET['w']) && !empty($_GET['h'])) {
     $im = new Image($name);
 }
 $im->render();
-
-?>

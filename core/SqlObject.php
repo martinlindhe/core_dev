@@ -250,8 +250,10 @@ class SqlObject
 
     public static function getByField($val, $tblname, $classname, $field_name)
     {
-        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name))
-            throw new \Exception ('very bad');
+        if (!is_alphanumeric($tblname))
+            throw new \Exception ('tblname should be alphanumeric, isnt: '.$tblname);
+        if (!is_alphanumeric($field_name))
+            throw new \Exception ('field_name should be alphanumeric, isnt: '.$field_name);
 
         $form = self::stringForm($val);
 
@@ -310,8 +312,13 @@ class SqlObject
      */
     public static function getAllByField($field_name, $value, $tblname, $classname, $order_field = '', $order = 'asc')
     {
-        if (!is_alphanumeric($tblname) || !is_alphanumeric($field_name) || !is_alphanumeric($order_field))
-            throw new \Exception ('very bad');
+        if (!is_alphanumeric($tblname))
+            throw new \Exception ('tblname should be alphanumeric, isnt: '.$tblname);
+        if (!is_alphanumeric($field_name))
+            throw new \Exception ('field_name should be alphanumeric, isnt: '.$field_name);
+
+        if (!is_alphanumeric($order_field))
+            throw new \Exception ('order_field should be alphanumeric, isnt: '.$order_field);
 
         if (!Sql::isValidOrder($order))
             throw new \Exception ('odd order '.$order);

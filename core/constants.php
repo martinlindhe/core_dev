@@ -36,6 +36,9 @@ define('SYSTEM',          24);  ///< something from the system
 define('RECORDING_PRES',  30);  ///< stream recording of a user presentation
 define('RECORDING_MSG',   31);  ///< stream recording of a private message
 
+define('WEBSHOP_CATEGORY',40);  ///< web shop category picture
+define('WEBSHOP_ITEM',    41);  ///< web shop item picture(s)
+
 /**
  * tblCategory.permissions
  */

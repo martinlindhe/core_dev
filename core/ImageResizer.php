@@ -24,6 +24,9 @@ class ImageResizer extends Image
      */
     function resizeAspect($to_width = 0, $to_height = 0)
     {
+        if (!is_numeric($to_width) || !is_numeric($to_height))
+            return;
+
         if (!$this->width || !$this->height)
             throw new \Exception ('can happen?');
 
