@@ -214,13 +214,16 @@ function bt()
             if (is_object($arg)) {
                 echo gettype($arg).' '.get_class($arg);
             } else {
-                echo $arg;
+                if (is_array($arg))
+                    echo implode(", ", $arg);
+                else
+                    echo $arg;
             }
             if ($i < count($l['args'])) echo ', ';
         }
         echo ')';
         if (!empty($l['file']))
-            echo ' from '.$l['file'].':'.$l['line'];
+            echo ' from '.$l['file'].':'.$l['line']."\n";;
         echo ln();
     }
 
