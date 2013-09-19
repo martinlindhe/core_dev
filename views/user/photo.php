@@ -105,5 +105,3 @@ case 'delete':
 default:
     echo 'no such view: '.$this->owner;
 }
-
-?>

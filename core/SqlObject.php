@@ -77,14 +77,14 @@ class SqlObject
                 continue;
             }
 
-            throw new \Exception ('class '.$classname.' expects database column named "'.$n.'" which dont exist');
+            throw new \Exception ('class '.$classname.' expects database column "'.$n.'" which dont exist');
         }
 
         if ( count($props) != count($list))
         {
             foreach ($list as $idx => $row) {
                 if (!array_key_exists($idx, $found))
-                    throw new \Exception ('class '.$classname.' misses define of variable '.$idx);
+                    throw new \Exception ('class '.$classname.' misses define of variable "'.$idx.'" which is found in table');
             }
 
             throw new \Exception ('class '.$classname.' ERROR - SHOULD NOT HAPPEN!');

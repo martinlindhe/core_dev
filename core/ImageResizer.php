@@ -81,5 +81,3 @@ class ImageResizer extends Image
     }
 
 }
-
-?>

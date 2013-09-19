@@ -149,5 +149,3 @@ function getThumbUrl($id, $width = 50, $height = 50)
         ($width ? '?w='.$width : '').
         ($height ? '&h='.$height : '');
 }
-
-?>

@@ -33,8 +33,3 @@ echo ahref('a/mysql_config',   'MySQL information').'<br/>';
 echo ahref('a/geoip/version',  'GeoIP information').'<br/>';
 echo ahref('a/hashes',         'Available hash functions').'<br/>';
 echo '<br/>';
-
-
-echo ahref('a/webshop/category/0',  'Webshop admin').'<br/>';
-
-?>
