@@ -14,6 +14,7 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
+require_once('core.php');
 require_once('files.php');
 
 $tests = expand_arg_files('./', array('test*.php') );

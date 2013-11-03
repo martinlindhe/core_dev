@@ -19,7 +19,7 @@ class RegressionTest
             $cnt++;
 
 
-            $code = 'return '.$a[0].';';
+            $code = 'namespace cd; return '.$a[0].';';
 
             $err = eval($code);
 
@@ -34,5 +34,3 @@ class RegressionTest
     }
 
 }
-
-?>

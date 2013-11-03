@@ -165,6 +165,8 @@ class MediaWikiClient
             $pages[] = $o;
         }
         $res = $pages[0]; // XXX only exports first article
+        if (!$res)
+            throw new \Exception('no data retrieved');
 
         $temp->set($key, serialize($res), '24h');
 

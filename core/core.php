@@ -344,14 +344,14 @@ function randstr($len)
 }
 
 /**
- * Checks if a string contains only numbers 0-9
+ * Checks if a string contains numbers 0-9 and - .
  */
 function numbers_only($s) //XXXX FIXME use a regexp   FIXME rename to is_digits()
 {
     if (strlen($s) == 0)
         return false;
 
-    $ok = array('0','1','2','3','4','5','6','7','8','9');
+    $ok = array('0','1','2','3','4','5','6','7','8','9', '-', '.');
     for ($i=0; $i<strlen($s); $i++) {
         $c = substr($s, $i, 1);
         if (!in_array($c, $ok))
