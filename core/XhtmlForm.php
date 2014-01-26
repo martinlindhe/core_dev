@@ -243,7 +243,7 @@ class XhtmlForm
     }
 
     /** Adds a input field to the form */
-    function addInput($name, $text, $val = '', $width = 0, $maxlen = 0)
+    function addInput($name, $text, $val = '', $width = 0, $maxlen = 0, $readonly = false)
     {
         if (!is_numeric($width) || !is_numeric($maxlen))
             throw new \Exception ('bad input');
@@ -254,6 +254,7 @@ class XhtmlForm
         $o->width  = $width;
         $o->maxlen = $maxlen;
         $o->autocomplete = $this->autocomplete;
+        $o->disabled = $readonly;
         $this->add($o, $text);
    }
 
