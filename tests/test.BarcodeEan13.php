@@ -16,6 +16,6 @@ if (!$x->isValid()) echo "FAIL 2\n";
 
 
 
-echo $x->render()."\n";
+// echo $x->render()."\n";
 
 ?>

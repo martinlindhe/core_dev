@@ -111,13 +111,18 @@ class BarcodeEan13 extends Image
         for ($i = strlen($this->code)-2; $i >= 0; $i--)
         {
             $s = substr($this->code, $i, 1);
-//            echo $i.": ".$s." * ". (($i % 2) ? '3' : '1') ."\n";
+            echo $i.": ".$s." * ". (($i % 2) ? '3' : '1') ."\n";
             $sum += ($i % 2) ? $s * 3 : $s;
         }
+		
+
+		echo "sum = ".$sum."\n";
 
         // round upwards to next ten-digit (eg: 47 => 50)
         $next_ten = ceil($sum / 10) * 10;
-        return $next_ten - $sum;
+        $res = $next_ten - $sum;
+		echo "res = ".$res."\n";
+		return $res;
     }
 
     /**

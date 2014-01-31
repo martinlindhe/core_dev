@@ -50,7 +50,7 @@ class YuiTreeview
         $header->includeCss('core_dev/js/ext/yui/2.9.0/build/treeview/assets/skins/sam/treeview.css');
 
         // XXX disable this css to get windows-style treeview object
-        $header->includeCss('http://developer.yahoo.com/yui/build/treeview/assets/treeview-menu.css');
+		// $header->includeCss('http://developer.yahoo.com/yui/build/treeview/assets/treeview-menu.css');
 
         $header->includeCss('core_dev/js/ext/yui/2.9.0/build/calendar/assets/skins/sam/calendar.css');
 

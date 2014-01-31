@@ -13,4 +13,3 @@ if (Password::isForbidden('imnotforbidden'))       echo "FAIL 10\n";
 if (!Password::isForbidden('password'))            echo "FAIL 11\n";
 if (!Password::isForbidden(' password '))          echo "FAIL 12\n";
 
-?>

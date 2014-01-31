@@ -11,7 +11,7 @@
  * The tenth digit is a checksum which was introduced in 1967 when the system was computerized.
  *
  * Documentation:
- * http://sv.wikipedia.org/wiki/Personnummer_i_Sverige
+ * http://en.wikipedia.org/wiki/Personal_identity_number_%28Sweden%29
  * http://sv.wikipedia.org/wiki/Organisationsnummer
  * Organisationsnummer, broschyr SKV 709 från Skatteverket:
  * http://www.skatteverket.se/download/18.70ac421612e2a997f85800040284/70909.pdf

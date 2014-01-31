@@ -69,6 +69,9 @@ class Sql
             throw new \Exception ($s);
         }
 
+        if (!$stmt->store_result())
+            throw new Exception ("fail store result");
+
         if ($db instanceof DatabaseMysqlProfiler)
         {
             $prof = &$db->measureQuery($args[0]);  // XXXX rename to finishMeasure()
@@ -172,8 +175,36 @@ class Sql
             $data[] = $x;
         }
 
+
         $meta->close();
+        $stmt->free_result();
         $stmt->close();
+
+        return $data;
+    }
+
+    public static function pStoredProc($q)
+    {
+        // TODO this is not prepared! i get "Commands out of sync; you can't run this command now" error
+        // calling stored procedures is a special case, so we use
+        // mysqli_multi_query() and loop until mysqli_next_result() has no more result sets
+
+        $db = SqlHandler::getInstance();
+        $db->connect();
+
+        $db->db_handle->multi_query($q);
+
+
+        if ($result = $db->db_handle->store_result()) {
+            while ($row = $result->fetch_assoc())
+                $data[] = $row;
+
+            $result->free();
+        }
+
+        // handles subsequent results, needed to avoid "command out of sync" with stored procedures
+        while ($db->db_handle->more_results())
+            $db->db_handle->next_result();
 
         return $data;
     }
@@ -206,6 +237,7 @@ class Sql
         while ($stmt->fetch())
             $data[] = $col1;
 
+        $stmt->free_result();
         $stmt->close();
 
         if (count($data) > 1)
@@ -232,7 +264,9 @@ class Sql
         while ($stmt->fetch())
             $data[] = $col1;
 
+        $stmt->free_result();
         $stmt->close();
+
         return $data;
     }
 
@@ -252,7 +286,9 @@ class Sql
         while ($stmt->fetch())
             $data[ $col1 ] = $col2;
 
+        $stmt->free_result();
         $stmt->close();
+
         return $data;
     }
 
@@ -264,7 +300,9 @@ class Sql
 
         $data = $stmt->affected_rows;
 
+        $stmt->free_result();
         $stmt->close();
+
         return $data;
     }
 
@@ -314,5 +352,3 @@ class Sql
     }
 
 }
-
-?>
