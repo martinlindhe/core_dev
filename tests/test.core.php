@@ -62,6 +62,17 @@ array("formatMSID('46707123456', '46')",    '46707123456'),
 array("formatMSID('0046707123456', '46')",  '46707123456'), // 46 is country code for Sweden
 array("formatMSID('04612345', '46')",       '464612345'),   // 046 is area code for Lund, Sweden
 array("formatMSID('0044', '46')",           '0044'),        // dont touch short special codes
+array("is_upper_char('A')",                 true),
+array("is_upper_char('a')",                 false),
+array("is_upper_char('Z')",                 true),
+array("is_upper_char('z')",                 false),
+array("is_lower_char('A')",                 false),
+array("is_lower_char('a')",                 true),
+array("is_lower_char('Z')",                 false),
+array("is_lower_char('z')",                 true),
+array("is_upper_str(\"AAA\")",                true),
+array("is_upper_str(\"AaA\")",                false),
+array("is_upper_str(\"AAa\")",                false),
 ));
 
 ?>

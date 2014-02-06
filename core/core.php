@@ -635,3 +635,56 @@ function t($s)
 
     return $t;
 }
+
+/**
+ * @return true if input char is upper case
+ */
+function is_upper_char($c)
+{
+    // TODO recognize åäö etc
+    if ($c >= 'a' && $c <= 'z')
+        return false;
+
+    return true;
+}
+
+/**
+ * @return true if input char is lower case
+ */
+function is_lower_char($c)
+{
+    // TODO recognize ÅÄÖ etc
+    if ($c >= 'A' && $c <= 'Z')
+        return false;
+
+    return true;
+}
+
+/**
+ * @return true if input string is upper case
+ */
+function is_upper_str($s)
+{
+    for ($i = 0; $i < mb_strlen($s); $i++)
+    {
+        $c = mb_substr($s, $i, 1);
+        if (!is_upper_char($c))
+            return false;
+    }
+    return true;
+}
+
+/*
+ * @return true if input string is lower case
+ */
+function is_lower_str($s)
+{
+    for ($i = 0; $i < mb_strlen($s); $i++)
+    {
+        $c = mb_substr($s, $i, 1);
+        if (!is_lower_char($c))
+            return false;
+    }
+    return true;
+}
+
