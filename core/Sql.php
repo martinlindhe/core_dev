@@ -166,8 +166,14 @@ class Sql
 
 
         $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        if (count($res) != 1 || count($res[0]) != 1)
+
+        if (count($res) != 1 || count($res[0]) != 1) {
+            if (count($res) == 0)
+                return 0;
+
+            d($res);
             throw new \Exception ("fail res");
+        }
 
         return array_shift($res[0]);
     }
