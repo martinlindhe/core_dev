@@ -48,7 +48,7 @@ class Comment
 
         $list = Sql::pSelect($q);
 
-        return SqlObject::loadObjects($list, __CLASS__);
+        return SqlObject::ListToObjects($list, __CLASS__);
     }
 
     public static function getByTypeAndOwner($type, $owner)
@@ -63,7 +63,7 @@ class Comment
 
         $list = Sql::pSelect($q, 'ii', $type, $owner);
 
-        return SqlObject::loadObjects($list, __CLASS__);
+        return SqlObject::ListToObjects($list, __CLASS__);
     }
 
     public static function getByType($type)
@@ -78,7 +78,7 @@ class Comment
 
         $list = Sql::pSelect($q, 'i', $type);
 
-        return SqlObject::loadObjects($list, __CLASS__);
+        return SqlObject::ListToObjects($list, __CLASS__);
     }
 
     /**

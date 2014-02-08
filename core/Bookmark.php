@@ -45,7 +45,7 @@ class Bookmark
 
         $list = Sql::pSelect($q, 'ii', $owner, $type);
 
-        return SqlObject::loadObjects($list, __CLASS__);
+        return SqlObject::ListToObjects($list, __CLASS__);
     }
 
     /**

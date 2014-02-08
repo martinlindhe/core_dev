@@ -67,11 +67,13 @@ class DatabaseMysqlPDO implements IDB_SQL
     /**
      * Calculates the time it took to execute a query
      */
-    public function &finishMeasure($q)
+    public function finishMeasure($q, $prepared = true)
     {
         $prof = new SqlQuery();
         $prof->query = $q;
         $prof->time = microtime(true) - $this->measure_start;
+        $prof->prepared = $prepared;
+
         $this->queries[] = $prof;
         return $prof;
     }

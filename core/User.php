@@ -102,11 +102,9 @@ class User
         $q =
         'SELECT * FROM '.self::$tbl_name.
         ' WHERE name = ?'.
-        ' AND time_deleted IS NULL';
-        $row = Sql::pSelectRow($q, 's', $name);
-
-        if (!$row) return false;
-        return SqlObject::loadObject($row, __CLASS__);
+        ' AND time_deleted IS NULL'.
+        ' LIMIT 1';
+        return Sql::pSelectRowToObject(__CLASS__, array($q, 's', $name));
     }
 
     public function store()
@@ -122,34 +120,28 @@ class User
         $q =
         'SELECT * FROM tblUsers'.
         ' WHERE id = ? AND name = ? AND type = ? AND time_deleted IS NULL';
+        $obj = Sql::pSelectRowToObject(__CLASS__, array($q, 'isi', $id, $name, $type) );
 
-        $row = Sql::pSelectRow($q,
-        'isi',
-        $id,
-        $name,
-        $type
-        );
-
-        if (!$row)
+        if (!$obj)
             return false;
 
-        $x = explode(':', $row['password']);
+        $x = explode(':', $obj->password);
         if (count($x) == 2) {
             $algo = $x[0];
             $pwd2 = $x[1];
         } else {
             // auto fallback to old default (sha1)
             $algo = 'sha1';
-            $pwd2 = $row['password'];
+            $pwd2 = $obj->password;
         }
 
         $session = SessionHandler::getInstance();
 
-	$expected = $algo.":".$pwd2;
+        $expected = $algo.":".$pwd2;
         if (Password::encrypt($id, $session->getEncryptKey(), $pwd, $algo) != $expected)
             return false;
 
-        return SqlObject::loadObject($row, __CLASS__);
+        return $obj;
     }
 
     /**

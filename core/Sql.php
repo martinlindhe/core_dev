@@ -27,7 +27,7 @@ class Sql
      * @param $args[1]    prepared statement string (isdb)..
      * @param $args[2..n] query parameters, or all params is an array in $args[2]
      */
-    protected static function pExecStmt($args)
+    public static function pExecStmt($args)
     {
         if (!$args[0])
             throw new \Exception ('no query');
@@ -60,6 +60,7 @@ class Sql
         $res = $stmt->execute();
         if (!$res) {
             $err = $stmt->errorInfo();
+            d($args);
 
             $s = $err[0].' '.$err[2].' (execute failed: '.$args[0].')';
 
@@ -68,39 +69,7 @@ class Sql
             throw new \Exception ($s);
         }
 
-        if ($db->isProfilingEnabled())
-        {
-            $prof = &$db->finishMeasure($args[0]);
-
-            $prof->prepared = true;
-
-            if (isset($args[1]))
-                $prof->format = $args[1];
-
-            if (isset($args[2]))
-                for ($i = 2; $i < count($args); $i++)
-                    $prof->params[] = $args[$i];
-
-            if ($res === false)
-                $prof->error = $db->db_handle->error;
-        }
-
         return $stmt;
-    }
-
-    /**
-     * Escapes a string for use in queries
-     *
-     * @param $q is the query to escape
-     * @return the escaped string, taking db-connection locale into account
-     */
-    public static function escape($q)
-    {
-        //db handle is needed to use the escape function... XXX, REALLY?, WHY???
-        $db = SqlHandler::getInstance();
-        $db->connect();
-
-        return $db->db_handle->real_escape_string($q);
     }
 
     /**
@@ -130,14 +99,52 @@ class Sql
     {
         $stmt = self::pExecStmt( func_get_args() );
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        self::finishMeasure( func_get_args() );
+
+        return $res;
+    }
+
+    public static function pSelectRowToObject($classname, $args = array())
+    {
+        $stmt = self::pExecStmt( $args );
+
+        $res = $stmt->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $classname);
+        self::finishMeasure( $args );
+        if (!$res)
+            return false;
+
+        return $res[0];
+    }
+
+    private static function finishMeasure($args)
+    {
+        $db = SqlHandler::getInstance();
+
+        if (!$db->isProfilingEnabled())
+            return;
+
+        $prof = $db->finishMeasure($args[0]);
+
+        if (isset($args[1]))
+            $prof->format = $args[1];
+
+        if (isset($args[2]))
+            for ($i = 2; $i < count($args); $i++)
+                $prof->params[] = $args[$i];
+
+//        if ($res === false)
+//            $prof->error = $db->db_handle->error;
     }
 
     public static function pStoredProc()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        self::finishMeasure( func_get_args() );
+
+        return $res;
     }
 
     public static function pSelectRow()
@@ -150,6 +157,8 @@ class Sql
 //            d( func_get_args() );
             throw new \Exception ('returned '.count($res).' rows');
         }
+
+        self::finishMeasure( func_get_args() );
 
         if (!$res)
             return false;
@@ -166,6 +175,8 @@ class Sql
 
 
         $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        self::finishMeasure( func_get_args() );
 
         if (count($res) != 1 || count($res[0]) != 1) {
             if (count($res) == 0)
@@ -228,24 +239,29 @@ class Sql
     public static function pDelete()
     {
         $stmt = self::pExecStmt( func_get_args() );
+
+        self::finishMeasure( func_get_args() );
         return $stmt->rowCount();
     }
 
     public static function pTruncate()
     {
         $stmt = self::pExecStmt( func_get_args() );
+        self::finishMeasure( func_get_args() );
         return $stmt->rowCount();
     }
 
     public static function pUpdate()
     {
         $stmt = self::pExecStmt( func_get_args() );
+        self::finishMeasure( func_get_args() );
         return $stmt->rowCount();
     }
 
     public static function pSet()
     {
         $stmt = self::pExecStmt( func_get_args() );
+        self::finishMeasure( func_get_args() );
         return $stmt->rowCount();
     }
 
@@ -258,6 +274,8 @@ class Sql
             $args = func_get_args();
             throw new \Exception ('insert fail: '.$args[0]);
         }
+
+        self::finishMeasure( func_get_args() );
 
         $db = SqlHandler::getInstance();
         return $db->db_handle->lastInsertId();

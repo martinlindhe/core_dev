@@ -7,7 +7,7 @@ require_once('/home/ml/dev/fmf/snabbsvar/config.php');
 
 require_once('DatabaseMysqlPDO.php');
 
-
+/*
 //  TODO more reliable test
 $q = "SELECT * FROM tblUsers";
 $users = Sql::pSelect($q);
@@ -58,4 +58,27 @@ $w = new Word();
 $w->id = 8;
 $w->value = "st2en";
 if (SqlObject::exists($w, 'oWord') == true)   echo "FAIL 11\n";
+
+*/
+
+// TODO more reliable test of ListToObjects
+$q =
+'SELECT * FROM tblBookmarks'.
+' WHERE owner = ? AND type = ?';
+$list = Sql::pSelect($q, 'ii', 2, 100);
+$objs = SqlObject::ListToObjects($list, 'Bookmark');
+if (count($objs) < 5)   echo "FAIL 20\n";
+
+
+
+$q =
+'SELECT * FROM tblBookmarks'.
+' WHERE id = ?';
+$row = Sql::pSelectRow($q, 'i', 66);
+$obj = SqlObject::RowToObject($row, 'Bookmark');
+if ($obj->id != 66) echo "FAIL 30\n";
+
+
+$bb = Bookmark::get(66);
+d($bb);
 

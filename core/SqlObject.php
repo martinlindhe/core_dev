@@ -4,7 +4,7 @@
  *
  * Reads database columns into properties of objects
  *
- * @author Martin Lindhe, 2011-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -28,20 +28,55 @@ class SqlObject
 {
     /**
      * Creates one object $classname
-     * @param $q a sql select query resulting in one row, or a indexed array
+     * @param $q a sql select query resulting in one row
      * @param $classname name of class object to load rows into
      */
     public static function loadObject($q, $classname)
     {
         if (!$q) {
+            throw new \Exception ("unexpected empty input");
+
             // return new $classname();   // TODO-LATER default to always return a object of type $classname
             return false;
         }
 
-        $list = is_array($q) ? $q : Sql::pSelect($q);
+        if (is_array($q)) {
 
+            d($q);
+            throw new \Exception ("array input to loadObject no longer supported, use RowToObject");
+        }
+
+        throw new \Exception ("FIXME use Sql::pSelectRowToObject() instead");
+    }
+
+    /**
+     * Creates an array of $objname objects from input query/indexed array
+     * @param $q       a sql select query resulting in multiple rows, or a array of rows
+     * @param $classname name of class object to load rows into
+     */
+    public static function loadObjects($q, $classname)
+    {
+        if (is_array($q)) {
+            d($q);
+            throw new \Exception ("input array no longer supported, use ListToObjects");
+        }
+
+        throw new \Exception ("XXXX FIFXM");
+    }
+
+    public static function ListToObjects($list, $classname)
+    {
+        $res = array();
+        foreach ($list as $row)
+            $res[] = self::RowToObject($row, $classname);
+
+        return $res;
+    }
+
+    public static function RowToObject($list, $classname)
+    {
         if (!is_array($list))
-            throw new \Exception ('loadObject fail, need array of rows, got: '.$list);
+            throw new \Exception ('RowToObject fail, need array of rows, got: '.$list);
 
         if (class_exists(__NAMESPACE__.'\\'.$classname))
             $classname = __NAMESPACE__.'\\'.$classname;
@@ -75,22 +110,6 @@ class SqlObject
         }
 
         return $obj;
-    }
-
-    /**
-     * Creates an array of $objname objects from input query/indexed array
-     * @param $q       a sql select query resulting in multiple rows, or a array of rows
-     * @param $classname name of class object to load rows into
-     */
-    public static function loadObjects($q, $classname)
-    {
-        $list = is_array($q) ? $q : Sql::pSelect($q);
-
-        $res = array();
-        foreach ($list as $row)
-            $res[] = self::loadObject($row, $classname);
-
-        return $res;
     }
 
     /**
@@ -260,9 +279,8 @@ class SqlObject
         $q =
          'SELECT * FROM '.$tblname.
         ' WHERE '.$field_name.' = ?';
-        $row = Sql::pSelectRow($q, $form, $val);
 
-        return SqlObject::loadObject($row, $classname);
+        return Sql::pSelectRowToObject($classname, array($q, $form, $val));
     }
 
     public static function deleteById($id, $tblname, $field_name = 'id')
@@ -331,7 +349,7 @@ class SqlObject
 
         $list = Sql::pSelect($q, $form, $value);
 
-        return SqlObject::loadObjects($list, $classname);
+        return SqlObject::ListToObjects($list, $classname);
     }
 
     public static function updateId($obj, $tblname, $field_name = 'id')
