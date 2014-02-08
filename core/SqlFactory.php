@@ -13,7 +13,6 @@ namespace cd;
 
 require_once('SqlHandler.php');
 require_once('DatabaseMysqlPDO.php');
-require_once('MysqlProfiler.php');
 
 class SqlFactory
 {
@@ -32,10 +31,6 @@ class SqlFactory
         default: throw new \Exception ('Unknown driver '.$driver);
         }
 
-        if ($profiler) {
-            $class = $driver.'Profiler';
-        }
-
         require_once($class.'.php');
 
         $class = '\\cd\\'.$class;
@@ -44,6 +39,10 @@ class SqlFactory
             throw new \Exception ('Database driver not found '.$class);
 
         $db = new $class();
+
+        if ($profiler) {
+            $db->enableProfiling();
+        }
 
         if (!($db instanceof IDB_SQL))
             throw new \Exception('Database driver must implement IDB_SQL');

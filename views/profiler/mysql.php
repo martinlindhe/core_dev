@@ -115,17 +115,15 @@ function print_query($q)
 
 $sql_div = 'cd_sql'.mt_rand();
 
-$db_time = $db->pSelectItem('SELECT NOW()');
-$uptime  = $db->pSelectRow('SHOW STATUS WHERE Variable_name = ?', 's', 'Uptime');
-
 echo ahref_js(count($db->queries).' sql', "return toggle_el('".$sql_div."')");
 
 $show_div = $db->getErrorCount() ? true : false;
 
 $css =
 ($show_div ? '' : 'display:none;').
-'overflow:auto;'.
 'max-width:400px;'.
+'max-height:600px;'.
+'overflow-y:scroll;'.
 'border:#000 1px solid;';
 
 echo '<div id="'.$sql_div.'" style="'.$css.'">';
@@ -139,20 +137,14 @@ count($db->queries).' '.(count($db->queries) == 1 ? 'query' : 'queries').
 echo '<br/>';
 
 echo 'Server: <b>'.$db->getHost().'</b><br/>';
-echo 'Software: <b>MySQL '.$db->db_handle->server_info.'</b><br/>';
+
+/*
+$db_time = Sql::pSelectItem('SELECT NOW()');
+$uptime  = Sql::pSelectRow('SHOW STATUS WHERE Variable_name = ?', 's', 'Uptime');
 
 echo 'Database server time: <b>'.$db_time.'</b><br/>';
 echo 'Web server time: <b>'.sql_datetime( time() ).'</b><br/>';
 echo 'Uptime: <b>'.elapsed_seconds($uptime['Value']).'</b><br/>';
-
-if (is_client_localhost())
-{
-    echo 'Database <b>'.$db->host.':'.$db->port.'</b>';
-    if ($db->db_handle)
-        echo ' with <b>MySQL '.$db->db_handle->server_info.'</b>';
-    else
-        echo ' <b>(CONNECTION NOT INITIALIZED)</b>';
-    echo '<br/>';
-}
+*/
 
 echo '</div>';

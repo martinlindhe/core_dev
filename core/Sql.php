@@ -34,10 +34,10 @@ class Sql
 
         $db = SqlHandler::getInstance();
         $db->connect();
-/*
-        if ($db instanceof MysqlProfiler)
+
+        if ($db->isProfilingEnabled())
             $db->startMeasure();
-*/
+
         if (! ($stmt = $db->db_handle->prepare($args[0])) )
             throw new \Exception ('FAIL prepare: '.$args[0]);
 
@@ -57,16 +57,17 @@ class Sql
             $stmt->bindValue($i, $args[$i+1]);
         }
 
-        if (!$stmt->execute()) {
+        $res = $stmt->execute();
+        if (!$res) {
             $s = 'execute failed: '.$args[0];
             if (!empty($args[1]))
                 $s .= ' ('.$args[1].')';
             throw new \Exception ($s);
         }
-/*
-        if ($db instanceof MysqlProfiler)
+
+        if ($db->isProfilingEnabled())
         {
-            $prof = &$db->measureQuery($args[0]);  // XXXX rename to finishMeasure()
+            $prof = &$db->finishMeasure($args[0]);
 
             $prof->prepared = true;
 
@@ -77,10 +78,10 @@ class Sql
                 for ($i = 2; $i < count($args); $i++)
                     $prof->params[] = $args[$i];
 
-            if ($params && $res === false)
+            if ($res === false)
                 $prof->error = $db->db_handle->error;
         }
-*/
+
         return $stmt;
     }
 
