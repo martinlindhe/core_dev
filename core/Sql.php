@@ -59,7 +59,10 @@ class Sql
 
         $res = $stmt->execute();
         if (!$res) {
-            $s = 'execute failed: '.$args[0];
+            $err = $stmt->errorInfo();
+
+            $s = $err[0].' '.$err[2].' (execute failed: '.$args[0].')';
+
             if (!empty($args[1]))
                 $s .= ' ('.$args[1].')';
             throw new \Exception ($s);
@@ -219,40 +222,36 @@ class Sql
     public static function pDelete()
     {
         $stmt = self::pExecStmt( func_get_args() );
-
         return $stmt->rowCount();
     }
 
     public static function pTruncate()
     {
         $stmt = self::pExecStmt( func_get_args() );
-
         return $stmt->rowCount();
     }
 
     public static function pUpdate()
     {
         $stmt = self::pExecStmt( func_get_args() );
-
         return $stmt->rowCount();
     }
 
     public static function pSet()
     {
         $stmt = self::pExecStmt( func_get_args() );
-
         return $stmt->rowCount();
     }
 
     /** returns insert id */
     public static function pInsert()
     {
-        $args = func_get_args();
-
         $stmt = self::pExecStmt( func_get_args() );
 
-        if ($stmt->rowCount() != 1)
+        if ($stmt->rowCount() != 1) {
+            $args = func_get_args();
             throw new \Exception ('insert fail: '.$args[0]);
+        }
 
         $db = SqlHandler::getInstance();
         return $db->db_handle->lastInsertId();

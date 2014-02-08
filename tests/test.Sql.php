@@ -8,7 +8,6 @@ require_once('/home/ml/dev/fmf/snabbsvar/config.php');
 require_once('DatabaseMysqlPDO.php');
 
 
-
 //  TODO more reliable test
 $q = "SELECT * FROM tblUsers";
 $users = Sql::pSelect($q);
@@ -42,6 +41,11 @@ d($x);
 $q = 'REPLACE tblSessionData (session_id,session_data,expires) VALUES(?, ?, ?)';
 $xxx = Sql::pUpdate($q, 'sss', 666, "hejhej", sql_datetime( time() ) );
 d($xxx);
+
+
+$q = 'INSERT INTO tblLikes (owner,type) VALUES (?, ?)';
+$id = Sql::pInsert($q, 'ii', 4,9);
+if ($id < 2)    echo "FAIL 5\n";
 
 
 
