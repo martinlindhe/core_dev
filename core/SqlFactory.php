@@ -12,6 +12,8 @@
 namespace cd;
 
 require_once('SqlHandler.php');
+require_once('DatabaseMysqlPDO.php');
+require_once('MysqlProfiler.php');
 
 class SqlFactory
 {
@@ -22,13 +24,17 @@ class SqlFactory
      */
     public static function factory($driver = 'mysql', $profiler = false)
     {
+        $driver = ucfirst($driver);
+
         switch ($driver) {
-        case 'mysql': $class = 'DatabaseMysql'; break;
-        case 'mssql': $class = 'DatabaseMssql'; break;
+        case 'Mysql': $class = 'DatabaseMysqlPDO'; break;
+        case 'Mssql': $class = 'DatabaseMssql'; break;
         default: throw new \Exception ('Unknown driver '.$driver);
         }
 
-        $class = $class.($profiler ? 'Profiler': '');
+        if ($profiler) {
+            $class = $driver.'Profiler';
+        }
 
         require_once($class.'.php');
 
@@ -45,5 +51,3 @@ class SqlFactory
         return $db;
     }
 }
-
-?>

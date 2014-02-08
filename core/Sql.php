@@ -11,12 +11,12 @@
  * Prepared statement format:
  *  (isdb), integer, string, double/float, binary
  *
- * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
 
-//REQUIRES PHP 5.3+
+//REQUIRES PHP 5.4+
 
 namespace cd;
 
@@ -32,19 +32,15 @@ class Sql
         if (!$args[0])
             throw new \Exception ('no query');
 
-        if (!self::isQueryPrepared($args[0]))
-            throw new \Exception ('query is not prepared: ... '.$args[0]);
-
         $db = SqlHandler::getInstance();
         $db->connect();
-
-        if ($db instanceof DatabaseMysqlProfiler)
+/*
+        if ($db instanceof MysqlProfiler)
             $db->startMeasure();
-
+*/
         if (! ($stmt = $db->db_handle->prepare($args[0])) )
             throw new \Exception ('FAIL prepare: '.$args[0]);
 
-        $params = array();
         if (isset($args[2]) && is_array($args[2]))
         {
             $x = array();
@@ -55,24 +51,20 @@ class Sql
                 $args[2+$i] = $x[$i];
          }
 
-        for ($i = 1; $i < count($args); $i++)
-            $params[] = $args[$i];
 
-        if ($params)
-            $res = call_user_func_array(array($stmt, 'bind_param'), self::refValues($params));
+        for ($i = 1; $i < count($args)-1; $i++) {
+            //echo "binding arg ".$i.", ".$args[$i+1]."<br>\n";
+            $stmt->bindValue($i, $args[$i+1]);
+        }
 
         if (!$stmt->execute()) {
-            d($params);
-            $s = 'query failed: '.$args[0];
+            $s = 'execute failed: '.$args[0];
             if (!empty($args[1]))
                 $s .= ' ('.$args[1].')';
             throw new \Exception ($s);
         }
-
-        if (!$stmt->store_result())
-            throw new Exception ("fail store result");
-
-        if ($db instanceof DatabaseMysqlProfiler)
+/*
+        if ($db instanceof MysqlProfiler)
         {
             $prof = &$db->measureQuery($args[0]);  // XXXX rename to finishMeasure()
 
@@ -88,31 +80,8 @@ class Sql
             if ($params && $res === false)
                 $prof->error = $db->db_handle->error;
         }
-
+*/
         return $stmt;
-    }
-
-    public static function isQueryPrepared($q)
-    {
-        $s = $q;
-        do
-        {
-            $p = strpos($s, '=');
-            if ($p === false)
-                return true;
-
-            $x1 = substr($s, $p+1);
-            $x2 = substr( trim($x1), 0, 1);
-
-            $old_s = $s;
-            $s = substr($s, $p+1);
-
-            if (is_numeric($x2) || $x2 == '"')
-                throw new \Exception ('query is not prepared: (val is '.$x2.') ... '.$old_s);
-
-        } while ($s);
-
-        return true;
     }
 
     /**
@@ -157,61 +126,21 @@ class Sql
     {
         $stmt = self::pExecStmt( func_get_args() );
 
-        $data = array();
-
-        $meta = $stmt->result_metadata();
-
-        while ($field = $meta->fetch_field())
-            $parameters[] = &$row[$field->name];
-
-        call_user_func_array(array($stmt, 'bind_result'), self::refValues($parameters));
-
-        while ($stmt->fetch())
-        {
-            $x = array();
-            foreach ($row as $key => $val)
-                $x[$key] = $val;
-
-            $data[] = $x;
-        }
-
-
-        $meta->close();
-        $stmt->free_result();
-        $stmt->close();
-
-        return $data;
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public static function pStoredProc($q)
+    public static function pStoredProc()
     {
-        // TODO this is not prepared! i get "Commands out of sync; you can't run this command now" error
-        // calling stored procedures is a special case, so we use
-        // mysqli_multi_query() and loop until mysqli_next_result() has no more result sets
+        $stmt = self::pExecStmt( func_get_args() );
 
-        $db = SqlHandler::getInstance();
-        $db->connect();
-
-        $db->db_handle->multi_query($q);
-
-
-        if ($result = $db->db_handle->store_result()) {
-            while ($row = $result->fetch_assoc())
-                $data[] = $row;
-
-            $result->free();
-        }
-
-        // handles subsequent results, needed to avoid "command out of sync" with stored procedures
-        while ($db->db_handle->more_results())
-            $db->db_handle->next_result();
-
-        return $data;
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     public static function pSelectRow()
     {
-        $res = call_user_func_array(array('self', 'pSelect'), func_get_args() );  // HACK to pass dynamic variables to parent method
+        $stmt = self::pExecStmt( func_get_args() );
+
+        $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         if (count($res) > 1) {
 //            d( func_get_args() );
@@ -228,28 +157,19 @@ class Sql
     {
         $stmt = self::pExecStmt( func_get_args() );
 
-        if ($stmt->field_count != 1)
+        if ($stmt->columnCount() != 1)
             throw new \Exception ('expected 1 column result, got '.$stmt->field_count.' columns');
 
-        $stmt->bind_result($col1);
 
-        $data = array();
-        while ($stmt->fetch())
-            $data[] = $col1;
+        $res = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($res) != 1 || count($res[0]) != 1)
+            throw new \Exception ("fail res");
 
-        $stmt->free_result();
-        $stmt->close();
-
-        if (count($data) > 1)
-            throw new \Exception ('returned '.count($data).' rows');
-
-        if (!$data)
-            return false;
-
-        return $data[0];
+        return array_shift($res[0]);
     }
 
     /** selects 1d array */
+    /*
     public static function pSelect1d()
     {
         $stmt = self::pExecStmt( func_get_args() );
@@ -268,9 +188,10 @@ class Sql
         $stmt->close();
 
         return $data;
-    }
+    }*/
 
     /** like getMappedArray(). query selects a list of key->value pairs */
+    /*
     public static function pSelectMapped()
     {
         $stmt = self::pExecStmt( func_get_args() );
@@ -290,65 +211,50 @@ class Sql
         $stmt->close();
 
         return $data;
-    }
+    }*/
 
 
-    /** like pSelect, but returns affected rows */
+    /** returns number of affected rows */
     public static function pDelete()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
-        $data = $stmt->affected_rows;
-
-        $stmt->free_result();
-        $stmt->close();
-
-        return $data;
+        return $stmt->rowCount();
     }
 
-    /** like pDelete */
     public static function pTruncate()
     {
-        $args = func_get_args();
-        return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+        $stmt = self::pExecStmt( func_get_args() );
+
+        return $stmt->rowCount();
     }
 
-    /** like pDelete */
     public static function pUpdate()
     {
-        $args = func_get_args();
-        return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+        $stmt = self::pExecStmt( func_get_args() );
+
+        return $stmt->rowCount();
     }
 
-    /** like pDelete */
     public static function pSet()
     {
-        $args = func_get_args();
-        return call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
+        $stmt = self::pExecStmt( func_get_args() );
+
+        return $stmt->rowCount();
     }
 
-    /** like pDelete, but returns insert id */
+    /** returns insert id */
     public static function pInsert()
     {
         $args = func_get_args();
-        $res = call_user_func_array(array('self', 'pDelete'), $args);  // HACK to pass dynamic variables to parent method
 
-        if ($res != 1)
+        $stmt = self::pExecStmt( func_get_args() );
+
+        if ($stmt->rowCount() != 1)
             throw new \Exception ('insert fail: '.$args[0]);
 
         $db = SqlHandler::getInstance();
-        return $db->db_handle->insert_id;
-    }
-
-    /** HACK needed for some reason */
-    protected static function refValues($arr)
-    {
-        // COMPAT: PHP 5.3+ is required for references
-        $refs = array();
-        foreach ($arr as $key => $val)
-            $refs[$key] = &$arr[$key];
-
-        return $refs;
+        return $db->db_handle->lastInsertId();
     }
 
 }

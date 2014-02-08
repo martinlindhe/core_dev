@@ -14,10 +14,11 @@
 
 namespace cd;
 
-require_once('DatabaseMysql.php');
 require_once('SqlQuery.php');
 
-class DatabaseMysqlProfiler extends DatabaseMysql implements IDB_SQL
+
+// FIXME untangle from DatabaseMysqlPDO  class use
+class MysqlProfiler extends DatabaseMysqlPDO implements IDB_SQL
 {
     protected $measure_start = 0;       ///< time when last profiling started
     var       $time_connect  = 0;       ///< time it took to connect to db

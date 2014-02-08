@@ -26,22 +26,6 @@ class ReflectedObject
 
 class SqlObject
 {
-    public static function stringForm($s)
-    {
-        if ($s && !is_string($s) && !is_numeric($s))
-            throw new \Exception ('not a string: '.$s);
-
-        if (substr($s, 0, 1) == '0')
-            return 's';
-
-        if (is_numeric($s) && strpos($s, '.') !== false)
-            return 'd';
-
-        if (numbers_only($s))
-            return 'i';
-        return 's';
-    }
-
     /**
      * Creates one object $classname
      * @param $q a sql select query resulting in one row, or a indexed array
@@ -135,10 +119,10 @@ class SqlObject
         $reflect = new \ReflectionClass($obj);
         $props   = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
 
-        // we escape column names for reserved SQL words
+        // auto escape column names for reserved SQL words
         // full list at http://dev.mysql.com/doc/refman/5.5/en/reserved-words.html
         // the list is huge, so we only cover common use cases
-        $reserved_words = array('desc', 'default', 'group', 'from', 'to');
+        $reserved_words = array('desc', 'default', 'group', 'from', 'to', 'value');
 
         $res = new ReflectedObject();
 
@@ -162,6 +146,22 @@ class SqlObject
         }
         //d($res);
         return $res;
+    }
+
+    public static function stringForm($s)
+    {
+        if ($s && !is_string($s) && !is_numeric($s))
+            throw new \Exception ('not a string: '.$s);
+
+        if (substr($s, 0, 1) == '0')
+            return 's';
+
+        if (is_numeric($s) && strpos($s, '.') !== false)
+            return 'd';
+
+        if (numbers_only($s))
+            return 'i';
+        return 's';
     }
 
     public static function idExists($id, $tblname, $field_name = 'id')

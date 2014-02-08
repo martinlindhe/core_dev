@@ -446,5 +446,3 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
     }
 
 }
-
-?>

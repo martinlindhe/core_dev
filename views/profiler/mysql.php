@@ -53,7 +53,7 @@ function print_query($q)
     $query = htmlentities(nl2br($q->query), ENT_COMPAT, 'UTF-8');
 
     $keywords = array(
-    'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ', 'SHOW ',
+    'SELECT ', 'UPDATE ', 'INSERT ', 'DELETE ', 'SHOW ', 'CALL ',
     ' FROM ', ' SET ', ' WHERE ',
     ' LEFT JOIN ', ' LEFT OUTER JOIN ', ' INNER JOIN ',
     ' GROUP BY ', ' ORDER BY ',
@@ -63,12 +63,13 @@ function print_query($q)
     ' != ',
     'NOW()', ' DATE(',
     ' COUNT(', ' DISTINCT(', ' SUM(', ' LENGTH(', ' CHAR_LENGTH(',
+    ' LOWER(',
     ' MIN(', ' MAX(',
     ' SHA1(',',SHA1(', // FIXME can this be described in one rule?
     );
 
     $decorated = array(
-    '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ', '<b>SHOW</b> ',
+    '<b>SELECT</b> ', '<b>UPDATE</b> ', '<b>INSERT</b> ', '<b>DELETE</b> ', '<b>SHOW</b> ', '<b>CALL</b> ',
     ' <b>FROM</b> ', '<br/><b>SET</b> ', '<br/><b>WHERE</b> ',
     '<br/><b>LEFT JOIN</b> ', '<br/><b>LEFT OUTER JOIN</b> ', '<br/><b>INNER JOIN</b> ',
     '<br/><b>GROUP BY</b> ', '<br/><b>ORDER BY</b> ',
@@ -78,6 +79,7 @@ function print_query($q)
     ' <b>!=</b> ',
     '<b>NOW()</b>', ' <b>DATE</b>(',
     ' <b>COUNT</b>( ', ' <b>DISTINCT</b>( ',' <b>SUM</b>( ', ' <b>LENGTH</b>( ', ' <b>CHAR_LENGTH</b>( ',
+    ' <b>LOWER</b>( ',
     ' <b>MIN</b>( ',' <b>MAX</b>( ',
     ' <b>SHA1</b>( ',', <b>SHA1</b>( ',
     );
@@ -154,5 +156,3 @@ if (is_client_localhost())
 }
 
 echo '</div>';
-
-?>

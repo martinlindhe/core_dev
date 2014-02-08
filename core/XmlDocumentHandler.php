@@ -300,7 +300,7 @@ class XmlDocumentHandler extends CoreBase
 
         foreach ($this->objs as $obj)
         {
-            $main .= $obj->render();
+           $main .= $obj->render();
         }
 
         if ($this->enable_design && $this->enable_profiler) {
@@ -391,5 +391,3 @@ class XmlDocumentHandler extends CoreBase
     }
 
 }
-
-?>

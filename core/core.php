@@ -45,6 +45,17 @@ function d($s)
 {
     $cli = is_cli();
 
+    if (is_bool($s)) {
+        echo $s == true ? 'true' : 'false';
+        echo ln();
+        return;
+    }
+
+    if (is_int($s)) {
+        echo $s.ln();
+        return;
+    }
+
     if (is_string($s)) {
         //XXX show name of the variable passed to this function somehow, backtrace or var_name() ?
 
@@ -641,8 +652,8 @@ function t($s)
  */
 function is_upper_char($c)
 {
-    // TODO recognize åäö etc
-    if ($c >= 'a' && $c <= 'z')
+    // TODO recognize åäö etc in a better way!
+    if (($c >= 'a' && $c <= 'z') || ($c == 'å' || $c == 'ä' || $c == 'ö'))
         return false;
 
     return true;
@@ -653,8 +664,8 @@ function is_upper_char($c)
  */
 function is_lower_char($c)
 {
-    // TODO recognize ÅÄÖ etc
-    if ($c >= 'A' && $c <= 'Z')
+    // TODO recognize ÅÄÖ etc in a better way!
+    if (($c >= 'A' && $c <= 'Z') || ($c == 'Å' || $c == 'Ä' || $c == 'Ö'))
         return false;
 
     return true;

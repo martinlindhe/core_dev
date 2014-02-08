@@ -16,21 +16,6 @@ interface IDB_SQL
     public function connect();
     public function disconnect();
 
-    public function ping();
-
-    public function escape($q);
-
-    public function insert($q);
-    public function replace($q);
-    public function delete($q);
-    public function update($q);
-
-    public function getArray($q);
-    public function get1dArray($q);
-    public function getMappedArray($q);
-    public function getOneRow($q);
-    public function getOneItem($q);
-
 //    public function pSelect($q, $fmt, $p1);
 }
 
