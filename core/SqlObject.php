@@ -73,10 +73,10 @@ class SqlObject
         return $res;
     }
 
-    public static function RowToObject($list, $classname)
+    public static function RowToObject($row, $classname)
     {
-        if (!is_array($list))
-            throw new \Exception ('RowToObject fail, need array of rows, got: '.$list);
+        if (!is_array($row))
+            throw new \Exception ('RowToObject fail, need array, got: '.$row);
 
         if (class_exists(__NAMESPACE__.'\\'.$classname))
             $classname = __NAMESPACE__.'\\'.$classname;
@@ -90,8 +90,8 @@ class SqlObject
         {
             $n = $prop->getName();
 
-            if (array_key_exists($n, $list)) {
-                $obj->$n = $list[ $n ];
+            if (array_key_exists($n, $row)) {
+                $obj->$n = $row[ $n ];
                 $found[$n] = true;
                 continue;
             }
@@ -99,9 +99,9 @@ class SqlObject
             throw new \Exception ('class '.$classname.' expects database column "'.$n.'" which dont exist');
         }
 
-        if ( count($props) != count($list))
+        if ( count($props) != count($row))
         {
-            foreach ($list as $idx => $row) {
+            foreach ($row as $idx => $col) {
                 if (!array_key_exists($idx, $found))
                     throw new \Exception ('class '.$classname.' misses define of variable "'.$idx.'" which is found in table');
             }
@@ -169,8 +169,10 @@ class SqlObject
 
     public static function stringForm($s)
     {
-        if ($s && !is_string($s) && !is_numeric($s))
-            throw new \Exception ('not a string: '.$s);
+        if ($s && !is_string($s) && !is_numeric($s)) {
+            d($s);
+            throw new \Exception ('not a string');
+        }
 
         if (substr($s, 0, 1) == '0')
             return 's';

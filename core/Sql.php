@@ -117,6 +117,18 @@ class Sql
         return $res[0];
     }
 
+    public static function pSelectToObjectList($classname, $args = array())
+    {
+        $stmt = self::pExecStmt( $args );
+
+        $res = $stmt->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $classname);
+        self::finishMeasure( $args );
+        if (!$res)
+            return false;
+
+        return $res;
+    }
+
     private static function finishMeasure($args)
     {
         $db = SqlHandler::getInstance();
@@ -190,26 +202,19 @@ class Sql
     }
 
     /** selects 1d array */
-    /*
     public static function pSelect1d()
     {
         $stmt = self::pExecStmt( func_get_args() );
 
         $data = array();
 
-        if ($stmt->field_count != 1)
+        if ($stmt->columnCount() != 1)
             throw new \Exception ('not 1d result');
 
-        $stmt->bind_result($col1);
+        $res = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
-        while ($stmt->fetch())
-            $data[] = $col1;
-
-        $stmt->free_result();
-        $stmt->close();
-
-        return $data;
-    }*/
+        return $res;
+    }
 
     /** like getMappedArray(). query selects a list of key->value pairs */
     /*
