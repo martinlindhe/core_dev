@@ -79,5 +79,9 @@ array("is_upper_str(\"ÅAA\")",              true),
 array("is_upper_str(\"Åaa\")",              false),
 array("is_upper_str(\"AAå\")",              false),
 array("is_upper_str(\"PÅ\")",               true),
+array("is_lower_str(\"på\")",               true),
+array("is_lower_str(\"pÅ\")",               false),
+array("is_ucfirst_str(\"Hallå\")",          true),
+array("is_ucfirst_str(\"HallÅ\")",          false),
 ));
 

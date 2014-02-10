@@ -648,7 +648,7 @@ function t($s)
 }
 
 /**
- * @return true if input char is upper case
+ * @return true if input char is UPPER case
  */
 function is_upper_char($c)
 {
@@ -672,7 +672,7 @@ function is_lower_char($c)
 }
 
 /**
- * @return true if input string is upper case
+ * @return true if input string is UPPER case
  */
 function is_upper_str($s)
 {
@@ -694,6 +694,22 @@ function is_lower_str($s)
     {
         $c = mb_substr($s, $i, 1);
         if (!is_lower_char($c))
+            return false;
+    }
+    return true;
+}
+
+/**
+ * @return true if input string is UcFirst case
+ */
+function is_ucfirst_str($s)
+{
+    for ($i = 0; $i < mb_strlen($s); $i++)
+    {
+        $c = mb_substr($s, $i, 1);
+        if ($i == 0 && !is_upper_char($c))
+            return false;
+        if ($i > 0 && !is_lower_char($c))
             return false;
     }
     return true;
