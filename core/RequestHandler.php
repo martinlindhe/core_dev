@@ -118,7 +118,8 @@ class RequestHandler
         // automatically resumes session unless it is blacklisted
         if (class_exists('\cd\SessionHandler') && !in_array($this->_controller, $this->exclude_session)) {
             $session = SessionHandler::getInstance();
-            $session->start();
+            if ($session->getName())
+                $session->start();
         }
 
         switch ($this->_controller) {
@@ -153,4 +154,3 @@ class RequestHandler
 
 }
 
-?>

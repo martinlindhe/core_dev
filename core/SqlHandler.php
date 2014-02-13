@@ -77,7 +77,8 @@ class SqlHandler
             if ($i->name == $s)
                 return $i->obj;
 
-        throw new \Exception ('No sql instance registered');
+        // fail if no sql instance is registered
+        return false;
     }
 
 }

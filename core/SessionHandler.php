@@ -64,6 +64,7 @@ class SessionHandler extends CoreBase ///XXXX should extend from User class ?
         return self::$_instance;
     }
 
+    function getName() { return $this->name; }
     function setName($s) { $this->name = $s; }
     function setTimeout($n)
     {

@@ -32,11 +32,16 @@ class DatabaseMysqlPDO implements IDB_SQL
     var       $time_connect  = 0;       ///< time it took to connect to db
     var       $queries       = array(); ///< array of SqlQuery (queries executed)
 
-    protected $connected = false;       ///< Are we connected to the db?
+    protected $connected = false;
 
     public function __construct()
     {
     }
+
+    /**
+     * Are we connected to the db?
+     */
+    public function isConnected() { return $this->connected; }
 
     public function getErrorCount()
     {

@@ -26,9 +26,15 @@ class CsvWriter
     private $eol          = "\r\n";
     private $write_header = true;
 
+    /**
+     * @param $data is an array of objects of the same type
+     */
     function setData($data) { $this->data = $data; }
 
     function setSeparator($s) { $this->separator = $s; }
+
+    function disableHeader() { $this->write_header = false; }
+    function enableHeader() { $this->write_header = true; }
 
     /**
      * Escapes data if nessecary
@@ -81,5 +87,3 @@ class CsvWriter
             return $res;
     }
 }
-
-?>

@@ -7,6 +7,9 @@
 
 namespace cd;
 
+if (!$db || !$db->isConnected())
+    return;
+
 $header->registerCss(
 '.cd_sql_row'.
 '{'.

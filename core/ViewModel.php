@@ -62,5 +62,3 @@ class ViewModel extends \ArrayObject implements IXmlComponent
         return ob_get_clean();
     }
 }
-
-?>
