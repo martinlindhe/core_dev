@@ -36,7 +36,7 @@ namespace cd;
 
 require_once('Image.php');
 
-class BarcodeEan13 extends Image
+class BarcodeEan13
 {
     protected $code;
     protected $gs1, $company, $product, $check;
@@ -48,6 +48,11 @@ class BarcodeEan13 extends Image
     {
         if ($n)
             $this->set($n);
+    }
+
+    function ToString()
+    {
+        return $this->code;
     }
 
     function set($n)
