@@ -44,5 +44,3 @@ class ISBN
         return true;
     }
 }
-
-?>

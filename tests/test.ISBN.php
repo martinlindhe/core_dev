@@ -10,5 +10,3 @@ require_once('ISBN.php');
 if (!ISBN::isValid('978-0-552-77429-1')) echo "FAIL 1\n";
 if (!ISBN::isValid('978-91-7429-121-6')) echo "FAIL 2\n";
 if (ISBN::isValid('978-91-7429-121-1'))  echo "FAIL 3\n"; // has bad checksum
-
-?>
