@@ -83,5 +83,6 @@ array("is_lower_str(\"på\")",               true),
 array("is_lower_str(\"pÅ\")",               false),
 array("is_ucfirst_str(\"Hallå\")",          true),
 array("is_ucfirst_str(\"HallÅ\")",          false),
+array("is_ucfirst_str(\"HALLÅ\")",          false),
 ));
 
