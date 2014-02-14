@@ -71,7 +71,7 @@ echo '<div id="'.$login_div.'" class="login_box">';
 if ($session->facebook_app_id && !$session->facebook_id)
 {
     // XXXX javascript login button dont work in chrome due to error at 2011.08.08:
-    // Unsafe JavaScript attempt to access frame with URL http://static.ak.fbcdn.net/connect/xd_proxy.php?... from frame with URL http://styggvar.dyndns.org:81/textfeed/. Domains, protocols and ports must match.
+    // Unsafe JavaScript attempt to access frame with URL http://static.ak.fbcdn.net/connect/xd_proxy.php?... from frame with URL /textfeed/. Domains, protocols and ports must match.
 
     // echo '<fb:login-button width="200" max-rows="1" perms="email">Login with Facebook</fb:login-button>';
 

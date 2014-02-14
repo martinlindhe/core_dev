@@ -14,7 +14,7 @@ require_once('io_playlist.php');
 require_once('Cache.php');
 
 
-$url = 'http://styggve.dyndns.org/webtv/playrapport.php?format=xspf';
+$url = 'xxx/webtv/playrapport.php?format=xspf';
 
 $url = 'http://media.svt.se/download/mcc/vision/kluster/20091021/PG-1133804-003A-BOOMSHAKALACK2-02.asx';
 
@@ -22,5 +22,3 @@ $pl = new Playlist();
 $pl->load($url);
 
 echo $pl->render('m3u');
-
-?>

@@ -85,6 +85,11 @@ class Image
         return;
     }
 
+    function ToFile($dst_file, $type)
+    {
+        $this->render($type, $dst_file);
+    }
+
     function render($type = 'png', $dst_file = '')
     {
         if (!$this->resource)

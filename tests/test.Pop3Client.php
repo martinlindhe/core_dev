@@ -9,7 +9,7 @@ require('Pop3Client.php');
 
 die('XXX: cant test pop3 client easily. the script worked last time tested');
 
-$mail = new Pop3Client('mail.startwars.org', 'martintest@startwars.org', 'test111');
+$mail = new Pop3Client('mail.host.com', 'martintest@host.com', 'test111');
 
 /**
  * If this function returns true, the mail is deleted from the server

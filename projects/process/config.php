@@ -33,8 +33,8 @@ $page->setApplicationPath();
 $db = SqlFactory::factory('mysql', true); // enable profiler
 SqlHandler::addInstance($db); //registers the created database connection as the one to use by SqlHandler
 
-//$db->setConfig( array('host' => 'process1.x:44000', 'database' => 'dbProcess', 'username' => 'ml', 'password' => 'nutana') );
-$db->setConfig( array('host' => 'localhost:44308', 'database' => 'dbProcess2', 'username' => 'root', 'password' => 'pl0gRupp4') );
+//$db->setConfig( array('host' => 'process1.x:44000', 'database' => 'dbProcess', 'username' => 'ml', 'password' => 'xx') );
+$db->setConfig( array('host' => 'localhost:44308', 'database' => 'dbProcess2', 'username' => 'root', 'password' => 'xx') );
 
 $page->enableProfiler();
 

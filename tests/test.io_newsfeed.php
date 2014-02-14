@@ -9,7 +9,7 @@ require('io_newsfeed.php');
 die('XXX: cant really test like this');
 
 
-$url = 'http://styggve.dyndns.org/webtv/apple.php?format=rss';
+$url = 'http://xxx/webtv/apple.php?format=rss';
 
 $feed = new NewsFeed();
 $feed->load($url);
@@ -46,6 +46,3 @@ $feed = new NewsFeed();
 $feed->addList($list);
 $feed->output('rss2');
 */
-
-
-?>
