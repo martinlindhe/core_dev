@@ -4,7 +4,7 @@
  *
  * Temporary all-in-one storage singleton that utilises memcached extension
  *
- * @author Martin Lindhe, 2011-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2013 <martin@ubique.se>
  */
 
 //STATUS: wip

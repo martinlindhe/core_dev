@@ -6,7 +6,7 @@
  *
  * http://en.wikipedia.org/wiki/List_of_circulating_currencies
  *
- * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
  */
 
 namespace cd;

@@ -8,7 +8,7 @@
  * http://en.wikipedia.org/wiki/Unit_of_energy
  * http://en.wikipedia.org/wiki/Kilowatt_hour
  *
- * @author Martin Lindhe, 2012-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2012-2013 <martin@ubique.se>
  */
 
 namespace cd;

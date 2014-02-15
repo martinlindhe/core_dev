@@ -6,7 +6,7 @@
  *
  * Use tools/update_geoip.sh to update local database
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@ubique.se>
  */
 
 //STATUS: wip

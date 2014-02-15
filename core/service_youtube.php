@@ -4,7 +4,7 @@
  *
  * Requires zend framework installed and php.ini paths configured!!!
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@ubique.se>
  */
 
 //STATUS: unused, need rewrite!

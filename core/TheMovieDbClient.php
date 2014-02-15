@@ -5,7 +5,7 @@
  * themoviedb.org metadata api
  * http://api.themoviedb.org/2.1/
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

@@ -11,7 +11,7 @@
  * NTLM HTTP Authentication
  * http://davenport.sourceforge.net/ntlm.html#ntlmHttpAuthentication
  *
- * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

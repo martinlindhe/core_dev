@@ -12,7 +12,7 @@
  * + supplement:
  * http://partners.adobe.com/public/developer/en/ps/PS3010and3011.Supplement.pdf
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: VERY WIP

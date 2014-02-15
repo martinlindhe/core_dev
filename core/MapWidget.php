@@ -4,7 +4,7 @@
  *
  * Common code for OpenStreetMap (OpenLayers) and Google Maps javascript widgets
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012 <martin@ubique.se>
  */
 
 namespace cd;

@@ -6,7 +6,7 @@
  *
  * http://en.wikipedia.org/wiki/Area
  *
- * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
  */
 
 namespace cd;

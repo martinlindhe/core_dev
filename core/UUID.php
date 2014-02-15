@@ -8,7 +8,7 @@
  *
  * The most widespread use of this standard is in Microsoft's Globally Unique Identifiers (GUIDs)
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
  */
 
 //STATUS: ok

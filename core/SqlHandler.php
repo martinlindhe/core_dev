@@ -21,7 +21,7 @@
  * ...
  * $db  =  SqlHandler::getInstance('microsoft-db');  // will always return the instance named "microsoft-db"
  *
- * @author Martin Lindhe, 2010-2014 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip

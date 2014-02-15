@@ -4,7 +4,7 @@
  *
  * Class to generate XHTML compilant forms
  *
- * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
  */
 
 //STATUS: wip

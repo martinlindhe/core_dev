@@ -4,7 +4,7 @@
  *
  * SQL database interface
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: ok, look over all use of the get* methods and see if someone is unused

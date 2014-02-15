@@ -4,7 +4,7 @@
  *
  * For keeping vistor track of user profiles, photos etc
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012 <martin@ubique.se>
  */
 
 //STATUS: wip

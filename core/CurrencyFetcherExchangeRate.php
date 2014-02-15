@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -18,7 +18,7 @@ class CurrencyFetcherExchangeRate implements ICurrencyFetcher
 {
     public static function getRate($from, $to)
     {
-        $api_key = 'RFJGV-fViGD-R3FGa'; //  api key for martin@startwars.org
+        $api_key = 'RFJGV-fViGD-R3FGa'; //  api key for martin@ubique.se
 
         $url = 'http://www.exchangerate-api.com/'.strtoupper($from).'/'.strtoupper($to).'?k='.$api_key;
 

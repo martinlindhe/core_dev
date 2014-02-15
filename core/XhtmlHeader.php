@@ -4,7 +4,7 @@
  *
  * Generates a HTML header
  *
- * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
  */
 
 //STATUS: ok

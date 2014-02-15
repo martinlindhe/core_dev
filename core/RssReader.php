@@ -6,7 +6,7 @@
  *
  * http://www.rssboard.org/rss-specification
  *
- * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@ubique.se>
  */
 
 //STATUS: good

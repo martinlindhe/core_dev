@@ -5,7 +5,7 @@
  * Singleton class to perform user registration and user handling.
  * Allows for additonal registration steps to be attached to base class
  *
- * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@ubique.se>
  */
 
 //TODO code needs updating in session_forgot_pwd

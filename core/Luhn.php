@@ -6,7 +6,7 @@
  * The resulting products (a two digit product, such as 16, would be converted to 1 + 6) are
  * added together. The checksum is 10 minus the ones place digit in this sum.
  *
- * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@ubique.se>
  */
 
 namespace cd;

@@ -4,7 +4,7 @@
  *
  * Misc file-related functions
  *
- * @author Martin Lindhe, 2009-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2012 <martin@ubique.se>
  */
 
 /**

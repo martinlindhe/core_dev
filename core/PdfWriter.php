@@ -8,7 +8,7 @@
  * http://www.adobe.com/devnet/acrobat/pdfs/PDF32000_2008.pdf
  * http://www.adobe.com/devnet/livecycle/articles/lc_pdf_overview_format.pdf
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@ubique.se>
  */
 
 //STATUS: unused, rework into a PdfWriter class

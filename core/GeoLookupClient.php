@@ -5,7 +5,7 @@
  * Looks up a set of coordinates and return normalized data such as
  * location name, country and local timezone.
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

@@ -4,7 +4,7 @@
  *
  * To send a poke, or a "flirt" to another community member
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012 <martin@ubique.se>
  */
 
 //STATUS: wip

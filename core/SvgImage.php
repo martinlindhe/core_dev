@@ -11,7 +11,7 @@
  * SVG test suite:
  * http://www.w3.org/Graphics/SVG/Test/
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

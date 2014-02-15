@@ -6,7 +6,7 @@
  *
  * http://en.wikipedia.org/wiki/Advanced_Stream_Redirector
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@ubique.se>
  */
 
 //STATUS: ok, needs more testing

@@ -6,7 +6,7 @@
  *
  * https://en.wikipedia.org/wiki/List_of_numeral_systems
  *
- * @author Martin Lindhe, 2010-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
  */
 
 //STATUS: ok

@@ -4,7 +4,7 @@
  *
  * Wrapper for built in XMLReader with helper methods
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

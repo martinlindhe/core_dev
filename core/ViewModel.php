@@ -4,7 +4,7 @@
  *
  * The view model creates a scope for variables and include the file returning the parsed output
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@ubique.se>
  */
 
 namespace cd;

@@ -4,7 +4,7 @@
  *
  * Methods for querying the query.yahooapis.com service
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

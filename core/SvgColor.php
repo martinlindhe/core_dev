@@ -4,7 +4,7 @@
  *
  * http://www.w3.org/TR/SVG/types.html#DataTypeColor
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

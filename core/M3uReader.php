@@ -4,7 +4,7 @@
  *
  * M3U playlist format reader
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

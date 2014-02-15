@@ -13,7 +13,7 @@
  * Examples:
  * http://code.google.com/apis/maps/documentation/javascript/examples/index.html
  *
- * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

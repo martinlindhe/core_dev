@@ -8,7 +8,7 @@
  * Grouping: You just need to add a grouping to the rel attribute with the grouping in brackets.
  *           So rel="lightbox" becomes rel="lightbox[grouping]"
  *
- * @author Martin Lindhe, 2011-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2011-2012 <martin@ubique.se>
  */
 
 //STATUS: works

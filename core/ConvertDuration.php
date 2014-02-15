@@ -8,7 +8,7 @@
  * http://en.wikipedia.org/wiki/Leap_year
  * http://en.wiktionary.org/wiki/kiloyear
  *
- * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
  */
 
 namespace cd;

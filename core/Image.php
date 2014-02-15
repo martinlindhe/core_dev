@@ -4,7 +4,7 @@
  *
  * Utility class for images, supporting PNG/GIF/JPEG images and GD resources
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

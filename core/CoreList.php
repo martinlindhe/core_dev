@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
  */
 
 //STATUS: drop this code & rework it into user classes: FeedWriter, Playlist

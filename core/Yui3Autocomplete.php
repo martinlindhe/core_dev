@@ -4,7 +4,7 @@
  *
  * http://developer.yahoo.com/yui/3/autocomplete/
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@ubique.se>
  */
 
 //STATUS: not finished. YuiAutocomplete is currently preferred. this will eventuall replace YuiAutocomplete

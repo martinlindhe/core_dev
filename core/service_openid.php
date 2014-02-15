@@ -21,7 +21,7 @@
  * http://openid.net/specs/openid-authentication-2_0.html
  * http://openid.net/specs/openid-attribute-exchange-1_0.html
  *
- * @author Martin Lindhe, 2008-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2011 <martin@ubique.se>
  */
 
 /**

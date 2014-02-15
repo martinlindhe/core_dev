@@ -4,7 +4,7 @@
  *
  * Implement revisioned documents, currently only used by Wiki class
  *
- * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@ubique.se>
  */
 
 //STATUS: wip

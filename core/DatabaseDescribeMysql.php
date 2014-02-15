@@ -5,7 +5,7 @@
  * Describes a MySQL database as a series of SQL commands
  * Useful for exporting a project's table structure
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

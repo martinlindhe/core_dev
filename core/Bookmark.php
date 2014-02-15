@@ -5,7 +5,7 @@
  * A bookmark owned by a user, which points to a resource of some kind,
  * such as another user (favorites), blocked users
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@ubique.se>
  */
 
 //STATUS: wip

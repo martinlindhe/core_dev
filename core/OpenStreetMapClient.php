@@ -7,7 +7,7 @@
  * http://www.openlayers.org/
  * http://wiki.openstreetmap.org/wiki/OpenLayers_Simple_Example
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012 <martin@ubique.se>
  */
 
 //STATUS: works

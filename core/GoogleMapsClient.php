@@ -18,7 +18,7 @@
  * Google Static Maps HTTP API documentation:
  * http://code.google.com/apis/maps/documentation/staticmaps/
  *
- * @author Martin Lindhe, 2008-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

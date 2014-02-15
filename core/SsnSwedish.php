@@ -16,7 +16,7 @@
  * Organisationsnummer, broschyr SKV 709 från Skatteverket:
  * http://www.skatteverket.se/download/18.70ac421612e2a997f85800040284/70909.pdf
  *
- * @author Martin Lindhe, 2007-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2013 <martin@ubique.se>
  */
 
 //STATUS: wip

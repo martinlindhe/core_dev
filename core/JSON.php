@@ -10,7 +10,7 @@
  * Object (a collection of key:value pairs, comma-separated and enclosed in curly braces; the key must be a string)  {name:"foo",val:"bar"}
  * null
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

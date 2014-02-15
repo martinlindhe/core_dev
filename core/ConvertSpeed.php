@@ -10,7 +10,7 @@
  * http://en.wikipedia.org/wiki/Kilometres_per_hour
  * http://en.wikipedia.org/wiki/Knot_(unit)
  *
- * @author Martin Lindhe, 2012-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2012-2013 <martin@ubique.se>
  */
 
 namespace cd;

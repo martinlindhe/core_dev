@@ -10,7 +10,7 @@
  * .otf (OpenType font)
  *
  *
- * @author Martin Lindhe, 2007-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

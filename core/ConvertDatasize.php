@@ -8,7 +8,7 @@
  * http://en.wikipedia.org/wiki/Template:Quantities_of_bits
  * http://en.wikipedia.org/wiki/Template:Quantities_of_bytes
  *
- * @author Martin Lindhe, 2009-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
  */
 
 namespace cd;

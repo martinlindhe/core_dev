@@ -9,7 +9,7 @@
  * API documentation:
  * http://code.google.com/apis/urlshortener/overview.html
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@ubique.se>
  */
 
 //STATUS: works 2011-01-13

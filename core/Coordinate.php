@@ -4,7 +4,7 @@
  *
  * Stores & handles WGS84 coordinates
  *
- * @author Martin Lindhe, 2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2012 <martin@ubique.se>
  */
 
 //TODO: port code from input_coordinates.php to static methods

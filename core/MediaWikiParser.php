@@ -2,7 +2,7 @@
 /**
  * $Id$
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@ubique.se>
  */
 
 //STATUS: early alpha, my own take at a mediawiki parser

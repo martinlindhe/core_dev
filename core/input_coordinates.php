@@ -20,7 +20,7 @@
  *
  * Based on http://latlong.mellifica.se/latlong.js (creative commons licence)
  *
- * @author Martin Lindhe, 2008-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2013 <martin@ubique.se>
  */
 
 //STATUS: ??? CLENAUP!

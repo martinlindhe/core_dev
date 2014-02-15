@@ -4,7 +4,7 @@
  *
  * Maps a simple Item to a MySQL database table entry
  *
- * @author Martin Lindhe, 2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2013 <martin@ubique.se>
  */
 
 namespace cd;

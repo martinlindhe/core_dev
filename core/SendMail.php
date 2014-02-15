@@ -10,7 +10,7 @@
  * MIME header Content-Disposition:  http://tools.ietf.org/html/rfc2183
  * MIME validator:                   http://www.apps.ietf.org/msglint.html
  *
- * @author Martin Lindhe, 2008-2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2008-2013 <martin@ubique.se>
  */
 
 //STATUS: wip

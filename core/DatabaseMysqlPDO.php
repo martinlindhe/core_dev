@@ -6,7 +6,7 @@
  *
  * Perform SQL commands using the Sql class
  *
- * @author Martin Lindhe, 2007-2014 <martin@startwars.org>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 //STATUS: wip

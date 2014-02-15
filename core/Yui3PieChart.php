@@ -6,7 +6,7 @@
  *
  * http://developer.yahoo.com/yui/3/charts/
  *
- * @author Martin Lindhe, 2010-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
  */
 
 //STATUS: wip

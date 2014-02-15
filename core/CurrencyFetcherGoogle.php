@@ -6,7 +6,7 @@
  *
  * https://rate-exchange.appspot.com/
  *
- * @author Martin Lindhe, 2013 <martin@startwars.org>
+ * @author Martin Lindhe, 2013 <martin@ubique.se>
  */
 
 //STATUS: wip

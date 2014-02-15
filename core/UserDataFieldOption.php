@@ -4,7 +4,7 @@
  *
  * Holds multiple selection options for UserDataField types such as RADIO
  *
- * @author Martin Lindhe, 2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2011 <martin@ubique.se>
  */
 
 // STATUS: wip

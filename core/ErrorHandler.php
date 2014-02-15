@@ -4,7 +4,7 @@
  *
  * Stores errors in a $_SESSION array to keep them persistent
  *
- * @author Martin Lindhe, 2010-2012 <martin@startwars.org>
+ * @author Martin Lindhe, 2010-2012 <martin@ubique.se>
  */
 
 //STATUS: wip

@@ -6,7 +6,7 @@
  *
  * Requirements: memcached php5-memcache (php 5.2 or older), or php5-memcached (php 5.3 or newer)
  *
- * @author Martin Lindhe, 2009-2011 <martin@startwars.org>
+ * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
  */
 
 //STATUS: FINISH MIGRATION OF ALL USERS TO TempStore. THEN NUKE THIS CLASS!
