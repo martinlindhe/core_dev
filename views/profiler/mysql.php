@@ -10,6 +10,18 @@ namespace cd;
 if (!$db || !$db->isConnected())
     return;
 
+$sql_div = 'cd_sql'.mt_rand();
+
+$header->registerCss(
+'#'.$sql_div.
+'{'.
+    'max-width:400px;'.
+    'max-height:600px;'.
+    'overflow-y:scroll;'.
+    'border:#000 1px solid;'.
+'}'
+);
+
 $header->registerCss(
 '.cd_sql_row'.
 '{'.
@@ -107,8 +119,25 @@ function print_query($q)
 
     if ($q->format)
         echo ' ('.$q->format.')';
-    if ($q->params)
-        echo ': '.implode(', ', $q->params);
+    if ($q->params) {
+        echo ': ';
+
+        $tmp = array();
+
+        foreach ($q->params as $param) {
+            $bg_col = 'white';
+            if (is_int($param)) {
+                $bg_col = '#A2B0FF'; // blueish
+            } else if (is_float($param)) {
+                $bg_col = '#FF6EDB'; // pink
+            } else if (is_string($param)) {
+                $bg_col = '#26D938'; // greenish
+            }
+
+            $tmp[] = '<span style="background-color:'.$bg_col.';">'.$param.'</span>';
+        }
+        echo implode(', ', $tmp);
+    }
 
     echo
     '</div>'.
@@ -116,18 +145,14 @@ function print_query($q)
     '</div>';
 }
 
-$sql_div = 'cd_sql'.mt_rand();
+
 
 echo ahref_js(count($db->queries).' sql', "return toggle_el('".$sql_div."')");
 
 $show_div = $db->getErrorCount() ? true : false;
 
 $css =
-($show_div ? '' : 'display:none;').
-'max-width:400px;'.
-'max-height:600px;'.
-'overflow-y:scroll;'.
-'border:#000 1px solid;';
+($show_div ? '' : 'display:none;');
 
 echo '<div id="'.$sql_div.'" style="'.$css.'">';
 

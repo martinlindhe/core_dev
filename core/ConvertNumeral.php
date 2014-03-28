@@ -37,7 +37,7 @@ class ConvertNumeral implements IConvert
         if (!empty(self::$scale[$s]))
             return self::$scale[$s];
 
-        throw new \Exception ('xx');
+        throw new \Exception ('unknown scale '.$s);
     }
 
     public static function convert($from, $to, $val)

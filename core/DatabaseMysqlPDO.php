@@ -41,7 +41,15 @@ class DatabaseMysqlPDO implements IDB_SQL
     /**
      * Are we connected to the db?
      */
-    public function isConnected() { return $this->connected; }
+    public function isConnected()
+    {
+        return $this->connected;
+    }
+
+    public function isProfilingEnabled()
+    {
+        return $this->profiling_enabled;
+    }
 
     public function getErrorCount()
     {
@@ -63,11 +71,15 @@ class DatabaseMysqlPDO implements IDB_SQL
         return $time;
     }
 
-    public function isProfilingEnabled() { return $this->profiling_enabled; }
+    public function enableProfiling()
+    {
+        $this->profiling_enabled = true;
+    }
 
-    public function enableProfiling() { $this->profiling_enabled = true; }
-
-    public function startMeasure() { $this->measure_start = microtime(true); }
+    public function startMeasure()
+    {
+        $this->measure_start = microtime(true);
+    }
 
     /**
      * Calculates the time it took to execute a query

@@ -27,7 +27,7 @@ require_once('Luhn.php');
 
 class OrgNoSwedish extends SsnSwedish
 {
-    protected static function cleanSsn($ssn)
+    static function cleanSsn($ssn)
     {
         $ssn = str_replace('-', '', $ssn);
         $ssn = str_replace(' ', '', $ssn);
@@ -40,7 +40,7 @@ class OrgNoSwedish extends SsnSwedish
         $ssn = self::cleanSsn($ssn);
 
         if (strlen($ssn) != 10)
-            throw new \Exception ('odd length');
+            return false;
 
         if (parent::calcLunh($ssn))
             return true;

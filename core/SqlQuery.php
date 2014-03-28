@@ -15,6 +15,6 @@ class SqlQuery
     var $error;
     var $time;
     var $prepared = false;
-    var $format;            ///< for prepared statements
-    var $params;            ///< for prepared statements
+    var $format;            ///< format string, for prepared statements
+    var $params;            ///< array of parameters, for prepared statements
 }
