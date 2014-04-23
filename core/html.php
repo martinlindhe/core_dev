@@ -1,10 +1,8 @@
 <?php
 /**
- * $Id$
- *
  * Various HTML, Javascript and CSS utility functions
  *
- * @author Martin Lindhe, 2007-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 namespace cd;
@@ -366,4 +364,9 @@ function str_add_smileys($s)
     return $s;
 }
 
-?>
+function is_json($s)
+{
+    json_decode($s);
+    return (json_last_error() == JSON_ERROR_NONE);
+}
+

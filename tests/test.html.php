@@ -50,4 +50,18 @@ if (strip_html($s) != '')                             echo "FAIL 43\n";
 $s = '<!-- c1 -->SHOULD_SHOW<!-- c2 -->ALWAYS_SHOWS';
 if (strip_html($s) != 'SHOULD_SHOWALWAYS_SHOWS')      echo "FAIL 44\n";
 
-?>
+
+if (!is_json('[]'))             echo "FAIL 50\n";
+if (!is_json('[1]'))            echo "FAIL 51\n";
+if (!is_json('[1.23]'))         echo "FAIL 52\n";
+if (!is_json('["a"]'))          echo "FAIL 53\n";
+if (!is_json('["a",1]'))        echo "FAIL 54\n";
+if (!is_json('[1,"a",["b"]]'))  echo "FAIL 55\n";
+
+
+if (is_json('x'))               echo "FAIL 60\n";
+if (is_json('['))               echo "FAIL 61\n";
+if (is_json('[]]'))             echo "FAIL 62\n";
+if (is_json('[[]'))             echo "FAIL 63\n";
+if (is_json('["a"'))            echo "FAIL 64\n";
+
