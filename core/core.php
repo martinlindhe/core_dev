@@ -1,10 +1,8 @@
 <?php
 /**
- * $Id$
- *
  * Functions assumed to always be available
  *
- * @author Martin Lindhe, 2007-2012 <martin@ubique.se>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 namespace cd;
@@ -572,6 +570,19 @@ function str_between($s, $needle1, $needle2)
 }
 
 /**
+ * @return the remainder of the string, after
+ * token $part_before is found, or false if not found
+ */
+function str_remaining($s, $part_before)
+{
+    $pos = strpos($s, $part_before);
+    if ($pos === false)
+        return false;
+
+    return substr($s, $pos + strlen($part_before));
+}
+
+/**
  * reduce excessive whitespace to a single space
  */
 function reduce_whitespace($s)
@@ -714,4 +725,3 @@ function is_ucfirst_str($s)
     }
     return true;
 }
-
