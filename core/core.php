@@ -575,7 +575,7 @@ function str_between($s, $needle1, $needle2)
  */
 function str_remaining($s, $part_before)
 {
-    $pos = strpos($s, $part_before);
+    $pos = strrpos($s, $part_before);
     if ($pos === false)
         return false;
 
