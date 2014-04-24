@@ -1,12 +1,10 @@
 <?php
 /**
- * $Id$
- *
  * Implements a OpenSearch compatible search engine
  *
  * http://www.opensearch.org/Specifications/OpenSearch/1.1
  *
- * @author Martin Lindhe, 2007-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -15,8 +13,6 @@
 //TODO: ask browser to cache content
 
 namespace cd;
-
-require_once('XhtmlComponent.php');
 
 class XhtmlComponentOpenSearch extends XhtmlComponent
 {
@@ -49,5 +45,3 @@ class XhtmlComponentOpenSearch extends XhtmlComponent
     }
 
 }
-
-?>

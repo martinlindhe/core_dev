@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * http://www.adobe.com/devnet/pdf/pdf_reference_archive.html
  *
  * PDF Reference, Sixth Edition, version 1.7:
@@ -10,15 +8,15 @@
  * + Errata to Sixth Edition:
  * http://www.adobe.com/devnet/pdf/pdfs/pdf_17_errata.pdf
  *
- * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: very much WIP
 
-//TODO: rewrite pdf_parse_dict() to handle multi-dimensional dictionaries
+//TODO: rewrite parseDict() to handle multi-dimensional dictionaries
 
 /**
- * Version status
+ * PDF document version status
  *
  * v1.3: dont work with the sample i have
  * v1.4: works with all samples
@@ -203,9 +201,43 @@ class PdfReader
         }
     }
 
+    //XXX assumes 2d dictionary. they can be multi-dimensonal with nested << >>
+    public static function parseDict($s)
+    {
+        if (substr($s, 0, 2) == '<<' && substr($s, -2) == '>>')
+            $s = substr($s, 2, strlen($s) - 4);
+        else {
+            //throw new \Exception ('Unexpected dict format: '.$s);
+            echo "Unexpected dict format: ".$s."\n";
+            return false;
+        }
+
+        $current_key = '';
+        $dict = array();
+        $x = explode('/', $s);
+
+        foreach ($x as $val)
+        {
+            if (!$val) continue;
+            if (strpos($val, ' ') !== false) {
+                $xx = explode(' ', $val, 2);
+                $dict[ $xx[0] ] = $xx[1];
+            } else {
+                if (!$current_key)
+                    $current_key = $val;
+                else {
+                    $dict[ $current_key ] = $val;
+                    $current_key = '';
+                }
+            }
+        }
+
+        return $dict;
+    }
+
     private function parseStream($s)
     {
-        $dict = pdf_parse_dict($s);
+        $dict = self::parseDict($s);
 //        d($dict);
 
         $stream = new PdfStream();
@@ -244,39 +276,3 @@ class PdfReader
     }
 
 }
-
-//XXX assumes 2d dictionary. they can be multi-dimensonal with nested << >>
-function pdf_parse_dict($s)
-{
-    if (substr($s, 0, 2) == '<<' && substr($s, -2) == '>>')
-        $s = substr($s, 2, strlen($s) - 4);
-    else {
-        //throw new \Exception ('Unexpected dict format: '.$s);
-        echo "Unexpected dict format: ".$s."\n";
-        return false;
-    }
-
-    $current_key = '';
-    $dict = array();
-    $x = explode('/', $s);
-
-    foreach ($x as $val)
-    {
-        if (!$val) continue;
-        if (strpos($val, ' ') !== false) {
-            $xx = explode(' ', $val, 2);
-            $dict[ $xx[0] ] = $xx[1];
-        } else {
-            if (!$current_key)
-                $current_key = $val;
-            else {
-                $dict[ $current_key ] = $val;
-                $current_key = '';
-            }
-        }
-    }
-
-    return $dict;
-}
-
-?>

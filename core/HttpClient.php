@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * HTTP Client class to GET/POST data using the HTTP protocol
  *
  * References
@@ -11,7 +9,7 @@
  * NTLM HTTP Authentication
  * http://davenport.sourceforge.net/ntlm.html#ntlmHttpAuthentication
  *
- * @author Martin Lindhe, 2008-2012 <martin@ubique.se>
+ * @author Martin Lindhe, 2008-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -467,5 +465,3 @@ class HttpClient
     }
 
 }
-
-?>

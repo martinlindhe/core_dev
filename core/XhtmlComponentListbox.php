@@ -1,15 +1,11 @@
 <?php
 /**
- * $Id$
- *
- * @author Martin Lindhe, 2007-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
 
 namespace cd;
-
-require_once('XhtmlComponent.php');
 
 class XhtmlComponentListbox extends XhtmlComponent
 {
@@ -59,5 +55,3 @@ class XhtmlComponentListbox extends XhtmlComponent
     }
 
 }
-
-?>

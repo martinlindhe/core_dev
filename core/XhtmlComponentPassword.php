@@ -1,17 +1,13 @@
 <?php
 /**
- * $Id$
- *
  * XHTML password input field
  *
- * @author Martin Lindhe, 2007-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
 
 namespace cd;
-
-require_once('XhtmlComponent.php');
 
 class XhtmlComponentPassword extends XhtmlComponent
 {
@@ -50,5 +46,3 @@ class XhtmlComponentPassword extends XhtmlComponent
     }
 
 }
-
-?>

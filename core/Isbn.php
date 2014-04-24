@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * ISBN (International Standard Book Number) handler
  *
  * http://en.wikipedia.org/wiki/ISBN
@@ -12,7 +10,7 @@
  *
  * 978 & 979 is the "Bookland" country code used for all books
  *
- * @author Martin Lindhe, 2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -23,7 +21,7 @@ namespace cd;
 
 require_once('BarcodeEan13.php');
 
-class ISBN
+class Isbn
 {
     /**
      * @return true if input is a valid ISBN-13 code (EAN-13)

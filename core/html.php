@@ -8,7 +8,7 @@
 namespace cd;
 
 require_once('XmlDocumentHandler.php');
-require_once('XhtmlComponentA.php');
+require_once('XhtmlComponent.php');
 
 //STATUS: wip
 

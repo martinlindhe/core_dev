@@ -1,17 +1,13 @@
 <?php
 /**
- * $Id$
- *
  * XHTML button
  *
- * @author Martin Lindhe, 2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
 
 namespace cd;
-
-require_once('XhtmlComponent.php');
 
 class XhtmlComponentButton extends XhtmlComponent
 {
@@ -33,5 +29,3 @@ class XhtmlComponentButton extends XhtmlComponent
     }
 
 }
-
-?>

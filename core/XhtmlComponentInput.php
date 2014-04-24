@@ -1,17 +1,13 @@
 <?php
 /**
- * $Id$
- *
  * XHTML text input field
  *
- * @author Martin Lindhe, 2007-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2007-2014 <martin@ubique.se>
  */
 
 //STATUS: ok
 
 namespace cd;
-
-require_once('XhtmlComponent.php');
 
 class XhtmlComponentInput extends XhtmlComponent
 {

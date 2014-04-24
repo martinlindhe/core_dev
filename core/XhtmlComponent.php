@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id$
- *
- * @author Martin Lindhe, 2011-2012 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 ///XXXX: make interface IXhtmlComponent instead?
@@ -10,6 +8,21 @@
 namespace cd;
 
 require_once('CoreBase.php');
+
+abstract class XhtmlComponent extends CoreBase
+{
+    var $name;
+
+    abstract function render();
+
+    function __construct($s = '')
+    {
+        $this->name = $s;
+    }
+
+    function setName($s) { $this->name = $s; }
+    function getName() { return $this->name; }
+}
 
 // standard html components:
 require_once('XhtmlComponentA.php');
@@ -40,20 +53,3 @@ require_once('YuiRichedit.php');
 
 // other enhanced components:
 require_once('Recaptcha.php');
-
-abstract class XhtmlComponent extends CoreBase
-{
-    var $name;
-
-    abstract function render();
-
-    function __construct($s = '')
-    {
-        $this->name = $s;
-    }
-
-    function setName($s) { $this->name = $s; }
-    function getName() { return $this->name; }
-}
-
-?>

@@ -144,16 +144,16 @@ class SpotifyClient extends CoreBase
     {
         $artists = array();
 
-        $reader = new XMLReader();
+        $reader = new \XMLReader();
         if ($this->getDebug()) echo 'Parsing Artists: '.$data.ln();
         $reader->xml($data);
 
         while ($reader->read())
         {
-            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'artists')
+            if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name == 'artists')
                 break;
 
-            if ($reader->nodeType != XMLReader::ELEMENT)
+            if ($reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch ($reader->name) {
@@ -180,16 +180,16 @@ class SpotifyClient extends CoreBase
     {
         $tracks = array();
 
-        $reader = new XMLReader();
+        $reader = new \XMLReader();
         if ($this->getDebug()) echo 'Parsing tracks: '.$data.ln();
         $reader->xml($data);
 
         while ($reader->read())
         {
-            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'album')
+            if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name == 'album')
                 break;
 
-            if ($reader->nodeType != XMLReader::ELEMENT)
+            if ($reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch ($reader->name) {
@@ -207,6 +207,7 @@ class SpotifyClient extends CoreBase
                 $tracks[] = $this->parseTrack($reader);
                 break;
 
+            case 'id': break;//Album id, XXX store?
             case 'name': break;//Album name, XXX store?
             case 'released': break;//Release year, XXX store?
             case 'availability': break;
@@ -227,16 +228,16 @@ class SpotifyClient extends CoreBase
     {
         $disco = array();
 
-        $reader = new XMLReader();
+        $reader = new \XMLReader();
         if ($this->getDebug()) echo 'Parsing disco: '.$data.ln();
         $reader->xml($data);
 
         while ($reader->read())
         {
-            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'artist')
+            if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name == 'artist')
                 break;
 
-            if ($reader->nodeType != XMLReader::ELEMENT)
+            if ($reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch ($reader->name) {
@@ -248,13 +249,13 @@ class SpotifyClient extends CoreBase
                 $name = '';
                 $year = '';
                 while ($reader->read()) {
-                    if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'album') {
+                    if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name == 'album') {
                         //XXX cache write aritst name + spotify id combo
                         $disco[] = array('album'=>$name, 'id'=>$id, 'year'=>$year);
                         break;
                     }
 
-                    if ($reader->nodeType != XMLReader::ELEMENT)
+                    if ($reader->nodeType != \XMLReader::ELEMENT)
                         continue;
 
                     switch ($reader->name) {
@@ -276,7 +277,7 @@ class SpotifyClient extends CoreBase
                     case 'availability'; break;
                     case 'territories'; break;
                     case 'id': break; //XXX whats this <id type="upc">884385682460</id>
-                    default: echo "bad entry " .$reader->name.ln();
+                    default: echo "bad entry (0) " .$reader->name.ln();
                     }
                 }
                 break;
@@ -297,12 +298,12 @@ class SpotifyClient extends CoreBase
         $name       = '';
         $popularity = '';
         while ($reader->read()) {
-            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'artist') {
+            if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name == 'artist') {
                 //XXX cache write aritst name + spotify id combo
                 return array('artist'=>$name, 'id'=>$id, 'popularity'=>$popularity);
             }
 
-            if ($reader->nodeType != XMLReader::ELEMENT)
+            if ($reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch ($reader->name) {
@@ -314,27 +315,33 @@ class SpotifyClient extends CoreBase
                 $reader->read();
                 $popularity = $reader->value;
                 break;
-            default: echo "bad entry " .$reader->name.ln();
+            default: echo "bad entry (1) " .$reader->name.ln();
             }
         }
     }
 
     private function parseTrack($reader)
     {
-        $id     = $reader->getAttribute('href');
+        $href   = $reader->getAttribute('href');
+        $id     = '';
         $name   = '';
         $track  = '';
         $length = '';
         while ($reader->read()) {
-            if ($reader->nodeType == XMLReader::END_ELEMENT && $reader->name == 'track') {
+            if ($reader->nodeType == \XMLReader::END_ELEMENT && $reader->name == 'track') {
                 //XXX cache write aritst name + spotify id combo
-                return array('title'=>$name, 'id'=>$id, 'track'=>$track, 'length'=>$length);
+                return array('title'=>$name, 'href'=>$href, 'id'=>$id, 'track'=>$track, 'length'=>$length);
             }
 
-            if ($reader->nodeType != XMLReader::ELEMENT)
+            if ($reader->nodeType != \XMLReader::ELEMENT)
                 continue;
 
             switch ($reader->name) {
+            case 'id':
+                $reader->read();
+                $id = $reader->value;
+                break;
+
             case 'name':
                 $reader->read();
                 $name = $reader->value;
@@ -354,10 +361,11 @@ class SpotifyClient extends CoreBase
                 $this->parseArtist($reader); //XXX store
                 break;
 
+            case 'available': $reader->read(); break; //XXX use
             case 'popularity': $reader->read(); break; //XXX use
             case 'disc-number': $reader->read(); break; //XXX use
 
-            default: echo "bad entry " .$reader->name.ln();
+            default: echo "bad entry (2) " .$reader->name.ln();
             }
         }
     }
