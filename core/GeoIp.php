@@ -1,12 +1,15 @@
 <?php
 /**
- * $Id$
- *
  * http://geolite.maxmind.com/download/geoip/database/LICENSE.txt
  *
- * Use tools/update_geoip.sh to update local database
+ * On Debian, install geoip-database-contrib to keep local database up-to-date.
  *
- * @author Martin Lindhe, 2011 <martin@ubique.se>
+ * The files are available at
+ * http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+ * http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+ * http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz
+ *
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -23,7 +26,7 @@ class GeoIp
     private static function compat_check()
     {
         if (!extension_loaded('geoip'))
-            throw new \Exception ('sudo apt-get install php5-geoip');
+            throw new \Exception ('sudo apt-get install php5-geoip geoip-database-contrib');
     }
 
     static function getRecord($s)
@@ -83,5 +86,3 @@ class GeoIp
         return $res;
     }
 }
-
-?>

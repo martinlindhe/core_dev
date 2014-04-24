@@ -7,7 +7,7 @@
  * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
  */
 
-//STATUS: good
+//TODO: use ConvertDuration internally, rename to RenderDuration
 
 namespace cd;
 
@@ -174,5 +174,3 @@ class Duration extends CoreProperty
     }
 
 }
-
-?>

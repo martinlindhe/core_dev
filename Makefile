@@ -9,7 +9,10 @@ syntax:
 		done \
 	done
 
+doxy:
+	doxygen Doxyfile
+
 test:
 	@for FILE in ./tests/*Test.php; do \
-		(echo "Running $$FILE"; /usr/bin/phpunit "$$FILE";) || exit 1; \
+		(echo "Running $$FILE"; /usr/bin/phpunit --colors "$$FILE";) || exit 1; \
 	done
