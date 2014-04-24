@@ -1,6 +1,6 @@
 # STATUS: wip
 
-DIRS = core core/views tests api cron setup tools
+DIRS = api core cron setup tests tools views/admin views/core views/error views/profiler views/tools views/user
 
 syntax:
 	@for DIR in $(DIRS); do \
@@ -10,6 +10,6 @@ syntax:
 	done
 
 test:
-	@for FILE in ./tests/test.*.php; do \
-		(echo "Running $$FILE"; /usr/bin/php5 "$$FILE";) || exit 1; \
+	@for FILE in ./tests/*Test.php; do \
+		(echo "Running $$FILE"; /usr/bin/phpunit "$$FILE";) || exit 1; \
 	done
