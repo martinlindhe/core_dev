@@ -4,7 +4,7 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('HashPBKDF2.php');
+require_once('HashPBKDF2.php');
 
 function assert_true($result, $msg)
 {

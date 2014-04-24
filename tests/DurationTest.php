@@ -4,7 +4,7 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('Duration.php');
+require_once('Duration.php');
 
 class DurationTest extends \PHPUnit_Framework_TestCase
 {

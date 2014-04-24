@@ -6,7 +6,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('ConvertVolume.php');
 
-class ConvertNumeralTest extends \PHPUnit_Framework_TestCase
+class ConvertVolumeTest extends \PHPUnit_Framework_TestCase
 {
     public function test()
     {

@@ -4,7 +4,7 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('CsvReader.php');
+require_once('CsvReader.php');
 
 class CsvReaderTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,14 +1,12 @@
 <?php
 /**
- * $Id$
- *
  * Conversion functions between different byte representations
  *
  * http://en.wikipedia.org/wiki/Units_of_information
  * http://en.wikipedia.org/wiki/Template:Quantities_of_bits
  * http://en.wikipedia.org/wiki/Template:Quantities_of_bytes
  *
- * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2009-2014 <martin@ubique.se>
  */
 
 namespace cd;
@@ -92,25 +90,26 @@ class ConvertDatasize implements IConvert
         return bcdiv($mul, $to, $scale);
     }
 
-}
 
-/**
- * 1024M, 4G, 256K etc into bytes
- */
-function datasize_to_bytes($s)
-{
-    if (is_numeric($s))
-        throw new \Exception ('unexpected value: '.$s);
+    /**
+     * 1024M, 4G, 256K etc into bytes
+     */
+    public static function toBytes($s)
+    {
+        if (is_numeric($s))
+            throw new \Exception ('unexpected value: '.$s);
 
-    //HACK: find first non-digit/non-separator. replace with a regexp
-    for ($i=0; $i<strlen($s); $i++) {
-        $c = substr($s, $i, 1);
-        if (!is_numeric($c) && $c != '.' && $c != ',')
-            break;
+        //HACK: find first non-digit/non-separator. replace with a regexp
+        for ($i=0; $i<strlen($s); $i++) {
+            $c = substr($s, $i, 1);
+            if (!is_numeric($c) && $c != '.' && $c != ',')
+                break;
+        }
+
+        $suff = substr($s, $i);
+        $val  = substr($s, 0, $i);
+
+        return ConvertDatasize::convert($suff, 'byte', $val);
     }
 
-    $suff = substr($s, $i);
-    $val  = substr($s, 0, $i);
-
-    return ConvertDatasize::convert($suff, 'byte', $val);
 }

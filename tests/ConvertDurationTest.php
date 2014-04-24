@@ -4,7 +4,7 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('ConvertDuration.php');
+require_once('ConvertDuration.php');
 
 class ConvertDurationTest extends \PHPUnit_Framework_TestCase
 {

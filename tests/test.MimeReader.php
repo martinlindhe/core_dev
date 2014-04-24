@@ -4,8 +4,8 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('core.php');
-require('MimeReader.php');
+require_once('core.php');
+require_once('MimeReader.php');
 
 $msg = 'Date: Sun, 06 Nov 2011 10:09:58 +0100
 From: =?iso-8859-1?Q?Tommy_J=F8nsson?= <tommy@oslocreditservice.no>

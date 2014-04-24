@@ -4,8 +4,8 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('core.php');
-require('Pop3Client.php');
+require_once('core.php');
+require_once('Pop3Client.php');
 
 die('XXX: cant test pop3 client easily. the script worked last time tested');
 

@@ -6,7 +6,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../co
 
 require_once('ConvertSpeed.php');
 
-class ConvertNumeralTest extends \PHPUnit_Framework_TestCase
+class ConvertSpeedTest extends \PHPUnit_Framework_TestCase
 {
     public function test()
     {

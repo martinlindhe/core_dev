@@ -4,7 +4,7 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require('ConvertCurrency.php');
+require_once('ConvertCurrency.php');
 
 class ConvertCurrencyTest extends \PHPUnit_Framework_TestCase
 {
