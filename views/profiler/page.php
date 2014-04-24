@@ -129,7 +129,7 @@ round(ConvertDatasize::convert('byte', 'MiB', $used_mem), 1).
 $memory_limit = ini_get('memory_limit');
 if ($memory_limit != '-1') { // "-1" means "no memory limit"
 
-    $limit = datasize_to_bytes($memory_limit);
+    $limit = ConvertDatasize::ToBytes($memory_limit);
     $pct = round($used_mem / $limit * 100, 1);
     $limit_s = round(ConvertDatasize::convert('byte', 'MiB', $limit), 1);
     echo

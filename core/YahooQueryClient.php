@@ -1,17 +1,15 @@
 <?php
 /**
- * $Id$
- *
  * Methods for querying the query.yahooapis.com service
  *
- * @author Martin Lindhe, 2010-2012 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
 
 namespace cd;
 
-require_once('JSON.php');
+require_once('Json.php');
 require_once('TempStore.php');
 require_once('GeonamesClient.php'); // to lookup timezone for location
 
@@ -53,7 +51,7 @@ class YahooQueryClient
         $q = urlencode('select * from geo.places where text="'.$text.'"');
         $url = 'http://query.yahooapis.com/v1/public/yql?q='.$q.'&format=json';
 
-        $x = JSON::decode($url);
+        $x = Json::decode($url);
 
         //XXX: instead return all results as array of YahooGeocodeResult objects?
         if ($x->query->count > 1)

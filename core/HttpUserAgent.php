@@ -1,12 +1,10 @@
 <?php
 /**
- * $Id
- *
  * A helper class to parse useful infromation from a HTTP user agent string
  *
  * See http://www.useragentstring.com/
  *
- * @author Martin Lindhe, 2011-2012 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -245,11 +243,24 @@ class HttpUserAgent
         }
         else if (instr($s, 'MSIE'))
         {
+            // this format was used up to & including IE 10
+
             $o->vendor = 'Microsoft';
             $o->name   = 'Internet Explorer';
 
             $x = explode('MSIE ', $s, 2);
             $y = explode(';', $x[1]);
+            $o->version = $y[0];
+        }
+        else if (instr($s, 'Trident/'))
+        {
+            // this format is used in IE 11 and forward
+
+            $o->vendor = 'Microsoft';
+            $o->name   = 'Internet Explorer';
+
+            $x = explode('rv:', $s, 2);
+            $y = explode(')', $x[1]);
             $o->version = $y[0];
         }
 

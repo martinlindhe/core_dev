@@ -14,7 +14,7 @@
 namespace cd;
 
 require_once('HttpClient.php');
-require_once('JSON.php');
+require_once('Json.php');
 require_once('MediaWikiParser.php');
 
 class MediaWikiPage
@@ -145,7 +145,7 @@ class MediaWikiClient
         $http = new HttpClient($url);
 
         $raw = $http->getBody();
-        $json = JSON::decode($raw);
+        $json = Json::decode($raw);
 
         $pages = array();
         foreach ( $json->query->pages as $id => $p)

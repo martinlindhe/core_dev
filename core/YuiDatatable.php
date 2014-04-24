@@ -1,10 +1,8 @@
 <?php
 /**
- * $Id$
- *
  * http://developer.yahoo.com/yui/datatable/
  *
- * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -19,7 +17,7 @@
 
 namespace cd;
 
-require_once('JSON.php');
+require_once('Json.php');
 
 class YuiColumnDef
 {
@@ -317,7 +315,7 @@ class YuiDatatable
                 for ($i=0; $i<count($this->embed_arrays); $i++) {
                     $res .=
                     'this.formatArray'.$i.' = function(elLiner, oRecord, oColumn, oData) {'.
-                        'var a='.JSON::encodeObject($this->embed_arrays[$i],true).';'.
+                        'var a='.Json::encodeObject($this->embed_arrays[$i],true).';'.
                         'elLiner.innerHTML = a[oData];'.
                     '};'.
                     'YAHOO.widget.DataTable.Formatter.formatArray'.$i.' = this.formatArray'.$i.';';
@@ -331,13 +329,13 @@ class YuiDatatable
                 'YAHOO.widget.DataTable.Formatter.formatMoney = this.formatMoney;'.
                 'YAHOO.widget.DataTable.Formatter.formatBool = this.formatBool;'.
 
-                'myColumnDefs = '.JSON::encode($this->columns).';'."\n".
+                'myColumnDefs = '.Json::encode($this->columns).';'."\n".
                 (is_array($this->data_source) ?
                     //embedded js-array
-                    'var '.$data_var.' = '.JSON::encode($this->data_source).';'."\n".
+                    'var '.$data_var.' = '.Json::encode($this->data_source).';'."\n".
                     'var myDataSource = new YAHOO.util.DataSource('.$data_var.');'.
                     'myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;'. // XXX whats difference of JSARRAY and JSON types?
-                    'myDataSource.responseSchema = { fields:'.JSON::encode($this->response_fields, false).'};'
+                    'myDataSource.responseSchema = { fields:'.Json::encode($this->response_fields, false).'};'
                 :
                     //rpc
                     'var myDataSource = new YAHOO.util.DataSource("'.$this->data_source.'");'.
@@ -345,7 +343,7 @@ class YuiDatatable
                     //'myDataSource.connXhrMode = "queueRequests";'. //XXX ???
                     'myDataSource.responseSchema = {'.
                         'resultsList: "records",'.
-                        'fields: '.JSON::encode($this->response_fields, false).','.
+                        'fields: '.Json::encode($this->response_fields, false).','.
                         'metaFields: { totalRecords:"totalRecords" }'. // mapped to XhrResponse "totalRecords" field, needed for paginator
                     '};'
                 );

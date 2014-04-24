@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * API client for http://isbndb.com/ (ISBN book search api)
  *
  * API documentation:
@@ -19,7 +17,7 @@
 namespace cd;
 
 require_once('HttpClient.php');
-require_once('ISBN.php');
+require_once('Isbn.php');
 require_once('MediaResource.php'); // for BookResource
 require_once('TempStore.php');
 
@@ -31,7 +29,7 @@ class IsbnDbClient
 
     function getByISBN($isbn)
     {
-        if (!ISBN::isValid($isbn))
+        if (!Isbn::isValid($isbn))
             throw new \Exception ('invalid isbn');
 
         if (!$this->api_key)
@@ -74,5 +72,3 @@ class IsbnDbClient
     }
 
 }
-
-?>
