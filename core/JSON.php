@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * JSON's basic types are:
  * Number (double precision floating-point format)
  * String (double-quoted Unicode with backslash escaping)
@@ -10,7 +8,7 @@
  * Object (a collection of key:value pairs, comma-separated and enclosed in curly braces; the key must be a string)  {name:"foo",val:"bar"}
  * null
  *
- * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -118,5 +116,3 @@ class JSON
         return $res;
     }
 }
-
-?>

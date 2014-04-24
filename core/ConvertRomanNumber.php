@@ -1,11 +1,7 @@
 <?php
 /**
- * $Id$
- *
- * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
-
-//STATUS: ok
 
 //TODO: reuse lookup array in getAsRoman() for decoding numbers, drop expand()
 
@@ -97,6 +93,18 @@ class ConvertRomanNumber implements IConvert
         }
 
         return $res;
+    }
+
+    public static function convert($from, $to, $val)
+    {
+        if ($from != 'roman')
+            throw new \Exception ("ep");
+
+        if (!in_array($to, array('arabic', 'decimal')))
+            throw new \Exception ("ep");
+
+        $x = new ConvertRomanNumber($val);
+        return $x->getAsInteger();
     }
 
 }
