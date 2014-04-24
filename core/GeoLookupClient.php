@@ -11,7 +11,7 @@
 namespace cd;
 
 require_once('GeonamesClient.php');
-require_once('GoogleMapsClient.php');
+require_once('GoogleMapsGeocode.php');
 require_once('TempStore.php');
 
 class GeoLookupResult  //XXX FIXME merge with GeoCodeResult from GoogleMapsClient

@@ -1,13 +1,11 @@
 <?php
 /**
- * $Id$
- *
  * For special usage with unique tokens (activation, private links)
  *
  * All tokens are 40 byte hex string repserentation of sha1 sums (160 bit)
  * See Setting.php for general key->val storage
  *
- * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -77,5 +75,3 @@ class Token
     }
 
 }
-
-?>

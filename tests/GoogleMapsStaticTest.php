@@ -4,18 +4,20 @@ namespace cd;
 
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
 
-require_once('GoogleMapsClient.php');
-require_once('input_coordinates.php');
+require_once('GoogleMapsStatic.php');
 
-$x = GoogleMapsClient::geocode('Stora Nygatan, Stockholm, Sweden');
-var_dump($x);
+class GoogleMapsStaticTest extends \PHPUnit_Framework_TestCase
+{
+    public function testGeocode2()
+    {
+        $url = GoogleMapsStatic::staticMap(59.2542869, 18.029657);
 
-
-
-$pos = GoogleMapsClient::geocode('gillerbacken');
-//d($pos);
-echo GoogleMapsClient::staticMap($pos->latitude, $pos->longitude);
-
+        $this->assertEquals(
+            $url,
+            'http://maps.googleapis.com/maps/api/staticmap?center=59.2542869,18.029657&zoom=14&size=512x512&format=png8&maptype=mobile&sensor=false'
+        );
+    }
+}
 
 
 
@@ -36,8 +38,5 @@ $path[4]['x'] = gpsToWGS84('62 23 42.10N');
 $path[4]['y'] = gpsToWGS84('017 18 50.50E');
 
 
-echo GoogleMapsClient::staticMap($path[0]['x'], $path[0]['y'], $path, $path, 512, 512, 15);
+echo GoogleMapsStatic::staticMap($path[0]['x'], $path[0]['y'], $path, $path, 512, 512, 15);
 */
-
-
-?>

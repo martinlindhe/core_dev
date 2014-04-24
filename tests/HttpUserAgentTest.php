@@ -277,7 +277,7 @@ class HttpUserAgentTest extends \PHPUnit_Framework_TestCase
     public function testSafariiOS5()
     {
         // version shipped with iOS 7.0.4, at 2014-04-24
-        $s = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/33.0.1750.21 Mobile/11B554a Safari/9537.53';
+        $s = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11B554a Safari/9537.53';
         $b = HttpUserAgent::getBrowser($s);
         $this->assertEquals(HttpUserAgent::isIOS($s), true);
         $this->assertEquals($b->vendor, 'Apple');
