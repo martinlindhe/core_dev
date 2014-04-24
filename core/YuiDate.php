@@ -1,14 +1,12 @@
 <?php
 /**
- * $Id$
- *
  * Renders a Yahoo UI date selector (javascript)
  *
  * Documentation:
  * http://developer.yahoo.com/yui/calendar/
  * http://developer.yahoo.com/yui/docs/YAHOO.widget.CalendarGroup.html
  *
- * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -18,7 +16,7 @@
 namespace cd;
 
 require_once('XhtmlComponent.php');
-require_once('JSON.php');
+require_once('Json.php');
 
 class YuiDate extends XhtmlComponent
 {
@@ -62,12 +60,12 @@ class YuiDate extends XhtmlComponent
                 : ''
             ).
             'cal.cfg.setProperty("start_weekday",'.$this->start_weekday.');'.
-            'cal.cfg.setProperty("MONTHS_SHORT",'.   JSON::encode($locale->handle->month_short, false).');'.
-            'cal.cfg.setProperty("MONTHS_LONG",'.    JSON::encode($locale->handle->month_long, false).');'.
-            'cal.cfg.setProperty("WEEKDAYS_1CHAR",'. JSON::encode($locale->handle->weekday_1char, false).');'.
-            'cal.cfg.setProperty("WEEKDAYS_SHORT",'. JSON::encode($locale->handle->weekday_short, false).');'.
-            'cal.cfg.setProperty("WEEKDAYS_MEDIUM",'.JSON::encode($locale->handle->weekday_medium, false).');'.
-            'cal.cfg.setProperty("WEEKDAYS_LONG",'.  JSON::encode($locale->handle->weekday_long, false).');'.
+            'cal.cfg.setProperty("MONTHS_SHORT",'.   Json::encode($locale->handle->month_short, false).');'.
+            'cal.cfg.setProperty("MONTHS_LONG",'.    Json::encode($locale->handle->month_long, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_1CHAR",'. Json::encode($locale->handle->weekday_1char, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_SHORT",'. Json::encode($locale->handle->weekday_short, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_MEDIUM",'.Json::encode($locale->handle->weekday_medium, false).');'.
+            'cal.cfg.setProperty("WEEKDAYS_LONG",'.  Json::encode($locale->handle->weekday_long, false).');'.
 
             'cal.selectEvent.subscribe(function() {'.
                 'var dates = this.getSelectedDates();'.

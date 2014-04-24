@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * Official documentation:
  * http://code.google.com/apis/maps/
  *
@@ -27,7 +25,7 @@
 
 namespace cd;
 
-require_once('JSON.php');
+require_once('Json.php');
 require_once('TempStore.php');
 
 class GeoCodeResult  //XXXX MERGE WITH GeoLookupResult into GeoResult !
@@ -55,7 +53,7 @@ class GoogleMapsClient
         '?ll='.$latitude.','.$longitude.
         '&output=json'; //XXX "output=xml" returns prettified street address & more info if needed
 
-        $json = JSON::decode($url);
+        $json = Json::decode($url);
 //d($json);
         if ($json->Status->code != 200)
             return false;
@@ -108,7 +106,7 @@ class GoogleMapsClient
         $res = new GeoCodeResult();
         $res->accuracy  = $item->AddressDetails->Accuracy; // 0 (worst) to 9 (best)
 
-        if       (isset($item->AddressDetails->Country->AdministrativeArea->Locality->LocalityName))
+        if      (isset($item->AddressDetails->Country->AdministrativeArea->Locality->LocalityName))
             $res->name = $item->AddressDetails->Country->AdministrativeArea->Locality->LocalityName;
         else if (isset($item->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName))
             $res->name = $item->AddressDetails->Country->AdministrativeArea->SubAdministrativeArea->Locality->LocalityName;
@@ -196,5 +194,3 @@ class GoogleMapsClient
     }
 
 }
-
-?>

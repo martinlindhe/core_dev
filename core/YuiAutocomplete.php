@@ -1,12 +1,10 @@
 <?php
 /**
- * $Id$
- *
  * Renders a Yahoo UI autocomplete input field
  *
  * http://developer.yahoo.com/yui/autocomplete/
  *
- * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip, currently only used in savak/bnr
@@ -19,7 +17,7 @@
 namespace cd;
 
 require_once('XhtmlComponent.php');
-require_once('JSON.php');
+require_once('Json.php');
 
 class YuiAutocomplete extends XhtmlComponent
 {
@@ -119,7 +117,7 @@ class YuiAutocomplete extends XhtmlComponent
             'var oDS = new YAHOO.util.ScriptNodeDataSource("'.$this->xhr_url.'");'. /// XXX use XHR instead
             'oDS.responseSchema = {'.
                 'resultsList:"records",'.
-                'fields:'.JSON::encode($this->result_fields, false).
+                'fields:'.Json::encode($this->result_fields, false).
             '};'.
 
             // Instantiate AutoComplete

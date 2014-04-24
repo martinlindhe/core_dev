@@ -18,7 +18,7 @@ namespace cd;
 require_once('HttpClient.php');
 require_once('html.php');
 
-class JSON
+class Json
 {
     public static function encode($obj, $with_keys = true)
     {
@@ -103,11 +103,10 @@ class JSON
         case JSON_ERROR_SYNTAX:
             $e = 'Syntax error';
             break;
-/* XXX PHP 5.3.3
+
         case JSON_ERROR_UTF8:
             $e = 'Malformed UTF-8 characters, possibly incorrectly encoded';
             break;
-*/
         }
 
         if ($e && !$res)

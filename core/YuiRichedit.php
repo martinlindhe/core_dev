@@ -1,13 +1,11 @@
 <?php
 /**
- * $Id$
- *
  * http://developer.yahoo.com/yui/editor/
  *
  * Custom toolbar example:
  * http://developer.yahoo.com/yui/examples/editor/toolbar_editor.html
  *
- * @author Martin Lindhe, 2009-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2009-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -17,7 +15,6 @@
 namespace cd;
 
 require_once('XhtmlComponent.php');
-require_once('JSON.php');
 
 class YuiRichedit extends XhtmlComponent
 {

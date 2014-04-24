@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * !!! For simpler usage, see GeoLookupClient
  *
  * Allows simple searching of data for a coordinate,
@@ -9,7 +7,7 @@
  *
  * http://www.geonames.org/
  *
- * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -57,5 +55,3 @@ class GeonamesClient
     }
 
 }
-
-?>

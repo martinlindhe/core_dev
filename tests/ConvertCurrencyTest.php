@@ -17,6 +17,6 @@ class ConvertCurrencyTest extends \PHPUnit_Framework_TestCase
 
         // TODO how to properly test this class
 
-        echo $val." USD is currently worth ".$in_sek." SEK\n";
+        // echo $val." USD is currently worth ".$in_sek." SEK\n";
     }
 }

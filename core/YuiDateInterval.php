@@ -1,14 +1,12 @@
 <?php
 /**
- * $Id$
- *
  * Renders a Yahoo UI date interval selector (javascript)
  *
  * Documentation:
  * http://developer.yahoo.com/yui/calendar/
  * http://developer.yahoo.com/yui/docs/YAHOO.widget.CalendarGroup.html
  *
- * @author Martin Lindhe, 2010-2013 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -19,7 +17,7 @@
 namespace cd;
 
 require_once('XhtmlComponent.php');
-require_once('JSON.php');
+require_once('Json.php');
 
 class YuiDateInterval extends XhtmlComponent
 {
@@ -197,12 +195,12 @@ class YuiDateInterval extends XhtmlComponent
                     : ''
                 ).
                 'start_weekday:'.  $this->start_weekday.','.
-                'MONTHS_SHORT:'.   JSON::encode($locale->handle->month_short, false).','.
-                'MONTHS_LONG:'.    JSON::encode($locale->handle->month_long, false).','.
-                'WEEKDAYS_1CHAR:'. JSON::encode($locale->handle->weekday_1char, false).','.
-                'WEEKDAYS_SHORT:'. JSON::encode($locale->handle->weekday_short, false).','.
-                'WEEKDAYS_MEDIUM:'.JSON::encode($locale->handle->weekday_medium, false).','.
-                'WEEKDAYS_LONG:'.  JSON::encode($locale->handle->weekday_long, false).','.
+                'MONTHS_SHORT:'.   Json::encode($locale->handle->month_short, false).','.
+                'MONTHS_LONG:'.    Json::encode($locale->handle->month_long, false).','.
+                'WEEKDAYS_1CHAR:'. Json::encode($locale->handle->weekday_1char, false).','.
+                'WEEKDAYS_SHORT:'. Json::encode($locale->handle->weekday_short, false).','.
+                'WEEKDAYS_MEDIUM:'.Json::encode($locale->handle->weekday_medium, false).','.
+                'WEEKDAYS_LONG:'.  Json::encode($locale->handle->weekday_long, false).','.
             '};'.
 
             'var cal = new YAHOO.example.calendar.IntervalCalendar("'.$div_holder.'",myConfigs);'.

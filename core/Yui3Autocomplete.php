@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * http://developer.yahoo.com/yui/3/autocomplete/
  *
  * @author Martin Lindhe, 2011 <martin@ubique.se>
@@ -13,7 +11,7 @@
 
 namespace cd;
 
-require_once('JSON.php');
+require_once('Json.php');
 
 class Yui3Autocomplete
 {
@@ -35,7 +33,7 @@ class Yui3Autocomplete
         'YUI().use("autocomplete", "autocomplete-filters", "autocomplete-highlighters", function (Y)'.
         '{'.
             'var inputNode = Y.one("#ac-input"),'.
-                'tags = '.JSON::encode($this->data_source, false).';'.
+                'tags = '.Json::encode($this->data_source, false).';'.
 
             'inputNode.plug(Y.Plugin.AutoComplete, {'.
 //                'activateFirstItem: true,'.
@@ -88,5 +86,3 @@ class Yui3Autocomplete
         js_embed($res);
     }
 }
-
-?>
