@@ -10,9 +10,7 @@
  *
  */
 
-//STATUS: wip
-
-//TODO: add api usage "keystats" method, see https://isbndb.com/docs/api/40-common.html for example
+//STATUS: wip, API works as of 2014-04-25
 
 namespace cd;
 
@@ -25,27 +23,41 @@ class IsbnDbClient
 {
     private $api_key;
 
-    function setApiKey($s) { $this->api_key = $s; }
+    public $use_cache = false;
+
+    public function __construct($api_key)
+    {
+        if (!$api_key)
+            throw new \Exception ("API key is required");
+
+        $this->api_key = $api_key;
+    }
 
     function getByISBN($isbn)
     {
         if (!Isbn::isValid($isbn))
             throw new \Exception ('invalid isbn');
 
-        if (!$this->api_key)
-            throw new \Exception ('api key required');
+        $isbn = str_replace(' ', '', $isbn);
+        $isbn = str_replace('-', '', $isbn);
 
-        $temp = TempStore::getInstance();
+        if ($this->use_cache) {
+            $temp = TempStore::getInstance();
 
-        $key = 'IsbnDbClient/isbn/'.$isbn;
-        $res = $temp->get($key);
+            $key = 'IsbnDbClient/isbn/'.$isbn;
+            $res = $temp->get($key);
 
-        if ($res)
-            return unserialize($res);
+            if ($res)
+                return unserialize($res);
+        }
 
-        $url = 'http://isbndb.com/api/books.xml?access_key='.$this->api_key.'&index1=isbn&value1='.$isbn;
+        $url =
+        'http://isbndb.com/api/books.xml'.
+        '?access_key='.$this->api_key.
+        '&index1=isbn'.
+        '&value1='.$isbn;
+
         $http = new HttpClient($url);
-        $http->setCacheTime('4h');
         $data = $http->getBody();
 
         $xml = simplexml_load_string($data);
@@ -66,7 +78,9 @@ class IsbnDbClient
         $book->isbn10    = strval($attrs['isbn']);
         $book->isbn13    = strval($attrs['isbn13']);
 
-        $temp->set($key, serialize($book), '24h');
+        if ($this->use_cache) {
+            $temp->set($key, serialize($book), '24h');
+        }
 
         return $book;
     }

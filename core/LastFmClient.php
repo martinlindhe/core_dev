@@ -1,17 +1,13 @@
 <?php
 /**
- * $Id$
- *
  * Last.fm API client for querying last.fm for music meta data
  *
  * http://www.last.fm/api/intro
  *
- * @author Martin Lindhe, 2010-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2010-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
-
-//TODO: getArtistInfo() parse "similar" artists tag
 
 namespace cd;
 
@@ -21,20 +17,15 @@ require_once('TempStore.php');
 
 class LastFmClient
 {
-    static $_instance; ///< singleton
+    protected $api_key = '';
+    protected $language = 'en';     // ISO 639 alpha-2
 
-    protected $api_key = 'b25b959554ed76058ac220b7b2e0a026'; // from last.fm api doc
-    protected $language = 'en';                              // The language to return the biography in, expressed as an ISO 639 alpha-2 code.
-
-    private function __construct() { }
-    private function __clone() {}      //singleton: prevent cloning of class
-
-    public static function getInstance()
+    public function __construct($api_key)
     {
-        if (!(self::$_instance instanceof self))
-            self::$_instance = new self();
+        if (!$api_key)
+            throw new \Exception ("API key is required");
 
-        return self::$_instance;
+        $this->api_key = $api_key;
     }
 
     function setLanguage($s)
@@ -44,8 +35,6 @@ class LastFmClient
 
         $this->language = $s;
     }
-
-    function setApiKey($s) { $this->api_key = $s; }
 
     private function query($method, $params)
     {
@@ -57,9 +46,10 @@ class LastFmClient
         foreach ($params as $key => $val)
             $http->Url->setParam($key, $val);
 
-//d( $http->getUrl() );
+echo "QUERYING ". $http->getUrl() ."\n";
 
         $data = $http->getBody();
+//d($data);
         $x = simplexml_load_string($data);
 /*
         $attrs = $x->attributes();
@@ -147,7 +137,7 @@ class LastFmClient
      * @param $quality force given quality if set
      * @return url to best quality album cover for given album
      */
-    function getAlbumCover($artist, $album, $quality = '')
+    function getAlbumCover($artist, $album, $quality = 'mega')
     {
         $images = $this->getAlbumCovers($artist, $album);
         if (!$images)
@@ -193,5 +183,3 @@ class LastFmClient
     }
 
 }
-
-?>
