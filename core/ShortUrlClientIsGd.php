@@ -1,16 +1,14 @@
 <?php
 /**
- * $Id$
- *
  * API for http://is.gd/ URL shortening service
  *
  * API documentation:
  * http://is.gd/api_info.php
  *
- * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2009-2014 <martin@ubique.se>
  */
 
-//STATUS: works 2011-01-13
+//STATUS: works 2014-04-25
 
 namespace cd;
 
@@ -34,5 +32,3 @@ class ShortUrlClientIsGd implements IShortUrlClient
     }
 
 }
-
-?>

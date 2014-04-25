@@ -1,16 +1,14 @@
 <?php
 /**
- * $Id$
- *
  * API for http://tinyurl.com/ URL shortening service
  *
  * API documentation:
  * http://fyneworks.blogspot.com/2008/08/tiny-url-api.html
  *
- * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2009-2014 <martin@ubique.se>
  */
 
-//STATUS: works 2011-01-13
+//STATUS: works 2014-04-25
 
 namespace cd;
 
@@ -36,5 +34,3 @@ class ShortUrlClientTinyUrl implements IShortUrlClient
     }
 
 }
-
-?>

@@ -11,7 +11,8 @@ class GeoLookupClientTest extends \PHPUnit_Framework_TestCase
     public function test1()
     {
         // TODO make proper test
-        $x = GeoLookupClient::get(59.332169, 18.062429); //= sthlm
-        d($x);
+        $res = GeoLookupClient::get(59.332169, 18.062429); //= sthlm
+
+        $this->assertInstanceOf('cd\GeoLookupResult', $res);
     }
 }

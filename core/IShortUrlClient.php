@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id$
- *
- * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2009-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -24,5 +22,3 @@ interface IShortUrlClient
      */
     static function shorten($input_url);
 }
-
-?>

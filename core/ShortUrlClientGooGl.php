@@ -1,24 +1,25 @@
 <?php
 /**
- * $Id$
- *
  * API for http://goo.gl/ URL shortening service
  *
- * To get started, you'll need a free bit.ly user account and apiKey. Signup at: http://bit.ly/a/sign_up
+ * https://developers.google.com/url-shortener/
  *
- * API documentation:
- * http://code.google.com/apis/urlshortener/overview.html
+ * Get API key here: http://code.google.com/apis/console/
  *
- * @author Martin Lindhe, 2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
-//STATUS: works 2011-01-13
+//STATUS: works 2014-04-25
+
+// TODO: add "expand url" method, use https://www.googleapis.com/urlshortener/v1/url?shortUrl=http://goo.gl/fbsS
+
+// TODO: add ability to specify api key! dont be static?
 
 namespace cd;
 
 require_once('IShortUrlClient.php');
 require_once('HttpClient.php');
-require_once('JSON.php');
+require_once('Json.php');
 require_once('TempStore.php');
 
 class ShortUrlClientGooGl implements IShortUrlClient
@@ -30,15 +31,20 @@ class ShortUrlClientGooGl implements IShortUrlClient
         if ($res)
             return $res;
 
+        $api_key = '';
+
         $http = new HttpClient('https://www.googleapis.com/urlshortener/v1/url');
 
         $http->setContentType('application/json');
-        $res = $http->post( JSON::encode( array('longUrl' => $input_url)) );
 
-        $res = JSON::decode($res);
+        $res = $http->post( Json::encode( array('longUrl' => $input_url, 'key' => $api_key) ) );
 
-        if (isset($res->error))
+        $res = Json::decode($res);
+
+        if (isset($res->error)) {
+            d($res->error->errors);
             throw new \Exception ('Error code '.$res->error->code.': '.$res->error->message);
+        }
 
         $temp->set('goo.gl/'.$input_url, $res->id);
 
@@ -46,5 +52,3 @@ class ShortUrlClientGooGl implements IShortUrlClient
     }
 
 }
-
-?>

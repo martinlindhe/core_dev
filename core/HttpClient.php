@@ -337,7 +337,11 @@ class HttpClient
             if ($this->debug)
                 echo 'BODY: '.$var.' ('.strlen($var).' bytes)'.ln();
 
-            curl_setopt($this->ch, CURLOPT_POST, 1);
+            // NOTE need to specify custom request "POST", in order to allow POST:ing with any Content-Type
+            curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
+
+            // TODO also set 'Content-Length: ' . strlen($var))
+
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $var);
         } else {
             if ($this->debug)

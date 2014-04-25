@@ -1,26 +1,21 @@
 <?php
 /**
- * $Id$
- *
  * API for http://bit.ly/ URL shortening service
  *
- * To get started, you'll need a free bit.ly user account and apiKey. Signup at: http://bit.ly/a/sign_up
+ * http://dev.bitly.com/
  *
- * API documentation:
- * http://code.google.com/p/bitly-api/wiki/ApiDocumentation
- *
- * @author Martin Lindhe, 2011 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: works 2011-01-13
 
-//TODO: how to "configure" this static function while avoiding globals?
+//TODO remove api key!
 
 namespace cd;
 
 require_once('IShortUrlClient.php');
 require_once('HttpClient.php');
-require_once('JSON.php');
+require_once('Json.php');
 
 class ShortUrlClientBitLy implements IShortUrlClient
 {
@@ -37,7 +32,7 @@ class ShortUrlClientBitLy implements IShortUrlClient
         $http = new HttpClient($url);
         $http->setCacheTime(86400); //24 hours
 
-        $res = JSON::decode( $http->getBody() );
+        $res = Json::decode( $http->getBody() );
 
         if ($res->status_code != 200)
             throw new \Exception ('Error code '.$res->status_code.': '.$res->status_txt);
@@ -46,5 +41,3 @@ class ShortUrlClientBitLy implements IShortUrlClient
     }
 
 }
-
-?>
