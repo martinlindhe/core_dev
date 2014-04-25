@@ -1,8 +1,6 @@
 <?php
 /**
- * $Id$
- *
- * @author Martin Lindhe, 2011-2012 <martin@ubique.se>
+ * @author Martin Lindhe, 2011-2014 <martin@ubique.se>
  */
 
 //STATUS: wip
@@ -46,30 +44,16 @@ function is_mediawiki_url($url)
     $pattern =
     '('.
         '(https?){1}://'.
-//        '([\w+]).'.   // XXX improve check to require 2-3 ASCII letters language code
-        '([en|sv].wikipedia.org/wiki/){1}'.
+        '(en|sv){1}'.
+        '\.(wikipedia|wiktionary)\.org/wiki/{1}'.
         '('.
             // XXX improve match???
-            '[\w+]'.
+            '[\w+]+'.
         ')?'.
-    ')i';
-/*
-    $pattern =
-    '('.
-        'https?://'.
-        '([-\w\.]+)+'.
-        '(wikipedia.org/wiki/){1}'.
-        '(/([\w/_\.]*(\?\S+)?)?)+'.
     ')';
-*/
-
-    if (is_url($url))
-        return true;
-
-// XXX FINISH THE REGEXP!!!
 
     preg_match($pattern, $url, $matches);
-d($matches);
+
     if ($matches && $matches[0] == $url)
         return true;
 
@@ -90,7 +74,9 @@ class MediaWikiClient
     /** @return 2-letter language code from MediaWiki url */
     public static function getArticleLanguage($full_url)
     {
-        // XXX only works on xxx.wikipedia.org or xx.wiktionary.org url:s
+        if (!is_mediawiki_url($full_url))
+            throw new \Exception ("mediawiki url required");
+
         $url = new Url($full_url);
 
         $host = $url->getHost();
@@ -107,9 +93,6 @@ class MediaWikiClient
      */
     public static function getArticle($full_url, $use_db_cache = '30 days')
     {
-        if (!is_url($full_url))
-            throw new \Exception ('need a url... '.$full_url);
-
         if (!is_mediawiki_url($full_url))
             throw new \Exception ('need a mediawiki url... '.$full_url);
 
