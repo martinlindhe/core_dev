@@ -12,10 +12,6 @@
 
 // NOTE: uses Geocoding API v3, recommended as of 2014-04-24
 
-// TODO add api key
-
-//XXX: google dont return timezone of geolocation queries
-
 namespace cd;
 
 require_once('Json.php');
@@ -39,7 +35,7 @@ class GoogleMapsGeocode
      * @param $address address to get coordinates for
      * @return coordinates & accuracy of specified location or false
      */
-    static function geocode($address, $api_key = '')
+    static public function geocode($address, $api_key = '')
     {
         $temp = TempStore::getInstance();
         $key = 'googlemaps/geocode//'.$address;
@@ -74,9 +70,7 @@ class GoogleMapsGeocode
         return $res;
     }
 
-
- // TODO add tests, update to v3 of API
-    static function reverse($latitude, $longitude, $api_key = '')
+    static public function reverse($latitude, $longitude, $api_key = '')
     {
         $temp = TempStore::getInstance();
         $key = 'googlemaps/reverse//'.$latitude.'/'.$longitude;
