@@ -14,7 +14,7 @@
 
 namespace cd;
 
-require_once('JSON.php');
+require_once('Json.php');
 
 class YuiTreeview
 {
