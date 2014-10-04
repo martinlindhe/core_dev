@@ -2,14 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('HashCrc32.php');
-require_once('HashMd5.php');
-require_once('HashSha1.php');
-require_once('HashSha256.php');
-require_once('HashSha512.php');
-
 class HashesTest extends \PHPUnit_Framework_TestCase
 {
     function VerifyHashes($hashes, $s)

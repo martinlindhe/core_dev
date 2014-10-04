@@ -2,11 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('PdfReader.php');
-require_once('core.php');
-
 class PdfReaderTest extends \PHPUnit_Framework_TestCase
 {
     function test1()
@@ -35,4 +30,3 @@ class PdfReaderTest extends \PHPUnit_Framework_TestCase
     }
 
 }
-

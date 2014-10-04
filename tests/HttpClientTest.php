@@ -2,11 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('core.php');
-require_once('HttpClient.php');
-
 // TODO add coredev_testserver files to core_dev git repo
 
 //$http->addRequestHeader('Accept-Language: sv'); // TODO test that request header is built properly
