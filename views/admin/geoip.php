@@ -4,8 +4,6 @@ namespace cd;
 
 $session->requireSuperAdmin();
 
-require_once('GeoIp.php');
-
 switch ($this->owner) {
 case 'version':
     echo "<h1>GeoIP database versions</h1>";

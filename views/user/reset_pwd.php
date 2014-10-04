@@ -10,8 +10,6 @@
 
 namespace cd;
 
-require_once('ForgotPasswordHandler.php');
-
 if (!$this->token)
     return;
 

@@ -5,9 +5,6 @@
 
 namespace cd;
 
-require_once('PersonalStatus.php');
-require_once('Like.php');
-
 $session->requireLoggedIn();
 
 switch ($this->owner) {

@@ -6,9 +6,6 @@
 
 namespace cd;
 
-require_once('UserDataField.php');
-require_once('YuiDatatable.php');
-
 $session->requireSuperAdmin();
 
 switch ($this->owner) {

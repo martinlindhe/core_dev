@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('ConvertCurrency.php');
-
 echo '<h1>Currencies</h1>';
 
 echo countryFlag('EUR').' 1 EUR = '.round(ConvertCurrency::convert('EUR', 'SEK', 1), 2)." SEK<br/>";

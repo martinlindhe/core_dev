@@ -9,8 +9,6 @@ namespace cd;
 
 $session->requireSuperAdmin();
 
-require_once('ReservedWord.php');
-
 echo '<h1>Reserved words</h1>';
 
 $list = ReservedWord::getAll(RESERVED_USERNAME);

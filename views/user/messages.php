@@ -10,10 +10,6 @@
 
 namespace cd;
 
-require_once('Message.php');
-require_once('Bookmark.php');
-require_once('YuiDatatable.php');
-
 $session->requireLoggedIn();
 
 if (!$this->owner)

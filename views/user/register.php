@@ -14,9 +14,6 @@
 
 namespace cd;
 
-require_once('UserList.php');
-require_once('XhtmlComponentButton.php');
-
 $superadmin_reg = !UserList::getCount();
 
 if (!$superadmin_reg && !$session->allow_registrations)

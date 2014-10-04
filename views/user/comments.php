@@ -15,8 +15,6 @@
 
 namespace cd;
 
-require_once('User.php');
-
 function handleSubmit($p)
 {
     $session = SessionHandler::getInstance();

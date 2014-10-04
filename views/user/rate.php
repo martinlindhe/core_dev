@@ -13,8 +13,6 @@
 
 namespace cd;
 
-require_once('Rating.php');
-
 switch ($this->view) {
 case 'handle':
     // handle user rating

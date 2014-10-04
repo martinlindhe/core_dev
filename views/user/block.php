@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('Bookmark.php');
-
 $session->requireLoggedIn();
 
 switch ($this->owner) {

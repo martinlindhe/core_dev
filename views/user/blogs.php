@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('BlogEntry.php');
-
 switch ($this->owner) {
 case 'recent':
     $list = BlogEntry::getRecent(10);

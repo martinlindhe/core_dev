@@ -8,10 +8,6 @@
 
 namespace cd;
 
-require_once('Image.php'); // for getThumbUrl()
-require_once('ImageRotator.php');
-require_once('YuiLightbox.php');
-
 switch ($this->owner) {
 case 'show':
     // child = id

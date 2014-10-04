@@ -17,9 +17,6 @@ namespace cd;
 
 $session->requireSuperAdmin();
 
-require_once('YuiDatatable.php');
-require_once('LoginEntry.php');
-
 $user = User::get($this->owner);
 if (!$user || !$user->id) {
     echo '<h2>No such user exists</h2>';

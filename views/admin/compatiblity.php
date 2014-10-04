@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('FtpClient.php'); // for curl_check_protocol_support()
-
 $session->requireAdmin();
 
 echo '<h1>Compatiblity check</h1>';

@@ -4,8 +4,6 @@
 
 namespace cd;
 
-require_once('PollItem.php');
-
 switch ($this->owner) {
 case 'active':
     echo '<h1>Active polls</h1>';

@@ -7,11 +7,6 @@
 
 namespace cd;
 
-require_once('ModerationObject.php');
-require_once('Image.php'); // for getThumbUrl()
-require_once('PhotoAlbum.php');
-require_once('PersonalStatus.php');
-
 $session->requireLoggedIn();
 
 $view = !$this->owner ? 'default': $this->owner;

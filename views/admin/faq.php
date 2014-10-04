@@ -2,9 +2,6 @@
 
 namespace cd;
 
-require_once('FaqItem.php');
-require_once('YuiDatatable.php');
-
 $session->requireAdmin();
 
 if (!$this->owner)

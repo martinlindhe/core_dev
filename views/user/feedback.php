@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('Feedback.php');
-
 function fbHandler($p)
 {
     $session = SessionHandler::getInstance();
