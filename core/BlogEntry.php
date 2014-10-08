@@ -1,15 +1,12 @@
 <?php
+
 /**
- * $Id$
- *
  * @author Martin Lindhe, 2009-2012 <martin@ubique.se>
  */
 
 //STATUS: wip
 
 namespace cd;
-
-require_once('SqlObject.php');
 
 class BlogEntry
 {
@@ -40,8 +37,9 @@ class BlogEntry
      */
     public static function getRecent($count)
     {
-        if (!is_numeric($count))
+        if (!is_numeric($count)) {
             return false;
+        }
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -58,7 +56,4 @@ class BlogEntry
     {
         return SqlObject::store($this, self::$tbl_name, 'id');
     }
-
 }
-
-?>
