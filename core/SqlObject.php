@@ -306,19 +306,19 @@ class SqlObject
      */
     public static function getAll($tblname, $classname, $order_field = '', $order = 'asc')
     {
-        if (!is_alphanumeric($tblname) || !is_alphanumeric($order_field))
-            throw new \Exception ('very bad');
+        if (!is_alphanumeric($tblname) || !is_alphanumeric($order_field)) {
+            throw new \Exception('very bad');
+        }
 
-        if (!Sql::isValidOrder($order))
-            throw new \Exception ('odd order '.$order);
+        if (!Sql::isValidOrder($order)) {
+            throw new \Exception('odd order '.$order);
+        }
 
         $q =
         'SELECT * FROM '.$tblname.
         ($order_field ? ' ORDER BY '.$order_field.' '.strtoupper($order) : '');
 
-        $list = Sql::pSelect($q);
-
-        return SqlObject::loadObjects($list, $classname);
+        return Sql::pSelectToObjectList($classname, $q);
     }
 
     /**
