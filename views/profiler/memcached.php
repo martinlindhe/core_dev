@@ -2,8 +2,9 @@
 
 namespace cd;
 
-if (!($temp instanceof TempStoreMemcached))
+if (!($temp instanceof TempStoreMemcached)) {
     return;
+}
 
 $pool = $temp->getServerStats();
 
@@ -12,12 +13,16 @@ if (!$pool) {
     return;
 }
 
-foreach ($pool as $host => $stat)
-{
+foreach ($pool as $host => $stat) {
+    $pct = 0;
+    if ($stat['limit_maxbytes']) {
+        $pct = $stat['bytes'] / $stat['limit_maxbytes'];
+    }
+
     echo 'Read: <b>'.byte_count($stat['bytes_read']).'</b><br/>';
     echo 'Written: <b>'.byte_count($stat['bytes_written']).'</b><br/>';
     echo 'Used memory: <b>'.byte_count($stat['bytes']).'</b>'.
-    ' (<b>'.round($stat['bytes'] / $stat['limit_maxbytes'] * 100, 1).'%</b>'.
+    ' (<b>'.round($pct * 100, 1).'%</b>'.
 
     ' of <b>'.byte_count($stat['limit_maxbytes']).'</b>)'.
     '<br/>';
