@@ -1,7 +1,5 @@
 <?php
 /**
- * $Id$
- *
  * @author Martin Lindhe, 2009-2011 <martin@ubique.se>
  */
 
@@ -11,19 +9,7 @@
 
 namespace cd;
 
-require_once('SqlObject.php');
 require_once('constants.php');
-
-class CommentViewer
-{
-    public static function render($type, $owner)
-    {
-        $view = new ViewModel('views/user/comments.php');
-        $view->registerVar('type', $type);
-        $view->registerVar('owner', $owner);
-        return $view->render();
-    }
-}
 
 class Comment
 {
@@ -53,8 +39,9 @@ class Comment
 
     public static function getByTypeAndOwner($type, $owner)
     {
-        if (!is_numeric($type) || !is_numeric($owner))
-            throw new \Exception ('hmmm');
+        if (!is_numeric($type) || !is_numeric($owner)) {
+            throw new \Exception('hmmm');
+        }
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -68,8 +55,9 @@ class Comment
 
     public static function getByType($type)
     {
-        if (!is_numeric($type))
-            throw new \Exception ('hmmm');
+        if (!is_numeric($type)) {
+            throw new \Exception('hmmm');
+        }
 
         $q =
         'SELECT * FROM '.self::$tbl_name.
@@ -95,7 +83,7 @@ class Comment
         $c->private = $private;
         $c->creator = $session->id;
         $c->creator_ip = client_ip();
-        $c->time_created = sql_datetime( time() );
+        $c->time_created = sql_datetime(time());
         return $c->store();
     }
 
@@ -114,5 +102,4 @@ class Comment
         ' WHERE type = ? AND owner = ?';
         Sql::pUpdate($q, 'iii', $session->id, $type, $owner);
     }
-
 }

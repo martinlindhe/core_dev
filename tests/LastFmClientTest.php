@@ -2,10 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('LastFmClient.php');
-
 class LastFmClientTest extends \PHPUnit_Framework_TestCase
 {
     static $api_key = ""; // NOTE: for test to pass, you need a valid api key

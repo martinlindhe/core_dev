@@ -7,8 +7,6 @@
 
 namespace cd;
 
-require_once('HttpUserAgent.php');
-
 // measure time at page "start execute" event
 $header->embedJs('var beforeload=new Date();');
 

@@ -2,11 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('core.php');
-require_once('MimeReader.php');
-
 // TODO fix test
 
 class MimeReaderTest extends \PHPUnit_Framework_TestCase

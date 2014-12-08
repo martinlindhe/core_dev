@@ -17,10 +17,30 @@ class Json
      */
     public static function encode($obj, $with_keys = true)
     {
-        $res = json_encode($obj, JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
+///        return json_encode($obj, JSON_FORCE_OBJECT | JSON_UNESCAPED_UNICODE);
 
-        return $res;
+
+        if (is_array($obj))
+            return self::encodeArray($obj, $with_keys);
+
+
+        if (is_object($obj))
+            return self::encodeObject($obj, $with_keys);
+
+        throw new \Exception ('ewwp');
+
     }
+
+    static function encodeArray($obj, $with_keys = true)
+    {
+        return '['.self::encodeInternal($obj, $with_keys).']';
+    }
+
+    static function encodeObject($obj, $with_keys = true)
+    {
+        return '{'.self::encodeInternal($obj, $with_keys).'}';
+    }
+
 
     public static function decode($data, $assoc = false)
     {
@@ -54,4 +74,38 @@ class Json
 
         return $res;
     }
+
+    private static function encodeInternal($list, $with_keys = false)
+    {
+        $all = array();
+
+        foreach ($list as $key => $val)
+        {
+            if (is_object($val) || is_array($val)) {
+                $all[] = json_encode($val);
+                continue;
+            }
+            //throw new \Exception ('eh '.$key.' = '.$val);
+
+            $res = '';
+            if ($with_keys)
+                if (is_numeric($key) && (strlen($key) == 1 || substr($key, 0, 1) != '0'))
+                    $res .= $key.':';
+                else
+                    $res .= '"'.$key.'":';
+            if (is_bool($val))
+                $res .= ($val ? '1' : '0');
+            else if (is_numeric($val) && (strlen($val) == 1 || substr($val, 0, 1) != '0' || strpos($val, '.') !== false))
+                $res .= $val;
+            else {
+                $val = str_replace('"', '&quot;', $val); // "
+                $val = str_replace("\r", '&#13;', $val); // carriage return
+                $val = str_replace("\n", '&#10;', $val); // line feed
+                $res .= '"'.$val.'"';
+            }
+            $all[] = $res;
+        }
+
+        return implode(',', $all);
+ }
 }

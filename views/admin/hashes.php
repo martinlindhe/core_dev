@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('YuiDatatable.php');
-
 $session->requireAdmin();
 
 echo '<h1>Available hash functions</h1>';
@@ -27,4 +25,3 @@ $dt->setRowsPerPage(50);
 $dt->setDataSource( $list );
 echo $dt->render();
 
-?>

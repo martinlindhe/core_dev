@@ -2,10 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('CsvWriter.php');
-
 class CsvTestRow {
     var $col1;
     var $col2;

@@ -2,10 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('IShortUrlClient.php');
-
 class ShortUrlClientTest extends \PHPUnit_Framework_TestCase
 {
     var $url1 = 'http://developer.yahoo.com/yui/editor/';

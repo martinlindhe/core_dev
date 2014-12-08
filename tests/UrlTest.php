@@ -2,10 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('Url.php');
-
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
     public function test1()

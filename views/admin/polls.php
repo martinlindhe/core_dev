@@ -4,9 +4,6 @@
 
 namespace cd;
 
-require_once('PollItem.php');
-require_once('YuiDatatable.php');
-
 $session->requireAdmin();
 
 if (!$this->owner)

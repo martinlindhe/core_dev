@@ -5,8 +5,6 @@
 
 namespace cd;
 
-require_once('ChatRoomUpdater.php');
-
 $session->requireLoggedIn();
 
 switch ($this->owner) {

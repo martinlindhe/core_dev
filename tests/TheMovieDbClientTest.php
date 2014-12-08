@@ -2,11 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('TheMovieDbClient.php');
-
-
 class TheMovieDbClientTest extends \PHPUnit_Framework_TestCase
 {
     static $api_key = ''; // NOTE: for tests to pass, you need an API key

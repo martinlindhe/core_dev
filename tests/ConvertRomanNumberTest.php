@@ -2,10 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('ConvertRomanNumber.php');
-
 class ConvertRomanNumberTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsValid1()

@@ -2,10 +2,6 @@
 
 namespace cd;
 
-require_once('Feedback.php');
-require_once('Message.php');
-require_once('YuiDatatable.php');
-
 $session->requireAdmin();
 
 if (!$this->owner)

@@ -2,9 +2,6 @@
 
 namespace cd;
 
-require_once('Bookmark.php');
-require_once('Poke.php');
-
 $session->requireLoggedIn();
 
 switch ($this->owner) {

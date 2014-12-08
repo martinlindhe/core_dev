@@ -134,7 +134,11 @@ function print_query($q)
                 $bg_col = '#26D938'; // greenish
             }
 
-            $tmp[] = '<span style="background-color:'.$bg_col.';">'.$param.'</span>';
+            if (is_string($param)) {
+                $tmp[] = '<span style="background-color:'.$bg_col.';">'.$param.'</span>';
+            } else {
+                $tmp[] = '<span style="background-color:'.$bg_col.';">'.serialize($param).'</span>';
+            }
         }
         echo implode(', ', $tmp);
     }

@@ -9,8 +9,6 @@
 
 namespace cd;
 
-require_once('ForgotPasswordHandler.php');
-
 if ($session->id)
     return;
 

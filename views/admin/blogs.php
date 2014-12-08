@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('BlogEntry.php');
-
 $session->requireSuperAdmin();
 
 switch ($this->owner) {

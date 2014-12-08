@@ -2,11 +2,6 @@
 
 namespace cd;
 
-set_include_path(get_include_path() . PATH_SEPARATOR . dirname(__FILE__).'/../core/');
-
-require_once('Json.php');
-
-
 class JsonTest extends \PHPUnit_Framework_TestCase
 {
     function test_encode1()
@@ -38,6 +33,3 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(JSON::encode(array('a' => 1, 'b' => 2)), '{"a":1,"b":2}' );
     }
 }
-
-
-

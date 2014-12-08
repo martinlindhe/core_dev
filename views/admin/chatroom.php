@@ -7,8 +7,6 @@
 
 namespace cd;
 
-require_once('ChatRoom.php');
-
 $session->requireSuperAdmin();
 
 switch ($this->owner) {

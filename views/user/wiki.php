@@ -2,9 +2,6 @@
 
 namespace cd;
 
-require_once('Wiki.php');
-require_once('Revision.php');
-
 $header->embedCss(
 '.wiki {'.
     'font-size: 14px;'.

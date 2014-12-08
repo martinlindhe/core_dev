@@ -4,8 +4,6 @@
 
 namespace cd;
 
-require_once('Image.php');
-
 $name = File::getUploadPath($this->owner);
 
 if (!empty($_GET['w']) && !empty($_GET['h'])) {

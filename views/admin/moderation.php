@@ -4,10 +4,6 @@
 
 namespace cd;
 
-require_once('ModerationObject.php');
-require_once('UserFinder.php');
-require_once('YuiDatatable.php');
-
 $session->requireSuperAdmin();
 
 if (!$this->owner)

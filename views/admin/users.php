@@ -9,9 +9,6 @@ namespace cd;
 
 $session->requireAdmin();
 
-require_once('UserList.php');
-require_once('YuiDatatable.php');
-
 echo '<h1>Manage users</h1>';
 echo 'All users: '.ahref('a/users/', UserList::getCount()).'<br/>';
 echo 'Users online: '.ahref('a/users/?online', UserList::onlineCount()).'<br/>';

@@ -105,7 +105,7 @@ class Sql
         return $res;
     }
 
-    public static function pSelectRowToObject($classname, $args = array())
+    public static function pSelectRowToObject($classname, array $args = array())
     {
         $stmt = self::pExecStmt( $args );
 
@@ -117,7 +117,7 @@ class Sql
         return $res[0];
     }
 
-    public static function pSelectToObjectList($classname, $args = array())
+    public static function pSelectToObjectList($classname, array $args = array())
     {
         $stmt = self::pExecStmt( $args );
 

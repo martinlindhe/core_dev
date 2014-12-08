@@ -2,9 +2,6 @@
 
 namespace cd;
 
-require_once('UserList.php');
-require_once('YuiDatatable.php');
-
 switch ($this->owner) {
 case 'online':
     $list = UserList::getUsersOnline();

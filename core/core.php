@@ -503,8 +503,12 @@ function uptime()
 {
     // XXX Linux only, windows code available in phpshsinfo, http://phpsysinfo.sourceforge.net/ in class.WINNT.inc.php
     // XXX2 make simple OS-specific classes wrapping these kind of features
-    $raw = explode(' ', file_get_contents('/proc/uptime') );
-    return $raw[0];
+    if (PHP_OS == 'Linux') {
+        $raw = explode(' ', file_get_contents('/proc/uptime') );
+        return $raw[0];
+    }
+
+    return 0;
 }
 
 /** @return a boolean representation of input value as a string */

@@ -1,16 +1,11 @@
 <?php
 /**
- * $Id$
- *
  * @author Martin Lindhe, 2007-2011 <martin@ubique.se>
  */
 
 //STATUS: wip
 
 namespace cd;
-
-require_once('SqlObject.php');
-require_once('ImageResizer.php');
 
 // normal file types defined in constants.php
 define('FILETYPE_PROCESS',            50);
@@ -40,8 +35,9 @@ class File
     {
         $page = XmlDocumentHandler::getInstance();
 
-        if (!$page->getUploadPath())
-            throw new \Exception ('No XmlDocumentHandler upload path configured!');
+        if (!$page->getUploadPath()) {
+            throw new \Exception('No XmlDocumentHandler upload path configured!');
+        }
 
         $dir_limit = 2000; // number of files per subdirectory
 
@@ -90,10 +86,11 @@ class File
         ($uploader ? ' AND uploader = ?' : '').
         ' AND time_deleted IS NULL';
 
-        if ($uploader)
+        if ($uploader) {
             $list = Sql::pSelect($q, 'iii', $type, $cat, $uploader);
-        else
+        } else {
             $list = Sql::pSelect($q, 'ii', $type, $cat);
+        }
 
         return SqlObject::loadObjects($list, __CLASS__);
     }
@@ -125,8 +122,9 @@ class File
     public static function sync($id)
     {
         $name = self::getUploadPath($id);
-        if (!file_exists($name))
-            throw new \Exception ('cant sync nonexisting file, what do???');
+        if (!file_exists($name)) {
+            throw new \Exception('cant sync nonexisting file, what do???');
+        }
 
         $size = filesize($name);
         $mime = get_mimetype_of_file($name);
@@ -151,18 +149,20 @@ class File
         $page = XmlDocumentHandler::getInstance();
 
         $page->disableDesign();
-        $page->setMimeType( $f->mimetype );
+        $page->setMimeType($f->mimetype);
 
-        if ($f->size)
+        if ($f->size) {
             header('Content-Length: '. $f->size);
+        }
 
         readfile($path);
     }
 
     public static function importFromDisk($type, $filename, $category = 0)
     {
-        if (!file_exists($filename))
+        if (!file_exists($filename)) {
             return false;
+        }
 
         $key = array();
         $key['size'] = filesize($filename);
@@ -180,11 +180,12 @@ class File
     public static function import($type, &$key, $category = 0, $blind = false)
     {
         // ignore empty file uploads
-        if (!$key['name'])
+        if (!$key['name']) {
             return false;
+        }
 
         if (!$blind && !is_uploaded_file($key['tmp_name'])) {
-            throw new \Exception ('Upload failed for file '.$key['name'] );
+            throw new \Exception('Upload failed for file '.$key['name']);
             //$error->add('Upload failed for file '.$key['name'] );
             //return;
         }
@@ -199,20 +200,24 @@ class File
         $file->name = $key['name'];
         $file->mimetype = $key['type'];
         $file->category = $category;
-        $file->time_uploaded = sql_datetime( time() );
+        $file->time_uploaded = sql_datetime(time());
         $file->id = $file->store();
-        if (!$file->id)
+        if (!$file->id) {
             return false;
+        }
 
         $dst_file = self::getUploadPath($file->id);
 
         if ($blind) {
-            // UGLY HACK using "@": currently gives a E_WARNING: "Operation not permitted" error even though the rename suceeds!?!?!?
-            if (! (@rename($key['tmp_name'], $dst_file)) )
-                throw new \Exception ('rename failed');
+            // UGLY HACK using "@": currently gives a E_WARNING: "Operation not permitted" error,
+            // even though the rename suceeds???
+            if (!(@rename($key['tmp_name'], $dst_file))) {
+                throw new \Exception('rename failed');
+            }
 
-        } else if (!move_uploaded_file($key['tmp_name'], $dst_file))
-            throw new \Exception ('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
+        } elseif (!move_uploaded_file($key['tmp_name'], $dst_file)) {
+            throw new \Exception('Failed to move file from '.$key['tmp_name'].' to '.$dst_file);
+        }
 
         chmod($dst_file, 0777);
 
@@ -229,8 +234,9 @@ class File
     {
         $error = ErrorHandler::getInstance();
 
-        if (!file_exists($key['tmp_name']))
-            throw new \Exception ('file '.$key['tmp_name'].' dont exist!');
+        if (!file_exists($key['tmp_name'])) {
+            throw new \Exception('file '.$key['tmp_name'].' dont exist!');
+        }
 
         $info = getimagesize($key['tmp_name']);
         switch ($info['mime']) {
@@ -243,18 +249,18 @@ class File
         }
 
         $fileId = self::import($type, $key, $category, $blind);
-        if (!$fileId)
+        if (!$fileId) {
             return false;
+        }
 
-        $im = new ImageResizer( File::get($fileId) );
+        $im = new ImageResizer(File::get($fileId));
 
         if ($im->width >= $max_width || $im->height >= $max_height) {
             $im->resizeAspect($max_width, $max_height);
-            $im->render( $im->mimetype, self::getUploadPath($fileId) );
+            $im->render($im->mimetype, self::getUploadPath($fileId));
             self::sync($fileId); //updates tblFiles.size
         }
 
         return $fileId;
     }
-
 }

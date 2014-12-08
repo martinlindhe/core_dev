@@ -2,8 +2,6 @@
 
 namespace cd;
 
-require_once('FaqItem.php');
-
 $active = 0;
 
 $list = FaqItem::getAll();

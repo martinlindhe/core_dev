@@ -2,10 +2,6 @@
 
 namespace cd;
 
-require_once('UserList.php');
-require_once('YuiDatatable.php');
-require_once('Visit.php');
-
 $session->requireLoggedIn();
 
 switch ($this->owner) {

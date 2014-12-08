@@ -4,12 +4,6 @@
 
 namespace cd;
 
-require_once('PhotoAlbum.php');
-require_once('Image.php'); // for showThumb()
-require_once('ImageResizer.php');
-require_once('YuiLightbox.php');
-require_once('Html5Uploader.php');
-
 switch ($this->owner) {
 case 'overview':
     // shows the users photo albums
