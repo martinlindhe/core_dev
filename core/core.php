@@ -250,11 +250,10 @@ function dh($m, $row_len = 16, $fill_char = ' ', $html_encode = true)
     $hex = '';
     $res = '';
 
-    for ($i = 0; $i < strlen($m); $i++)
-    {
+    for ($i = 0; $i < strlen($m); $i++) {
         $x = substr($m, $i, 1);
 
-        if (ord($x) > 30 && ord($x) < 0x80)
+        if (ord($x) > 0x1F && ord($x) < 0x80)
             $bytes .= $html_encode ? htmlspecialchars($x) : $x;
         else
             $bytes .= '.';
@@ -271,9 +270,9 @@ function dh($m, $row_len = 16, $fill_char = ' ', $html_encode = true)
 
     if ($j) {
         $res .=
-        $hex.' '.
-        str_repeat(' ', ($row_len - strlen($bytes)) * 3).
-        $bytes.ln();
+            $hex.' '
+            .str_repeat(' ', ($row_len - strlen($bytes)) * 3)
+            .$bytes.ln();
     }
 
     return $res;
