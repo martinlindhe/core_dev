@@ -1,5 +1,4 @@
 <?php
-echo "WOWO";die;
 namespace cd;
 
 class MapMarker
