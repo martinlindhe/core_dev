@@ -9,8 +9,6 @@
 
 namespace cd;
 
-require_once('User.php');
-
 class UserList
 {
     protected static $tbl_name = 'tblUsers';
